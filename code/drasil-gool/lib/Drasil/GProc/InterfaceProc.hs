@@ -9,9 +9,9 @@ module Drasil.GProc.InterfaceProc (
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MethodSym(..), Array,
-  EmptyStatement, MultiStatement, ValueStatement, AssignStatement, Argument,
-  BooleanExpression, CommandLineArgs, DeclStatement, CommentStatement,
+import Drasil.Shared.InterfaceCommon (Label, MethodSym(..), IndexTranslator,
+  Array, EmptyStatement, MultiStatement, ValueStatement, AssignStatement,
+  Argument, BooleanExpression, CommandLineArgs, DeclStatement, CommentStatement,
   Comparison, ControlStatement, FuncAppStatement, PrintConsole, ReadConsole,
   FileHandling, PrintFile, ReadFile, List, ListStatement, Literal, MathConstant,
   NumericExpression, ParameterSym, Reference, Set, StringStatement,
@@ -24,8 +24,8 @@ import Drasil.Shared.AST (ProgData, TypeData)
 -- for generating a procedural program.
 class (UnRepr r TypeData, BodySym r bod block, BlockSym r block stmt,
   FunctionSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r block,
-  MethodSym r vis mthd bod, TypeElim r, VariableElim r, Array r,
-  EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt,
+  MethodSym r vis mthd bod, TypeElim r, VariableElim r, IndexTranslator r,
+  Array r, EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt,
   AssignStatement r stmt, Argument r, BooleanExpression r, CommandLineArgs r,
   CommentStatement r stmt, Comparison r, ControlStatement r stmt bod,
   DeclStatement r stmt bod, FuncAppStatement r stmt, PrintConsole r stmt,

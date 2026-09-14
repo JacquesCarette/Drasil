@@ -26,14 +26,14 @@ import Drasil.Shared.InterfaceCommon (
   PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   BodySym(body), BlockSym, TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
-  ValueSym(valueType), VariableValue(valueOf), ValueExpression, Array,
-  List(listSize), ListStatement(listAdd), listOf, EmptyStatement, MultiStatement,
-  ValueStatement, AssignStatement, DeclStatement(listDecDef), FuncAppStatement,
-  VisibilitySym(..), Argument, BooleanExpression, CommandLineArgs,
-  CommentStatement, Comparison, ControlStatement, PrintConsole, ReadConsole,
-  FileHandling, PrintFile, ReadFile, Literal, MathConstant, NumericExpression,
-  ParameterSym, Reference, Set, StringStatement, convType, UnRepr, ScopeSym,
-  BinderSym, InternalList, TypeElim, VariableElim)
+  ValueSym(valueType), VariableValue(valueOf), ValueExpression, IndexTranslator,
+  Array, List(listSize), ListStatement(listAdd), listOf, EmptyStatement,
+  MultiStatement, ValueStatement, AssignStatement, DeclStatement(listDecDef),
+  FuncAppStatement, VisibilitySym(..), Argument, BooleanExpression,
+  CommandLineArgs, CommentStatement, Comparison, ControlStatement, PrintConsole,
+  ReadConsole, FileHandling, PrintFile, ReadFile, Literal, MathConstant,
+  NumericExpression, ParameterSym, Reference, Set, StringStatement, convType,
+  UnRepr, ScopeSym, BinderSym, InternalList, TypeElim, VariableElim)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
@@ -48,9 +48,9 @@ class (UnRepr r TypeData, Argument r, BodySym r bod block, BlockSym r block stmt
   CommandLineArgs r, Literal r, MathConstant r, VariableValue r, VariableSym r,
   TypeSym r, OOTypeSym r, OOVariableSym r, SelfSym r, BooleanExpression r,
   Comparison r, NumericExpression r, ValueSym r, InternalValueExp r,
-  ValueExpression r, OOValueExpression r, Array r, List r, ListStatement r stmt,
-  Reference r, Set r, FunctionSym r, OOFunctionSym r, ParameterSym r,
-  VariableValue r, ScopeSym r, BinderSym r, InternalList r block,
+  ValueExpression r, OOValueExpression r, IndexTranslator r, Array r, List r,
+  ListStatement r stmt, Reference r, Set r, FunctionSym r, OOFunctionSym r,
+  ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r block,
   MethodSym r vis mthd bod, OOMethodSym r vis mthd attch bod,
   AttachmentSym r attch, VisibilitySym r vis, StateVarSym r vis stvr attch,
   ClassSym r mthd stvr, TypeElim r, VariableElim r, EmptyStatement r stmt,

@@ -303,7 +303,7 @@ class (TypeSym r, ValueSym r) => Reference r where
   -- apply any necessary dereference operation.
   maybeDeref :: SValue r -> SValue r
 
-class (IndexTranslator r) => Array r where
+class Array r where
   -- TODO [Brandon Bosman, 05/19/2026]: Change return type to SValue
   -- | Given array `a` and index `i`, creates `a[i]`
   arrayElem :: SValue r -> SValue r -> SVariable r
@@ -316,7 +316,7 @@ class (IndexTranslator r) => Array r where
   -- | Given a source array, create a (shallow) copy of it
   arrayCopy :: SValue r -> SValue r
 
-class (IndexTranslator r) => List r where
+class List r where
   -- | Finds the size of a list.
   --   Arguments are: List
   listSize   :: SValue r -> SValue r
@@ -357,7 +357,7 @@ class (ValueSym r) => Set r where
 --   operations compose like math (e.g. @vecAdd (vecScale s a) b@).
 --   Vectors have their own 'vecType' and 'litVec' so callers don't depend on
 --   how vectors are represented; these default to 'listType' and 'litList'.
-class (IndexTranslator r, Literal r) => NativeVector r where
+class (Literal r) => NativeVector r where
   -- | The type of a vector with the given element type.
   --   Defaults to 'listType'; a language may override it to use a distinct
   --   vector representation.

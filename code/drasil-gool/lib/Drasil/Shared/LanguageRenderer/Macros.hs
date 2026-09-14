@@ -92,6 +92,7 @@ listSlice
     , NumericExpression r
     , IC.ValueExpression r
     , IC.VariableValue r
+    , IC.IndexTranslator r
     , IC.List r
     , IC.ListStatement r stmt
     , ValueElim r

@@ -1,7 +1,4 @@
--- | Defines all functions needed to print HTML files. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.HTML.Print.html).
 module Language.Drasil.HTML.Print(
-  -- * Main Function
-  genHTML,
   -- * Citation Renderer
   renderCite,
   -- * HTML Bib Formatter
@@ -12,123 +9,41 @@ module Language.Drasil.HTML.Print(
   OpenClose(Open, Close),
   fence) where
 
-import Prelude hiding (print, (<>))
+import Prelude hiding ((<>))
 import Data.List (sortBy)
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
   rendPersLFM'', special, checkValidStr, numList)
-import Language.Drasil.Document (CitationKind(..), MaxWidthPercent)
+import Language.Drasil.Document (CitationKind(..))
 
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
-  caption, divTag, spanTag', em, h, headTag, html, image, li, ol, pa,
-  paragraph, reflink, reflinkInfo, reflinkURI, refwrap, refwrap', sub, sup, table, td,
-  th, title, tr, ul, dl, dd, BibFormatter(..))
-import Language.Drasil.HTML.CSS (linkCSS)
+import Language.Drasil.HTML.Helpers (bold, em, reflink, reflinkInfo, reflinkURI,
+  spanTag', sub, sup, BibFormatter(..))
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
-import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
-  ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
+import Language.Drasil.Printing.AST (Fence(Curly, Paren, Abs, Norm),
   Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:), Tooltip),
-  Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
+  Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat),
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author,
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb),
-  Citation(Cite), BibRef)
-import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
+  Citation(Cite))
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sufxPrint)
 
-import qualified Language.Drasil.TeX.Print as TeX (pExpr, spec)
-import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
+import qualified Language.Drasil.TeX.Print as TeX (pExpr, printMath)
+import Language.Drasil.TeX.Monad (toMath)
 
 -- | Referring to 'fence' (for parenthesis and brackeds). Either opened or closed.
 data OpenClose = Open | Close
 
--- | Generate an HTML document from a Drasil 'Document'.
-genHTML ::  String -> Document -> Doc
-genHTML = build
---      first arg should really be of type Filename, but that's not in scope
-
--- TODO: Use our JSON printer here to create this code snippet.
--- | Variable to include MathJax in our HTML files so we can render equations in LaTeX.
-mathJaxScript :: Doc
-mathJaxScript =
-  vcat [text "<script>",
-        text "MathJax = {",
-        text "  loader: {load: ['[tex]/textmacros', 'output/chtml']},",
-        text "  tex: {",
-        text "    packages: {'[+]': ['textmacros']}",
-        text "  },",
-        text "  svg: {",
-        text "    fontCache: 'global'",
-        text "  }",
-        text "};",
-        text "</script>",
-        text "<script type=\"text/javascript\" id=\"MathJax-script\" async",
-        text " src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js\">",
-        text "</script>"]
-
--- HTML printer doesn't need to know if there is a table of contents or not.
--- | Build the HTML Document, called by 'genHTML'.
-build :: String -> Document -> Doc
-build fn (Document t a c) =
-  text "<!DOCTYPE html>" $$
-  html (headTag (linkCSS fn $$ title (titleSpec t) $$
-  text "<meta charset=\"utf-8\">" $$
-  mathJaxScript) $$
-  body (articleTitle (pSpec t) $$ author (pSpec a)
-  $$ print c
-  ))
-
--- | Helper for rendering a 'D' from Latex print.
-printMath :: D -> Doc
-printMath = (`runPrint` Math)
-
--- | Helper for rendering layout objects ('LayoutObj's) into HTML.
-printLO :: LayoutObj -> Doc
--- FIXME: could be hacky
-printLO (HDiv ["equation"] layoutObs EmptyS)  = vcat (map printLO layoutObs)
--- Creates delimeters to be used for mathjax displayed equations
--- Latex print sets up a \begin{displaymath} environment instead of this
-printLO (EqnBlock contents)    = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
-  where
-    toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp d = text "\\[" <> d <> text "\\]"
--- Non-mathjax
--- printLO (EqnBlock contents) = pSpec contents
-printLO (HDiv ts layoutObs EmptyS)  = divTag ts (vcat (map printLO layoutObs))
-printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
-                                 divTag ts (vcat (map printLO layoutObs))
-printLO (Paragraph contents)   = paragraph $ pSpec contents
-printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
-printLO (Definition ssPs l)    = makeDefn ssPs (pSpec l)
-printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
-printLO (List t)               = makeList t
-printLO (Figure r c f wp)      = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
-printLO (Bib bib)              = makeBib bib
-printLO Graph{}                = empty -- FIXME
-printLO Cell{}                 = empty
-printLO CodeBlock{}            = empty
-
--- | Called by build, uses 'printLO' to render the layout
--- objects in 'Doc' format.
-print :: [LayoutObj] -> Doc
-print = foldr (($$) . printLO) empty
-
 -----------------------------------------------------------------
 --------------------BEGIN SPEC PRINTING--------------------------
 -----------------------------------------------------------------
--- | Renders the title of the document. Different than body rendering
--- because newline can't be rendered in an HTML title.
-titleSpec :: Spec -> Doc
-titleSpec (a :+: b) = titleSpec a <> titleSpec b
-titleSpec HARDNL    = empty
-titleSpec s         = pSpec s
 
--- | Renders the Sentences ('Spec's) in the HTML body (called by 'printLO').
+-- | Renders the Sentences ('Spec's) in the HTML body.
 pSpec :: Spec -> Doc
 -- Non-mathjax
 pSpec (E e)  = em $ pExpr e
@@ -176,7 +91,7 @@ pExpr (Font Bold e)  = bold $ pExpr e
 pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- FIXME
 pExpr (Spc Thin)     = text "&#8239;"
 -- Uses TeX for Mathjax for all other exprs
-pExpr e              = mjDelimDisp $ printMath $ toMath $ TeX.pExpr e
+pExpr e              = mjDelimDisp $ TeX.printMath $ toMath $ TeX.pExpr e
   where mjDelimDisp d = text "\\(" <> d <> text "\\)"
 -- Non-mathjax
 {-
@@ -252,104 +167,9 @@ fence Close Curly = "}"
 fence _     Abs   = "|"
 fence _     Norm  = "||"
 
--- Not used since we use MathJax handles this
--- pMatrix :: [[Expr]] -> Doc
--- pMatrix [] = text ""
--- pMatrix [x] = text "<tr>" <> pIn x <> text "</tr>\n"
--- pMatrix (x:xs) = pMatrix [x] <> pMatrix xs
-
--- Not used since we use MathJax handles this
--- pIn :: [Expr] -> Doc
--- pIn [] = text ""
--- pIn [x] = text "<td>" <> pExpr x <> text "</td>"
--- pIn (x:xs) = pIn [x] <> pIn xs
-
------------------------------------------------------------------
-------------------BEGIN TABLE PRINTING---------------------------
------------------------------------------------------------------
-
--- | Renders an HTML table, called by 'printLO'.
-makeTable :: Tags -> [[Spec]] -> Doc -> Bool -> Doc -> Doc
-makeTable _ [] _ _ _       = error "No table to print (see PrintHTML)"
-makeTable ts (l:lls) r b t = refwrap r (table ts (
-    tr (makeHeaderCols l) $$ makeRows lls) $$ if b then caption t else empty)
-
--- | Helper for creating table rows.
-makeRows :: [[Spec]] -> Doc
-makeRows = foldr (($$) . tr . makeColumns) empty
-
-makeColumns, makeHeaderCols :: [Spec] -> Doc
--- | Helper for creating table header row (each of the column header cells).
-makeHeaderCols = vcat . map (th . pSpec)
-
--- | Helper for creating table columns.
-makeColumns = vcat . map (td . pSpec)
-
------------------------------------------------------------------
-------------------BEGIN DEFINITION PRINTING----------------------
------------------------------------------------------------------
-
--- | Renders definition tables (Data, General, Theory, etc.).
-makeDefn :: [(String, [LayoutObj])] -> Doc -> Doc
-makeDefn [] _  = error "L.Empty definition"
-makeDefn ps l = refwrap l $ table ["defn-table"]
-  (tr (th (text "Refname") $$ td (bold l)) $$ makeDRows ps)
-
--- | Helper for making the definition table rows.
-makeDRows :: [(String,[LayoutObj])] -> Doc
-makeDRows []         = error "No fields to create defn table"
-makeDRows [(f,d)] = tr (th (text f) $$ td (vcat $ map printLO d))
-makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRows ps
-
------------------------------------------------------------------
-------------------BEGIN LIST PRINTING----------------------------
------------------------------------------------------------------
-
--- | Renders lists in HTML.
-makeList :: ListType -> Doc -- FIXME: ref id's should be folded into the li
-makeList (Simple items) = divTag ["list"] $
-  vcat $ map (\(b,e,l) -> pa $ mlref l $ pSpec b <> text ": "
-  <> pItem e) items
-makeList (Desc items)   = divTag ["list"] $
-  vcat $ map (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b
-  <> text ": " <> pItem e) items
-makeList (Ordered items) = ol ["list"] (vcat $ map
-  (li . \(i,l) -> mlref l $ pItem i) items)
-makeList (Unordered items) = ul ["list"] (vcat $ map
-  (li . \(i,l) -> mlref l $ pItem i) items)
-makeList (Definitions items) = ul ["hide-list-style-no-indent"] $
-  vcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the"
-  <+> pItem e) items
-
--- | Helper for setting up references.
-mlref :: Maybe Label -> Doc -> Doc
-mlref = maybe id $ refwrap . pSpec
-
--- | Helper for rendering list items.
-pItem :: ItemType -> Doc
-pItem (Flat s)     = pSpec s
-pItem (Nested s l) = vcat [pSpec s, makeList l]
-
------------------------------------------------------------------
-------------------BEGIN FIGURE PRINTING--------------------------
------------------------------------------------------------------
--- | Renders figures in HTML.
-makeFigure :: Doc -> Maybe Doc -> Doc -> MaxWidthPercent -> Doc
-makeFigure r c f wp = refwrap r (image f c wp)
-
--- | Renders assumptions, requirements, likely changes.
-makeRefList :: Doc -> Doc -> Doc
-makeRefList l a = refwrap' "dt" l (brackets $ bold l) $$ dd a
-
 ---------------------
 --HTML bibliography--
 ---------------------
--- **THE MAIN FUNCTION**
-
--- | Makes a bilbliography for the document.
-makeBib :: BibRef -> Doc
-makeBib = dl ["reference-list"] . vcat .
-  map (uncurry makeRefList . renderCite htmlBibFormatter)
 
 -- | HTML specific bib rendering functions
 htmlBibFormatter :: BibFormatter

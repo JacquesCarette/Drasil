@@ -10,7 +10,8 @@ capitalize :: String -> String
 capitalize [] = error "capitalize called on an empty String"
 capitalize (c:cs) = toUpper c:map toLower cs
 
--- | Organize a list of Strings (or other 'IsString'/'Semigroup' types), separated by commas and inserting "and" before the last item.
+-- | Organize a list of Strings (or other 'IsString'/'Semigroup' types),
+-- separated by commas and inserting "and" before the last item.
 foldlList :: (IsString a, Semigroup a) => [a] -> a
 foldlList []    = fromString ""
 foldlList [a,b] = a <> fromString " and " <> b

@@ -1,22 +1,17 @@
--- | Helper functions for creating HTML printers (specifically, HTML tag wrappers).
+-- | Helper functions for HTML and Markdown printers (specifically, HTML tag wrappers).
 module Language.Drasil.HTML.Helpers (
   -- * Types
   BibFormatter(..), Variation(..),
   -- * Tag Wrappers
-  html, headTag, body, title, paragraph, code, tr, th, td, figure, figcaption,
-  li, pa, ba, dd, ol, ul, table, dl, img, h, divTag, spanTag, spanTag',
-  image, em, sup, sub, bold,
-  -- * Misc.
-  wrap, wrap', wrapGen, wrapGen', wrapInside, tagL, tagR, indent,
-  caption, descWrap, refwrap, refwrap', reflink, reflinkInfo, reflinkURI,
-  articleTitle, author
+  th, bold, em, sub, sup, spanTag', img,
+  -- * Wrapping Combinators
+  wrap', wrapGen', wrapInside, tagL, tagR,
+  -- * References
+  reflink, reflinkInfo, reflinkURI
 ) where
 import Prelude hiding ((<>))
 import Data.List (intersperse)
-import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, nest,
-  cat)
-
-import Language.Drasil.Document (MaxWidthPercent)
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), hcat, nest)
 
 import Language.Drasil.Printing.AST (Spec)
 
@@ -29,58 +24,13 @@ data BibFormatter = BibFormatter {
   spec :: Spec -> Doc
 }
 
-html, headTag, body, title, paragraph, code, tr, th, td, figure,
-  figcaption, li, pa, ba, dd :: Doc -> Doc
--- | HTML tag wrapper.
-html       = wrap "html" []
--- | Head tag wrapper.
-headTag   = wrap "head" []
--- | Body tag wrapper.
-body       = wrap "body" []
--- | Title tag wrapper.
-title      = wrap "title" []
--- | Paragraph tag wrapper.
-paragraph  = wrap "p" ["paragraph"]
--- | Code tag wrapper.
-code       = wrap "code" ["code"]
--- | Table row tag wrapper.
-tr         = wrap "tr" []
 -- | Table header tag wrapper.
-th         = wrap "th" []
--- | Table cell tag wrapper.
-td         = wrap "td" []
--- | Figure tag wrapper.
-figure     = wrap "figure" []
--- | Figcaption tag wrapper.
-figcaption = wrap "figcaption" []
--- | List tag wrapper.
-li         = wrap "li" []
--- | Paragraph in list tag wrapper.
-pa         = wrap "p" []
--- | Bring attention to element wrapper.
-ba         = wrap "b" []
--- | Description wrapper
-dd         = wrap "dd" []
+th :: Doc -> Doc
+th = wrap' "th" []
 
-ol, ul, table, dl :: [String] -> Doc -> Doc
--- | Ordered list tag wrapper.
-ol       = wrap "ol"
--- | Unordered list tag wrapper.
-ul       = wrap "ul"
--- | Table tag wrapper.
-table    = wrap "table"
--- | Description list wrapper
-dl       = wrap "dl"
-
-img :: [(String, Doc)] -> Doc
 -- | Image tag wrapper.
-img        = wrapInside "img"
-
--- | Helper for HTML headers.
-h :: Int -> Doc -> Doc
-h n       | n < 1 = error "Illegal header (too small)"
-          | n > 7 = error "Illegal header (too large)"
-          | otherwise = wrap ("h" ++ show n) []
+img :: [(String, Doc)] -> Doc
+img = wrapInside "img"
 
 -- | HTML attribute selector.
 data Variation = Class | Id | Align | Title deriving Eq
@@ -90,10 +40,6 @@ instance Show Variation where
   show Id    = "id"
   show Align = "align"
   show Title = "title"
-
--- | General 'Class' wrapper function and formats the document space with 'cat'.
-wrap :: String -> [String] -> Doc -> Doc
-wrap a = wrapGen Class a empty
 
 -- | General wrapper function and formats the document space with 'hcat'.
 wrap' :: String -> [String] -> Doc -> Doc
@@ -110,10 +56,6 @@ wrapGen' sepf Class s _ ts = \x ->
 wrapGen' sepf v s ti _ = \x ->
   let con = if v == Align then x else indent x
   in sepf [tagL s v ti, con, tagR s]
-
--- | General wrapper that formats the document space nicely.
-wrapGen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrapGen = wrapGen' cat
 
 -- | Helper for creating a left HTML tag with a single attribute.
 tagL :: String -> Variation -> Doc -> Doc
@@ -132,20 +74,6 @@ wrapInside :: String -> [(String, Doc)] -> Doc
 wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text ">"
   where foldStr (attr, val) = text (attr ++ "=\"") <> val <> text "\" "
 
--- | Helper for setting up captions.
-caption :: Doc -> Doc
-caption = wrap "p" ["caption"]
-
-descWrap :: [String] -> Doc -> Doc -> Doc
-descWrap = flip (wrapGen Class "dt")
-
--- | Helper for wrapping divisions or sections.
--- Arguments: Wrapper element type/tag (e.g., p, div, a), attribute value, body text
-refwrap' :: String -> Doc -> Doc -> Doc
-refwrap' a = flip (wrapGen Id a) [""]
-
-refwrap :: Doc -> Doc -> Doc
-refwrap = refwrap' "div"
 
 -- | Helper for setting up links to references.
 reflink :: String -> Doc -> Doc
@@ -159,12 +87,6 @@ reflinkInfo rf txt info = text ("<a href=\"#" ++ rf ++ "\">") <> txt <> text "</
 reflinkURI :: String -> Doc -> Doc
 reflinkURI rf txt = text ("<a href=\"" ++ rf ++ "\">") <> txt <> text "</a>"
 
--- | Helper for setting up figures.
-image :: Doc -> Maybe Doc -> MaxWidthPercent -> Doc
-image f Nothing wp =
-  figure $ vcat [img $ [("src", f), ("alt", text "")] ++ [("width", text $ show wp ++ "%") | wp /= 100]]
-image f (Just c) wp =
-  figure $ vcat [img $ [("src", f), ("alt", c)] ++ [("width", text $ show wp ++ "%") | wp /= 100], figcaption $ text "Figure: " <> c]
 
 em, sup, sub, bold :: Doc -> Doc
 -- | Emphasis (italics) tag.
@@ -176,19 +98,6 @@ sub = wrap' "sub" []
 -- | Bold tag.
 bold = wrap' "b" []
 
-articleTitle, author :: Doc -> Doc
--- | Title header.
-articleTitle t = divTag ["title"]  (h 1 t)
--- | Author header.
-author a        = divTag ["author"] (h 2 a)
-
--- | Div tag wrapper.
-divTag :: [String] -> Doc -> Doc
-divTag = wrap "div"
-
--- | Span tag wrapper.
-spanTag :: [String] -> Doc -> Doc
-spanTag = wrap "span"
 
 -- | Span tag wrapper with a title attribute.
 spanTag' :: Doc -> Doc -> Doc

@@ -14,7 +14,7 @@ import Data.Maybe (maybeToList, mapMaybe)
 import Drasil.Database (ChunkDB, HasUID (..), findOrErr)
 import Language.Drasil (Sentence, Definition(..), ModelExpr, HasAdditionalNotes(..),
   Express(express), DefinedQuantityDict, UnitDefn, Quantity, MayHaveUnit(..), IsUnit(..))
-import Language.Drasil.Document (HasContents, Section(Section), SecCons(..),
+import Language.Drasil.Document (HasContents, Section(Section),
   sentToExp, extractSents, extractSents', extractMExprs, getSec)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
@@ -75,12 +75,7 @@ egetDocDesc = fmGetDocDesc exprPlate
 
 -- | Extracts expressions from a 'Section'.
 egetSec :: Section -> [ModelExpr]
-egetSec (Section _ sc _ ) = concatMap egetSecCon sc
-
--- | Extracts expressions from section contents.
-egetSecCon :: SecCons -> [ModelExpr]
-egetSecCon (Sub s) = egetSec s
-egetSecCon (Con c) = extractMExprs c
+egetSec (Section _ pcs ssc _) = concatMap extractMExprs pcs ++ concatMap egetSec ssc
 
 -- | Creates a 'Sentence' plate.
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)

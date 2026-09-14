@@ -85,35 +85,3 @@ This section collects and defines all the data needed to build the instance mode
 |Notes      |<ul><li>\\({p\_{\text{y}2}}\\) is the vertical position</li><li>\\({p\_{\text{y}2}}\\) is shown in [Fig:dblpend](./SecPhysSyst.md#Figure:dblpend).</li></ul>                                                                                                                                                                                                 |
 |Source     |--                                                                                                                                                                                                                                                                                                                                                           |
 |RefBy      |[GD:velocityY2](./SecGDs.md#GD:velocityY2)                                                                                                                                                                                                                                                                                                                   |
-
-<div align="center">
-
-## Acceleration {#DD:accelerationGDD}
-
-</div>
-
-|Refname    |DD:accelerationGDD                                                                                                                                                                                                                                              |
-|:----------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Label      |Acceleration                                                                                                                                                                                                                                                    |
-|Symbol     |\\(\boldsymbol{a}\text{(}t\text{)}\\)                                                                                                                                                                                                                           |
-|Units      |\\(\frac{\text{m}}{\text{s}^{2}}\\)                                                                                                                                                                                                                             |
-|Equation   |\\[\boldsymbol{a}\text{(}t\text{)}=\frac{\\,d\boldsymbol{v}\text{(}t\text{)}}{\\,dt}\\]                                                                                                                                                                         |
-|Description|<ul><li>\\(\boldsymbol{a}\text{(}t\text{)}\\) is the acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\(t\\) is the time (\\({\text{s}}\\))</li><li>\\(\boldsymbol{v}\text{(}t\text{)}\\) is the velocity (\\(\frac{\text{m}}{\text{s}}\\))</li></ul>|
-|Source     |--                                                                                                                                                                                                                                                              |
-|RefBy      |                                                                                                                                                                                                                                                                |
-
-<div align="center">
-
-## Force {#DD:forceGDD}
-
-</div>
-
-|Refname    |DD:forceGDD                                                                                                                                                                                                                   |
-|:----------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Label      |Force                                                                                                                                                                                                                         |
-|Symbol     |\\(\boldsymbol{F}\\)                                                                                                                                                                                                          |
-|Units      |\\({\text{N}}\\)                                                                                                                                                                                                              |
-|Equation   |\\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}\\]                                                                                                                                                                        |
-|Description|<ul><li>\\(\boldsymbol{F}\\) is the force (\\({\text{N}}\\))</li><li>\\(m\\) is the mass (\\({\text{kg}}\\))</li><li>\\(\boldsymbol{a}\text{(}t\text{)}\\) is the acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li></ul>|
-|Source     |--                                                                                                                                                                                                                            |
-|RefBy      |                                                                                                                                                                                                                              |

@@ -6,7 +6,6 @@ module Language.Drasil.HTML.Citation (
 
 import Data.Text (Text)
 import qualified Data.Text as T (pack, show)
-import Data.Text.Extras (paren)
 import Data.List (sortBy)
 import Utils.Drasil (foldlList)
 
@@ -17,10 +16,19 @@ import Language.Drasil.Document (CitationKind(..))
 import Drasil.Data.Formats.HTML (HTMLBody(..), DItem(..), bold_, emphasis_,
   rawText, rawText', id_, class_)
 
+import Drasil.Printers.Common (paren)
 import Language.Drasil.HTML.Spec (specToHTML, printSpec)
 import Language.Drasil.Printing.AST (Spec(S))
 import Language.Drasil.Printing.Citation (CiteField(..), HP(..), Citation(..), BibRef)
 import Language.Drasil.Printing.Helpers (sufxer, sufxPrint)
+
+-- | Internal: Wrap an HTMLBody with text on both sides.
+wrapBodyWText :: Text -> Text -> HTMLBody -> [HTMLBody]
+wrapBodyWText l r b = [RawText l, b, RawText r]
+
+-- | Internal: Place an 'HTMLBody' in brackets.
+sqBrak :: HTMLBody -> [HTMLBody]
+sqBrak = wrapBodyWText "[" "]"
 
 -- | Makes a bibliography for the document.
 printBib :: BibRef -> HTMLBody
@@ -30,8 +38,9 @@ printBib bib =
     renderCitation :: Citation -> [DItem]
     renderCitation cite@(Cite e _ _) =
       let (termDoc, detailsDoc) = renderCite cite
-          termHTML = ["[", bold_ termDoc, "]"]
-       in [DTerm [id_ $ T.pack e] termHTML, DDetails [] detailsDoc]
+       in [ DTerm [id_ $ T.pack e] $ sqBrak $ bold_ termDoc
+          , DDetails [] detailsDoc
+          ]
 
 -- | Internal: For when we add other things to reference like website, newspaper.
 renderCite :: Citation -> ([HTMLBody], [HTMLBody])
@@ -171,7 +180,7 @@ artclMLA i         = bookMLA i
 artclAPA :: CiteField -> [HTMLBody]
 artclAPA (Title  s)  = specToHTML s <> [". "]
 artclAPA (Volume n)  = [emphasis_ [rawText $ T.show n]]
-artclAPA (Number  n) = [RawText $ ", (" <> T.show n <> ") "]
+artclAPA (Number  n) = [", ", RawText $ paren (T.show n), " "]
 artclAPA i           = bookAPA i
 
 -- | Internal: Cite articles in Chicago format.

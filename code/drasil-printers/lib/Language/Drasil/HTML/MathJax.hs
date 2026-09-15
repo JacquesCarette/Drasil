@@ -6,9 +6,10 @@ module Language.Drasil.HTML.MathJax (
 
 import Data.Text (Text)
 import qualified Data.Text as T
-import Data.Text.Extras (wrap)
 
 import Drasil.Data.Formats.JSON (renderJSON, jsonRenderOpts, JSONStyle(..), JSON(..))
+
+import Drasil.Printers.Common (wrap)
 
 mathJax3Url :: Text
 mathJax3Url = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"

@@ -18,11 +18,12 @@ import Drasil.Data.Formats.CSV (DoubleQuotationPolicy(..), csvRenderOpts,
   mkCSV, renderCSV)
 import Drasil.FileHandling (FileLayout, file, directory, ps)
 
+import Drasil.Printers.Common
 import Language.Drasil.Printing.AST (ItemType(..), ListType(..), Spec(..),
   Expr(..), Label, Spacing(Thin), Fonts(..), OverSymb(Hat), Fence(Abs),
   Ops(..), LinkType(..))
 import Language.Drasil.Printing.Citation (BibRef)
-import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders,
+import Language.Drasil.Printing.Helpers (pipe, bslash, unders,
   hat, hyph, dot, ($^$), vsep)
 import Language.Drasil.Printing.LayoutObj (Project(Project),
   LayoutObj(..), Filename, RefMap, File(File))
@@ -61,8 +62,8 @@ summaryItem :: RefMap -> File -> Doc
 summaryItem rm (File t n d _) = bullet <+> lbl <> ref
   where
     bullet = text (replicate (d*2) ' ') <> text "-"
-    lbl    = brackets $ pSpec rm t
-    ref    = parens $ text $ "./" ++ n ++ ".md"
+    lbl    = brak $ pSpec rm t
+    ref    = paren $ text $ "./" ++ n ++ ".md"
 
 -- | Prints the .toml config file for mdBook.
 makeBook :: RefMap -> Spec -> Doc
@@ -78,7 +79,7 @@ makeBook rm t = vcat [
 
 -- | Render a title 'Spec'.
 mkTitle :: RefMap -> Spec -> Doc
-mkTitle rm t = text "\"" <> pSpec rm t <> text "\""
+mkTitle rm = dquote . pSpec rm
 
 -- | Prints the .csv file mapping the original filepaths of assets to the
 -- location mdBook uses.
@@ -159,7 +160,7 @@ pSpec rm (Ref Internal       r a) = reflink     rm r (pSpec rm a)
 pSpec rm (Ref (Cite2 EmptyS) r a) = reflink     rm r (pSpec rm a)
 pSpec rm (Ref (Cite2 n)      r a) = reflinkInfo rm r (pSpec rm a) (pSpec rm n)
 pSpec rm (Ref External       r a) = reflinkURI  (text r) (pSpec rm a)
-pSpec rm (Quote q) = doubleQuotes $ pSpec rm q
+pSpec rm (Quote q) = dquote $ pSpec rm q
 pSpec _ (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
     invalid = ['<', '>']
@@ -185,12 +186,12 @@ pExpr (Case ees)     = printMath $ mkEnv "cases" (P.<>) cases
 pExpr (Mtx a)        = printMath $ mkEnv "bmatrix" (P.<>) matrix
   where
     matrix = TeX.pMatrix a hpunctuate lnl pExpr'
-pExpr (Row [x])      = braces $ pExpr x
+pExpr (Row [x])      = brace $ pExpr x
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Label s)      = printMath $ TeX.pExpr (Label s')
   where s' = replace "*" "\\*" (replace "_" "\\_" s)
-pExpr (Sub e)        = bslash <> unders <> braces (pExpr e)
-pExpr (Sup e)        = hat    <> braces (pExpr e)
+pExpr (Sub e)        = bslash <> unders <> brace (pExpr e)
+pExpr (Sup e)        = hat    <> brace (pExpr e)
 pExpr (Over Hat s)   = printMath $ commandD "hat" (pExpr' s)
 pExpr (MO o)
   | o == Perc || o == Mul = bslash <> printMath (TeX.pExpr (MO o))
@@ -377,4 +378,4 @@ makeRefList a l i = divTag l $^$ (i <> text ": " <> a)
 makeBib :: RefMap -> BibRef -> Doc
 makeBib rm = vsep .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite (mdBibFormatter rm))
+  [brak $ text $ show x | x <- [1..] :: [Int]] . map (renderCite (mdBibFormatter rm))

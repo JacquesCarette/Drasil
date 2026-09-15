@@ -13,6 +13,7 @@ import Drasil.Data.Formats.HTML (attr, bold_, emphasis_, rawText',
   subscript_, superscript_, HTMLBody(..), span_)
 import Language.Drasil.HTML.MathJax (inlineEqn)
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, printMath)
+import Drasil.Printers.Common
 
 -- | Transforms the Sentences ('Spec's) into Text
 printSpec :: AST.Spec -> Text
@@ -23,7 +24,7 @@ printSpec (AST.Sp s) = T.pack $ specialToString s
 printSpec (AST.Ref (AST.Cite2 n) _ a) = printSpec a <> " " <> printSpec n
 printSpec (AST.Ref _ _ a) = printSpec a
 printSpec AST.EmptyS = ""
-printSpec (AST.Quote q) = "\"" <> printSpec q <> "\""
+printSpec (AST.Quote q) = dquote $ printSpec q
 printSpec (AST.Tooltip _ s) = printSpec s
 
 -- | Transforms the Sentences ('Spec's) into HTML (called by 'loToHTML').
@@ -48,7 +49,7 @@ specToHTML (AST.Quote q) = ["\""] ++ specToHTML q ++ ["\""]
 exprToHTML :: AST.Expr -> [HTMLBody]
 exprToHTML (AST.Dbl d) = [RawText $ T.show d]
 exprToHTML (AST.Int i) = [RawText $ T.show i]
-exprToHTML (AST.Str s) = [RawText $ "\"" <> T.pack s <> "\""]
+exprToHTML (AST.Str s) = [RawText $ dquote $ T.pack s]
 exprToHTML (AST.Row l) = concatMap exprToHTML l
 exprToHTML (AST.Ident s) = [rawText' s]
 exprToHTML (AST.Label s) = [rawText' s]

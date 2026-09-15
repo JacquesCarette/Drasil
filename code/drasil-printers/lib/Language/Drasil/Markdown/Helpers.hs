@@ -9,11 +9,11 @@ import Prelude hiding ((<>), lookup)
 import Data.List (intersperse)
 import Data.Map (lookup)
 import System.FilePath (takeFileName)
-import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), hcat, nest,
-  brackets, parens, braces)
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), hcat, nest)
 
 import Language.Drasil.Printing.Helpers (ast, ($^$), vsep)
 import Language.Drasil.Printing.LayoutObj (RefMap)
+import Drasil.Printers.Common
 
 -- | HTML attribute selector.
 data Variation = Class | Id | Align deriving Eq
@@ -60,10 +60,6 @@ wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text "
 indent :: Doc -> Doc
 indent = nest 2
 
--- | Angled brackets
-ang :: Doc -> Doc
-ang t = text "<" <> t <> text ">"
-
 -- | Bold text
 bold :: Doc -> Doc
 bold t = ast <> ast <> t <> ast <> ast
@@ -94,7 +90,7 @@ centeredDivId l con = vsep [wrapInside "div" atrs, con, tagR "div"]
 
 -- | Helper for setting up links to references
 reflink :: RefMap -> String -> Doc -> Doc
-reflink rm ref txt = brackets txt <> parens rp
+reflink rm ref txt = brak txt <> paren rp
   where
     fn = maybe empty fp (lookup ref rm)
     fp s = text $ "./" ++ s ++ ".md"
@@ -108,8 +104,8 @@ reflinkInfo rm rf txt info = reflink rm rf txt <+> info
 -- is the same as the link, it will return @<link>@ instead of @[text](link)@.
 reflinkURI :: Doc -> Doc -> Doc
 reflinkURI ref txt
-  | ref == txt = ang ref
-  | otherwise  = brackets txt <> parens ref
+  | ref == txt = angbrac ref
+  | otherwise  = brak txt <> paren ref
 
 -- | Helper for setting up figures
 image :: Doc -> Maybe Doc -> Doc
@@ -123,7 +119,7 @@ caption = wrapGen' hcat Align "p" (text "center") [""]
 -- | Helper for setting up headings with an id attribute.
 -- id attribute will only work for mdBook.
 heading ::  Doc -> Doc -> Doc
-heading t l = t <+> braces (text "#" <> l)
+heading t l = t <+> brace (text "#" <> l)
 
 -- | Helper for setting up heading weights in mdBook.
 h :: Int -> Doc

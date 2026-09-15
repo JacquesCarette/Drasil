@@ -8,9 +8,10 @@ module Language.Drasil.Markdown.Citation (
 
 import Prelude hiding ((<>))
 import Data.List (sortBy)
-import Text.PrettyPrint (Doc, text, (<>), doubleQuotes, hsep)
+import Text.PrettyPrint (Doc, text, (<>), hsep)
 import Utils.Drasil (foldlList)
 
+import Drasil.Printers.Common
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
   rendPersLFM'', numList)
 import Language.Drasil.Document (CitationKind(..))
@@ -20,7 +21,7 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb),
   Citation(Cite))
-import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sufxPrint)
+import Language.Drasil.Printing.Helpers (comm, dot, sufxer, sufxPrint)
 
 -- | Data type that carries functions that vary for bib printing
 data BibFormatter = BibFormatter {
@@ -152,7 +153,7 @@ bookChicago f i = bookMLA f i --Most items are rendered the same as MLA
 -- for article renderings
 -- | Cite articles in MLA format.
 artclMLA :: BibFormatter -> CiteField -> Doc
-artclMLA f (Title s) = doubleQuotes $ dot $ spec f s
+artclMLA f (Title s) = dquote $ dot $ spec f s
 artclMLA f i         = bookMLA f i
 
 -- | Cite articles in APA format.

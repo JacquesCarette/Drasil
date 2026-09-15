@@ -20,6 +20,8 @@ import Data.List.Split (splitOn)
 
 import Drasil.Data.Formats.JSON (JSON(..))
 import Language.Drasil.Document (MaxWidthPercent)
+
+import Drasil.Printers.Common hiding (wrap)
 import Language.Drasil.Printing.Helpers (bslash)
 
 data Variation = Class | Id
@@ -56,7 +58,7 @@ wrap' a = wrapGen' hcat Class a empty
 
 wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
 wrapGen' sepf _ s _ [] = \x ->
-  let tb c = text $ "<" ++ c ++ ">"
+  let tb = angbrac . text
   in sepf [tb s, x, tb $ '/':s]
 wrapGen' sepf Class s _ ts = \x ->
   let tb c = text $ "<" ++ c ++ " class=\\\"" ++ foldr1 (++) (intersperse " " ts) ++ "\\\">"
@@ -112,12 +114,8 @@ h n | n < 1 = error "Illegal header (too small)"
     | n > 6 = error "Illegal header (too large)"
     | otherwise = text (replicate n '#' ++ " ")
 
--- | Curly braces.
-br :: Doc -> Doc
-br x = text "{" <> x <> text "}"
-
 mkDiv :: String -> Doc -> Doc -> Doc
-mkDiv s a0 a1 = (bslash <> text s) <> br a0 <> br a1
+mkDiv s a0 a1 = (bslash <> text s) <> brace a0 <> brace a1
 
 -- Maybe use "lines" instead (Data.List @lines :: String -> [String])
 stripnewLine :: String -> Doc

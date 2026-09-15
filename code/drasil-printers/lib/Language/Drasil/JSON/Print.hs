@@ -15,6 +15,7 @@ import Drasil.Data.Formats.JSON (JSON(..), JSONRenderOptions, JSONStyle(..),
 import Language.Drasil (checkValidStr, Special(Circle))
 import Language.Drasil.Document (MaxWidthPercent)
 
+import Drasil.Printers.Common
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
   Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:), Tooltip),
@@ -22,7 +23,7 @@ import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   Fence(Curly, Paren, Abs, Norm))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
-import Language.Drasil.Printing.Helpers (sqbrac, unders, hat)
+import Language.Drasil.Printing.Helpers (unders, hat)
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
 import Language.Drasil.Markdown.Citation (BibFormatter(..), renderCite)
@@ -64,7 +65,7 @@ printLO (Paragraph contents)             = text "" $$ stripnewLine (show (pSpec 
 printLO (EqnBlock contents)              = mathEqn
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$"
+    mjDelimDisp = ddollars . stripnewLine . show
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 printLO (Table _ rows r _ _)            = text "" $$ makeTable rows (pSpec r)
 printLO (Definition ssPs l)             = text "<br>" $$ makeDefn ssPs (pSpec l)
@@ -83,7 +84,7 @@ printLO' (Paragraph contents)             = [markdownCell $ stripnewLine (show (
 printLO' (EqnBlock contents)              = [markdownCell mathEqn]
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$"
+    mjDelimDisp = ddollars . stripnewLine . show
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 printLO' (Table _ rows r _ _)             = [markdownCell $ makeTable rows (pSpec r)]
 printLO' Definition{}                     = []
@@ -99,7 +100,7 @@ print :: [LayoutObj] -> Doc
 print = foldr (($$) . printLO) empty
 
 pSpec :: Spec -> Doc
-pSpec (E e)  = text "$" <> pExpr e <> text "$" -- symbols used
+pSpec (E e)  = dollar $ pExpr e
 pSpec (a :+: b) = pSpec a <> pSpec b
 pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
@@ -114,7 +115,7 @@ pSpec (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec a -- no difference for ci
 pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)
 pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
 pSpec EmptyS    = text "" -- Expected in the output
-pSpec (Quote q) = doubleQuotes $ pSpec q
+pSpec (Quote q) = dquote $ pSpec q
 
 cSpec :: Spec -> Doc
 cSpec (E e)  = pExpr e
@@ -124,7 +125,7 @@ cSpec _      = empty
 pExpr :: Expr -> Doc
 pExpr (Dbl d)        = text $ showEFloat Nothing d ""
 pExpr (Int i)        = text $ show i
-pExpr (Str s)        = doubleQuotes $ text s
+pExpr (Str s)        = dquote $ text s
 pExpr (Div n d)      = mkDiv "frac" (pExpr n) (pExpr d)
 pExpr (Row l)        = hcat $ map pExpr l
 pExpr (Set l)        = hcat $ map pExpr l
@@ -294,4 +295,4 @@ pSpecBib s                  = pSpec s
 makeBib :: BibRef -> Doc
 makeBib = vcat .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite jsonBibFormatter)
+  [brak $ text $ show x | x <- [1..] :: [Int]] . map (renderCite jsonBibFormatter)

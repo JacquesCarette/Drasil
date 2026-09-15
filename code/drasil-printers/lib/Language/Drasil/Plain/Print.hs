@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 -- | Defines functions to print on plain files (for .txt, .log, etc.).
 module Language.Drasil.Plain.Print (
   -- * Types
@@ -10,13 +12,14 @@ module Language.Drasil.Plain.Print (
 
 import Prelude hiding ((<>))
 import Data.List (partition)
-import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
-  doubleQuotes, empty, hcat, hsep, integer, parens, punctuate, space, text,
+import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), comma, double,
+  empty, hcat, hsep, integer, punctuate, space, text,
   vcat, render)
 
 import Language.Drasil (Special(..), Symbol, USymb(..), codeSymb)
 import qualified Language.Drasil as L (HasSymbol(..), Sentence, Expr)
 
+import Drasil.Printers.Common
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..),
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
@@ -64,9 +67,9 @@ pExprDoc _ (MO o) = opsDoc o
 pExprDoc f (Over Hat e) = pExprDoc f e <> text "_hat"
 pExprDoc f (Fenced l r e) = fenceDocL l <> pExprDoc f e <> fenceDocR r
 pExprDoc f (Font Bold e) = pExprDoc f e <> text "_vect"
-pExprDoc f (Font Emph e) = text "_" <> pExprDoc f e <> text "_"
-pExprDoc f (Div n d) = parens (pExprDoc f n) <> text "/" <> parens (pExprDoc f d)
-pExprDoc f (Sqrt e) = text "sqrt" <> parens (pExprDoc f e)
+pExprDoc f (Font Emph e) = wrap "_" "_" $ pExprDoc f e
+pExprDoc f (Div n d) = paren (pExprDoc f n) <> text "/" <> paren (pExprDoc f d)
+pExprDoc f (Sqrt e) = text "sqrt" <> paren (pExprDoc f e)
 pExprDoc _ (Spc Thin) = space
 
 -- | Helper for printing sentences ('Spec's) in 'Doc' format.
@@ -79,7 +82,7 @@ specDoc f (Ref (Cite2 n) r _) = specDoc f n <+> text ("Ref: " ++ r)
 specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r) --may need to change?
 specDoc f (s1 :+: s2) = specDoc f s1 <> specDoc f s2
 specDoc _ EmptyS = empty
-specDoc f (Quote s) = doubleQuotes $ specDoc f s
+specDoc f (Quote s) = dquote $ specDoc f s
 specDoc MultiLine HARDNL = text "\n"
 specDoc OneLine HARDNL = error "HARDNL encountered in attempt to format linearly"
 
@@ -95,7 +98,7 @@ unitDoc f (US us) = formatu t b
   line :: [(Symbol,Integer)] -> Doc
   line []  = empty
   line [x] = pow x
-  line l   = parens $ hsep $ map pow l
+  line l   = paren $ hsep $ map pow l
   pow :: (Symbol,Integer) -> Doc
   pow (x,1) = pExprDoc f $ symbol x
   pow (x,p) = pExprDoc f (symbol x) <> text "^" <> integer p
@@ -109,9 +112,9 @@ caseDoc MultiLine cs = vcat $ map (\(e,c) -> pExprDoc MultiLine e <> comma <+>
 
 -- | Helper for printing matrices.
 mtxDoc :: SingleLine -> [[Expr]] -> Doc
-mtxDoc OneLine rs = brackets $ hsep $ map (brackets . hsep . map (pExprDoc
+mtxDoc OneLine rs = brak $ hsep $ map (brak . hsep . map (pExprDoc
   OneLine)) rs
-mtxDoc MultiLine rs = brackets $ vcat $ map (hsep . map (pExprDoc MultiLine)) rs
+mtxDoc MultiLine rs = brak $ vcat $ map (hsep . map (pExprDoc MultiLine)) rs
 
 -- TODO: Double check that this is valid in all output languages
 -- | Helper for printing special characters (for degrees and partial derivatives).

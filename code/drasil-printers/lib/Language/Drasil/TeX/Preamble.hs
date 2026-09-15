@@ -2,9 +2,10 @@
 module Language.Drasil.TeX.Preamble (genPreamble) where
 
 import Data.List (nub)
+import Text.PrettyPrint.HughesPJ (text)
 
+import Drasil.Printers.Common (dollar, brak)
 import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
-import Language.Drasil.Printing.Helpers (sq)
 import Language.Drasil.Printing.LayoutObj (LayoutObj(..))
 import Language.Drasil.TeX.Monad (D, vcat, (%%), nest)
 import Language.Drasil.TeX.Helpers (docclass, command, command1o, command2, command3,
@@ -86,8 +87,8 @@ addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
 addDef SymbDescriptionP1 = command3 "newlist" "symbDescription" "description" "1"
 addDef SymbDescriptionP2 = command1o "setlist" (Just "symbDescription") "noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt"
 addDef ResizeExpr = vcat [
-    command "newcommand" "\\resizeExpression" <> pure (sq "1") <> lbrace,
-    nest 2 $ command2 "adjustbox" "max width=\\linewidth" "$#1$",
+    command "newcommand" "\\resizeExpression" <> pure (brak $ text "1") <> lbrace,
+    nest 2 $ command2 "adjustbox" "max width=\\linewidth" (dollar "#1"),
     rbrace
   ]
 

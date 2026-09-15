@@ -1,7 +1,7 @@
 -- | Defines helper functions used in printing LaTeX documents.
 module Language.Drasil.TeX.Helpers (
   -- * Formatting
-  br, sq, parens, quote, lbrace, rbrace,
+  quote, lbrace, rbrace,
   -- * Commands
   command0, command, commandD, command1o, command1oD, command1p, command1pD,
   texSym, command2, command2D, command3,
@@ -22,44 +22,34 @@ module Language.Drasil.TeX.Helpers (
   bullet, counter, ddefnum, ddref, colAw, colBw, arrayS, modcounter, modnum,
   newline, hyperConfig, useTikz,
   -- * Equations
-  toEqn,
-  -- * Strings
-  paren, sqbrac
+  toEqn
 ) where
 
 import Data.List (isSuffixOf)
-import Text.PrettyPrint (text)
+import Text.PrettyPrint (text, Doc)
 import qualified Text.PrettyPrint as TP
 
 import Language.Drasil.Document (MaxWidthPercent)
 
+import Drasil.Printers.Common hiding (quote)
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$))
+
+-- | Text-rendering helper for wrapping strings with brackets/braces.
+brak' :: String -> Doc
+-- | Curly braces.
+brak' t = text $ "{" ++ t ++ "}"
 
 -----------------------------------------------------------------------------
 -- * LaTeX Commands
 --
 -- $latexCmd
 --
--- Infrastructre for defining commands, environments, etc.
--- Calls to TP should only occur in this section.
+-- Infrastructure for defining commands, environments, et
 
 -- | Helper for adding fencing symbols.
-br, sq, parens, quote :: D -> D
--- | Curly braces.
-br x = lbrace <> x <> rbrace
--- | Square brackets.
-sq x = ls <> x <> rs
-  where
-  ls = pure $ text "["
-  rs = pure $ text "]"
--- | Parenthesis.
-parens x = lp <> x <> rp
-  where
-  lp = pure $ text "("
-  rp = pure $ text ")"
--- | Quotes.
+quote :: D -> D
 quote x = lq <> x <> rq
   where
   lq = pure $ text "``"
@@ -77,11 +67,11 @@ command0 s = pure $ H.bslash TP.<> text s
 
 -- | Make 1-argument command.
 command :: String -> String -> D
-command s c = pure $ (H.bslash TP.<> text s) TP.<> H.br c
+command s c = pure $ (H.bslash TP.<> text s) TP.<> brak' c
 
 -- | Similar to 'command', but uses 'br' for braces.
 commandD :: String -> D -> D
-commandD s c = pure (H.bslash TP.<> text s) <> br c
+commandD s c = pure (H.bslash TP.<> text s) <> brace c
 
 -- | 1-argument command, with optional argument.
 command1o :: String -> Maybe String -> String -> D
@@ -93,11 +83,11 @@ command1oD s = maybe (commandD s) (command1pD s)
 
 -- | 1-argument command with parameter in square brackets.
 command1p :: String -> String -> String -> D
-command1p s p c = pure $ (H.bslash TP.<> text s) TP.<> H.sq p TP.<> H.br c
+command1p s p c = pure $ (H.bslash TP.<> text s) TP.<> brak (text p) TP.<> brak' c
 
 -- | Similar to 'command1p', but uses 'sq' and 'br' for brackets.
 command1pD :: String -> D -> D -> D
-command1pD s p c = pure (H.bslash TP.<> text s) <> sq p <> br c
+command1pD s p c = pure (H.bslash TP.<> text s) <> brak p <> brace c
 
 -- | Make LaTeX symbol.
 texSym :: String -> D
@@ -105,36 +95,36 @@ texSym s = pure $ H.bslash TP.<> text s
 
 -- | 2-argument command.
 command2 :: String -> String -> String -> D
-command2 s a0 a1 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1
+command2 s a0 a1 = pure $ (H.bslash TP.<> text s) TP.<> brak' a0 TP.<> brak' a1
 
 -- | Similar to 'command2', but uses 'br' for brackets.
 command2D :: String -> D -> D -> D
-command2D s a0 a1 = pure (H.bslash TP.<> text s) <> br a0 <> br a1
+command2D s a0 a1 = pure (H.bslash TP.<> text s) <> brace a0 <> brace a1
 
 -- | 3-argument command.
 command3 :: String -> String -> String -> String -> D
-command3 s a0 a1 a2 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1 TP.<> H.br a2
+command3 s a0 a1 a2 = pure $ (H.bslash TP.<> text s) TP.<> brak' a0 TP.<> brak' a1 TP.<> brak' a2
 
 -- | Encapsulate environments.
 mkEnv :: String -> (D -> D -> D) -> D -> D
 mkEnv nm cat d =
-  pure (text ("\\begin" ++ H.brace nm)) `cat`
+  pure (text "\\begin" <> text (brace nm)) `cat`
   d `cat`
-  pure (text ("\\end" ++ H.brace nm))
+  pure (text "\\end" <> text (brace nm))
 
 -- | Encapsulate environments with argument with braces.
 mkEnvArgBr :: String -> String -> D -> D
 mkEnvArgBr nm args d =
-  pure (text ("\\begin" ++ H.brace nm ++ H.brace args)) $+$
+  pure (text "\\begin" <> text (brace nm) <> text (brace args)) $+$
   d $+$
-  pure (text ("\\end" ++ H.brace nm))
+  pure (text "\\end" <> text (brace nm))
 
 -- | Encapsulate environments with argument with brackets.
 mkEnvArgSq :: String -> String -> D -> D
 mkEnvArgSq nm args d =
-  pure (text ("\\begin" ++ H.brace nm ++ H.sqbrac args)) $+$
+  pure (text ("\\begin" ++ brace nm ++ brak args)) $+$
   d $+$
-  pure (text ("\\end" ++ H.brace nm))
+  pure (text ("\\end" ++ brace nm))
 
 -- | Makes minipage environment.
 mkMinipage :: D -> D
@@ -143,8 +133,8 @@ mkMinipage d = command0 "medskip" $+$
 
 -- | For defining (LaTeX) macros.
 comm :: String -> String -> Maybe String -> D
-comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<>
-  maybe TP.empty H.sq s1 TP.<> H.br b2)
+comm b1 b2 s1 = command0 "newcommand" <> pure (brak' ("\\" ++ b1) TP.<>
+  maybe TP.empty (brak . text) s1 TP.<> brak' b2)
 
 -- this one is special enough, let this sub-optimal implementation stand
 -- | Renews given command.
@@ -170,8 +160,8 @@ ref, sref, hyperref, externalref, snref :: String -> D -> D
 sref            = if numberedSections then ref else hyperref
 ref         t x = pure (text $ t ++ "~") <> commandD "ref" x
 hyperref    t x = command1pD "hyperref" x (pure (text (t ++ "~")) <> x)
-externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>
-  br empty <> br x
+externalref t x = command0 "hyperref" <> brace (pure $ text t) <> brace empty <>
+  brace empty <> brace x
 snref       r   = command1pD "hyperref" (pure (text r))
 
 -- | For references.
@@ -245,13 +235,13 @@ docclass = command1p "documentclass"
 
 -- | General section function.
 sec :: Int -> D -> D
-sec d b1 = genSec d <> br b1
+sec d b1 = genSec d <> brace b1
 
 subscript, superscript :: D -> D -> D
 -- | Makes second argument a subscript of the first argument.
-subscript   a b = a <> pure H.unders <> br b
+subscript   a b = a <> pure H.unders <> brace b
 -- | Makes second argument a superscript of the first argument.
-superscript a b = a <> pure H.hat    <> br b
+superscript a b = a <> pure H.hat    <> brace b
 
 -- grave, acute :: Char -> D
 -- grave c = (pure $ text "\\`{") <> pure (TP.char c) <> (pure $ text "}")
@@ -304,11 +294,4 @@ useTikz = usepackage "luatex85" $+$ command0 "def" <>
 -- | toEqn is special; it switches to 'Math', but inserts an equation environment.
 -- Uses resizeExpression macro (defined in Preamble.hs) to prevent page overflow.
 toEqn :: D -> D
-toEqn (PL g) = equation $ commandD "resizeExpression" $ PL (\_ -> g Math)
------------------------------------------------------------------------------
--- | Helper(s) for String-Printing in TeX where it varies from HTML/Plaintext.
-paren, sqbrac :: String -> String
--- | Wrap with parenthesis.
-paren x = "\\left(" ++ x ++ "\\right)"
--- | Wrap with square brackets.
-sqbrac x = "\\left[" ++ x ++ "\\right]"
+toEqn (PL g) = equation $ commandD "resizeExpression" $ PL (const $ g Math)

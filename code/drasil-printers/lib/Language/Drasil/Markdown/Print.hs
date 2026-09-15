@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
 
 -- | Defines main Markdown printer functions.
-module Language.Drasil.Markdown.Print (genMDBook, pSpec) where
+module Language.Drasil.Markdown.Print (genMDBook) where
 
 import Prelude hiding (print, (<>))
 import qualified Prelude as P ((<>))
@@ -13,30 +13,31 @@ import qualified Prettyprinter as PNew (Doc)
 import System.FilePath (takeFileName)
 import Text.PrettyPrint hiding (Str)
 
+import Language.Drasil (Special(Circle), checkValidStr)
 import Drasil.Data.Formats.CSV (DoubleQuotationPolicy(..), csvRenderOpts,
   mkCSV, renderCSV)
 import Drasil.FileHandling (FileLayout, file, directory, ps)
 
+import Drasil.Printers.Common
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
-  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:), Tooltip), Label,
+  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:), Tooltip, Sp, S), Label,
   LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold),
   Spacing(Thin), Fence(Abs), Ops(Perc, Mul))
 import Language.Drasil.Printing.Citation (BibRef)
-import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders,
+import Language.Drasil.Printing.Helpers (pipe, bslash, unders,
   hat, hyph, dot, ($^$), vsep)
 import Language.Drasil.Printing.LayoutObj (Project(Project),
   LayoutObj(..), Filename, RefMap, File(File))
-import Language.Drasil.HTML.Helpers(BibFormatter(..))
-import qualified Language.Drasil.HTML.Print as HTML (renderCite, pSpec)
+import Language.Drasil.Markdown.Citation (BibFormatter(..), renderCite)
 import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
   reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, centeredDiv,
   em, h, h', centeredDivId)
 import Language.Drasil.TeX.Helpers (commandD, command2D, mkEnv)
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, fence, OpenClose(..),
   pMatrix, cases)
-import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText,
-  hpunctuate)
+import Language.Drasil.TeX.Print (printMath)
+import Language.Drasil.TeX.Monad (D, toText, hpunctuate)
 
 -----------------------------------------------------------------
 ------------------------- mdBook SRS ----------------------------
@@ -63,8 +64,8 @@ summaryItem :: RefMap -> File -> Doc
 summaryItem rm (File t n d _) = bullet <+> lbl <> ref
   where
     bullet = text (replicate (d*2) ' ') <> text "-"
-    lbl    = brackets $ pSpec rm t
-    ref    = parens $ text $ "./" ++ n ++ ".md"
+    lbl    = brak $ pSpec rm t
+    ref    = paren $ text $ "./" ++ n ++ ".md"
 
 -- | Prints the .toml config file for mdBook.
 makeBook :: RefMap -> Spec -> Doc
@@ -80,7 +81,7 @@ makeBook rm t = vcat [
 
 -- | Render a title 'Spec'.
 mkTitle :: RefMap -> Spec -> Doc
-mkTitle rm t = text "\"" <> pSpec rm t <> text "\""
+mkTitle rm = dquote . pSpec rm
 
 -- | Prints the .csv file mapping the original filepaths of assets to the
 -- location mdBook uses.
@@ -162,8 +163,14 @@ pSpec rm (Ref Internal       r a) = reflink     rm r (pSpec rm a)
 pSpec rm (Ref (Cite2 EmptyS) r a) = reflink     rm r (pSpec rm a)
 pSpec rm (Ref (Cite2 n)      r a) = reflinkInfo rm r (pSpec rm a) (pSpec rm n)
 pSpec rm (Ref External       r a) = reflinkURI  (text r) (pSpec rm a)
-pSpec rm (Quote q) = doubleQuotes $ pSpec rm q
-pSpec _ s          = HTML.pSpec s
+pSpec rm (Quote q) = dquote $ pSpec rm q
+pSpec _ (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
+  where
+    invalid = ['<', '>']
+    escapeChars '&' = "\\&"
+    escapeChars c = [c]
+pSpec _ (Sp Circle) = text "&deg;"
+pSpec _ EmptyS      = text ""
 
 -----------------------------------------------------------------
 -------------------- EXPRESSION PRINTING ------------------------
@@ -182,12 +189,12 @@ pExpr (Case ees)     = printMath $ mkEnv "cases" (P.<>) cases
 pExpr (Mtx a)        = printMath $ mkEnv "bmatrix" (P.<>) matrix
   where
     matrix = TeX.pMatrix a hpunctuate lnl pExpr'
-pExpr (Row [x])      = braces $ pExpr x
+pExpr (Row [x])      = brace $ pExpr x
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Label s)      = printMath $ TeX.pExpr (Label s')
   where s' = replace "*" "\\*" (replace "_" "\\_" s)
-pExpr (Sub e)        = bslash <> unders <> braces (pExpr e)
-pExpr (Sup e)        = hat    <> braces (pExpr e)
+pExpr (Sub e)        = bslash <> unders <> brace (pExpr e)
+pExpr (Sup e)        = hat    <> brace (pExpr e)
 pExpr (Over Hat s)   = printMath $ commandD "hat" (pExpr' s)
 pExpr (MO o)
   | o == Perc || o == Mul = bslash <> printMath (TeX.pExpr (MO o))
@@ -204,10 +211,6 @@ pExpr e              = printMath $ TeX.pExpr e
 -- | Print an expression to a LaTeX D
 pExpr' :: Expr -> D
 pExpr' = pure . pExpr
-
--- | Helper for rendering a D from LaTeX print
-printMath :: D -> Doc
-printMath = (`runPrint` Math) . toMath
 
 -- | LaTeX newline command
 lnl :: Doc
@@ -378,4 +381,4 @@ makeRefList a l i = divTag l $^$ (i <> text ": " <> a)
 makeBib :: RefMap -> BibRef -> Doc
 makeBib rm = vsep .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (HTML.renderCite (mdBibFormatter rm))
+  [brak $ text $ show x | x <- [1..] :: [Int]] . map (renderCite (mdBibFormatter rm))

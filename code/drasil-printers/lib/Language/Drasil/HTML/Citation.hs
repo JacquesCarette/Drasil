@@ -5,8 +5,8 @@ module Language.Drasil.HTML.Citation (
 ) where
 
 import Data.Text (Text)
-import qualified Data.Text as T
-import Data.Text.Extras (num2Text, paren)
+import qualified Data.Text as T (pack, show)
+import Data.Text.Extras (paren)
 import Data.List (sortBy)
 import Utils.Drasil (foldlList)
 
@@ -122,19 +122,19 @@ useStyleArtcl Chicago = artclChicago
 -- | Internal: Cite books in MLA format.
 bookMLA :: CiteField -> [HTMLBody]
 bookMLA (Address   s) = specToHTML s ++ [colon]
-bookMLA (Edition   s) = [rawText $ num2Text s, rawText' $ sufxer s, ed]
+bookMLA (Edition   s) = [rawText $ T.show s, rawText' $ sufxer s, ed]
 bookMLA (Series    s) = [emphasis_ (specToHTML s), period]
 bookMLA (Title     s) = [emphasis_ (specToHTML s), period] --If there is a series or collection, this should be in quotes, not italics
-bookMLA (Volume    s) = [vol, rawText $ num2Text s, comma]
+bookMLA (Volume    s) = [vol, rawText $ T.show s, comma]
 bookMLA (Publisher s) = specToHTML s ++ [comma]
 bookMLA (Author    p) = specToHTML (rendPeople' p) ++ [period]
-bookMLA (Year      y) = [rawText $ num2Text y, period]
+bookMLA (Year      y) = [rawText $ T.show y, period]
 bookMLA (BookTitle s) = [emphasis_ (specToHTML s), period]
 bookMLA (Journal   s) = [emphasis_ (specToHTML s), comma]
-bookMLA (Pages   [p]) = [pg, rawText $ num2Text p, period]
+bookMLA (Pages   [p]) = [pg, rawText $ T.show p, period]
 bookMLA (Pages     p) = [pp, foldPages p, period]
 bookMLA (Note      s) = specToHTML s
-bookMLA (Number    n) = [no, rawText $ num2Text n, comma]
+bookMLA (Number    n) = [no, rawText $ T.show n, comma]
 bookMLA (School    s) = specToHTML s ++ [comma]
 bookMLA (HowPublished (Verb s)) = specToHTML s ++ [comma]
 bookMLA (HowPublished (URL s)) = [Anchor (printSpec s) [] (specToHTML s), period]
@@ -148,7 +148,7 @@ bookMLA (Type         t) = specToHTML t ++ [comma]
 -- | Internal: Cite books in APA format.
 bookAPA :: CiteField -> [HTMLBody] -- FIXME: year needs to come after author in APA
 bookAPA (Author   p) = specToHTML (rendPeople rendPersLFM' p) --L.APA uses initials rather than full name
-bookAPA (Year     y) = [rawText $ paren $ num2Text y, period] --APA puts "()" around the year
+bookAPA (Year     y) = [rawText $ paren $ T.show y, period] --APA puts "()" around the year
 bookAPA (Pages    p) = [foldPages p, period]
 bookAPA (Editor   p) = [foldPeople p, " (Ed.)", period]
 bookAPA i = bookMLA i --Most items are rendered the same as MLA
@@ -170,15 +170,15 @@ artclMLA i         = bookMLA i
 -- | Internal: Cite articles in APA format.
 artclAPA :: CiteField -> [HTMLBody]
 artclAPA (Title  s)  = specToHTML s <> [". "]
-artclAPA (Volume n)  = [emphasis_ [rawText $ num2Text n]]
-artclAPA (Number  n) = [RawText $ ", (" <> num2Text n <> ") "]
+artclAPA (Volume n)  = [emphasis_ [rawText $ T.show n]]
+artclAPA (Number  n) = [RawText $ ", (" <> T.show n <> ") "]
 artclAPA i           = bookAPA i
 
 -- | Internal: Cite articles in Chicago format.
 artclChicago :: CiteField -> [HTMLBody]
 artclChicago i@(Title    _)  = artclMLA i
-artclChicago (Volume     n)  = [rawText $ num2Text n, comma]
-artclChicago (Number      n) = [no, rawText $ num2Text n]
+artclChicago (Volume     n)  = [rawText $ T.show n, comma]
+artclChicago (Number      n) = [no, rawText $ T.show n]
 artclChicago i@(Year     _)  = bookAPA i
 artclChicago i = bookChicago i
 

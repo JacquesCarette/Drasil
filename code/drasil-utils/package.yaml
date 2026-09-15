@@ -18,7 +18,6 @@ dependencies:
 - base >= 4.7 && < 5
 - containers
 - text
-- text-show
 
 ghc-options:
 - -Wall

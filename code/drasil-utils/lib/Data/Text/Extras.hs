@@ -1,7 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# OPTIONS_GHC -Wno-redundant-constraints #-}
 module Data.Text.Extras (
-  num2Text,
   wrap,
   paren,
   brak,
@@ -9,10 +7,6 @@ module Data.Text.Extras (
 ) where
 
 import Data.Text (Text)
-import TextShow
-
-num2Text :: (TextShow i, Num i) => i -> Text
-num2Text = showt
 
 wrap :: Text -> Text -> Text -> Text
 wrap l r e = l <> e <> r

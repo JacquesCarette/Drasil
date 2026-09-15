@@ -5,8 +5,7 @@ module Language.Drasil.HTML.Render(
 ) where
 
 import Data.Text (Text)
-import qualified Data.Text as T
-import Data.Text.Extras (num2Text)
+import qualified Data.Text as T (pack, show)
 
 import Drasil.Data.Formats.HTML
 
@@ -73,7 +72,7 @@ loToHTML _ (AST.List t) = [buildListHtml t]
 loToHTML _ (AST.Figure r c f wp) =
   [Div [id_ (printSpec r)] [figureImage [] attrs (T.pack f) captionText ("Figure: " <> captionText)]]
   where
-    attrs = [attr "width" (num2Text wp <> "%") | wp /= 100]
+    attrs = [attr "width" (T.show wp <> "%") | wp /= 100]
     captionText = maybe mempty printSpec c
 loToHTML _ (AST.Bib bib) = [printBib bib]
 loToHTML _ AST.Graph {} = []

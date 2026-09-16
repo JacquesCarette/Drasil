@@ -4,13 +4,19 @@ The unit system used throughout is SI (Système International d'Unités). In add
 
 <div id="Table:ToU"></div>
 
-|Symbol            |Description|SI Name |
-|:-----------------|:----------|:-------|
-|\\({\text{Hz}}\\) |frequency  |hertz   |
-|\\({\text{kg}}\\) |mass       |kilogram|
-|\\({\text{m}}\\)  |length     |metre   |
-|\\({\text{N}}\\)  |force      |newton  |
-|\\({\text{rad}}\\)|angle      |radian  |
-|\\({\text{s}}\\)  |time       |second  |
+|Symbol                               |Description         |SI Name             |
+|:------------------------------------|:-------------------|:-------------------|
+|\\({\text{Hz}}\\)                    |frequency           |hertz               |
+|\\({\text{kg}}\\)                    |mass                |kilogram            |
+|\\(\text{kg}\text{m}^{2}\\)          |moment of inertia   |moment of inertia   |
+|\\({\text{m}}\\)                     |length              |metre               |
+|\\(\frac{\text{m}}{\text{s}^{2}}\\)  |acceleration        |acceleration        |
+|\\(\frac{\text{m}}{\text{s}}\\)      |velocity            |velocity            |
+|\\({\text{N}}\\)                     |force               |newton              |
+|\\(\text{N}\text{m}\\)               |torque              |torque              |
+|\\({\text{rad}}\\)                   |angle               |radian              |
+|\\(\frac{\text{rad}}{\text{s}^{2}}\\)|angular acceleration|angular acceleration|
+|\\(\frac{\text{rad}}{\text{s}}\\)    |angular velocity    |angular velocity    |
+|\\({\text{s}}\\)                     |time                |second              |
 
 **<p align="center">Table of Units</p>**

@@ -7,16 +7,19 @@ import Language.Drasil (cnIES, cn, cn', cn'', Sentence(S),
 
 import Data.Drasil.SI_Units (centigrade, joule, kilogram, watt, m_2, m_3)
 
+thermoUnits :: [UnitDefn]
+thermoUnits = [heatCapacity, heatCapSpec, thermalFlux, heatTransferCoef, volHtGenU]
+
 heatCapacity :: UnitDefn
-heatCapacity = makeDerU (cncpt''' (mkUid "heatCapacity") (cnIES "heat capacity")
+heatCapacity = makeDerU (cncpt''' (mkUid "heatCapacityU") (cnIES "heat capacity")
   (S "heat capacity (constant pressure)")) (joule /: centigrade)
 
 heatCapSpec :: UnitDefn --Specific heat capacity
-heatCapSpec = makeDerU (cncpt''' (mkUid "heatCapSpec") (cn' "specific heat")
+heatCapSpec = makeDerU (cncpt''' (mkUid "heatCapSpecU") (cn' "specific heat")
   (S "heat capacity per unit mass")) (joule /$ (kilogram *: centigrade))
 
 thermalFlux :: UnitDefn
-thermalFlux = makeDerU (cncpt''' (mkUid "thermalFlux") (cn'' "heat flux")
+thermalFlux = makeDerU (cncpt''' (mkUid "thermalFluxU") (cn'' "heat flux")
   (S "the rate of heat energy transfer per unit area")) (watt /: m_2)
 
 heatTransferCoef :: UnitDefn

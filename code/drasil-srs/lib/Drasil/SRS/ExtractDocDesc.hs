@@ -149,12 +149,15 @@ getDocDesc = fmGetDocDesc (sentencePlate id)
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
-extractUnits dd cdb = collectUnitDeps cdb $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) cdb
+extractUnits dd cdb = collectUnits cdb $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) cdb
 
 -- | For a given list of 'Quantity's, collects the 'UnitDefn's dependencies of
 -- their units (i.e., what units their units are defined with).
-collectUnitDeps :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-collectUnitDeps db = map (`findOrErr` db) . concatMap getUnits . mapMaybe (getUnitLup db)
+collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
+collectUnits db qs = oneLevelDeps ++ uds
+  where
+    uds = mapMaybe (getUnitLup db) qs
+    oneLevelDeps = map (`findOrErr` db) (concatMap getUnits uds)
 
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)

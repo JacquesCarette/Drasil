@@ -4,12 +4,15 @@ The unit system used throughout is SI (Système International d'Unités). In add
 
 <div id="Table:ToU"></div>
 
-|Symbol           |Description|SI Name |
-|:----------------|:----------|:-------|
-|\\({\text{J}}\\) |energy     |joule   |
-|\\({\text{kg}}\\)|mass       |kilogram|
-|\\({\text{m}}\\) |length     |metre   |
-|\\({\text{N}}\\) |force      |newton  |
-|\\({\text{s}}\\) |time       |second  |
+|Symbol                                          |Description                     |SI Name               |
+|:-----------------------------------------------|:-------------------------------|:---------------------|
+|\\({\text{J}}\\)                                |energy                          |joule                 |
+|\\({\text{kg}}\\)                               |mass                            |kilogram              |
+|\\(\frac{\text{m}}{\text{s}}\\)                 |velocity                        |velocity              |
+|\\({\text{m}}\\)                                |length                          |metre                 |
+|\\(\frac{\text{m}}{\text{s}^{2}}\\)             |acceleration                    |acceleration          |
+|\\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\\)|universal gravitational constant|gravitational constant|
+|\\({\text{N}}\\)                                |force                           |newton                |
+|\\({\text{s}}\\)                                |time                            |second                |
 
 **<p align="center">Table of Units</p>**

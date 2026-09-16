@@ -3,7 +3,7 @@ module Drasil.Generator.CommonKnowledge (
   withCommonKnowledge
 ) where
 
-import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder13, insert)
+import Drasil.Database (empty, ChunkDB, insertAllOutOfOrder13, insert)
 import Language.Drasil (IdeaDict, ConceptChunk, DefinedQuantityDict,
   UnitDefn, CI)
 import Language.Drasil.Document (ConceptInstance, LabelledContent, Reference,
@@ -18,6 +18,9 @@ import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.Physics (physicCon')
 import Data.Drasil.SI_Units (siUnits)
+import Data.Drasil.Units.PhysicalProperties (physicalPropertyUnits)
+import Data.Drasil.Units.Physics (physicsUnits)
+import Data.Drasil.Units.Thermodynamics (thermoUnits)
 import qualified Drasil.SRS.DummyChunks as SRS
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
@@ -39,16 +42,28 @@ withCommonKnowledge projN = insertAllOutOfOrder13 (insert projN basisCDB)
 -- common background knowledge, including that related to the SRS, mathematics,
 -- physics, general science, basic software, and general documentation.
 basisCDB :: ChunkDB
-basisCDB =
-    insertAll basisSections
-  $ insertAll basisLCs
-  $ insertAll siUnits
-  $ insertAll basisConceptChunks
-  $ insertAll basisSymbols
-  $ insertAll basisCIs
-  $ insertAll basisIdeaDicts
-  $ insertAll basisCitations
-    empty
+basisCDB = insertAllOutOfOrder13 empty
+  basisExternalLinks basisSymbols basisIdeaDicts basisCIs
+  basisConceptChunks basisUnits basisDDs basisIMs basisGDs
+  basisTMs basisSections basisCitations basisLCs
+
+basisExternalLinks :: [Reference] -- FIXME: When editing `Reference`, this should become '[ExternalLink]'
+basisExternalLinks = []
+
+basisDDs :: [DataDefinition]
+basisDDs = []
+
+basisIMs :: [InstanceModel]
+basisIMs = []
+
+basisGDs :: [GenDefn]
+basisGDs = []
+
+basisTMs :: [TheoryModel]
+basisTMs = []
+
+basisUnits :: [UnitDefn]
+basisUnits = physicalPropertyUnits ++ physicsUnits ++ thermoUnits ++ siUnits
 
 basisSections :: [Section]
 basisSections = SRS.sections

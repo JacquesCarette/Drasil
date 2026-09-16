@@ -4,13 +4,20 @@ The unit system used throughout is SI (Système International d'Unités). In add
 
 <div id="Table:ToU"></div>
 
-|Symbol                    |Description|SI Name   |
-|:-------------------------|:----------|:---------|
-|\\({{}^{\circ}\text{C}}\\)|temperature|centigrade|
-|\\({\text{J}}\\)          |energy     |joule     |
-|\\({\text{kg}}\\)         |mass       |kilogram  |
-|\\({\text{m}}\\)          |length     |metre     |
-|\\({\text{s}}\\)          |time       |second    |
-|\\({\text{W}}\\)          |power      |watt      |
+|Symbol                                               |Description                                       |SI Name                   |
+|:----------------------------------------------------|:-------------------------------------------------|:-------------------------|
+|\\({{}^{\circ}\text{C}}\\)                           |temperature                                       |centigrade                |
+|\\({\text{J}}\\)                                     |energy                                            |joule                     |
+|\\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\\)   |heat capacity per unit mass                       |specific heat             |
+|\\(\frac{\text{kg}}{\text{m}^{3}}\\)                 |densityU                                          |densityU                  |
+|\\({\text{kg}}\\)                                    |mass                                              |kilogram                  |
+|\\({\text{m}}\\)                                     |length                                            |metre                     |
+|\\({\text{m}^{2}}\\)                                 |square metres                                     |square metres             |
+|\\({\text{m}^{3}}\\)                                 |cubic metres                                      |cubic metres              |
+|\\({\text{s}}\\)                                     |time                                              |second                    |
+|\\({\text{W}}\\)                                     |power                                             |watt                      |
+|\\(\frac{\text{W}}{\text{m}^{3}}\\)                  |the rate of heat energy generation per unit volume|volumetric heat generation|
+|\\(\frac{\text{W}}{\text{m}^{2}}\\)                  |the rate of heat energy transfer per unit area    |heat flux                 |
+|\\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\\)|heat transfer coefficient                         |heat transfer coefficient |
 
 **<p align="center">Table of Units</p>**

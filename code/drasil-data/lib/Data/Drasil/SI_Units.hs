@@ -14,7 +14,8 @@ fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 derived :: [UnitDefn]
 derived = [becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
   katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
-  pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber]
+  pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber,
+  specificE, specificWeight]
 
 common :: [UnitDefn]
 common = [s_2, m_2, m_3]
@@ -51,7 +52,8 @@ m_3 = newUnit "cubic metres"    $ metre ^: 3
 
 becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
   katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
-  pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber :: UnitDefn
+  pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber,
+  specificE, specificWeight :: UnitDefn
 
 becquerel = derCUC' "becquerel"
   "becquerel" "activity" (label "Bq") --of a Radionuclide
@@ -140,11 +142,9 @@ watt = derCUC' "watt" "watt" "power" (label "W")
 weber = derCUC' "weber"
   "weber" "magnetic flux" (label "Wb") (volt *: second)
 
-specificE :: UnitDefn
 specificE = makeDerU (cncpt''' (mkUid "specificE") (cnIES "specific energy")
   (S "energy per unit mass")) (joule /: kilogram)
 
-specificWeight :: UnitDefn
 specificWeight = makeDerU (cncpt''' (mkUid "specificWeight") (cn' "specific weight")
   (S "weight per unit volume")) (newton *$ (metre ^: (-3)))
 

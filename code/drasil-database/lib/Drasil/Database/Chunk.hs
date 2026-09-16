@@ -122,6 +122,9 @@ instance (HasChunkRefs l, HasChunkRefs r) => HasChunkRefs (Either l r) where
   chunkRefs = either chunkRefs chunkRefs
   {-# INLINABLE chunkRefs #-}
 
+instance (HasChunkRefs l, HasChunkRefs r) => HasChunkRefs (l, r) where
+  chunkRefs (l, r) = chunkRefs l `S.union` chunkRefs r
+
 instance (Generic a, GHasCRefs (Rep a)) => HasChunkRefs (Generically a) where
   chunkRefs (Generically a) = gChunkRefs $ from a
   {-# INLINABLE chunkRefs #-}

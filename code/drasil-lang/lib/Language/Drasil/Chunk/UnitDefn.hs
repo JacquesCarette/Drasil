@@ -20,6 +20,7 @@ module Language.Drasil.Chunk.UnitDefn (
 
 import Control.Lens ((^.), makeLenses, view)
 import Control.Arrow (second)
+import qualified Data.Set as S
 
 import Drasil.Database (HasChunkRefs(..), UID, HasUID(..), mkUid, nsUid)
 
@@ -32,11 +33,10 @@ import Language.Drasil.Symbol (Symbol(Label))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift),
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))
 
--- | For defining units.
--- It has a 'ConceptChunk' (that defines what kind of unit it is),
--- a unit symbol, maybe another (when it is a synonym),
--- perhaps a definition, and a list of 'UID' of the units that make up
--- the definition.
+-- | For defining units. It has a 'ConceptChunk' (that defines what kind of unit
+-- it is), a unit symbol, maybe another (when it is a synonym), perhaps a
+-- definition, and a list of 'UID' of the units that make up the definition
+-- (empty for fundamental units).
 --
 -- Ex. Meter is a unit of length defined by the symbol (m).
 data UnitDefn = UD { _vc :: ConceptChunk
@@ -45,7 +45,11 @@ data UnitDefn = UD { _vc :: ConceptChunk
 makeLenses ''UnitDefn
 
 instance HasChunkRefs UnitDefn where
-  chunkRefs ud = chunkRefs (ud ^. vc)
+  chunkRefs ud = S.unions [
+      chunkRefs $ ud ^. vc,
+      chunkRefs $ ud ^. cas,
+      S.fromList $ ud ^. cu
+    ]
   {-# INLINABLE chunkRefs #-}
 
 -- | Finds 'UID' of the 'ConceptChunk' used to make the 'UnitDefn'.
@@ -80,24 +84,26 @@ instance HasUnitSymbol UnitEquation where usymb u = u ^. us
 getCu :: UnitEquation -> [UID]
 getCu = view contributingUnit
 
+unitNs :: String -> UID
+unitNs = nsUid "unit" . mkUid
+
 -- | Create a derived unit chunk from a concept and a unit equation.
 makeDerU :: ConceptChunk -> UnitEquation -> UnitDefn
 makeDerU concept eqn = UD concept (Defined (usymb eqn) (USynonym $ usymb eqn)) (getCu eqn)
 
--- FIXME: Shouldn't need to use the UID constructor here.
 derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
 -- | Create a 'SI_Unit' with two 'Symbol' representations. The created 'NP' is self-plural.
-derCUC a b c s ue = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [mkUid a]
+derCUC a b c s ue = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) (getCu ue)
 -- | Similar to 'derCUC', but the created 'NP' has the 'AddS' plural rule.
-derCUC' a b c s ue = UD (cncpt''' (mkUid a) (cn' b) (S c)) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [mkUid a]
+derCUC' a b c s ue = UD (cncpt''' (mkUid a) (cn' b) (S c)) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) (getCu ue)
 
 -- | Create a derived unit chunk from a 'UID', term ('String'), definition,
 -- 'Symbol', and unit equation.
 derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
 -- | Uses self-plural term.
-derUC  a b c s u = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
+derUC  a b c s u = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) [] -- FIXME: The empty list of contributing units looks wrong.
 -- | Uses term that pluralizes by adding "s" to the end.
-derUC' a b c s u = UD (cncpt''' (mkUid a) (cn' b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
+derUC' a b c s u = UD (cncpt''' (mkUid a) (cn' b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) [] -- FIXME: The empty list of contributing units looks wrong.
 
 -- | Create a derived unit chunk from a 'UID', term ('NP'), definition,
 -- 'Symbol', and unit equation.
@@ -106,13 +112,13 @@ derCUC'' a b c s ue = UD (cncpt''' (mkUid a) b (S c)) (DerivedSI (US [(s,1)]) (u
 -- | Create a derived unit chunk from a 'UID', term ('NP'), definition,
 -- 'Symbol', and unit equation.
 derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
-derUC'' a b c s u = UD (cncpt''' (mkUid a) b (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
+derUC'' a b c s u = UD (cncpt''' (mkUid a) b (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) [] -- FIXME: The empty list of contributing units looks wrong.
 
---FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same 'String'
 -- for the identifier, term, and definition.
 unitCon :: String -> ConceptChunk
-unitCon s = cncpt''' (mkUid s) (cn' s) (S s)
+unitCon s = cncpt''' (unitNs s) (cn' s) (S s)
+
 ---------------------------------------------------------
 
 -- | Helper to get derived units if they exist.
@@ -182,12 +188,12 @@ newUnit s = makeDerU (unitCon s)
 
 -- | Smart constructor for a "fundamental" unit.
 fund :: String -> String -> String -> UnitDefn
-fund nam desc sym = UD (cncpt''' u (cn' nam) (S desc)) (BaseSI $ US [(Label sym, 1)]) [u]
+fund nam desc sym = UD (cncpt''' u (cn' nam) (S desc)) (BaseSI $ US [(Label sym, 1)]) []
   where u = nsUid "unit" (mkUid nam)
 
 -- | Variant of the 'fund', useful for degree.
 fund' :: String -> String -> Symbol -> UnitDefn
-fund' nam desc sym = UD (cncpt''' u (cn' nam) (S desc)) (BaseSI $ US [(sym, 1)]) [u]
+fund' nam desc sym = UD (cncpt''' u (cn' nam) (S desc)) (BaseSI $ US [(sym, 1)]) []
   where u = nsUid "unit" (mkUid nam)
 
 -- | We don't want an Ord on units, but this still allows us to compare them.

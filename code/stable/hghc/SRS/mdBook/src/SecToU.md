@@ -4,10 +4,10 @@ The unit system used throughout is SI (Système International d'Unités). In add
 
 <div id="Table:ToU"></div>
 
-|Symbol                    |Description|SI Name   |
-|:-------------------------|:----------|:---------|
-|\\({{}^{\circ}\text{C}}\\)|temperature|centigrade|
-|\\({\text{m}}\\)          |length     |metre     |
-|\\({\text{W}}\\)          |power      |watt      |
+|Symbol                                               |Description              |SI Name                  |
+|:----------------------------------------------------|:------------------------|:------------------------|
+|\\({{}^{\circ}\text{C}}\\)                           |temperature              |centigrade               |
+|\\({\text{W}}\\)                                     |power                    |watt                     |
+|\\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\\)|heat transfer coefficient|heat transfer coefficient|
 
 **<p align="center">Table of Units</p>**

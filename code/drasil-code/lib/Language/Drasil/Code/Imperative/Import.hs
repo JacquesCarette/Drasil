@@ -89,6 +89,7 @@ value
     , OO.Literal r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -228,6 +229,7 @@ mkVal
     , OO.Literal r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -448,6 +450,7 @@ convExpr
     ( Argument r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , OO.Literal r
@@ -558,6 +561,7 @@ convCall
     ( Argument r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , OO.Literal r
@@ -1063,6 +1067,7 @@ valueProc
   ::
     ( NativeVector r
     , MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1138,6 +1143,7 @@ mkValProc
   ::
     ( NativeVector r
     , MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1505,6 +1511,7 @@ getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
 convExprProc
   ::
     ( MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1600,6 +1607,7 @@ convExprProc (RealI c ri)  = do
 convCallProc
   ::
     ( MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r

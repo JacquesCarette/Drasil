@@ -27,9 +27,10 @@ import Language.Drasil.Choices (InternalConcept(..))
 
 import Drasil.GOOL (SValue, MS, VS, TypeSym(..), OOTypeSym, OOVariableSym,
   VariableValue(..), ValueStatement(valStmt), DeclStatement(..), convType,
-  convTypeOO, TypeData, FuncAppStatement, TypeElim, VariableElim, Argument, Set,
-  ValueExpression, Comparison, BooleanExpression, MathConstant, List, SelfSym,
-  OOFuncAppStatement, InternalValueExp, Literal, OOValueExpression)
+  convTypeOO, TypeData, FuncAppStatement, TypeElim, VariableSym, VariableElim,
+  Argument, Set, ValueExpression, Comparison, BooleanExpression, MathConstant,
+  List, SelfSym, OOFuncAppStatement, InternalValueExp, Literal,
+  OOValueExpression)
 import Drasil.GProc (NativeVector, Reference, NumericExpression)
 
 -- | Generates calls to all of the input-related functions. First is the call to
@@ -105,6 +106,7 @@ genConstraintCall
     , Literal r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -167,6 +169,7 @@ genOutputCall
     , Literal r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -197,6 +200,7 @@ genFuncCall
     , Literal r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -321,6 +325,7 @@ genDerivedCallProc = do
 genConstraintCallProc
   ::
     ( MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -371,6 +376,7 @@ genCalcCallProc c = do
 genOutputCallProc
   ::
     ( MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -395,6 +401,7 @@ genOutputCallProc = do
 genFuncCallProc
   ::
     ( MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r

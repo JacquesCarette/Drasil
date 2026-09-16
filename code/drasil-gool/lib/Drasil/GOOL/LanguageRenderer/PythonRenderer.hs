@@ -884,14 +884,14 @@ readline, readlines :: (TypeSym r, InternalValueExp r) => SValue r -> SValue r
 readline f = objMethodCall string f pyReadline []
 readlines f = objMethodCall (listType string) f pyReadlines []
 
-readInt, readDouble :: (ValueExpression r) => SValue r -> SValue r
+readInt, readDouble :: (TypeSym r, ValueExpression r) => SValue r -> SValue r
 readInt inSrc = funcApp pyInt int [inSrc]
 readDouble inSrc = funcApp pyDouble double [inSrc]
 
 readString :: (TypeSym r, InternalValueExp r) => SValue r -> SValue r
 readString inSrc = objMethodCall string inSrc pyRstrip []
 
-range :: (ValueExpression r) => SValue r -> SValue r -> SValue r -> SValue r
+range :: (TypeSym r, ValueExpression r) => SValue r -> SValue r -> SValue r -> SValue r
 range initv finalv stepv = funcApp pyRange (listType int) [initv, finalv, stepv]
 
 pyClassVarAccess :: Doc -> Doc -> Doc

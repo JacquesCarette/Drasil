@@ -703,7 +703,14 @@ jlListAppend = "append!"
 jlListAbsdex = "findfirst"
 
 jlIndexOf
-  :: (IndexTranslator r, ValueExpression r, BinderSym r, VariableValue r, Comparison r)
+  ::
+    ( IndexTranslator r
+    , ValueExpression r
+    , BinderSym r
+    , VariableSym r
+    , VariableValue r
+    , Comparison r
+    )
   => SValue r
   -> SValue r
   -> SValue r
@@ -1010,7 +1017,7 @@ jlInput inSrc v = v &= (v >>= jlInput' . getCodeType . variableType)
         jlInput' Char = jlParse jlCharConc char inSrc
         jlInput' _ = error "Attempt to read a value of unreadable type"
 
-readLine, readLines :: (ValueExpression r) => SValue r -> SValue r
+readLine, readLines :: (TypeSym r, ValueExpression r) => SValue r -> SValue r
 readLine f = funcApp jlReadLineFunc string [f]
 readLines f = funcApp jlReadLinesFunc (listType string) [f]
 
@@ -1025,8 +1032,9 @@ jlCloseFunc = "close"
 jlArgs :: Label
 jlArgs = "ARGS"
 
-jlParse :: (RenderValue r, ValueExpression r) => Label -> VS (r TypeData) ->
-  SValue r -> SValue r
+jlParse
+  :: (TypeSym r, RenderValue r, ValueExpression r)
+  => Label -> VS (r TypeData) -> SValue r -> SValue r
 jlParse tl tp v = let
   typeLabel = mkStateVal void (text tl)
   in funcApp jlParseFunc tp [typeLabel, v]

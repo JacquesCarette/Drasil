@@ -8,7 +8,7 @@ module Drasil.SRS.Sections.Requirements (
   inReqWTab,
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- * Non-functional Requirements
-  nfReqF, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
+  nfReqF, mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR
   ) where
 
@@ -32,7 +32,6 @@ import Drasil.Metadata.Documentation (description, funcReqDom, nonFuncReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, output_, section_,
   software, symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis,
   likelyChg)
-import Drasil.Metadata.Concepts.Computation (defaultOSs)
 import Drasil.Metadata.Concepts.Math (unit_)
 
 -- Other docLang
@@ -105,13 +104,6 @@ mkMaintainableNFR refAddress percent lbl = cic refAddress (foldlSent [
   S "finished software, it will take at most", addPercent percent `S.ofThe`
   S "original development time,",
   S "assuming the same development resources are available"
-  ]) lbl nonFuncReqDom
-
--- | Common Non-Functional Requirement for Portability, targeting 'defaultOSs'.
-mkPortableNFR :: String -> String -> ConceptInstance
-mkPortableNFR refAddress lbl = cic refAddress (foldlSent [
-  S "The code shall be portable to multiple environments, particularly",
-  foldlList Comma List $ map phrase defaultOSs
   ]) lbl nonFuncReqDom
 
 -- | Common Non-Functional Requirement for Correctness.

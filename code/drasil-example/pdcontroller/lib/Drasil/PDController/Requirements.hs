@@ -3,8 +3,9 @@ module Drasil.PDController.Requirements (
 ) where
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, datumConstraint)
+import Data.Drasil.Requirements (portable)
 import Drasil.SRS.Concepts (datCon)
-import Drasil.SRS (mkMaintainableNFR, mkPortableNFR, mkVerifiableNFR,
+import Drasil.SRS (mkMaintainableNFR, mkVerifiableNFR,
   mkSecurityNFR, inReqWTab)
 
 import Drasil.PDController.Concepts
@@ -52,10 +53,7 @@ outputValuesDesc
 -----------------------------------------------------------------------------
 
 nonfuncReqs :: [ConceptInstance]
-nonfuncReqs = [portability, security, maintainability, verifiability]
-
-portability :: ConceptInstance
-portability = mkPortableNFR "portable" "Portability"
+nonfuncReqs = [portable, security, maintainability, verifiability]
 
 security :: ConceptInstance
 security = mkSecurityNFR "security" "Security"

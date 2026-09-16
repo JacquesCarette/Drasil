@@ -10,6 +10,7 @@ import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators 
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (inValue)
+import Data.Drasil.Requirements (portable)
 import Data.Drasil.Concepts.Documentation (characteristic, condition,
   datumConstraint, funcReqDom, message, output_, system,
   type_, value)
@@ -18,7 +19,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Drasil.SRS (inReqWTab, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
-  mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
+  mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR)
 import Drasil.SRS.Concepts (datCon)
 
@@ -119,6 +120,3 @@ reusable = mkReusableNFR "reusable" "Reusability"
 
 maintainable :: ConceptInstance
 maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"
-
-portable :: ConceptInstance
-portable = mkPortableNFR "portable" "Portability"

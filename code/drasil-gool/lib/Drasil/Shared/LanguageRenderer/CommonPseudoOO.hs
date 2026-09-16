@@ -210,7 +210,8 @@ printSt va' vb' = do
   mkStmt (R.print va vb)
 
 arrayDec
-  :: ( ScopeElim r
+  :: ( TypeSym r
+     , ScopeElim r
      , UnRepr r TypeData
      , InternalVarElim r
      , RC.RenderStatement r stmt

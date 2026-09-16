@@ -118,7 +118,7 @@ class (TypeSym r) => VariableSym r where
   -- it performs the necessary imports and creates `Lib.v`
   extVar    :: Library -> Label -> VS (r TypeData) -> SVariable r
 
-class (VariableSym r) => VariableElim r where
+class VariableElim r where
   variableName :: r Variable -> String
   variableType :: r Variable -> r TypeData
 

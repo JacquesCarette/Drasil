@@ -99,6 +99,8 @@ instance IsString Sentence where
 
 -- | Sentences can be concatenated.
 instance Semigroup Sentence where
+  l <> EmptyS = l
+  EmptyS <> r = r
   l <> r = l :+: r
 
 eS :: ModelExpr -> Sentence

@@ -8,7 +8,7 @@ Correctness: The outputs of the code have the [properties of a correct solution]
 
 <div id="portable"></div>
 
-Portability: The code shall be portable to multiple environments, particularly Windows, macOS, and Linux.
+Portability: The code shall be portable to multiple environments, particularly Linux, macOS, and Windows.
 
 <div id="maintainable"></div>
 

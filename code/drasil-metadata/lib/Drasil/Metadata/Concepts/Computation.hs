@@ -17,6 +17,7 @@ linux   = idea' (mkUid "linux")   (cn "Linux")
 macOS   = idea' (mkUid "macOS")   (cn "macOS")
 windows = idea' (mkUid "windows") (cn "Windows")
 
--- | The operating systems that Drasil's generated software targets by default.
+-- | The operating systems that Drasil's generated software targets by default,
+-- listed alphabetically.
 defaultOSs :: [IdeaDict]
-defaultOSs = [windows, macOS, linux]
+defaultOSs = [linux, macOS, windows]

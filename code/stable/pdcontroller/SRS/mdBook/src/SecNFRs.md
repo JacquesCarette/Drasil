@@ -4,7 +4,7 @@ This section provides the non-functional requirements, the qualities that the so
 
 <div id="portable"></div>
 
-Portability: The code shall be portable to multiple environments, particularly Windows, macOS, and Linux.
+Portability: The code shall be portable to multiple environments, particularly Linux, macOS, and Windows.
 
 <div id="security"></div>
 

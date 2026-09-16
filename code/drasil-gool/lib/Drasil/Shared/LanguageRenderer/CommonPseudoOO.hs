@@ -365,7 +365,9 @@ docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (map fst $ bs ++
 bindingError :: String -> String
 bindingError l = "AttachmentTag unimplemented in " ++ l
 
-notNull :: (Comparison r, IC.VariableValue r) => String -> SValue r -> SValue r
+notNull
+  :: (Comparison r, IC.VariableSym r, IC.VariableValue r)
+  => String -> SValue r -> SValue r
 notNull nil v = v ?!= IC.valueOf (IC.var nil $ onStateValue valueType v)
 
 listDecDef
@@ -524,7 +526,12 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 inOutCall
-  :: (RC.InternalAssignStmt r stmt, ValueStatement r stmt, IC.VariableValue r)
+  ::
+    ( TypeSym r
+    , RC.InternalAssignStmt r stmt
+    , ValueStatement r stmt
+    , IC.VariableValue r
+    )
   => (Label -> VS (r TypeData) -> [SValue r] -> SValue r)
   -> Label
   -> [SValue r]

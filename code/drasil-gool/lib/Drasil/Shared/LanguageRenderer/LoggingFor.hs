@@ -76,7 +76,7 @@ instance (LiftLogging u1 l1, LiftLogging u2 l2) => LiftLogging (u1, u2) (l1, l2)
 varLogFile :: (VariableSym r) => SVariable r
 varLogFile = var "outfile" outfile
 
-valLogFile :: (VariableValue r) => SValue r
+valLogFile :: (VariableSym r, VariableValue r) => SValue r
 valLogFile = valueOf varLogFile
 
 -- TODO [Brandon Bosman, 06/19/2026]: This should be passed down from drasil-code

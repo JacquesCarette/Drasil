@@ -165,7 +165,7 @@ litZero t = do
 class (ValueSym r) => MathConstant r where
   pi :: SValue r
 
-class (VariableSym r, ValueSym r) => VariableValue r where
+class VariableValue r where
   valueOf       :: SVariable r -> SValue r
 
 class (ValueSym r) => CommandLineArgs r where

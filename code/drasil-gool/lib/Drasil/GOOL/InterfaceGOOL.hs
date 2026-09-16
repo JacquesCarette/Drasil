@@ -50,7 +50,7 @@ class (UnRepr r TypeData, Argument r, BodySym r bod block, BlockSym r block stmt
   Comparison r, NumericExpression r, ValueSym r, InternalValueExp r,
   ValueExpression r, OOValueExpression r, IndexTranslator r, Array r, List r,
   ListStatement r stmt, Reference r, Set r, FunctionSym r, OOFunctionSym r,
-  ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r block,
+  ParameterSym r, ScopeSym r, BinderSym r, InternalList r block,
   MethodSym r vis mthd bod, OOMethodSym r vis mthd attch bod,
   AttachmentSym r attch, VisibilitySym r vis, StateVarSym r vis stvr attch,
   ClassSym r mthd stvr, TypeElim r, VariableElim r, EmptyStatement r stmt,
@@ -323,7 +323,7 @@ initObserverList
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
 addObserver
-  :: (VariableValue r, List r, ListStatement r stmt)
+  :: (VariableSym r, VariableValue r, ValueSym r, List r, ListStatement r stmt)
   => SValue r -> MS (r stmt)
 addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)

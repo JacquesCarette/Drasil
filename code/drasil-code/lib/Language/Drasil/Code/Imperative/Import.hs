@@ -126,7 +126,14 @@ value u s t = do
 -- construct it with 'classConst' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
 variable
-  :: (OOTypeSym r, OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
+  ::
+    ( OOTypeSym r
+    , VariableSym r
+    , OOVariableSym r
+    , SelfSym r
+    , VariableElim r
+    , VariableValue r
+    )
   => Name -> VS (r TypeData) -> GenState (SVariable r)
 variable s t = do
   g <- get
@@ -148,7 +155,14 @@ variable s t = do
 -- representation is 'Const'. Variable should be accessed through class, so
 -- 'classVariable' is called.
 inputVariable
-  :: (OOTypeSym r, OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
+  ::
+    ( OOTypeSym r
+    , VariableSym r
+    , OOVariableSym r
+    , SelfSym r
+    , VariableElim r
+    , VariableValue r
+    )
   => Structure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
@@ -169,7 +183,14 @@ inputVariable Bundled Const v = do
 -- If constants are 'Inline'd, the generator should not be attempting to make a
 -- variable for one of the constants.
 constVariable
-  :: (OOTypeSym r, OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
+  ::
+    ( OOTypeSym r
+    , VariableSym r
+    , OOVariableSym r
+    , SelfSym r
+    , VariableElim r
+    , VariableValue r
+    )
   => ConstantStructure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
 constVariable (Store Unbundled) _ v = return v
 constVariable (Store Bundled) Var v = do
@@ -234,7 +255,14 @@ mkVal v = do
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
 mkVar
-  :: (OOTypeSym r, OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
+  ::
+    ( OOTypeSym r
+    , VariableSym r
+    , OOVariableSym r
+    , SelfSym r
+    , VariableElim r
+    , VariableValue r
+    )
   => CodeVarChunk -> GenState (SVariable r)
 mkVar v = do
   t <- codeType v
@@ -996,13 +1024,13 @@ readData ddef = do
           (innerType $ convTypeOO t)) scp []) (codeType v)
         ---------------
         appendTemps
-          :: (ListStatement r stmt, VariableValue r, OOTypeSym r)
+          :: (ListStatement r stmt, VariableSym r, VariableValue r, OOTypeSym r)
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp
-          :: (ListStatement r stmt, VariableValue r, OOTypeSym r)
+          :: (ListStatement r stmt, VariableSym r, VariableValue r, OOTypeSym r)
           => String -> DataItem -> GenState (MS (r stmt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convTypeOO t))
@@ -1010,7 +1038,14 @@ readData ddef = do
 
 -- | Get entry variables.
 getEntryVars
-  :: (OOTypeSym r, OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
+  ::
+    ( OOTypeSym r
+    , VariableSym r
+    , OOVariableSym r
+    , SelfSym r
+    , VariableElim r
+    , VariableValue r
+    )
   => Maybe String -> LinePattern -> GenState [SVariable r]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
   (variable (codeName v ++ st) . innerType . convTypeOO))
@@ -1447,13 +1482,13 @@ readDataProc ddef = do
           (innerType $ convType t)) scp []) (codeType v)
         ---------------
         appendTemps
-          :: (ListStatement r stmt, VariableValue r)
+          :: (ListStatement r stmt, VariableSym r, VariableValue r)
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp
-          :: (ListStatement r stmt, VariableValue r)
+          :: (ListStatement r stmt, VariableSym r, VariableValue r)
           => String -> DataItem -> GenState (MS (r stmt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convType t))
@@ -1852,7 +1887,7 @@ l_line, l_lines, l_linetokens, l_infile, l_i :: Label
 var_line, var_lines, var_linetokens, var_infile, var_i ::
   (VariableSym r) => SVariable r
 v_line, v_lines, v_linetokens, v_infile, v_i ::
-  (VariableValue r) => SValue r
+  (VariableSym r, VariableValue r) => SValue r
 l_line = "line"
 var_line = var l_line string
 v_line = valueOf var_line

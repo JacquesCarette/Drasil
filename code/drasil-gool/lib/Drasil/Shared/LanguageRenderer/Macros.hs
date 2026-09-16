@@ -7,8 +7,8 @@ module Drasil.Shared.LanguageRenderer.Macros (
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, SVariable, SValue, bodyStatements,
-  oneLiner, VariableElim(..), getCodeType, listOf, ValueSym(valueType),
-  NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
+  oneLiner, VariableSym, VariableElim(..), getCodeType, listOf,
+  ValueSym(valueType), NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), List, at, EmptyStatement(emptyStmt),
   MultiStatement(multi), ValueStatement(valStmt),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope, VariableValue, BodySym,
@@ -265,18 +265,19 @@ forRange
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
   (IC.valueOf i ?< finalv) (i &+= stepv)
 
-observerIndex :: (IC.VariableSym r) => SVariable r
+observerIndex :: (VariableSym r) => SVariable r
 observerIndex = IC.var "observerIndex" IC.int
 
-observerIdxVal :: (IC.VariableValue r) => SValue r
+observerIdxVal :: (VariableSym r, IC.VariableValue r) => SValue r
 observerIdxVal = IC.valueOf observerIndex
 
-obsList :: (IC.VariableValue r) => VS (r TypeData) -> SValue r
+obsList :: (VariableSym r, IC.VariableValue r) => VS (r TypeData) -> SValue r
 obsList t = IC.valueOf $ listOf observerListName t
 
 notify
   ::
     ( ValueStatement r stmt
+    , VariableSym r
     , VariableValue r
     , List r
     , OOFunctionSym r

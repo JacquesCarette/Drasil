@@ -76,5 +76,5 @@ varLogFile :: (VariableSym r) => SVariable r
 varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.
-valLogFile :: (VariableValue r) => SValue r
+valLogFile :: (VariableSym r, VariableValue r) => SValue r
 valLogFile = valueOf varLogFile

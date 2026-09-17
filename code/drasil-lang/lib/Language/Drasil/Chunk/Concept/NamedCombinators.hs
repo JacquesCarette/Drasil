@@ -44,8 +44,7 @@ import Language.Drasil.Chunk.NamedIdea (IdeaDict, idea')
 import Language.Drasil.Classes (Idea, NamedIdea(..))
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, CapitalizationRuleG(CapWords, Replace,
   CapFirst), NounPhrase(phraseNP, pluralNP), nounPhrase'', compoundPhrase,
-  compoundPhrase'', compoundPhrase''', npS, (.+.))
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct)
+  compoundPhrase'', compoundPhrase''', npS, (.+.), NPStruct)
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase as D (NounPhrase(pluralNP, phraseNP))
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP (
   insertString, insertStringOp, insertStringGen)

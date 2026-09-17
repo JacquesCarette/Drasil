@@ -23,6 +23,20 @@ module Language.Drasil.NaturalLanguage.English.NounPhrase (
 import Data.Char (isLatin1, isLetter, toLower, toUpper)
 
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core -- uses whole module
+import Language.Drasil.Symbol (Symbol)
+
+-- | Synonym for 'NPStructG' filled with a 'Symbol' the version
+-- used outside this file.
+type NPStruct = NPStructG Symbol
+
+-- | 'PluralFormG' filled with a 'Symbol' the version used outside this file.
+type PluralForm = PluralFormG Symbol
+
+-- | 'CapitalizationRuleG' filled with a 'Symbol' the version used outside this file.
+type CapitalizationRule = CapitalizationRuleG Symbol
+
+-- | 'NPG' filled with a 'Symbol' the version used outside this file.
+type NP = NPG Symbol
 
 --Linguistically, nounphrase might not be the best name (yet!), but once
 -- it is fleshed out and/or we do more with it, it will likely be a good fit

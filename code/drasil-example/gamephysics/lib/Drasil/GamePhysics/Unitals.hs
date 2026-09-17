@@ -193,7 +193,7 @@ angAccj = quant (mkUid "angAccj") (nounPhrase'' n n CapWords CapWords) (phrase Q
                (sub (eqSymb QP.angularAccel) lJ) Real angAccelU
   where
     n :: D.NPStruct
-    n = D.S "j-th body's" D.:+: phraseNP (QP.angularAccel ^. term)
+    n = npS "j-th body's" .+. phraseNP (QP.angularAccel ^. term)
 
 velj = quant (mkUid "velj") (compoundPhrase' (QP.velocity ^. term)
                (cn "of the j-th body")) (phrase QP.velocity)

@@ -103,6 +103,10 @@ instance Semigroup Sentence where
   EmptyS <> r = r
   l <> r = l :+: r
 
+-- | Sentences can be empty or directly concatenated.
+instance Monoid Sentence where
+  mempty = EmptyS
+
 eS :: ModelExpr -> Sentence
 eS = E
 
@@ -112,10 +116,6 @@ eS' = E . express
 -- | Gets a symbol and places it in a 'Sentence'.
 ch :: (IsChunk t, Idea t, HasSpace t, HasSymbol t) => t -> Sentence
 ch s = SyCh $ hide s
-
--- | Sentences can be empty or directly concatenated.
-instance Monoid Sentence where
-  mempty = EmptyS
 
 -- | Smart constructors for turning a 'UID' into a 'Sentence'.
 sentencePlural, sentenceShort, sentenceTerm :: UID -> Sentence

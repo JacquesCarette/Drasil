@@ -411,6 +411,7 @@ genInOutFunc
     , OOVariableSym r
     , VariableValue r
     , SelfSym r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -794,6 +795,7 @@ convStmt
     , ListStatement r stmt
     , Reference r
     , OO.Set r
+    , ScopeSym r
     , MultiStatement r stmt
     , ValueStatement r stmt
     , AssignStatement r stmt
@@ -932,6 +934,7 @@ readData
     , ListStatement r stmt
     , Reference r
     , OO.Set r
+    , ScopeSym r
     , DeclStatement r stmt bod
     , OODeclStatement r stmt
     , ControlStatement r stmt bod
@@ -964,6 +967,7 @@ readData ddef = do
             , VariableValue r
             , List r
             , ListStatement r stmt
+            , ScopeSym r
             , DeclStatement r stmt bod
             , OODeclStatement r stmt
             , ControlStatement r stmt bod
@@ -998,6 +1002,7 @@ readData ddef = do
           ::
             ( SelfSym r
             , OOTypeSym r
+            , ScopeSym r
             , OOVariableSym r
             , VariableValue r
             , ListStatement r stmt
@@ -1016,13 +1021,25 @@ readData ddef = do
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
         clearTemps
-          :: (OOTypeSym r, DeclStatement r stmt bod, OODeclStatement r stmt)
+          ::
+            ( OOTypeSym r
+            , ScopeSym r
+            , VariableSym r
+            , DeclStatement r stmt bod
+            , OODeclStatement r stmt
+            )
           => Maybe String -> [DataItem] -> r ScopeData -> [GenState (MS (r stmt))]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
         clearTemp
-          :: (OOTypeSym r, DeclStatement r stmt bod, OODeclStatement r stmt)
+          ::
+            ( OOTypeSym r
+            , ScopeSym r
+            , VariableSym r
+            , DeclStatement r stmt bod
+            , OODeclStatement r stmt
+            )
           => String -> DataItem -> r ScopeData -> GenState (MS (r stmt))
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
           (innerType $ convTypeOO t)) scp []) (codeType v)
@@ -1216,6 +1233,7 @@ publicFuncProc
     , VariableValue r
     , ParameterSym r
     , VisibilitySym r vis
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -1243,6 +1261,7 @@ privateFuncProc
     , VariableValue r
     , ParameterSym r
     , VisibilitySym r vis
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -1271,6 +1290,7 @@ genMethodProc
     ( OO.Literal r
     , VariableValue r
     , ParameterSym r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -1315,6 +1335,7 @@ genFuncProc
     , VariableValue r
     , ParameterSym r
     , VisibilitySym r vis
+    , ScopeSym r
     , MultiStatement r stmt
     , ValueStatement r stmt
     , DeclStatement r stmt bod
@@ -1363,6 +1384,7 @@ genModFuncsProc
     , VariableValue r
     , ParameterSym r
     , VisibilitySym r vis
+    , ScopeSym r
     , MultiStatement r stmt
     , ValueStatement r stmt
     , DeclStatement r stmt bod
@@ -1398,6 +1420,7 @@ readDataProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
+    , ScopeSym r
     , DeclStatement r stmt bod
     , ControlStatement r stmt bod
     , StringStatement r stmt
@@ -1427,6 +1450,7 @@ readDataProc ddef = do
             ( BlockSym r block stmt
             , BodySym r bod block
             , VariableValue r
+            , ScopeSym r
             , NativeVector r
             , List r
             , ListStatement r stmt
@@ -1462,6 +1486,7 @@ readDataProc ddef = do
           ::
             ( VariableValue r
             , NativeVector r
+            , ScopeSym r
             , ListStatement r stmt
             , DeclStatement r stmt bod
             , StringStatement r stmt
@@ -1476,13 +1501,13 @@ readDataProc ddef = do
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
         clearTemps
-          :: (DeclStatement r stmt bod)
+          :: (VariableSym r, ScopeSym r, DeclStatement r stmt bod)
           => Maybe String -> [DataItem] -> r ScopeData -> [GenState (MS (r stmt))]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
         clearTemp
-          :: (DeclStatement r stmt bod)
+          :: (VariableSym r, ScopeSym r, DeclStatement r stmt bod)
           => String -> DataItem -> r ScopeData -> GenState (MS (r stmt))
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
           (innerType $ convType t)) scp []) (codeType v)
@@ -1648,6 +1673,7 @@ convStmtProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , MathConstant r
+    , ScopeSym r
     , VariableValue r
     , BooleanExpression r
     , NumericExpression r
@@ -1777,6 +1803,7 @@ genDataFuncProc
     , Comparison r
     , NumericExpression r
     , ValueExpression r
+    , ScopeSym r
     , VariableValue r
     , ParameterSym r
     , VisibilitySym r vis
@@ -1811,6 +1838,7 @@ publicInOutFuncProc
     , OO.Literal r
     , VariableValue r
     , VisibilitySym r vis
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -1834,6 +1862,7 @@ privateInOutFuncProc
     , OO.Literal r
     , VariableValue r
     , VisibilitySym r vis
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -1857,6 +1886,7 @@ genInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt

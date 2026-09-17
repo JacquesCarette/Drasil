@@ -83,6 +83,7 @@ listSlice
     ( BodySym r bod block
     , IC.BlockSym r block stmt
     , EmptyStatement r stmt
+    , IC.ScopeSym r
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod
@@ -168,6 +169,7 @@ listSlice beg end step vnew vold = do
 makeSetterVal
   ::
     ( EmptyStatement r stmt
+    , VariableSym r
     , IC.DeclStatement r stmt bod
     , Comparison r
     , IC.IndexTranslator r
@@ -250,7 +252,8 @@ stringListLists lsts sl = do
 
 forRange
   ::
-    ( IC.DeclStatement r stmt bod
+    ( IC.ScopeSym r
+    , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod
     , Comparison r
@@ -296,6 +299,7 @@ notifyObservers
     , Comparison r
     , List r
     , ValueStatement r stmt
+    , IC.ScopeSym r
     , DeclStatement r stmt bod
     , AssignStatement r stmt
     , ControlStatement r stmt bod

@@ -134,8 +134,10 @@ getInputDecl
     , Literal r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
+    , ScopeSym r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
@@ -192,6 +194,8 @@ initConsts
     ( Argument r
     , MathConstant r
     , OOTypeSym r
+    , ScopeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -238,7 +242,9 @@ initConsts = do
 
 -- | Generates a statement to declare the variable representing the log file,
 -- if the user chose to turn on logs for variable assignments.
-initLogFileVar :: (DeclStatement r stmt bod) => [Logging] -> r ScopeData -> [MS (r stmt)]
+initLogFileVar
+  :: (VariableSym r, DeclStatement r stmt bod)
+  => [Logging] -> r ScopeData -> [MS (r stmt)]
 initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 
 ------- INPUT ----------
@@ -404,6 +410,7 @@ sfwrCBody
     , Argument r
     , MathConstant r
     , OOTypeSym r
+    , ScopeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -438,6 +445,7 @@ physCBody
     , Argument r
     , MathConstant r
     , OOTypeSym r
+    , ScopeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -473,6 +481,7 @@ chooseConstr
     , Argument r
     , MathConstant r
     , OOTypeSym r
+    , ScopeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -586,6 +595,8 @@ constrVarDec
     ( Argument r
     , MathConstant r
     , OOTypeSym r
+    , ScopeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -991,6 +1002,7 @@ genMainFuncProc
     , BodySym r bod block
     , CommandLineArgs r
     , MathConstant r
+    , ScopeSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1043,6 +1055,8 @@ genMainFuncProc = do
 initConstsProc
   ::
     ( MathConstant r
+    , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1129,7 +1143,7 @@ checkInputClass = do
 -- using 'objDecNew' if the inputs are exported by the current module, and
 -- 'extObjDecNew' if they are exported by a different module.
 getInputDeclProc
-  :: (MultiStatement r stmt, DeclStatement r stmt bod)
+  :: (ScopeSym r, VariableSym r, MultiStatement r stmt, DeclStatement r stmt bod)
   => GenState (Maybe (MS (r stmt)))
 getInputDeclProc = do
   g <- get
@@ -1162,6 +1176,7 @@ genCalcFuncProc
     , BodySym r bod block
     , NativeVector r
     , MathConstant r
+    , ScopeSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1305,6 +1320,7 @@ genInputFormatProc
     , BodySym r bod block
     , NativeVector r
     , MathConstant r
+    , ScopeSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1341,6 +1357,7 @@ genInputFormatProc s = do
           , BodySym r bod block
           , NativeVector r
           , MathConstant r
+          , ScopeSym r
           , VariableValue r
           , BooleanExpression r
           , Comparison r
@@ -1381,6 +1398,7 @@ genInputDerivedProc
     , BodySym r bod block
     , NativeVector r
     , MathConstant r
+    , ScopeSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1418,6 +1436,7 @@ genInputDerivedProc s = do
           , BodySym r bod block
           , NativeVector r
           , MathConstant r
+          , ScopeSym r
           , VariableValue r
           , BooleanExpression r
           , Comparison r
@@ -1458,6 +1477,7 @@ genInputConstraintsProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , MathConstant r
+    , ScopeSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1494,6 +1514,7 @@ genInputConstraintsProc s = do
           ( BlockSym r block stmt
           , BodySym r bod block
           , MathConstant r
+          , ScopeSym r
           , VariableValue r
           , BooleanExpression r
           , Comparison r
@@ -1538,6 +1559,7 @@ sfwrCBodyProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , MathConstant r
+    , ScopeSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1566,6 +1588,7 @@ physCBodyProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , MathConstant r
+    , ScopeSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1595,6 +1618,7 @@ chooseConstrProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , MathConstant r
+    , ScopeSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1686,6 +1710,8 @@ constrExcProc c = do
 constrVarDecProc
   ::
     ( MathConstant r
+    , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1807,6 +1833,7 @@ genOutputFormatProc
     , BodySym r bod block
     , NativeVector r
     , MathConstant r
+    , ScopeSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1838,6 +1865,7 @@ genOutputFormatProc = do
           , BodySym r bod block
           , NativeVector r
           , MathConstant r
+          , ScopeSym r
           , VariableValue r
           , BooleanExpression r
           , Comparison r

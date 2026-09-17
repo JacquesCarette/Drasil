@@ -943,6 +943,7 @@ pyOut
     , Comparison r
     , VariableValue r
     , List r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , AssignStatement r stmt

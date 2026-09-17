@@ -557,16 +557,18 @@ mainBody b = do
   mthdFromData Pub empty
 
 inOutFunc
-  :: ( IC.VariableValue r
-     , IC.ParameterSym r
-     , IC.DeclStatement r stmt bod
-     , BlockSym r block stmt
-     , IC.BodySym r bod block
-     , VariableElim r
-     , RenderBody r bod
-     , RenderType r
-     , RC.InternalControlStmt r stmt
-     )
+  ::
+    ( IC.VariableValue r
+    , IC.ParameterSym r
+    , IC.ScopeSym r
+    , IC.DeclStatement r stmt bod
+    , BlockSym r block stmt
+    , IC.BodySym r bod block
+    , VariableElim r
+    , RenderBody r bod
+    , RenderType r
+    , RC.InternalControlStmt r stmt
+    )
   => (VS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd))
   -> [SVariable r]
   -> [SVariable r]

@@ -30,6 +30,7 @@ doubleAndAdd
     ( BlockSym r block stmt
     , BodySym r bod block
     , Literal r
+    , ScopeSym r
     , VariableValue r
     , NumericExpression r
     , ParameterSym r

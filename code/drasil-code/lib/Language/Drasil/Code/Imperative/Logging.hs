@@ -22,6 +22,7 @@ logBody
   ::
     ( Literal r
     , VariableValue r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -44,6 +45,7 @@ loggedMethod
   ::
     ( Literal r
     , VariableValue r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt

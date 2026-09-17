@@ -378,6 +378,7 @@ printList
     ( BlockSym r block stmt
     , BodySym r bod block
     , MultiStatement r stmt
+    , IC.ScopeSym r
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod
@@ -435,6 +436,7 @@ print
     , MultiStatement r stmt
     , PrintConsole r stmt
     , PrintFile r stmt
+    , IC.ScopeSym r
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod

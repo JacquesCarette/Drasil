@@ -76,6 +76,7 @@ helloInitVariables
   ::
     ( BlockSym r block stmt
     , Literal r
+    , ScopeSym r
     , VariableValue r
     , Comparison r
     , Array r
@@ -176,6 +177,7 @@ mySlicedList11 = var "mySlicedList11" (listType double)
 listSliceTests
   ::
     ( Literal r
+    , ScopeSym r
     , VariableValue r
     , InternalList r block
     , DeclStatement r stmt bod
@@ -305,6 +307,7 @@ listSliceTests = [
 helloIfBody
   ::
     ( Literal r
+    , ScopeSym r
     , VariableValue r
     , BooleanExpression r
     , NumericExpression r

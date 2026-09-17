@@ -25,11 +25,11 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import Drasil.GOOL (SValue, MS, VS, TypeSym(..), OOTypeSym, OOVariableSym,
-  VariableValue(..), ValueStatement(valStmt), DeclStatement(..), convType,
-  convTypeOO, TypeData, FuncAppStatement, TypeElim, VariableSym, VariableElim,
-  Argument, Set, ValueExpression, Comparison, BooleanExpression, MathConstant,
-  List, SelfSym, OOFuncAppStatement, InternalValueExp, Literal,
+import Drasil.GOOL (SValue, MS, VS, TypeSym(..), OOTypeSym, ScopeSym,
+  OOVariableSym, VariableValue(..), ValueStatement(valStmt), DeclStatement(..),
+  convType, convTypeOO, TypeData, FuncAppStatement, TypeElim, VariableSym,
+  VariableElim, Argument, Set, ValueExpression, Comparison, BooleanExpression,
+  MathConstant, List, SelfSym, OOFuncAppStatement, InternalValueExp, Literal,
   OOValueExpression)
 import Drasil.GProc (NativeVector, Reference, NumericExpression)
 
@@ -137,7 +137,9 @@ genCalcCall
     , Literal r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
+    , ScopeSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -354,6 +356,8 @@ genCalcCallProc
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
+    , VariableSym r
+    , ScopeSym r
     , ValueExpression r
     , DeclStatement r stmt bod
     , Argument r

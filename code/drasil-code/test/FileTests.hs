@@ -32,6 +32,7 @@ fileTestMethod
     ( BlockSym r block stmt
     , BodySym r bod block
     , Literal r
+    , ScopeSym r
     , VariableValue r
     , Comparison r
     , List r
@@ -51,6 +52,7 @@ writeStory
   ::
     ( BlockSym r block stmt
     , Literal r
+    , ScopeSym r
     , VariableValue r
     , Comparison r
     , DeclStatement r stmt bod

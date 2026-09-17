@@ -25,6 +25,7 @@ helper
     ( BlockSym r block stmt
     , BodySym r bod block
     , Literal r
+    , ScopeSym r
     , VariableValue r
     , Comparison r
     , List r
@@ -49,6 +50,7 @@ main
     ( BlockSym r block stmt
     , BodySym r bod block
     , Literal r
+    , ScopeSym r
     , VariableValue r
     , Comparison r
     , List r

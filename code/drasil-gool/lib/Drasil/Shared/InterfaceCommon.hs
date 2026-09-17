@@ -437,7 +437,7 @@ class AssignStatement r stmt | r -> stmt where
 infixr 1 &=
 (&=) = assign
 
-class (VariableSym r, ScopeSym r) => DeclStatement r stmt bod | r -> stmt bod where
+class DeclStatement r stmt bod | r -> stmt bod where
   -- | Declare a variable without giving it a value.
   -- Not for use with arrays; use `arrayDec` instead.
   varDec       :: SVariable r -> r ScopeData -> MS (r stmt)

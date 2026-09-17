@@ -17,10 +17,10 @@ import Drasil.Shared.InterfaceCommon (Label, Library, Variable, SVariable, Value
   MathConstant(..), VariableSym, ValueSym, VariableValue(..),
   ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
-  ListStatement, InternalList(..), AssignStatement(..), DeclStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ParameterSym(..), BinderElim(..), UnRepr(..), BodySym,
-  BlockSym)
+  ListStatement, InternalList(..), AssignStatement(..), ScopeSym,
+  DeclStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ParameterSym(..), BinderElim(..),
+  UnRepr(..), BodySym, BlockSym)
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   OpData, BinderD, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS)
@@ -29,7 +29,7 @@ import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 class (BodySym r bod block, BlockSym r block stmt, AssignStatement r stmt,
-  DeclStatement r stmt bod, StringStatement r stmt, FuncAppStatement r stmt,
+  ScopeSym r, DeclStatement r stmt bod, StringStatement r stmt, FuncAppStatement r stmt,
   CommentStatement r stmt, ControlStatement r stmt bod, Argument r, Literal r,
   MathConstant r, ValueSym r, VariableSym r, VariableValue r, CommandLineArgs r,
   NumericExpression r, BooleanExpression r, Comparison r, IndexTranslator r,

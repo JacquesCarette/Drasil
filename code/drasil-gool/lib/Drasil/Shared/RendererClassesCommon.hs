@@ -40,8 +40,8 @@ class (BodySym r bod block, BlockSym r block stmt, AssignStatement r stmt,
   RenderStatement r stmt, StatementElim r stmt, RenderType r, RenderValue r,
   ValueElim r, RenderVariable r, InternalVarElim r, InternalBinderElim r,
   ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
-  BlockCommentElim r, ValueExpression r, RenderMethod r mthd, MethodElim r mthd,
-  ParameterSym r, ScopeElim r
+  BlockCommentElim r, ValueExpression r, TypeSym r, MethodTypeSym r,
+  RenderMethod r mthd, MethodElim r mthd, ParameterSym r, ScopeElim r
   ) => CommonRenderSym r vis stmt mthd bod block
 
 -- Common Typeclasses --
@@ -202,10 +202,10 @@ class BlockCommentSym r where
 class BlockCommentElim r where
   blockComment' :: r Doc -> Doc
 
-class (TypeSym r) => MethodTypeSym r where
-  mType    :: VS (r TypeData) -> MS (r TypeData)
+class MethodTypeSym r where
+  mType :: VS (r TypeData) -> MS (r TypeData)
 
-class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r mthd | r -> mthd where
+class RenderMethod r mthd | r -> mthd where
   -- | Takes a BlockComment and a method and generates a function.
   commentedFunc :: MS (r Doc) -> MS (r mthd) -> MS (r mthd)
   mthdFromData :: VisibilityTag -> Doc -> MS (r mthd)

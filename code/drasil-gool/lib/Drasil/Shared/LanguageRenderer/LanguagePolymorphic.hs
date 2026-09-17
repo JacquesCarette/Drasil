@@ -546,7 +546,7 @@ param f v' = do
   paramFromData v' $ f v
 
 method
-  :: (OORenderMethod r vis mthd attch bod)
+  :: (MethodTypeSym r, OORenderMethod r vis mthd attch bod)
   => Label
   -> r vis
   -> r attch
@@ -583,17 +583,33 @@ initStmts
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
-  :: (AttachmentSym r attch, OORenderMethod r vis mthd attch bod)
+  ::
+    ( AttachmentSym r attch
+    , MethodTypeSym r
+    , OORenderMethod r vis mthd attch bod
+    )
   => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 function n s t = RO.intFunc False n s classLevel (mType t)
 
-docFuncRepr :: (RenderMethod r mthd) => FuncDocRenderer -> String ->
-  [String] -> [String] -> MS (r mthd) -> MS (r mthd)
+docFuncRepr
+  :: (BlockCommentSym r, RenderMethod r mthd)
+  => FuncDocRenderer
+  -> String
+  -> [String]
+  -> [String]
+  -> MS (r mthd)
+  -> MS (r mthd)
 docFuncRepr f desc pComms rComms = commentedFunc (docComment $ onStateValue
   (\ps -> f desc (zip ps pComms) rComms) getParameters)
 
-docFunc :: (RenderMethod r mthd) => FuncDocRenderer -> String -> [String] ->
-  Maybe String -> MS (r mthd) -> MS (r mthd)
+docFunc
+  :: (BlockCommentSym r, RenderMethod r mthd)
+  => FuncDocRenderer
+  -> String
+  -> [String]
+  -> Maybe String
+  -> MS (r mthd)
+  -> MS (r mthd)
 docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 -- Classes --

@@ -1091,10 +1091,15 @@ jInOut f ins outs both b = f (returnTp rets)
         decls = multi $ map (`varDec` local) outs
         rets = both ++ outs
 
-jDocInOut :: (RenderMethod r mthd) => ([SVariable r] ->
-  [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r mthd)) -> String ->
-  [(String, SVariable r)] -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> MS (r Body) -> MS (r mthd)
+jDocInOut
+  :: (BlockCommentSym r, RenderMethod r mthd)
+  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r mthd))
+  -> String
+  -> [(String, SVariable r)]
+  -> [(String, SVariable r)]
+  -> [(String, SVariable r)]
+  -> MS (r Body)
+  -> MS (r mthd)
 jDocInOut f desc is [] [] b = docFuncRepr functionDox desc (map fst is) []
   (f (map snd is) [] [] b)
 jDocInOut f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)

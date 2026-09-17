@@ -23,7 +23,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
   ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
-  OOVariableSym(..), SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
+  OOVariableSym(..), SelfSym(..), StateVarSym(..), AttachmentSym(..),
   OOValueExpression(..), objMethodCall, selfMethodCall, newObj,
   InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -292,8 +292,6 @@ instance RenderVariable JavaCode where
 
 instance ValueSym JavaCode where
   valueType = onCodeValue valType
-
-instance OOValueSym JavaCode
 
 instance Argument JavaCode where
   pointerArg = id

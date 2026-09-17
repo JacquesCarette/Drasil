@@ -88,6 +88,7 @@ value
     ( Argument r
     , OO.Literal r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -125,7 +126,7 @@ value u s t = do
 -- construct it with 'classConst' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
 variable
-  :: (OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
+  :: (OOTypeSym r, OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
   => Name -> VS (r TypeData) -> GenState (SVariable r)
 variable s t = do
   g <- get
@@ -147,7 +148,7 @@ variable s t = do
 -- representation is 'Const'. Variable should be accessed through class, so
 -- 'classVariable' is called.
 inputVariable
-  :: (OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
+  :: (OOTypeSym r, OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
   => Structure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
@@ -168,7 +169,7 @@ inputVariable Bundled Const v = do
 -- If constants are 'Inline'd, the generator should not be attempting to make a
 -- variable for one of the constants.
 constVariable
-  :: (OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
+  :: (OOTypeSym r, OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
   => ConstantStructure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
 constVariable (Store Unbundled) _ v = return v
 constVariable (Store Bundled) Var v = do
@@ -205,6 +206,7 @@ mkVal
     ( Argument r
     , OO.Literal r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -232,7 +234,7 @@ mkVal v = do
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
 mkVar
-  :: (OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
+  :: (OOTypeSym r, OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
   => CodeVarChunk -> GenState (SVariable r)
 mkVar v = do
   t <- codeType v
@@ -246,7 +248,8 @@ mkVar v = do
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
 mkParam
   ::
-    ( OOVariableSym r
+    ( OOTypeSym r
+    , OOVariableSym r
     , VariableValue r
     , SelfSym r
     , ParameterSym r
@@ -374,6 +377,7 @@ genMethod f n desc p r b = do
 genInOutFunc
   ::
     ( OO.Literal r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , SelfSym r
@@ -415,6 +419,7 @@ convExpr
   ::
     ( Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , OO.Literal r
@@ -524,6 +529,7 @@ convCall
   ::
     ( Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , OO.Literal r
@@ -740,6 +746,7 @@ convStmt
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , OO.Literal r
@@ -883,6 +890,7 @@ readData
     , Comparison r
     , NumericExpression r
     , SelfSym r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , InternalValueExp r
@@ -919,6 +927,7 @@ readData ddef = do
             , BodySym r bod block
             , OO.Literal r
             , SelfSym r
+            , OOTypeSym r
             , OOVariableSym r
             , VariableValue r
             , List r
@@ -956,6 +965,7 @@ readData ddef = do
         lineData
           ::
             ( SelfSym r
+            , OOTypeSym r
             , OOVariableSym r
             , VariableValue r
             , ListStatement r stmt
@@ -1000,7 +1010,7 @@ readData ddef = do
 
 -- | Get entry variables.
 getEntryVars
-  :: (OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
+  :: (OOTypeSym r, OOVariableSym r, SelfSym r, VariableElim r, VariableValue r)
   => Maybe String -> LinePattern -> GenState [SVariable r]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
   (variable (codeName v ++ st) . innerType . convTypeOO))

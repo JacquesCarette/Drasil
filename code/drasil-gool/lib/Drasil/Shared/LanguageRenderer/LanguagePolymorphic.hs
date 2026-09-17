@@ -458,7 +458,7 @@ print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
           printStr printFileStr f
 
 closeFile
-  :: (IG.InternalValueExp r, IC.ValueStatement r stmt)
+  :: (IC.TypeSym r, IG.InternalValueExp r, IC.ValueStatement r stmt)
   => Label -> SValue r -> MS (r stmt)
 closeFile n f = IC.valStmt $ objMethodCallNoParams IC.void f n
 

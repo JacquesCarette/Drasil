@@ -23,11 +23,11 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOValueExpression(..),
-  selfMethodCall, newObj, InternalValueExp(..), objMethodCall,
-  objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+  StateVarSym(..), AttachmentSym(..), OOValueExpression(..), selfMethodCall,
+  newObj, InternalValueExp(..), objMethodCall, objMethodCallNoParams,
+  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -296,8 +296,6 @@ instance RenderVariable CSharpCode where
 
 instance ValueSym CSharpCode where
   valueType = onCodeValue valType
-
-instance OOValueSym CSharpCode
 
 instance Argument CSharpCode where
   pointerArg = id
@@ -876,7 +874,7 @@ csAssert condition errorMessage = vcat [
 csDiscardInput :: SValue CSharpCode -> MS (CSharpCode (Doc, Terminator))
 csDiscardInput = valStmt
 
-csFileInput :: (InternalValueExp r) => SValue r -> SValue r
+csFileInput :: (TypeSym r, InternalValueExp r) => SValue r -> SValue r
 csFileInput f = objMethodCallNoParams string f csReadLine
 
 csInput :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode

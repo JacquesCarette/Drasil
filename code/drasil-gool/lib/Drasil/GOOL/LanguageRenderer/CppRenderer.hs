@@ -23,11 +23,10 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   ParameterSym(..), MethodSym(..), convScope, BinderElim(..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, Class, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
-  OOValueExpression(..), selfMethodCall, InternalValueExp(..), objMethodCall,
-  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..), convTypeOO)
+  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueExpression(..),
+  selfMethodCall, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
+  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..), convTypeOO)
 import Drasil.GOOL.Renderers (renderType, renderParam,)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
@@ -299,8 +298,6 @@ instance (Pair p) => RenderVariable (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
-
-instance (Pair p) => OOValueSym (p CppSrcCode CppHdrCode)
 
 instance (Pair p) => Argument (p CppSrcCode CppHdrCode) where
   pointerArg = pair1 pointerArg pointerArg
@@ -1221,8 +1218,6 @@ instance RenderVariable CppSrcCode where
 instance ValueSym CppSrcCode where
   valueType = onCodeValue valType
 
-instance OOValueSym CppSrcCode where
-
 instance Argument CppSrcCode where
   pointerArg = id
 
@@ -1914,8 +1909,6 @@ instance RenderVariable CppHdrCode where
 
 instance ValueSym CppHdrCode where
   valueType = onCodeValue valType
-
-instance OOValueSym CppHdrCode where
 
 instance Argument CppHdrCode where
   pointerArg = id

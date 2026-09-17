@@ -34,9 +34,9 @@ tOfUnitNone _ = tOfUnitHelper [] [] []
 
 -- | Helper for making a Table of Units.
 tOfUnitHelper :: [Sentence] -> [s -> Sentence] -> [s] -> LabelledContent
-tOfUnitHelper _       _  [] = mkRawLC (Para EmptyS) unitTableRef
-tOfUnitHelper []      _  _  = mkRawLC (Para EmptyS) unitTableRef
-tOfUnitHelper _       [] _  = mkRawLC (Para EmptyS) unitTableRef
+tOfUnitHelper _       _  [] = mkRawLC (Para []) unitTableRef
+tOfUnitHelper []      _  _  = mkRawLC (Para []) unitTableRef
+tOfUnitHelper _       [] _  = mkRawLC (Para []) unitTableRef
 tOfUnitHelper headers fs u  = mkRawLC (Table headers
   (mkTable fs u) (S "Table of Units") True) unitTableRef
 

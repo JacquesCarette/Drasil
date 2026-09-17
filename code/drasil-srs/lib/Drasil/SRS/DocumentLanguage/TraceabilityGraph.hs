@@ -44,15 +44,15 @@ traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailin
 -- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
 -- and wraps in 'Contents'. Usually references the five graphs as defined in 'GraphInfo'.
 traceGIntro :: [UID] -> [Sentence] -> [UnlabelledContent]
-traceGIntro refs trailings = [ulcc $ Para $ foldlSent
+traceGIntro refs trailings = [ulcc $ Para [foldlSent
         [phrase purpose `S.the_ofTheC` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
         S "additionally modified if a certain", phrase component +:+. S "is changed",
         S "The arrows in the", plural graph, S "represent" +:+. plural dependency,
         S "The", phrase component, S "at the tail of an arrow is depended on by the",
         phrase component, S "at the head of that arrow. Therefore, if a", phrase component,
-        S "is changed, the", plural component, S "that it points to should also be changed"] +:+
-        foldlSent_ (zipWith graphShows refs trailings)]
+        S "is changed, the", plural component, S "that it points to should also be changed"],
+        foldlSent_ (zipWith graphShows refs trailings)]]
 
 -- | Extracts traceability graph inforomation from filled-in 'System'.
 mkGraphInfo :: SmithEtAlSRS -> GraphInfo

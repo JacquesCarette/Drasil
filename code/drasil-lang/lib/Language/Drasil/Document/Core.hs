@@ -71,7 +71,7 @@ data HasCaption = NoCaption | WithCaption
 -- | Types of layout objects we deal with explicitly.
 data RawContent =
     Table [Sentence] [[Sentence]] Title Bool -- ^ table has: header-row, data(rows), label/caption, and a bool that determines whether or not to show label.
-  | Para Sentence                            -- ^ Paragraphs are just sentences.
+  | Para Paragraph                           -- ^ A paragraph of 'Sentence's.
   | EqnBlock ModelExpr                       -- ^ Block of Equations holds an expression.
   | DerivBlock Sentence [RawContent]         -- ^ Grants the ability to label a group of 'RawContent'.
   | Enumeration ListType                     -- ^ For enumerated lists.

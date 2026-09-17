@@ -92,7 +92,7 @@ derivation c = fmap
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivCons :: Sentence -> RawContent
 makeDerivCons (E e) = EqnBlock e
-makeDerivCons s     = Para s
+makeDerivCons s     = Para [s]
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs.
 type ModRow = [(String, [Contents])]

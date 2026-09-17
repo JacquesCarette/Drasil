@@ -121,7 +121,7 @@ ulcc = UnlblC
 ---------------------------------------------------------------------------
 -- | Smart constructor that wraps 'UnlabelledContent' into 'Contents'.
 mkParagraph :: Sentence -> Contents
-mkParagraph x = UlC $ ulcc $ Para x
+mkParagraph x = UlC $ ulcc $ Para [x]
 
 -- | Smart constructor that wraps 'LabelledContent' into 'Contents'.
 -- Takes a Reference to extract UID, LblType, and ShortName for the labelled content.

@@ -7,6 +7,7 @@ import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
 import Data.Map (fromList)
 
+import Language.Drasil (foldlSent_)
 import Language.Drasil.Document
 import Drasil.Code.CodeExpr.Development (expr)
 
@@ -146,7 +147,7 @@ layLabelled sm (LblC _ _ rc)                    = layUnlabelled sm rc
 layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
-layUnlabelled sm (Para c)         = T.Paragraph (spec sm c)
+layUnlabelled sm (Para c)         = T.Paragraph (spec sm $ foldlSent_ c)
 layUnlabelled sm (EqnBlock c)     = T.EqnBlock (P.E (modelExpr c sm))
 layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr

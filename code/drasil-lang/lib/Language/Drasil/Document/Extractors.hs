@@ -51,7 +51,7 @@ extractSents = go . (^. accessContents)
     -- | Extracts 'Sentence's from 'RawContent'.
     go :: RawContent -> [Sentence]
     go (Table s1 s2 t _)   = t : s1 ++ concat s2
-    go (Para s)            = [s]
+    go (Para s)            = s
     go (EqnBlock e)        = [eS e]
     go (CodeBlock e)       = [eS' e]
     go (DerivBlock h d)    = h : concatMap go d

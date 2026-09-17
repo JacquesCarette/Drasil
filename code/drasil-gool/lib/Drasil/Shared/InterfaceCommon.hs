@@ -421,7 +421,7 @@ class ValueStatement r stmt | r -> stmt where
   -- | Converts a value to statement
   valStmt :: SValue r -> MS (r stmt)
 
-class (VariableSym r) => AssignStatement r stmt | r -> stmt where
+class AssignStatement r stmt | r -> stmt where
   (&-=)  :: SVariable r -> SValue r -> MS (r stmt)
   infixl 1 &-=
   (&+=)  :: SVariable r -> SValue r -> MS (r stmt)

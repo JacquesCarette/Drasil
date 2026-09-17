@@ -450,7 +450,7 @@ double :: (Monad r) => VS (r TypeData)
 double = typeFromData Double doubleRender (text doubleRender)
 
 openFileR
-  :: (IC.AssignStatement r stmt)
+  :: (TypeSym r, IC.AssignStatement r stmt)
   => (SValue r -> VS (r TypeData) -> SValue r)
   -> SVariable r
   -> SValue r
@@ -478,7 +478,8 @@ self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (obj l)
   R.self')
 
 multiAssign
-  :: ( IC.AssignStatement r stmt
+  :: ( TypeSym r
+     , IC.AssignStatement r stmt
      , InternalVarElim r
      , RC.RenderValue r
      , RC.RenderVariable r

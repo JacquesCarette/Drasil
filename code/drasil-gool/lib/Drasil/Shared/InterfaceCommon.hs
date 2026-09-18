@@ -168,7 +168,7 @@ class MathConstant r where
 class VariableValue r where
   valueOf       :: SVariable r -> SValue r
 
-class (ValueSym r) => CommandLineArgs r where
+class CommandLineArgs r where
   arg          :: Integer -> SValue r
   argsList     :: SValue r
   argExists    :: Integer -> SValue r

@@ -3,7 +3,8 @@
 module Language.Drasil.Document.Core (
   Contents(..), ListType(..), ItemType(..), RawContent(..),
   ListTuple, MaxWidthPercent, HasContents(..), LabelledContent(..),
-  UnlabelledContent(..), HasCaption(..), Lbl, Filepath, Author, Title
+  UnlabelledContent(..), HasCaption(..), Lbl, Filepath, Author, Title,
+  Paragraph
 ) where
 
 import Control.Lens ((^.), makeLenses, Lens', set, view)
@@ -47,6 +48,10 @@ type ListTuple = (Title, ItemType, Maybe String) -- ^ Formats as Title: Item. Fo
 type Filepath = String
 type Lbl      = Sentence  -- ^ Label.
 
+-- | A paragraph is a group of 'Sentence's that are folded into one when
+-- rendered.
+type Paragraph = [Sentence]
+
 -- * Contents
 
 -- | Contents may be labelled or unlabelled.
@@ -66,7 +71,7 @@ data HasCaption = NoCaption | WithCaption
 -- | Types of layout objects we deal with explicitly.
 data RawContent =
     Table [Sentence] [[Sentence]] Title Bool -- ^ table has: header-row, data(rows), label/caption, and a bool that determines whether or not to show label.
-  | Paragraph Sentence                       -- ^ Paragraphs are just sentences.
+  | Para Paragraph                           -- ^ A paragraph of 'Sentence's.
   | EqnBlock ModelExpr                       -- ^ Block of Equations holds an expression.
   | DerivBlock Sentence [RawContent]         -- ^ Grants the ability to label a group of 'RawContent'.
   | Enumeration ListType                     -- ^ For enumerated lists.
@@ -138,7 +143,7 @@ prependLabel EqnBlock{}     = prepend "EqnB"
 prependLabel CodeBlock{}    = prepend "CodeB"
 prependLabel DerivBlock{}   = prepend "Deriv"
 prependLabel Enumeration{}  = prepend "Lst"
-prependLabel Paragraph{}    = prepend "Par" -- error "Shouldn't reference paragraphs"
+prependLabel Para{}         = prepend "Par" -- error "Shouldn't reference paragraphs"
 prependLabel Bib{}          = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."

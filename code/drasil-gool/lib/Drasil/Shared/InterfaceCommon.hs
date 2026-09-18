@@ -162,7 +162,7 @@ litZero t = do
     Double -> litDouble 0
     _ -> error "litZero expects a numeric type"
 
-class (ValueSym r) => MathConstant r where
+class MathConstant r where
   pi :: SValue r
 
 class VariableValue r where

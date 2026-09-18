@@ -43,7 +43,7 @@ module Drasil.SRS (
   -- ** Requirements
   -- Drasil.Sections.Requirements
   inReqWTab, mkInputPropsTable, mkQRTuple, mkQRTupleRef,
-  mkValsSourceTable, reqInputsRef, mkMaintainableNFR, mkPortableNFR,
+  mkValsSourceTable, reqInputsRef, mkMaintainableNFR,
   mkCorrectNFR, mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR,
   mkSecurityNFR,
   -- ** Specific System Description
@@ -66,7 +66,7 @@ import Drasil.SRS.DocumentLanguage.TraceabilityGraph (mkGraphInfo, traceyGraphGe
 import Drasil.SRS.Sections.AuxiliaryConstants (tableOfConstants)
 import Drasil.SRS.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing)
 import Drasil.SRS.Sections.Requirements (mkInputPropsTable,
-  mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
+  mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef, mkMaintainableNFR, mkCorrectNFR,
   mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR, inReqWTab)
 import Drasil.SRS.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)
 import Drasil.SRS.Sections.TableOfSymbols (tsymb, tsymb'')

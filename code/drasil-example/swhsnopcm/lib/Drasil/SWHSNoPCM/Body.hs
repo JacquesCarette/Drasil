@@ -237,7 +237,7 @@ orgDocEnd = foldlSent [D.toSent (atStartNP (the inModel)),
 --Section 3.3 : SYSTEM CONSTRAINTS
 ----------------------------------
 
---s3_3_intro = Paragraph $ EmptyS
+--s3_3_intro = Para $ EmptyS
 
 --TODO: Placeholder value until content can be added
 

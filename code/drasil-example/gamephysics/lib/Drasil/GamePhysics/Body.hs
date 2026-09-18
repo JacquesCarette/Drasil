@@ -314,7 +314,7 @@ general_definitions_GDefs = map (Definition . General) gDefs)
 -- Collision Diagram        --
 ------------------------------
 {-- should be paired with the last instance model for this example
-secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image",
+secCollisionDiagram = Para $ foldlSent [ S "This section presents an image",
   S "of a typical collision between two 2D rigid bodies labeled A and B,"
   S "showing the position of the two objects, the collision normal vector n and",
   S "the vectors from the approximate center of mass of each object to the point",

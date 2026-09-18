@@ -129,7 +129,7 @@ purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase docume
 purposeOfDoc :: SmithEtAlSRS -> PurposeDescription -> Section
 purposeOfDoc srd (StdPurp Succinct) = SRS.prpsOfDoc [mkParagraph $ purpDocPara1 $ srd ^. projName] []
 purposeOfDoc srd (StdPurp Verbose) = SRS.prpsOfDoc [mkParagraph $ purpDocPara1 $ srd ^. projName, mkParagraph developmentProcessParagraph] []
-purposeOfDoc _   (CustomPurp ss) = SRS.prpsOfDoc (map (mkParagraph . foldlSent_) ss) []
+purposeOfDoc _   (CustomPurp ss) = SRS.prpsOfDoc (map (UlC . ulcc . Para) ss) []
 
 -- | Constructor for the Scope of Requirements subsection.
 -- Takes in the main requirement for the program.

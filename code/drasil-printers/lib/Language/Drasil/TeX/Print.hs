@@ -154,7 +154,7 @@ pOps Cross    = texSym "times"
 pOps VAdd     = pure pls
 pOps VSub     = pure hyph -- unfortunately, hyphen and - are the same
 pOps Dot      = commandD "cdot" empty
-pOps Scale    = pure $ text " "
+pOps Scale    = pure thinSpace
 pOps Eq       = pure assign
 pOps NEq      = commandD "neq" empty
 pOps Lt       = commandD "lt" empty
@@ -171,7 +171,7 @@ pOps SRemove  = pure hyph
 pOps SContains = commandD " in " empty
 pOps SUnion   = commandD "+" empty
 pOps Add      = pure pls
-pOps Mul      = pure $ text "\\,"
+pOps Mul      = pure thinSpace
 pOps Summ     = command0 "displaystyle" <> command0 "sum"
 pOps Prod     = command0 "displaystyle" <> command0 "prod"
 pOps Inte     = texSym "int"
@@ -181,6 +181,9 @@ pOps LArrow   = commandD "leftarrow"  empty
 pOps RArrow   = commandD "rightarrow" empty
 pOps ForAll   = commandD "ForAll"     empty
 pOps Partial  = commandD "partial"    empty
+
+thinSpace :: TP.Doc
+thinSpace = text "\\,"
 
 -- | Prints fencing notation ("(),{},|,||").
 fence :: OpenClose -> Fence -> D

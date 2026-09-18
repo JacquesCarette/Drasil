@@ -26,7 +26,7 @@ import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 -- acronyms. It is assumed that the provided 'TermAbbr's are unique and all have
 -- a short form.
 tableAbbAccGen :: [TermAbbr] -> LabelledContent
-tableAbbAccGen [] = mkRawLC (Paragraph $ emptySectSentPlu [abbAcc]) tableAbbAccRef
+tableAbbAccGen [] = mkRawLC (Para [emptySectSentPlu [abbAcc]]) tableAbbAccRef
 tableAbbAccGen ls = let chunks = sortBy (compare `on` shortForm) ls in
   mkRawLC (Table
   (map titleize [abbreviation, fullForm]) (mkTable

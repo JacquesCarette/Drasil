@@ -26,7 +26,7 @@ import Language.Drasil.Sentence ((+:+), sParen, sentenceTerm,
 import qualified Language.Drasil.Sentence as S
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase as NP
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NPStruct)
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStructG(SC, PC, (:-!:), (:+!:)))
+import Drasil.NaturalLanguage.English.NounPhrase.Core (NPStructG(SC, PC, (:-!:), (:+!:)))
 
 -- | Translate from NPStruct to Sentence
 toSent :: NPStruct -> S.Sentence

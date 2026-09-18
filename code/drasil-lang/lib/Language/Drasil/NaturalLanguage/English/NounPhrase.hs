@@ -22,7 +22,7 @@ module Language.Drasil.NaturalLanguage.English.NounPhrase (
 
 import Data.Char (isLatin1, isLetter, toLower, toUpper)
 
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core -- uses whole module
+import Drasil.NaturalLanguage.English.NounPhrase.Core -- uses whole module
 import Language.Drasil.Symbol (Symbol)
 
 -- | Synonym for 'NPStructG' filled with a 'Symbol' the version

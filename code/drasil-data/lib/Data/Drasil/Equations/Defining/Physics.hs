@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Documentation (body, constant)
 -- * Equations
 
 weightEqn, newtonSLEqn, hsPressureEqn, speedEqn :: ExprC r => r
-newtonSLEqn               = sy QPP.mass $* sy QP.acceleration
+newtonSLEqn               = sy QPP.mass `vScale` sy QP.acceleration
 weightEqn                 = sy QPP.vol $* sy QPP.specWeight
 hsPressureEqn             = sy QPP.specWeight $* sy QP.height
 speedEqn                  = norm (sy QP.velocity)

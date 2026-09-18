@@ -6,8 +6,14 @@ import Data.Drasil.SI_Units (metre, radian, s_2, second, newton, kilogram,
 import Language.Drasil (cn, newUnit, UnitDefn, (/:), (/$), (*:), makeDerU, cncpt''', Sentence(..))
 import Drasil.Database (mkUid)
 
+physicsUnits :: [UnitDefn]
+physicsUnits = [
+    accelU, angVelU, angAccelU, forcePerMeterU, momtInertU, momentOfForceU,
+    impulseU, springConstU, torqueU, velU, gravConstU
+  ]
+
 accelU, angVelU, angAccelU, forcePerMeterU, momtInertU, momentOfForceU,
- impulseU, springConstU, torqueU, velU :: UnitDefn
+ impulseU, springConstU, torqueU, velU, gravConstU :: UnitDefn
 
 accelU          = newUnit "acceleration"         $ metre /: s_2
 angVelU         = newUnit "angular velocity"     $ radian /: second
@@ -19,8 +25,6 @@ momentOfForceU  = newUnit "moment of force"      $ newton *: metre
 springConstU    = newUnit "spring constant"      $ newton /: metre
 torqueU         = newUnit "torque"               $ newton *: metre
 velU            = newUnit "velocity"             $ metre /: second
-
-gravConstU :: UnitDefn
 
 gravConstU = makeDerU (cncpt''' (mkUid "gravConstU") (cn "gravitational constant")
   (S "universal gravitational constant")) (m_3 /$ (kilogram *: s_2))

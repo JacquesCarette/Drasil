@@ -4,12 +4,14 @@ The unit system used throughout is SI (Système International d'Unités). In add
 
 <div id="Table:ToU"></div>
 
-|Symbol           |Description|SI Name |
-|:----------------|:----------|:-------|
-|\\({\text{kg}}\\)|mass       |kilogram|
-|\\({\text{m}}\\) |length     |metre   |
-|\\({\text{N}}\\) |force      |newton  |
-|\\({\text{Pa}}\\)|pressure   |pascal  |
-|\\({\text{s}}\\) |time       |second  |
+|Symbol                                  |Description           |SI Name               |
+|:---------------------------------------|:---------------------|:---------------------|
+|\\({\text{kg}}\\)                       |mass                  |kilogram              |
+|\\({\text{m}}\\)                        |length                |metre                 |
+|\\(\frac{\text{m}^{12}}{\text{N}^{7}}\\)|surface flaw parameter|surface flaw parameter|
+|\\({\text{mm}}\\)                       |length                |millimetre            |
+|\\({\text{N}}\\)                        |force                 |newton                |
+|\\({\text{Pa}}\\)                       |pressure              |pascal                |
+|\\({\text{s}}\\)                        |time                  |second                |
 
 **<p align="center">Table of Units</p>**

@@ -4,12 +4,16 @@ The unit system used throughout is SI (Système International d'Unités). In add
 
 <div id="Table:ToU"></div>
 
-|Symbol            |Description|SI Name |
-|:-----------------|:----------|:-------|
-|\\({\text{kg}}\\) |mass       |kilogram|
-|\\({\text{m}}\\)  |length     |metre   |
-|\\({\text{N}}\\)  |force      |newton  |
-|\\({\text{rad}}\\)|angle      |radian  |
-|\\({\text{s}}\\)  |time       |second  |
+|Symbol                               |Description         |SI Name             |
+|:------------------------------------|:-------------------|:-------------------|
+|\\({\text{kg}}\\)                    |mass                |kilogram            |
+|\\({\text{m}}\\)                     |length              |metre               |
+|\\(\frac{\text{m}}{\text{s}^{2}}\\)  |acceleration        |acceleration        |
+|\\(\frac{\text{m}}{\text{s}}\\)      |velocity            |velocity            |
+|\\({\text{N}}\\)                     |force               |newton              |
+|\\({\text{rad}}\\)                   |angle               |radian              |
+|\\(\frac{\text{rad}}{\text{s}^{2}}\\)|angular acceleration|angular acceleration|
+|\\(\frac{\text{rad}}{\text{s}}\\)    |angular velocity    |angular velocity    |
+|\\({\text{s}}\\)                     |time                |second              |
 
 **<p align="center">Table of Units</p>**

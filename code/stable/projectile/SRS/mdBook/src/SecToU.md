@@ -4,10 +4,12 @@ The unit system used throughout is SI (Système International d'Unités). In add
 
 <div id="Table:ToU"></div>
 
-|Symbol            |Description|SI Name|
-|:-----------------|:----------|:------|
-|\\({\text{m}}\\)  |length     |metre  |
-|\\({\text{rad}}\\)|angle      |radian |
-|\\({\text{s}}\\)  |time       |second |
+|Symbol                             |Description |SI Name     |
+|:----------------------------------|:-----------|:-----------|
+|\\({\text{m}}\\)                   |length      |metre       |
+|\\(\frac{\text{m}}{\text{s}^{2}}\\)|acceleration|acceleration|
+|\\(\frac{\text{m}}{\text{s}}\\)    |velocity    |velocity    |
+|\\({\text{rad}}\\)                 |angle       |radian      |
+|\\({\text{s}}\\)                   |time        |second      |
 
 **<p align="center">Table of Units</p>**

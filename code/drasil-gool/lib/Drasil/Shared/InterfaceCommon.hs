@@ -459,38 +459,38 @@ class DeclStatement r stmt bod | r -> stmt bod where
   funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MS (r bod)
     -> MS (r stmt)
 
-class (VariableSym r) => PrintConsole r stmt | r -> stmt where
+class PrintConsole r stmt | r -> stmt where
   print      :: SValue r -> MS (r stmt)
   printLn    :: SValue r -> MS (r stmt)
   -- TODO [Brandon Bosman, 07/23/2026]: Could these be helpers?
   printStr   :: String -> MS (r stmt)
   printStrLn :: String -> MS (r stmt)
 
-class (VariableSym r) => ReadConsole r stmt | r -> stmt where
+class ReadConsole r stmt | r -> stmt where
   getInput         :: SVariable r -> MS (r stmt)
   discardInput     :: MS (r stmt)
 
-class (VariableSym r) => FileHandling r stmt | r -> stmt where
+class FileHandling r stmt | r -> stmt where
   openFileR :: SVariable r -> SValue r -> MS (r stmt)
   openFileW :: SVariable r -> SValue r -> MS (r stmt)
   openFileA :: SVariable r -> SValue r -> MS (r stmt)
   closeFile :: SValue r -> MS (r stmt)
 
-class (VariableSym r) => PrintFile r stmt | r -> stmt where
+class PrintFile r stmt | r -> stmt where
   -- | Given the file handle and value to print, print the value to the file.
   printFile      :: SValue r -> SValue r -> MS (r stmt)
   printFileLn    :: SValue r -> SValue r -> MS (r stmt)
   printFileStr   :: SValue r -> String -> MS (r stmt)
   printFileStrLn :: SValue r -> String -> MS (r stmt)
 
-class (VariableSym r) => ReadFile r stmt | r -> stmt where
+class ReadFile r stmt | r -> stmt where
   getFileInput     :: SValue r -> SVariable r -> MS (r stmt)
   discardFileInput :: SValue r -> MS (r stmt)
   getFileInputLine :: SValue r -> SVariable r -> MS (r stmt)
   discardFileLine  :: SValue r -> MS (r stmt)
   getFileInputAll  :: SValue r -> SVariable r -> MS (r stmt)
 
-class (VariableSym r) => StringStatement r stmt | r -> stmt where
+class StringStatement r stmt | r -> stmt where
   -- | Given a char to split on, variable to store result in, and string to split,
   -- generates a statement splitting the string into a list of strings
   -- delimited by the char.

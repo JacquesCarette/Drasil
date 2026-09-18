@@ -47,6 +47,7 @@ helperClass
     , OOMethodSym r vis mthd attch bod
     , PrintConsole r stmt
     , Literal r
+    , VariableSym r
     , OOVariableSym r
     , SelfSym r
     , VariableValue r
@@ -75,6 +76,7 @@ printNumMethod
     , AttachmentSym r attch
     , VisibilitySym r vis
     , PrintConsole r stmt
+    , VariableSym r
     , OOVariableSym r
     , SelfSym r
     , VariableValue r

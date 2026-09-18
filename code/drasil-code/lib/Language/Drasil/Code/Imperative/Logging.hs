@@ -21,6 +21,7 @@ import Drasil.GOOL (Label, block, SVariable, SValue, MS, BodySym(..),
 logBody
   ::
     ( Literal r
+    , VariableSym r
     , VariableValue r
     , ScopeSym r
     , MultiStatement r stmt
@@ -44,6 +45,7 @@ logBody n vars b = do
 loggedMethod
   ::
     ( Literal r
+    , VariableSym r
     , VariableValue r
     , ScopeSym r
     , MultiStatement r stmt

@@ -408,6 +408,7 @@ genInOutFunc
   ::
     ( OO.Literal r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , SelfSym r
@@ -1003,6 +1004,7 @@ readData ddef = do
             ( SelfSym r
             , OOTypeSym r
             , ScopeSym r
+            , VariableSym r
             , OOVariableSym r
             , VariableValue r
             , ListStatement r stmt
@@ -1484,7 +1486,8 @@ readDataProc ddef = do
         ---------------
         lineData
           ::
-            ( VariableValue r
+            ( VariableSym r
+            , VariableValue r
             , NativeVector r
             , ScopeSym r
             , ListStatement r stmt
@@ -1836,6 +1839,7 @@ publicInOutFuncProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , OO.Literal r
+    , VariableSym r
     , VariableValue r
     , VisibilitySym r vis
     , ScopeSym r
@@ -1860,6 +1864,7 @@ privateInOutFuncProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , OO.Literal r
+    , VariableSym r
     , VariableValue r
     , VisibilitySym r vis
     , ScopeSym r
@@ -1885,6 +1890,7 @@ privateInOutFuncProc n = genInOutFuncProc (inOutFunc n private) (docInOutFunc n 
 genInOutFuncProc
   ::
     ( OO.Literal r
+    , VariableSym r
     , VariableValue r
     , ScopeSym r
     , MultiStatement r stmt

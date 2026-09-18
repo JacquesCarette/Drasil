@@ -529,6 +529,7 @@ constrWarn
     , MathConstant r
     , OOTypeSym r
     , OOVariableSym r
+    , VariableSym r
     , VariableValue r
     , Literal r
     , BooleanExpression r
@@ -629,6 +630,7 @@ constraintViolatedMsg
     ( Argument r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -662,6 +664,7 @@ printConstraint
     ( Argument r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -688,6 +691,7 @@ printConstraint v c = do
           ( Argument r
           , MathConstant r
           , OOTypeSym r
+          , VariableSym r
           , OOVariableSym r
           , VariableValue r
           , Literal r
@@ -1655,6 +1659,7 @@ chooseConstrProc cb cs = do
 constrWarnProc
   ::
     ( MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1739,6 +1744,7 @@ constrVarDecProc v e = do
 constraintViolatedMsgProc
   ::
     ( MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1766,6 +1772,7 @@ constraintViolatedMsgProc q s c = do
 printConstraintProc
   ::
     ( MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1786,6 +1793,7 @@ printConstraintProc c = do
       printConstraint'
         ::
           ( MathConstant r
+          , VariableSym r
           , VariableValue r
           , BooleanExpression r
           , Comparison r

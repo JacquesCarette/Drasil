@@ -84,7 +84,14 @@ logName :: (Literal r) => SValue r
 logName = litString "log.txt"
 
 logVarUpdate
-  :: (FileHandling r stmt, PrintFile r stmt, VariableValue r, VariableElim r, Literal r)
+  ::
+    ( FileHandling r stmt
+    , PrintFile r stmt
+    , VariableSym r
+    , VariableValue r
+    , VariableElim r
+    , Literal r
+    )
   => SVariable (LoggingFor r) -> [MS (r stmt)]
 logVarUpdate x =
   [ openFileA varLogFile logName
@@ -103,6 +110,7 @@ instance
   , AssignStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
+  , VariableSym r
   , VariableValue r
   , VariableElim r
   , Literal r
@@ -131,6 +139,7 @@ instance
   , DeclStatement r stmt bod
   , FileHandling r stmt
   , PrintFile r stmt
+  , VariableSym r
   , VariableValue r
   , VariableElim r
   , Literal r
@@ -164,6 +173,7 @@ instance
   , FileHandling r stmt
   , PrintFile r stmt
   , ReadConsole r stmt
+  , VariableSym r
   , VariableValue r
   , VariableElim r
   , Literal r
@@ -189,6 +199,7 @@ instance
   , FileHandling r stmt
   , PrintFile r stmt
   , ReadFile r stmt
+  , VariableSym r
   , VariableValue r
   , VariableElim r
   , Literal r
@@ -206,6 +217,7 @@ instance
   , StringStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
+  , VariableSym r
   , VariableValue r
   , VariableElim r
   , Literal r

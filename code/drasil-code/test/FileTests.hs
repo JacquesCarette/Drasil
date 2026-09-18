@@ -83,7 +83,7 @@ writeStory = block [
   listDec 0 (var "fileContents" (listType string)) mainFn]
 
 -- | Generates functions to read from a file.
-readStory :: (VariableValue r, ReadFile r stmt) => MS (r stmt)
+readStory :: (VariableSym r, VariableValue r, ReadFile r stmt) => MS (r stmt)
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
   (var "fileContents" (listType string))
 

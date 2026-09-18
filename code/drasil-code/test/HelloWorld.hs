@@ -178,6 +178,7 @@ listSliceTests
   ::
     ( Literal r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , InternalList r block
     , DeclStatement r stmt bod
@@ -308,6 +309,7 @@ helloIfBody
   ::
     ( Literal r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , NumericExpression r

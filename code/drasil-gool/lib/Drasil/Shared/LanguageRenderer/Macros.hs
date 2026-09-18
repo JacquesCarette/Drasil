@@ -92,6 +92,7 @@ listSlice
     , Comparison r
     , NumericExpression r
     , IC.ValueExpression r
+    , VariableSym r
     , IC.VariableValue r
     , IC.IndexTranslator r
     , IC.List r
@@ -218,6 +219,7 @@ stringListLists
     , IC.ControlStatement r stmt bod
     , IC.Literal r
     , NumericExpression r
+    , VariableSym r
     , IC.VariableValue r
     , IC.List r
     , IC.ListStatement r stmt
@@ -295,6 +297,7 @@ notifyObservers
     ( BodySym r bod block
     , IC.BlockSym r block stmt
     , Literal r
+    , VariableSym r
     , VariableValue r
     , Comparison r
     , List r
@@ -316,6 +319,7 @@ notifyObservers'
     , IC.BlockSym r block stmt
     , ValueStatement r stmt
     , Literal r
+    , VariableSym r
     , VariableValue r
     , List r
     , ControlStatement r stmt bod
@@ -334,6 +338,7 @@ arrayDecAsList
     , IC.DeclStatement r stmt bod
     , IC.ControlStatement r stmt bod
     , IC.Literal r
+    , VariableSym r
     , IC.VariableValue r
     , IC.ListStatement r stmt
     , VariableElim r

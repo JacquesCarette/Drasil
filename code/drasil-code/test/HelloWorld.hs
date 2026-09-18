@@ -77,6 +77,7 @@ helloInitVariables
     ( BlockSym r block stmt
     , Literal r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , Comparison r
     , Array r
@@ -400,6 +401,7 @@ helloIfExists
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , VariableSym r
     , VariableValue r
     , ControlStatement r stmt bod
     , PrintConsole r stmt
@@ -414,6 +416,7 @@ helloSwitch
     ( BlockSym r block stmt
     , BodySym r bod block
     , Literal r
+    , VariableSym r
     , VariableValue r
     , AssignStatement r stmt
     , ControlStatement r stmt bod
@@ -429,6 +432,7 @@ helloForLoop
     ( BlockSym r block stmt
     , BodySym r bod block
     , Literal r
+    , VariableSym r
     , VariableValue r
     , ControlStatement r stmt bod
     , PrintConsole r stmt
@@ -444,6 +448,7 @@ helloWhileLoop
     ( BlockSym r block stmt
     , BodySym r bod block
     , Literal r
+    , VariableSym r
     , VariableValue r
     , Comparison r
     , AssignStatement r stmt
@@ -460,6 +465,7 @@ helloForEachLoop
     ( BlockSym r block stmt
     , BodySym r bod block
     , Literal r
+    , VariableSym r
     , VariableValue r
     , ValueExpression r
     , ControlStatement r stmt bod

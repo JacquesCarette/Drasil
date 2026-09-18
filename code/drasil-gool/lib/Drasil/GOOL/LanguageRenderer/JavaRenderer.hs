@@ -979,6 +979,7 @@ jOut
     , Comparison r
     , NumericExpression r
     , ValueExpression r
+    , VariableSym r
     , VariableValue r
     , List r
     , ScopeSym r

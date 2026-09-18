@@ -513,7 +513,7 @@ class FuncAppStatement r stmt | r -> stmt where
 class CommentStatement r stmt | r -> stmt where
   comment :: String -> MS (r stmt)
 
-class (VariableSym r) => ControlStatement r stmt bod | r -> stmt bod where
+class ControlStatement r stmt bod | r -> stmt bod where
   break :: MS (r stmt)
   continue :: MS (r stmt)
 

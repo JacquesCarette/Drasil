@@ -500,7 +500,12 @@ multiAssign f vars vals = if length vals /= 1 && length vars /= length vals
     mkStateVal IC.void (wrapIfMult vls (valueList vls))
 
 multiReturn
-  :: (IC.ControlStatement r stmt bod, RC.RenderValue r, RC.ValueElim r)
+  ::
+    ( TypeSym r
+    , IC.ControlStatement r stmt bod
+    , RC.RenderValue r
+    , RC.ValueElim r
+    )
   => (Doc -> Doc) -> [SValue r] -> MS (r stmt)
 multiReturn _ [] = error "Attempt to write return statement with no values."
 multiReturn _ [v] = returnStmt v

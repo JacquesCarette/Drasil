@@ -941,6 +941,7 @@ pyOut
     , Literal r
     , NumericExpression r
     , Comparison r
+    , VariableSym r
     , VariableValue r
     , List r
     , ScopeSym r

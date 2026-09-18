@@ -33,6 +33,7 @@ fileTestMethod
     , BodySym r bod block
     , Literal r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , Comparison r
     , List r
@@ -53,6 +54,7 @@ writeStory
     ( BlockSym r block stmt
     , Literal r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , Comparison r
     , DeclStatement r stmt bod
@@ -94,6 +96,7 @@ goodBye
     ( BlockSym r block stmt
     , Comparison r
     , Literal r
+    , VariableSym r
     , VariableValue r
     , List r
     , ControlStatement r stmt bod

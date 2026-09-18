@@ -411,6 +411,7 @@ sfwrCBody
     , MathConstant r
     , OOTypeSym r
     , ScopeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -446,6 +447,7 @@ physCBody
     , MathConstant r
     , OOTypeSym r
     , ScopeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -482,6 +484,7 @@ chooseConstr
     , MathConstant r
     , OOTypeSym r
     , ScopeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -565,6 +568,7 @@ constrExc
     , Argument r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -872,6 +876,7 @@ genCalcBlock
     , Argument r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -908,6 +913,7 @@ genCaseBlock
     , Argument r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -1245,6 +1251,7 @@ genCalcBlockProc
     , BodySym r bod block
     , NativeVector r
     , MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1281,6 +1288,7 @@ genCaseBlockProc
     , BodySym r bod block
     , NativeVector r
     , MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1326,6 +1334,7 @@ genInputFormatProc
     , NativeVector r
     , MathConstant r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1363,6 +1372,7 @@ genInputFormatProc s = do
           , NativeVector r
           , MathConstant r
           , ScopeSym r
+          , VariableSym r
           , VariableValue r
           , BooleanExpression r
           , Comparison r
@@ -1404,6 +1414,7 @@ genInputDerivedProc
     , NativeVector r
     , MathConstant r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1442,6 +1453,7 @@ genInputDerivedProc s = do
           , NativeVector r
           , MathConstant r
           , ScopeSym r
+          , VariableSym r
           , VariableValue r
           , BooleanExpression r
           , Comparison r
@@ -1565,6 +1577,7 @@ sfwrCBodyProc
     , BodySym r bod block
     , MathConstant r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1594,6 +1607,7 @@ physCBodyProc
     , BodySym r bod block
     , MathConstant r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1624,6 +1638,7 @@ chooseConstrProc
     , BodySym r bod block
     , MathConstant r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1691,6 +1706,7 @@ constrExcProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , MathConstant r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1922,6 +1938,7 @@ writeOutputValue
     ( BlockSym r block stmt
     , BodySym r bod block
     , Literal r
+    , VariableSym r
     , VariableValue r
     , Comparison r
     , NumericExpression r

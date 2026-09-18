@@ -385,6 +385,7 @@ printList
     , IC.Literal r
     , NumericExpression r
     , Comparison r
+    , IC.VariableSym r
     , IC.VariableValue r
     , IC.List r
     )
@@ -410,6 +411,7 @@ printSet
     , BodySym r bod block
     , MultiStatement r stmt
     , IC.ControlStatement r stmt bod
+    , IC.VariableSym r
     , IC.VariableValue r
     )
   => Integer
@@ -443,6 +445,7 @@ print
     , IC.Literal r
     , NumericExpression r
     , Comparison r
+    , IC.VariableSym r
     , IC.VariableValue r
     , IC.List r
     , TypeElim r

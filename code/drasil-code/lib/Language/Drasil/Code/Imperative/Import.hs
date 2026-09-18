@@ -781,6 +781,7 @@ convStmt
     , Argument r
     , MathConstant r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , OO.Literal r
@@ -926,6 +927,7 @@ readData
     , NumericExpression r
     , SelfSym r
     , OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , InternalValueExp r
@@ -964,6 +966,7 @@ readData ddef = do
             , OO.Literal r
             , SelfSym r
             , OOTypeSym r
+            , VariableSym r
             , OOVariableSym r
             , VariableValue r
             , List r
@@ -1421,6 +1424,7 @@ readDataProc
     , Comparison r
     , NumericExpression r
     , ValueExpression r
+    , VariableSym r
     , VariableValue r
     , ScopeSym r
     , DeclStatement r stmt bod
@@ -1451,6 +1455,7 @@ readDataProc ddef = do
           ::
             ( BlockSym r block stmt
             , BodySym r bod block
+            , VariableSym r
             , VariableValue r
             , ScopeSym r
             , NativeVector r
@@ -1677,6 +1682,7 @@ convStmtProc
     , BodySym r bod block
     , MathConstant r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , NumericExpression r

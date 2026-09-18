@@ -47,6 +47,8 @@ global a = length(myOtherList)
 insert!(myOtherList, 3, 2.0)
 append!(myOtherList, 2.5)
 global e = myOtherList[2]
+print("Last element of myOtherList: ")
+println(myOtherList[end])
 global myOtherList[2] = 17.4
 global myName = String[]
 global myName = split("Brooks Mac", " ")

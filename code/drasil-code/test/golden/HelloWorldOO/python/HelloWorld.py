@@ -59,6 +59,8 @@ assert a == 2, "List size should be 2"
 myOtherList.insert(2, 2.0)
 myOtherList.append(2.5)
 e = myOtherList[1]
+print("Last element of myOtherList: ", end="")
+print(myOtherList[-1])
 myOtherList[1] = 17.4
 myName = []
 myName = "Brooks Mac".split(" ")

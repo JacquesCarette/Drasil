@@ -1,6 +1,6 @@
 -- | Defines main LaTeX printer functions. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.TeX.Print.html).
 module Language.Drasil.TeX.Print (genTeX, pExpr, pUnit, spec, fence,
-  OpenClose(..), pMatrix, cases) where
+  OpenClose(..), pMatrix, cases, printMath) where
 
 import Prelude hiding (print)
 import Data.Bifunctor (bimap)
@@ -14,6 +14,7 @@ import qualified Language.Drasil as L
 import qualified Language.Drasil.Document as L
 import qualified Language.Drasil.Display as LD
 
+import Drasil.Printers.Common (brace, brak, paren, dquote)
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Nested, Flat),
   ListType(Ordered, Unordered, Desc, Definitions, Simple),
@@ -30,12 +31,12 @@ import Language.Drasil.Printing.Import.Symbol (symbol)
 import qualified Language.Drasil.Printing.Import.Sentence as I (spec)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
-import Language.Drasil.Printing.Helpers hiding (br, paren, sq, sqbrac)
-import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
+import Language.Drasil.Printing.Helpers
+import Language.Drasil.TeX.Helpers (author, bold, caption, center, centering,
   cite, command, command0, commandD, command2D, description, description', document,
   empty, enumerate, externalref, figure, fraction, includegraphics, item, item',
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgBr, mkEnvArgSq,
-  mkMinipage, newline, newpage, parens, quote, sec, snref, sq, superscript,
+  mkMinipage, newline, newpage, quote, sec, snref, superscript,
   symbDescription, texSym, title, toEqn)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (%%), ($+$),
   hpunctuate, lub, runPrint, switch, toMath, toText, unPL, vcat, vpunctuate)
@@ -106,7 +107,7 @@ pExpr (Str s)        = toText . quote . pure $ text s
 pExpr (Div n d)      = command2D "frac" (pExpr n) (pExpr d)
 pExpr (Case ps)      = mkEnv "cases" ($+$) (cases ps vpunctuate dbs pExpr)
 pExpr (Mtx a)        = mkEnv "bmatrix" ($+$) (pMatrix a vpunctuate dbs pExpr)
-pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
+pExpr (Row [x])      = brace $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Set l)        = foldl1 (<>) (map pExpr l)
 pExpr (Ident s@[_])  = pure . text . escapeIdentSymbols $ s
@@ -114,8 +115,8 @@ pExpr (Ident s)      = commandD "mathit" (pure . text . escapeIdentSymbols $ s)
 pExpr (Label s)      = command "text" s
 pExpr (Spec s)       = pure . text $ unPL $ L.special s
 --pExpr (Gr g)         = unPL $ greek g
-pExpr (Sub e)        = pure unders <> br (pExpr e)
-pExpr (Sup e)        = pure hat    <> br (pExpr e)
+pExpr (Sub e)        = pure unders <> brace (pExpr e)
+pExpr (Sup e)        = pure hat    <> brace (pExpr e)
 pExpr (Over Hat s)   = commandD "hat" (pExpr s)
 pExpr (MO o)         = pOps o
 pExpr (Fenced l r m) = fence Open l <> pExpr m <> fence Close r
@@ -214,8 +215,8 @@ makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable [] _ _ _ = error "Completely empty table (not even header)"
 makeTable [_] _ _ _ = empty -- table with no actual contents... don't error
 makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" ($+$) $
-  (if bool then sq $ pure (text "caption=") <> br t else empty)
-  %% br (pure (text "colspec=") <> br (pure $ text $ unwords $ anyBig lls)
+  (if bool then brak $ pure (text "caption=") <> brace t else empty)
+  %% brace (pure (text "colspec=") <> brace (pure $ text $ unwords $ anyBig lls)
     <> pure (text ", rowhead=1, hline{1,Z}=\\heavyrulewidth, hline{2}=\\lightrulewidth"))
   %% makeHeaders h
   %% makeRows tlines
@@ -319,7 +320,7 @@ pUnit (L.US ls) = formatu t b
     line :: [(L.Symbol,Integer)] -> D
     line []  = empty
     line [n] = pow n
-    line l   = parens $ foldr ((<>) . pow) empty l
+    line l   = paren $ foldr ((<>) . pow) empty l
     pow :: (L.Symbol,Integer) -> D
     pow (n,1) = p_symb n
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
@@ -441,17 +442,16 @@ makeGraph ps w h c l =
   mkEnv "figure" ($+$) $ centering %%
   mkEnvArgBr "adjustbox" "max width=\\textwidth" (
   mkEnvArgSq "tikzpicture" ">=latex,line join=bevel" (
-  vcat [command "tikzstyle" "n" <> pure (text " = ") <> sq (
+  vcat [command "tikzstyle" "n" <> pure (text " = ") <> brak (
           pure (text "draw, shape=rectangle, ") <> w <> h <>
           pure (text "font=\\Large, align=center]")),
         mkEnvArgSq "dot2tex" "dot, codeonly, options=-t raw" (
-        pure (text "digraph G ") <> br ( vcat (
+        pure (text "digraph G ") <> brace ( vcat (
          pure (text "graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];") :
          pure (text "node [style = \"n\"];") :
-         map (\(a,b) -> q a <> pure (text " -> ") <> q b <> pure (text ";")) ps)
+         map (\(a,b) -> dquote a <> pure (text " -> ") <> dquote b <> pure (text ";")) ps)
         ))
        ])) %% caption c %% label l
-  where q x = pure (text "\"") <> x <> pure (text "\"")
 
 ---------------------------
 -- Bibliography Printing --
@@ -461,7 +461,7 @@ makeGraph ps w h c l =
 makeBib :: PrintingInformation -> BibRef -> D
 makeBib sm bib = mkEnvArgBr "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bib) %%
   command "nocite" "*" %% command "bibstyle" bibStyleT %%
-  command0 "printbibliography" <> sq (pure $ text "heading=none")
+  command0 "printbibliography" <> brak (pure $ text "heading=none")
 
 -- | Renders a bibliographical reference with a single line break between
 -- entries.
@@ -471,7 +471,7 @@ mkBibRef sm = foldr ((%%) . renderF sm) mempty
 -- | Helper that renders a citation.
 renderF :: PrintingInformation -> Citation -> D
 renderF sm (Cite cid refType fields) = pure (text (showT refType)) <>
-  br (hpunctuate (text ",\n") $ pure (text cid) : map (showBibTeX sm) fields)
+  brace (hpunctuate (text ",\n") $ pure (text cid) : map (showBibTeX sm) fields)
 
 -- | Renders different kinds of citation mediums.
 showT :: L.CitationKind -> String
@@ -526,9 +526,9 @@ data FieldWrap = Braces | NoDelimiters | Command String
 wrapField :: FieldWrap -> String -> Spec -> D
 wrapField fw f s = pure (text (f ++ "=")) <> resolve fw (spec s)
   where
-    resolve Braces       = br
+    resolve Braces       = brace
     resolve NoDelimiters = id
-    resolve (Command st) = br . commandD st
+    resolve (Command st) = brace . commandD st
 
 showField, showFieldRaw :: String -> Spec -> D
 -- | Helper that renders citation fields wrapped with braces.
@@ -564,3 +564,7 @@ bibTeXMonth L.Dec = S "dec"
 -- | Helper that lifts something showable into a 'Spec'.
 wrapS :: Show a => a -> Spec
 wrapS = S . show
+
+-- | Render a LaTeX D in a math context.
+printMath :: D -> TP.Doc
+printMath = (`runPrint` Math) . toMath

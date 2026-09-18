@@ -118,7 +118,7 @@ class (TypeSym r) => VariableSym r where
   -- it performs the necessary imports and creates `Lib.v`
   extVar    :: Library -> Label -> VS (r TypeData) -> SVariable r
 
-class (VariableSym r) => VariableElim r where
+class VariableElim r where
   variableName :: r Variable -> String
   variableType :: r Variable -> r TypeData
 
@@ -165,7 +165,7 @@ litZero t = do
 class (ValueSym r) => MathConstant r where
   pi :: SValue r
 
-class (VariableSym r, ValueSym r) => VariableValue r where
+class VariableValue r where
   valueOf       :: SVariable r -> SValue r
 
 class (ValueSym r) => CommandLineArgs r where
@@ -254,7 +254,7 @@ class (BinderSym r) => BinderElim r where
   binderType :: r BinderD -> r TypeData
 
 -- | A class for representing values that can include expressions
-class (VariableSym r, ValueSym r) => ValueExpression r where
+class ValueExpression r where
   -- An inline if-statement, aka the ternary operator.  Inputs:
   -- Condition, True-value, False-value
   inlineIf     :: SValue r -> SValue r -> SValue r -> SValue r
@@ -303,7 +303,7 @@ class (TypeSym r, ValueSym r) => Reference r where
   -- apply any necessary dereference operation.
   maybeDeref :: SValue r -> SValue r
 
-class (IndexTranslator r) => Array r where
+class Array r where
   -- TODO [Brandon Bosman, 05/19/2026]: Change return type to SValue
   -- | Given array `a` and index `i`, creates `a[i]`
   arrayElem :: SValue r -> SValue r -> SVariable r
@@ -316,7 +316,7 @@ class (IndexTranslator r) => Array r where
   -- | Given a source array, create a (shallow) copy of it
   arrayCopy :: SValue r -> SValue r
 
-class (IndexTranslator r) => List r where
+class List r where
   -- | Finds the size of a list.
   --   Arguments are: List
   listSize   :: SValue r -> SValue r
@@ -357,7 +357,7 @@ class (ValueSym r) => Set r where
 --   operations compose like math (e.g. @vecAdd (vecScale s a) b@).
 --   Vectors have their own 'vecType' and 'litVec' so callers don't depend on
 --   how vectors are represented; these default to 'listType' and 'litList'.
-class (IndexTranslator r, Literal r) => NativeVector r where
+class (Literal r) => NativeVector r where
   -- | The type of a vector with the given element type.
   --   Defaults to 'listType'; a language may override it to use a distinct
   --   vector representation.
@@ -421,7 +421,7 @@ class ValueStatement r stmt | r -> stmt where
   -- | Converts a value to statement
   valStmt :: SValue r -> MS (r stmt)
 
-class (VariableSym r) => AssignStatement r stmt | r -> stmt where
+class AssignStatement r stmt | r -> stmt where
   (&-=)  :: SVariable r -> SValue r -> MS (r stmt)
   infixl 1 &-=
   (&+=)  :: SVariable r -> SValue r -> MS (r stmt)
@@ -437,7 +437,7 @@ class (VariableSym r) => AssignStatement r stmt | r -> stmt where
 infixr 1 &=
 (&=) = assign
 
-class (VariableSym r, ScopeSym r) => DeclStatement r stmt bod | r -> stmt bod where
+class DeclStatement r stmt bod | r -> stmt bod where
   -- | Declare a variable without giving it a value.
   -- Not for use with arrays; use `arrayDec` instead.
   varDec       :: SVariable r -> r ScopeData -> MS (r stmt)
@@ -459,38 +459,38 @@ class (VariableSym r, ScopeSym r) => DeclStatement r stmt bod | r -> stmt bod wh
   funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MS (r bod)
     -> MS (r stmt)
 
-class (VariableSym r) => PrintConsole r stmt | r -> stmt where
+class PrintConsole r stmt | r -> stmt where
   print      :: SValue r -> MS (r stmt)
   printLn    :: SValue r -> MS (r stmt)
   -- TODO [Brandon Bosman, 07/23/2026]: Could these be helpers?
   printStr   :: String -> MS (r stmt)
   printStrLn :: String -> MS (r stmt)
 
-class (VariableSym r) => ReadConsole r stmt | r -> stmt where
+class ReadConsole r stmt | r -> stmt where
   getInput         :: SVariable r -> MS (r stmt)
   discardInput     :: MS (r stmt)
 
-class (VariableSym r) => FileHandling r stmt | r -> stmt where
+class FileHandling r stmt | r -> stmt where
   openFileR :: SVariable r -> SValue r -> MS (r stmt)
   openFileW :: SVariable r -> SValue r -> MS (r stmt)
   openFileA :: SVariable r -> SValue r -> MS (r stmt)
   closeFile :: SValue r -> MS (r stmt)
 
-class (VariableSym r) => PrintFile r stmt | r -> stmt where
+class PrintFile r stmt | r -> stmt where
   -- | Given the file handle and value to print, print the value to the file.
   printFile      :: SValue r -> SValue r -> MS (r stmt)
   printFileLn    :: SValue r -> SValue r -> MS (r stmt)
   printFileStr   :: SValue r -> String -> MS (r stmt)
   printFileStrLn :: SValue r -> String -> MS (r stmt)
 
-class (VariableSym r) => ReadFile r stmt | r -> stmt where
+class ReadFile r stmt | r -> stmt where
   getFileInput     :: SValue r -> SVariable r -> MS (r stmt)
   discardFileInput :: SValue r -> MS (r stmt)
   getFileInputLine :: SValue r -> SVariable r -> MS (r stmt)
   discardFileLine  :: SValue r -> MS (r stmt)
   getFileInputAll  :: SValue r -> SVariable r -> MS (r stmt)
 
-class (VariableSym r) => StringStatement r stmt | r -> stmt where
+class StringStatement r stmt | r -> stmt where
   -- | Given a char to split on, variable to store result in, and string to split,
   -- generates a statement splitting the string into a list of strings
   -- delimited by the char.
@@ -506,14 +506,14 @@ class (ValueSym r) => FunctionSym r where
 type InOutCall r stmt = Label -> [SValue r] -> [SVariable r] -> [SVariable r] ->
   MS (r stmt)
 
-class (VariableSym r) => FuncAppStatement r stmt | r -> stmt where
+class FuncAppStatement r stmt | r -> stmt where
   inOutCall    ::            InOutCall r stmt
   extInOutCall :: Library -> InOutCall r stmt
 
 class CommentStatement r stmt | r -> stmt where
   comment :: String -> MS (r stmt)
 
-class (VariableSym r) => ControlStatement r stmt bod | r -> stmt bod where
+class ControlStatement r stmt bod | r -> stmt bod where
   break :: MS (r stmt)
   continue :: MS (r stmt)
 
@@ -559,7 +559,7 @@ class VisibilitySym r vis | r -> vis where
   public  :: r vis
 
 -- | A class for representing function/method parameters.
-class (VariableSym r) => ParameterSym r where
+class ParameterSym r where
   param :: SVariable r -> MS (r ParamData)
   -- | A parameter that is an "alias" type, e.g. a C++ reference.
   -- This is a minor hack, to get around us not having/wanting
@@ -577,7 +577,7 @@ type DocInOutFunc r mthd bod = String -> [(String, SVariable r)] ->
 
 -- | A class for representing functions/methods.
 -- Usually 'MethodData' is used for the representation.
-class (ParameterSym r, VisibilitySym r vis) => MethodSym r vis mthd bod | r -> mthd bod
+class MethodSym r vis mthd bod | r -> vis mthd bod
   where
   docMain :: MS (r bod) -> MS (r mthd)
 

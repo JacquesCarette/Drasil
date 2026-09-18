@@ -96,5 +96,5 @@ increment vr' v'= do
 -- Python, Julia, and MATLAB --
 
 -- | Call to get the size of a list as a function call
-listSize :: (ValueExpression r) => String -> SValue r -> SValue r
+listSize :: (TypeSym r, ValueExpression r) => String -> SValue r -> SValue r
 listSize fnName list = funcApp fnName int [list]

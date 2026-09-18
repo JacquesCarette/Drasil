@@ -973,7 +973,7 @@ swiftIndexFunc l v' = do
   objMethodCallNamedArgs int l swiftIndex [(ofArg, pure v)]
 
 swiftStrideFunc
-  :: (RenderValue r, ValueExpression r)
+  :: (VariableSym r, RenderValue r, ValueExpression r)
   => SValue r -> SValue r -> SValue r -> SValue r
 swiftStrideFunc beg end step = let t = listType int
                                    fromArg = var swiftFrom int
@@ -992,11 +992,12 @@ swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)
     [(contentsArg, newObj (obj swiftData) [v $. funcFromData (R.func swiftUTF8)
     (obj swiftEncoding)])]
 
-swiftReadLineFunc :: (RenderValue r, ValueElim r, ValueExpression r) => SValue r
+swiftReadLineFunc
+  :: (ValueSym r, RenderValue r, ValueElim r, ValueExpression r) => SValue r
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
 
 swiftReadFileFunc
-  :: (RenderValue r, ValueElim r, ValueExpression r)
+  :: (VariableSym r, ValueSym r, RenderValue r, ValueElim r, ValueExpression r)
   => SValue r -> SValue r
 swiftReadFileFunc v = swiftTryVal $
   funcAppNamedArgs CP.stringRender' string [contentsArg, encodingArg]

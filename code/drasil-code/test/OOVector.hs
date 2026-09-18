@@ -28,7 +28,9 @@ vecVar v = var v (obj "Vector")
 localV :: VariableSym r => SVariable r
 localV = var "v" (arrayType double)
 
-thisV :: (OOVariableSym r, SelfSym r, VariableValue r) => SVariable r
+thisV
+  :: (VariableSym r, OOVariableSym r, SelfSym r, VariableValue r)
+  => SVariable r
 thisV = instanceVarSelf localV
 
 dimension :: OOProg r vis stmt mthd stvr attch prg file mod bod block => MS (r mthd)

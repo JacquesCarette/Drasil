@@ -7,8 +7,8 @@ module Drasil.Shared.LanguageRenderer.Macros (
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, SVariable, SValue, bodyStatements,
-  oneLiner, VariableElim(..), getCodeType, listOf, ValueSym(valueType),
-  NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
+  oneLiner, VariableSym, VariableElim(..), getCodeType, listOf,
+  ValueSym(valueType), NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), List, at, EmptyStatement(emptyStmt),
   MultiStatement(multi), ValueStatement(valStmt),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope, VariableValue, BodySym,
@@ -83,6 +83,7 @@ listSlice
     ( BodySym r bod block
     , IC.BlockSym r block stmt
     , EmptyStatement r stmt
+    , IC.ScopeSym r
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod
@@ -91,7 +92,9 @@ listSlice
     , Comparison r
     , NumericExpression r
     , IC.ValueExpression r
+    , VariableSym r
     , IC.VariableValue r
+    , IC.IndexTranslator r
     , IC.List r
     , IC.ListStatement r stmt
     , ValueElim r
@@ -167,6 +170,7 @@ listSlice beg end step vnew vold = do
 makeSetterVal
   ::
     ( EmptyStatement r stmt
+    , VariableSym r
     , IC.DeclStatement r stmt bod
     , Comparison r
     , IC.IndexTranslator r
@@ -215,6 +219,7 @@ stringListLists
     , IC.ControlStatement r stmt bod
     , IC.Literal r
     , NumericExpression r
+    , VariableSym r
     , IC.VariableValue r
     , IC.List r
     , IC.ListStatement r stmt
@@ -249,7 +254,8 @@ stringListLists lsts sl = do
 
 forRange
   ::
-    ( IC.DeclStatement r stmt bod
+    ( IC.ScopeSym r
+    , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod
     , Comparison r
@@ -264,18 +270,19 @@ forRange
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
   (IC.valueOf i ?< finalv) (i &+= stepv)
 
-observerIndex :: (IC.VariableSym r) => SVariable r
+observerIndex :: (VariableSym r) => SVariable r
 observerIndex = IC.var "observerIndex" IC.int
 
-observerIdxVal :: (IC.VariableValue r) => SValue r
+observerIdxVal :: (VariableSym r, IC.VariableValue r) => SValue r
 observerIdxVal = IC.valueOf observerIndex
 
-obsList :: (IC.VariableValue r) => VS (r TypeData) -> SValue r
+obsList :: (VariableSym r, IC.VariableValue r) => VS (r TypeData) -> SValue r
 obsList t = IC.valueOf $ listOf observerListName t
 
 notify
   ::
     ( ValueStatement r stmt
+    , VariableSym r
     , VariableValue r
     , List r
     , OOFunctionSym r
@@ -290,10 +297,12 @@ notifyObservers
     ( BodySym r bod block
     , IC.BlockSym r block stmt
     , Literal r
+    , VariableSym r
     , VariableValue r
     , Comparison r
     , List r
     , ValueStatement r stmt
+    , IC.ScopeSym r
     , DeclStatement r stmt bod
     , AssignStatement r stmt
     , ControlStatement r stmt bod
@@ -310,6 +319,7 @@ notifyObservers'
     , IC.BlockSym r block stmt
     , ValueStatement r stmt
     , Literal r
+    , VariableSym r
     , VariableValue r
     , List r
     , ControlStatement r stmt bod
@@ -328,6 +338,7 @@ arrayDecAsList
     , IC.DeclStatement r stmt bod
     , IC.ControlStatement r stmt bod
     , IC.Literal r
+    , VariableSym r
     , IC.VariableValue r
     , IC.ListStatement r stmt
     , VariableElim r

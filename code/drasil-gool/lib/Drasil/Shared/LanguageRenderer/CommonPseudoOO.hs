@@ -210,7 +210,8 @@ printSt va' vb' = do
   mkStmt (R.print va vb)
 
 arrayDec
-  :: ( ScopeElim r
+  :: ( TypeSym r
+     , ScopeElim r
      , UnRepr r TypeData
      , InternalVarElim r
      , RC.RenderStatement r stmt
@@ -279,6 +280,7 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
 
 mainFunction
   :: ( AttachmentSym r attch
+     , IC.VariableSym r
      , MethodTypeSym r
      , OORenderMethod r vis mthd attch bod
      , IC.ParameterSym r
@@ -364,7 +366,9 @@ docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (map fst $ bs ++
 bindingError :: String -> String
 bindingError l = "AttachmentTag unimplemented in " ++ l
 
-notNull :: (Comparison r, IC.VariableValue r) => String -> SValue r -> SValue r
+notNull
+  :: (Comparison r, IC.VariableSym r, IC.VariableValue r)
+  => String -> SValue r -> SValue r
 notNull nil v = v ?!= IC.valueOf (IC.var nil $ onStateValue valueType v)
 
 listDecDef
@@ -447,7 +451,7 @@ double :: (Monad r) => VS (r TypeData)
 double = typeFromData Double doubleRender (text doubleRender)
 
 openFileR
-  :: (IC.AssignStatement r stmt)
+  :: (TypeSym r, IC.AssignStatement r stmt)
   => (SValue r -> VS (r TypeData) -> SValue r)
   -> SVariable r
   -> SValue r
@@ -475,7 +479,8 @@ self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (obj l)
   R.self')
 
 multiAssign
-  :: ( IC.AssignStatement r stmt
+  :: ( TypeSym r
+     , IC.AssignStatement r stmt
      , InternalVarElim r
      , RC.RenderValue r
      , RC.RenderVariable r
@@ -496,7 +501,12 @@ multiAssign f vars vals = if length vals /= 1 && length vars /= length vals
     mkStateVal IC.void (wrapIfMult vls (valueList vls))
 
 multiReturn
-  :: (IC.ControlStatement r stmt bod, RC.RenderValue r, RC.ValueElim r)
+  ::
+    ( TypeSym r
+    , IC.ControlStatement r stmt bod
+    , RC.RenderValue r
+    , RC.ValueElim r
+    )
   => (Doc -> Doc) -> [SValue r] -> MS (r stmt)
 multiReturn _ [] = error "Attempt to write return statement with no values."
 multiReturn _ [v] = returnStmt v
@@ -523,7 +533,12 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 inOutCall
-  :: (RC.InternalAssignStmt r stmt, ValueStatement r stmt, IC.VariableValue r)
+  ::
+    ( TypeSym r
+    , RC.InternalAssignStmt r stmt
+    , ValueStatement r stmt
+    , IC.VariableValue r
+    )
   => (Label -> VS (r TypeData) -> [SValue r] -> SValue r)
   -> Label
   -> [SValue r]
@@ -548,16 +563,19 @@ mainBody b = do
   mthdFromData Pub empty
 
 inOutFunc
-  :: ( IC.VariableValue r
-     , IC.ParameterSym r
-     , IC.DeclStatement r stmt bod
-     , BlockSym r block stmt
-     , IC.BodySym r bod block
-     , VariableElim r
-     , RenderBody r bod
-     , RenderType r
-     , RC.InternalControlStmt r stmt
-     )
+  ::
+    ( IC.VariableValue r
+    , IC.ParameterSym r
+    , TypeSym r
+    , IC.ScopeSym r
+    , IC.DeclStatement r stmt bod
+    , BlockSym r block stmt
+    , IC.BodySym r bod block
+    , VariableElim r
+    , RenderBody r bod
+    , RenderType r
+    , RC.InternalControlStmt r stmt
+    )
   => (VS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd))
   -> [SVariable r]
   -> [SVariable r]

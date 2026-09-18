@@ -378,12 +378,14 @@ printList
     ( BlockSym r block stmt
     , BodySym r bod block
     , MultiStatement r stmt
+    , IC.ScopeSym r
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod
     , IC.Literal r
     , NumericExpression r
     , Comparison r
+    , IC.VariableSym r
     , IC.VariableValue r
     , IC.List r
     )
@@ -409,6 +411,7 @@ printSet
     , BodySym r bod block
     , MultiStatement r stmt
     , IC.ControlStatement r stmt bod
+    , IC.VariableSym r
     , IC.VariableValue r
     )
   => Integer
@@ -435,12 +438,14 @@ print
     , MultiStatement r stmt
     , PrintConsole r stmt
     , PrintFile r stmt
+    , IC.ScopeSym r
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod
     , IC.Literal r
     , NumericExpression r
     , Comparison r
+    , IC.VariableSym r
     , IC.VariableValue r
     , IC.List r
     , TypeElim r

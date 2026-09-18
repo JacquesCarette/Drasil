@@ -26,7 +26,13 @@ x :: (VariableSym r) => SVariable r
 x = var "x" int
 
 -- | Acces the @x@ attribute of @self@.
-selfX :: (OOVariableSym r, SelfSym r, VariableValue r) => SVariable r
+selfX ::
+  ( VariableSym r
+  , OOVariableSym r
+  , SelfSym r
+  , VariableValue r
+  )
+  => SVariable r
 selfX = instanceVarSelf x
 
 -- | Helper function to create the class.
@@ -41,6 +47,7 @@ helperClass
     , OOMethodSym r vis mthd attch bod
     , PrintConsole r stmt
     , Literal r
+    , VariableSym r
     , OOVariableSym r
     , SelfSym r
     , VariableValue r
@@ -69,6 +76,7 @@ printNumMethod
     , AttachmentSym r attch
     , VisibilitySym r vis
     , PrintConsole r stmt
+    , VariableSym r
     , OOVariableSym r
     , SelfSym r
     , VariableValue r

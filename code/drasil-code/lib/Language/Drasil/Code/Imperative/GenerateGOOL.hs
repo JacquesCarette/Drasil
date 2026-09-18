@@ -123,7 +123,7 @@ auxClass = mkClass Auxiliary
 
 -- | Converts lists or objects to pointer arguments, since we use pointerParam
 -- for list or object-type parameters.
-mkArg :: (Argument r, TypeElim r) => SValue r -> SValue r
+mkArg :: (ValueSym r, Argument r, TypeElim r) => SValue r -> SValue r
 mkArg v = do
   vl <- v
   let mkArg' (List _) = pointerArg
@@ -133,8 +133,12 @@ mkArg v = do
 
 -- | Gets the current module and calls mkArg on the arguments.
 -- Called by more specific function call generators ('fApp' and 'ctorCall').
-fCall :: (Argument r, TypeElim r) => (Name -> [SValue r] -> NamedArgs r ->
-  SValue r) -> [SValue r] -> NamedArgs r -> GenState (SValue r)
+fCall
+  :: (ValueSym r, Argument r, TypeElim r)
+  => (Name -> [SValue r] -> NamedArgs r -> SValue r)
+  -> [SValue r]
+  -> NamedArgs r
+  -> GenState (SValue r)
 fCall f vl ns = do
   g <- get
   let cm = currentModule g
@@ -153,7 +157,8 @@ fCall f vl ns = do
 --   which is true for this generator.
 fApp
   ::
-    ( Argument r
+    ( ValueSym r
+    , Argument r
     , VariableValue r
     , SelfSym r
     , InternalValueExp r
@@ -171,7 +176,7 @@ fApp m s t vl ns = do
 -- | Logic similar to 'fApp', but the self case is not required here
 -- (because constructor will never be private). Calls 'newObjMixedArgs'.
 ctorCall
-  :: (Argument r, OOValueExpression r, TypeElim r)
+  :: (ValueSym r, Argument r, OOValueExpression r, TypeElim r)
   => Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r -> GenState (SValue r)
 ctorCall m t = fCall (\cm args nargs -> if m /= cm then
   extNewObjMixedArgs m t args nargs else newObjMixedArgs t args nargs)
@@ -235,7 +240,7 @@ genModuleProc n desc = genModuleWithImportsProc n desc []
 --   calling a method on self. This assumes all private methods are dynamic,
 --   which is true for this generator.
 fAppProc
-  :: (Argument r, TypeElim r, ValueExpression r) => Name
+  :: (ValueSym r, Argument r, TypeElim r, ValueExpression r) => Name
   -> Name
   -> VS (r TypeData)
   -> [SValue r]

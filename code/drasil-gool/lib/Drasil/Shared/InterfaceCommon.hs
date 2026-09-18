@@ -138,7 +138,7 @@ class (TypeSym r) => ValueSym r where
 class (TypeSym r) => TypeElim r where
   getCodeType :: r TypeData -> CodeType
 
-class (ValueSym r) => Argument r where
+class Argument r where
   pointerArg :: SValue r -> SValue r
 
 class (ValueSym r) => Literal r where

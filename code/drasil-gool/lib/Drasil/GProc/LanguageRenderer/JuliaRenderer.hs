@@ -397,6 +397,8 @@ instance Set JuliaCode where
   setUnion a b = funcApp "union!" void [a, b]
 
 instance NativeVector JuliaCode where
+  vecType = listType
+  litVec = litList
   vecScale = binExpr multOp
   vecAdd   = binExpr plusOp
   vecIndex = G.listAccess

@@ -290,7 +290,8 @@ genCall n = do
 -- inputs, then the function for checking input constraints.
 genAllInputCallsProc
   ::
-    ( MathConstant r
+    ( Literal r
+    , MathConstant r
     , VariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -332,7 +333,8 @@ genDerivedCallProc = do
 -- | Generates a call to the function for checking constraints on the input.
 genConstraintCallProc
   ::
-    ( MathConstant r
+    ( Literal r
+    , MathConstant r
     , VariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -357,7 +359,8 @@ genConstraintCallProc = do
 -- value being calculated.
 genCalcCallProc
   ::
-    ( MathConstant r
+    ( Literal r
+    , MathConstant r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -385,7 +388,8 @@ genCalcCallProc c = do
 -- | Generates a call to the function for printing outputs.
 genOutputCallProc
   ::
-    ( MathConstant r
+    ( Literal r
+    , MathConstant r
     , VariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -410,7 +414,8 @@ genOutputCallProc = do
 -- the function.
 genFuncCallProc
   ::
-    ( MathConstant r
+    ( Literal r
+    , MathConstant r
     , VariableSym r
     , VariableValue r
     , BooleanExpression r

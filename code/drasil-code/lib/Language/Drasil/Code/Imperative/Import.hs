@@ -1088,7 +1088,8 @@ getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
 -- call 'valueOf' to reference its value.
 valueProc
   ::
-    ( NativeVector r
+    ( OO.Literal r
+    , NativeVector r
     , MathConstant r
     , VariableSym r
     , VariableValue r
@@ -1165,6 +1166,7 @@ constVariableProc Inline _ _ = error $ "mkVar called on a constant, but user " +
 mkValProc
   ::
     ( NativeVector r
+    , OO.Literal r
     , MathConstant r
     , VariableSym r
     , VariableValue r
@@ -1338,6 +1340,7 @@ genFuncProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , NativeVector r
+    , OO.Literal r
     , MathConstant r
     , BooleanExpression r
     , Comparison r
@@ -1387,6 +1390,7 @@ genModFuncsProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , OO.Literal r
     , NativeVector r
     , MathConstant r
     , BooleanExpression r
@@ -1426,6 +1430,7 @@ readDataProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , OO.Literal r
     , NativeVector r
     , MathConstant r
     , BooleanExpression r
@@ -1463,6 +1468,7 @@ readDataProc ddef = do
           ::
             ( BlockSym r block stmt
             , BodySym r bod block
+            , OO.Literal r
             , VariableSym r
             , VariableValue r
             , ScopeSym r
@@ -1551,7 +1557,8 @@ getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
 -- | Converts an 'Expr' to a GOOL Value.
 convExprProc
   ::
-    ( MathConstant r
+    ( OO.Literal r
+    , MathConstant r
     , VariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -1647,7 +1654,8 @@ convExprProc (RealI c ri)  = do
 -- call generator (used if the function is in the library export map).
 convCallProc
   ::
-    ( MathConstant r
+    ( OO.Literal r
+    , MathConstant r
     , VariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -1688,6 +1696,7 @@ convStmtProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , OO.Literal r
     , MathConstant r
     , ScopeSym r
     , VariableSym r
@@ -1815,6 +1824,7 @@ genDataFuncProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , NativeVector r
+    , OO.Literal r
     , MathConstant r
     , BooleanExpression r
     , Comparison r

@@ -1007,6 +1007,7 @@ genMainFuncProc
     , CommandLineArgs r
     , MathConstant r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r

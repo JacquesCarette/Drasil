@@ -506,7 +506,7 @@ class (ValueSym r) => FunctionSym r where
 type InOutCall r stmt = Label -> [SValue r] -> [SVariable r] -> [SVariable r] ->
   MS (r stmt)
 
-class (VariableSym r) => FuncAppStatement r stmt | r -> stmt where
+class FuncAppStatement r stmt | r -> stmt where
   inOutCall    ::            InOutCall r stmt
   extInOutCall :: Library -> InOutCall r stmt
 

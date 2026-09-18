@@ -351,6 +351,8 @@ instance Set MatlabCode where
   setUnion = undefined
 
 instance NativeVector MatlabCode where
+  vecType = listType
+  litVec = litList
   vecScale = binExpr multOp           -- s * v
   vecAdd   = binExpr plusOp           -- a + b
   vecIndex = mlVecIndex               -- a(1) / a(i + 1)

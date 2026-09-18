@@ -357,16 +357,13 @@ class (ValueSym r) => Set r where
 --   operations compose like math (e.g. @vecAdd (vecScale s a) b@).
 --   Vectors have their own 'vecType' and 'litVec' so callers don't depend on
 --   how vectors are represented; these default to 'listType' and 'litList'.
-class (Literal r) => NativeVector r where
+class NativeVector r where
   -- | The type of a vector with the given element type.
-  --   Defaults to 'listType'; a language may override it to use a distinct
-  --   vector representation.
+  --   For most languages it will be 'listType'
   vecType :: VS (r TypeData) -> VS (r TypeData)
-  vecType = listType
   -- | A vector literal with the given element type and elements.
-  --   Defaults to 'litList'.
+  --   For most languages it will be 'litList'.
   litVec :: VS (r TypeData) -> [SValue r] -> SValue r
-  litVec = litList
   -- | Scales a vector by a scalar.
   --   Arguments are: Scalar, Vector
   vecScale :: SValue r -> SValue r -> SValue r

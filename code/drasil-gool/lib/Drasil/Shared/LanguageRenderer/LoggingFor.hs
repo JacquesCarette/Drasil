@@ -426,6 +426,8 @@ instance (IndexTranslator r) => IndexTranslator (LoggingFor r) where
   indexToInt = liftLogging indexToInt
 
 instance (NativeVector lang) => NativeVector (LoggingFor lang) where
+  vecType = liftLogging vecType
+  litVec = liftLogging litVec
   vecScale = liftLogging vecScale
   vecAdd = liftLogging vecAdd
   vecIndex = liftLogging vecIndex

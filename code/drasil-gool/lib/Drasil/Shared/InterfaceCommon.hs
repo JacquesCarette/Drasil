@@ -559,7 +559,7 @@ class VisibilitySym r vis | r -> vis where
   public  :: r vis
 
 -- | A class for representing function/method parameters.
-class (VariableSym r) => ParameterSym r where
+class ParameterSym r where
   param :: SVariable r -> MS (r ParamData)
   -- | A parameter that is an "alias" type, e.g. a C++ reference.
   -- This is a minor hack, to get around us not having/wanting

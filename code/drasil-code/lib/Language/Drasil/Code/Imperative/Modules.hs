@@ -1188,6 +1188,7 @@ genCalcFuncProc
     , NativeVector r
     , MathConstant r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1495,6 +1496,7 @@ genInputConstraintsProc
     , BodySym r bod block
     , MathConstant r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1532,6 +1534,7 @@ genInputConstraintsProc s = do
           , BodySym r bod block
           , MathConstant r
           , ScopeSym r
+          , VariableSym r
           , VariableValue r
           , BooleanExpression r
           , Comparison r
@@ -1859,6 +1862,7 @@ genOutputFormatProc
     , NativeVector r
     , MathConstant r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1891,6 +1895,7 @@ genOutputFormatProc = do
           , NativeVector r
           , MathConstant r
           , ScopeSym r
+          , VariableSym r
           , VariableValue r
           , BooleanExpression r
           , Comparison r

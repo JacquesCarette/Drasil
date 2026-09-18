@@ -31,6 +31,7 @@ doubleAndAdd
     , BodySym r bod block
     , Literal r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , NumericExpression r
     , ParameterSym r

@@ -26,6 +26,7 @@ helper
     , BodySym r bod block
     , Literal r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , Comparison r
     , List r

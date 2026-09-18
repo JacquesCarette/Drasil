@@ -279,6 +279,7 @@ mkVar v = do
 mkParam
   ::
     ( OOTypeSym r
+    , VariableSym r
     , OOVariableSym r
     , VariableValue r
     , SelfSym r
@@ -1224,7 +1225,9 @@ genModDefProc (Mod n desc is cs fs) = case cs of
   _  -> error "genModDefProc: Procedural renderers do not support classes"
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
-mkParamProc :: (ParameterSym r) => ParameterChunk -> GenState (MS (r ParamData))
+mkParamProc
+  :: (VariableSym r, ParameterSym r)
+  => ParameterChunk -> GenState (MS (r ParamData))
 mkParamProc p = do
   v <- mkVarProc (quantvar p)
   return $ paramFunc (passBy p) v
@@ -1235,6 +1238,7 @@ mkParamProc p = do
 publicFuncProc
   ::
     ( OO.Literal r
+    , VariableSym r
     , VariableValue r
     , ParameterSym r
     , VisibilitySym r vis
@@ -1263,6 +1267,7 @@ publicFuncProc n t desc ps r b = do
 privateFuncProc
   ::
     ( OO.Literal r
+    , VariableSym r
     , VariableValue r
     , ParameterSym r
     , VisibilitySym r vis
@@ -1293,6 +1298,7 @@ privateFuncProc n t desc ps r b = do
 genMethodProc
   ::
     ( OO.Literal r
+    , VariableSym r
     , VariableValue r
     , ParameterSym r
     , ScopeSym r
@@ -1337,6 +1343,7 @@ genFuncProc
     , Comparison r
     , NumericExpression r
     , ValueExpression r
+    , VariableSym r
     , VariableValue r
     , ParameterSym r
     , VisibilitySym r vis
@@ -1386,6 +1393,7 @@ genModFuncsProc
     , Comparison r
     , NumericExpression r
     , ValueExpression r
+    , VariableSym r
     , VariableValue r
     , ParameterSym r
     , VisibilitySym r vis
@@ -1813,6 +1821,7 @@ genDataFuncProc
     , NumericExpression r
     , ValueExpression r
     , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , ParameterSym r
     , VisibilitySym r vis

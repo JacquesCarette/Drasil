@@ -59,10 +59,10 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
-    IntroProg (startIntro software blstRskInvWGlassSlab) []
+    introProg (startIntro software blstRskInvWGlassSlab)
     [IPurpose (StdPurp Verbose),
      IScope scope,
-     IChar [] (undIR ++ appStanddIR) [],
+     iChar (undIR ++ appStanddIR),
      IOrgSec (Just orgOfDocIntroEnd)],
   StkhldrSec $
     StkhldrProg
@@ -70,20 +70,20 @@ mkSRS = [TableOfContents,
         +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (fullName mCampidelli),
       Cstmr],
   GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
-    UsrChars [userCharacteristicsIntro], SystCons [] [] ],
+    UsrChars [userCharacteristicsIntro], systCons [] ],
   SSDSec $
     SSDProg
       [SSDProblem $ PDProg purp [termsAndDesc]
-        [ PhySysDesc physSystParts physSystFig []
+        [ phySysDesc physSystParts physSystFig
         , Goals goalInputs],
        SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields)
-        , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , tms (Label : stdFields)
+        , gds [] HideDerivation -- No Gen Defs for GlassBR
+        , dds ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
         , Constraints auxSpecSent dataConstraints
-        , CorrSolnPpties [probBr, stressDistFac] []
+        , corrSolnPpties [probBr, stressDistFac]
         ]
       ],
   ReqrmntSec $ ReqsProg [

@@ -43,7 +43,7 @@ mkSRS
   = [TableOfContents,
     RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
-       IntroProg introPara []
+       introProg introPara
          [IPurpose (CustomPurp [[introPurposeOfDoc]]),
           IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
@@ -53,25 +53,25 @@ mkSRS
          [SysCntxt
             [gsdSysContextP1, LlC gsdSysContextFig, gsdSysContextP2,
              gsdSysContextList],
-          UsrChars [gsduserCharacteristics], SystCons [] []],
+          UsrChars [gsduserCharacteristics], systCons []],
      SSDSec $
        SSDProg
          [SSDProblem $
-            PDProg purp []
+            pdProg purp
               -- FIXME: When removing the manually aggregated list here, expect
               -- duplicate UID errors! Why? `defs` is a hand-crafted list that
               -- extends `termDefs` with non-unique chunks containing
               -- alternative definitions for use in the `Terminology and
               -- Definitions` section.
               [TermsAndDefs Nothing defs,
-               PhySysDesc sysParts sysFigure [],
+               phySysDesc sysParts sysFigure,
                Goals sysGoalInput],
           SSDSolChSpec $
             SCSProg
-              [Assumptions, TMs [] (Label : stdFields),
-               GDs [] (Label : stdFields) HideDerivation,
-               DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
-               IMs []
+              [Assumptions, tms (Label : stdFields),
+               gds (Label : stdFields) HideDerivation,
+               dds ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
+               ims
                  ([Label, Input, Output, InConstraints, OutConstraints] ++
                     stdFields)
                  ShowDerivation,

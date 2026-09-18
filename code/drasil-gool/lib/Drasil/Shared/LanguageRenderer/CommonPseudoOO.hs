@@ -242,7 +242,7 @@ arrayDecDef v' scp vals' = do
   mkStmt (RC.statement vd <+> equals <+> braces (valueList vs))
 
 openFileA
-  :: (IC.AssignStatement r stmt, IC.Literal r)
+  :: (IC.AssignStatement r stmt, TypeSym r, IC.Literal r)
   => (SValue r -> VS (r TypeData) -> SValue r -> SValue r)
   -> SVariable r
   -> SValue r
@@ -372,7 +372,7 @@ notNull
 notNull nil v = v ?!= IC.valueOf (IC.var nil $ onStateValue valueType v)
 
 listDecDef
-  :: (IC.DeclStatement r stmt bod, IC.Literal r, VariableElim r)
+  :: (IC.DeclStatement r stmt bod, TypeSym r, IC.Literal r, VariableElim r)
   => SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 listDecDef v scp vals = do
   vr <- zoom lensMStoVS v
@@ -380,7 +380,7 @@ listDecDef v scp vals = do
   IC.varDecDef (return vr) scp lst
 
 setDecDef
-  :: (IC.DeclStatement r stmt bod, IC.Literal r, VariableElim r)
+  :: (IC.DeclStatement r stmt bod, TypeSym r, IC.Literal r, VariableElim r)
   => SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 setDecDef v scp vals = do
   vr <- zoom lensMStoVS v
@@ -459,7 +459,7 @@ openFileR
 openFileR f vr vl = vr &= f vl infile
 
 openFileW
-  :: (IC.AssignStatement r stmt, IC.Literal r)
+  :: (IC.AssignStatement r stmt, TypeSym r, IC.Literal r)
   => (SValue r -> VS (r TypeData) -> SValue r -> SValue r)
   -> SVariable r
   -> SValue r
@@ -515,7 +515,7 @@ multiReturn f vs = do
   returnStmt $ mkStateVal IC.void $ f $ valueList vs'
 
 listDec
-  :: (IC.DeclStatement r stmt bod, IC.Literal r, VariableElim r)
+  :: (IC.DeclStatement r stmt bod, TypeSym r, IC.Literal r, VariableElim r)
   => SVariable r -> r ScopeData -> MS (r stmt)
 listDec v scp = listDecDef v scp []
 
@@ -668,7 +668,7 @@ fileW = "w"
 fileA = "a"
 
 openFileR', openFileW', openFileA'
-  :: (IC.Literal r, IC.ValueExpression r) => SValue r -> SValue r
+  :: (TypeSym r, IC.Literal r, IC.ValueExpression r) => SValue r -> SValue r
 openFileR' n = funcApp fileOpen infile [n, IC.litString fileR]
 openFileW' n = funcApp fileOpen infile [n, IC.litString fileW]
 openFileA' n = funcApp fileOpen infile [n, IC.litString fileA]

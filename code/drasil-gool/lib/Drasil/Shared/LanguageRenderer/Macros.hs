@@ -197,6 +197,7 @@ stringListVals
   :: ( MultiStatement r stmt
      , IC.AssignStatement r stmt
      , IC.List r
+     , ValueSym r
      , IC.Literal r
      , RenderValue r
      , IC.TypeElim r

@@ -141,7 +141,7 @@ class (TypeSym r) => TypeElim r where
 class Argument r where
   pointerArg :: SValue r -> SValue r
 
-class (ValueSym r) => Literal r where
+class Literal r where
   litTrue   :: SValue r
   litFalse  :: SValue r
   litChar   :: Char -> SValue r

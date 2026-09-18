@@ -1245,7 +1245,7 @@ swiftStringError = do
 swiftClassDoc :: ClassDocRenderer
 swiftClassDoc desc = [desc | not (null desc)]
 
-typeDfltVal :: (Literal r, OOTypeSym r) => CodeType -> SValue r
+typeDfltVal :: (Literal r, TypeSym r, OOTypeSym r) => CodeType -> SValue r
 typeDfltVal Boolean = litFalse
 typeDfltVal Integer = litInt 0
 typeDfltVal Float = litFloat 0.0

@@ -912,7 +912,7 @@ jHasNextLineFunc = func jHasNextLine bool []
 jCharAtFunc :: VS (JavaCode FuncData)
 jCharAtFunc = func jCharAt char [litInt 0]
 
-jSplitFunc :: (Literal r, OOFunctionSym r) => Char -> VS (r FuncData)
+jSplitFunc :: (TypeSym r, Literal r, OOFunctionSym r) => Char -> VS (r FuncData)
 jSplitFunc d = func jSplit (listType string) [litString [d]]
 
 jEquality :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode

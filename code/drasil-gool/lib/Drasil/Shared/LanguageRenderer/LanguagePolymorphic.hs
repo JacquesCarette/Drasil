@@ -108,7 +108,7 @@ valOfOne t = t >>= (getVal . getCodeType)
 -- Binary Operators --
 
 smartAdd
-  :: (IC.Literal r, IC.NumericExpression r, RenderValue r, ValueElim r)
+  :: (IC.NumericExpression r, RenderValue r, ValueElim r)
   => SValue r -> SValue r -> SValue r
 smartAdd v1 v2 = do
   v1' <- v1
@@ -119,7 +119,7 @@ smartAdd v1 v2 = do
     _                  -> v1 #+ v2
 
 smartSub
-  :: (IC.Literal r, IC.NumericExpression r, RenderValue r, ValueElim r)
+  :: (IC.NumericExpression r, RenderValue r, ValueElim r)
   => SValue r -> SValue r -> SValue r
 smartSub v1 v2 = do
   v1' <- v1

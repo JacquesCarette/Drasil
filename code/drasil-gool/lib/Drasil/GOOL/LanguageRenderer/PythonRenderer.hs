@@ -877,7 +877,7 @@ addmathImport = (>>) $ modify (addLangImportVS pyMath)
 mathFunc :: (Monad r) => String -> VSOp r
 mathFunc = addmathImport . unOpPrec . access pyMath
 
-splitFunc :: (Literal r, OOFunctionSym r) => Char -> VS (r FuncData)
+splitFunc :: (TypeSym r, Literal r, OOFunctionSym r) => Char -> VS (r FuncData)
 splitFunc d = func pySplit (listType string) [litString [d]]
 
 readline, readlines :: (TypeSym r, InternalValueExp r) => SValue r -> SValue r

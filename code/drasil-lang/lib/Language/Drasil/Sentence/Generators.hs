@@ -9,7 +9,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Classes (NamedIdea(..), Quantity)
 import Language.Drasil.Development.Sentence (phrase)
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 import Language.Drasil.Sentence (Sentence,(+:+), ch)
 
 -- | Apply a binary function to the terms of two named ideas, instead of to the named

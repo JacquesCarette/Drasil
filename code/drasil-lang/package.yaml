@@ -26,6 +26,7 @@ dependencies:
 - Decimal
 - unicode-names >= 3.2.0.0
 - drasil-database
+- drasil-natural-language
 - drasil-utils
 - containers
 

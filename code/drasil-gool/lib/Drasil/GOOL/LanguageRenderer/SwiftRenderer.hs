@@ -1151,7 +1151,7 @@ swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData ->
   MS (SwiftCode (Doc, Terminator))
 swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
-  innerTp <- zoom lensMStoVS (innerType $ return $ variableType v)
+  innerTp <- zoom lensMStoVS (innerType $ pure $ variableType v)
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
   let bind ClassLevel = classLevel :: SwiftCode Doc

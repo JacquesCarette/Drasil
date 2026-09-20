@@ -217,7 +217,7 @@ genPackage unRepr = do
         exampleScope = scp,
         folderNum = getVal g,
         inputOutput = (sampleInputName, "output.txt")} -- This needs a more permanent solution
-  return $ package pd (m:catMaybes [i,rm,d])
+  pure $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.
 genProgram
@@ -229,7 +229,7 @@ genProgram = do
   let n = g ^. projAbrv
   -- FIXME: The below code does `Doc -> String` conversion!
   let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ g ^. purpose
-  return $ OO.prog n p ms
+  pure $ OO.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
@@ -272,7 +272,7 @@ genModules = do
   cal    <- genCalcMod
   out    <- genOutputMod
   moddef <- traverse genModDef (modules g) -- hack ?
-  return $ mn : inp ++ con ++ cal : out ++ moddef
+  pure $ mn : inp ++ con ++ cal : out ++ moddef
 
 -- Procedural Versions --
 
@@ -351,7 +351,7 @@ genPackageProc unRepr = do
         exampleScope = scp,
         folderNum = getVal g,
         inputOutput = (sampleInputName, "output.txt")} -- This needs a more permanent solution
-  return $ package pd (m:catMaybes [i,rm,d])
+  pure $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.
 genProgramProc
@@ -362,7 +362,7 @@ genProgramProc = do
   ms <- chooseModulesProc $ g ^. modular
   let n = g ^. projAbrv
   let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ g ^. purpose
-  return $ Proc.prog n p ms
+  pure $ Proc.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
@@ -405,7 +405,7 @@ genModulesProc = do
   out    <- genOutputModProc
   moddef <- traverse genModDefProc (modules g) -- hack ?
   if con then error "genModulesProc: Procedural renderers do not support classes"
-  else return $ mn : inp ++ cal : out ++ moddef
+  else pure $ mn : inp ++ cal : out ++ moddef
 
 -- | Private utilities used in 'generateCode'.
 getDir :: Lang -> String

@@ -92,7 +92,7 @@ genCodeZoo :: SmithEtAlSRS -> [Choices] -> IO [FileLayout]
 genCodeZoo syst = mapM $ \chcs -> do
     let dir = codedDirName syst chcs
     layout <- genCode syst chcs
-    return $ directory [ps|{dir}|] [layout]
+    pure $ directory [ps|{dir}|] [layout]
 
 -- | Human-readable name for coded variants (e.g. "Projectile_U_P_NoL_U_WI_V_D").
 codedHRName :: (HasProjectName sys) => sys -> Choices -> String

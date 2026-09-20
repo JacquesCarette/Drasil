@@ -118,7 +118,7 @@ value u s t = do
       cm = g ^. concMatches
       cdCncpt = Map.lookup u cm
   val <- maybe (valueOf <$> variable s t) (convExpr . (^. codeExpr)) constDef
-  return $ maybe val conceptToGOOL cdCncpt
+  pure $ maybe val conceptToGOOL cdCncpt
 
 -- | If variable is an input, construct it with 'var' and pass to inputVariable.
 -- If variable is a constant and 'Var' constant representation is chosen,
@@ -146,7 +146,7 @@ variable s t = do
     else if s `elem` map codeName (cs ^. constDefns)
       then constVariable (g ^. conStruct) (g ^. conRepr)
               ((defFunc $ g ^. conRepr) s t)
-      else return $ var s t
+      else pure $ var s t
 
 -- | If 'Unbundled' inputs, just return variable as-is.
 -- If 'Bundled' inputs, access variable through object, where the object is self
@@ -165,12 +165,12 @@ inputVariable
     , VariableValue r
     )
   => Structure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
-inputVariable Unbundled _ v = return v
+inputVariable Unbundled _ v = pure v
 inputVariable Bundled Var v = do
   g <- get
   inClsName <- genICName InputParameters
   ip <- mkVar (quantvar inParams)
-  return $ if currentClass g == inClsName then instanceVarSelf v else valueOf ip $-> v
+  pure $ if currentClass g == inClsName then instanceVarSelf v else valueOf ip $-> v
 inputVariable Bundled Const v = do
   ip <- mkVar (quantvar inParams)
   classVariable ip v
@@ -193,10 +193,10 @@ constVariable
     , VariableValue r
     )
   => ConstantStructure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
-constVariable (Store Unbundled) _ v = return v
+constVariable (Store Unbundled) _ v = pure v
 constVariable (Store Bundled) Var v = do
   cs <- mkVar (quantvar consts)
-  return $ valueOf cs $-> v
+  pure $ valueOf cs $-> v
 constVariable (Store Bundled) Const v = do
   cs <- mkVar (quantvar consts)
   classVariable cs v
@@ -216,7 +216,7 @@ classVariable :: (OOVariableSym r, VariableElim r) => SVariable r ->
 classVariable c v = do
   g <- get
   let checkCurrent m = if currentModule g == m then classVarAccess else extClassVarAccess
-  return $ do
+  pure $ do
     v' <- v
     let nm = variableName v'
     maybe (error $ "Variable " ++ nm ++ " missing from export map")
@@ -251,7 +251,7 @@ mkVal v = do
   let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
       toGOOLVal (Just o) = do
         ot <- codeType o
-        return $ valueOf $ instanceVarAccess (valueOf $ var (codeName o) (convTypeOO ot))
+        pure $ valueOf $ instanceVarAccess (valueOf $ var (codeName o) (convTypeOO ot))
           (var (codeName v) (convTypeOO t))
   toGOOLVal (v ^. obv)
 
@@ -271,7 +271,7 @@ mkVar v = do
   let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
       toGOOLVar (Just o) = do
         ot <- codeType o
-        return $ instanceVarAccess (valueOf $ var (codeName o) (convTypeOO ot))
+        pure $ instanceVarAccess (valueOf $ var (codeName o) (convTypeOO ot))
           (var (codeName v) (convTypeOO t))
   toGOOLVar (v ^. obv)
 
@@ -289,7 +289,7 @@ mkParam
   => ParameterChunk -> GenState (MS (r ParamData))
 mkParam p = do
   v <- mkVar (quantvar p)
-  return $ paramFunc (passBy p) v
+  pure $ paramFunc (passBy p) v
   where paramFunc Ref = pointerParam
         paramFunc Val = param
 
@@ -398,7 +398,7 @@ genMethod f n desc p r b = do
   bod <- logBody n vars b
   let fn = f ps bod
   pComms <- mapM getCommentBrief p
-  return $ if CommentFunc `elem` g ^. commented
+  pure $ if CommentFunc `elem` g ^. commented
     then docFunc desc pComms r fn else fn
 
 -- | Generates a function or method defined by its inputs and outputs.
@@ -443,7 +443,7 @@ genInOutFunc f docf n desc ins' outs' b = do
   pComms <- mapM getCommentBrief ins
   oComms <- mapM getCommentBrief outs
   bComms <- mapM getCommentBrief both
-  return $ if CommentFunc `elem` g ^. commented
+  pure $ if CommentFunc `elem` g ^. commented
     then docf desc (zip pComms inVs) (zip oComms outVs) (zip
     bComms bothVs) bod else f inVs outVs bothVs bod
 
@@ -476,16 +476,16 @@ convExpr (Lit (Dbl d)) = do
   let getLiteral Double = litDouble d
       getLiteral Float = litFloat (realToFrac d)
       getLiteral _ = error "convExpr: Real space matched to invalid CodeType; should be Double or Float"
-  return $ getLiteral sm
+  pure $ getLiteral sm
 convExpr (Lit (ExactDbl d)) = convExpr $ Lit . Dbl $ fromInteger d
-convExpr (Lit (Int i))      = return $ litInt i
-convExpr (Lit (Str s))      = return $ litString s
+convExpr (Lit (Int i))      = pure $ litInt i
+convExpr (Lit (Str s))      = pure $ litString s
 convExpr (Lit (Perc a b)) = do
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble
       getLiteral Float = litFloat . realToFrac
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
-  return $ getLiteral sm (fromIntegral a / (10 ** fromIntegral b))
+  pure $ getLiteral sm (fromIntegral a / (10 ** fromIntegral b))
 convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
 convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
@@ -503,14 +503,14 @@ convExpr (Message a m x ns) = do
   let objCd = quantvar (lookupC g a)
   o <- mkVal objCd
   convCall m x ns
-    (\_ n t ps nas -> return (objMethodCallMixedArgs t o n ps nas))
+    (\_ n t ps nas -> pure (objMethodCallMixedArgs t o n ps nas))
     (\_ n t -> objMethodCallMixedArgs t o n)
 convExpr (Field o f) = do
   g <- get
   let ob  = quantvar (lookupC g o)
       fld = quantvar (lookupC g f)
   v <- mkVar (ccObjVar ob fld)
-  return $ valueOf v
+  pure $ valueOf v
 convExpr (UnaryOp o u)    = fmap (unop o) (convExpr u)
 convExpr (UnaryOpB o u)   = fmap (unopB o) (convExpr u)
 convExpr (UnaryOpVV o u)  = fmap (unopVV o) (convExpr u)
@@ -520,7 +520,7 @@ convExpr (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to deal w
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
       getLiteral Float = litFloat (fromIntegral a) #/ litFloat (fromIntegral b)
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
-  return $ getLiteral sm
+  pure $ getLiteral sm
 convExpr (ArithBinaryOp o a b) = liftM2 (arithBfunc o) (convExpr a) (convExpr b)
 convExpr (LABinaryOp o a b)    = liftM2 (laBfunc o) (convExpr a) (convExpr b)
 convExpr (EqBinaryOp o a b)    = liftM2 (eqBfunc o) (convExpr a) (convExpr b)
@@ -539,16 +539,16 @@ convExpr (Case c l)            = doit l -- FIXME this is sub-optimal
 convExpr (Matrix [l]) = do
   ar <- mapM convExpr l
                                     -- hd will never fail here
-  return $ litArray (fmap valueType (head ar)) ar
+  pure $ litArray (fmap valueType (head ar)) ar
 convExpr Matrix{} = error "convExpr: Matrix"
 convExpr (S.Set s l) = do
   ar <- mapM convExpr l
   sm <- spaceCodeType s
-  return $ litSet (convTypeOO sm) ar
+  pure $ litSet (convTypeOO sm) ar
 convExpr(Variable s (S.Set l _)) = do
   sm <- spaceCodeType l
   let varSet = var s (setType $ convTypeOO sm)
-  return $ valueOf varSet
+  pure $ valueOf varSet
 convExpr(Variable _ _) = error "convExpr: Variable"
 convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
@@ -598,7 +598,7 @@ convCall c x ns f libf = do
   nms <- mapM (mkVar . quantvar . lookupC g . fst) ns
   nargs <- mapM (convExpr . snd) ns
   maybe (maybe (error $ "Call to non-existent function " ++ funcNm)
-      (\m -> return $ libf m funcNm (convTypeOO funcTp) args (zip nms nargs))
+      (\m -> pure $ libf m funcNm (convTypeOO funcTp) args (zip nms nargs))
       (Map.lookup funcNm lem))
     (\m -> f m funcNm (convTypeOO funcTp) args (zip nms nargs))
     (Map.lookup funcNm mem)
@@ -815,11 +815,11 @@ convStmt (FAsg v (Matrix [es])) = do
   let listFunc (OO.List _) = litList
       listFunc (OO.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
-  return $ assign v' (listFunc t (innerType $ fmap variableType v') els)
+  pure $ assign v' (listFunc t (innerType $ fmap variableType v') els)
 convStmt (FAsg v e) = do
   e' <- convExpr e
   v' <- mkVar v
-  return $ assign v' e'
+  pure $ assign v' e'
 convStmt (FAsgIndex v i e) = do
   e' <- convExpr e
   v' <- mkVar v
@@ -827,41 +827,41 @@ convStmt (FAsgIndex v i e) = do
   let asgFunc (OO.List _) = listSet (valueOf v') (litInt i) e'
       asgFunc (OO.Array _) = assign (arrayElem (valueOf v') (litInt i)) e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
-  return $ asgFunc t
+  pure $ asgFunc t
 convStmt (FFor v start end step st) = do
   stmts <- mapM convStmt st
   vari <- mkVar v
   start' <- convExpr start
   end' <- convExpr end
   step' <- convExpr step
-  return $ forRange vari start' end' step' (bodyStatements stmts)
+  pure $ forRange vari start' end' step' (bodyStatements stmts)
 convStmt (FForEach v e st) = do
   stmts <- mapM convStmt st
   vari <- mkVar v
   e' <- convExpr e
-  return $ forEach vari e' (bodyStatements stmts)
+  pure $ forEach vari e' (bodyStatements stmts)
 convStmt (FWhile e st) = do
   stmts <- mapM convStmt st
   e' <- convExpr e
-  return $ while e' (bodyStatements stmts)
+  pure $ while e' (bodyStatements stmts)
 convStmt (FCond e tSt []) = do
   stmts <- mapM convStmt tSt
   e' <- convExpr e
-  return $ ifNoElse [(e', bodyStatements stmts)]
+  pure $ ifNoElse [(e', bodyStatements stmts)]
 convStmt (FCond e tSt eSt) = do
   stmt1 <- mapM convStmt tSt
   stmt2 <- mapM convStmt eSt
   e' <- convExpr e
-  return $ ifCond [(e', bodyStatements stmt1)] (bodyStatements stmt2)
+  pure $ ifCond [(e', bodyStatements stmt1)] (bodyStatements stmt2)
 convStmt (FRet e) = do
   e' <- convExpr e
-  return $ returnStmt e'
-convStmt (FThrow s) = return $ throw s
+  pure $ returnStmt e'
+convStmt (FThrow s) = pure $ throw s
 convStmt (FTry t c) = do
   stmt1 <- mapM convStmt t
   stmt2 <- mapM convStmt c
-  return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
-convStmt FContinue = return continue
+  pure $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
+convStmt FContinue = pure continue
 convStmt (FDecDef v (Matrix [[]])) = do
   g <- get
   let scp = convScope $ currentScope g
@@ -880,10 +880,10 @@ convStmt (FDecDef v e) = do
             contDecDef (OO.Array _) = arrayDecDef
             contDecDef _ = error "Type mismatch between variable and value in declare-define FuncStmt"
         e' <- mapM convExpr lst
-        return $ contDecDef t v' scp e'
+        pure $ contDecDef t v' scp e'
       convDecDef _ = do
         e' <- convExpr e
-        return $ varDecDef v' scp e'
+        pure $ varDecDef v' scp e'
   convDecDef e
 convStmt (FFuncDef f ps sts) = do
   g <- get
@@ -891,17 +891,17 @@ convStmt (FFuncDef f ps sts) = do
   f' <- mkVar (quantvar f)
   pms <- mapM (mkVar . quantvar) ps
   b <- mapM convStmt sts
-  return $ funcDecDef f' scp pms (bodyStatements b)
+  pure $ funcDecDef f' scp pms (bodyStatements b)
 convStmt (FVal e) = do
   e' <- convExpr e
-  return $ valStmt e'
+  pure $ valStmt e'
 convStmt (FMulti ss) = do
   stmts <- mapM convStmt ss
-  return $ multi stmts
+  pure $ multi stmts
 convStmt (FAppend a b) = do
   a' <- convExpr a
   b' <- convExpr b
-  return $ listAppend a' b'
+  pure $ listAppend a' b'
 
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
@@ -954,7 +954,7 @@ readData ddef = do
   let localScope = convScope $ currentScope g
   inD <- mapM (`inData` localScope) ddef
   v_filename <- mkVal (quantvar inFileName)
-  return [block $
+  pure [block $
     varDec var_infile localScope :
     (if any (\d -> isLine d || isLines d) ddef then [varDec var_line localScope,
     listDec 0 var_linetokens localScope ] else []) ++
@@ -983,11 +983,11 @@ readData ddef = do
           => Data -> r ScopeData -> GenState [MS (r stmt)]
         inData (Singleton v) _ = do
             vv <- mkVar v
-            return [getFileInput v_infile vv]
-        inData JunkData _ = return [discardFileLine v_infile]
+            pure [getFileInput v_infile vv]
+        inData JunkData _ = pure [discardFileLine v_infile]
         inData (Line lp d) scp = do
           lnI <- lineData Nothing lp scp
-          return $ [getFileInputLine v_infile var_line,
+          pure $ [getFileInputLine v_infile var_line,
             stringSplit d var_linetokens v_line] ++ lnI
         inData (Lines lp ls d) scp = do
           lnV <- lineData (Just "_temp") lp scp
@@ -1001,7 +1001,7 @@ readData ddef = do
                   [getFileInputLine v_infile var_line,
                    stringSplit d var_linetokens v_line
                   ] ++ lnV)]
-          return $ readLines ls
+          pure $ readLines ls
         ---------------
         lineData
           ::
@@ -1020,10 +1020,10 @@ readData ddef = do
           => Maybe String -> LinePattern -> r ScopeData -> GenState [MS (r stmt)]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVars s p
-          return [stringListVals vs v_linetokens]
+          pure [stringListVals vs v_linetokens]
         lineData s p@(Repeat ds) scp = do
           vs <- getEntryVars s p
-          sequence $ clearTemps s ds scp ++ return
+          sequence $ clearTemps s ds scp ++ pure
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
         clearTemps
@@ -1117,7 +1117,7 @@ valueProc u s t = do
       cdCncpt = Map.lookup u cm
   val <- maybe (valueOf <$> variableProc s t)
                 (convExprProc . (^. codeExpr)) constDef
-  return $ maybe val conceptToGOOL cdCncpt
+  pure $ maybe val conceptToGOOL cdCncpt
 
 -- | If variable is an input, construct it with 'var' and pass to inputVariable.
 -- If variable is a constant and 'Var' constant representation is chosen,
@@ -1136,14 +1136,14 @@ variableProc s t = do
     else if s `elem` map codeName (cs ^. constDefns)
       then constVariableProc (g ^. conStruct) (g ^. conRepr)
               ((defFunc $ g ^. conRepr) s t)
-      else return $ var s t
+      else pure $ var s t
 
 -- | If 'Unbundled' inputs, just return variable as-is.
 -- If 'Bundled' inputs, throw an error, since procedural renderers
 -- don't support 'Bundled' inputs yet.
 inputVariableProc :: (VariableSym r) => Structure -> ConstantRepr -> SVariable r ->
   GenState (SVariable r)
-inputVariableProc Unbundled _ v = return v
+inputVariableProc Unbundled _ v = pure v
 inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers do not support bundled inputs"
 
 -- | If 'Unbundled' constants, just return variable as-is.
@@ -1154,7 +1154,7 @@ inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers d
 -- variable for one of the constants.
 constVariableProc :: (VariableSym r) => ConstantStructure -> ConstantRepr ->
   SVariable r -> GenState (SVariable r)
-constVariableProc (Store Unbundled) _ v = return v
+constVariableProc (Store Unbundled) _ v = pure v
 constVariableProc (Store Bundled) _ _ = error "constVariableProc: Procedural renderers do not support bundled constants"
 constVariableProc WithInputs cr v = do
   g <- get
@@ -1232,7 +1232,7 @@ mkParamProc
   => ParameterChunk -> GenState (MS (r ParamData))
 mkParamProc p = do
   v <- mkVarProc (quantvar p)
-  return $ paramFunc (passBy p) v
+  pure $ paramFunc (passBy p) v
   where paramFunc Ref = pointerParam
         paramFunc Val = param
 
@@ -1327,7 +1327,7 @@ genMethodProc f n desc p r b = do
   bod <- logBody n vars b
   let fn = f ps bod
   pComms <- mapM getCommentBrief p
-  return $ if CommentFunc `elem` (g ^. commented)
+  pure $ if CommentFunc `elem` (g ^. commented)
     then docFunc desc pComms r fn else fn
 
 -- | Converts a 'Func' (from the Mod AST) to GOOL.
@@ -1458,7 +1458,7 @@ readDataProc ddef = do
   let localScope = convScope $ currentScope g
   inD <- mapM (`inData` localScope) ddef
   v_filename <- mkValProc (quantvar inFileName)
-  return [block $
+  pure [block $
     varDec var_infile localScope :
     (if any (\d -> isLine d || isLines d) ddef then [varDec var_line localScope,
     listDec 0 var_linetokens localScope] else []) ++
@@ -1483,11 +1483,11 @@ readDataProc ddef = do
           => Data -> r ScopeData -> GenState [MS (r stmt)]
         inData (Singleton v) _ = do
             vv <- mkVarProc v
-            return [getFileInput v_infile vv]
-        inData JunkData _ = return [discardFileLine v_infile]
+            pure [getFileInput v_infile vv]
+        inData JunkData _ = pure [discardFileLine v_infile]
         inData (Line lp d) scp = do
           lnI <- lineData Nothing lp scp
-          return $ [getFileInputLine v_infile var_line,
+          pure $ [getFileInputLine v_infile var_line,
             stringSplit d var_linetokens v_line] ++ lnI
         inData (Lines lp ls d) scp = do
           lnV <- lineData (Just "_temp") lp scp
@@ -1501,7 +1501,7 @@ readDataProc ddef = do
                   [getFileInputLine v_infile var_line,
                    stringSplit d var_linetokens v_line
                   ] ++ lnV)]
-          return $ readLines ls
+          pure $ readLines ls
         ---------------
         lineData
           ::
@@ -1516,10 +1516,10 @@ readDataProc ddef = do
           => Maybe String -> LinePattern -> r ScopeData -> GenState [MS (r stmt)]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVarsProc s p
-          return [stringListVals vs v_linetokens]
+          pure [stringListVals vs v_linetokens]
         lineData s p@(Repeat ds) scp = do
           vs <- getEntryVarsProc s p
-          sequence $ clearTemps s ds scp ++ return
+          sequence $ clearTemps s ds scp ++ pure
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
         clearTemps
@@ -1578,16 +1578,16 @@ convExprProc (Lit (Dbl d)) = do
   let getLiteral Double = litDouble d
       getLiteral Float = litFloat (realToFrac d)
       getLiteral _ = error "convExprProc: Real space matched to invalid CodeType; should be Double or Float"
-  return $ getLiteral sm
+  pure $ getLiteral sm
 convExprProc (Lit (ExactDbl d)) = convExprProc $ Lit . Dbl $ fromInteger d
-convExprProc (Lit (Int i))      = return $ litInt i
-convExprProc (Lit (Str s))      = return $ litString s
+convExprProc (Lit (Int i))      = pure $ litInt i
+convExprProc (Lit (Str s))      = pure $ litString s
 convExprProc (Lit (Perc a b)) = do
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble
       getLiteral Float = litFloat . realToFrac
       getLiteral _ = error "convExprProc: Rational space matched to invalid CodeType; should be Double or Float"
-  return $ getLiteral sm (fromIntegral a / (10 ** fromIntegral b))
+  pure $ getLiteral sm (fromIntegral a / (10 ** fromIntegral b))
 convExprProc (AssocA Add l) = foldl1 (#+)  <$> mapM convExprProc l
 convExprProc (AssocA Mul l) = foldl1 (#*)  <$> mapM convExprProc l
 convExprProc (AssocB And l) = foldl1 (?&&) <$> mapM convExprProc l
@@ -1611,7 +1611,7 @@ convExprProc (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to de
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
       getLiteral Float = litFloat (fromIntegral a) #/ litFloat (fromIntegral b)
       getLiteral _ = error "convExprProc: Rational space matched to invalid CodeType; should be Double or Float"
-  return $ getLiteral sm
+  pure $ getLiteral sm
 convExprProc (ArithBinaryOp o a b) = liftM2 (arithBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (LABinaryOp o a b)    = liftM2 (laBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (EqBinaryOp o a b)    = liftM2 (eqBfunc o) (convExprProc a) (convExprProc b)
@@ -1632,16 +1632,16 @@ convExprProc (Case c l)            = doit l -- FIXME this is sub-optimal
 convExprProc (Matrix [l]) = do
   ar <- mapM convExprProc l
                                     -- hd will never fail here
-  return $ litArray (fmap valueType (head ar)) ar
+  pure $ litArray (fmap valueType (head ar)) ar
 convExprProc Matrix{} = error "convExprProc: Matrix"
 convExprProc (S.Set s l) = do
   ar <- mapM convExprProc l
   sm <- spaceCodeType s
-  return $ litSet (convType sm) ar
+  pure $ litSet (convType sm) ar
 convExprProc (Variable s (S.Set l _)) = do
   sm <- spaceCodeType l
   let varSet = var s (setType $ convType sm)
-  return $ valueOf varSet
+  pure $ valueOf varSet
 convExprProc (Variable _ _) = error "convExpr: Variable"
 convExprProc Operator{} = error "convExprProc: Operator"
 convExprProc (RealI c ri)  = do
@@ -1686,7 +1686,7 @@ convCallProc c x ns f libf = do
   nms <- mapM (mkVarProc . quantvar . lookupC g . fst) ns
   nargs <- mapM (convExprProc . snd) ns
   maybe (maybe (error $ "Call to non-existent function " ++ funcNm)
-      (\m -> return $ libf m funcNm (convType funcTp) args (zip nms nargs))
+      (\m -> pure $ libf m funcNm (convType funcTp) args (zip nms nargs))
       (Map.lookup funcNm lem))
     (\m -> f m funcNm (convType funcTp) args (zip nms nargs))
     (Map.lookup funcNm mem)
@@ -1728,12 +1728,12 @@ convStmtProc (FAsg v (Matrix [es])) = do
   let listFunc (OO.List _) = litList
       listFunc (OO.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
-  return $ assign v' (listFunc t (innerType $ fmap variableType v')
+  pure $ assign v' (listFunc t (innerType $ fmap variableType v')
     els)
 convStmtProc (FAsg v e) = do
   e' <- convExprProc e
   v' <- mkVarProc v
-  return $ assign v' e'
+  pure $ assign v' e'
 convStmtProc (FAsgIndex v i e) = do
   e' <- convExprProc e
   v' <- mkVarProc v
@@ -1741,41 +1741,41 @@ convStmtProc (FAsgIndex v i e) = do
   let asgFunc (OO.List _) = listSet (valueOf v') (litInt i) e'
       asgFunc (OO.Array _) = assign (arrayElem (valueOf v') (litInt i)) e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
-  return $ asgFunc t
+  pure $ asgFunc t
 convStmtProc (FFor v start end step st) = do
   stmts <- mapM convStmtProc st
   vari <- mkVarProc v
   start' <- convExprProc start
   end' <- convExprProc end
   step' <- convExprProc step
-  return $ forRange vari start' end' step' (bodyStatements stmts)
+  pure $ forRange vari start' end' step' (bodyStatements stmts)
 convStmtProc (FForEach v e st) = do
   stmts <- mapM convStmtProc st
   vari <- mkVarProc v
   e' <- convExprProc e
-  return $ forEach vari e' (bodyStatements stmts)
+  pure $ forEach vari e' (bodyStatements stmts)
 convStmtProc (FWhile e st) = do
   stmts <- mapM convStmtProc st
   e' <- convExprProc e
-  return $ while e' (bodyStatements stmts)
+  pure $ while e' (bodyStatements stmts)
 convStmtProc (FCond e tSt []) = do
   stmts <- mapM convStmtProc tSt
   e' <- convExprProc e
-  return $ ifNoElse [(e', bodyStatements stmts)]
+  pure $ ifNoElse [(e', bodyStatements stmts)]
 convStmtProc (FCond e tSt eSt) = do
   stmt1 <- mapM convStmtProc tSt
   stmt2 <- mapM convStmtProc eSt
   e' <- convExprProc e
-  return $ ifCond [(e', bodyStatements stmt1)] (bodyStatements stmt2)
+  pure $ ifCond [(e', bodyStatements stmt1)] (bodyStatements stmt2)
 convStmtProc (FRet e) = do
   e' <- convExprProc e
-  return $ returnStmt e'
-convStmtProc (FThrow s) = return $ throw s
+  pure $ returnStmt e'
+convStmtProc (FThrow s) = pure $ throw s
 convStmtProc (FTry t c) = do
   stmt1 <- mapM convStmtProc t
   stmt2 <- mapM convStmtProc c
-  return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
-convStmtProc FContinue = return continue
+  pure $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
+convStmtProc FContinue = pure continue
 convStmtProc (FDecDef v (Matrix [[]])) = do
   g <- get
   let scp = convScope $ currentScope g
@@ -1794,10 +1794,10 @@ convStmtProc (FDecDef v e) = do
             contDecDef (OO.Array _) = arrayDecDef
             contDecDef _ = error "Type mismatch between variable and value in declare-define FuncStmt"
         e' <- mapM convExprProc lst
-        return $ contDecDef t v' scp e'
+        pure $ contDecDef t v' scp e'
       convDecDef _ = do
         e' <- convExprProc e
-        return $ varDecDef v' scp e'
+        pure $ varDecDef v' scp e'
   convDecDef e
 convStmtProc (FFuncDef f ps sts) = do
   g <- get
@@ -1805,17 +1805,17 @@ convStmtProc (FFuncDef f ps sts) = do
   f' <- mkVarProc (quantvar f)
   pms <- mapM (mkVarProc . quantvar) ps
   b <- mapM convStmtProc sts
-  return $ funcDecDef f' scp pms (bodyStatements b)
+  pure $ funcDecDef f' scp pms (bodyStatements b)
 convStmtProc (FVal e) = do
   e' <- convExprProc e
-  return $ valStmt e'
+  pure $ valStmt e'
 convStmtProc (FMulti ss) = do
   stmts <- mapM convStmtProc ss
-  return $ multi stmts
+  pure $ multi stmts
 convStmtProc (FAppend a b) = do
   a' <- convExprProc a
   b' <- convExprProc b
-  return $ listAppend a' b'
+  pure $ listAppend a' b'
 
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
@@ -1947,7 +1947,7 @@ genInOutFuncProc f docf n desc ins' outs' b = do
   pComms <- mapM getCommentBrief ins
   oComms <- mapM getCommentBrief outs
   bComms <- mapM getCommentBrief both
-  return $ if CommentFunc `elem` g ^. commented
+  pure $ if CommentFunc `elem` g ^. commented
     then docf desc (zip pComms inVs) (zip oComms outVs) (zip
     bComms bothVs) bod else f inVs outVs bothVs bod
 

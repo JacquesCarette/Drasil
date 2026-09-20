@@ -52,7 +52,7 @@ readWithDataDesc fp ddsc = do
         (map (splitOn dlm2) $ splitOn dlm1 s)
       -- FIXME: Since the representation for vectors in Expr is Matrix, and that constructor accepts a 2-D list, building a 3-D or higher matrix is not straightforward. This would be easier if Expr had a constructor for 1-D vectors, which could be nested to achieve n-dimensional structures.
       readDataItem (DI _ _) _ = error "readWithDataDesc does not yet support lists with 3 or more dimensions"
-  return $ readDD ddsc ins
+  pure $ readDD ddsc ins
 
 -- data :: [Delimiter] -> Space -> String -> Expr
 -- data [] sp s = strAsExpr sp s

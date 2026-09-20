@@ -256,7 +256,7 @@ separateN = concatMap (splitOn "\n")
 -- creates an entry for each file (new Entry data-oriented format)
 createEntry :: FilePath -> DC.File -> DC.FileName -> IO Entry
 -- creates blank line to separate file entries by drasil- package
-createEntry _ _ "newline" = return nlEntry where
+createEntry _ _ "newline" = pure nlEntry where
   nlEntry = makeEntry "" "newline" "" [] [] [] []
 -- creates actual file entries
 createEntry homeDirectory file filename = do
@@ -283,12 +283,12 @@ createEntry homeDirectory file filename = do
       clsint = map makeClassInstance stripInstances
 
   let entry = makeEntry drpk fn efp dtl ntl clss clsint
-  return entry
+  pure entry
 
 -- creates entrystring for each entry (contains lines for each entry's data)
 compileEntryData :: [ClassName] -> Entry -> DC.FileName -> IO EntryString
 -- creates blank line entrystring to separate file entries by drasil- package
-compileEntryData _ _ "newline" = return "\t"
+compileEntryData _ _ "newline" = pure "\t"
 -- creates entrystrings for actual file entries
 compileEntryData ordClassInsts entry _ = do
 
@@ -342,7 +342,7 @@ compileEntryData ordClassInsts entry _ = do
       sbE  = intercalate "\n"
 
   -- mapM_ print (lines output)
-  return genOutput
+  pure genOutput
 
 -- gets raw Entries, extracts classes and orders them with config file settings
 ordClasses :: [ClassType] -> [Entry] -> [Class]

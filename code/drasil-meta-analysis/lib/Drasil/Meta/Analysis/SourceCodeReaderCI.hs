@@ -47,7 +47,7 @@ extractEntryData fileName filePath = do
       ordClassNames = map getClassName allClasslines
       stripInstances = map getStripInstance definInstances
 
-  return EntryData {dNs=dataNames,ntNs=newtypeNames,cNs=ordClassNames,cITs=stripInstances}
+  pure EntryData {dNs=dataNames,ntNs=newtypeNames,cNs=ordClassNames,cITs=stripInstances}
 
 -- strips leading and trailing whitespace from strings
 stripWS :: String -> String

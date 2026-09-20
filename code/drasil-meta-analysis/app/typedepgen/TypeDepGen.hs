@@ -51,7 +51,7 @@ main = do
   mapM_ (output outputDirectory) rawEntryData
   mapM_ (closePackageFiles outputDirectory) packageNames
   mkDrasilTypeGraph outputDirectory rawEntryData
-  return mempty
+  pure mempty
 
 ----------
 -- Main output functions
@@ -97,7 +97,7 @@ output fp entry = do
     mapM_ (separateDigraph outputFilePath "darkviolet") $ dataTypeConstructors entry
     mapM_ (separateDigraph outputFilePath "darkgreen") $ newtypes entry
     mapM_ (separateDigraph outputFilePath "red2") $ types entry
-    return mempty
+    pure mempty
 
 -------
 --Output sections
@@ -185,4 +185,4 @@ createEntry homeDirectory file filename = do
       typeDecl = SCRT.tNs rEntryData
 
   let entry = makeEntry drpk fn efp dataTypeDeclR dataTypeDeclC newtypeDecl typeDecl
-  return entry
+  pure entry

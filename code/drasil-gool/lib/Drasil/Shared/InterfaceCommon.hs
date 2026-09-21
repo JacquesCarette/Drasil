@@ -246,10 +246,10 @@ type VSBinder a = VS (a BinderD)
 -- to a type, scope, etc.
 -- As of July 2026, integration of this typeclass is still WIP, blocked
 -- by issues with our variable map.
-class (TypeSym r) => BinderSym r where
+class BinderSym r where
   binder :: Label -> VS (r TypeData) -> VSBinder r
 
-class (BinderSym r) => BinderElim r where
+class BinderElim r where
   binderName :: r BinderD -> String
   binderType :: r BinderD -> r TypeData
 

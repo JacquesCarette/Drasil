@@ -338,7 +338,7 @@ class ListStatement r stmt | r -> stmt where
   --   Arguments are: List, Index, Value
   listSet    :: SValue r -> SValue r -> SValue r -> MS (r stmt)
 
-class (ValueSym r) => Set r where
+class Set r where
   -- | Checks membership
   -- Arguments are: Set, Value
   contains :: SValue r -> SValue r -> SValue r
@@ -383,7 +383,7 @@ class NativeVector r where
   --   Argument is: Vector
   vecUnit :: SValue r -> SValue r
 
-class (ValueSym r) => InternalList r block | r -> block where
+class InternalList r block | r -> block where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
     -> SVariable r -> SValue r -> MS (r block)
 

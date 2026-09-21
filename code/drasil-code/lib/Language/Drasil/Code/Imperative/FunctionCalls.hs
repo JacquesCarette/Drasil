@@ -25,7 +25,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import Drasil.GOOL (SValue, MS, VS, TypeSym(..), OOTypeSym, ScopeSym,
+import Drasil.GOOL (SValue, MS, VS, TypeSym(..), OOTypeSym, ScopeSym, ValueSym,
   OOVariableSym, VariableValue(..), ValueStatement(valStmt), DeclStatement(..),
   convType, convTypeOO, TypeData, FuncAppStatement, TypeElim, VariableSym,
   VariableElim, Argument, Set, ValueExpression, Comparison, BooleanExpression,
@@ -38,7 +38,8 @@ import Drasil.GProc (NativeVector, Reference, NumericExpression)
 -- inputs, then the function for checking input constraints.
 genAllInputCalls
   ::
-    ( Argument r
+    ( ValueSym r
+    , Argument r
     , Literal r
     , MathConstant r
     , OOTypeSym r
@@ -105,7 +106,8 @@ genDerivedCall = do
 -- | Generates a call to the function for checking constraints on the input.
 genConstraintCall
   ::
-    ( Argument r
+    ( ValueSym r
+    , Argument r
     , Literal r
     , MathConstant r
     , OOTypeSym r
@@ -136,7 +138,8 @@ genConstraintCall = do
 -- value being calculated.
 genCalcCall
   ::
-    ( Argument r
+    ( ValueSym r
+    , Argument r
     , Literal r
     , MathConstant r
     , OOTypeSym r
@@ -170,7 +173,8 @@ genCalcCall c = do
 -- | Generates a call to the function for printing outputs.
 genOutputCall
   ::
-    ( Argument r
+    ( ValueSym r
+    , Argument r
     , Literal r
     , MathConstant r
     , OOTypeSym r
@@ -201,7 +205,8 @@ genOutputCall = do
 -- the function.
 genFuncCall
   ::
-    ( Argument r
+    ( ValueSym r
+    , Argument r
     , Literal r
     , MathConstant r
     , OOTypeSym r
@@ -290,7 +295,8 @@ genCall n = do
 -- inputs, then the function for checking input constraints.
 genAllInputCallsProc
   ::
-    ( Literal r
+    ( ValueSym r
+    , Literal r
     , MathConstant r
     , VariableSym r
     , VariableValue r
@@ -333,7 +339,8 @@ genDerivedCallProc = do
 -- | Generates a call to the function for checking constraints on the input.
 genConstraintCallProc
   ::
-    ( Literal r
+    ( ValueSym r
+    , Literal r
     , MathConstant r
     , VariableSym r
     , VariableValue r
@@ -359,7 +366,8 @@ genConstraintCallProc = do
 -- value being calculated.
 genCalcCallProc
   ::
-    ( Literal r
+    ( ValueSym r
+    , Literal r
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -388,7 +396,8 @@ genCalcCallProc c = do
 -- | Generates a call to the function for printing outputs.
 genOutputCallProc
   ::
-    ( Literal r
+    ( ValueSym r
+    , Literal r
     , MathConstant r
     , VariableSym r
     , VariableValue r
@@ -414,7 +423,8 @@ genOutputCallProc = do
 -- the function.
 genFuncCallProc
   ::
-    ( Literal r
+    ( ValueSym r
+    , Literal r
     , MathConstant r
     , VariableSym r
     , VariableValue r

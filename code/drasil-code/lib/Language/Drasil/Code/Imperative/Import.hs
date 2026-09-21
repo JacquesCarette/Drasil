@@ -85,7 +85,8 @@ spaceCodeType s = do
 -- call 'valueOf' to reference its value.
 value
   ::
-    ( Argument r
+    ( ValueSym r
+    , Argument r
     , OO.Literal r
     , MathConstant r
     , OOTypeSym r
@@ -225,7 +226,8 @@ classVariable c v = do
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
 mkVal
   ::
-    ( Argument r
+    ( ValueSym r
+    , Argument r
     , OO.Literal r
     , MathConstant r
     , OOTypeSym r
@@ -450,7 +452,8 @@ genInOutFunc f docf n desc ins' outs' b = do
 -- | Converts an 'Expr' to a GOOL Value.
 convExpr
   ::
-    ( Argument r
+    ( ValueSym r
+    , Argument r
     , MathConstant r
     , OOTypeSym r
     , VariableSym r
@@ -561,7 +564,8 @@ convExpr (RealI c ri)  = do
 -- call generator (used if the function is in the library export map).
 convCall
   ::
-    ( Argument r
+    ( ValueSym r
+    , Argument r
     , MathConstant r
     , OOTypeSym r
     , VariableSym r
@@ -779,6 +783,7 @@ convStmt
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , ValueSym r
     , Argument r
     , MathConstant r
     , OOTypeSym r
@@ -920,6 +925,7 @@ readData
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , ValueSym r
     , Argument r
     , OO.Literal r
     , MathConstant r
@@ -1088,7 +1094,8 @@ getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
 -- call 'valueOf' to reference its value.
 valueProc
   ::
-    ( OO.Literal r
+    ( ValueSym r
+    , OO.Literal r
     , NativeVector r
     , MathConstant r
     , VariableSym r
@@ -1166,6 +1173,7 @@ constVariableProc Inline _ _ = error $ "mkVar called on a constant, but user " +
 mkValProc
   ::
     ( NativeVector r
+    , ValueSym r
     , OO.Literal r
     , MathConstant r
     , VariableSym r
@@ -1339,6 +1347,7 @@ genFuncProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , ValueSym r
     , NativeVector r
     , OO.Literal r
     , MathConstant r
@@ -1390,6 +1399,7 @@ genModFuncsProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , ValueSym r
     , OO.Literal r
     , NativeVector r
     , MathConstant r
@@ -1430,6 +1440,7 @@ readDataProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , ValueSym r
     , OO.Literal r
     , NativeVector r
     , MathConstant r
@@ -1557,7 +1568,8 @@ getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
 -- | Converts an 'Expr' to a GOOL Value.
 convExprProc
   ::
-    ( OO.Literal r
+    ( ValueSym r
+    , OO.Literal r
     , MathConstant r
     , VariableSym r
     , VariableValue r
@@ -1654,7 +1666,8 @@ convExprProc (RealI c ri)  = do
 -- call generator (used if the function is in the library export map).
 convCallProc
   ::
-    ( OO.Literal r
+    ( ValueSym r
+    , OO.Literal r
     , MathConstant r
     , VariableSym r
     , VariableValue r
@@ -1696,6 +1709,7 @@ convStmtProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , ValueSym r
     , OO.Literal r
     , MathConstant r
     , ScopeSym r
@@ -1823,6 +1837,7 @@ genDataFuncProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , ValueSym r
     , NativeVector r
     , OO.Literal r
     , MathConstant r

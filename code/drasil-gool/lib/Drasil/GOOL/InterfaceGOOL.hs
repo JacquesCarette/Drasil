@@ -322,7 +322,14 @@ initObserverList
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
 addObserver
-  :: (VariableSym r, VariableValue r, ValueSym r, List r, ListStatement r stmt)
+  ::
+    ( TypeSym r
+    , VariableSym r
+    , VariableValue r
+    , ValueSym r
+    , List r
+    , ListStatement r stmt
+    )
   => SValue r -> MS (r stmt)
 addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)

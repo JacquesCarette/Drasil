@@ -132,7 +132,7 @@ type Value = ValData
 type SValue a = VS (a Value)
 
 -- | Class for representing a value.
-class (TypeSym r) => ValueSym r where
+class ValueSym r where
   valueType :: r Value -> r TypeData
 
 class (TypeSym r) => TypeElim r where

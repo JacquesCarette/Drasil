@@ -397,7 +397,7 @@ setDec f vl v scp = do
   mkStmt (RC.statement vd <> f sz)
 
 setMethodCall
-  :: (ValueSym r, IG.InternalValueExp r)
+  :: (TypeSym r, ValueSym r, IG.InternalValueExp r)
   => Label -> SValue r ->  SValue r -> SValue r
 setMethodCall n a b = objMethodCall (innerType $ onStateValue valueType a) a n [b]
 
@@ -702,7 +702,7 @@ listSet list idx val = do
 --   Since GOOL is 0-indexed, we need to add 1
 intToIndex'
   ::
-    ( ValueSym r
+    ( TypeSym r
     , IC.Literal r
     , IC.NumericExpression r
     , RC.RenderValue r
@@ -715,7 +715,7 @@ intToIndex' v = v `smartAdd` IC.litInt 1
 --   Since GOOL is 0-indexed, we need to subtract 1
 indexToInt'
   ::
-    ( ValueSym r
+    ( TypeSym r
     , IC.Literal r
     , IC.NumericExpression r
     , RC.RenderValue r

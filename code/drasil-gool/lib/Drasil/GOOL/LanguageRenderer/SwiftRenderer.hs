@@ -962,7 +962,7 @@ swiftCast t' v' = do
   unwrap $ mkStateVal (pure t) (R.castObj (renderType t) (RC.value v))
 
 swiftIndexFunc
-  :: (ValueSym r, InternalValueExp r, VariableSym r)
+  :: (TypeSym r, ValueSym r, InternalValueExp r, VariableSym r)
   => SValue r -> SValue r -> SValue r
 swiftIndexFunc l v' = do
   v <- v'
@@ -991,11 +991,19 @@ swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)
     (obj swiftEncoding)])]
 
 swiftReadLineFunc
-  :: (ValueSym r, RenderValue r, ValueElim r, ValueExpression r) => SValue r
+  :: (TypeSym r, ValueSym r, RenderValue r, ValueElim r, ValueExpression r)
+  => SValue r
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
 
 swiftReadFileFunc
-  :: (VariableSym r, ValueSym r, RenderValue r, ValueElim r, ValueExpression r)
+  ::
+    ( TypeSym r
+    , VariableSym r
+    , ValueSym r
+    , RenderValue r
+    , ValueElim r
+    , ValueExpression r
+    )
   => SValue r -> SValue r
 swiftReadFileFunc v = swiftTryVal $
   funcAppNamedArgs CP.stringRender' string [contentsArg, encodingArg]

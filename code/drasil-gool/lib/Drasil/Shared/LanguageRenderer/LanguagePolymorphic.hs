@@ -114,7 +114,7 @@ valOfOne t = t >>= (getVal . getCodeType)
 -- Binary Operators --
 
 smartAdd
-  :: (ValueSym r, IC.NumericExpression r, RenderValue r, ValueElim r)
+  :: (IC.TypeSym r, NumericExpression r, RenderValue r, ValueElim r)
   => SValue r -> SValue r -> SValue r
 smartAdd v1 v2 = do
   v1' <- v1
@@ -125,7 +125,7 @@ smartAdd v1 v2 = do
     _                  -> v1 #+ v2
 
 smartSub
-  :: (ValueSym r, IC.NumericExpression r, RenderValue r, ValueElim r)
+  :: (IC.TypeSym r, IC.NumericExpression r, RenderValue r, ValueElim r)
   => SValue r -> SValue r -> SValue r
 smartSub v1 v2 = do
   v1' <- v1
@@ -196,7 +196,13 @@ instanceVarAccess o' v' = do
   instanceVarAccess' (variableBind v)
 
 arrayElem
-  :: (ValueSym r, IC.IndexTranslator r, RenderVariable r, ValueElim r)
+  ::
+    ( IC.TypeSym r
+    , ValueSym r
+    , IC.IndexTranslator r
+    , RenderVariable r
+    , ValueElim r
+    )
   => SValue r -> SValue r -> SVariable r
 arrayElem arr' i' = do
   i <- IC.intToIndex i'
@@ -269,7 +275,7 @@ newObjMixedArgs s tp vs ns = do
   RC.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns
 
 lambda
-  :: (BinderElim r, RenderValue r, ValueSym r)
+  :: (BinderElim r, RenderValue r, IC.TypeSym r, ValueSym r)
   => ([r BinderD] -> r Value -> Doc) -> [VSBinder r] -> SValue r -> SValue r
 lambda f ps' ex' = do
   ps <- sequence ps'

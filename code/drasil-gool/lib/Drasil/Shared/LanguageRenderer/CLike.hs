@@ -125,7 +125,9 @@ libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
 
 -- Functions --
 
-listSize :: (ValueSym r, IG.InternalValueExp r) => String -> SValue r -> SValue r
+listSize
+  :: (IC.TypeSym r, IG.InternalValueExp r)
+  => String -> SValue r -> SValue r
 listSize fnName list = objMethodCallNoParams IC.int list fnName
 
 listSize'

@@ -245,7 +245,7 @@ initConsts = do
 -- | Generates a statement to declare the variable representing the log file,
 -- if the user chose to turn on logs for variable assignments.
 initLogFileVar
-  :: (VariableSym r, DeclStatement r stmt bod)
+  :: (TypeSym r, VariableSym r, DeclStatement r stmt bod)
   => [Logging] -> r ScopeData -> [MS (r stmt)]
 initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 
@@ -1171,7 +1171,13 @@ checkInputClass = do
 -- using 'objDecNew' if the inputs are exported by the current module, and
 -- 'extObjDecNew' if they are exported by a different module.
 getInputDeclProc
-  :: (ScopeSym r, VariableSym r, MultiStatement r stmt, DeclStatement r stmt bod)
+  ::
+    ( ScopeSym r
+    , TypeSym r
+    , VariableSym r
+    , MultiStatement r stmt
+    , DeclStatement r stmt bo
+    )
   => GenState (Maybe (MS (r stmt)))
 getInputDeclProc = do
   g <- get
@@ -1999,6 +2005,7 @@ writeOutputValue
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , Literal r
     , VariableSym r
     , VariableValue r

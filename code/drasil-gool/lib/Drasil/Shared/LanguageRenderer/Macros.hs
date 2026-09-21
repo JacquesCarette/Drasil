@@ -87,6 +87,7 @@ listSlice
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod
+    , IC.TypeSym r
     , IC.Literal r
     , BooleanExpression r
     , Comparison r
@@ -172,6 +173,7 @@ makeSetterVal
     ( EmptyStatement r stmt
     , VariableSym r
     , IC.DeclStatement r stmt bod
+    , IC.TypeSym r
     , Comparison r
     , IC.IndexTranslator r
     , IC.Literal r
@@ -272,18 +274,21 @@ forRange
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
   (IC.valueOf i ?< finalv) (i &+= stepv)
 
-observerIndex :: (VariableSym r) => SVariable r
+observerIndex :: (IC.TypeSym r, VariableSym r) => SVariable r
 observerIndex = IC.var "observerIndex" IC.int
 
-observerIdxVal :: (VariableSym r, IC.VariableValue r) => SValue r
+observerIdxVal :: (IC.TypeSym r, VariableSym r, IC.VariableValue r) => SValue r
 observerIdxVal = IC.valueOf observerIndex
 
-obsList :: (VariableSym r, IC.VariableValue r) => VS (r TypeData) -> SValue r
+obsList
+  :: (IC.TypeSym r, VariableSym r, IC.VariableValue r)
+  => VS (r TypeData) -> SValue r
 obsList t = IC.valueOf $ listOf observerListName t
 
 notify
   ::
     ( ValueStatement r stmt
+    , IC.TypeSym r
     , VariableSym r
     , VariableValue r
     , List r
@@ -298,6 +303,7 @@ notifyObservers
   ::
     ( BodySym r bod block
     , IC.BlockSym r block stmt
+    , IC.TypeSym r
     , Literal r
     , VariableSym r
     , VariableValue r
@@ -320,6 +326,7 @@ notifyObservers'
     ( BodySym r bod block
     , IC.BlockSym r block stmt
     , ValueStatement r stmt
+    , IC.TypeSym r
     , Literal r
     , VariableSym r
     , VariableValue r
@@ -339,6 +346,7 @@ arrayDecAsList
     , MultiStatement r stmt
     , IC.DeclStatement r stmt bod
     , IC.ControlStatement r stmt bod
+    , IC.TypeSym r
     , IC.Literal r
     , VariableSym r
     , IC.VariableValue r

@@ -971,7 +971,7 @@ swiftIndexFunc l v' = do
   objMethodCallNamedArgs int l swiftIndex [(ofArg, pure v)]
 
 swiftStrideFunc
-  :: (VariableSym r, RenderValue r, ValueExpression r)
+  :: (TypeSym r, VariableSym r, RenderValue r, ValueExpression r)
   => SValue r -> SValue r -> SValue r -> SValue r
 swiftStrideFunc beg end step = let t = listType int
                                    fromArg = var swiftFrom int
@@ -1005,13 +1005,13 @@ swiftReadFileFunc v = swiftTryVal $
     encodingArg = (var "encoding" string, encVal)
 
 swiftSplitFunc
-  :: (InternalValueExp r, Literal r, VariableSym r)
+  :: (InternalValueExp r, TypeSym r, Literal r, VariableSym r)
   => Char -> SValue r -> SValue r
 swiftSplitFunc d s = let sepArg = var swiftSepBy char
   in objMethodCallNamedArgs (listType string) s swiftSplit [(sepArg, litChar d)]
 
 swiftJoinedFunc
-  :: (InternalValueExp r, Literal r, VariableSym r)
+  :: (InternalValueExp r, TypeSym r, Literal r, VariableSym r)
   => Char -> SValue r -> SValue r
 swiftJoinedFunc d s = let sepArg = var swiftSep char
   in objMethodCallNamedArgs string s swiftJoined [(sepArg, litChar d)]

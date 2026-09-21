@@ -129,7 +129,7 @@ listSize :: (ValueSym r, IG.InternalValueExp r) => String -> SValue r -> SValue 
 listSize fnName list = objMethodCallNoParams IC.int list fnName
 
 listSize'
-  :: (VariableSym r, IG.OOVariableSym r, VariableValue r)
+  :: (IC.TypeSym r, VariableSym r, IG.OOVariableSym r, VariableValue r)
   => String -> SValue r -> SValue r
 listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 

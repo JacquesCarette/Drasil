@@ -317,7 +317,7 @@ observerListName :: Label
 observerListName = "observerList"
 
 initObserverList
-  :: (VariableSym r, DeclStatement r stmt bod)
+  :: (TypeSym r, VariableSym r, DeclStatement r stmt bod)
   => VS (r TypeData) -> [SValue r] -> r ScopeData -> MS (r stmt)
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 

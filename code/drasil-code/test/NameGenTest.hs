@@ -24,6 +24,7 @@ helper
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , Literal r
     , ScopeSym r
     , VariableSym r
@@ -50,6 +51,7 @@ main
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , Literal r
     , ScopeSym r
     , VariableSym r

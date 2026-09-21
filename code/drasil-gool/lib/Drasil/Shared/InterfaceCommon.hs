@@ -108,7 +108,7 @@ type Variable = VarData
 type SVariable a = VS (a Variable)
 
 -- | Class for representing variables.
-class (TypeSym r) => VariableSym r where
+class VariableSym r where
   -- | An instance- or function-level variable, separate from its instance (i.e. `v`, not `o.v`)
   var       :: Label -> VS (r TypeData) -> SVariable r
   -- | An instance- or function-level constant, separate from its instance (i.e. `v`, not `o.v`)
@@ -122,10 +122,10 @@ class VariableElim r where
   variableName :: r Variable -> String
   variableType :: r Variable -> r TypeData
 
-listVar :: (VariableSym r) => Label -> VS (r TypeData) -> SVariable r
+listVar :: (TypeSym r, VariableSym r) => Label -> VS (r TypeData) -> SVariable r
 listVar n t = var n (listType t)
 
-listOf :: (VariableSym r) => Label -> VS (r TypeData) -> SVariable r
+listOf :: (TypeSym r, VariableSym r) => Label -> VS (r TypeData) -> SVariable r
 listOf = listVar
 
 type Value = ValData

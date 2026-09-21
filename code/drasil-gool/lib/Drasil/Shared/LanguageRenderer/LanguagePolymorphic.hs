@@ -389,6 +389,7 @@ printList
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod
+    , IC.TypeSym r
     , IC.Literal r
     , NumericExpression r
     , Comparison r

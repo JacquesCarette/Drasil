@@ -100,8 +100,10 @@ printLO' (CodeBlock contents)             = [codeCell $ cSpec contents]
 print :: [LayoutObj] -> Doc
 print = foldr (($$) . printLO) empty
 
+data ExprContext = NotebookMath | NotebookCode
+
 pSpec :: Spec -> Doc
-pSpec (E e)  = text "$" <> pExpr e <> text "$" -- symbols used
+pSpec (E e)  = text "$" <> pExpr NotebookMath e <> text "$" -- symbols used
 pSpec (a :+: b) = pSpec a <> pSpec b
 pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
@@ -119,31 +121,42 @@ pSpec EmptyS    = text "" -- Expected in the output
 pSpec (Quote q) = doubleQuotes $ pSpec q
 
 cSpec :: Spec -> Doc
-cSpec (E e)  = pExpr e
+cSpec (E e)  = pExpr NotebookCode e
 cSpec _      = empty
 
 -- | Renders expressions in JSON (called by multiple functions)
-pExpr :: Expr -> Doc
-pExpr (Dbl d)        = text $ showEFloat Nothing d ""
-pExpr (Int i)        = text $ show i
-pExpr (Str s)        = doubleQuotes $ text s
-pExpr (Div n d)      = mkDiv "frac" (pExpr n) (pExpr d)
-pExpr (Row l)        = hcat $ map pExpr l
-pExpr (Set l)        = hcat $ map pExpr l
-pExpr (Ident s)      = text s
-pExpr (Label s)      = text s
-pExpr (Spec s)       = text $ unPH $ special s
-pExpr (Sub e)        = unders <> pExpr e
-pExpr (Sup e)        = hat <> pExpr e
-pExpr (Over Hat s)   = pExpr s <> text "&#770;"
-pExpr (MO o)         = text $ pOps o
-pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)
-pExpr (Font Bold e)  = pExpr e
+pExpr :: ExprContext -> Expr -> Doc
+pExpr _ (Dbl d)        = text $ showEFloat Nothing d ""
+pExpr _ (Int i)        = text $ show i
+pExpr _ (Str s)        = doubleQuotes $ text s
+pExpr ctx (Div n d)    = mkDiv "frac" (pExpr ctx n) (pExpr ctx d)
+pExpr NotebookMath (Row [x]) =
+  braces $ pExpr NotebookMath x
+pExpr ctx (Row l)      = hcat $ map (pExpr ctx) l
+pExpr ctx (Set l)      = hcat $ map (pExpr ctx) l
+pExpr _ (Ident s)      = text s
+pExpr NotebookMath (Label s) =
+  printMath $ toMath $ TeX.pExpr (Label s)
+pExpr NotebookCode (Label s) = text s
+pExpr _ (Spec s)       = text $ unPH $ special s
+pExpr NotebookMath (Sub e) =
+  unders <> braces (pExpr NotebookMath e)
+pExpr NotebookCode (Sub e) =
+  unders <> pExpr NotebookCode e
+pExpr NotebookMath (Sup e) =
+  hat <> braces (pExpr NotebookMath e)
+pExpr NotebookCode (Sup e) =
+  hat <> pExpr NotebookCode e
+pExpr ctx (Over Hat s) = pExpr ctx s <> text "&#770;"
+pExpr _ (MO o)         = text $ pOps o
+pExpr ctx (Fenced l r e) =
+  text (fence Open l) <> pExpr ctx e <> text (fence Close r)
+pExpr ctx (Font Bold e) = pExpr ctx e
 --pExpr (Font Bold e)  = bold $ pExpr e -- used before
 --pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- HTML used
 --pExpr (Spc Thin)     = text "&#8239;" -- HTML used
 -- Uses TeX for Mathjax for all other exprs
-pExpr e              = printMath $ toMath $ TeX.pExpr e
+pExpr _ e              = printMath $ toMath $ TeX.pExpr e
 
 -- TODO: edit all operations in markdown format
 pOps :: Ops -> String

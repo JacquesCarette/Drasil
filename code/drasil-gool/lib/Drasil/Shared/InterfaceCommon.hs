@@ -135,7 +135,7 @@ type SValue a = VS (a Value)
 class ValueSym r where
   valueType :: r Value -> r TypeData
 
-class (TypeSym r) => TypeElim r where
+class TypeElim r where
   getCodeType :: r TypeData -> CodeType
 
 class Argument r where

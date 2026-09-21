@@ -220,6 +220,7 @@ stringListLists
     ( BodySym r bod block
     , IC.BlockSym r block stmt
     , IC.ControlStatement r stmt bod
+    , IC.TypeSym r
     , ValueSym r
     , IC.Literal r
     , NumericExpression r

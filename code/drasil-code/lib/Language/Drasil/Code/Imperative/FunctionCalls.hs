@@ -42,6 +42,7 @@ genAllInputCalls
     , Argument r
     , Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -112,6 +113,7 @@ genConstraintCall
     , Argument r
     , Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -144,6 +146,7 @@ genCalcCall
     , Argument r
     , Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -179,6 +182,7 @@ genOutputCall
     , Argument r
     , Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -211,6 +215,7 @@ genFuncCall
     , Argument r
     , Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -298,7 +303,8 @@ genCall n = do
 -- inputs, then the function for checking input constraints.
 genAllInputCallsProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableSym r
@@ -342,7 +348,8 @@ genDerivedCallProc = do
 -- | Generates a call to the function for checking constraints on the input.
 genConstraintCallProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableSym r
@@ -369,7 +376,8 @@ genConstraintCallProc = do
 -- value being calculated.
 genCalcCallProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableValue r
@@ -399,7 +407,8 @@ genCalcCallProc c = do
 -- | Generates a call to the function for printing outputs.
 genOutputCallProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableSym r
@@ -426,7 +435,8 @@ genOutputCallProc = do
 -- the function.
 genFuncCallProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableSym r

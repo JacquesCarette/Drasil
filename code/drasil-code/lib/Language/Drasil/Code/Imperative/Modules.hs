@@ -134,6 +134,7 @@ getInputDecl
     , Argument r
     , Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -195,6 +196,7 @@ initConsts
     ( ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , ScopeSym r
     , VariableSym r
@@ -412,6 +414,7 @@ sfwrCBody
     , ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , ScopeSym r
     , VariableSym r
@@ -449,6 +452,7 @@ physCBody
     , ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , ScopeSym r
     , VariableSym r
@@ -487,6 +491,7 @@ chooseConstr
     , ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , ScopeSym r
     , VariableSym r
@@ -536,6 +541,7 @@ constrWarn
     ( ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , OOVariableSym r
     , VariableSym r
@@ -574,6 +580,7 @@ constrExc
     , ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -607,6 +614,7 @@ constrVarDec
     ( ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , ScopeSym r
     , VariableSym r
@@ -642,6 +650,7 @@ constraintViolatedMsg
     ( ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -677,6 +686,7 @@ printConstraint
     ( ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -705,6 +715,7 @@ printConstraint v c = do
           ( ValueSym r
           , Argument r
           , MathConstant r
+          , TypeSym r
           , OOTypeSym r
           , VariableSym r
           , OOVariableSym r
@@ -887,6 +898,7 @@ genCalcBlock
     , ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -925,6 +937,7 @@ genCaseBlock
     , ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -1023,6 +1036,7 @@ genMainFuncProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , CommandLineArgs r
     , Literal r
@@ -1080,7 +1094,8 @@ genMainFuncProc = do
 -- If constants are 'Inlined', nothing needs to be declared.
 initConstsProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , ScopeSym r
@@ -1208,6 +1223,7 @@ genCalcFuncProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , NativeVector r
     , Literal r
@@ -1275,6 +1291,7 @@ genCalcBlockProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , NativeVector r
     , Literal r
@@ -1314,6 +1331,7 @@ genCaseBlockProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , NativeVector r
     , Literal r
@@ -1361,6 +1379,7 @@ genInputFormatProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , NativeVector r
     , Literal r
@@ -1401,6 +1420,7 @@ genInputFormatProc s = do
         ::
           ( BlockSym r block stmt
           , BodySym r bod block
+          , TypeSym r
           , ValueSym r
           , NativeVector r
           , Literal r
@@ -1445,6 +1465,7 @@ genInputDerivedProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , NativeVector r
     , Literal r
@@ -1486,6 +1507,7 @@ genInputDerivedProc s = do
         ::
           ( BlockSym r block stmt
           , BodySym r bod block
+          , TypeSym r
           , ValueSym r
           , NativeVector r
           , Literal r
@@ -1531,6 +1553,7 @@ genInputConstraintsProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , Literal r
     , MathConstant r
@@ -1571,6 +1594,7 @@ genInputConstraintsProc s = do
         ::
           ( BlockSym r block stmt
           , BodySym r bod block
+          , TypeSym r
           , ValueSym r
           , Literal r
           , MathConstant r
@@ -1619,6 +1643,7 @@ sfwrCBodyProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , Literal r
     , MathConstant r
@@ -1651,6 +1676,7 @@ physCBodyProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , Literal r
     , MathConstant r
@@ -1684,6 +1710,7 @@ chooseConstrProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , Literal r
     , MathConstant r
@@ -1724,7 +1751,8 @@ chooseConstrProc cb cs = do
 -- what value was \"suggested\".
 constrWarnProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableSym r
@@ -1757,6 +1785,7 @@ constrExcProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , Literal r
     , MathConstant r
@@ -1785,7 +1814,8 @@ constrExcProc c = do
 -- | Generate a set variable dec
 constrVarDecProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , ScopeSym r
@@ -1816,7 +1846,8 @@ constrVarDecProc v e = do
 -- description of the constraint that is violated.
 constraintViolatedMsgProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableSym r
@@ -1846,7 +1877,8 @@ constraintViolatedMsgProc q s c = do
 -- expression they originated from, using printExpr.
 printConstraintProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableSym r
@@ -1869,7 +1901,8 @@ printConstraintProc c = do
   let db = printfo g
       printConstraint'
         ::
-          ( ValueSym r
+          ( TypeSym r
+          , ValueSym r
           , Literal r
           , MathConstant r
           , VariableSym r
@@ -1918,6 +1951,7 @@ genOutputFormatProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , NativeVector r
     , Literal r
@@ -1953,6 +1987,7 @@ genOutputFormatProc = do
         ::
           ( BlockSym r block stmt
           , BodySym r bod block
+          , TypeSym r
           , NativeVector r
           , ValueSym r
           , Literal r

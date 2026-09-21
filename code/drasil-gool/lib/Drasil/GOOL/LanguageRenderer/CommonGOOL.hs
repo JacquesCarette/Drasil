@@ -59,6 +59,6 @@ listAdd
 listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]
 
 innerType
-  :: (TypeElim r, OOTypeSym r)
+  :: (TypeElim r, TypeSym r, OOTypeSym r)
   => VS (r TypeData) -> VS (r TypeData)
 innerType t = t >>= (convTypeOO . getInnerType . getCodeType)

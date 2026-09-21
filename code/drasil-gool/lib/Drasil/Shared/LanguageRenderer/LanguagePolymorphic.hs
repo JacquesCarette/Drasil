@@ -314,7 +314,8 @@ set v vToSet toVal = v $. RO.setFunc (onStateValue valueType v) vToSet toVal
 
 -- TODO [Brandon Bosman, 06/10/2026]: Figure out what to do with this
 listAccess
-  :: ( ValueSym r
+  :: ( IC.TypeSym r
+     , ValueSym r
      , IC.IndexTranslator r
      , RC.InternalListFunc r
      , FunctionElim r
@@ -463,6 +464,7 @@ print
     , IC.VariableSym r
     , IC.VariableValue r
     , IC.List r
+    , IC.TypeSym r
     , TypeElim r
     , RC.InternalIOStmt r stmt
     )

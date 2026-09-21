@@ -24,11 +24,10 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   BinderElim(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
-  OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
-  objMethodCall, objMethodCallMixedArgs, objMethodCallNamedArgs,
-  objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StateVarSym(..), AttachmentSym(..), OOValueExpression(..), selfMethodCall,
+  newObj, InternalValueExp(..), objMethodCall, objMethodCallMixedArgs,
+  objMethodCallNamedArgs, objMethodCallNoParams, OOFunctionSym(..), ($.),
+  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
@@ -297,8 +296,6 @@ instance RenderVariable SwiftCode where
 instance ValueSym SwiftCode where
   valueType = onCodeValue valType
 
-instance OOValueSym SwiftCode
-
 instance Argument SwiftCode where
   pointerArg = swiftArgVal
 
@@ -319,8 +316,6 @@ instance MathConstant SwiftCode where
 
 instance VariableValue SwiftCode where
   valueOf = G.valueOf
-
-instance OOVariableValue SwiftCode
 
 instance CommandLineArgs SwiftCode where
   arg n = G.arg (litInt n) argsList
@@ -537,7 +532,7 @@ instance DeclStatement SwiftCode (Doc, Terminator) Body where
     mkStmtNoEnd $ RC.statement vdec <+> equals <+> RC.value vl
   funcDecDef = CP.funcDecDef
 
-instance OODeclStatement SwiftCode (Doc, Terminator) Body where
+instance OODeclStatement SwiftCode (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -727,7 +722,7 @@ instance StateVarSym SwiftCode Doc Doc Doc where
 instance StateVarElim SwiftCode StateVar where
   stateVar = unSC
 
-instance ClassSym SwiftCode Doc MethodData StateVar Doc where
+instance ClassSym SwiftCode MethodData StateVar where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -969,7 +964,8 @@ swiftCast t' v' = do
   unwrap $ mkStateVal (pure t) (R.castObj (renderType t) (RC.value v))
 
 swiftIndexFunc
-  :: (InternalValueExp r, VariableSym r) => SValue r -> SValue r -> SValue r
+  :: (ValueSym r, InternalValueExp r, VariableSym r)
+  => SValue r -> SValue r -> SValue r
 swiftIndexFunc l v' = do
   v <- v'
   let t = pure $ valueType v
@@ -977,7 +973,7 @@ swiftIndexFunc l v' = do
   objMethodCallNamedArgs int l swiftIndex [(ofArg, pure v)]
 
 swiftStrideFunc
-  :: (RenderValue r, ValueExpression r)
+  :: (VariableSym r, RenderValue r, ValueExpression r)
   => SValue r -> SValue r -> SValue r -> SValue r
 swiftStrideFunc beg end step = let t = listType int
                                    fromArg = var swiftFrom int
@@ -986,7 +982,8 @@ swiftStrideFunc beg end step = let t = listType int
   in cast t (funcAppNamedArgs swiftStride t
     [(fromArg, beg), (toArg, end), (byArg, step)])
 
-swiftMapFunc :: (InternalValueExp r) => SValue r -> SValue r -> SValue r
+swiftMapFunc
+  :: (ValueSym r, InternalValueExp r) => SValue r -> SValue r -> SValue r
 swiftMapFunc lst f = objMethodCall (onStateValue valueType lst) lst swiftMap [f]
 
 swiftWriteFunc :: SValue SwiftCode -> SValue SwiftCode -> SValue SwiftCode
@@ -995,11 +992,12 @@ swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)
     [(contentsArg, newObj (obj swiftData) [v $. funcFromData (R.func swiftUTF8)
     (obj swiftEncoding)])]
 
-swiftReadLineFunc :: (RenderValue r, ValueElim r, ValueExpression r) => SValue r
+swiftReadLineFunc
+  :: (ValueSym r, RenderValue r, ValueElim r, ValueExpression r) => SValue r
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
 
 swiftReadFileFunc
-  :: (RenderValue r, ValueElim r, ValueExpression r)
+  :: (VariableSym r, ValueSym r, RenderValue r, ValueElim r, ValueExpression r)
   => SValue r -> SValue r
 swiftReadFileFunc v = swiftTryVal $
   funcAppNamedArgs CP.stringRender' string [contentsArg, encodingArg]

@@ -238,5 +238,5 @@ periodPendDerivSent2 = S "Therefore from the data definition of the" +:+
 
 periodPendNotes :: Sentence
 periodPendNotes = D.toSent (atStartNP (NP.the (frequency `and_` period))) +:+
-  S "are defined in the data definitions for" +:+ namedRef frequencyDD (phrase frequencyDD) `S.and_`
-        namedRef periodSHMDD (phrase periodSHMDD) +:+ S "respectively"
+  S "are defined in the data definitions for" +:+ namedRef frequencyDD (phrase frequency) `S.and_`
+        namedRef periodSHMDD (phrase period) +:+ S "respectively"

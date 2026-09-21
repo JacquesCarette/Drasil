@@ -2,7 +2,7 @@
 -- when 'name' and 'nameCT' both appear, 'name' is the Haskell function and
 -- 'nameCT' is the "Code Template" that 'name' builds.
 
-module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
+module Drasil.GlassBR.ModuleDefs (readTableMod, allMods, implVars, interpY, interpZ) where
 
 import Drasil.Code.CodeExpr (CodeExpr, LiteralC(int))
 import Drasil.Database (IsChunk, mkUid)
@@ -21,7 +21,8 @@ allMods = [readTableMod, interpMod]
 
 -- It's a bit odd that this has to be explicitly built here...
 implVars :: [DefinedQuantityDict]
-implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
+implVars = map asVC [readTable, findCT, extractColumnCT, linInterpCT] ++
+  [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
   i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename,
   y_2, y_1, x_2, x_1, x]
 
@@ -169,6 +170,9 @@ extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix"
     FRet (sy col)
   ]
 
+-- FIXME: interpY and interpZ should not share a `UID` with their `DQD`
+-- counterparts. Unfortunately, cannot change the `UID` here because it creates
+-- an error "call to non-existent function interpY"
 interpY :: Func
 interpY = funcDef (showHasSymbImpl U.interpY)
   "Linearly interpolates a y value at given x and z values"

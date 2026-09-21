@@ -18,18 +18,17 @@ module Drasil.SRS.SmithEtAlSRS (
 ) where
 
 import Control.Lens (makeClassy, (^.))
-import Data.Char (isSpace)
 import qualified Data.List.NonEmpty as NE
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, HasUID(..), ChunkDB)
-import Language.Drasil (Quantity, MayHaveUnit, Concept, People, CI,
-  Constrained, ConstQDef, abrv, DefinedQuantityDict)
+import Language.Drasil (Quantity, MayHaveUnit, Concept, People, Constrained,
+  ConstQDef, DefinedQuantityDict)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 
-import Drasil.System (SystemMeta, Background, HasSystemMeta(..),
-  mkSystemMeta, Motivation, Purpose, Scope)
+import Drasil.System (SystemMeta, Background, HasSystemMeta(..), mkSystemMeta,
+  Motivation, Purpose, Scope, ProjectName, HasProjectName(..))
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
@@ -38,7 +37,6 @@ data SmithEtAlSRS where
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
   { _meta         :: SystemMeta
-  , _programName  :: String
   , _theoryModels :: [TheoryModel]
   , _genDefns     :: [GenDefn]
   , _dataDefns    :: [DataDefinition]
@@ -61,19 +59,20 @@ makeClassy ''SmithEtAlSRS
 instance HasSystemMeta SmithEtAlSRS where
   systemMeta = meta
 
+instance HasProjectName SmithEtAlSRS where
+  projectName = meta . projectName
+
 -- | Build a 'System'.
 mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
-  CI -> People -> Purpose -> Background -> Scope -> Motivation ->
+  ProjectName -> People -> Purpose -> Background -> Scope -> Motivation ->
     [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
     NE.NonEmpty h -> NE.NonEmpty i -> [j] -> [ConstQDef] -> [DefinedQuantityDict] ->
     ChunkDB -> SmithEtAlSRS
-mkSmithEtAlICO nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs db
-  = ICO (mkSystemMeta nm ppl prps bkgrd scp motive db) progName tms gds dds ims hs is js
+mkSmithEtAlICO pn ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs db
+  = ICO (mkSystemMeta pn ppl prps bkgrd scp motive db) tms gds dds ims hs is js
       cqds qs mempty mempty
-  where
-    progName = filter (not . isSpace) $ abrv nm
 
 -- | Find what chunks reference a specific chunk.
 refbyLookup :: UID -> SmithEtAlSRS -> [UID]

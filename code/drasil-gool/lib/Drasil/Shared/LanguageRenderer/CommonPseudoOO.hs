@@ -95,8 +95,9 @@ constructor
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (RG.construct c) ps (RC.multiBody [initStmts is, b]))
 
-doxFunc :: (RenderMethod r mthd) => String -> [String] -> Maybe String ->
-  MS (r mthd) -> MS (r mthd)
+doxFunc
+  :: (BlockCommentSym r, RenderMethod r mthd)
+  => String -> [String] -> Maybe String -> MS (r mthd) -> MS (r mthd)
 doxFunc = docFunc functionDox
 
 doxClass :: (RG.RenderClass r vis mthd stvr) => String -> CS (r Class) -> CS (r Class)
@@ -131,16 +132,18 @@ indexOf
   => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])
 
-contains :: (IG.OOFunctionSym r) => Label -> SValue r -> SValue r -> SValue r
+contains
+  :: (IC.FunctionSym r, IG.OOFunctionSym r)
+  => Label -> SValue r -> SValue r -> SValue r
 contains f s v = IG.objAccess s (IG.func f IC.bool [v])
 
 containsInt
-  :: (Comparison r, IG.OOFunctionSym r)
+  :: (Comparison r, IC.FunctionSym r, IG.OOFunctionSym r)
   => Label -> Label -> SValue r -> SValue r -> SValue r
 containsInt f fn s v = contains f s v ?!= IG.objAccess s (IG.func fn IC.bool [])
 
 discardFileLine
-  :: (IG.InternalValueExp r, ValueStatement r stmt)
+  :: (TypeSym r, IG.InternalValueExp r, ValueStatement r stmt)
   => Label -> SValue r -> MS (r stmt)
 discardFileLine n f = valStmt $ objMethodCallNoParams IC.string f n
 
@@ -207,7 +210,8 @@ printSt va' vb' = do
   mkStmt (R.print va vb)
 
 arrayDec
-  :: ( ScopeElim r
+  :: ( TypeSym r
+     , ScopeElim r
      , UnRepr r TypeData
      , InternalVarElim r
      , RC.RenderStatement r stmt
@@ -276,6 +280,8 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
 
 mainFunction
   :: ( AttachmentSym r attch
+     , IC.VariableSym r
+     , MethodTypeSym r
      , OORenderMethod r vis mthd attch bod
      , IC.ParameterSym r
      , UnRepr r TypeData
@@ -323,11 +329,11 @@ call' _ l o n t ps ns = call empty l o n t ps ns
 namedArgError :: String -> String
 namedArgError l = "Named arguments not supported in " ++ l
 
-listSizeFunc :: (IG.OOFunctionSym r) => VS (r FuncData)
+listSizeFunc :: (IC.FunctionSym r, IG.OOFunctionSym r) => VS (r FuncData)
 listSizeFunc = IG.func "size" IC.int []
 
 listAccessFunc'
-  :: (IG.OOFunctionSym r, TypeElim r)
+  :: (IC.FunctionSym r, IG.OOFunctionSym r, TypeElim r)
   => Label -> VS (r TypeData) -> SValue r -> VS (r FuncData)
 listAccessFunc' f t i = IG.func f t [intValue i]
 
@@ -340,7 +346,7 @@ string :: (Monad r) => VS (r TypeData)
 string = typeFromData String stringRender (text stringRender)
 
 docInOutFunc
-  :: (RenderMethod r mthd)
+  :: (BlockCommentSym r, RenderMethod r mthd)
   => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r bod) -> MS (r mthd))
   -> String
   -> [(String, SVariable r)]
@@ -360,7 +366,9 @@ docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (map fst $ bs ++
 bindingError :: String -> String
 bindingError l = "AttachmentTag unimplemented in " ++ l
 
-notNull :: (Comparison r, IC.VariableValue r) => String -> SValue r -> SValue r
+notNull
+  :: (Comparison r, IC.VariableSym r, IC.VariableValue r)
+  => String -> SValue r -> SValue r
 notNull nil v = v ?!= IC.valueOf (IC.var nil $ onStateValue valueType v)
 
 listDecDef
@@ -388,7 +396,8 @@ setDec f vl v scp = do
   mkStmt (RC.statement vd <> f sz)
 
 setMethodCall
-  :: (IG.InternalValueExp r) => Label -> SValue r ->  SValue r -> SValue r
+  :: (ValueSym r, IG.InternalValueExp r)
+  => Label -> SValue r ->  SValue r -> SValue r
 setMethodCall n a b = objMethodCall (innerType $ onStateValue valueType a) a n [b]
 
 destructorError :: String -> String
@@ -442,7 +451,7 @@ double :: (Monad r) => VS (r TypeData)
 double = typeFromData Double doubleRender (text doubleRender)
 
 openFileR
-  :: (IC.AssignStatement r stmt)
+  :: (TypeSym r, IC.AssignStatement r stmt)
   => (SValue r -> VS (r TypeData) -> SValue r)
   -> SVariable r
   -> SValue r
@@ -470,7 +479,8 @@ self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (obj l)
   R.self')
 
 multiAssign
-  :: ( IC.AssignStatement r stmt
+  :: ( TypeSym r
+     , IC.AssignStatement r stmt
      , InternalVarElim r
      , RC.RenderValue r
      , RC.RenderVariable r
@@ -491,7 +501,12 @@ multiAssign f vars vals = if length vals /= 1 && length vars /= length vals
     mkStateVal IC.void (wrapIfMult vls (valueList vls))
 
 multiReturn
-  :: (IC.ControlStatement r stmt bod, RC.RenderValue r, RC.ValueElim r)
+  ::
+    ( TypeSym r
+    , IC.ControlStatement r stmt bod
+    , RC.RenderValue r
+    , RC.ValueElim r
+    )
   => (Doc -> Doc) -> [SValue r] -> MS (r stmt)
 multiReturn _ [] = error "Attempt to write return statement with no values."
 multiReturn _ [v] = returnStmt v
@@ -518,7 +533,12 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 inOutCall
-  :: (RC.InternalAssignStmt r stmt, ValueStatement r stmt, IC.VariableValue r)
+  ::
+    ( TypeSym r
+    , RC.InternalAssignStmt r stmt
+    , ValueStatement r stmt
+    , IC.VariableValue r
+    )
   => (Label -> VS (r TypeData) -> [SValue r] -> SValue r)
   -> Label
   -> [SValue r]
@@ -543,16 +563,19 @@ mainBody b = do
   mthdFromData Pub empty
 
 inOutFunc
-  :: ( IC.VariableValue r
-     , IC.ParameterSym r
-     , IC.DeclStatement r stmt bod
-     , BlockSym r block stmt
-     , IC.BodySym r bod block
-     , VariableElim r
-     , RenderBody r bod
-     , RenderType r
-     , RC.InternalControlStmt r stmt
-     )
+  ::
+    ( IC.VariableValue r
+    , IC.ParameterSym r
+    , TypeSym r
+    , IC.ScopeSym r
+    , IC.DeclStatement r stmt bod
+    , BlockSym r block stmt
+    , IC.BodySym r bod block
+    , VariableElim r
+    , RenderBody r bod
+    , RenderType r
+    , RC.InternalControlStmt r stmt
+    )
   => (VS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd))
   -> [SVariable r]
   -> [SVariable r]
@@ -568,7 +591,7 @@ inOutFunc f ins outs both b = f
   where rets = both ++ outs
 
 docInOutFunc'
-  :: (RenderMethod r mthd)
+  :: (BlockCommentSym r, RenderMethod r mthd)
   => FuncDocRenderer
   -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r bod) -> MS (r mthd))
   -> String

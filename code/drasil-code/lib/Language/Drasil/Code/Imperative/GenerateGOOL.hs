@@ -22,8 +22,7 @@ import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), SoftwareDossierFile(..))
 import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
-import Drasil.System (HasSystemMeta(..))
-import Drasil.SRS (HasSmithEtAlSRS(..))
+import Drasil.System (HasSystemMeta(..), HasProjectName(..))
 
 import Drasil.GOOL (SVariable, SValue, Class, CSStateVar, NamedArgs, OOProg, CS,
   FS, MS, VS, TypeData, ValueSym(..), Argument(..), ValueExpression(..),
@@ -71,7 +70,7 @@ genDoxConfig :: (SoftwareDossierSym r) => SoftwareDossierState ->
   GenState (Maybe (r FileLayout))
 genDoxConfig s = do
   g <- get
-  let n = g ^. programName
+  let n = g ^. projAbrv
       cms = g ^. commented
       v = getDoxOutput g
   return $ if not (null cms) then doxConfig n s v else Nothing
@@ -80,7 +79,7 @@ genDoxConfig s = do
 genReadMe :: (SoftwareDossierSym r) => ReadMeInfo -> GenState (Maybe (r FileLayout))
 genReadMe rmi = do
   g <- get
-  let n = g ^. programName
+  let n = g ^. projAbrv
   return $ getReadMe (getSoftwareDossierFiles g) rmi {caseName = n}
 
 -- | Helper for generating a README file.
@@ -92,7 +91,7 @@ data ClassType = Primary | Auxiliary
 -- | Generates a primary or auxiliary class with the given name, description,
 -- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the
 -- interface the class implements, if applicable.
-mkClass :: (ClassSym r vis mthd stvr attch) => ClassType -> Name -> Maybe Name ->
+mkClass :: (ClassSym r mthd stvr) => ClassType -> Name -> Maybe Name ->
   Description -> [CSStateVar r stvr] -> GenState [MS (r mthd)] ->
     GenState [MS (r mthd)] -> GenState (CS (r Class))
 mkClass s n l desc vs cstrs mths = do
@@ -111,13 +110,13 @@ mkClass s n l desc vs cstrs mths = do
     else c
 
 -- | Generates a primary class.
-primaryClass :: (ClassSym r vis mthd stvr attch) => Name -> Maybe Name -> Description ->
+primaryClass :: (ClassSym r mthd stvr) => Name -> Maybe Name -> Description ->
   [CSStateVar r stvr] -> GenState [MS (r mthd)] -> GenState [MS (r mthd)] ->
   GenState (CS (r Class))
 primaryClass = mkClass Primary
 
 -- | Generates an auxiliary class (for when a module contains multiple classes).
-auxClass :: (ClassSym r vis mthd stvr attch) => Name -> Maybe Name -> Description ->
+auxClass :: (ClassSym r mthd stvr) => Name -> Maybe Name -> Description ->
   [CSStateVar r stvr] -> GenState [MS (r mthd)] -> GenState [MS (r mthd)] ->
   GenState (CS (r Class))
 auxClass = mkClass Auxiliary
@@ -178,8 +177,14 @@ ctorCall m t = fCall (\cm args nargs -> if m /= cm then
   extNewObjMixedArgs m t args nargs else newObjMixedArgs t args nargs)
 
 -- | Logic similar to 'fApp', but for In/Out calls.
-fAppInOut :: (OOFuncAppStatement r stmt) => Name -> Name -> [SValue r] ->
-  [SVariable r] -> [SVariable r] -> GenState (MS (r stmt))
+fAppInOut
+  :: (FuncAppStatement r stmt, OOFuncAppStatement r stmt)
+  => Name
+  -> Name
+  -> [SValue r]
+  -> [SVariable r]
+  -> [SVariable r]
+  -> GenState (MS (r stmt))
 fAppInOut m n ins outs both = do
   g <- get
   let cm = currentModule g

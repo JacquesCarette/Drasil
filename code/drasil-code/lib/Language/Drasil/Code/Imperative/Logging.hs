@@ -21,7 +21,9 @@ import Drasil.GOOL (Label, block, SVariable, SValue, MS, BodySym(..),
 logBody
   ::
     ( Literal r
+    , VariableSym r
     , VariableValue r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -43,7 +45,9 @@ logBody n vars b = do
 loggedMethod
   ::
     ( Literal r
+    , VariableSym r
     , VariableValue r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -76,5 +80,5 @@ varLogFile :: (VariableSym r) => SVariable r
 varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.
-valLogFile :: (VariableValue r) => SValue r
+valLogFile :: (VariableSym r, VariableValue r) => SValue r
 valLogFile = valueOf varLogFile

@@ -23,11 +23,10 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
   ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
-  InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
-  OOValueExpression(..), selfMethodCall, OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..))
+  StateVarSym(..), AttachmentSym(..), InternalValueExp(..), extNewObj,
+  objMethodCall, OOFunctionSym(..), GetSet(..), OOValueExpression(..),
+  selfMethodCall, OODeclStatement(..), OOFuncAppStatement(..),
+  ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -286,8 +285,6 @@ instance RenderVariable PythonCode where
 instance ValueSym PythonCode where
   valueType = onCodeValue valType
 
-instance OOValueSym PythonCode
-
 instance Argument PythonCode where
   pointerArg = id
 
@@ -308,8 +305,6 @@ instance MathConstant PythonCode where
 
 instance VariableValue PythonCode where
   valueOf = G.valueOf
-
-instance OOVariableValue PythonCode
 
 instance CommandLineArgs PythonCode where
   arg n = G.arg (litInt $ n+1) argsList
@@ -534,7 +529,7 @@ instance DeclStatement PythonCode (Doc, Terminator) Body where
       else error "Cannot safely capitalize constant."
   funcDecDef = CP.funcDecDef
 
-instance OODeclStatement PythonCode (Doc, Terminator) Body where
+instance OODeclStatement PythonCode (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v scp vs = do
@@ -699,7 +694,7 @@ instance StateVarSym PythonCode Doc Doc AttachmentData where
 instance StateVarElim PythonCode StateVar where
   stateVar = unPC
 
-instance ClassSym PythonCode Doc MethodData StateVar AttachmentData where
+instance ClassSym PythonCode MethodData StateVar where
   buildClass par sVars cstrs = if length cstrs <= 1
                                   then G.buildClass par sVars cstrs
                                   else error pyMultCstrsError
@@ -885,18 +880,18 @@ mathFunc = addmathImport . unOpPrec . access pyMath
 splitFunc :: (Literal r, OOFunctionSym r) => Char -> VS (r FuncData)
 splitFunc d = func pySplit (listType string) [litString [d]]
 
-readline, readlines :: (InternalValueExp r) => SValue r -> SValue r
+readline, readlines :: (TypeSym r, InternalValueExp r) => SValue r -> SValue r
 readline f = objMethodCall string f pyReadline []
 readlines f = objMethodCall (listType string) f pyReadlines []
 
-readInt, readDouble :: (ValueExpression r) => SValue r -> SValue r
+readInt, readDouble :: (TypeSym r, ValueExpression r) => SValue r -> SValue r
 readInt inSrc = funcApp pyInt int [inSrc]
 readDouble inSrc = funcApp pyDouble double [inSrc]
 
-readString :: (InternalValueExp r) => SValue r -> SValue r
+readString :: (TypeSym r, InternalValueExp r) => SValue r -> SValue r
 readString inSrc = objMethodCall string inSrc pyRstrip []
 
-range :: (ValueExpression r) => SValue r -> SValue r -> SValue r -> SValue r
+range :: (TypeSym r, ValueExpression r) => SValue r -> SValue r -> SValue r -> SValue r
 range initv finalv stepv = funcApp pyRange (listType int) [initv, finalv, stepv]
 
 pyClassVarAccess :: Doc -> Doc -> Doc
@@ -946,8 +941,10 @@ pyOut
     , Literal r
     , NumericExpression r
     , Comparison r
+    , VariableSym r
     , VariableValue r
     , List r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , AssignStatement r stmt

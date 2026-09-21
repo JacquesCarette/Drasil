@@ -16,10 +16,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), VSBinder, Variable, Value,
   VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym, OOVariableValue,
-  OOValueExpression(..), InternalValueExp(..), OOFunctionSym(..), GetSet(..),
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..))
+  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueExpression(..),
+  InternalValueExp(..), OOFunctionSym(..), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
 import Drasil.Shared.AST (qualName, td, ScopeData, ScopeTag(..), sd, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
@@ -138,8 +137,6 @@ instance VariableElim CodeInfoOO where
 instance ValueSym CodeInfoOO where
   valueType _ = return $ error "[valueType] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance OOValueSym CodeInfoOO
-
 instance Argument CodeInfoOO where
   pointerArg = id
 
@@ -160,8 +157,6 @@ instance MathConstant CodeInfoOO where
 
 instance VariableValue CodeInfoOO where
   valueOf _ = return $ error "[valueOf] The return value of this isn't used, and the thunk shouldn't fire."
-
-instance OOVariableValue CodeInfoOO
 
 instance CommandLineArgs CodeInfoOO where
   arg       _ = return $ error "[arg] The return value of this isn't used, and the thunk shouldn't fire."
@@ -326,7 +321,7 @@ instance DeclStatement CodeInfoOO () () where
     _ <- bod
     return $ return $ error "[funcDecDef] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance OODeclStatement CodeInfoOO () () where
+instance OODeclStatement CodeInfoOO () where
   objDecDef            _ _ = zoom lensMStoVS . execute1
   objDecNew            _ _ = zoom lensMStoVS . executeListErr
   extObjDecNew       _ _ _ = zoom lensMStoVS . executeListErr
@@ -481,7 +476,7 @@ instance StateVarSym CodeInfoOO () () () where
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO () () () () where
+instance ClassSym CodeInfoOO () () where
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
     implementingClass n [] [] cs ms

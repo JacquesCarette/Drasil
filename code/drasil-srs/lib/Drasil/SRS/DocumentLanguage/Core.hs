@@ -105,10 +105,9 @@ data LFunc where
 
 -- ** Introduction Section
 
--- | Introduction section. Contents are top level followed by a list of
--- subsections.
-data IntroSec = IntroProg Sentence Sentence [IntroSub]
-  -- ^ Temporary, will be modified once we've figured out more about the section.
+-- | Introduction section. Contents are top level (an introductory blurb and an
+-- optional, extra paragraph) followed by a list of subsections.
+data IntroSec = IntroProg Sentence [Sentence] [IntroSub]
 
 -- | Introduction subsections.
 data IntroSub where
@@ -121,7 +120,9 @@ data IntroSub where
   -- | Organises the section.
   IOrgSec  :: Maybe Sentence -> IntroSub
 
-data PurposeDescription = StdPurp Verbosity | CustomPurp [[Sentence]]
+-- | How to describe the purpose of the system: either with the standard blurb
+-- (at the given 'Verbosity') or with custom paragraphs.
+data PurposeDescription = StdPurp Verbosity | CustomPurp [Paragraph]
 
 -- ** Stakeholders Section
 
@@ -297,8 +298,7 @@ instance Multiplate DLPlate where
     ds Bibliography = pure Bibliography
 
     res (RefProg c x) = pure $ RefProg c x
-    intro (IntroProg s1 s2 progs) = IntroProg s1 s2 <$>
-      traverse (introSub p) progs
+    intro (IntroProg s1 s2s progs) = IntroProg s1 s2s <$> traverse (introSub p) progs
     intro' (IPurpose s) = pure $ IPurpose s
     intro' (IScope s) = pure $ IScope s
     intro' (IChar s1 s2 s3) = pure $ IChar s1 s2 s3

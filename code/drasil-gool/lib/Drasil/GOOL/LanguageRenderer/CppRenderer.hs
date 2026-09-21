@@ -23,11 +23,10 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   ParameterSym(..), MethodSym(..), convScope, BinderElim(..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, Class, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym, OOVariableValue,
-  OOValueExpression(..), selfMethodCall, InternalValueExp(..), objMethodCall,
-  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..), convTypeOO)
+  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueExpression(..),
+  selfMethodCall, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
+  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..), convTypeOO)
 import Drasil.GOOL.Renderers (renderType, renderParam,)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
@@ -300,8 +299,6 @@ instance (Pair p) => RenderVariable (p CppSrcCode CppHdrCode) where
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
 
-instance (Pair p) => OOValueSym (p CppSrcCode CppHdrCode)
-
 instance (Pair p) => Argument (p CppSrcCode CppHdrCode) where
   pointerArg = pair1 pointerArg pointerArg
 
@@ -322,8 +319,6 @@ instance (Pair p) => MathConstant (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => VariableValue (p CppSrcCode CppHdrCode) where
   valueOf = pair1 valueOf valueOf
-
-instance (Pair p) => OOVariableValue (p CppSrcCode CppHdrCode)
 
 instance (Pair p) => CommandLineArgs (p CppSrcCode CppHdrCode) where
   arg n = on2StateValues pair (arg n) (arg n)
@@ -552,7 +547,7 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) B
   funcDecDef v scp ps = pairValListVal (`funcDecDef` pfst scp)
     (`funcDecDef` psnd scp) (zoom lensMStoVS v) (map (zoom lensMStoVS) ps)
 
-instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) Body where
+instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
   objDecDef o scp v = pair2 (`objDecDef` pfst scp) (`objDecDef` psnd scp)
     (zoom lensMStoVS o) (zoom lensMStoVS v)
   objDecNew vr scp vs = pair1Val1List (`objDecNew` pfst scp)
@@ -779,8 +774,7 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode)
 instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) StateVarData where
   stateVar v = RC.stateVar $ pfst v
 
-instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) MethodData StateVarData AttachmentData where
+instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) MethodData StateVarData where
   buildClass p vs cs fs = do
     n <- zoom lensCStoFS getModuleName
     modify (setClassName n)
@@ -1224,8 +1218,6 @@ instance RenderVariable CppSrcCode where
 instance ValueSym CppSrcCode where
   valueType = onCodeValue valType
 
-instance OOValueSym CppSrcCode where
-
 instance Argument CppSrcCode where
   pointerArg = id
 
@@ -1248,8 +1240,6 @@ instance MathConstant CppSrcCode where
 
 instance VariableValue CppSrcCode where
   valueOf = G.valueOf
-
-instance OOVariableValue CppSrcCode
 
 instance CommandLineArgs CppSrcCode where
   arg n = G.arg (litInt $ n+1) argsList
@@ -1485,7 +1475,7 @@ instance DeclStatement CppSrcCode (Doc, Terminator) Body where
   constDecDef = CG.constDecDef
   funcDecDef = cppFuncDecDef
 
-instance OODeclStatement CppSrcCode (Doc, Terminator) Body where
+instance OODeclStatement CppSrcCode (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -1680,7 +1670,7 @@ instance StateVarSym CppSrcCode (Doc, VisibilityTag) StateVarData AttachmentData
 instance StateVarElim CppSrcCode StateVarData where
   stateVar = stVar . unCPPSC
 
-instance ClassSym CppSrcCode (Doc, VisibilityTag) MethodData StateVarData AttachmentData where
+instance ClassSym CppSrcCode MethodData StateVarData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -1920,8 +1910,6 @@ instance RenderVariable CppHdrCode where
 instance ValueSym CppHdrCode where
   valueType = onCodeValue valType
 
-instance OOValueSym CppHdrCode where
-
 instance Argument CppHdrCode where
   pointerArg = id
 
@@ -1944,8 +1932,6 @@ instance MathConstant CppHdrCode where
 
 instance VariableValue CppHdrCode where
   valueOf = G.valueOf
-
-instance OOVariableValue CppHdrCode
 
 instance CommandLineArgs CppHdrCode where
   arg n = G.arg (litInt $ n+1) argsList
@@ -2148,7 +2134,7 @@ instance DeclStatement CppHdrCode (Doc, Terminator) Body where
   constDecDef = CG.constDecDef
   funcDecDef _ _ _ _ = emptyStmt
 
-instance OODeclStatement CppHdrCode (Doc, Terminator) Body where
+instance OODeclStatement CppHdrCode (Doc, Terminator) where
   objDecDef _ _ _ = emptyStmt
   objDecNew _ _ _ = emptyStmt
   extObjDecNew _ _ _ _ = emptyStmt
@@ -2316,7 +2302,7 @@ instance StateVarSym CppHdrCode (Doc, VisibilityTag) StateVarData AttachmentData
 instance StateVarElim CppHdrCode StateVarData where
   stateVar = stVar . unCPPHC
 
-instance ClassSym CppHdrCode (Doc, VisibilityTag) MethodData StateVarData AttachmentData where
+instance ClassSym CppHdrCode MethodData StateVarData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass

@@ -49,7 +49,7 @@ classMethodCall f t cls vs ns = do
   call Nothing (Just $ renderType c <> dot) f t vs ns
 
 listAppend
-  :: (InternalValueExp r, ValueStatement r stmt)
+  :: (TypeSym r, InternalValueExp r, ValueStatement r stmt)
   => String -> SValue r -> SValue r -> MS (r stmt)
 listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 

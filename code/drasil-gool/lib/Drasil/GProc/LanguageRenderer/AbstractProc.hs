@@ -6,7 +6,7 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable,
-  VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
+  VariableElim(variableName, variableType), TypeSym, VisibilitySym(..), funcApp,
   getCodeType, convType, ValueStatement(..), ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import qualified Drasil.Shared.RendererClassesCommon as RC
@@ -80,7 +80,7 @@ innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
 listAppend
-  :: (ValueStatement r stmt, ValueExpression r)
+  :: (TypeSym r, ValueStatement r stmt, ValueExpression r)
   => String -> SValue r -> SValue r -> MS (r stmt)
 listAppend fnName list val = valStmt $
   funcApp fnName IC.void [list, val]
@@ -117,6 +117,11 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 function
-  :: (RP.ProcRenderMethod r vis mthd bod) => Label -> r vis -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
+  :: (RC.MethodTypeSym r, RP.ProcRenderMethod r vis mthd bod)
+  => Label
+  -> r vis
+  -> VS (r TypeData)
+  -> [MS (r ParamData)]
+  -> MS (r bod)
+  -> MS (r mthd)
 function n s t = RP.intFunc False n s (RC.mType t)

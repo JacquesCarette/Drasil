@@ -32,6 +32,8 @@ fileTestMethod
     ( BlockSym r block stmt
     , BodySym r bod block
     , Literal r
+    , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , Comparison r
     , List r
@@ -51,6 +53,8 @@ writeStory
   ::
     ( BlockSym r block stmt
     , Literal r
+    , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , Comparison r
     , DeclStatement r stmt bod
@@ -81,7 +85,7 @@ writeStory = block [
   listDec 0 (var "fileContents" (listType string)) mainFn]
 
 -- | Generates functions to read from a file.
-readStory :: (VariableValue r, ReadFile r stmt) => MS (r stmt)
+readStory :: (VariableSym r, VariableValue r, ReadFile r stmt) => MS (r stmt)
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
   (var "fileContents" (listType string))
 
@@ -92,6 +96,7 @@ goodBye
     ( BlockSym r block stmt
     , Comparison r
     , Literal r
+    , VariableSym r
     , VariableValue r
     , List r
     , ControlStatement r stmt bod

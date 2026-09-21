@@ -3,8 +3,8 @@ module GOOL.Observer (observer, observerName, printNum, x) where
 
 import Drasil.GOOL (SVariable, Class, OOProg, CS, FS, MS, FileSym(..),
   AttachmentSym(..), BodySym, BlockSym, oneLiner, TypeSym(..), PrintConsole(..),
-  VariableSym(..), SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..),
-  OOVariableValue, VisibilitySym(..), OOMethodSym(..), initializer,
+  VariableSym(..), OOVariableSym, SelfSym(..), instanceVarSelf, Literal(..),
+  VariableValue(..), VisibilitySym(..), OOMethodSym(..), initializer,
   StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
@@ -26,7 +26,13 @@ x :: (VariableSym r) => SVariable r
 x = var "x" int
 
 -- | Acces the @x@ attribute of @self@.
-selfX :: (SelfSym r, VariableValue r) => SVariable r
+selfX ::
+  ( VariableSym r
+  , OOVariableSym r
+  , SelfSym r
+  , VariableValue r
+  )
+  => SVariable r
 selfX = instanceVarSelf x
 
 -- | Helper function to create the class.
@@ -34,11 +40,17 @@ helperClass
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , ClassSym r vis mthd stvr attch
+    , AttachmentSym r attch
+    , VisibilitySym r vis
+    , StateVarSym r vis stvr attch
+    , ClassSym r mthd stvr
     , OOMethodSym r vis mthd attch bod
     , PrintConsole r stmt
     , Literal r
-    , OOVariableValue r
+    , VariableSym r
+    , OOVariableSym r
+    , SelfSym r
+    , VariableValue r
     )
   => CS (r Class)
 helperClass = buildClass Nothing [stateVar public instanceLevel x]
@@ -61,9 +73,13 @@ printNumMethod
     ( BlockSym r block stmt
     , BodySym r bod block
     , OOMethodSym r vis mthd attch bod
+    , AttachmentSym r attch
     , VisibilitySym r vis
     , PrintConsole r stmt
-    , OOVariableValue r
+    , VariableSym r
+    , OOVariableSym r
+    , SelfSym r
+    , VariableValue r
     )
   => MS (r mthd)
 printNumMethod = method printNum public instanceLevel void [] $

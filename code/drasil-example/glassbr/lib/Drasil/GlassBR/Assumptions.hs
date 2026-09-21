@@ -9,6 +9,7 @@ import qualified Drasil.SRS.Concepts as SRS (valsOfAuxCons)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (projAbrvS)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,
   constant, practice, reference, scenario, system, value)
@@ -17,7 +18,7 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass,
   loadShareFac, plane, responseTy, explosion, lateral)
-import Drasil.GlassBR.MetaConcepts (progName)
+import Drasil.GlassBR.MetaConcepts (projName)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constantK, constantLoadDur, constantLoadSF,
   constantM, constantModElas, loadDF, loadDur)
@@ -73,7 +74,7 @@ standardValuesDesc q = foldlSent [D.toSent $ atStartNP' (the value), S "provided
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [atStart glass, S "under consideration is assumed to be a single",
   S "lite; hence, the", phrase value `S.of_` short loadShareFac, S "is equal to 1 for all",
-  plural calculation `S.in_` short progName]
+  plural calculation `S.in_` projAbrvS projName]
 
 boundaryConditionsDesc :: Sentence
 boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
@@ -82,10 +83,10 @@ boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
 
 responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [D.toSent $ atStartNP (the responseTy), S "considered in",
-  short progName, S "is flexural"]
+  projAbrvS projName, S "is flexural"]
 
 ldfConstantDesc :: Sentence
 ldfConstantDesc = foldlSent [S "With", phrase reference, S "to",
   refS assumpSV `sC` D.toSent (phraseNP (NP.the (value `of_`
   loadDF))), sParen (ch loadDF) `S.is` D.toSent (phraseNP (a_ constant))
-  `S.in_` short progName]
+  `S.in_` projAbrvS projName]

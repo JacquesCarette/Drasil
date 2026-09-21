@@ -76,7 +76,7 @@ instance (LiftLogging u1 l1, LiftLogging u2 l2) => LiftLogging (u1, u2) (l1, l2)
 varLogFile :: (VariableSym r) => SVariable r
 varLogFile = var "outfile" outfile
 
-valLogFile :: (VariableValue r) => SValue r
+valLogFile :: (VariableSym r, VariableValue r) => SValue r
 valLogFile = valueOf varLogFile
 
 -- TODO [Brandon Bosman, 06/19/2026]: This should be passed down from drasil-code
@@ -84,7 +84,14 @@ logName :: (Literal r) => SValue r
 logName = litString "log.txt"
 
 logVarUpdate
-  :: (FileHandling r stmt, PrintFile r stmt, VariableValue r, VariableElim r, Literal r)
+  ::
+    ( FileHandling r stmt
+    , PrintFile r stmt
+    , VariableSym r
+    , VariableValue r
+    , VariableElim r
+    , Literal r
+    )
   => SVariable (LoggingFor r) -> [MS (r stmt)]
 logVarUpdate x =
   [ openFileA varLogFile logName
@@ -103,6 +110,7 @@ instance
   , AssignStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
+  , VariableSym r
   , VariableValue r
   , VariableElim r
   , Literal r
@@ -131,6 +139,7 @@ instance
   , DeclStatement r stmt bod
   , FileHandling r stmt
   , PrintFile r stmt
+  , VariableSym r
   , VariableValue r
   , VariableElim r
   , Literal r
@@ -164,6 +173,7 @@ instance
   , FileHandling r stmt
   , PrintFile r stmt
   , ReadConsole r stmt
+  , VariableSym r
   , VariableValue r
   , VariableElim r
   , Literal r
@@ -189,6 +199,7 @@ instance
   , FileHandling r stmt
   , PrintFile r stmt
   , ReadFile r stmt
+  , VariableSym r
   , VariableValue r
   , VariableElim r
   , Literal r
@@ -206,6 +217,7 @@ instance
   , StringStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
+  , VariableSym r
   , VariableValue r
   , VariableElim r
   , Literal r
@@ -414,6 +426,8 @@ instance (IndexTranslator r) => IndexTranslator (LoggingFor r) where
   indexToInt = liftLogging indexToInt
 
 instance (NativeVector lang) => NativeVector (LoggingFor lang) where
+  vecType = liftLogging vecType
+  litVec = liftLogging litVec
   vecScale = liftLogging vecScale
   vecAdd = liftLogging vecAdd
   vecIndex = liftLogging vecIndex
@@ -457,16 +471,14 @@ instance (G.OOVariableSym r) => G.OOVariableSym (LoggingFor r) where
   extClassVarAccess = liftLogging G.extClassVarAccess
   instanceVarAccess = liftLogging G.instanceVarAccess
 
-instance (DeclStatement (LoggingFor r) stmt bod, G.OODeclStatement r stmt bod) =>
-    G.OODeclStatement (LoggingFor r) stmt bod where
+instance (DeclStatement (LoggingFor r) stmt bod, G.OODeclStatement r stmt) =>
+    G.OODeclStatement (LoggingFor r) stmt where
   objDecDef = liftLogging G.objDecDef
   objDecNew = liftLogging G.objDecNew
   extObjDecNew = liftLogging G.extObjDecNew
 
 instance (G.OOFuncAppStatement r stmt) => G.OOFuncAppStatement (LoggingFor r) stmt where
   selfInOutCall = liftLogging G.selfInOutCall
-
-instance (G.OOValueSym r) => G.OOValueSym (LoggingFor r) where
 
 instance (G.OOValueExpression r) => G.OOValueExpression (LoggingFor r) where
   newObjMixedArgs = liftLogging G.newObjMixedArgs
@@ -475,8 +487,6 @@ instance (G.OOValueExpression r) => G.OOValueExpression (LoggingFor r) where
 
 instance (G.SelfSym r) => G.SelfSym (LoggingFor r) where
   self = liftLogging G.self
-
-instance (G.OOVariableValue r) => G.OOVariableValue (LoggingFor r)
 
 instance (G.OOFunctionSym r) => G.OOFunctionSym (LoggingFor r) where
   func = liftLogging G.func
@@ -502,7 +512,7 @@ instance (G.StateVarSym r vis stvr attch) => G.StateVarSym (LoggingFor r) vis st
   stateVarDef = liftLogging G.stateVarDef
   constVar = liftLogging G.constVar
 
-instance (G.ClassSym r vis mthd stvr attch) => G.ClassSym (LoggingFor r) vis mthd stvr attch where
+instance (G.ClassSym r mthd stvr) => G.ClassSym (LoggingFor r) mthd stvr where
   buildClass = liftLogging G.buildClass
   extraClass = liftLogging G.extraClass
   implementingClass = liftLogging G.implementingClass

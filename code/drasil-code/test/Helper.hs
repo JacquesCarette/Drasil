@@ -30,8 +30,12 @@ doubleAndAdd
     ( BlockSym r block stmt
     , BodySym r bod block
     , Literal r
+    , ScopeSym r
+    , VariableSym r
     , VariableValue r
     , NumericExpression r
+    , ParameterSym r
+    , VisibilitySym r vis
     , DeclStatement r stmt bod
     , AssignStatement r stmt
     , ControlStatement r stmt bod

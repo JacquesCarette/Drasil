@@ -28,7 +28,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Variable,
   VariableValue, BlockSym, BodySym)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (Class, Initializers, CSStateVar, newObj,
-  objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym)
+  objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym, OOVariableSym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
@@ -295,7 +295,9 @@ get
   => SValue r -> SVariable r -> SValue r
 get v vToGet = v $. RO.getFunc vToGet
 
-set :: (RO.InternalGetSet r, IG.OOFunctionSym r) => SValue r -> SVariable r -> SValue r -> SValue r
+set
+  :: (RO.InternalGetSet r, IC.FunctionSym r, IG.OOFunctionSym r)
+  => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. RO.setFunc (onStateValue valueType v) vToSet toVal
 
 -- TODO [Brandon Bosman, 06/10/2026]: Figure out what to do with this
@@ -376,12 +378,14 @@ printList
     ( BlockSym r block stmt
     , BodySym r bod block
     , MultiStatement r stmt
+    , IC.ScopeSym r
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod
     , IC.Literal r
     , NumericExpression r
     , Comparison r
+    , IC.VariableSym r
     , IC.VariableValue r
     , IC.List r
     )
@@ -407,6 +411,7 @@ printSet
     , BodySym r bod block
     , MultiStatement r stmt
     , IC.ControlStatement r stmt bod
+    , IC.VariableSym r
     , IC.VariableValue r
     )
   => Integer
@@ -433,12 +438,14 @@ print
     , MultiStatement r stmt
     , PrintConsole r stmt
     , PrintFile r stmt
+    , IC.ScopeSym r
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod
     , IC.Literal r
     , NumericExpression r
     , Comparison r
+    , IC.VariableSym r
     , IC.VariableValue r
     , IC.List r
     , TypeElim r
@@ -456,7 +463,7 @@ print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
           printStr printFileStr f
 
 closeFile
-  :: (IG.InternalValueExp r, IC.ValueStatement r stmt)
+  :: (IC.TypeSym r, IG.InternalValueExp r, IC.ValueStatement r stmt)
   => Label -> SValue r -> MS (r stmt)
 closeFile n f = IC.valStmt $ objMethodCallNoParams IC.void f n
 
@@ -544,7 +551,7 @@ param f v' = do
   paramFromData v' $ f v
 
 method
-  :: (OORenderMethod r vis mthd attch bod)
+  :: (MethodTypeSym r, OORenderMethod r vis mthd attch bod)
   => Label
   -> r vis
   -> r attch
@@ -570,7 +577,8 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
 
 initStmts
   ::
-    ( VariableValue r
+    ( OOVariableSym r
+    , VariableValue r
     , SelfSym r
     , AssignStatement r stmt
     , BlockSym r block stmt
@@ -580,17 +588,33 @@ initStmts
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
-  :: (AttachmentSym r attch, OORenderMethod r vis mthd attch bod)
+  ::
+    ( AttachmentSym r attch
+    , MethodTypeSym r
+    , OORenderMethod r vis mthd attch bod
+    )
   => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 function n s t = RO.intFunc False n s classLevel (mType t)
 
-docFuncRepr :: (RenderMethod r mthd) => FuncDocRenderer -> String ->
-  [String] -> [String] -> MS (r mthd) -> MS (r mthd)
+docFuncRepr
+  :: (BlockCommentSym r, RenderMethod r mthd)
+  => FuncDocRenderer
+  -> String
+  -> [String]
+  -> [String]
+  -> MS (r mthd)
+  -> MS (r mthd)
 docFuncRepr f desc pComms rComms = commentedFunc (docComment $ onStateValue
   (\ps -> f desc (zip ps pComms) rComms) getParameters)
 
-docFunc :: (RenderMethod r mthd) => FuncDocRenderer -> String -> [String] ->
-  Maybe String -> MS (r mthd) -> MS (r mthd)
+docFunc
+  :: (BlockCommentSym r, RenderMethod r mthd)
+  => FuncDocRenderer
+  -> String
+  -> [String]
+  -> Maybe String
+  -> MS (r mthd)
+  -> MS (r mthd)
 docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 -- Classes --

@@ -60,7 +60,7 @@ water = cncpt''' (mkUid "water") (cn' "water") (S "the liquid with which the tan
 
 -- TODO: extract 'PCM' from 'phsChgMtrl' again instead of hard-coding it
 tankPCM = cncpt''' (mkUid "tankPCM") (nounPhrase''
-  (phraseNP (sWHT ^. term) NP.:+: NP.S "incorporating PCM")
-  (phraseNP (sWHT ^. term) NP.:+: NP.S "incorporating PCM")
+  (phraseNP (sWHT ^. term) NP..+. NP.npS "incorporating PCM")
+  (phraseNP (sWHT ^. term) NP..+. NP.npS "incorporating PCM")
   CapFirst CapWords)
   (S "solar water heating tank incorporating phase change material")

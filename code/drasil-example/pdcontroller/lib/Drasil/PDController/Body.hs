@@ -21,7 +21,7 @@ import Drasil.PDController.Concepts (acronyms, pidC, termDefs, defs,
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
-import Drasil.PDController.MetaConcepts (progName)
+import Drasil.PDController.MetaConcepts (projName)
 import Drasil.PDController.GenSysDesc
        (gsdSysContextList, gsdSysContextP1, gsdSysContextP2, gsduserCharacteristics)
 import Drasil.PDController.IModel (instanceModels, imPD)
@@ -43,7 +43,7 @@ mkSRS
   = [TableOfContents,
     RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
-       IntroProg introPara (phrase progName)
+       IntroProg introPara []
          [IPurpose (CustomPurp [[introPurposeOfDoc]]),
           IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
@@ -82,7 +82,7 @@ mkSRS
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  progName [naveen]
+  projName [naveen]
   [purp] [background] [scope] [motivation]
   theoreticalModels genDefns dataDefinitions instanceModels
   inputs outputs inpConstrained pidConstants allSymbols
@@ -110,21 +110,17 @@ orgSecEnd = foldlSent [
     titleize ode, sParen (short ode), S "that models the", phrase pidC
   ]
 
-cis :: [CI]
-cis = progName : acronyms
-
 conceptChunks :: [ConceptChunk]
 conceptChunks = physicalcon ++ [linear, angular] ++ termDefs
 
 allSymbols :: [DefinedQuantityDict]
 allSymbols = physicscon ++ symbols ++
-  [mass, posInf, negInf] ++
-  map dqdWr pidConstants
+  [mass, posInf, negInf]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs allSymbols [] cis conceptChunks []
-  dataDefinitions instanceModels genDefns theoreticalModels conceptInstances
-  citations labelledContent'
+symbMap = withCommonKnowledge projName allRefs allSymbols [] acronyms
+  conceptChunks [] dataDefinitions instanceModels genDefns theoreticalModels
+  conceptInstances citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables

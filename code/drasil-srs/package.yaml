@@ -23,8 +23,11 @@ dependencies:
 - transformers
 - multiplate
 - drasil-database
+- drasil-file-handling
 - drasil-lang
+- drasil-makefile
 - drasil-metadata
+- drasil-printers
 - drasil-system
 - drasil-theory
 - drasil-utils

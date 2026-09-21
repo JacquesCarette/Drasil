@@ -8,6 +8,7 @@ import Drasil.Database (ChunkDB)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (projTitleS, projAbrvS)
 
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
@@ -17,7 +18,7 @@ import Data.Drasil.Concepts.Documentation as Doc (material_)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
-import Data.Drasil.Concepts.Software (softwarecon)
+import Data.Drasil.Concepts.Software (softwarecon, program)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
@@ -55,12 +56,13 @@ import Drasil.SWHSNoPCM.GenDefs (genDefs)
 import Drasil.SWHSNoPCM.Goals (goals)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
 import Drasil.SWHSNoPCM.LabelledContent (labelledContent, figTank, sysCntxtFig)
-import Drasil.SWHSNoPCM.MetaConcepts (progName)
+import Drasil.SWHSNoPCM.MetaConcepts (projName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
+import Drasil.SWHS.MetaConcepts (swhs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
@@ -89,10 +91,10 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits,
-   tsymb [TSPurpose, SymbConvention [Lit htTrans, Doc' progName], SymbOrder, VectorUnits],
+   tsymb [TSPurpose, SymbConvention [Lit htTrans, Doc' swhs], SymbOrder, VectorUnits],
    TAandA],
   IntroSec $
-    IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
+    IntroProg (introStart +:+ introStartNoPCM) [extraInfoSent]
     [ IPurpose (StdPurp Verbose)
     , IScope scope
     , IChar [] charsOfReader []
@@ -100,8 +102,8 @@ mkSRS = [TableOfContents,
     ],
   GSDSec $
     GSDProg
-      [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets progName]
-      , UsrChars [userChars progName]
+      [ SysCntxt [sysCntxtDesc projName, LlC sysCntxtFig, sysCntxtRespIntro projName, systContRespBullets projName]
+      , UsrChars [userChars projName]
       , SystCons [] []
       ],
   SSDSec $
@@ -139,7 +141,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  progName [thulasi]
+  projName [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs
@@ -150,10 +152,10 @@ purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]
 
 ideaDicts :: [IdeaDict]
-ideaDicts = [htTrans, materialProprty]
+ideaDicts = [htTrans, materialProprty, swhs]
 
 cis :: [CI]
-cis = [progName, phsChgMtrl]
+cis = [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
@@ -161,7 +163,7 @@ conceptChunks =
   meltPt] ++ [CP.energy, CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
+symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
@@ -176,13 +178,12 @@ allRefs = [externalLinkRef, externalLinkRef'] ++ uriReferences
 --------------------------
 
 -- To get this generating properly we need to add a constructor for custom plural and capital case, see #3535
-introStartNoPCM :: Sentence
-introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. phrase energy
+introStartNoPCM, extraInfoSent :: Sentence
+introStartNoPCM = projTitleS projName +:+ S "provide a novel way of storing" +:+. phrase energy
 
-introEnd :: Sentence -> CI -> Sentence
-introEnd progSent pro = foldlSent_ [progSent +:+ S "The developed program",
-  S "will be referred to as", titleize pro, sParen (short pro),
-  S "based on the original" `sC` S "manually created version" `S.of_` namedRef externalLinkRef' (S "SWHSNoPCM")]
+extraInfoSent = foldlSent [S "The", phrase program,
+  S "is based on the original, manually created version of",
+  namedRef externalLinkRef' (S "SWHSNoPCM")]
 
 externalLinkRef' :: Reference
 externalLinkRef' = makeURI "SWHSNoPCM_SRSLink"
@@ -213,8 +214,8 @@ orgDocEnd :: Sentence
 orgDocEnd = foldlSent [D.toSent (atStartNP (the inModel)),
   S "to be solved" `S.is` S "referred to as" +:+. refS eBalanceOnWtr,
   D.toSent (atStartNP (the inModel)), S "provides the", titleize ode,
-  sParen (short ode), S "that models the" +:+. phrase progName,
-  short progName, S "solves this", short ode]
+  sParen (short ode), S "that models the" +:+. projTitleS projName,
+  projAbrvS projName, S "solves this", short ode]
 
 ----------------------------------------
 --Section 3 : GENERAL SYSTEM DESCRIPTION
@@ -236,7 +237,7 @@ orgDocEnd = foldlSent [D.toSent (atStartNP (the inModel)),
 --Section 3.3 : SYSTEM CONSTRAINTS
 ----------------------------------
 
---s3_3_intro = Paragraph $ EmptyS
+--s3_3_intro = Para $ EmptyS
 
 --TODO: Placeholder value until content can be added
 

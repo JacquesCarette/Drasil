@@ -31,7 +31,7 @@ import Language.Drasil.HTML.CSS (linkCSS)
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
-  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:), Tooltip),
+  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, Sp, S, E, (:+:), Tooltip),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author,
@@ -125,7 +125,6 @@ print = foldr (($$) . printLO) empty
 -- because newline can't be rendered in an HTML title.
 titleSpec :: Spec -> Doc
 titleSpec (a :+: b) = titleSpec a <> titleSpec b
-titleSpec HARDNL    = empty
 titleSpec s         = pSpec s
 
 -- | Renders the Sentences ('Spec's) in the HTML body (called by 'printLO').
@@ -143,7 +142,6 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s 
     escapeChars c = [c]
 pSpec (Tooltip t s) = spanTag' (pSpec t) (pSpec s)
 pSpec (Sp s)    = text $ unPH $ special s
-pSpec HARDNL    = text "<br />"
 pSpec (Ref Internal r a)       = reflink     r $ pSpec a
 pSpec (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec a -- no difference for citations?
 pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n) -- no difference for citations?

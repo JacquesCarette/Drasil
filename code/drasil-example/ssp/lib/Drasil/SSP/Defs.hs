@@ -112,7 +112,7 @@ maxim = idea' (mkUid "maximum") (cn' "maximum")
 
 -- Some sentences want plurals (because of arrays) of things that are normally singular.
 xCoords, yCoords :: ConceptChunk
-xCoords = cncpt''' (mkUid "xCoords") (nounPhraseSent $ D.P lX D.:-: D.S "-coordinates")
+xCoords = cncpt''' (mkUid "xCoords") (nounPhraseSent $ npP lX .-. npS "-coordinates")
   (S "the location of the points on the x-axis")
-yCoords = cncpt''' (mkUid "yCoords") (nounPhraseSent $ D.P lY D.:-: D.S "-coordinates")
+yCoords = cncpt''' (mkUid "yCoords") (nounPhraseSent $ npP lY .-. npS "-coordinates")
   (S "the location of the points on the y-axis")

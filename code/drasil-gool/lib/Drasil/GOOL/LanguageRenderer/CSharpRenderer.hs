@@ -23,11 +23,11 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
-  OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
-  objMethodCall, objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+  StateVarSym(..), AttachmentSym(..), OOValueExpression(..), selfMethodCall,
+  newObj, InternalValueExp(..), objMethodCall, objMethodCallNoParams,
+  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -297,8 +297,6 @@ instance RenderVariable CSharpCode where
 instance ValueSym CSharpCode where
   valueType = onCodeValue valType
 
-instance OOValueSym CSharpCode
-
 instance Argument CSharpCode where
   pointerArg = id
 
@@ -319,8 +317,6 @@ instance MathConstant CSharpCode where
 
 instance VariableValue CSharpCode where
   valueOf = G.valueOf
-
-instance OOVariableValue CSharpCode
 
 instance CommandLineArgs CSharpCode where
   arg n = G.arg (litInt n) argsList
@@ -526,7 +522,7 @@ instance DeclStatement CSharpCode (Doc, Terminator) Body where
   constDecDef = CG.constDecDef
   funcDecDef = csFuncDecDef
 
-instance OODeclStatement CSharpCode (Doc, Terminator) Body where
+instance OODeclStatement CSharpCode (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -686,7 +682,7 @@ instance StateVarSym CSharpCode Doc StateVar Doc where
 instance StateVarElim CSharpCode StateVar where
   stateVar = unCSC
 
-instance ClassSym CSharpCode Doc MethodData StateVar Doc where
+instance ClassSym CSharpCode MethodData StateVar where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -878,7 +874,7 @@ csAssert condition errorMessage = vcat [
 csDiscardInput :: SValue CSharpCode -> MS (CSharpCode (Doc, Terminator))
 csDiscardInput = valStmt
 
-csFileInput :: (InternalValueExp r) => SValue r -> SValue r
+csFileInput :: (TypeSym r, InternalValueExp r) => SValue r -> SValue r
 csFileInput f = objMethodCallNoParams string f csReadLine
 
 csInput :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode
@@ -945,8 +941,10 @@ csPrint
     , Literal r
     , NumericExpression r
     , ValueExpression r
+    , VariableSym r
     , VariableValue r
     , List r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , AssignStatement r stmt

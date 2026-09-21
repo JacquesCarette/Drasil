@@ -23,8 +23,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
   ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
-  OOVariableSym(..), SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), objMethodCall, selfMethodCall, newObj,
+  OOVariableSym(..), SelfSym(..), StateVarSym(..), AttachmentSym(..),
+  OOValueExpression(..), objMethodCall, selfMethodCall, newObj,
   InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..))
@@ -293,8 +293,6 @@ instance RenderVariable JavaCode where
 instance ValueSym JavaCode where
   valueType = onCodeValue valType
 
-instance OOValueSym JavaCode
-
 instance Argument JavaCode where
   pointerArg = id
 
@@ -319,8 +317,6 @@ instance MathConstant JavaCode where
 
 instance VariableValue JavaCode where
   valueOf = G.valueOf
-
-instance OOVariableValue JavaCode
 
 instance CommandLineArgs JavaCode where
   arg n = G.arg (litInt n) argsList
@@ -549,7 +545,7 @@ instance DeclStatement JavaCode (Doc, Terminator) Body where
   constDecDef = jConstDecDef
   funcDecDef = jFuncDecDef
 
-instance OODeclStatement JavaCode (Doc, Terminator) Body where
+instance OODeclStatement JavaCode (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -715,7 +711,7 @@ instance StateVarSym JavaCode Doc Doc Doc where
 instance StateVarElim JavaCode StateVar where
   stateVar = unJC
 
-instance ClassSym JavaCode Doc MethodData StateVar Doc where
+instance ClassSym JavaCode MethodData StateVar where
   buildClass = G.buildClass
   extraClass = jExtraClass
   implementingClass = G.implementingClass
@@ -983,8 +979,10 @@ jOut
     , Comparison r
     , NumericExpression r
     , ValueExpression r
+    , VariableSym r
     , VariableValue r
     , List r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , AssignStatement r stmt
@@ -1018,11 +1016,14 @@ jInput vr inFn = do
       jInput' _ = error "Attempt to read value of unreadable type"
   jInput' (getCodeType $ variableType v)
 
-jOpenFileR :: (OOValueExpression r) => SValue r -> VS (r TypeData) -> SValue r
+jOpenFileR
+  :: (OOTypeSym r, OOValueExpression r)
+  => SValue r -> VS (r TypeData) -> SValue r
 jOpenFileR n t = newObj t [newObj jFileType [n]]
 
-jOpenFileWorA :: (OOValueExpression r) => SValue r -> VS (r TypeData) ->
-  SValue r -> SValue r
+jOpenFileWorA
+  :: (OOTypeSym r, OOValueExpression r)
+  => SValue r -> VS (r TypeData) -> SValue r -> SValue r
 jOpenFileWorA n t wa = newObj t
   [newObj jFileWriterType [newObj jFileType [n], wa]]
 
@@ -1092,10 +1093,15 @@ jInOut f ins outs both b = f (returnTp rets)
         decls = multi $ map (`varDec` local) outs
         rets = both ++ outs
 
-jDocInOut :: (RenderMethod r mthd) => ([SVariable r] ->
-  [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r mthd)) -> String ->
-  [(String, SVariable r)] -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> MS (r Body) -> MS (r mthd)
+jDocInOut
+  :: (BlockCommentSym r, RenderMethod r mthd)
+  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r mthd))
+  -> String
+  -> [(String, SVariable r)]
+  -> [(String, SVariable r)]
+  -> [(String, SVariable r)]
+  -> MS (r Body)
+  -> MS (r mthd)
 jDocInOut f desc is [] [] b = docFuncRepr functionDox desc (map fst is) []
   (f (map snd is) [] [] b)
 jDocInOut f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)

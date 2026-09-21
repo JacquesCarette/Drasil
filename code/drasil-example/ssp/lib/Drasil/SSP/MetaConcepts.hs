@@ -1,8 +1,9 @@
-module Drasil.SSP.MetaConcepts (progName) where
+module Drasil.SSP.MetaConcepts (projName) where
 
 import Drasil.Database (mkUid)
 import Language.Drasil
-import Data.Drasil.Domains (civilEng)
+import Drasil.System (ProjectName, mkCommonProjName)
 
-progName :: CI
-progName = commonIdea (mkUid "ssp") (pn' "Slope Stability analysis Program") "SSP" [civilEng]
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "sspProjName")
+  (pn' "Slope Stability analysis Program") "SSP"

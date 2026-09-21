@@ -24,13 +24,13 @@ renderType :: (UnRepr r TypeData) => r TypeData -> Doc
 renderType = typeDoc . unRepr
 
 renderParam
-  :: (InternalVarElim r, UnRepr r TypeData, VariableElim r)
+  :: (InternalVarElim r, UnRepr r TypeData, VariableElim r TypeData)
   => r Variable -> Doc
 renderParam v = renderType (variableType v) <+> variable v
 
 renderMethod
   :: ( RC.BodyElim r bod
-     , ParamElim r
+     , ParamElim r typ
      , PermElim r attch
      , UnRepr r TypeData
      , VisibilityElim r vis
@@ -49,13 +49,13 @@ renderMethod n s p t ps b = vcat [
   rbrace]
 
 renderListDec
-  :: (UnRepr r TypeData, ValueElim r, VariableElim r)
+  :: (UnRepr r TypeData, ValueElim r, VariableElim r TypeData)
   => r Variable -> r Value -> Doc
 renderListDec v n = space <> equals <+> new' <+> renderType (variableType v)
   <> parens (value n)
 
 renderConstDecDef
-  :: (InternalVarElim r, UnRepr r TypeData, ValueElim r, VariableElim r)
-  =>  r Variable -> r Value -> Doc
+  :: (InternalVarElim r, UnRepr r TypeData, ValueElim r, VariableElim r TypeData)
+  => r Variable -> r Value -> Doc
 renderConstDecDef v def = constDec' <+> renderType (variableType v) <+>
   variable v <+> equals <+> value def

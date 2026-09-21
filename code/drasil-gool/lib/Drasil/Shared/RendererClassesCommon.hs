@@ -22,7 +22,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, Variable, SVariable, Value
   CommentStatement(..), ControlStatement(..), ParameterSym(..), BinderElim(..),
   UnRepr(..), BodySym, BlockSym)
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
-  OpData, BinderD, TypeData, ParamData, FuncData)
+  OpData, BinderD, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)
@@ -30,20 +30,22 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 class (BodySym r bod block, BlockSym r block stmt, AssignStatement r stmt,
   ScopeSym r, DeclStatement r stmt bod, StringStatement r stmt, FuncAppStatement r stmt,
-  CommentStatement r stmt, ControlStatement r stmt bod, Argument r, Literal r,
-  MathConstant r, ValueSym r, VariableSym r, VariableValue r, CommandLineArgs r,
-  NumericExpression r, BooleanExpression r, Comparison r, IndexTranslator r,
-  List r, ListStatement r stmt, InternalList r block, VariableElim r,
-  BinderElim r, RenderBlock r block, BlockElim r block, RenderBody r bod,
-  BodyElim r bod, InternalListFunc r, RenderFunction r, FunctionElim r, OpElim r,
-  RenderParam r, ParamElim r, RenderVisibility r vis, VisibilityElim r vis,
+  CommentStatement r stmt, ControlStatement r stmt bod, Argument r,
+  Literal r typ, MathConstant r, ValueSym r typ, VariableSym r typ,
+  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
+  Comparison r, IndexTranslator r, List r, ListStatement r stmt,
+  InternalList r block, VariableElim r typ, BinderElim r typ,
+  RenderBlock r block, BlockElim r block, RenderBody r bod, BodyElim r bod,
+  InternalListFunc r typ, RenderFunction r typ, FunctionElim r typ, OpElim r,
+  RenderParam r, ParamElim r typ, RenderVisibility r vis, VisibilityElim r vis,
   InternalAssignStmt r stmt, InternalIOStmt r stmt, InternalControlStmt r stmt,
-  RenderStatement r stmt, StatementElim r stmt, RenderType r, RenderValue r,
-  ValueElim r, RenderVariable r, InternalVarElim r, InternalBinderElim r,
-  ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
-  BlockCommentElim r, ValueExpression r, TypeSym r, MethodTypeSym r,
-  RenderMethod r mthd, MethodElim r mthd, ParameterSym r, ScopeElim r
-  ) => CommonRenderSym r vis stmt mthd bod block
+  RenderStatement r stmt, StatementElim r stmt, RenderType r typ,
+  RenderValue r typ, ValueElim r, RenderVariable r typ, InternalVarElim r,
+  InternalBinderElim r, ImportSym r, UnaryOpSym r, BinaryOpSym r,
+  BlockCommentSym r, BlockCommentElim r, ValueExpression r typ, TypeSym r typ,
+  MethodTypeSym r typ, RenderMethod r mthd, MethodElim r mthd, ParameterSym r,
+  ScopeElim r
+  ) => CommonRenderSym r vis typ stmt mthd bod block
 
 -- Common Typeclasses --
 
@@ -68,8 +70,8 @@ class RenderBlock r block | r -> block where
 class BlockElim r block | r -> block where
   block :: r block -> Doc
 
-class RenderType r where
-  multiType :: [VS (r TypeData)] -> VS (r TypeData)
+class RenderType r typ | r -> typ where
+  multiType :: [VS (r typ)] -> VS (r typ)
 
 type VSUnOp a = VS (a OpData)
 
@@ -117,8 +119,8 @@ class OpElim r where
 class ScopeElim r where
   scopeData :: r ScopeData -> ScopeData
 
-class RenderVariable r where
-  varFromData :: AttachmentTag -> String -> VS (r TypeData) -> Doc -> SVariable r
+class RenderVariable r typ | r -> typ where
+  varFromData :: AttachmentTag -> String -> VS (r typ) -> Doc -> SVariable r
 
 class InternalVarElim r where
   variableBind :: r Variable -> AttachmentTag
@@ -127,38 +129,38 @@ class InternalVarElim r where
 class InternalBinderElim r where
   binderElim  :: r BinderD -> Doc
 
-class RenderValue r where
+class RenderValue r typ | r -> typ where
   inputFunc       :: SValue r
   printFunc       :: SValue r
   printLnFunc     :: SValue r
   printFileFunc   :: SValue r -> SValue r
   printFileLnFunc :: SValue r -> SValue r
 
-  cast :: VS (r TypeData) -> SValue r -> SValue r
+  cast :: VS (r typ) -> SValue r -> SValue r
 
   -- | Very generic internal function for generating calls, to reduce repeated
   -- code throughout generators.
   -- Parameters are: maybe name of external module, maybe Doc for object
   -- variable (including separator between object and function) for method
   -- calls.
-  call :: Maybe Library -> Maybe Doc -> MixedCall r
+  call :: Maybe Library -> Maybe Doc -> MixedCall r typ
 
-  valFromData :: Maybe Int -> Maybe Integer -> VS (r TypeData) -> Doc -> SValue r
+  valFromData :: Maybe Int -> Maybe Integer -> VS (r typ) -> Doc -> SValue r
 
 class ValueElim r where
   valuePrec :: r Value -> Maybe Int
   valueInt :: r Value -> Maybe Integer
   value :: r Value -> Doc
 
-class InternalListFunc r where
+class InternalListFunc r typ | r -> typ where
   -- | List, Index
-  listAccessFunc :: VS (r TypeData) -> SValue r -> VS (r FuncData)
+  listAccessFunc :: VS (r typ) -> SValue r -> VS (r FuncData)
 
-class RenderFunction r where
-  funcFromData :: Doc -> VS (r TypeData) -> VS (r FuncData)
+class RenderFunction r typ | r -> typ where
+  funcFromData :: Doc -> VS (r typ) -> VS (r FuncData)
 
-class FunctionElim r where
-  functionType :: r FuncData -> r TypeData
+class FunctionElim r typ | r -> typ where
+  functionType :: r FuncData -> r typ
   function :: r FuncData -> Doc
 
 class InternalAssignStmt r stmt | r -> stmt where
@@ -190,9 +192,9 @@ class VisibilityElim r vis | r -> vis where
 class RenderParam r where
   paramFromData :: SVariable r -> Doc -> MS (r ParamData)
 
-class ParamElim r where
+class ParamElim r typ | r -> typ where
   parameterName :: r ParamData -> Label
-  parameterType :: r ParamData -> r TypeData
+  parameterType :: r ParamData -> r typ
   parameter     :: r ParamData -> Doc
 
 class BlockCommentSym r where
@@ -203,8 +205,8 @@ class BlockCommentSym r where
 class BlockCommentElim r where
   blockComment' :: r Doc -> Doc
 
-class MethodTypeSym r where
-  mType :: VS (r TypeData) -> MS (r TypeData)
+class MethodTypeSym r typ | r -> typ where
+  mType :: VS (r typ) -> MS (r typ)
 
 class RenderMethod r mthd | r -> mthd where
   -- | Takes a BlockComment and a method and generates a function.

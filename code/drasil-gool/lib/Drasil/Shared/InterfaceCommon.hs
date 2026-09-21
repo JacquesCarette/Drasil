@@ -286,7 +286,7 @@ exists = notNull
 -- | Helper class for representing the conversion between integers and array indices.
 -- GOOL is 0-indexed, so languages like Julia that are not 0-indexed
 -- need to convert between integers and indices.
-class (ValueSym r) => IndexTranslator r where
+class IndexTranslator r where
   -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
   --   the target language's assumptions
   intToIndex :: SValue r -> SValue r
@@ -296,7 +296,7 @@ class (ValueSym r) => IndexTranslator r where
 
 -- | A class for representing references.
 -- By "reference" we basically mean "C++ pointer" or "OCaml reference".
-class (TypeSym r, ValueSym r) => Reference r where
+class Reference r where
   -- | Given a value, convert it to a reference to that value
   makeRef :: SValue r -> SValue r
   -- | Given a value that may be a reference type,

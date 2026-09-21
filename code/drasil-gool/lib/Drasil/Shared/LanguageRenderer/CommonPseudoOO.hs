@@ -128,7 +128,7 @@ classVarAccess f c' v'= do
   toState $ classVarAccessCheck vr
 
 indexOf
-  :: (IC.IndexTranslator r, IG.OOFunctionSym r)
+  :: (TypeSym r, IC.IndexTranslator r, IG.OOFunctionSym r)
   => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])
 
@@ -682,6 +682,7 @@ argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 
 listSet
   :: ( IC.AssignStatement r stmt
+     , ValueSym r
      , IC.IndexTranslator r
      , RC.RenderVariable r
      , RC.ValueElim r

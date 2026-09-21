@@ -706,7 +706,8 @@ jlListAbsdex = "findfirst"
 
 jlIndexOf
   ::
-    ( IndexTranslator r
+    ( ValueSym r
+    , IndexTranslator r
     , ValueExpression r
     , BinderSym r
     , VariableSym r

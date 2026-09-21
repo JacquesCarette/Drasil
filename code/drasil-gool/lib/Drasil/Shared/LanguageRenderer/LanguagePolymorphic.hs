@@ -196,7 +196,7 @@ instanceVarAccess o' v' = do
   instanceVarAccess' (variableBind v)
 
 arrayElem
-  :: (IC.IndexTranslator r, RenderVariable r, ValueElim r)
+  :: (ValueSym r, IC.IndexTranslator r, RenderVariable r, ValueElim r)
   => SValue r -> SValue r -> SVariable r
 arrayElem arr' i' = do
   i <- IC.intToIndex i'
@@ -308,7 +308,8 @@ set v vToSet toVal = v $. RO.setFunc (onStateValue valueType v) vToSet toVal
 
 -- TODO [Brandon Bosman, 06/10/2026]: Figure out what to do with this
 listAccess
-  :: ( IC.IndexTranslator r
+  :: ( ValueSym r
+     , IC.IndexTranslator r
      , RC.InternalListFunc r
      , FunctionElim r
      , RenderFunction r

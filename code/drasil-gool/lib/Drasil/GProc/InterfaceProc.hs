@@ -16,7 +16,8 @@ import Drasil.Shared.InterfaceCommon (Label, VisibilitySym, MethodSym(..),
   ReadConsole, FileHandling, PrintFile, ReadFile, List, ListStatement, Literal,
   MathConstant, NumericExpression, ParameterSym, Reference, Set, StringStatement,
   ValueExpression, ValueSym, VariableSym, VariableValue, UnRepr, FunctionSym,
-  ScopeSym, BinderSym, InternalList, TypeElim, VariableElim, BodySym, BlockSym)
+  ScopeSym, BinderSym, InternalList, TypeSym, TypeElim, VariableElim, BodySym,
+  BlockSym)
 import Drasil.Shared.State (GS, FS, MS)
 import Drasil.Shared.AST (ProgData, TypeData)
 
@@ -25,16 +26,16 @@ import Drasil.Shared.AST (ProgData, TypeData)
 class (UnRepr r TypeData, BodySym r bod block, BlockSym r block stmt,
   FunctionSym r, ValueSym r, VariableSym r, VariableValue r, ScopeSym r,
   BinderSym r, InternalList r block, VisibilitySym r vis,
-  MethodSym r vis mthd bod, TypeElim r, VariableElim r, IndexTranslator r,
-  Array r, EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt,
-  AssignStatement r stmt, Argument r, BooleanExpression r, CommandLineArgs r,
-  CommentStatement r stmt, Comparison r, ControlStatement r stmt bod,
-  DeclStatement r stmt bod, FuncAppStatement r stmt, PrintConsole r stmt,
-  ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
-  List r, ListStatement r stmt, Literal r, MathConstant r, NumericExpression r,
-  ParameterSym r, Reference r, Set r, StringStatement r stmt, ValueExpression r,
-  VariableValue r, ModuleSym r mod mthd, FileSym r file mod,
-  ProgramSym r prg file)
+  MethodSym r vis mthd bod, TypeSym r, TypeElim r, VariableElim r,
+  IndexTranslator r, Array r, EmptyStatement r stmt, MultiStatement r stmt,
+  ValueStatement r stmt, AssignStatement r stmt, Argument r, BooleanExpression r,
+  CommandLineArgs r, CommentStatement r stmt, Comparison r,
+  ControlStatement r stmt bod, DeclStatement r stmt bod, FuncAppStatement r stmt,
+  PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
+  ReadFile r stmt, List r, ListStatement r stmt, Literal r, MathConstant r,
+  NumericExpression r, ParameterSym r, Reference r, Set r,
+  StringStatement r stmt, ValueExpression r, VariableValue r,
+  ModuleSym r mod mthd, FileSym r file mod, ProgramSym r prg file)
   => ProcProg r vis stmt mthd prg file mod bod block
 
 type Program = ProgData

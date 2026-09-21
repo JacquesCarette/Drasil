@@ -54,7 +54,7 @@ listAppend
 listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 
 listAdd
-  :: (IndexTranslator r, InternalValueExp r, ValueStatement r stmt)
+  :: (TypeSym r, IndexTranslator r, InternalValueExp r, ValueStatement r stmt)
   => String -> SValue r -> SValue r -> SValue r -> MS (r stmt)
 listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]
 

@@ -173,7 +173,7 @@ class CommandLineArgs r where
   argsList     :: SValue r
   argExists    :: Integer -> SValue r
 
-class (ValueSym r) => NumericExpression r where
+class NumericExpression r where
   (#~)  :: SValue r -> SValue r
   infixl 8 #~ -- Negation
   (#/^) :: SValue r -> SValue r
@@ -208,7 +208,7 @@ class (ValueSym r) => NumericExpression r where
   floor  :: SValue r -> SValue r
   ceil   :: SValue r -> SValue r
 
-class (ValueSym r) => BooleanExpression r where
+class BooleanExpression r where
   (?!)  :: SValue r -> SValue r
   infixr 6 ?! -- Boolean 'not'
   (?&&) :: SValue r -> SValue r -> SValue r

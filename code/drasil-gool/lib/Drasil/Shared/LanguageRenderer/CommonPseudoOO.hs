@@ -699,13 +699,25 @@ listSet list idx val = do
 -- | Convert an integer to an index in a 1-indexed language
 --   Since GOOL is 0-indexed, we need to add 1
 intToIndex'
-  :: (IC.Literal r, IC.NumericExpression r, RC.RenderValue r, RC.ValueElim r)
+  ::
+    ( ValueSym r
+    , IC.Literal r
+    , IC.NumericExpression r
+    , RC.RenderValue r
+    , RC.ValueElim r
+    )
   => SValue r -> SValue r
 intToIndex' v = v `smartAdd` IC.litInt 1
 
 -- | Convert an index to an integer in a 1-indexed language
 --   Since GOOL is 0-indexed, we need to subtract 1
 indexToInt'
-  :: (IC.Literal r, IC.NumericExpression r, RC.RenderValue r, RC.ValueElim r)
+  ::
+    ( ValueSym r
+    , IC.Literal r
+    , IC.NumericExpression r
+    , RC.RenderValue r
+    , RC.ValueElim r
+    )
   => SValue r -> SValue r
 indexToInt' v = v `smartSub` IC.litInt 1

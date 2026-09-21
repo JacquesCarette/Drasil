@@ -938,6 +938,7 @@ pyOut
   ::
     ( BodySym r bod block
     , BlockSym r block stmt
+    , ValueSym r
     , Literal r
     , NumericExpression r
     , Comparison r

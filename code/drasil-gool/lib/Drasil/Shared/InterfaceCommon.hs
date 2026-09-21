@@ -216,7 +216,7 @@ class BooleanExpression r where
   (?||) :: SValue r -> SValue r -> SValue r
   infixl 1 ?||
 
-class (ValueSym r) => Comparison r where
+class Comparison r where
   (?<)  :: SValue r -> SValue r -> SValue r
   infixl 4 ?<
   (?<=) :: SValue r -> SValue r -> SValue r

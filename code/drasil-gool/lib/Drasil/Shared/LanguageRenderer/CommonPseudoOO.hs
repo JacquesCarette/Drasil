@@ -367,7 +367,7 @@ bindingError :: String -> String
 bindingError l = "AttachmentTag unimplemented in " ++ l
 
 notNull
-  :: (Comparison r, IC.VariableSym r, IC.VariableValue r)
+  :: (ValueSym r, Comparison r, IC.VariableSym r, IC.VariableValue r)
   => String -> SValue r -> SValue r
 notNull nil v = v ?!= IC.valueOf (IC.var nil $ onStateValue valueType v)
 

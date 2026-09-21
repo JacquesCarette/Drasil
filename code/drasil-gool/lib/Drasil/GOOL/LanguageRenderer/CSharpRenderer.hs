@@ -937,6 +937,7 @@ csPrint
   ::
     ( BodySym r bod block
     , BlockSym r block stmt
+    , ValueSym r
     , Comparison r
     , Literal r
     , NumericExpression r

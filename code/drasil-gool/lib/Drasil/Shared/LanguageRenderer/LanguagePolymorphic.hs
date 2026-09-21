@@ -302,7 +302,7 @@ get
 get v vToGet = v $. RO.getFunc vToGet
 
 set
-  :: (RO.InternalGetSet r, IC.FunctionSym r, IG.OOFunctionSym r)
+  :: (ValueSym r, RO.InternalGetSet r, IG.OOFunctionSym r)
   => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. RO.setFunc (onStateValue valueType v) vToSet toVal
 

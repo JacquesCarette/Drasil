@@ -18,7 +18,7 @@ module Drasil.Shared.InterfaceCommon (
   EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
   ParameterSym(..), MethodSym(..), BinderSym(..), BinderElim(..), convType
   ) where
@@ -496,8 +496,6 @@ class StringStatement r stmt | r -> stmt where
   -- | Given a list of variables and a value containing a list of strings,
   -- assign the ith element of the list of strings into the ith variable
   stringListLists :: [SVariable r] -> SValue r -> MS (r stmt)
-
-class (ValueSym r) => FunctionSym r where
 
 -- The three lists are inputs, outputs, and both, respectively
 type InOutCall r stmt = Label -> [SValue r] -> [SVariable r] -> [SVariable r] ->

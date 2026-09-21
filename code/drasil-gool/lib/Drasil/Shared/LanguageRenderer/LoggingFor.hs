@@ -336,8 +336,6 @@ instance (FuncAppStatement r stmt) => FuncAppStatement (LoggingFor r) stmt where
   inOutCall = liftLogging inOutCall
   extInOutCall = liftLogging extInOutCall
 
-instance (FunctionSym r) => FunctionSym (LoggingFor r) where
-
 instance (InternalList r block) => InternalList (LoggingFor r) block where
   listSlice' = liftLogging listSlice'
 

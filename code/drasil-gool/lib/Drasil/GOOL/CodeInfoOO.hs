@@ -11,7 +11,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), VSBinder, Variable, Value,
   Set(..), InternalList(..), EmptyStatement(..), MultiStatement(..),
   ValueStatement(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
   VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
@@ -237,8 +237,6 @@ instance InternalValueExp CodeInfoOO where
     _ <- currModCall n vs ns
     return $ return $ error "[objMethodCallMixedArgs'] The return value of this isn't used, and the thunk shouldn't fire."
   classMethodCallMixedArgs' n _ cls vs ns = cls >> currModCall n vs ns
-
-instance FunctionSym CodeInfoOO where
 
 instance OOFunctionSym CodeInfoOO where
   func  _ _ l = do

@@ -15,8 +15,8 @@ import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
   EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
   FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
-  FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  switchAsIf, VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
+  VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
   BinderElim(..), MethodSym(..), funcApp, (&=), bodyStatements)
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
@@ -472,8 +472,6 @@ instance StringStatement MatlabCode (Doc, Terminator) where
   stringSplit d vnew s = vnew &= funcApp "strsplit" (listType string) [s, litString [d]]
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
-
-instance FunctionSym MatlabCode where
 
 instance FuncAppStatement MatlabCode (Doc, Terminator) where
   inOutCall = CP.inOutCall funcApp

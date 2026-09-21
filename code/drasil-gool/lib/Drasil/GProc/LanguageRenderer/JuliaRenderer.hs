@@ -18,10 +18,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, SValue,
   Set(..), NativeVector(..), InternalList(..), EmptyStatement(..),
   MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
-  switchAsIf, convScope)
+  ReadFile(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
+  BinderSym(..), BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
@@ -508,8 +507,6 @@ instance StringStatement JuliaCode (Doc, Terminator) where
   stringSplit d vnew s = vnew &= funcApp jlSplit (listType string) [s, litString [d]]
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
-
-instance FunctionSym JuliaCode where
 
 instance FuncAppStatement JuliaCode (Doc, Terminator) where
   inOutCall = CP.inOutCall funcApp

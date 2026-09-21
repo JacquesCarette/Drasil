@@ -18,9 +18,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   ListStatement(..), Set(..), InternalList(..), EmptyStatement(..),
   MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  BinderSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), convScope, BinderElim(..), (&=))
+  ReadFile(..), StringStatement(..), FuncAppStatement(..), BinderSym(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), convScope, BinderElim(..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, Class, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueExpression(..),
@@ -414,8 +414,6 @@ instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
   classMethodCallMixedArgs' f = pair2Vals3Lists
     (classMethodCallMixedArgs' f)
     (classMethodCallMixedArgs' f)
-
-instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => OOFunctionSym (p CppSrcCode CppHdrCode) where
   func l = pair1Val1List (func l) (func l)
@@ -1336,8 +1334,6 @@ instance InternalValueExp CppSrcCode where
     c <- cls
     RC.call Nothing (Just $ renderType c <> text nmSpc) f t vs ns
 
-instance FunctionSym CppSrcCode where
-
 instance OOFunctionSym CppSrcCode where
   func = G.func
   objAccess = G.objAccess
@@ -2016,8 +2012,6 @@ instance ValueElim CppHdrCode where
 instance InternalValueExp CppHdrCode where
   objMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
   classMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
-
-instance FunctionSym CppHdrCode where
 
 instance OOFunctionSym CppHdrCode where
   func _ _ _ = funcFromData empty void

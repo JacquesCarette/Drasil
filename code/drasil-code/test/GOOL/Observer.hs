@@ -17,19 +17,19 @@ observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
 -- | Creates the observer class.
-observer :: (OOProg r vis stmt mthd stvr attch prg file mod bod block) => FS (r file)
+observer :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => FS (r file)
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
 -- | Makes a variable @x@.
-x :: (TypeSym r, VariableSym r) => SVariable r
+x :: (TypeSym r typ, VariableSym r typ) => SVariable r
 x = var "x" int
 
 -- | Acces the @x@ attribute of @self@.
 selfX ::
-  ( TypeSym r
-  , VariableSym r
-  , OOVariableSym r
+  ( TypeSym r typ
+  , VariableSym r typ
+  , OOVariableSym r typ
   , SelfSym r
   , VariableValue r
   )
@@ -45,12 +45,12 @@ helperClass
     , VisibilitySym r vis
     , StateVarSym r vis stvr attch
     , ClassSym r mthd stvr
-    , OOMethodSym r vis mthd attch bod
+    , OOMethodSym r vis typ mthd attch bod
     , PrintConsole r stmt
-    , TypeSym r
-    , Literal r
-    , VariableSym r
-    , OOVariableSym r
+    , TypeSym r typ
+    , Literal r typ
+    , VariableSym r typ
+    , OOVariableSym r typ
     , SelfSym r
     , VariableValue r
     )
@@ -62,10 +62,10 @@ helperClass = buildClass Nothing [stateVar public instanceLevel x]
 observerConstructor
   ::
     ( BodySym r bod block
-    , TypeSym r
-    , VariableSym r
-    , OOMethodSym r vis mthd attch bod
-    , Literal r
+    , TypeSym r typ
+    , VariableSym r typ
+    , OOMethodSym r vis typ mthd attch bod
+    , Literal r typ
     )
   => MS (r mthd)
 observerConstructor = initializer [] [(x, litInt 5)]
@@ -75,13 +75,13 @@ printNumMethod
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , TypeSym r
-    , OOMethodSym r vis mthd attch bod
+    , TypeSym r typ
+    , OOMethodSym r vis typ mthd attch bod
     , AttachmentSym r attch
     , VisibilitySym r vis
     , PrintConsole r stmt
-    , VariableSym r
-    , OOVariableSym r
+    , VariableSym r typ
+    , OOVariableSym r typ
     , SelfSym r
     , VariableValue r
     )

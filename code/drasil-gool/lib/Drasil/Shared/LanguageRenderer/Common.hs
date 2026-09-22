@@ -36,27 +36,28 @@ bool = typeFromData Boolean boolRender (text boolRender)
 
 -- Python, Java, C#, and Julia --
 
-extVar :: (RenderVariable r) => Label -> Label -> VS (r TypeData) -> SVariable r
+extVar :: (RenderVariable r typ) => Label -> Label -> VS (r typ) -> SVariable r
 extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
 -- Python, Java, and Julia --
 
-funcType :: (Monad r, IC.TypeElim r) => [VS (r TypeData)] ->
-  VS (r TypeData) -> VS (r TypeData)
+funcType
+  :: (Monad r, IC.TypeElim r TypeData)
+  => [VS (r TypeData)] -> VS (r TypeData) -> VS (r TypeData)
 funcType ps' r' =  do
   ps <- sequence ps'
   r <- r'
   typeFromData (Func (map getCodeType ps) (getCodeType r)) "" empty
 
 -- Python, Java, C#, Swift, and Julia --
-extFuncAppMixedArgs :: (RenderValue r) => Library -> MixedCall r
+extFuncAppMixedArgs :: (RenderValue r typ) => Library -> MixedCall r typ
 extFuncAppMixedArgs l = call (Just l) Nothing
 
 -- Python, C#, Swift, and Julia --
 
 listAccessFunc
-  :: (RenderFunction r, IC.TypeElim r, ValueElim r, ValueSym r)
-  => VS (r TypeData) -> SValue r -> VS (r FuncData)
+  :: (RenderFunction r typ, IC.TypeElim r typ, ValueElim r, ValueSym r typ)
+  => VS (r typ) -> SValue r -> VS (r FuncData)
 listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Python, Swift, and Julia --
@@ -72,7 +73,12 @@ forEach' f i' v' b' = do
 -- Python and Julia --
 
 varDecDef
-  :: (EmptyStatement r stmt, AssignStatement r stmt, ScopeElim r, VariableElim r)
+  ::
+    ( EmptyStatement r stmt
+    , AssignStatement r stmt
+    , ScopeElim r
+    , VariableElim r typ
+    )
   => SVariable r -> r ScopeData -> Maybe (SValue r) -> MS (r stmt)
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v
@@ -96,5 +102,7 @@ increment vr' v'= do
 -- Python, Julia, and MATLAB --
 
 -- | Call to get the size of a list as a function call
-listSize :: (TypeSym r, ValueExpression r) => String -> SValue r -> SValue r
+listSize
+  :: (TypeSym r typ, ValueExpression r typ)
+  => String -> SValue r -> SValue r
 listSize fnName list = funcApp fnName int [list]

@@ -73,25 +73,25 @@ instance (LiftLogging u1 l1, LiftLogging u2 l2) => LiftLogging (u1, u2) (l1, l2)
   lowerLogging = bimap lowerLogging lowerLogging
 
 -- TODO [Brandon Bosman, 06/19/2026]: This should be passed down from drasil-code
-varLogFile :: (TypeSym r, VariableSym r) => SVariable r
+varLogFile :: (TypeSym r typ, VariableSym r typ) => SVariable r
 varLogFile = var "outfile" outfile
 
-valLogFile :: (TypeSym r, VariableSym r, VariableValue r) => SValue r
+valLogFile :: (TypeSym r typ, VariableSym r typ, VariableValue r) => SValue r
 valLogFile = valueOf varLogFile
 
 -- TODO [Brandon Bosman, 06/19/2026]: This should be passed down from drasil-code
-logName :: (Literal r) => SValue r
+logName :: (Literal r typ) => SValue r
 logName = litString "log.txt"
 
 logVarUpdate
   ::
     ( FileHandling r stmt
     , PrintFile r stmt
-    , TypeSym r
-    , VariableSym r
+    , TypeSym r typ
+    , VariableSym r typ
     , VariableValue r
-    , VariableElim r
-    , Literal r
+    , VariableElim r typ
+    , Literal r typ
     )
   => SVariable (LoggingFor r) -> [MS (r stmt)]
 logVarUpdate x =
@@ -111,11 +111,11 @@ instance
   , AssignStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
-  , TypeSym r
-  , VariableSym r
+  , TypeSym r typ
+  , VariableSym r typ
   , VariableValue r
-  , VariableElim r
-  , Literal r
+  , VariableElim r typ
+  , Literal r typ
   ) => AssignStatement (LoggingFor r) stmt where
   (&-=) = liftLogging (&-=)
   (&+=) = liftLogging (&+=)
@@ -141,11 +141,11 @@ instance
   , DeclStatement r stmt bod
   , FileHandling r stmt
   , PrintFile r stmt
-  , TypeSym r
-  , VariableSym r
+  , TypeSym r typ
+  , VariableSym r typ
   , VariableValue r
-  , VariableElim r
-  , Literal r
+  , VariableElim r typ
+  , Literal r typ
   ) => DeclStatement (LoggingFor r) stmt bod where
   varDec = liftLogging varDec
   varDecDef vr scp vl = liftLogging $ multi $
@@ -176,11 +176,11 @@ instance
   , FileHandling r stmt
   , PrintFile r stmt
   , ReadConsole r stmt
-  , TypeSym r
-  , VariableSym r
+  , TypeSym r typ
+  , VariableSym r typ
   , VariableValue r
-  , VariableElim r
-  , Literal r
+  , VariableElim r typ
+  , Literal r typ
   ) => ReadConsole (LoggingFor r) stmt where
   getInput vr = liftLogging $ multi $
     getInput (lowerLogging vr) : logVarUpdate vr
@@ -203,11 +203,11 @@ instance
   , FileHandling r stmt
   , PrintFile r stmt
   , ReadFile r stmt
-  , TypeSym r
-  , VariableSym r
+  , TypeSym r typ
+  , VariableSym r typ
   , VariableValue r
-  , VariableElim r
-  , Literal r
+  , VariableElim r typ
+  , Literal r typ
   ) => ReadFile (LoggingFor r) stmt where
   getFileInput file vr = liftLogging $ multi $
     getFileInput (lowerLogging file) (lowerLogging vr)
@@ -222,11 +222,11 @@ instance
   , StringStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
-  , TypeSym r
-  , VariableSym r
+  , TypeSym r typ
+  , VariableSym r typ
   , VariableValue r
-  , VariableElim r
-  , Literal r
+  , VariableElim r typ
+  , Literal r typ
   ) => StringStatement (LoggingFor r) stmt where
   stringSplit chr vr str  = liftLogging $
     stringSplit (lowerLogging chr) (lowerLogging vr) (lowerLogging str)
@@ -238,12 +238,12 @@ instance
 
 -- SharedProg Boilerplate
 
-instance (VariableSym r) => VariableSym (LoggingFor r) where
+instance (VariableSym r typ) => VariableSym (LoggingFor r) typ where
   var = liftLogging var
   constant = liftLogging constant
   extVar = liftLogging extVar
 
-instance (TypeSym r) => TypeSym (LoggingFor r) where
+instance (TypeSym r typ) => TypeSym (LoggingFor r) typ where
   bool = liftLogging bool
   int = liftLogging int
   float = liftLogging float
@@ -260,10 +260,10 @@ instance (TypeSym r) => TypeSym (LoggingFor r) where
   funcType = liftLogging funcType
   void = liftLogging void
 
-instance (TypeElim r) => TypeElim (LoggingFor r) where
+instance (TypeElim r typ) => TypeElim (LoggingFor r) typ where
   getCodeType = liftLogging getCodeType
 
-instance (ValueSym r) => ValueSym (LoggingFor r) where
+instance (ValueSym r typ) => ValueSym (LoggingFor r) typ where
   valueType = liftLogging valueType
 
 instance EmptyStatement r stmt => EmptyStatement (LoggingFor r) stmt where
@@ -287,7 +287,7 @@ instance (Array r) => Array (LoggingFor r) where
   arrayLength = liftLogging arrayLength
   arrayCopy = liftLogging arrayCopy
 
-instance (BinderSym r) => BinderSym (LoggingFor r) where
+instance (BinderSym r typ) => BinderSym (LoggingFor r) typ where
   binder = liftLogging binder
 
 instance (BooleanExpression r) => BooleanExpression (LoggingFor r) where
@@ -345,7 +345,7 @@ instance (FuncAppStatement r stmt) => FuncAppStatement (LoggingFor r) stmt where
 instance (InternalList r block) => InternalList (LoggingFor r) block where
   listSlice' = liftLogging listSlice'
 
-instance (Literal r) => Literal (LoggingFor r) where
+instance (Literal r typ) => Literal (LoggingFor r) typ where
   litTrue = liftLogging litTrue
   litFalse = liftLogging litFalse
   litChar = liftLogging litChar
@@ -368,7 +368,7 @@ instance (VisibilitySym r vis) => VisibilitySym (LoggingFor r) vis where
   private = liftLogging private
   public = liftLogging public
 
-instance (MethodSym r vis mthd bod) => MethodSym (LoggingFor r) vis mthd bod where
+instance (MethodSym r vis typ mthd bod) => MethodSym (LoggingFor r) vis typ mthd bod where
   docMain = liftLogging docMain
   function = liftLogging function
   mainFunction = liftLogging mainFunction
@@ -410,7 +410,7 @@ instance (Set r) => Set (LoggingFor r) where
 instance (UnRepr r contents) => UnRepr (LoggingFor r) contents where
   unRepr = unRepr . unLC
 
-instance (ValueExpression r) => ValueExpression (LoggingFor r) where
+instance (ValueExpression r typ) => ValueExpression (LoggingFor r) typ where
   inlineIf = liftLogging inlineIf
   funcAppMixedArgs = liftLogging funcAppMixedArgs
   extFuncAppMixedArgs = liftLogging extFuncAppMixedArgs
@@ -418,7 +418,7 @@ instance (ValueExpression r) => ValueExpression (LoggingFor r) where
   lambda = liftLogging lambda
   notNull = liftLogging notNull
 
-instance (VariableElim r) => VariableElim (LoggingFor r) where
+instance (VariableElim r typ) => VariableElim (LoggingFor r) typ where
   variableName = liftLogging variableName
   variableType = liftLogging variableType
 
@@ -429,7 +429,7 @@ instance (IndexTranslator r) => IndexTranslator (LoggingFor r) where
   intToIndex = liftLogging intToIndex
   indexToInt = liftLogging indexToInt
 
-instance (NativeVector lang) => NativeVector (LoggingFor lang) where
+instance (NativeVector lang typ) => NativeVector (LoggingFor lang) typ where
   vecType = liftLogging vecType
   litVec = liftLogging litVec
   vecScale = liftLogging vecScale
@@ -441,7 +441,7 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 
 -- GProc
 
-instance (P.ProcProg r vis stmt mthd prg file mod bod block) => P.ProcProg (LoggingFor r) vis stmt mthd prg file mod bod block
+instance (P.ProcProg r vis typ stmt mthd prg file mod bod block) => P.ProcProg (LoggingFor r) vis typ stmt mthd prg file mod bod block
 
 instance (P.ModuleSym r mod mthd) => P.ModuleSym (LoggingFor r) mod mthd where
   buildModule = liftLogging P.buildModule
@@ -455,20 +455,20 @@ instance (P.ProgramSym r prg file) => P.ProgramSym (LoggingFor r) prg file where
 
 -- GOOL
 
-instance (G.OOProg r vis stmt mthd stvr attch prg file mod bod block) => G.OOProg (LoggingFor r) vis stmt mthd stvr attch prg file mod bod block
+instance (G.OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => G.OOProg (LoggingFor r) vis typ stmt mthd stvr attch prg file mod bod block
 
 instance (G.GetSet r) => G.GetSet (LoggingFor r) where
   get = liftLogging G.get
   set = liftLogging G.set
 
-instance (G.InternalValueExp r) => G.InternalValueExp (LoggingFor r) where
+instance (G.InternalValueExp r typ) => G.InternalValueExp (LoggingFor r) typ where
   objMethodCallMixedArgs' = liftLogging G.objMethodCallMixedArgs'
   classMethodCallMixedArgs' = liftLogging G.classMethodCallMixedArgs'
 
-instance (G.OOTypeSym r) => G.OOTypeSym (LoggingFor r) where
+instance (G.OOTypeSym r typ) => G.OOTypeSym (LoggingFor r) typ where
   obj = liftLogging G.obj
 
-instance (G.OOVariableSym r) => G.OOVariableSym (LoggingFor r) where
+instance (G.OOVariableSym r typ) => G.OOVariableSym (LoggingFor r) typ where
   classVar = liftLogging G.classVar
   classConst = liftLogging G.classConst
   classVarAccess = liftLogging G.classVarAccess
@@ -484,7 +484,7 @@ instance (DeclStatement (LoggingFor r) stmt bod, G.OODeclStatement r stmt) =>
 instance (G.OOFuncAppStatement r stmt) => G.OOFuncAppStatement (LoggingFor r) stmt where
   selfInOutCall = liftLogging G.selfInOutCall
 
-instance (G.OOValueExpression r) => G.OOValueExpression (LoggingFor r) where
+instance (G.OOValueExpression r typ) => G.OOValueExpression (LoggingFor r) typ where
   newObjMixedArgs = liftLogging G.newObjMixedArgs
   extNewObjMixedArgs = liftLogging G.extNewObjMixedArgs
   libNewObjMixedArgs = liftLogging G.libNewObjMixedArgs
@@ -492,18 +492,18 @@ instance (G.OOValueExpression r) => G.OOValueExpression (LoggingFor r) where
 instance (G.SelfSym r) => G.SelfSym (LoggingFor r) where
   self = liftLogging G.self
 
-instance (G.OOFunctionSym r) => G.OOFunctionSym (LoggingFor r) where
+instance (G.OOFunctionSym r typ) => G.OOFunctionSym (LoggingFor r) typ where
   func = liftLogging G.func
   objAccess = liftLogging G.objAccess
 
-instance (G.ObserverPattern r stmt) => G.ObserverPattern (LoggingFor r) stmt where
+instance (G.ObserverPattern r typ stmt) => G.ObserverPattern (LoggingFor r) typ stmt where
   notifyObservers = liftLogging G.notifyObservers
 
 instance (G.AttachmentSym r attch) => G.AttachmentSym (LoggingFor r) attch where
   classLevel = liftLogging G.classLevel
   instanceLevel = liftLogging G.instanceLevel
 
-instance (G.OOMethodSym r vis mthd attch bod) => G.OOMethodSym (LoggingFor r) vis mthd attch bod where
+instance (G.OOMethodSym r vis typ mthd attch bod) => G.OOMethodSym (LoggingFor r) vis typ mthd attch bod where
   method = liftLogging G.method
   getMethod = liftLogging G.getMethod
   setMethod = liftLogging G.setMethod

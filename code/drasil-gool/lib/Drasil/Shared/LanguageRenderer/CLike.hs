@@ -57,15 +57,17 @@ double = typeFromData Double doubleRender (text doubleRender)
 char :: (Monad r) => VS (r TypeData)
 char = typeFromData Char charRender (text charRender)
 
-listType :: (Monad r, TypeElim r, UnRepr r TypeData) => String ->
-  VS (r TypeData) -> VS (r TypeData)
+listType
+  :: (Monad r, TypeElim r TypeData, UnRepr r TypeData)
+  => String -> VS (r TypeData) -> VS (r TypeData)
 listType lst t' = do
   t <- t'
   typeFromData (List (getCodeType t)) (lst
     `containing` getTypeString t) $ text lst <> angles (renderType t)
 
-setType :: (Monad r, TypeElim r, UnRepr r TypeData) => String ->
-  VS (r TypeData) -> VS (r TypeData)
+setType
+  :: (Monad r, TypeElim r TypeData, UnRepr r TypeData)
+  => String -> VS (r TypeData) -> VS (r TypeData)
 setType lst t' = do
   t <- t'
   typeFromData (Set (getCodeType t)) (lst
@@ -88,24 +90,24 @@ orOp :: (Monad r) => VSOp r
 orOp = orPrec "||"
 -- Variables --
 
-self :: (IG.OOTypeSym r, RC.RenderVariable r) => SVariable r
+self :: (IG.OOTypeSym r typ, RC.RenderVariable r typ) => SVariable r
 self = do
   l <- zoom lensVStoMS getClassName
   mkStateVar R.this (IG.obj l) R.this'
 
 -- Values --
 
-litTrue :: (RenderValue r, IC.TypeSym r) => SValue r
+litTrue :: (RenderValue r typ, IC.TypeSym r typ) => SValue r
 litTrue = mkStateVal IC.bool (text "true")
 
-litFalse :: (RenderValue r, IC.TypeSym r) => SValue r
+litFalse :: (RenderValue r typ, IC.TypeSym r typ) => SValue r
 litFalse = mkStateVal IC.bool (text "false")
 
-litFloat :: (RenderValue r, IC.TypeSym r) => Float -> SValue r
+litFloat :: (RenderValue r typ, IC.TypeSym r typ) => Float -> SValue r
 litFloat f = mkStateVal IC.float (D.float f <> text "f")
 
 inlineIf
-  :: (RenderValue r, ValueElim r, ValueSym r)
+  :: (RenderValue r typ, ValueElim r, ValueSym r typ)
   => SValue r -> SValue r -> SValue r -> SValue r
 inlineIf c' v1' v2' = do
   c <- c'
@@ -115,23 +117,30 @@ inlineIf c' v1' v2' = do
     (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2)
   where prec cd = valuePrec cd <|> Just 0
 
-libFuncAppMixedArgs :: (IC.ValueExpression r) => Library -> MixedCall r
+libFuncAppMixedArgs :: (IC.ValueExpression r typ) => Library -> MixedCall r typ
 libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >>
   IC.funcAppMixedArgs n t vs ns
 
-libNewObjMixedArgs :: (IG.OOValueExpression r) => Library -> MixedCtorCall r
+libNewObjMixedArgs
+  :: (IG.OOValueExpression r typ)
+  => Library -> MixedCtorCall r typ
 libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
   IG.newObjMixedArgs tp vs ns
 
 -- Functions --
 
 listSize
-  :: (IC.TypeSym r, IG.InternalValueExp r)
+  :: (IC.TypeSym r typ, IG.InternalValueExp r typ)
   => String -> SValue r -> SValue r
 listSize fnName list = objMethodCallNoParams IC.int list fnName
 
 listSize'
-  :: (IC.TypeSym r, VariableSym r, IG.OOVariableSym r, VariableValue r)
+  ::
+    ( IC.TypeSym r typ
+    , VariableSym r typ
+    , IG.OOVariableSym r typ
+    , VariableValue r
+    )
   => String -> SValue r -> SValue r
 listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
@@ -161,8 +170,8 @@ varDec
      , RC.RenderStatement r stmt
      , ScopeElim r
      , UnRepr r TypeData
-     , TypeElim r
-     , VariableElim r
+     , TypeElim r TypeData
+     , VariableElim r TypeData
      )
   => r attch -> r attch -> Doc -> SVariable r -> r ScopeData -> MS (r stmt)
 varDec s d pdoc v' scp = do
@@ -219,7 +228,11 @@ listDec f vl v scp = do
   mkStmt (RC.statement vd <> f sz)
 
 extObjDecNew
-  :: (IC.DeclStatement r stmt bod, IG.OOValueExpression r, VariableElim r)
+  ::
+    ( IC.DeclStatement r stmt bod
+    , IG.OOValueExpression r typ
+    , VariableElim r typ
+    )
   => Library -> SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 extObjDecNew l v scp vs = IC.varDecDef v scp
   (extNewObj l (onStateValue variableType v) vs)

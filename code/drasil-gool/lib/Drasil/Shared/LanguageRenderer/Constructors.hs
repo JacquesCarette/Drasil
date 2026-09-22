@@ -36,25 +36,27 @@ mkStmtNoEnd = flip stmtFromData Empty
 -- Values --
 
 -- | Constructs a value in a stateful context
-mkStateVal :: (RenderValue r) => VS (r TypeData) -> Doc -> SValue r
+mkStateVal :: (RenderValue r typ) => VS (r typ) -> Doc -> SValue r
 mkStateVal = valFromData Nothing Nothing
 
 -- | Constructs a value in a non-stateful context
-mkVal :: (RenderValue r) => r TypeData -> Doc -> SValue r
+mkVal :: (RenderValue r typ) => r typ -> Doc -> SValue r
 mkVal t = valFromData Nothing Nothing (toState t)
 
 -- Variables --
 
 -- | Constructs an instance-level variable in a stateful context
-mkStateVar :: (RenderVariable r) => String -> VS (r TypeData) -> Doc -> SVariable r
+mkStateVar
+  :: (RenderVariable r typ)
+  => String -> VS (r typ) -> Doc -> SVariable r
 mkStateVar = varFromData InstanceLevel
 
 -- | Constructs an instance-level variable in a non-stateful context
-mkVar :: (RenderVariable r) => String -> r TypeData -> Doc -> SVariable r
+mkVar :: (RenderVariable r typ) => String -> r typ -> Doc -> SVariable r
 mkVar n t = varFromData InstanceLevel n (toState t)
 
 -- | Constructs a classLevel variable in a stateful context
-mkClassVar :: (RenderVariable r) => String -> VS (r TypeData) -> Doc -> SVariable r
+mkClassVar :: (RenderVariable r typ) => String -> VS (r typ) -> Doc -> SVariable r
 mkClassVar = varFromData ClassLevel
 
 -- Types --
@@ -108,13 +110,13 @@ inPrec = mkOp 2 . text
 
 -- | Constructs a unary expression like ln(v), for some operator ln and value v
 unExpr
-  :: (OpElim r, RenderValue r, ValueElim r, ValueSym r)
+  :: (OpElim r, RenderValue r typ, ValueElim r, ValueSym r typ)
   => VSUnOp r -> SValue r -> SValue r
 unExpr = join .: on2StateValues (mkUnExpr unOpDocD)
 
 -- | Constructs a unary expression like -v, for some operator - and value v
 unExpr'
-  :: (OpElim r, RenderValue r, ValueElim r, ValueSym r)
+  :: (OpElim r, RenderValue r typ, ValueElim r, ValueSym r typ)
   => VSUnOp r -> SValue r -> SValue r
 unExpr' u' v'= do
   u <- u'
@@ -126,7 +128,7 @@ unExpr' u' v'= do
     u' v'
 
 mkUnExpr
-  :: (OpElim r, RenderValue r, ValueElim r, ValueSym r)
+  :: (OpElim r, RenderValue r typ, ValueElim r, ValueSym r typ)
   => (Doc -> Doc -> Doc) -> r OpData -> r Value -> SValue r
 mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 
@@ -134,7 +136,14 @@ mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 -- value passed to the operator is a float, this function preserves that type
 -- by casting the result to a float.
 unExprNumDbl
-  :: (OpElim r, RenderValue r, TypeSym r, TypeElim r, ValueElim r, ValueSym r)
+  ::
+    ( OpElim r
+    , RenderValue r typ
+    , TypeSym r typ
+    , TypeElim r typ
+    , ValueElim r
+    , ValueSym r typ
+    )
   => VSUnOp r -> SValue r -> SValue r
 unExprNumDbl u' v' = do
   u <- u'
@@ -144,8 +153,8 @@ unExprNumDbl u' v' = do
 
 -- Only used by unExprNumDbl
 unExprCastFloat
-  :: (TypeSym r, RenderValue r, TypeElim r)
-  => r TypeData -> r Value -> SValue r
+  :: (TypeSym r typ, RenderValue r typ, TypeElim r typ)
+  => r typ -> r Value -> SValue r
 unExprCastFloat t = castType (getCodeType t) . toState
   where castType Float = cast float
         castType _ = id
@@ -153,8 +162,8 @@ unExprCastFloat t = castType (getCodeType t) . toState
 -- | To be used when the type of the value is different from the type of the
 -- resulting expression. The type of the result is passed as a parameter.
 typeUnExpr
-  :: (OpElim r, RenderValue r, ValueElim r)
-  => VSUnOp r -> VS (r TypeData) -> SValue r -> SValue r
+  :: (OpElim r, RenderValue r typ, ValueElim r)
+  => VSUnOp r -> VS (r typ) -> SValue r -> SValue r
 typeUnExpr u' t' s' = do
   u <- u'
   t <- t'
@@ -164,7 +173,7 @@ typeUnExpr u' t' s' = do
 -- | Constructs binary expressions like v + w, for some operator + and values v
 -- and w, parenthesizing v and w if needed.
 binExpr
-  :: (OpElim r, RenderValue r, TypeElim r, ValueElim r, ValueSym r)
+  :: (OpElim r, RenderValue r typ, TypeElim r typ, ValueElim r, ValueSym r typ)
   => VSBinOp r -> SValue r -> SValue r -> SValue r
 binExpr b' v1' v2'= do
   b <- b'
@@ -175,7 +184,7 @@ binExpr b' v1' v2'= do
 -- | Constructs binary expressions like pow(v,w), for some operator pow and
 -- values v and w
 binExpr'
-  :: (OpElim r, RenderValue r, TypeElim r, ValueElim r, ValueSym r)
+  :: (OpElim r, RenderValue r typ, TypeElim r typ, ValueElim r, ValueSym r typ)
   => VSBinOp r -> SValue r -> SValue r -> SValue r
 binExpr' b' v1' v2' = do
   exprType <- numType v1' v2'
@@ -186,7 +195,14 @@ binExpr' b' v1' v2' = do
 -- either value passed to the operator is a float, this function preserves that
 -- type by casting the result to a float.
 binExprNumDbl'
-  :: (OpElim r, RenderValue r, TypeSym r, TypeElim r, ValueElim r, ValueSym r)
+  ::
+    ( OpElim r
+    , RenderValue r typ
+    , TypeSym r typ
+    , TypeElim r typ
+    , ValueElim r
+    , ValueSym r typ
+    )
   => VSBinOp r -> SValue r -> SValue r -> SValue r
 binExprNumDbl' b' v1' v2' = do
   v1 <- v1'
@@ -198,8 +214,8 @@ binExprNumDbl' b' v1' v2' = do
 
 -- Only used by binExprNumDbl'
 binExprCastFloat
-  :: (RenderValue r, TypeSym r, TypeElim r)
-  => r TypeData -> r TypeData -> r Value -> SValue r
+  :: (RenderValue r typ, TypeSym r typ, TypeElim r typ)
+  => r typ -> r typ -> r Value -> SValue r
 binExprCastFloat t1 t2 = castType (getCodeType t1) (getCodeType t2) . toState
   where castType Float _ = cast float
         castType _ Float = cast float
@@ -208,8 +224,8 @@ binExprCastFloat t1 t2 = castType (getCodeType t1) (getCodeType t2) . toState
 -- | To be used when the types of the values are different from the type of the
 -- resulting expression. The type of the result is passed as a parameter.
 typeBinExpr
-  :: (OpElim r, RenderValue r, ValueElim r)
-  => VSBinOp r -> VS (r TypeData) -> SValue r -> SValue r -> SValue r
+  :: (OpElim r, RenderValue r typ, ValueElim r)
+  => VSBinOp r -> VS (r typ) -> SValue r -> SValue r -> SValue r
 typeBinExpr b' t' v1' v2' = do
   b <- b'
   t <- t'
@@ -219,8 +235,8 @@ typeBinExpr b' t' v1' v2' = do
 -- For numeric binary expressions, checks that both types are numeric and
 -- returns result type. Selects the type with lowest precision.
 numType
-  :: (TypeElim r, ValueSym r)
-  => SValue r-> SValue r -> VS (r TypeData)
+  :: (TypeElim r typ, ValueSym r typ)
+  => SValue r-> SValue r -> VS (r typ)
 numType v1' v2' = do
   v1 <- v1'
   v2 <- v2'
@@ -242,7 +258,7 @@ exprRender' f b' v1' v2' = do
   v2 <- v2'
   toState $ f b v1 v2
 
-mkExpr :: (RenderValue r) => Int -> r TypeData -> Doc -> SValue r
+mkExpr :: (RenderValue r typ) => Int -> r typ -> Doc -> SValue r
 mkExpr p t = valFromData (Just p) Nothing (toState t)
 
 binOpDocDRend

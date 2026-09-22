@@ -24,7 +24,7 @@ class (CommonRenderSym r vis typ stmt mthd bod block, ParameterSym r,
   ) => ProcRenderSym r vis typ stmt mthd file mod bod block
 -- Procedural-Only Typeclasses --
 
-class (BlockCommentSym r) => RenderFile r file mod | r -> file mod where
+class RenderFile r file mod | r -> file mod where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)

@@ -37,7 +37,7 @@ class (CommonRenderSym r vis typ stmt mthd bod block, ParameterSym r,
 
 -- OO-Only Typeclasses --
 
-class (BlockCommentSym r) => RenderFile r file mod | r -> file mod where
+class RenderFile r file mod | r -> file mod where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
@@ -76,7 +76,7 @@ class StateVarElim r stvr | r -> stvr where
 
 type ParentSpec = Doc
 
-class (BlockCommentSym r) => RenderClass r vis mthd stvr | r -> vis mthd stvr where
+class RenderClass r vis mthd stvr | r -> vis mthd stvr where
   -- class name, visibility, parent, state variables, constructor(s), methods
   intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r stvr]
     -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r IG.Class)

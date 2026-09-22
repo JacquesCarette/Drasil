@@ -655,7 +655,7 @@ implementingClass :: (RenderClass r vis mthd stvr, VisibilitySym r vis) => Label
 implementingClass n is = RO.intClass n public (implements is)
 
 docClass
-  :: (RenderClass r vis mthd stvr)
+  :: (BlockCommentSym r, RenderClass r vis mthd stvr)
   => ClassDocRenderer -> String -> CS (r Class) -> CS (r Class)
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 
@@ -692,7 +692,7 @@ fileDoc ext topb botb mdl = do
 --   dt is the date
 --   fl is the file
 docMod
-  :: (RenderFile r file mod)
+  :: (BlockCommentSym r, RenderFile r file mod)
   => ModuleDocRenderer
   -> String
   -> String

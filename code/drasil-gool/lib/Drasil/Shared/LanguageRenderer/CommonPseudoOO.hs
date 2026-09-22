@@ -100,11 +100,13 @@ doxFunc
   => String -> [String] -> Maybe String -> MS (r mthd) -> MS (r mthd)
 doxFunc = docFunc functionDox
 
-doxClass :: (RG.RenderClass r vis mthd stvr) => String -> CS (r Class) -> CS (r Class)
+doxClass
+  :: (BlockCommentSym r, RG.RenderClass r vis mthd stvr)
+  => String -> CS (r Class) -> CS (r Class)
 doxClass = docClass classDox
 
 doxMod
-  :: (RG.RenderFile r file mod)
+  :: (BlockCommentSym r, RG.RenderFile r file mod)
   => String
   -> String
   -> String

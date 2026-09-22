@@ -14,8 +14,7 @@ import Drasil.Shared.AST (ParamData)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
-  RenderMethod(..))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderMethod(..))
 
 class (CommonRenderSym r vis typ stmt mthd bod block, ParameterSym r,
   VisibilitySym r vis, MethodSym r vis typ mthd bod, IP.ModuleSym r mod mthd,
@@ -24,7 +23,7 @@ class (CommonRenderSym r vis typ stmt mthd bod block, ParameterSym r,
   ) => ProcRenderSym r vis typ stmt mthd file mod bod block
 -- Procedural-Only Typeclasses --
 
-class (BlockCommentSym r) => RenderFile r file mod | r -> file mod where
+class RenderFile r file mod | r -> file mod where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)

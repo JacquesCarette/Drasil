@@ -65,7 +65,7 @@ buildModule n imps bot fs = RP.modFromData n (do
   return $ emptyIfEmpty fnDocs (vibcat (filter (not . isEmpty) [is, fnDocs])))
 
 docMod
-  :: (RP.RenderFile r file mod)
+  :: (RC.BlockCommentSym r, RP.RenderFile r file mod)
   => String -> String -> String -> [String] -> String -> FS (r file) -> FS (r file)
 docMod e d wm a dt fl = RP.commentedMod fl
   (RC.docComment $ CP.modDoc' d wm a dt . addExt e <$> getModuleName)

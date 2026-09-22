@@ -10,7 +10,6 @@ import Drasil.Data.Formats.HTML (
   )
 
 import qualified Drasil.Data.Formats.HTML as HTML (span)
-
 import Drasil.TestingKit.Golden (file, goldenTest, goldenTestingGroup, ps)
 import System.OsPath (osp)
 import Test.Tasty (TestTree, testGroup)
@@ -28,10 +27,10 @@ blockquoteTag = customTag "blockquote"
 inputTag      = customTag "input"
 
 testRenderOptions :: HTMLRenderOptions
-testRenderOptions = HTMLRO $ M.fromList [
+testRenderOptions = HTMLRO (M.fromList [
     (blockquoteTag, Standard),
     (inputTag, Void)
-  ]
+  ]) 2
 
 tagsHTMLTest :: HTML
 tagsHTMLTest =
@@ -85,7 +84,7 @@ tagsHTMLTest =
        Paragraph []
          [Anchor "https://jacquescarette.github.io/Drasil/" [Attr "id" "anchor"] [RawText "Anchor"]],
 
-       figureImage [Attr "id" "figure-image"] "source.png" "Alternative Text" "Figure Caption",
+       figureImage [Attr "id" "figure-image"] [] "source.png" "Alternative Text" "Figure Caption",
 
        Custom blockquoteTag [Attr "class" "quote"]
          [Paragraph [] [RawText "This is a quote."]],

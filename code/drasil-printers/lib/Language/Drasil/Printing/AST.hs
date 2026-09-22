@@ -64,6 +64,10 @@ data Spec = E Expr                   -- ^ Holds an expression.
           | EmptyS                   -- ^ Empty sentence.
           | Quote Spec               -- ^ Quotes are different in different languages.
 
+-- TODO: Semigroup instance for 'Spec', closed under both definitional and
+-- rendering equality. Former _might_ require replacing `:+:` with a `Concat
+-- [Spec]` term.
+
 -- | A title is just a sentence ('Spec').
 type Title    = Spec
 

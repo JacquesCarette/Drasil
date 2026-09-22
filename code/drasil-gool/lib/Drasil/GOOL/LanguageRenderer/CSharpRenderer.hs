@@ -18,7 +18,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
   InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
@@ -405,8 +405,6 @@ instance ValueElim CSharpCode where
 instance InternalValueExp CSharpCode where
   objMethodCallMixedArgs' = G.objMethodCall
   classMethodCallMixedArgs' = CG.classMethodCall
-
-instance FunctionSym CSharpCode where
 
 instance OOFunctionSym CSharpCode where
   func = G.func
@@ -937,6 +935,7 @@ csPrint
   ::
     ( BodySym r bod block
     , BlockSym r block stmt
+    , ValueSym r
     , Comparison r
     , Literal r
     , NumericExpression r

@@ -18,9 +18,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
   ListStatement(..), Set(..), InternalList(..), EmptyStatement(..),
   MultiStatement(..), ValueStatement(..), AssignStatement(..), (&=),
   DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
-  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
-  ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
+  PrintFile(..), ReadFile(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   StateVarSym(..), AttachmentSym(..), InternalValueExp(..), extNewObj,
@@ -406,8 +406,6 @@ instance ValueElim PythonCode where
 instance InternalValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
   classMethodCallMixedArgs' = CG.classMethodCall
-
-instance FunctionSym PythonCode where
 
 instance OOFunctionSym PythonCode where
   func = G.func
@@ -877,7 +875,7 @@ addmathImport = (>>) $ modify (addLangImportVS pyMath)
 mathFunc :: (Monad r) => String -> VSOp r
 mathFunc = addmathImport . unOpPrec . access pyMath
 
-splitFunc :: (Literal r, OOFunctionSym r) => Char -> VS (r FuncData)
+splitFunc :: (TypeSym r, Literal r, OOFunctionSym r) => Char -> VS (r FuncData)
 splitFunc d = func pySplit (listType string) [litString [d]]
 
 readline, readlines :: (TypeSym r, InternalValueExp r) => SValue r -> SValue r
@@ -938,6 +936,7 @@ pyOut
   ::
     ( BodySym r bod block
     , BlockSym r block stmt
+    , ValueSym r
     , Literal r
     , NumericExpression r
     , Comparison r

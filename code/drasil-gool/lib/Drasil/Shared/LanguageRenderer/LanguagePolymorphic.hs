@@ -91,13 +91,19 @@ obj n = typeFromData (Object n) n (text n)
 negateOp :: (Monad r) => VSOp r
 negateOp = unOpPrec "-"
 
-csc :: (IC.Literal r, IC.NumericExpression r, TypeElim r) => SValue r -> SValue r
+csc
+  :: (ValueSym r, IC.Literal r, IC.NumericExpression r, TypeElim r)
+  => SValue r -> SValue r
 csc v = valOfOne (fmap valueType v) #/ sin v
 
-sec :: (IC.Literal r, IC.NumericExpression r, TypeElim r) => SValue r -> SValue r
+sec
+  :: (ValueSym r, IC.Literal r, IC.NumericExpression r, TypeElim r)
+  => SValue r -> SValue r
 sec v = valOfOne (fmap valueType v) #/ cos v
 
-cot :: (IC.Literal r, IC.NumericExpression r, TypeElim r) => SValue r -> SValue r
+cot
+  :: (ValueSym r, IC.Literal r, IC.NumericExpression r, TypeElim r)
+  => SValue r -> SValue r
 cot v = valOfOne (fmap valueType v) #/ tan v
 
 valOfOne :: (IC.Literal r, TypeElim r) => VS (r TypeData) -> SValue r
@@ -108,7 +114,7 @@ valOfOne t = t >>= (getVal . getCodeType)
 -- Binary Operators --
 
 smartAdd
-  :: (IC.Literal r, IC.NumericExpression r, RenderValue r, ValueElim r)
+  :: (ValueSym r, IC.NumericExpression r, RenderValue r, ValueElim r)
   => SValue r -> SValue r -> SValue r
 smartAdd v1 v2 = do
   v1' <- v1
@@ -119,7 +125,7 @@ smartAdd v1 v2 = do
     _                  -> v1 #+ v2
 
 smartSub
-  :: (IC.Literal r, IC.NumericExpression r, RenderValue r, ValueElim r)
+  :: (ValueSym r, IC.NumericExpression r, RenderValue r, ValueElim r)
   => SValue r -> SValue r -> SValue r
 smartSub v1 v2 = do
   v1' <- v1
@@ -190,7 +196,7 @@ instanceVarAccess o' v' = do
   instanceVarAccess' (variableBind v)
 
 arrayElem
-  :: (IC.IndexTranslator r, RenderVariable r, ValueElim r)
+  :: (ValueSym r, IC.IndexTranslator r, RenderVariable r, ValueElim r)
   => SValue r -> SValue r -> SVariable r
 arrayElem arr' i' = do
   i <- IC.intToIndex i'
@@ -296,13 +302,14 @@ get
 get v vToGet = v $. RO.getFunc vToGet
 
 set
-  :: (RO.InternalGetSet r, IC.FunctionSym r, IG.OOFunctionSym r)
+  :: (ValueSym r, RO.InternalGetSet r, IG.OOFunctionSym r)
   => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. RO.setFunc (onStateValue valueType v) vToSet toVal
 
 -- TODO [Brandon Bosman, 06/10/2026]: Figure out what to do with this
 listAccess
-  :: ( IC.IndexTranslator r
+  :: ( ValueSym r
+     , IC.IndexTranslator r
      , RC.InternalListFunc r
      , FunctionElim r
      , RenderFunction r
@@ -442,6 +449,7 @@ print
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
     , IC.ControlStatement r stmt bod
+    , ValueSym r
     , IC.Literal r
     , NumericExpression r
     , Comparison r

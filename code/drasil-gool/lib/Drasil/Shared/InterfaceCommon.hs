@@ -18,7 +18,7 @@ module Drasil.Shared.InterfaceCommon (
   EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
   ParameterSym(..), MethodSym(..), BinderSym(..), BinderElim(..), convType
   ) where
@@ -138,10 +138,10 @@ class (TypeSym r) => ValueSym r where
 class (TypeSym r) => TypeElim r where
   getCodeType :: r TypeData -> CodeType
 
-class (ValueSym r) => Argument r where
+class Argument r where
   pointerArg :: SValue r -> SValue r
 
-class (ValueSym r) => Literal r where
+class Literal r where
   litTrue   :: SValue r
   litFalse  :: SValue r
   litChar   :: Char -> SValue r
@@ -162,18 +162,18 @@ litZero t = do
     Double -> litDouble 0
     _ -> error "litZero expects a numeric type"
 
-class (ValueSym r) => MathConstant r where
+class MathConstant r where
   pi :: SValue r
 
 class VariableValue r where
   valueOf       :: SVariable r -> SValue r
 
-class (ValueSym r) => CommandLineArgs r where
+class CommandLineArgs r where
   arg          :: Integer -> SValue r
   argsList     :: SValue r
   argExists    :: Integer -> SValue r
 
-class (ValueSym r) => NumericExpression r where
+class NumericExpression r where
   (#~)  :: SValue r -> SValue r
   infixl 8 #~ -- Negation
   (#/^) :: SValue r -> SValue r
@@ -208,7 +208,7 @@ class (ValueSym r) => NumericExpression r where
   floor  :: SValue r -> SValue r
   ceil   :: SValue r -> SValue r
 
-class (ValueSym r) => BooleanExpression r where
+class BooleanExpression r where
   (?!)  :: SValue r -> SValue r
   infixr 6 ?! -- Boolean 'not'
   (?&&) :: SValue r -> SValue r -> SValue r
@@ -216,7 +216,7 @@ class (ValueSym r) => BooleanExpression r where
   (?||) :: SValue r -> SValue r -> SValue r
   infixl 1 ?||
 
-class (ValueSym r) => Comparison r where
+class Comparison r where
   (?<)  :: SValue r -> SValue r -> SValue r
   infixl 4 ?<
   (?<=) :: SValue r -> SValue r -> SValue r
@@ -286,7 +286,7 @@ exists = notNull
 -- | Helper class for representing the conversion between integers and array indices.
 -- GOOL is 0-indexed, so languages like Julia that are not 0-indexed
 -- need to convert between integers and indices.
-class (ValueSym r) => IndexTranslator r where
+class IndexTranslator r where
   -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
   --   the target language's assumptions
   intToIndex :: SValue r -> SValue r
@@ -296,7 +296,7 @@ class (ValueSym r) => IndexTranslator r where
 
 -- | A class for representing references.
 -- By "reference" we basically mean "C++ pointer" or "OCaml reference".
-class (TypeSym r, ValueSym r) => Reference r where
+class Reference r where
   -- | Given a value, convert it to a reference to that value
   makeRef :: SValue r -> SValue r
   -- | Given a value that may be a reference type,
@@ -338,7 +338,7 @@ class ListStatement r stmt | r -> stmt where
   --   Arguments are: List, Index, Value
   listSet    :: SValue r -> SValue r -> SValue r -> MS (r stmt)
 
-class (ValueSym r) => Set r where
+class Set r where
   -- | Checks membership
   -- Arguments are: Set, Value
   contains :: SValue r -> SValue r -> SValue r
@@ -383,7 +383,7 @@ class NativeVector r where
   --   Argument is: Vector
   vecUnit :: SValue r -> SValue r
 
-class (ValueSym r) => InternalList r block | r -> block where
+class InternalList r block | r -> block where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
     -> SVariable r -> SValue r -> MS (r block)
 
@@ -496,8 +496,6 @@ class StringStatement r stmt | r -> stmt where
   -- | Given a list of variables and a value containing a list of strings,
   -- assign the ith element of the list of strings into the ith variable
   stringListLists :: [SVariable r] -> SValue r -> MS (r stmt)
-
-class (ValueSym r) => FunctionSym r where
 
 -- The three lists are inputs, outputs, and both, respectively
 type InOutCall r stmt = Label -> [SValue r] -> [SVariable r] -> [SVariable r] ->

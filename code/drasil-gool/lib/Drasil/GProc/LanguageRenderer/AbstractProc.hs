@@ -87,13 +87,19 @@ listAppend fnName list val = valStmt $
 
 -- | Call to insert a value into a list as a function call
 listAdd
-  :: (IndexTranslator r, ValueStatement r stmt, ValueExpression r)
+  :: (TypeSym r, IndexTranslator r, ValueStatement r stmt, ValueExpression r)
   => String -> SValue r -> SValue r -> SValue r -> MS (r stmt)
 listAdd fnName list idx val = valStmt $
   funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
 arrayElem
-  :: (IndexTranslator r, RC.RenderVariable r, IC.TypeElim r, RC.ValueElim r)
+  ::
+    ( IC.ValueSym r
+    , IndexTranslator r
+    , RC.RenderVariable r
+    , IC.TypeElim r
+    , RC.ValueElim r
+    )
   => SValue r -> SValue r -> SVariable r
 arrayElem arr' i' = do
   i <- IC.intToIndex i'

@@ -18,10 +18,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, SValue,
   Set(..), NativeVector(..), InternalList(..), EmptyStatement(..),
   MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
-  switchAsIf, convScope)
+  ReadFile(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
+  BinderSym(..), BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
@@ -509,8 +508,6 @@ instance StringStatement JuliaCode (Doc, Terminator) where
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
 
-instance FunctionSym JuliaCode where
-
 instance FuncAppStatement JuliaCode (Doc, Terminator) where
   inOutCall = CP.inOutCall funcApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
@@ -706,7 +703,8 @@ jlListAbsdex = "findfirst"
 
 jlIndexOf
   ::
-    ( IndexTranslator r
+    ( ValueSym r
+    , IndexTranslator r
     , ValueExpression r
     , BinderSym r
     , VariableSym r
@@ -990,6 +988,7 @@ jlOut
   ::
     ( BodySym r bod block
     , BlockSym r block stmt
+    , ValueSym r
     , Literal r
     , NumericExpression r
     , Comparison r

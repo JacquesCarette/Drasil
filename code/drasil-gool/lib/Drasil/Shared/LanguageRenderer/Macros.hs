@@ -197,6 +197,7 @@ stringListVals
   :: ( MultiStatement r stmt
      , IC.AssignStatement r stmt
      , IC.List r
+     , ValueSym r
      , IC.Literal r
      , RenderValue r
      , IC.TypeElim r
@@ -217,6 +218,7 @@ stringListLists
     ( BodySym r bod block
     , IC.BlockSym r block stmt
     , IC.ControlStatement r stmt bod
+    , ValueSym r
     , IC.Literal r
     , NumericExpression r
     , VariableSym r

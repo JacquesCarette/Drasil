@@ -128,17 +128,17 @@ classVarAccess f c' v'= do
   toState $ classVarAccessCheck vr
 
 indexOf
-  :: (IC.IndexTranslator r, IG.OOFunctionSym r)
+  :: (TypeSym r, IC.IndexTranslator r, IG.OOFunctionSym r)
   => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])
 
 contains
-  :: (IC.FunctionSym r, IG.OOFunctionSym r)
+  :: (TypeSym r, IG.OOFunctionSym r)
   => Label -> SValue r -> SValue r -> SValue r
 contains f s v = IG.objAccess s (IG.func f IC.bool [v])
 
 containsInt
-  :: (Comparison r, IC.FunctionSym r, IG.OOFunctionSym r)
+  :: (TypeSym r, Comparison r, IG.OOFunctionSym r)
   => Label -> Label -> SValue r -> SValue r -> SValue r
 containsInt f fn s v = contains f s v ?!= IG.objAccess s (IG.func fn IC.bool [])
 
@@ -242,7 +242,7 @@ arrayDecDef v' scp vals' = do
   mkStmt (RC.statement vd <+> equals <+> braces (valueList vs))
 
 openFileA
-  :: (IC.AssignStatement r stmt, IC.Literal r)
+  :: (IC.AssignStatement r stmt, TypeSym r, IC.Literal r)
   => (SValue r -> VS (r TypeData) -> SValue r -> SValue r)
   -> SVariable r
   -> SValue r
@@ -329,11 +329,11 @@ call' _ l o n t ps ns = call empty l o n t ps ns
 namedArgError :: String -> String
 namedArgError l = "Named arguments not supported in " ++ l
 
-listSizeFunc :: (IC.FunctionSym r, IG.OOFunctionSym r) => VS (r FuncData)
+listSizeFunc :: (TypeSym r, IG.OOFunctionSym r) => VS (r FuncData)
 listSizeFunc = IG.func "size" IC.int []
 
 listAccessFunc'
-  :: (IC.FunctionSym r, IG.OOFunctionSym r, TypeElim r)
+  :: (ValueSym r, IG.OOFunctionSym r, TypeElim r)
   => Label -> VS (r TypeData) -> SValue r -> VS (r FuncData)
 listAccessFunc' f t i = IG.func f t [intValue i]
 
@@ -367,12 +367,12 @@ bindingError :: String -> String
 bindingError l = "AttachmentTag unimplemented in " ++ l
 
 notNull
-  :: (Comparison r, IC.VariableSym r, IC.VariableValue r)
+  :: (ValueSym r, Comparison r, IC.VariableSym r, IC.VariableValue r)
   => String -> SValue r -> SValue r
 notNull nil v = v ?!= IC.valueOf (IC.var nil $ onStateValue valueType v)
 
 listDecDef
-  :: (IC.DeclStatement r stmt bod, IC.Literal r, VariableElim r)
+  :: (IC.DeclStatement r stmt bod, TypeSym r, IC.Literal r, VariableElim r)
   => SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 listDecDef v scp vals = do
   vr <- zoom lensMStoVS v
@@ -380,7 +380,7 @@ listDecDef v scp vals = do
   IC.varDecDef (return vr) scp lst
 
 setDecDef
-  :: (IC.DeclStatement r stmt bod, IC.Literal r, VariableElim r)
+  :: (IC.DeclStatement r stmt bod, TypeSym r, IC.Literal r, VariableElim r)
   => SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 setDecDef v scp vals = do
   vr <- zoom lensMStoVS v
@@ -459,7 +459,7 @@ openFileR
 openFileR f vr vl = vr &= f vl infile
 
 openFileW
-  :: (IC.AssignStatement r stmt, IC.Literal r)
+  :: (IC.AssignStatement r stmt, TypeSym r, IC.Literal r)
   => (SValue r -> VS (r TypeData) -> SValue r -> SValue r)
   -> SVariable r
   -> SValue r
@@ -515,7 +515,7 @@ multiReturn f vs = do
   returnStmt $ mkStateVal IC.void $ f $ valueList vs'
 
 listDec
-  :: (IC.DeclStatement r stmt bod, IC.Literal r, VariableElim r)
+  :: (IC.DeclStatement r stmt bod, TypeSym r, IC.Literal r, VariableElim r)
   => SVariable r -> r ScopeData -> MS (r stmt)
 listDec v scp = listDecDef v scp []
 
@@ -668,7 +668,7 @@ fileW = "w"
 fileA = "a"
 
 openFileR', openFileW', openFileA'
-  :: (IC.Literal r, IC.ValueExpression r) => SValue r -> SValue r
+  :: (TypeSym r, IC.Literal r, IC.ValueExpression r) => SValue r -> SValue r
 openFileR' n = funcApp fileOpen infile [n, IC.litString fileR]
 openFileW' n = funcApp fileOpen infile [n, IC.litString fileW]
 openFileA' n = funcApp fileOpen infile [n, IC.litString fileA]
@@ -682,6 +682,7 @@ argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 
 listSet
   :: ( IC.AssignStatement r stmt
+     , ValueSym r
      , IC.IndexTranslator r
      , RC.RenderVariable r
      , RC.ValueElim r
@@ -699,13 +700,25 @@ listSet list idx val = do
 -- | Convert an integer to an index in a 1-indexed language
 --   Since GOOL is 0-indexed, we need to add 1
 intToIndex'
-  :: (IC.Literal r, IC.NumericExpression r, RC.RenderValue r, RC.ValueElim r)
+  ::
+    ( ValueSym r
+    , IC.Literal r
+    , IC.NumericExpression r
+    , RC.RenderValue r
+    , RC.ValueElim r
+    )
   => SValue r -> SValue r
 intToIndex' v = v `smartAdd` IC.litInt 1
 
 -- | Convert an index to an integer in a 1-indexed language
 --   Since GOOL is 0-indexed, we need to subtract 1
 indexToInt'
-  :: (IC.Literal r, IC.NumericExpression r, RC.RenderValue r, RC.ValueElim r)
+  ::
+    ( ValueSym r
+    , IC.Literal r
+    , IC.NumericExpression r
+    , RC.RenderValue r
+    , RC.ValueElim r
+    )
   => SValue r -> SValue r
 indexToInt' v = v `smartSub` IC.litInt 1

@@ -31,6 +31,7 @@ packages:
 - drasil-makefile
 - drasil-meta-analysis
 - drasil-metadata
+- drasil-natural-language
 - drasil-printers
 - drasil-system
 - drasil-testing-kit

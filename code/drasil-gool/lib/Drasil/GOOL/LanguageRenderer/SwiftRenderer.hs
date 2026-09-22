@@ -962,7 +962,7 @@ swiftCast t' v' = do
   unwrap $ mkStateVal (pure t) (R.castObj (renderType t) (RC.value v))
 
 swiftIndexFunc
-  :: (ValueSym r, InternalValueExp r, VariableSym r)
+  :: (TypeSym r, ValueSym r, InternalValueExp r, VariableSym r)
   => SValue r -> SValue r -> SValue r
 swiftIndexFunc l v' = do
   v <- v'
@@ -971,7 +971,7 @@ swiftIndexFunc l v' = do
   objMethodCallNamedArgs int l swiftIndex [(ofArg, pure v)]
 
 swiftStrideFunc
-  :: (VariableSym r, RenderValue r, ValueExpression r)
+  :: (TypeSym r, VariableSym r, RenderValue r, ValueExpression r)
   => SValue r -> SValue r -> SValue r -> SValue r
 swiftStrideFunc beg end step = let t = listType int
                                    fromArg = var swiftFrom int
@@ -991,11 +991,19 @@ swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)
     (obj swiftEncoding)])]
 
 swiftReadLineFunc
-  :: (ValueSym r, RenderValue r, ValueElim r, ValueExpression r) => SValue r
+  :: (TypeSym r, ValueSym r, RenderValue r, ValueElim r, ValueExpression r)
+  => SValue r
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
 
 swiftReadFileFunc
-  :: (VariableSym r, ValueSym r, RenderValue r, ValueElim r, ValueExpression r)
+  ::
+    ( TypeSym r
+    , VariableSym r
+    , ValueSym r
+    , RenderValue r
+    , ValueElim r
+    , ValueExpression r
+    )
   => SValue r -> SValue r
 swiftReadFileFunc v = swiftTryVal $
   funcAppNamedArgs CP.stringRender' string [contentsArg, encodingArg]
@@ -1005,13 +1013,13 @@ swiftReadFileFunc v = swiftTryVal $
     encodingArg = (var "encoding" string, encVal)
 
 swiftSplitFunc
-  :: (InternalValueExp r, Literal r, VariableSym r)
+  :: (InternalValueExp r, TypeSym r, Literal r, VariableSym r)
   => Char -> SValue r -> SValue r
 swiftSplitFunc d s = let sepArg = var swiftSepBy char
   in objMethodCallNamedArgs (listType string) s swiftSplit [(sepArg, litChar d)]
 
 swiftJoinedFunc
-  :: (InternalValueExp r, Literal r, VariableSym r)
+  :: (InternalValueExp r, TypeSym r, Literal r, VariableSym r)
   => Char -> SValue r -> SValue r
 swiftJoinedFunc d s = let sepArg = var swiftSep char
   in objMethodCallNamedArgs string s swiftJoined [(sepArg, litChar d)]

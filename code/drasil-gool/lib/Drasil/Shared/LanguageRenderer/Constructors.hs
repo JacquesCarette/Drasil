@@ -134,7 +134,7 @@ mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 -- value passed to the operator is a float, this function preserves that type
 -- by casting the result to a float.
 unExprNumDbl
-  :: (OpElim r, RenderValue r, TypeElim r, ValueElim r, ValueSym r)
+  :: (OpElim r, RenderValue r, TypeSym r, TypeElim r, ValueElim r, ValueSym r)
   => VSUnOp r -> SValue r -> SValue r
 unExprNumDbl u' v' = do
   u <- u'
@@ -144,7 +144,7 @@ unExprNumDbl u' v' = do
 
 -- Only used by unExprNumDbl
 unExprCastFloat
-  :: (RenderValue r, TypeElim r)
+  :: (TypeSym r, RenderValue r, TypeElim r)
   => r TypeData -> r Value -> SValue r
 unExprCastFloat t = castType (getCodeType t) . toState
   where castType Float = cast float
@@ -186,7 +186,7 @@ binExpr' b' v1' v2' = do
 -- either value passed to the operator is a float, this function preserves that
 -- type by casting the result to a float.
 binExprNumDbl'
-  :: (OpElim r, RenderValue r, TypeElim r, ValueElim r, ValueSym r)
+  :: (OpElim r, RenderValue r, TypeSym r, TypeElim r, ValueElim r, ValueSym r)
   => VSBinOp r -> SValue r -> SValue r -> SValue r
 binExprNumDbl' b' v1' v2' = do
   v1 <- v1'
@@ -198,7 +198,7 @@ binExprNumDbl' b' v1' v2' = do
 
 -- Only used by binExprNumDbl'
 binExprCastFloat
-  :: (RenderValue r, TypeElim r)
+  :: (RenderValue r, TypeSym r, TypeElim r)
   => r TypeData -> r TypeData -> r Value -> SValue r
 binExprCastFloat t1 t2 = castType (getCodeType t1) (getCodeType t2) . toState
   where castType Float _ = cast float

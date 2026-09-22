@@ -988,6 +988,7 @@ jlOut
   ::
     ( BodySym r bod block
     , BlockSym r block stmt
+    , TypeSym r
     , ValueSym r
     , Literal r
     , NumericExpression r

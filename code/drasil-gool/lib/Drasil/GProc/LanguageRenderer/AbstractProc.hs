@@ -75,7 +75,7 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Lists and Arrays --
 
-innerType :: (IC.TypeElim r) => VS (r TypeData) -> VS (r TypeData)
+innerType :: (TypeSym r, IC.TypeElim r) => VS (r TypeData) -> VS (r TypeData)
 innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
@@ -94,7 +94,8 @@ listAdd fnName list idx val = valStmt $
 
 arrayElem
   ::
-    ( IC.ValueSym r
+    ( TypeSym r
+    , IC.ValueSym r
     , IndexTranslator r
     , RC.RenderVariable r
     , IC.TypeElim r

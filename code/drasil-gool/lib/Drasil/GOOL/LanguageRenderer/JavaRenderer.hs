@@ -973,6 +973,7 @@ jOut
   ::
     ( BodySym r bod block
     , BlockSym r block stmt
+    , TypeSym r
     , ValueSym r
     , Literal r
     , Comparison r

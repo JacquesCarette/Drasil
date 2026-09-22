@@ -22,12 +22,13 @@ observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
 -- | Makes a variable @x@.
-x :: (VariableSym r) => SVariable r
+x :: (TypeSym r, VariableSym r) => SVariable r
 x = var "x" int
 
 -- | Acces the @x@ attribute of @self@.
 selfX ::
-  ( VariableSym r
+  ( TypeSym r
+  , VariableSym r
   , OOVariableSym r
   , SelfSym r
   , VariableValue r
@@ -46,6 +47,7 @@ helperClass
     , ClassSym r mthd stvr
     , OOMethodSym r vis mthd attch bod
     , PrintConsole r stmt
+    , TypeSym r
     , Literal r
     , VariableSym r
     , OOVariableSym r
@@ -60,6 +62,7 @@ helperClass = buildClass Nothing [stateVar public instanceLevel x]
 observerConstructor
   ::
     ( BodySym r bod block
+    , TypeSym r
     , VariableSym r
     , OOMethodSym r vis mthd attch bod
     , Literal r
@@ -72,6 +75,7 @@ printNumMethod
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , OOMethodSym r vis mthd attch bod
     , AttachmentSym r attch
     , VisibilitySym r vis

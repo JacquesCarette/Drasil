@@ -25,11 +25,11 @@ vectorClass = docClass "Vectors of doubles and common vector-related operations.
 vecVar :: (VariableSym r, OOTypeSym r) => String -> SVariable r
 vecVar v = var v (obj "Vector")
 
-localV :: VariableSym r => SVariable r
+localV :: (TypeSym r, VariableSym r) => SVariable r
 localV = var "v" (arrayType double)
 
 thisV
-  :: (VariableSym r, OOVariableSym r, SelfSym r, VariableValue r)
+  :: (TypeSym r, VariableSym r, OOVariableSym r, SelfSym r, VariableValue r)
   => SVariable r
 thisV = instanceVarSelf localV
 

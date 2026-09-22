@@ -42,6 +42,7 @@ genAllInputCalls
     , Argument r
     , Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -72,7 +73,8 @@ genAllInputCalls = do
 -- | Generates a call to the function for reading inputs from a file.
 genInputCall
   ::
-    ( OOTypeSym r
+    ( TypeSym r
+    , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
     , VariableValue r
@@ -89,7 +91,8 @@ genInputCall = do
 -- | Generates a call to the function for calculating derived inputs.
 genDerivedCall
   ::
-    ( OOTypeSym r
+    ( TypeSym r
+    , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
     , VariableValue r
@@ -110,6 +113,7 @@ genConstraintCall
     , Argument r
     , Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -142,6 +146,7 @@ genCalcCall
     , Argument r
     , Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -177,6 +182,7 @@ genOutputCall
     , Argument r
     , Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -209,6 +215,7 @@ genFuncCall
     , Argument r
     , Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -244,7 +251,8 @@ genFuncCall n t funcPs = do
 -- function.
 genInOutCall
   ::
-    ( OOTypeSym r
+    ( TypeSym r
+    , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
     , VariableValue r
@@ -295,7 +303,8 @@ genCall n = do
 -- inputs, then the function for checking input constraints.
 genAllInputCallsProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableSym r
@@ -322,7 +331,7 @@ genAllInputCallsProc = do
 
 -- | Generates a call to the function for reading inputs from a file.
 genInputCallProc
-  :: (FuncAppStatement r stmt, VariableSym r, VariableValue r)
+  :: (FuncAppStatement r stmt, TypeSym r, VariableSym r, VariableValue r)
   => GenState (Maybe (MS (r stmt)))
 genInputCallProc = do
   giName <- genICName GetInput
@@ -330,7 +339,7 @@ genInputCallProc = do
 
 -- | Generates a call to the function for calculating derived inputs.
 genDerivedCallProc
-  :: (FuncAppStatement r stmt, VariableSym r, VariableValue r)
+  :: (FuncAppStatement r stmt, TypeSym r, VariableSym r, VariableValue r)
   => GenState (Maybe (MS (r stmt)))
 genDerivedCallProc = do
   dvName <- genICName DerivedValuesFn
@@ -339,7 +348,8 @@ genDerivedCallProc = do
 -- | Generates a call to the function for checking constraints on the input.
 genConstraintCallProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableSym r
@@ -366,7 +376,8 @@ genConstraintCallProc = do
 -- value being calculated.
 genCalcCallProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableValue r
@@ -396,7 +407,8 @@ genCalcCallProc c = do
 -- | Generates a call to the function for printing outputs.
 genOutputCallProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableSym r
@@ -423,7 +435,8 @@ genOutputCallProc = do
 -- the function.
 genFuncCallProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , Literal r
     , MathConstant r
     , VariableSym r
@@ -456,7 +469,7 @@ genFuncCallProc n t funcPs = do
 -- | Generates a function call given the name, inputs, and outputs for the
 -- function.
 genInOutCallProc
-  :: (FuncAppStatement r stmt, VariableSym r, VariableValue r)
+  :: (FuncAppStatement r stmt, TypeSym r, VariableSym r, VariableValue r)
   => Name
   -> GenState [CodeVarChunk]
   -> GenState [CodeVarChunk]

@@ -45,7 +45,7 @@ description = "Tests various GOOL functions. It should run without errors."
 descriptionProc = "Tests various GProc functions. It should run without errors."
 
 -- | Variable for a list of doubles
-myOtherList :: (VariableSym r) => SVariable r
+myOtherList :: (TypeSym r, VariableSym r) => SVariable r
 myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
@@ -75,6 +75,7 @@ helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
 helloInitVariables
   ::
     ( BlockSym r block stmt
+    , TypeSym r
     , Literal r
     , ScopeSym r
     , VariableSym r
@@ -162,7 +163,7 @@ objectTests = block [comment "Object tests",
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
-  mySlicedList10, mySlicedList11 :: (VariableSym r) => SVariable r
+  mySlicedList10, mySlicedList11 :: (TypeSym r, VariableSym r) => SVariable r
 mySlicedList = var "mySlicedList" (listType double)
 mySlicedList2 = var "mySlicedList2" (listType double)
 mySlicedList3 = var "mySlicedList3" (listType double)
@@ -177,7 +178,8 @@ mySlicedList11 = var "mySlicedList11" (listType double)
 
 listSliceTests
   ::
-    ( Literal r
+    ( TypeSym r
+    , Literal r
     , ScopeSym r
     , VariableSym r
     , VariableValue r
@@ -308,7 +310,8 @@ listSliceTests = [
 {-# ANN module "HLint: ignore Evaluate" #-}
 helloIfBody
   ::
-    ( Literal r
+    ( TypeSym r
+    , Literal r
     , ScopeSym r
     , VariableSym r
     , VariableValue r
@@ -401,6 +404,7 @@ helloIfExists
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , VariableSym r
     , VariableValue r
     , ControlStatement r stmt bod
@@ -415,6 +419,7 @@ helloSwitch
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , Literal r
     , VariableSym r
     , VariableValue r
@@ -431,6 +436,7 @@ helloForLoop
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , Literal r
     , VariableSym r
     , VariableValue r
@@ -447,6 +453,7 @@ helloWhileLoop
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , Literal r
     , VariableSym r
     , VariableValue r
@@ -464,6 +471,7 @@ helloForEachLoop
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , Literal r
     , VariableSym r
     , VariableValue r

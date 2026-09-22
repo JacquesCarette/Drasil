@@ -317,12 +317,19 @@ observerListName :: Label
 observerListName = "observerList"
 
 initObserverList
-  :: (VariableSym r, DeclStatement r stmt bod)
+  :: (TypeSym r, VariableSym r, DeclStatement r stmt bod)
   => VS (r TypeData) -> [SValue r] -> r ScopeData -> MS (r stmt)
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
 addObserver
-  :: (VariableSym r, VariableValue r, ValueSym r, List r, ListStatement r stmt)
+  ::
+    ( TypeSym r
+    , VariableSym r
+    , VariableValue r
+    , ValueSym r
+    , List r
+    , ListStatement r stmt
+    )
   => SValue r -> MS (r stmt)
 addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)

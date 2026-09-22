@@ -89,6 +89,7 @@ value
     , Argument r
     , OO.Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -129,7 +130,8 @@ value u s t = do
 -- If variable is neither, just construct it with 'var' and return it.
 variable
   ::
-    ( OOTypeSym r
+    ( TypeSym r
+    , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
     , SelfSym r
@@ -158,7 +160,8 @@ variable s t = do
 -- 'classVariable' is called.
 inputVariable
   ::
-    ( OOTypeSym r
+    ( TypeSym r
+    , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
     , SelfSym r
@@ -186,7 +189,8 @@ inputVariable Bundled Const v = do
 -- variable for one of the constants.
 constVariable
   ::
-    ( OOTypeSym r
+    ( TypeSym r
+    , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
     , SelfSym r
@@ -230,6 +234,7 @@ mkVal
     , Argument r
     , OO.Literal r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -260,7 +265,8 @@ mkVal v = do
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
 mkVar
   ::
-    ( OOTypeSym r
+    ( TypeSym r
+    , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
     , SelfSym r
@@ -280,7 +286,8 @@ mkVar v = do
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
 mkParam
   ::
-    ( OOTypeSym r
+    ( TypeSym r
+    , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
     , VariableValue r
@@ -410,6 +417,7 @@ genMethod f n desc p r b = do
 genInOutFunc
   ::
     ( OO.Literal r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -455,6 +463,7 @@ convExpr
     ( ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -567,6 +576,7 @@ convCall
     ( ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -786,6 +796,7 @@ convStmt
     , ValueSym r
     , Argument r
     , MathConstant r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -933,6 +944,7 @@ readData
     , Comparison r
     , NumericExpression r
     , SelfSym r
+    , TypeSym r
     , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
@@ -972,6 +984,7 @@ readData ddef = do
             , BodySym r bod block
             , OO.Literal r
             , SelfSym r
+            , TypeSym r
             , OOTypeSym r
             , VariableSym r
             , OOVariableSym r
@@ -1012,6 +1025,7 @@ readData ddef = do
         lineData
           ::
             ( SelfSym r
+            , TypeSym r
             , OOTypeSym r
             , ScopeSym r
             , VariableSym r
@@ -1034,7 +1048,8 @@ readData ddef = do
         ---------------
         clearTemps
           ::
-            ( OOTypeSym r
+            ( TypeSym r
+            , OOTypeSym r
             , ScopeSym r
             , VariableSym r
             , DeclStatement r stmt bod
@@ -1046,7 +1061,8 @@ readData ddef = do
         ---------------
         clearTemp
           ::
-            ( OOTypeSym r
+            ( TypeSym r
+            , OOTypeSym r
             , ScopeSym r
             , VariableSym r
             , DeclStatement r stmt bod
@@ -1057,13 +1073,25 @@ readData ddef = do
           (innerType $ convTypeOO t)) scp []) (codeType v)
         ---------------
         appendTemps
-          :: (ListStatement r stmt, VariableSym r, VariableValue r, OOTypeSym r)
+          ::
+            ( ListStatement r stmt
+            , VariableSym r
+            , VariableValue r
+            , TypeSym r
+            , OOTypeSym r
+            )
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp
-          :: (ListStatement r stmt, VariableSym r, VariableValue r, OOTypeSym r)
+          ::
+            ( ListStatement r stmt
+            , VariableSym r
+            , VariableValue r
+            , TypeSym r
+            , OOTypeSym r
+            )
           => String -> DataItem -> GenState (MS (r stmt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convTypeOO t))
@@ -1072,7 +1100,8 @@ readData ddef = do
 -- | Get entry variables.
 getEntryVars
   ::
-    ( OOTypeSym r
+    ( TypeSym r
+    , OOTypeSym r
     , VariableSym r
     , OOVariableSym r
     , SelfSym r
@@ -1094,7 +1123,8 @@ getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
 -- call 'valueOf' to reference its value.
 valueProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , OO.Literal r
     , NativeVector r
     , MathConstant r
@@ -1173,6 +1203,7 @@ constVariableProc Inline _ _ = error $ "mkVar called on a constant, but user " +
 mkValProc
   ::
     ( NativeVector r
+    , TypeSym r
     , ValueSym r
     , OO.Literal r
     , MathConstant r
@@ -1196,7 +1227,7 @@ mkValProc v = do
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
-mkVarProc :: (VariableSym r) => CodeVarChunk -> GenState (SVariable r)
+mkVarProc :: (TypeSym r, VariableSym r) => CodeVarChunk -> GenState (SVariable r)
 mkVarProc v = do
   t <- codeType v
   let toGOOLVar Nothing = variableProc (codeName v) (convType t)
@@ -1236,7 +1267,7 @@ genModDefProc (Mod n desc is cs fs) = case cs of
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
 mkParamProc
-  :: (VariableSym r, ParameterSym r)
+  :: (TypeSym r, VariableSym r, ParameterSym r)
   => ParameterChunk -> GenState (MS (r ParamData))
 mkParamProc p = do
   v <- mkVarProc (quantvar p)
@@ -1247,7 +1278,8 @@ mkParamProc p = do
 -- | Generates a public function.
 publicFuncProc
   ::
-    ( OO.Literal r
+    ( TypeSym r
+    , OO.Literal r
     , VariableSym r
     , VariableValue r
     , ParameterSym r
@@ -1276,7 +1308,8 @@ publicFuncProc n t desc ps r b = do
 -- | Generates a private function.
 privateFuncProc
   ::
-    ( OO.Literal r
+    ( TypeSym r
+    , OO.Literal r
     , VariableSym r
     , VariableValue r
     , ParameterSym r
@@ -1307,7 +1340,8 @@ privateFuncProc n t desc ps r b = do
 -- description of what is returned (if applicable), and body.
 genMethodProc
   ::
-    ( OO.Literal r
+    ( TypeSym r
+    , OO.Literal r
     , VariableSym r
     , VariableValue r
     , ParameterSym r
@@ -1347,6 +1381,7 @@ genFuncProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , NativeVector r
     , OO.Literal r
@@ -1399,6 +1434,7 @@ genModFuncsProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , OO.Literal r
     , NativeVector r
@@ -1440,6 +1476,7 @@ readDataProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , OO.Literal r
     , NativeVector r
@@ -1479,6 +1516,7 @@ readDataProc ddef = do
           ::
             ( BlockSym r block stmt
             , BodySym r bod block
+            , TypeSym r
             , OO.Literal r
             , VariableSym r
             , VariableValue r
@@ -1516,7 +1554,8 @@ readDataProc ddef = do
         ---------------
         lineData
           ::
-            ( VariableSym r
+            ( TypeSym r
+            , VariableSym r
             , VariableValue r
             , NativeVector r
             , ScopeSym r
@@ -1534,33 +1573,34 @@ readDataProc ddef = do
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
         clearTemps
-          :: (VariableSym r, ScopeSym r, DeclStatement r stmt bod)
+          :: (TypeSym r, VariableSym r, ScopeSym r, DeclStatement r stmt bod)
           => Maybe String -> [DataItem] -> r ScopeData -> [GenState (MS (r stmt))]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
         clearTemp
-          :: (VariableSym r, ScopeSym r, DeclStatement r stmt bod)
+          :: (TypeSym r, VariableSym r, ScopeSym r, DeclStatement r stmt bod)
           => String -> DataItem -> r ScopeData -> GenState (MS (r stmt))
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
           (innerType $ convType t)) scp []) (codeType v)
         ---------------
         appendTemps
-          :: (ListStatement r stmt, VariableSym r, VariableValue r)
+          :: (TypeSym r, ListStatement r stmt, VariableSym r, VariableValue r)
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp
-          :: (ListStatement r stmt, VariableSym r, VariableValue r)
+          :: (TypeSym r , ListStatement r stmt, VariableSym r, VariableValue r)
           => String -> DataItem -> GenState (MS (r stmt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convType t))
           (valueOf $ var (codeName v ++ sfx) (convType t))) (codeType v)
 
 -- | Get entry variables.
-getEntryVarsProc :: (VariableSym r) => Maybe String -> LinePattern ->
-  GenState [SVariable r]
+getEntryVarsProc
+  :: (TypeSym r, VariableSym r)
+  => Maybe String -> LinePattern -> GenState [SVariable r]
 getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
   (variableProc (codeName v ++ st) . innerType . convType))
     s) (getPatternInputs lp)
@@ -1568,7 +1608,8 @@ getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
 -- | Converts an 'Expr' to a GOOL Value.
 convExprProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , OO.Literal r
     , MathConstant r
     , VariableSym r
@@ -1666,7 +1707,8 @@ convExprProc (RealI c ri)  = do
 -- call generator (used if the function is in the library export map).
 convCallProc
   ::
-    ( ValueSym r
+    ( TypeSym r
+    , ValueSym r
     , OO.Literal r
     , MathConstant r
     , VariableSym r
@@ -1709,6 +1751,7 @@ convStmtProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , OO.Literal r
     , MathConstant r
@@ -1837,6 +1880,7 @@ genDataFuncProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , ValueSym r
     , NativeVector r
     , OO.Literal r
@@ -1878,6 +1922,7 @@ publicInOutFuncProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , OO.Literal r
     , VariableSym r
     , VariableValue r
@@ -1903,6 +1948,7 @@ privateInOutFuncProc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , TypeSym r
     , OO.Literal r
     , VariableSym r
     , VariableValue r
@@ -1929,7 +1975,8 @@ privateInOutFuncProc n = genInOutFuncProc (inOutFunc n private) (docInOutFunc n 
 -- list of inputs, list of outputs, and body.
 genInOutFuncProc
   ::
-    ( OO.Literal r
+    ( TypeSym r
+    , OO.Literal r
     , VariableSym r
     , VariableValue r
     , ScopeSym r
@@ -1969,9 +2016,9 @@ genInOutFuncProc f docf n desc ins' outs' b = do
 -- Used for readData and readDataProc
 l_line, l_lines, l_linetokens, l_infile, l_i :: Label
 var_line, var_lines, var_linetokens, var_infile, var_i ::
-  (VariableSym r) => SVariable r
+  (TypeSym r, VariableSym r) => SVariable r
 v_line, v_lines, v_linetokens, v_infile, v_i ::
-  (VariableSym r, VariableValue r) => SValue r
+  (TypeSym r, VariableSym r, VariableValue r) => SValue r
 l_line = "line"
 var_line = var l_line string
 v_line = valueOf var_line

@@ -108,7 +108,7 @@ type Variable = VarData
 type SVariable a = VS (a Variable)
 
 -- | Class for representing variables.
-class (TypeSym r) => VariableSym r where
+class VariableSym r where
   -- | An instance- or function-level variable, separate from its instance (i.e. `v`, not `o.v`)
   var       :: Label -> VS (r TypeData) -> SVariable r
   -- | An instance- or function-level constant, separate from its instance (i.e. `v`, not `o.v`)
@@ -122,20 +122,20 @@ class VariableElim r where
   variableName :: r Variable -> String
   variableType :: r Variable -> r TypeData
 
-listVar :: (VariableSym r) => Label -> VS (r TypeData) -> SVariable r
+listVar :: (TypeSym r, VariableSym r) => Label -> VS (r TypeData) -> SVariable r
 listVar n t = var n (listType t)
 
-listOf :: (VariableSym r) => Label -> VS (r TypeData) -> SVariable r
+listOf :: (TypeSym r, VariableSym r) => Label -> VS (r TypeData) -> SVariable r
 listOf = listVar
 
 type Value = ValData
 type SValue a = VS (a Value)
 
 -- | Class for representing a value.
-class (TypeSym r) => ValueSym r where
+class ValueSym r where
   valueType :: r Value -> r TypeData
 
-class (TypeSym r) => TypeElim r where
+class TypeElim r where
   getCodeType :: r TypeData -> CodeType
 
 class Argument r where
@@ -246,10 +246,10 @@ type VSBinder a = VS (a BinderD)
 -- to a type, scope, etc.
 -- As of July 2026, integration of this typeclass is still WIP, blocked
 -- by issues with our variable map.
-class (TypeSym r) => BinderSym r where
+class BinderSym r where
   binder :: Label -> VS (r TypeData) -> VSBinder r
 
-class (BinderSym r) => BinderElim r where
+class BinderElim r where
   binderName :: r BinderD -> String
   binderType :: r BinderD -> r TypeData
 

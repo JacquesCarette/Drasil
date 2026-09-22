@@ -73,10 +73,10 @@ instance (LiftLogging u1 l1, LiftLogging u2 l2) => LiftLogging (u1, u2) (l1, l2)
   lowerLogging = bimap lowerLogging lowerLogging
 
 -- TODO [Brandon Bosman, 06/19/2026]: This should be passed down from drasil-code
-varLogFile :: (VariableSym r) => SVariable r
+varLogFile :: (TypeSym r, VariableSym r) => SVariable r
 varLogFile = var "outfile" outfile
 
-valLogFile :: (VariableSym r, VariableValue r) => SValue r
+valLogFile :: (TypeSym r, VariableSym r, VariableValue r) => SValue r
 valLogFile = valueOf varLogFile
 
 -- TODO [Brandon Bosman, 06/19/2026]: This should be passed down from drasil-code
@@ -87,6 +87,7 @@ logVarUpdate
   ::
     ( FileHandling r stmt
     , PrintFile r stmt
+    , TypeSym r
     , VariableSym r
     , VariableValue r
     , VariableElim r
@@ -110,6 +111,7 @@ instance
   , AssignStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
+  , TypeSym r
   , VariableSym r
   , VariableValue r
   , VariableElim r
@@ -139,6 +141,7 @@ instance
   , DeclStatement r stmt bod
   , FileHandling r stmt
   , PrintFile r stmt
+  , TypeSym r
   , VariableSym r
   , VariableValue r
   , VariableElim r
@@ -173,6 +176,7 @@ instance
   , FileHandling r stmt
   , PrintFile r stmt
   , ReadConsole r stmt
+  , TypeSym r
   , VariableSym r
   , VariableValue r
   , VariableElim r
@@ -199,6 +203,7 @@ instance
   , FileHandling r stmt
   , PrintFile r stmt
   , ReadFile r stmt
+  , TypeSym r
   , VariableSym r
   , VariableValue r
   , VariableElim r
@@ -217,6 +222,7 @@ instance
   , StringStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
+  , TypeSym r
   , VariableSym r
   , VariableValue r
   , VariableElim r

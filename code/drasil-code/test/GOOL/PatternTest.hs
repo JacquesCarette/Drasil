@@ -27,7 +27,7 @@ observerType :: (OOTypeSym r) => VS (r TypeData)
 observerType = obj observerName
 
 -- | Variables used in the generated code.
-n :: (VariableSym r) => SVariable r
+n :: (TypeSym r, VariableSym r) => SVariable r
 n = var nName int
 obs1, obs2 :: (OOTypeSym r, VariableSym r) => SVariable r
 obs1 = var obs1Name observerType

@@ -18,8 +18,8 @@ import Drasil.Shared.State (FS, CS, VS, MS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
-  MethodTypeSym(..), RenderMethod(..))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, MethodTypeSym(..),
+  RenderMethod(..))
 
 class (CommonRenderSym r vis typ stmt mthd bod block, ParameterSym r,
   MethodSym r vis typ mthd bod, IG.OOMethodSym r vis typ mthd attch bod,

@@ -14,8 +14,7 @@ import Drasil.Shared.AST (ParamData)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
-  RenderMethod(..))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderMethod(..))
 
 class (CommonRenderSym r vis typ stmt mthd bod block, ParameterSym r,
   VisibilitySym r vis, MethodSym r vis typ mthd bod, IP.ModuleSym r mod mthd,

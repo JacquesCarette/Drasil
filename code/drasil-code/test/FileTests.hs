@@ -14,14 +14,14 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
 
 -- | Creates a program in GOOL to test reading and writing to files.
 fileTestsOO
-  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
   => OO.GSProgram r prg
 fileTestsOO = OO.prog "FileTests" "" [OO.fileDoc (OO.buildModule "FileTests" []
   [fileTestMethod] [])]
 
 -- | Creates a program in GProc to test reading and writing to files.
 fileTestsProc
-  :: (ProcProg r vis stmt mthd prg file mod bod block)
+  :: (ProcProg r vis typ stmt mthd prg file mod bod block)
   => GProc.GSProgram r prg
 fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
   "FileTests" [] [fileTestMethod])]
@@ -31,9 +31,10 @@ fileTestMethod
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , Literal r
+    , TypeSym r typ
+    , Literal r typ
     , ScopeSym r
-    , VariableSym r
+    , VariableSym r typ
     , VariableValue r
     , Comparison r
     , List r
@@ -43,7 +44,7 @@ fileTestMethod
     , FileHandling r stmt
     , PrintFile r stmt
     , ReadFile r stmt
-    , MethodSym r vis mthd bod
+    , MethodSym r vis typ mthd bod
     )
   => MS (r mthd)
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
@@ -52,9 +53,10 @@ fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 writeStory
   ::
     ( BlockSym r block stmt
-    , Literal r
+    , TypeSym r typ
+    , Literal r typ
     , ScopeSym r
-    , VariableSym r
+    , VariableSym r typ
     , VariableValue r
     , Comparison r
     , DeclStatement r stmt bod
@@ -85,7 +87,9 @@ writeStory = block [
   listDec 0 (var "fileContents" (listType string)) mainFn]
 
 -- | Generates functions to read from a file.
-readStory :: (VariableSym r, VariableValue r, ReadFile r stmt) => MS (r stmt)
+readStory
+  :: (TypeSym r typ, VariableSym r typ, VariableValue r, ReadFile r stmt)
+  => MS (r stmt)
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
   (var "fileContents" (listType string))
 
@@ -94,9 +98,10 @@ readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
 goodBye
   ::
     ( BlockSym r block stmt
+    , TypeSym r typ
     , Comparison r
-    , Literal r
-    , VariableSym r
+    , Literal r typ
+    , VariableSym r typ
     , VariableValue r
     , List r
     , ControlStatement r stmt bod

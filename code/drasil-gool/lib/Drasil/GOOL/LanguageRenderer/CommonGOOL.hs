@@ -26,7 +26,7 @@ constDecDef
      , ScopeElim r
      , UnRepr r TypeData
      , ValueElim r
-     , VariableElim r
+     , VariableElim r TypeData
      )
   => SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
 constDecDef vr' scp v'= do
@@ -37,7 +37,7 @@ constDecDef vr' scp v'= do
   mkStmt (renderConstDecDef vr v)
 
 classMethodCall
-  :: (RenderValue r, UnRepr r TypeData)
+  :: (RenderValue r TypeData, UnRepr r TypeData)
   => String
   -> VS (r TypeData)
   -> VS (r TypeData)
@@ -49,16 +49,21 @@ classMethodCall f t cls vs ns = do
   call Nothing (Just $ renderType c <> dot) f t vs ns
 
 listAppend
-  :: (TypeSym r, InternalValueExp r, ValueStatement r stmt)
+  :: (TypeSym r typ, InternalValueExp r typ, ValueStatement r stmt)
   => String -> SValue r -> SValue r -> MS (r stmt)
 listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 
 listAdd
-  :: (IndexTranslator r, InternalValueExp r, ValueStatement r stmt)
+  ::
+    ( TypeSym r typ
+    , IndexTranslator r
+    , InternalValueExp r typ
+    , ValueStatement r stmt
+    )
   => String -> SValue r -> SValue r -> SValue r -> MS (r stmt)
 listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]
 
 innerType
-  :: (TypeElim r, OOTypeSym r)
-  => VS (r TypeData) -> VS (r TypeData)
+  :: (TypeElim r typ, TypeSym r typ, OOTypeSym r typ)
+  => VS (r typ) -> VS (r typ)
 innerType t = t >>= (convTypeOO . getInnerType . getCodeType)

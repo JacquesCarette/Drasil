@@ -11,7 +11,7 @@ import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable,
 import qualified Drasil.Shared.InterfaceCommon as IC
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import qualified Drasil.GProc.RendererClassesProc as RP
-import Drasil.Shared.AST (isSource, ScopeData, TypeData, ParamData)
+import Drasil.Shared.AST (isSource, ScopeData, ParamData)
 import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)
@@ -65,7 +65,7 @@ buildModule n imps bot fs = RP.modFromData n (do
   pure $ emptyIfEmpty fnDocs (vibcat (filter (not . isEmpty) [is, fnDocs])))
 
 docMod
-  :: (RP.RenderFile r file mod)
+  :: (RC.BlockCommentSym r, RP.RenderFile r file mod)
   => String -> String -> String -> [String] -> String -> FS (r file) -> FS (r file)
 docMod e d wm a dt fl = RP.commentedMod fl
   (RC.docComment $ CP.modDoc' d wm a dt . addExt e <$> getModuleName)
@@ -75,25 +75,37 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Lists and Arrays --
 
-innerType :: (IC.TypeElim r) => VS (r TypeData) -> VS (r TypeData)
+innerType :: (TypeSym r typ, IC.TypeElim r typ) => VS (r typ) -> VS (r typ)
 innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
 listAppend
-  :: (TypeSym r, ValueStatement r stmt, ValueExpression r)
+  :: (TypeSym r typ, ValueStatement r stmt, ValueExpression r typ)
   => String -> SValue r -> SValue r -> MS (r stmt)
 listAppend fnName list val = valStmt $
   funcApp fnName IC.void [list, val]
 
 -- | Call to insert a value into a list as a function call
 listAdd
-  :: (IndexTranslator r, ValueStatement r stmt, ValueExpression r)
+  ::
+    ( TypeSym r typ
+    , IndexTranslator r
+    , ValueStatement r stmt
+    , ValueExpression r typ
+    )
   => String -> SValue r -> SValue r -> SValue r -> MS (r stmt)
 listAdd fnName list idx val = valStmt $
   funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
 arrayElem
-  :: (IndexTranslator r, RC.RenderVariable r, IC.TypeElim r, RC.ValueElim r)
+  ::
+    ( TypeSym r typ
+    , IC.ValueSym r typ
+    , IndexTranslator r
+    , RC.RenderVariable r typ
+    , IC.TypeElim r typ
+    , RC.ValueElim r
+    )
   => SValue r -> SValue r -> SVariable r
 arrayElem arr' i' = do
   i <- IC.intToIndex i'
@@ -104,7 +116,7 @@ arrayElem arr' i' = do
   mkStateVar vName vType vRender
 
 funcDecDef
-  :: (RP.ProcRenderSym r vis stmt mthd file mod bod block)
+  :: (RP.ProcRenderSym r vis typ stmt mthd file mod bod block)
   => SVariable r -> r ScopeData -> [SVariable r] -> MS (r bod) -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
@@ -117,10 +129,10 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 function
-  :: (RC.MethodTypeSym r, RP.ProcRenderMethod r vis mthd bod)
+  :: (RC.MethodTypeSym r typ, RP.ProcRenderMethod r vis typ mthd bod)
   => Label
   -> r vis
-  -> VS (r TypeData)
+  -> VS (r typ)
   -> [MS (r ParamData)]
   -> MS (r bod)
   -> MS (r mthd)

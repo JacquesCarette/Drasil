@@ -11,7 +11,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), VSBinder, Variable, Value,
   Set(..), InternalList(..), EmptyStatement(..), MultiStatement(..),
   ValueStatement(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
   VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
@@ -50,7 +50,7 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance OOProg CodeInfoOO () () () () () GOOLState () () () ()
+instance OOProg CodeInfoOO () () () () () () GOOLState () () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
@@ -87,7 +87,7 @@ instance BlockSym CodeInfoOO () () where
     sequence_ b
     pure $ pure $ error "[block] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance TypeSym CodeInfoOO where
+instance TypeSym CodeInfoOO () where
   bool            = pure $ pure $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
   int             = pure $ pure $ error "[int] The return value of this isn't used, and the thunk shouldn't fire."
   float           = pure $ pure $ error "[float] The return value of this isn't used, and the thunk shouldn't fire."
@@ -104,10 +104,10 @@ instance TypeSym CodeInfoOO where
   funcType    _ _ = pure $ pure $ error "[funcType] The return value of this isn't used, and the thunk shouldn't fire."
   void            = pure $ pure $ error "[void] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance OOTypeSym CodeInfoOO where
+instance OOTypeSym CodeInfoOO () where
   obj             _ = pure $ pure $ error "[obj] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance TypeElim CodeInfoOO where
+instance TypeElim CodeInfoOO () where
   getCodeType _ = Void
 
 instance ScopeSym CodeInfoOO where
@@ -115,12 +115,12 @@ instance ScopeSym CodeInfoOO where
   mainFn = noInfoScope
   local = noInfoScope
 
-instance VariableSym CodeInfoOO where
+instance VariableSym CodeInfoOO () where
   var       _ _ = pure $ pure $ error "[var] The return value of this isn't used, and the thunk shouldn't fire."
   constant  _ _ = pure $ pure $ error "[constant] The return value of this isn't used, and the thunk shouldn't fire."
   extVar  _ _ _ = pure $ pure $ error "[extVar] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance OOVariableSym CodeInfoOO where
+instance OOVariableSym CodeInfoOO () where
   classVar _ _ = pure $ pure $ error "[classVar] The return value of this isn't used, and the thunk shouldn't fire."
   classConst _ _ = pure $ pure $ error "[classConst] The return value of this isn't used, and the thunk shouldn't fire."
   classVarAccess    _ _   = pure $ pure $ error "[classVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
@@ -130,17 +130,17 @@ instance OOVariableSym CodeInfoOO where
 instance SelfSym CodeInfoOO where
   self              = pure $ pure $ error "[self] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance VariableElim CodeInfoOO where
+instance VariableElim CodeInfoOO () where
   variableName _ = ""
   variableType _ = pure $ error "[variableType] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance ValueSym CodeInfoOO where
+instance ValueSym CodeInfoOO () where
   valueType _ = pure $ error "[valueType] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance Argument CodeInfoOO where
   pointerArg = id
 
-instance Literal CodeInfoOO where
+instance Literal CodeInfoOO () where
   litTrue     = pure $ error "[litTrue] The return value of this isn't used, and the thunk shouldn't fire."
   litFalse    = pure $ error "[litFalse] The return value of this isn't used, and the thunk shouldn't fire."
   litChar   _ = pure $ error "[litChar] The return value of this isn't used, and the thunk shouldn't fire."
@@ -202,7 +202,7 @@ instance Comparison CodeInfoOO where
   (?==) = execute2
   (?!=) = execute2
 
-instance ValueExpression CodeInfoOO where
+instance ValueExpression CodeInfoOO () where
   inlineIf = execute3
   funcAppMixedArgs n _ = do
     _ <- currModCall n
@@ -218,7 +218,7 @@ instance ValueExpression CodeInfoOO where
 
   notNull = execute1
 
-instance OOValueExpression CodeInfoOO where
+instance OOValueExpression CodeInfoOO () where
   newObjMixedArgs _ vs ns = do
     sequence_ vs
     mapM_ fst ns
@@ -231,16 +231,14 @@ instance OOValueExpression CodeInfoOO where
     pure $ error "[extNewObjMixedArgs] The return value of this isn't used, and the thunk shouldn't fire."
   libNewObjMixedArgs = extNewObjMixedArgs
 
-instance InternalValueExp CodeInfoOO where
+instance InternalValueExp CodeInfoOO () where
   objMethodCallMixedArgs' n _ v vs ns = do
     _ <- v
     _ <- currModCall n vs ns
     pure $ pure $ error "[objMethodCallMixedArgs'] The return value of this isn't used, and the thunk shouldn't fire."
   classMethodCallMixedArgs' n _ cls vs ns = cls >> currModCall n vs ns
 
-instance FunctionSym CodeInfoOO where
-
-instance OOFunctionSym CodeInfoOO where
+instance OOFunctionSym CodeInfoOO () where
   func  _ _ l = do
     sequence_ l
     pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
@@ -288,7 +286,7 @@ instance InternalList CodeInfoOO () where
     _ <- vl
     pure $ pure $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance BinderSym CodeInfoOO where
+instance BinderSym CodeInfoOO () where
   binder _ _ = noInfoBinder
 
 instance EmptyStatement CodeInfoOO () where
@@ -427,7 +425,7 @@ instance ControlStatement CodeInfoOO () () where
     _ <- zoom lensMStoVS msg
     noInfo
 
-instance ObserverPattern CodeInfoOO () where
+instance ObserverPattern CodeInfoOO () () where
   notifyObservers f _ = do
     _ <- zoom lensMStoVS f
     pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
@@ -446,7 +444,7 @@ instance ParameterSym CodeInfoOO where
   param        _ = pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
   pointerParam _ = pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance MethodSym CodeInfoOO () () () where
+instance MethodSym CodeInfoOO () () () () where
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
   mainFunction = updateMEMandCM "main"
@@ -457,7 +455,7 @@ instance MethodSym CodeInfoOO () () () where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance OOMethodSym CodeInfoOO () () () () where
+instance OOMethodSym CodeInfoOO () () () () () where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo

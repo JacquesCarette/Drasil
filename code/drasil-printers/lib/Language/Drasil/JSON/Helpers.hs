@@ -2,19 +2,17 @@
 
 -- | Defines helper functions for creating jupyter notebooks.
 module Language.Drasil.JSON.Helpers (
-  -- * Types
-  Variation(..),
   -- * Jupyter-related
   markdownCell, codeCell, makeMetadata,
   -- * HTML Tag Wrappers
-  tr, td, figure, li, pa, ba, ol, ul, table,
-  wrap, wrap', refwrap, refID, reflink, reflinkURI, image, h, br, mkDiv,
-  stripnewLine,
+  tr, td, th, bold, em, li, pa, ba, table,
+  refwrap, refID, reflink, reflinkInfo, reflinkURI, image, h, mkDiv,
+  stripnewLine
 ) where
 
 import Prelude hiding ((<>))
 import qualified Prelude
-import Text.PrettyPrint (Doc, text, empty, (<>), vcat, hcat, render)
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, render)
 import Data.Text (Text)
 import qualified Data.Text as T (lines, pack)
 import Data.List (intersperse)
@@ -22,16 +20,23 @@ import Data.List.Split (splitOn)
 
 import Drasil.Data.Formats.JSON (JSON(..))
 import Language.Drasil.Document (MaxWidthPercent)
-import Language.Drasil.HTML.Helpers (img)
+
+import Drasil.Printers.Common hiding (wrap)
 import Language.Drasil.Printing.Helpers (bslash)
 
 data Variation = Class | Id
 
-tr, td, figure, li, pa, ba :: Doc -> Doc
+tr, td, th, bold, em, figure, li, pa, ba :: Doc -> Doc
 -- | Table row tag wrapper
 tr         = wrap "tr" []
 -- | Table cell tag wrapper
 td         = wrap "td" []
+-- | Table header tag wrapper
+th         = wrap' "th" []
+-- | Bold tag wrapper
+bold       = wrap' "b" []
+-- | Emphasis (italics) tag wrapper
+em         = wrap' "em" []
 -- | Figure tag wrapper
 figure     = wrap "figure" []
 -- | List tag wrapper
@@ -41,13 +46,9 @@ pa         = wrap "p" []
 -- | Bring attention to element wrapper.
 ba         = wrap "b" []
 
-ol, ul, table :: [String] -> Doc -> Doc
--- | Ordered list tag wrapper
-ol       = wrap "ol"
--- | Unordered list tag wrapper
-ul       = wrap "ul"
 -- | Table tag wrapper
-table    = wrap "table"
+table :: [String] -> Doc -> Doc
+table = wrap "table"
 
 wrap :: String -> [String] -> Doc -> Doc
 wrap a = wrapGen' vcat Class a empty
@@ -57,8 +58,7 @@ wrap' a = wrapGen' hcat Class a empty
 
 wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
 wrapGen' sepf _ s _ [] = \x ->
-  let tb c = text $ "<" ++ c ++ ">"
-  --in sepf [quote(tb s), x, quote(tb $ '/':s)]
+  let tb = angbrac . text
   in sepf [tb s, x, tb $ '/':s]
 wrapGen' sepf Class s _ ts = \x ->
   let tb c = text $ "<" ++ c ++ " class=\\\"" ++ foldr1 (++) (intersperse " " ts) ++ "\\\">"
@@ -78,11 +78,27 @@ refID i = text "<a id=\"" <> i <> text "\"></a>"
 -- | Helper for setting up links to references
 reflink :: String -> Doc -> Doc
 reflink ref txt = text "[" <> txt <> text ("](#" ++ ref ++ ")")
---reflink ref txt = text ("<a href=#" ++ ref ++ ">") <> txt <> text "</a>"
+
+-- | Helper for setting up links to references with additional information.
+reflinkInfo :: String -> Doc -> Doc -> Doc
+reflinkInfo rf txt info = text ("<a href=\"#" ++ rf ++ "\">") <> txt <> text "</a>" <+> info
 
 -- | Helper for setting up links to external URIs
 reflinkURI :: String -> Doc -> Doc
 reflinkURI ref txt = text ("<a href=\\\"" ++ ref ++ "\\\">") <> txt <> text "</a>"
+
+-- | Helper for wrapping attributes in a tag.
+--
+--     * The first argument is tag name.
+--     * The 'String' in the pair is the attribute name,
+--     * The 'Doc' is the value for different attributes.
+wrapInside :: String -> [(String, Doc)] -> Doc
+wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text ">"
+  where foldStr (attr, val) = text (attr ++ "=\"") <> val <> text "\" "
+
+-- | Image tag wrapper.
+img :: [(String, Doc)] -> Doc
+img = wrapInside "img"
 
 -- | Helper for setting up figures.
 image :: Doc -> Maybe Doc -> MaxWidthPercent -> Doc
@@ -98,12 +114,8 @@ h n | n < 1 = error "Illegal header (too small)"
     | n > 6 = error "Illegal header (too large)"
     | otherwise = text (replicate n '#' ++ " ")
 
--- | Curly braces.
-br :: Doc -> Doc
-br x = text "{" <> x <> text "}"
-
 mkDiv :: String -> Doc -> Doc -> Doc
-mkDiv s a0 a1 = (bslash <> text s) <> br a0 <> br a1
+mkDiv s a0 a1 = (bslash <> text s) <> brace a0 <> brace a1
 
 -- Maybe use "lines" instead (Data.List @lines :: String -> [String])
 stripnewLine :: String -> Doc

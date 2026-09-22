@@ -25,14 +25,14 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Helper (helperOO, helperProc)
 
 -- | Creates the HelloWorld program and necessary files.
-helloWorldOO :: (OOProg r vis stmt mthd stvr attch prg file mod bod block) => OO.GSProgram r prg
+helloWorldOO :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => OO.GSProgram r prg
 helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
   ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
   [helloWorldMainOO] [helloWorldClass]), helperOO]
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldProc
-  :: (ProcProg r vis stmt mthd prg file mod bod block)
+  :: (ProcProg r vis typ stmt mthd prg file mod bod block)
   => GProc.GSProgram r prg
 helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod descriptionProc
   watermark
@@ -45,11 +45,11 @@ description = "Tests various GOOL functions. It should run without errors."
 descriptionProc = "Tests various GProc functions. It should run without errors."
 
 -- | Variable for a list of doubles
-myOtherList :: (VariableSym r) => SVariable r
+myOtherList :: (TypeSym r typ, VariableSym r typ) => SVariable r
 myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
-helloWorldMainOO :: (OOProg r vis stmt mthd stvr attch prg file mod bod block) => MS (r mthd)
+helloWorldMainOO :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => MS (r mthd)
 helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
@@ -61,7 +61,7 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ lis
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainProc
-  :: (ProcProg r vis stmt mthd prg file mod bod block)
+  :: (ProcProg r vis typ stmt mthd prg file mod bod block)
   => MS (r mthd)
 helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
@@ -75,9 +75,10 @@ helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
 helloInitVariables
   ::
     ( BlockSym r block stmt
-    , Literal r
+    , TypeSym r typ
+    , Literal r typ
     , ScopeSym r
-    , VariableSym r
+    , VariableSym r typ
     , VariableValue r
     , Comparison r
     , Array r
@@ -141,7 +142,7 @@ helloInitVariables = block [comment "Initializing variables",
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
 
-objectTests :: (OOProg r vis stmt mthd stvr attch prg file mod bod block) => MS (r block)
+objectTests :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => MS (r block)
 objectTests = block [comment "Object tests",
   varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
   varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4]),
@@ -162,7 +163,9 @@ objectTests = block [comment "Object tests",
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
-  mySlicedList10, mySlicedList11 :: (VariableSym r) => SVariable r
+  mySlicedList10, mySlicedList11
+  :: (TypeSym r typ, VariableSym r typ)
+  => SVariable r
 mySlicedList = var "mySlicedList" (listType double)
 mySlicedList2 = var "mySlicedList2" (listType double)
 mySlicedList3 = var "mySlicedList3" (listType double)
@@ -177,9 +180,10 @@ mySlicedList11 = var "mySlicedList11" (listType double)
 
 listSliceTests
   ::
-    ( Literal r
+    ( TypeSym r typ
+    , Literal r typ
     , ScopeSym r
-    , VariableSym r
+    , VariableSym r typ
     , VariableValue r
     , InternalList r block
     , DeclStatement r stmt bod
@@ -308,13 +312,14 @@ listSliceTests = [
 {-# ANN module "HLint: ignore Evaluate" #-}
 helloIfBody
   ::
-    ( Literal r
+    ( TypeSym r typ
+    , Literal r typ
     , ScopeSym r
-    , VariableSym r
+    , VariableSym r typ
     , VariableValue r
     , BooleanExpression r
     , NumericExpression r
-    , ValueExpression r
+    , ValueExpression r typ
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , AssignStatement r stmt
@@ -401,7 +406,8 @@ helloIfExists
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , VariableSym r
+    , TypeSym r typ
+    , VariableSym r typ
     , VariableValue r
     , ControlStatement r stmt bod
     , PrintConsole r stmt
@@ -415,8 +421,9 @@ helloSwitch
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , Literal r
-    , VariableSym r
+    , TypeSym r typ
+    , Literal r typ
+    , VariableSym r typ
     , VariableValue r
     , AssignStatement r stmt
     , ControlStatement r stmt bod
@@ -431,8 +438,9 @@ helloForLoop
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , Literal r
-    , VariableSym r
+    , TypeSym r typ
+    , Literal r typ
+    , VariableSym r typ
     , VariableValue r
     , ControlStatement r stmt bod
     , PrintConsole r stmt
@@ -447,8 +455,9 @@ helloWhileLoop
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , Literal r
-    , VariableSym r
+    , TypeSym r typ
+    , Literal r typ
+    , VariableSym r typ
     , VariableValue r
     , Comparison r
     , AssignStatement r stmt
@@ -464,10 +473,11 @@ helloForEachLoop
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , Literal r
-    , VariableSym r
+    , TypeSym r typ
+    , Literal r typ
+    , VariableSym r typ
     , VariableValue r
-    , ValueExpression r
+    , ValueExpression r typ
     , ControlStatement r stmt bod
     , PrintConsole r stmt
     )
@@ -489,7 +499,7 @@ helloTryCatch
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
 
-helloWorldClass :: (OOProg r vis stmt mthd stvr attch prg file mod bod block) => CS (r Class)
+helloWorldClass :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => CS (r Class)
 helloWorldClass = extraClass "TestClass" Nothing
   [stateVar public instanceLevel (var "a" int)]
   [initializer [param $ var "a" int]

@@ -12,6 +12,5 @@ module Language.Drasil.Development (
 ) where
 
 import Language.Drasil.Development.Sentence (toSent)
-import Language.Drasil.NaturalLanguage.English.NounPhrase (NounPhrase(..))
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NounPhrase(..), NPStruct)
 import Language.Drasil.Sentence (sdep, shortdep, lnames, lnames')

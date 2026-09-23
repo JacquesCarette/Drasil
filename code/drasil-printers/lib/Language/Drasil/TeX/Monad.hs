@@ -13,7 +13,7 @@ import qualified Text.PrettyPrint as TP
 
 import Language.Drasil (RenderSpecial(..), Special(..))
 
-import qualified Language.Drasil.Printing.Helpers as H
+import Drasil.Printers.Common
 
 -----------------------------------------------------------------------------
 -- * Printing Monad
@@ -51,20 +51,22 @@ instance Monad PrintLaTeX where
 -- | Convenient abbreviation.
 type D = PrintLaTeX TP.Doc
 
+instance CanCarryText D where
+  holdText = pure . holdText
+
 -- | MonadReader calls this @local@.
 -- Can switch contexts (including no-switch cases).  Adjust printing as necessary.
 switch :: (MathContext -> MathContext) -> D -> D
 switch f (PL g) = PL $ \c -> adjust c (f c) g
   where
     bstext = TP.text "\\text"
-    br doc = TP.text "{" TP.<> doc TP.<> TP.text "}"
     adjust :: MathContext -> MathContext -> (MathContext -> TP.Doc) -> TP.Doc
     adjust Math Math gen = gen Math
     adjust Text Text gen = gen Text
     -- we are producing Math, but want some Text embedded
-    adjust Math Text gen = bstext TP.<> br (gen Text)
+    adjust Math Text gen = bstext TP.<> brace (gen Text)
     -- we are producing Text, but want some Math embedded
-    adjust Text Math gen = H.dollarDoc $ gen Math
+    adjust Text Math gen = dollar $ gen Math
     adjust Curr Curr gen = gen Text -- default
     adjust Curr x gen = gen x
     adjust x Curr gen = gen x

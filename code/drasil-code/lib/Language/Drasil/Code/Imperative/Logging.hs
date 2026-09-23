@@ -36,7 +36,7 @@ logBody
   => Label -> [SVariable r] -> [MS (r block)] -> GenState (MS (r bod))
 logBody n vars b = do
   g <- get
-  return $ body $
+  pure $ body $
     [loggedMethod (g ^. logName) n vars | LogFunc `elem` g ^. logKind] ++ b
 
 -- | Generates a block that logs, to the given 'FilePath', the name of a function,

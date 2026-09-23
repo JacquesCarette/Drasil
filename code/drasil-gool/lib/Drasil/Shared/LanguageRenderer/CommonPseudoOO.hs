@@ -100,11 +100,13 @@ doxFunc
   => String -> [String] -> Maybe String -> MS (r mthd) -> MS (r mthd)
 doxFunc = docFunc functionDox
 
-doxClass :: (RG.RenderClass r vis mthd stvr) => String -> CS (r Class) -> CS (r Class)
+doxClass
+  :: (BlockCommentSym r, RG.RenderClass r vis mthd stvr)
+  => String -> CS (r Class) -> CS (r Class)
 doxClass = docClass classDox
 
 doxMod
-  :: (RG.RenderFile r file mod)
+  :: (BlockCommentSym r, RG.RenderFile r file mod)
   => String
   -> String
   -> String
@@ -169,7 +171,7 @@ intClass f n s i svrs cstrs mths = do
   modify (setClassName n)
   svs <- onStateList (R.stateVarList . map RG.stateVar) svrs
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) (cstrs ++ mths))
-  return $ onCodeValue (\p -> f n p (RC.visibility s) svs ms) i
+  pure $ onCodeValue (\p -> f n p (RC.visibility s) svs ms) i
 
 -- Python and C++ --
 
@@ -191,7 +193,7 @@ buildModule n imps topDoc bot fs cs = RG.modFromData n (do
   is <- imps
   tp <- topDoc
   bt <- bot
-  return $ R.module' is (vibcat (tp : map RG.class' cls))
+  pure $ R.module' is (vibcat (tp : map RG.class' cls))
     (vibcat (map RC.method fns ++ [bt])))
 
 -- Java and C# --
@@ -231,7 +233,7 @@ arrayDec n vr scp = do
   modify $ useVarName $ variableName v
   modify $ setVarScope (variableName v) (scopeData scp)
   let tp = variableType v
-  innerTp <- zoom lensMStoVS $ innerType $ return tp
+  innerTp <- zoom lensMStoVS $ innerType $ pure tp
   mkStmt $ renderType tp <+> RC.variable v <+> equals <+> new' <+>
     renderType innerTp <> brackets (RC.value sz)
 
@@ -323,7 +325,7 @@ buildModule' n inc is ms cs = RG.modFromData n (do
   lis <- getLangImports
   libis <- getLibImports
   mis <- getModuleImports
-  return $ vibcat [
+  pure $ vibcat [
     vcat (map (RC.import' . inc) (lis ++ sort (is ++ libis) ++ mis)),
     vibcat (map RG.class' cls)])
 
@@ -391,8 +393,8 @@ listDecDef
   => SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 listDecDef v scp vals = do
   vr <- zoom lensMStoVS v
-  let lst = IC.litList (innerType $ return $ variableType vr) vals
-  IC.varDecDef (return vr) scp lst
+  let lst = IC.litList (innerType $ pure $ variableType vr) vals
+  IC.varDecDef (pure vr) scp lst
 
 setDecDef
   ::
@@ -404,8 +406,8 @@ setDecDef
   => SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 setDecDef v scp vals = do
   vr <- zoom lensMStoVS v
-  let st = IC.litSet (innerType $ return $ variableType vr) vals
-  IC.varDecDef (return vr) scp st
+  let st = IC.litSet (innerType $ pure $ variableType vr) vals
+  IC.varDecDef (pure vr) scp st
 
 setDec
   :: (IC.DeclStatement r stmt bod, RC.RenderStatement r stmt, RC.StatementElim r stmt)
@@ -553,7 +555,7 @@ funcDecDef v scp ps b = do
   modify $ useVarName $ variableName vr
   modify $ setVarScope (variableName vr) (scopeData scp)
   s <- get
-  f <- function (variableName vr) private (return $ variableType vr)
+  f <- function (variableName vr) private (pure $ variableType vr)
     (map IC.param ps) b
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RC.method f

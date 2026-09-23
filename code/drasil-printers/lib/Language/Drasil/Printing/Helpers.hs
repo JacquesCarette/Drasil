@@ -5,12 +5,8 @@ module Language.Drasil.Printing.Helpers (
   -- * Text Rendering
   bslash, dbs, assign, eq, lt, gt, leq, geq, dlr, ast, pls, hat, slash, hyph,
   unders, pipe, emptyline,
-  -- * Brackets and Braces
-  sq, br,
   -- * Punctuation
   dot, comm,
-  -- * Word Wrapping
-  dollarDoc, paren, brace, dollar, sqbrac, angbrac,
   -- * Numeric Suffixes
   sufx, sufxer, sufxPrint
 ) where
@@ -68,36 +64,12 @@ pipe      = text "|"
 -- | Empty line.
 emptyline = text ""
 
--- | Text-rendering helper for wrapping strings with brackets/braces.
-sq,br :: String -> Doc
--- | Square brackets.
-sq t = text $ "[" ++ t ++ "]"
--- | Curly braces.
-br t = text $ "{" ++ t ++ "}"
-
 -- | Text-rendering helper for appending a period/decimal point (dot symbol) or a comma.
 dot, comm :: Doc -> Doc
 -- | Dot symbol (".")
 dot  = (<> text ".")
 -- | Comma (",")
 comm = (<> text ",")
-
--- | For wrapping $ on both sides of a 'Doc'.
-dollarDoc :: Doc -> Doc
-dollarDoc x = dlr <> x <> dlr
-
--- | Basic plaintext (String) wrapping.
-paren, brace, dollar, sqbrac, angbrac :: String -> String
--- | Wraps in parenthesis.
-paren   x = "(" ++ x ++ ")"
--- | Wraps in curly braces.
-brace   x = "{" ++ x ++ "}"
--- | Wraps in dollar signs.
-dollar  x = "$" ++ x ++ "$"
--- | Wraps in square brackets.
-sqbrac  x = "[" ++ x ++ "]"
--- | Wraps in angular brackets ("<>").
-angbrac x = "<" ++ x ++ ">"
 
 --FIXME: move this. It is here for not since TeX and HTML
 --       use this for bibliography rendering

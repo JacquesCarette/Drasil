@@ -359,7 +359,7 @@ arrayDecAsList
   => Integer -> SValue r -> SVariable r -> r ScopeData -> MS (r stmt)
 arrayDecAsList len dflt vr scp = do
   vr' <- zoom lensMStoVS vr
-  let innerTp = IC.innerType $ return $ variableType vr'
+  let innerTp = IC.innerType $ pure $ variableType vr'
   i <- genVarName [] "i"
   multi [
     IC.varDecDef vr scp (IC.litList innerTp []),

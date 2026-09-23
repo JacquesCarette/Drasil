@@ -46,7 +46,7 @@ iterator folder = do
 
       workingDirectory = getFolderPath folder
       currentDrasilPack = folderDrasilPack folder
-  return bakedContents
+  pure bakedContents
 
 -- recursively searches for all folders + files in a directory using iterator
 finder :: Folder -> IO [File]
@@ -62,7 +62,7 @@ finder folder = do
   let files
         | null folders = snd rawData
         | otherwise = bakedFiles ++ snd rawData
-  return files
+  pure files
 
 -- gets all drasil- packages + filepaths in a list of folder data types
 getDirectories :: FilePath -> FilterPrefix -> IO [Folder]
@@ -74,7 +74,7 @@ getDirectories directoryPath filterPrefix = do
       packageNames = map (\\"drasil-") rawPackages
   -- convert list of directories into folder data types
       directories = zipWith (createFolder directoryPath) packageNames rawPackages
-  return directories
+  pure directories
 
 -- verifies that each folder/directory exists
 verifyDirectories :: [Folder] -> IO [Folder]
@@ -82,7 +82,7 @@ verifyDirectories rawFolders = do
   let rawDirectories = map getFolderPath rawFolders
   boolFolders <- mapM doesDirectoryExist rawDirectories
   let verifiedDirectories = snd $ partition nullFolder (zipWith fBool boolFolders rawFolders)
-  return verifiedDirectories
+  pure verifiedDirectories
 
 -- combines lists of Booleans and Folders (if True, Folder exists)
 fBool :: Bool -> Folder -> Folder

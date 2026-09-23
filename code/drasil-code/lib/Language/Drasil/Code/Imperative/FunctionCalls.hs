@@ -68,7 +68,7 @@ genAllInputCalls = do
   gi <- genInputCall
   dv <- genDerivedCall
   ic <- genConstraintCall
-  return $ catMaybes [gi, dv, ic]
+  pure $ catMaybes [gi, dv, ic]
 
 -- | Generates a call to the function for reading inputs from a file.
 genInputCall
@@ -136,7 +136,7 @@ genConstraintCall
 genConstraintCall = do
   icName <- genICName InputConstraintsFn
   val <- genFuncCall icName void getConstraintParams
-  return $ fmap valStmt val
+  pure $ fmap valStmt val
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
@@ -173,7 +173,7 @@ genCalcCall c = do
   t <- codeType c
   val <- genFuncCall (codeName c) (convTypeOO t) (getCalcParams c)
   v <- mkVar (quantvar c)
-  return $ fmap (varDecDef v scp) val
+  pure $ fmap (varDecDef v scp) val
 
 -- | Generates a call to the function for printing outputs.
 genOutputCall
@@ -205,7 +205,7 @@ genOutputCall
 genOutputCall = do
   woName <- genICName WriteOutput
   val <- genFuncCall woName void getOutputParams
-  return $ fmap valStmt val
+  pure $ fmap valStmt val
 
 -- | Generates a function call given the name, return type, and arguments to
 -- the function.
@@ -239,12 +239,12 @@ genFuncCall
   -> GenState (Maybe (SValue r))
 genFuncCall n t funcPs = do
   mm <- genCall n
-  let genFuncCall' Nothing = return Nothing
+  let genFuncCall' Nothing = pure Nothing
       genFuncCall' (Just m) = do
         cs <- funcPs
         pvals <- mapM mkVal cs
         val <- fApp m n t pvals []
-        return $ Just val
+        pure $ Just val
   genFuncCall' mm
 
 -- | Generates a function call given the name, inputs, and outputs for the
@@ -267,7 +267,7 @@ genInOutCall
   -> GenState (Maybe (MS (r stmt)))
 genInOutCall n inFunc outFunc = do
   mm <- genCall n
-  let genInOutCall' Nothing = return Nothing
+  let genInOutCall' Nothing = pure Nothing
       genInOutCall' (Just m) = do
         ins' <- inFunc
         outs' <- outFunc
@@ -275,7 +275,7 @@ genInOutCall n inFunc outFunc = do
         outs <- mapM mkVar (outs' \\ ins')
         both <- mapM mkVar (ins' `intersect` outs')
         stmt <- fAppInOut m n (map valueOf ins) outs both
-        return $ Just stmt
+        pure $ Just stmt
   genInOutCall' mm
 
 -- | Gets the name of the module containing the function being called.
@@ -289,11 +289,11 @@ genCall n = do
   g <- get
   let currc = currentClass g
       genCallExported Nothing = genCallInClass (Map.lookup n $ clsMap g)
-      genCallExported m = return m
-      genCallInClass Nothing = return Nothing
-      genCallInClass (Just c) = if c == currc then return $ Map.lookup c (eMap
+      genCallExported m = pure m
+      genCallInClass Nothing = pure Nothing
+      genCallInClass (Just c) = if c == currc then pure $ Map.lookup c (eMap
         g) <|> error (c ++ " class missing from export map")
-        else return Nothing
+        else pure Nothing
   genCallExported $ Map.lookup n (eMap g)
 
 -- Procedural Versions --
@@ -327,7 +327,7 @@ genAllInputCallsProc = do
   gi <- genInputCallProc
   dv <- genDerivedCallProc
   ic <- genConstraintCallProc
-  return $ catMaybes [gi, dv, ic]
+  pure $ catMaybes [gi, dv, ic]
 
 -- | Generates a call to the function for reading inputs from a file.
 genInputCallProc
@@ -370,7 +370,7 @@ genConstraintCallProc
 genConstraintCallProc = do
   icName <- genICName InputConstraintsFn
   val <- genFuncCallProc icName void getConstraintParams
-  return $ fmap valStmt val
+  pure $ fmap valStmt val
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
@@ -402,7 +402,7 @@ genCalcCallProc c = do
   t <- codeType c
   val <- genFuncCallProc (codeName c) (convType t) (getCalcParams c)
   v <- mkVarProc (quantvar c)
-  return $ fmap ((`varDecDef` scp) v) val
+  pure $ fmap ((`varDecDef` scp) v) val
 
 -- | Generates a call to the function for printing outputs.
 genOutputCallProc
@@ -429,7 +429,7 @@ genOutputCallProc
 genOutputCallProc = do
   woName <- genICName WriteOutput
   val <- genFuncCallProc woName void getOutputParams
-  return $ fmap valStmt val
+  pure $ fmap valStmt val
 
 -- | Generates a function call given the name, return type, and arguments to
 -- the function.
@@ -458,12 +458,12 @@ genFuncCallProc
   -> GenState (Maybe (SValue r))
 genFuncCallProc n t funcPs = do
   mm <- genCall n
-  let genFuncCall' Nothing = return Nothing
+  let genFuncCall' Nothing = pure Nothing
       genFuncCall' (Just m) = do
         cs <- funcPs
         pvals <- mapM mkValProc cs
         val <- fAppProc m n t pvals []
-        return $ Just val
+        pure $ Just val
   genFuncCall' mm
 
 -- | Generates a function call given the name, inputs, and outputs for the
@@ -476,7 +476,7 @@ genInOutCallProc
   -> GenState (Maybe (MS (r stmt)))
 genInOutCallProc n inFunc outFunc = do
   mm <- genCall n
-  let genInOutCall' Nothing = return Nothing
+  let genInOutCall' Nothing = pure Nothing
       genInOutCall' (Just m) = do
         ins' <- inFunc
         outs' <- outFunc
@@ -484,5 +484,5 @@ genInOutCallProc n inFunc outFunc = do
         outs <- mapM mkVarProc (outs' \\ ins')
         both <- mapM mkVarProc (ins' `intersect` outs')
         stmt <- fAppInOutProc m n (map valueOf ins) outs both
-        return $ Just stmt
+        pure $ Just stmt
   genInOutCall' mm

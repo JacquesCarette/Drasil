@@ -65,11 +65,11 @@ instance ProgramSym CodeInfoOO GOOLState () where
 instance FileSym CodeInfoOO () () where
   fileDoc m = do
     _ <- m
-    return $ return $ error "[fileDoc] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "[fileDoc] The return value of this isn't used, and the thunk shouldn't fire."
 
   docMod _ _ _ _ fl = do
     _ <- fl
-    return $ return $ error "[docMod] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "[docMod] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance AttachmentSym CodeInfoOO () where
   classLevel  = toCode ()
@@ -78,34 +78,34 @@ instance AttachmentSym CodeInfoOO () where
 instance BodySym CodeInfoOO () () where
   body b = do
     sequence_ b
-    return $ return $ error "[body] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "[body] The return value of this isn't used, and the thunk shouldn't fire."
 
-  addComments _ _ = return $ return $ error "[addComments] The return value of this isn't used, and the thunk shouldn't fire."
+  addComments _ _ = pure $ pure $ error "[addComments] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance BlockSym CodeInfoOO () () where
   block b = do
     sequence_ b
-    return $ return $ error "[block] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "[block] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance TypeSym CodeInfoOO () where
-  bool            = return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
-  int             = return $ return $ error "[int] The return value of this isn't used, and the thunk shouldn't fire."
-  float           = return $ return $ error "[float] The return value of this isn't used, and the thunk shouldn't fire."
-  double          = return $ return $ error "[double] The return value of this isn't used, and the thunk shouldn't fire."
-  char            = return $ return $ error "[char] The return value of this isn't used, and the thunk shouldn't fire."
-  string          = return $ return $ error "[string] The return value of this isn't used, and the thunk shouldn't fire."
-  infile          = return $ return $ error "[infile] The return value of this isn't used, and the thunk shouldn't fire."
-  outfile         = return $ return $ error "[outfile] The return value of this isn't used, and the thunk shouldn't fire."
-  referenceType _ = return $ return $ error "[referenceType] The return value of this isn't used, and the thunk shouldn't fire."
-  setType       _ = return $ return $ error "[setType] The return value of this isn't used, and the thunk shouldn't fire."
-  listType      _ = return $ return $ error "[listType] The return value of this isn't used, and the thunk shouldn't fire."
-  arrayType     _ = return $ return $ error "[arrayType] The return value of this isn't used, and the thunk shouldn't fire."
-  innerType     _ = return $ return $ error "[innerType] The return value of this isn't used, and the thunk shouldn't fire."
-  funcType    _ _ = return $ return $ error "[funcType] The return value of this isn't used, and the thunk shouldn't fire."
-  void            = return $ return $ error "[void] The return value of this isn't used, and the thunk shouldn't fire."
+  bool            = pure $ pure $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+  int             = pure $ pure $ error "[int] The return value of this isn't used, and the thunk shouldn't fire."
+  float           = pure $ pure $ error "[float] The return value of this isn't used, and the thunk shouldn't fire."
+  double          = pure $ pure $ error "[double] The return value of this isn't used, and the thunk shouldn't fire."
+  char            = pure $ pure $ error "[char] The return value of this isn't used, and the thunk shouldn't fire."
+  string          = pure $ pure $ error "[string] The return value of this isn't used, and the thunk shouldn't fire."
+  infile          = pure $ pure $ error "[infile] The return value of this isn't used, and the thunk shouldn't fire."
+  outfile         = pure $ pure $ error "[outfile] The return value of this isn't used, and the thunk shouldn't fire."
+  referenceType _ = pure $ pure $ error "[referenceType] The return value of this isn't used, and the thunk shouldn't fire."
+  setType       _ = pure $ pure $ error "[setType] The return value of this isn't used, and the thunk shouldn't fire."
+  listType      _ = pure $ pure $ error "[listType] The return value of this isn't used, and the thunk shouldn't fire."
+  arrayType     _ = pure $ pure $ error "[arrayType] The return value of this isn't used, and the thunk shouldn't fire."
+  innerType     _ = pure $ pure $ error "[innerType] The return value of this isn't used, and the thunk shouldn't fire."
+  funcType    _ _ = pure $ pure $ error "[funcType] The return value of this isn't used, and the thunk shouldn't fire."
+  void            = pure $ pure $ error "[void] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance OOTypeSym CodeInfoOO () where
-  obj             _ = return $ return $ error "[obj] The return value of this isn't used, and the thunk shouldn't fire."
+  obj             _ = pure $ pure $ error "[obj] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance TypeElim CodeInfoOO () where
   getCodeType _ = Void
@@ -116,52 +116,52 @@ instance ScopeSym CodeInfoOO where
   local = noInfoScope
 
 instance VariableSym CodeInfoOO () where
-  var       _ _ = return $ return $ error "[var] The return value of this isn't used, and the thunk shouldn't fire."
-  constant  _ _ = return $ return $ error "[constant] The return value of this isn't used, and the thunk shouldn't fire."
-  extVar  _ _ _ = return $ return $ error "[extVar] The return value of this isn't used, and the thunk shouldn't fire."
+  var       _ _ = pure $ pure $ error "[var] The return value of this isn't used, and the thunk shouldn't fire."
+  constant  _ _ = pure $ pure $ error "[constant] The return value of this isn't used, and the thunk shouldn't fire."
+  extVar  _ _ _ = pure $ pure $ error "[extVar] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance OOVariableSym CodeInfoOO () where
-  classVar _ _ = return $ return $ error "[classVar] The return value of this isn't used, and the thunk shouldn't fire."
-  classConst _ _ = return $ return $ error "[classConst] The return value of this isn't used, and the thunk shouldn't fire."
-  classVarAccess    _ _   = return $ return $ error "[classVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
-  extClassVarAccess _ _   = return $ return $ error "[extClassVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
-  instanceVarAccess      _ _   = return $ return $ error "[instanceVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
+  classVar _ _ = pure $ pure $ error "[classVar] The return value of this isn't used, and the thunk shouldn't fire."
+  classConst _ _ = pure $ pure $ error "[classConst] The return value of this isn't used, and the thunk shouldn't fire."
+  classVarAccess    _ _   = pure $ pure $ error "[classVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
+  extClassVarAccess _ _   = pure $ pure $ error "[extClassVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
+  instanceVarAccess      _ _   = pure $ pure $ error "[instanceVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance SelfSym CodeInfoOO where
-  self              = return $ return $ error "[self] The return value of this isn't used, and the thunk shouldn't fire."
+  self              = pure $ pure $ error "[self] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance VariableElim CodeInfoOO () where
   variableName _ = ""
-  variableType _ = return $ error "[variableType] The return value of this isn't used, and the thunk shouldn't fire."
+  variableType _ = pure $ error "[variableType] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance ValueSym CodeInfoOO () where
-  valueType _ = return $ error "[valueType] The return value of this isn't used, and the thunk shouldn't fire."
+  valueType _ = pure $ error "[valueType] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance Argument CodeInfoOO where
   pointerArg = id
 
 instance Literal CodeInfoOO () where
-  litTrue     = return $ error "[litTrue] The return value of this isn't used, and the thunk shouldn't fire."
-  litFalse    = return $ error "[litFalse] The return value of this isn't used, and the thunk shouldn't fire."
-  litChar   _ = return $ error "[litChar] The return value of this isn't used, and the thunk shouldn't fire."
-  litDouble _ = return $ error "[litDouble] The return value of this isn't used, and the thunk shouldn't fire."
-  litFloat  _ = return $ error "[litFloat] The return value of this isn't used, and the thunk shouldn't fire."
-  litInt    _ = return $ error "[litInt] The return value of this isn't used, and the thunk shouldn't fire."
-  litString _ = return $ error "[litString] The return value of this isn't used, and the thunk shouldn't fire."
+  litTrue     = pure $ error "[litTrue] The return value of this isn't used, and the thunk shouldn't fire."
+  litFalse    = pure $ error "[litFalse] The return value of this isn't used, and the thunk shouldn't fire."
+  litChar   _ = pure $ error "[litChar] The return value of this isn't used, and the thunk shouldn't fire."
+  litDouble _ = pure $ error "[litDouble] The return value of this isn't used, and the thunk shouldn't fire."
+  litFloat  _ = pure $ error "[litFloat] The return value of this isn't used, and the thunk shouldn't fire."
+  litInt    _ = pure $ error "[litInt] The return value of this isn't used, and the thunk shouldn't fire."
+  litString _ = pure $ error "[litString] The return value of this isn't used, and the thunk shouldn't fire."
   litArray  _ = executeListErr
   litList   _ = executeListErr
   litSet   _ = executeListErr
 
 instance MathConstant CodeInfoOO where
-  pi = return $ error "[pi] The return value of this isn't used, and the thunk shouldn't fire."
+  pi = pure $ error "[pi] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance VariableValue CodeInfoOO where
-  valueOf _ = return $ error "[valueOf] The return value of this isn't used, and the thunk shouldn't fire."
+  valueOf _ = pure $ error "[valueOf] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance CommandLineArgs CodeInfoOO where
-  arg       _ = return $ error "[arg] The return value of this isn't used, and the thunk shouldn't fire."
-  argsList    = return $ error "[argsList] The return value of this isn't used, and the thunk shouldn't fire."
-  argExists _ = return $ error "[argExists] The return value of this isn't used, and the thunk shouldn't fire."
+  arg       _ = pure $ error "[arg] The return value of this isn't used, and the thunk shouldn't fire."
+  argsList    = pure $ error "[argsList] The return value of this isn't used, and the thunk shouldn't fire."
+  argExists _ = pure $ error "[argExists] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance NumericExpression CodeInfoOO where
   (#~)  = execute1
@@ -206,7 +206,7 @@ instance ValueExpression CodeInfoOO () where
   inlineIf = execute3
   funcAppMixedArgs n _ = do
     _ <- currModCall n
-    return $ return $ return $ error "[funcAppMixedArgs] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ pure $ error "[funcAppMixedArgs] The return value of this isn't used, and the thunk shouldn't fire."
   extFuncAppMixedArgs l n _ vs ns = do
     sequence_ vs
     mapM_ fst ns
@@ -223,29 +223,29 @@ instance OOValueExpression CodeInfoOO () where
     sequence_ vs
     mapM_ fst ns
     mapM_ snd ns
-    return $ error "[newObjMixedArgs] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ error "[newObjMixedArgs] The return value of this isn't used, and the thunk shouldn't fire."
   extNewObjMixedArgs _ _ vs ns = do
     sequence_ vs
     mapM_ fst ns
     mapM_ snd ns
-    return $ error "[extNewObjMixedArgs] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ error "[extNewObjMixedArgs] The return value of this isn't used, and the thunk shouldn't fire."
   libNewObjMixedArgs = extNewObjMixedArgs
 
 instance InternalValueExp CodeInfoOO () where
   objMethodCallMixedArgs' n _ v vs ns = do
     _ <- v
     _ <- currModCall n vs ns
-    return $ return $ error "[objMethodCallMixedArgs'] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "[objMethodCallMixedArgs'] The return value of this isn't used, and the thunk shouldn't fire."
   classMethodCallMixedArgs' n _ cls vs ns = cls >> currModCall n vs ns
 
 instance OOFunctionSym CodeInfoOO () where
   func  _ _ l = do
     sequence_ l
-    return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
   objAccess s1 s2 = do
     _ <- s1
     _ <- s2
-    return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
 instance GetSet CodeInfoOO where
   get v _ = execute1 v
@@ -260,9 +260,9 @@ instance Reference CodeInfoOO where
   maybeDeref = execute1
 
 instance Array CodeInfoOO where
-  arrayElem _ _ = return $ return $ error "[arrayElem] The return value of this isn't used, and the thunk shouldn't fire."
-  arrayLength _ = return $ error "[arrayLength] The return value of this isn't used, and the thunk shouldn't fire."
-  arrayCopy _ = return $ error "[arrayCopy] The return value of this isn't used, and the thunk shouldn't fire."
+  arrayElem _ _ = pure $ pure $ error "[arrayElem] The return value of this isn't used, and the thunk shouldn't fire."
+  arrayLength _ = pure $ error "[arrayLength] The return value of this isn't used, and the thunk shouldn't fire."
+  arrayCopy _ = pure $ error "[arrayCopy] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance List CodeInfoOO where
   listSize       = execute1
@@ -282,9 +282,9 @@ instance Set CodeInfoOO where
 
 instance InternalList CodeInfoOO () where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
-    mapM_ (fromMaybe (return $ error "[listSlice'] The return value of this isn't used, and the thunk shouldn't fire.")) [b,e,s]
+    mapM_ (fromMaybe (pure $ error "[listSlice'] The return value of this isn't used, and the thunk shouldn't fire.")) [b,e,s]
     _ <- vl
-    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance BinderSym CodeInfoOO () where
   binder _ _ = noInfoBinder
@@ -317,7 +317,7 @@ instance DeclStatement CodeInfoOO () () where
   constDecDef          _ _ = zoom lensMStoVS . execute1
   funcDecDef         _ _ _ bod = do
     _ <- bod
-    return $ return $ error "[funcDecDef] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "[funcDecDef] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance OODeclStatement CodeInfoOO () where
   objDecDef            _ _ = zoom lensMStoVS . execute1
@@ -393,28 +393,28 @@ instance ControlStatement CodeInfoOO () () where
     _ <- zoom lensMStoVS v
     _ <- t
     _ <- f
-    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
   for dec v stmt bod = do
     _ <- dec
     _ <- zoom lensMStoVS v
     _ <- stmt
     _ <- bod
-    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
   forRange _ b e s bod = do
     _ <- zoom lensMStoVS b
     _ <- zoom lensMStoVS e
     _ <- zoom lensMStoVS s
     _ <- bod
-    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
   forEach _ v bod = do
     _ <- zoom lensMStoVS v
     _ <- bod
-    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
   while v bod = do
     _ <- zoom lensMStoVS v
     _ <- bod
-    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
   tryCatch _ cb = do
     _ <- cb
@@ -428,21 +428,21 @@ instance ControlStatement CodeInfoOO () () where
 instance ObserverPattern CodeInfoOO () () where
   notifyObservers f _ = do
     _ <- zoom lensMStoVS f
-    return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
 instance StrategyPattern CodeInfoOO () () where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
-    _ <- zoom lensMStoVS $ fromMaybe (return $ return $ error "[runStrategy] The return value of this isn't used, and the thunk shouldn't fire.") vl
-    return $ return $ error "[runStrategy] The return value of this isn't used, and the thunk shouldn't fire."
+    _ <- zoom lensMStoVS $ fromMaybe (pure $ pure $ error "[runStrategy] The return value of this isn't used, and the thunk shouldn't fire.") vl
+    pure $ pure $ error "[runStrategy] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance VisibilitySym CodeInfoOO () where
-  private = return ()
-  public  = return ()
+  private = pure ()
+  public  = pure ()
 
 instance ParameterSym CodeInfoOO where
-  param        _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
-  pointerParam _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  param        _ = pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  pointerParam _ = pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
 instance MethodSym CodeInfoOO () () () () where
   docMain = updateMEMandCM "main"
@@ -482,24 +482,24 @@ instance ClassSym CodeInfoOO () () where
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) cs
     mapM_ (zoom lensCStoMS) ms
-    return $ error "[extraClass] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ error "[extraClass] The return value of this isn't used, and the thunk shouldn't fire."
 
   implementingClass n _ _ cs ms = do
     modify (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) cs
     mapM_ (zoom lensCStoMS) ms
-    return $ error "[implementingClass] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ error "[implementingClass] The return value of this isn't used, and the thunk shouldn't fire."
 
   docClass _ c = do
     _ <- c
-    return $ error "[docClass] The return value of this isn't used, and the thunk shouldn't fire."
+    pure $ error "[docClass] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance ModuleSym CodeInfoOO () () where
   buildModule n _ funcs classes = do
     modify (setModuleName n)
     mapM_ (zoom lensFStoCS) classes
     mapM_ (zoom lensFStoMS) funcs
-    modifyReturn (updateClassMap n) (return $ error "[buildModule] The return value of this isn't used, and the thunk shouldn't fire.")
+    modifyReturn (updateClassMap n) (pure $ error "[buildModule] The return value of this isn't used, and the thunk shouldn't fire.")
 
 -- Helpers
 
@@ -507,10 +507,10 @@ noInfo :: State s (CodeInfoOO ())
 noInfo = toState $ toCode ()
 
 noInfoScope :: CodeInfoOO ScopeData
-noInfoScope = return $ sd Global -- Hack
+noInfoScope = pure $ sd Global -- Hack
 
 noInfoBinder :: VSBinder CodeInfoOO
-noInfoBinder = return $ return $ bindFormD "" (td Void "" empty) -- Hack
+noInfoBinder = pure $ pure $ bindFormD "" (td Void "" empty) -- Hack
 
 updateMEMandCM :: String -> MS (CodeInfoOO ()) -> MS (CodeInfoOO ())
 updateMEMandCM n b = do
@@ -530,23 +530,23 @@ addCurrModCallVal :: String -> SValue CodeInfoOO
 addCurrModCallVal n = do
   mn <- zoom lensVStoFS getModuleName
   modify (addCall (qualName mn n))
-  return $ error "[addCurrModCallSmt] The return value of this isn't used, and the thunk shouldn't fire."
+  pure $ error "[addCurrModCallSmt] The return value of this isn't used, and the thunk shouldn't fire."
 
 addCurrModCallSmt :: String -> VS (CodeInfoOO ())
 addCurrModCallSmt n = do
   mn <- zoom lensVStoFS getModuleName
   modify (addCall (qualName mn n))
-  return $ error "[addCurrModCallSmt] The return value of this isn't used, and the thunk shouldn't fire."
+  pure $ error "[addCurrModCallSmt] The return value of this isn't used, and the thunk shouldn't fire."
 
 addExternalCallSmt :: String -> String -> VS (CodeInfoOO ())
 addExternalCallSmt l n = do
   modify (addCall (qualName l n))
-  return $ error "[addExternalCall] The return value of this isn't used, and the thunk shouldn't fire."
+  pure $ error "[addExternalCall] The return value of this isn't used, and the thunk shouldn't fire."
 
 addExternalCallVal :: String -> String -> SValue CodeInfoOO
 addExternalCallVal l n = do
   modify (addCall (qualName l n))
-  return $ error "[addExternalCall] The return value of this isn't used, and the thunk shouldn't fire."
+  pure $ error "[addExternalCall] The return value of this isn't used, and the thunk shouldn't fire."
 
 executeList :: [State a (CodeInfoOO ())] -> State a (CodeInfoOO ())
 executeList l = do
@@ -556,12 +556,12 @@ executeList l = do
 executeListErr :: [State a (CodeInfoOO b)] -> State a (CodeInfoOO c)
 executeListErr l = do
   sequence_ l
-  return $ return $ error "[executeListErr] The return value of this isn't used, and the thunk shouldn't fire."
+  pure $ pure $ error "[executeListErr] The return value of this isn't used, and the thunk shouldn't fire."
 
 execute1 :: State a (CodeInfoOO b) -> State a (CodeInfoOO c)
 execute1 s = do
   _ <- s
-  return $ return $ error "[execute1] The return value of this isn't used, and the thunk shouldn't fire."
+  pure $ pure $ error "[execute1] The return value of this isn't used, and the thunk shouldn't fire."
 
 execute2 :: State a (CodeInfoOO b) -> State a (CodeInfoOO c) ->
   State a (CodeInfoOO d)

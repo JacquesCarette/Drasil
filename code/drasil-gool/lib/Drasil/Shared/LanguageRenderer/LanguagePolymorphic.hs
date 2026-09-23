@@ -208,7 +208,7 @@ arrayElem arr' i' = do
   i <- IC.intToIndex i'
   arr <- arr'
   let vName = render (RC.value arr) ++ "[" ++ render (RC.value i) ++ "]"
-      vType = IC.innerType $ return $ valueType arr
+      vType = IC.innerType $ pure $ valueType arr
       vRender = RC.value arr <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
@@ -274,7 +274,7 @@ newObjMixedArgs
   => String -> MixedCtorCall r TypeData
 newObjMixedArgs s tp vs ns = do
   t <- tp
-  RC.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns
+  RC.call Nothing Nothing (s ++ getTypeString t) (pure t) vs ns
 
 lambda
   :: (BinderElim r typ, RenderValue r typ, IC.TypeSym r typ, ValueSym r typ)
@@ -282,7 +282,7 @@ lambda
 lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
-  let ft = IC.funcType (map (return . binderType) ps) (return $ valueType ex)
+  let ft = IC.funcType (map (pure . binderType) ps) (pure $ valueType ex)
   valFromData (Just 0) Nothing ft (f ps ex)
 
 objAccess
@@ -330,7 +330,7 @@ listAccess
 listAccess v i = do
   v' <- v
   let i' = IC.intToIndex i
-      t  = IC.innerType $ return $ valueType v'
+      t  = IC.innerType $ pure $ valueType v'
       checkType (List _) = RC.listAccessFunc t i'
       checkType (Set _) = RC.listAccessFunc t i'
       checkType (Array _) = i' >>=
@@ -655,7 +655,7 @@ implementingClass :: (RenderClass r vis mthd stvr, VisibilitySym r vis) => Label
 implementingClass n is = RO.intClass n public (implements is)
 
 docClass
-  :: (RenderClass r vis mthd stvr)
+  :: (BlockCommentSym r, RenderClass r vis mthd stvr)
   => ClassDocRenderer -> String -> CS (r Class) -> CS (r Class)
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 
@@ -692,7 +692,7 @@ fileDoc ext topb botb mdl = do
 --   dt is the date
 --   fl is the file
 docMod
-  :: (RenderFile r file mod)
+  :: (BlockCommentSym r, RenderFile r file mod)
   => ModuleDocRenderer
   -> String
   -> String
@@ -717,7 +717,7 @@ fileFromData f fpath mdl' = do
       if s ^. currMain && isSource (s ^. currFileType)
         then over lensFStoGS (setMainMod fpath) s
         else s)
-  return $ f fpath mdl
+  pure $ f fpath mdl
 
 -- Helper functions
 

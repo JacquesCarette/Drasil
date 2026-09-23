@@ -26,7 +26,7 @@ chooseSpace lng chs = \s -> selectType lng s (spaceMatch (maps chs) s)
         selectType _ s (t:_) = do
           modify (addLoggedSpace s t .
             addToDesignLog s t (successLog s t))
-          return t
+          pure t
         selectType l s [] = error $ "Chosen CodeType matches for Space " ++
           show s ++ " are not compatible with target language " ++ show l
 

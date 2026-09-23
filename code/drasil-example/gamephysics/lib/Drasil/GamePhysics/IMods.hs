@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
 import Language.Drasil

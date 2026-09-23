@@ -10,6 +10,7 @@ import Drasil.Database (HasUID(..))
 import Language.Drasil
 import Language.Drasil.Document
 import Data.List.Extras (mkTable)
+import Drasil.System (ProjectName, projAbrvS)
 
 -- Other docLang
 import qualified Drasil.SRS.Concepts as SRS (valsOfAuxCons)
@@ -21,18 +22,18 @@ import Drasil.Metadata.Documentation (value, description, symbol_, tAuxConsts)
 import qualified Drasil.Metadata.Concepts.Math as CM (unit_)
 
 -- | Gets the auxiliary constant values given an introductory 'Idea' and a 'QDefinition'.
-valsOfAuxConstantsF :: Idea a => a -> [ConstQDef] -> Section
+valsOfAuxConstantsF :: ProjectName -> [ConstQDef] -> Section
 valsOfAuxConstantsF kWord listOfConstants = SRS.valsOfAuxCons (contentGenerator kWord listOfConstants)  []
 
 -- | Gets a table of constants from a 'QDefinition'. Also uses an 'Idea' as the introduction.
-contentGenerator :: Idea a => a -> [ConstQDef] -> [Contents]
+contentGenerator :: ProjectName -> [ConstQDef] -> [Contents]
 contentGenerator _ [] = [mkParagraph $ emptySectSentPlu [tAuxConsts]]
 contentGenerator a b  = [intro a, LlC $ tableOfConstants b]
 
 --FIXME: general introduction?
 -- | Helper that creates a general introduction using an 'Idea'.
-intro :: (Idea a) => a -> Contents
-intro kWord = foldlSP [S "This section contains the standard values that are used for calculations in" +:+ short kWord]
+intro :: ProjectName -> Contents
+intro kWord = foldlSP [S "This section contains the standard values that are used for calculations in" +:+ projAbrvS kWord]
 
 -- | Helper that gets a table of constants from a 'QDefinition'.
 tableOfConstants :: [ConstQDef] -> LabelledContent

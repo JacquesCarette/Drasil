@@ -4,6 +4,7 @@ module Drasil.GlassBR.References (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Document
 
 import Data.Drasil.Citations (campidelli, parnasClements1986)
 import Data.Drasil.People (jmBracci, tlKohutek, wlBeason)

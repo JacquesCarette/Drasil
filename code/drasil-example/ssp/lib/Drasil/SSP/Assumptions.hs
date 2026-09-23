@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Assumptions (
   assumptions, assumpSLH, assumpINSFL, assumpENSL, assumpSF, assumpSL,
   assumpSBSBISL, assumpFOSL, assumpSP, assumpSLI, assumpPSC, assumpWIBE,

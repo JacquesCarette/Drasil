@@ -8,19 +8,24 @@ github:       JacquesCarette/Drasil
 homepage:     https://jacquescarette.github.io/Drasil/
 description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
-language: Haskell2010
+language: GHC2024
 default-extensions:
 - StrictData
 - TemplateHaskell
+- StandaloneDeriving
+- DerivingVia
+- DeriveGeneric
 
 extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
+- containers
 - lens
 - drasil-database
 - drasil-file-handling
 - drasil-lang
+- drasil-utils
 
 ghc-options:
 - -Wall

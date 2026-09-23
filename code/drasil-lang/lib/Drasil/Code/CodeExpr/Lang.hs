@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs #-}
 module Drasil.Code.CodeExpr.Lang (CodeExpr(..)) where
 
 import Prelude hiding (sqrt)

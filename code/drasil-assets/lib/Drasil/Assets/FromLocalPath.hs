@@ -1,7 +1,5 @@
-{-# LANGUAGE DeriveLift #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskellQuotes #-}
-
 -- | External file 'Asset's.
 module Drasil.Assets.FromLocalPath
   ( -- * Assets

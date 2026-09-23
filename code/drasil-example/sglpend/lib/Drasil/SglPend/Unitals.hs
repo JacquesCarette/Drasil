@@ -26,7 +26,7 @@ import Drasil.DblPend.Concepts (rod, horizontalForce, verticalForce)
 import Drasil.DblPend.Unitals (lRod)
 
 symbols:: [DefinedQuantityDict]
-symbols = unitalChunks ++ unitless ++ NE.toList inputs ++ NE.toList outputs
+symbols = unitalChunks ++ unitless ++ NE.toList inputs
 
 inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = lenRod :| [QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
@@ -35,10 +35,10 @@ outputs :: NE.NonEmpty DefinedQuantityDict
 outputs = NE.singleton pendDisplacementAngle
 
 unitalChunks :: [DefinedQuantityDict]
-unitalChunks = [QPP.len, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
-   QP.angularVelocity, QP.angularAccel, QP.gravitationalAccel, QP.tension, QP.acceleration,
+unitalChunks = [QPP.len, QP.force, QP.ixPos, QP.xPos, QP.yPos,
+   QP.angularVelocity, QP.gravitationalAccel, QP.tension, QP.acceleration,
    QP.yAccel, QP.xAccel, QP.yVel, QP.xVel, QP.iyPos, QP.time, QP.velocity, QP.position, QP.torque,
-   QP.momentOfInertia, QP.angularDisplacement, initialPendAngle, xForce, yForce,
+   QP.momentOfInertia, QP.angularDisplacement, xForce, yForce,
    QP.angularFrequency, QP.frequency, QP.period]
 
 lenRod, xForce, yForce, pendDisplacementAngle, initialPendAngle :: DefinedQuantityDict

@@ -26,7 +26,7 @@ import Drasil.Database (HasChunkRefs(..), UID, HasUID(..), mkUid, nsUid)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cncpt''')
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
+  Definition(defn), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
 import Language.Drasil.NaturalLanguage.English.NounPhrase (cn,cn',NP)
 import Language.Drasil.Symbol (Symbol(Label))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift),
@@ -58,8 +58,6 @@ instance Idea          UnitDefn where getA c = getA (c ^. vc)
 instance Definition    UnitDefn where defn = vc . defn
 -- | Equal if 'Symbol's are equal.
 instance Eq            UnitDefn where a == b = usymb a == usymb b
--- | Finds the domain contained in the 'ConceptChunk' used to make the 'UnitDefn'.
-instance ConceptDomain UnitDefn where cdom = cdom . view vc
 -- | Finds unit symbol of the 'ConceptChunk' used to make the 'UnitDefn'.
 instance HasUnitSymbol UnitDefn where usymb = getUSymb . view cas
 -- | Gets the UnitDefn and contributing units.

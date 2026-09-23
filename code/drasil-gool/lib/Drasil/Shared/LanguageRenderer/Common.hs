@@ -1,4 +1,3 @@
-{-# LANGUAGE FlexibleContexts #-}
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.Shared.LanguageRenderer.Common (
   boolRender, bool, extVar, funcType, extFuncAppMixedArgs, listAccessFunc,
@@ -13,7 +12,8 @@ import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Body, Variable, SVariable, MixedCall,
   Value, SValue, ValueSym, TypeSym(int), VariableElim(variableName), Label,
-  Library, funcApp, getCodeType, AssignStatement, ValueExpression)
+  Library, funcApp, getCodeType, EmptyStatement, AssignStatement,
+  ValueExpression)
 import Drasil.Shared.RendererClassesCommon (scopeData, call,
   RenderFunction(funcFromData), RenderVariable, RenderValue, ValueElim,
   RenderStatement, ScopeElim, InternalVarElim)
@@ -72,7 +72,7 @@ forEach' f i' v' b' = do
 -- Python and Julia --
 
 varDecDef
-  :: (AssignStatement r stmt, ScopeElim r, VariableElim r)
+  :: (EmptyStatement r stmt, AssignStatement r stmt, ScopeElim r, VariableElim r)
   => SVariable r -> r ScopeData -> Maybe (SValue r) -> MS (r stmt)
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v

@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD) where
 
 import Data.Drasil.Concepts.Math as CM (line, cartesian)

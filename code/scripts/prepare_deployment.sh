@@ -148,7 +148,7 @@ src_stub() {
 copy_images() {
   rm -rf "$CUR_DIR/deploy/images"
   mkdir -p "$CUR_DIR/deploy/images"
-  cp -r "$CUR_DIR/drasil-website/WebInfo/images/" "$CUR_DIR/deploy/images/"
+  cp -r "$CUR_DIR/drasil-website/WebInfo/images/" "$CUR_DIR/deploy/"
 }
 
 copy_analysis() {

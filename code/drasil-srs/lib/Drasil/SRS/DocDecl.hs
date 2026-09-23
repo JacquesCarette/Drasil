@@ -1,10 +1,9 @@
-{-# LANGUAGE GADTs #-}
--- | Document declaration types and functions for generating Software Requirement Specifications.
-
--- Changes to DocSection and its subections should be reflected in the 'Creating Your Project
--- in Drasil' tutorial found on the wiki:
+-- | Document declaration types and functions for generating Software
+-- Requirement Specifications.
+--
+-- Changes to DocSection and its subections should be reflected in the 'Creating
+-- Your Project in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
-
 module Drasil.SRS.DocDecl (
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..), PDSub(..),
   ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..), SolChSpec(..),
@@ -74,7 +73,7 @@ data PDSub where
   -- | Terms and Definitions.
   TermsAndDefs :: Concept c => Maybe Sentence -> [c] -> PDSub
   -- | Physical System Description.
-  PhySysDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
+  PhySysDesc :: [Sentence] -> LabelledContent -> [Contents] -> PDSub
   -- | Goals.
   Goals :: [Sentence] -> PDSub
 
@@ -95,7 +94,7 @@ data SCSSub where
   -- | Instance models.
   IMs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
   -- | Constraints.
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveRationale c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
   -- | Properties of a correct solution.
   CorrSolnPpties :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
 
@@ -140,7 +139,7 @@ mkDocDesc sys = map sec where
 
   pdSub :: PDSub -> DL.PDSub
   pdSub (TermsAndDefs s c) = DL.TermsAndDefs s c
-  pdSub (PhySysDesc i s lc c) = DL.PhySysDesc i s lc c
+  pdSub (PhySysDesc s lc c) = DL.PhySysDesc s lc c
   pdSub (Goals s) = DL.Goals s $ fromConcInsDB goalStmtDom
 
   scsSub :: SCSSub -> DL.SCSSub

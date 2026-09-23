@@ -1,4 +1,3 @@
-{-# LANGUAGE LambdaCase #-}
 -- | Defines a language for specifying external library use scenarios
 module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   FunctionInterface(..), Result(..), Argument(..), ArgumentInfo(..),

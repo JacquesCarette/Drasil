@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.BinaryStar.Requirements (funcReqs, funcReqsTables,
   nonFuncReqs) where
 

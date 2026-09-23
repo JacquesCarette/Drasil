@@ -1,6 +1,7 @@
 module Drasil.Projectile.Goals (goals) where
 
 import Language.Drasil
+import Language.Drasil.Document (ConceptInstance, cic)
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 

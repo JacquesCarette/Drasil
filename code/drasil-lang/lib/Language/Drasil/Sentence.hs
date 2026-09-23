@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, PostfixOperators, TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers functions.
 module Language.Drasil.Sentence (
@@ -29,6 +29,7 @@ import Language.Drasil.Space (HasSpace)
 import Language.Drasil.Symbol (HasSymbol, Symbol)
 
 import qualified Data.Set as Set
+import Data.String (IsString (..))
 
 -- | Used in 'Ch' constructor to determine the state of a term
 -- (can record whether something is in plural form, a singular term, or in short form).
@@ -92,6 +93,14 @@ data Sentence where
   -- | Empty Sentence.
   EmptyS :: Sentence
 
+instance IsString Sentence where
+  fromString [] = EmptyS
+  fromString ss = S ss
+
+-- | Sentences can be concatenated.
+instance Semigroup Sentence where
+  l <> r = l :+: r
+
 eS :: ModelExpr -> Sentence
 eS = E
 
@@ -101,10 +110,6 @@ eS' = E . express
 -- | Gets a symbol and places it in a 'Sentence'.
 ch :: (IsChunk t, Idea t, HasSpace t, HasSymbol t) => t -> Sentence
 ch s = SyCh $ hide s
-
--- | Sentences can be concatenated.
-instance Semigroup Sentence where
-  (<>) = (:+:)
 
 -- | Sentences can be empty or directly concatenated.
 instance Monoid Sentence where

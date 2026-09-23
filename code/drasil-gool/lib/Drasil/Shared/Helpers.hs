@@ -1,4 +1,3 @@
-{-# LANGUAGE FlexibleContexts #-}
 module Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat,
   vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,

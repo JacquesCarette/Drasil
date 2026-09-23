@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SglPend.IMods (iMods, angularDisplacementIM) where
 
 import Prelude hiding (cos, sin)

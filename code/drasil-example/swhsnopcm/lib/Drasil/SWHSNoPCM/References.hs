@@ -1,6 +1,6 @@
 module Drasil.SWHSNoPCM.References (citations) where
 
-import Language.Drasil
+import Language.Drasil.Document (BibRef)
 
 import Data.Drasil.Citations (parnasClements1986)
 

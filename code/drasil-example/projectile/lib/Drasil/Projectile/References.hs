@@ -1,6 +1,6 @@
 module Drasil.Projectile.References (citations) where
 
-import Language.Drasil
+import Language.Drasil.Document (BibRef)
 import Data.Drasil.Citations (accelerationWiki, velocityWiki,
  hibbeler2004, parnasClements1986)
 

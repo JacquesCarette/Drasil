@@ -7,38 +7,45 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Block, Body, SVariable, SValue)
-import qualified Drasil.GOOL.InterfaceGOOL as IG (File, Module, Class,
-  CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
-  FileSym(..), GetSet(..), ObserverPattern(..), StrategyPattern(..))
+import Drasil.Shared.InterfaceCommon (Label, Block, SVariable, SValue, TypeSym,
+  MethodSym, ValueSym, VariableSym, VisibilitySym)
+import qualified Drasil.GOOL.InterfaceGOOL as IG (Class, CSStateVar,
+  OOTypeSym, OOVariableSym, SelfSym, OOValueExpression(..), InternalValueExp(..),
+  FileSym(..), GetSet(..), ObserverPattern(..), StrategyPattern(..), ModuleSym,
+  OOMethodSym, AttachmentSym, StateVarSym, ClassSym)
 import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (FS, CS, VS, MS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
+  MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r vis stmt mthd, IG.FileSym r vis stmt mthd stvr attch,
-  IG.InternalValueExp r, IG.GetSet r, IG.ObserverPattern r stmt,
-  IG.StrategyPattern r stmt, IG.OOVariableValue r,
-  IG.OOValueExpression r, RenderClass r vis mthd stvr, ClassElim r, RenderFile r,
-  InternalGetSet r, OORenderMethod r vis mthd attch, RenderMod r, ModuleElim r,
-  StateVarElim r stvr, PermElim r attch
-  ) => OORenderSym r vis stmt mthd stvr attch
+class (CommonRenderSym r vis stmt mthd bod block, MethodSym r vis mthd bod,
+  IG.OOMethodSym r vis mthd attch bod, VisibilitySym r vis,
+  IG.AttachmentSym r attch, IG.StateVarSym r vis stvr attch,
+  IG.ClassSym r mthd stvr, IG.ModuleSym r mod mthd, IG.FileSym r file mod,
+  ValueSym r, IG.InternalValueExp r, IG.GetSet r, IG.ObserverPattern r stmt,
+  IG.StrategyPattern r bod block, VariableSym r, TypeSym r, IG.OOTypeSym r,
+  IG.OOVariableSym r, IG.SelfSym r, IG.OOValueExpression r,
+  RenderClass r vis mthd stvr, ClassElim r, RenderFile r file mod,
+  InternalGetSet r, MethodTypeSym r, OOMethodTypeSym r, RenderMethod r mthd,
+  OORenderMethod r vis mthd attch bod, RenderMod r mod,
+  ModuleElim r mod, StateVarElim r stvr, PermElim r attch
+  ) => OORenderSym r vis stmt mthd stvr attch file mod bod block
 
 -- OO-Only Typeclasses --
 
-class (BlockCommentSym r) => RenderFile r where
+class (BlockCommentSym r) => RenderFile r file mod | r -> file mod where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
-  top :: r IG.Module -> r Block
+  top :: r mod -> r Block
   bottom :: r Block
 
-  commentedMod :: FS (r IG.File) -> FS (r Doc) -> FS (r IG.File)
+  commentedMod :: FS (r file) -> FS (r Doc) -> FS (r file)
 
-  fileFromData :: FilePath -> FS (r IG.Module) -> FS (r IG.File)
+  fileFromData :: FilePath -> FS (r mod) -> FS (r file)
 
 class PermElim r attch where
   perm :: r attch -> Doc
@@ -48,18 +55,18 @@ class InternalGetSet r where
   getFunc :: SVariable r -> VS (r FuncData)
   setFunc :: VS (r TypeData) -> SVariable r -> SValue r -> VS (r FuncData)
 
-class (MethodTypeSym r) => OOMethodTypeSym r where
-  construct :: Label -> MSMthdType r
+class OOMethodTypeSym r where
+  construct :: Label -> MS (r TypeData)
 
-class (RenderMethod r mthd, OOMethodTypeSym r) => OORenderMethod r vis mthd attch | r -> vis attch where
+class OORenderMethod r vis mthd attch bod | r -> vis mthd attch bod where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r attch ->
-    MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+    MS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intFunc       :: Bool -> Label -> r vis -> r attch
-    -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+    -> MS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 
   destructor :: [IG.CSStateVar r stvr] -> MS (r mthd)
 
@@ -81,9 +88,9 @@ class (BlockCommentSym r) => RenderClass r vis mthd stvr | r -> vis mthd stvr wh
 class ClassElim r where
   class' :: r IG.Class -> Doc
 
-class RenderMod r where
-  modFromData :: String -> FS Doc -> FS (r IG.Module)
-  updateModuleDoc :: (Doc -> Doc) -> r IG.Module -> r IG.Module
+class RenderMod r mod | r -> mod where
+  modFromData :: String -> FS Doc -> FS (r mod)
+  updateModuleDoc :: (Doc -> Doc) -> r mod -> r mod
 
-class ModuleElim r where
-  module' :: r IG.Module -> Doc
+class ModuleElim r mod | r -> mod where
+  module' :: r mod -> Doc

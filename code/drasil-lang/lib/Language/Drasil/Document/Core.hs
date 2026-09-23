@@ -11,10 +11,10 @@ import Control.Lens ((^.), makeLenses, Lens', set, view)
 import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 
 import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.Chunk.Citation (BibRef)
-import Language.Drasil.ShortName (HasShortName(shortname))
+import Language.Drasil.Document.Citation.Core (BibRef)
+import Language.Drasil.Document.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
+import Language.Drasil.Document.Labels (getAdd, prepend, IRefProg,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Document.Reference (Reference)
 import Language.Drasil.Sentence (Sentence)

@@ -17,7 +17,7 @@ import Drasil.Database (UID, HasUID(uid), declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, idea')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
- CommonIdea(abrv), ConceptDomain(cdom))
+ CommonIdea(abrv))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 
 -- | The common idea (with 'NounPhrase') data type. It must have a 'UID',
@@ -38,8 +38,6 @@ instance NamedIdea     CI where term = nc' . term
 instance Idea          CI where getA = Just . view ab
 -- | Finds the idea of a 'CI' (abbreviation).
 instance CommonIdea    CI where abrv = view ab
--- | Finds the domain of a 'CI'.
-instance ConceptDomain CI where cdom = cdom'
 
 -- | The commonIdea smart constructor requires a chunk id ('String'), a
 -- term ('NP'), an abbreviation ('String'), and a

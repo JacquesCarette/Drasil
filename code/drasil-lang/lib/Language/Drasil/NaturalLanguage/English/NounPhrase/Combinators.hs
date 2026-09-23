@@ -32,39 +32,40 @@ module Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators (
   -- ** Other Combinators
   with, parensNP,
   -- re-exports
-  NPStruct((:+:), S, P)
+  npS, npP, (.+.)
 ) where
 
 import Language.Drasil.NaturalLanguage.English.NounPhrase
     ( NP,
-      CapitalizationRule(CapWords, CapFirst, CapNothing),
+      CapitalizationRuleG(CapWords, CapFirst, CapNothing),
       NounPhrase(phraseNP, pluralNP),
-      nounPhrase'', surroundNPStruct)
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct((:+:),S,P))
+      nounPhrase'', surroundNPStruct,
+      npS, npP, (.+.))
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct)
 
 --Maybe move these to a separate Drasil.NounPhrase section
 -- | Helper function that places a 'String' in between two 'NP's. Plural case is
 -- @(phraseNP t1) :+: S s :+: (pluralNP t2)@.
 insertString :: String -> NP -> NP -> NP
-insertString s t1 t2 = nounPhrase'' (phraseNP t1 :+: S s :+: phraseNP t2) (phraseNP t1 :+: S s :+: pluralNP t2) CapFirst CapWords
+insertString str t1 t2 = nounPhrase'' (phraseNP t1 .+. npS str .+. phraseNP t2) (phraseNP t1 .+. npS str .+. pluralNP t2) CapFirst CapWords
 
 -- | Helper function that places a 'String' in between two 'NP's. Plural case is
 -- @(pluralNP t1) :+: S s :+: (phraseNP t2)@, i.e. opposite of 'insertString'
 insertStringOp :: String -> NP -> NP -> NP
-insertStringOp s t1 t2 = nounPhrase'' (phraseNP t1 :+: S s :+: phraseNP t2) (pluralNP t1 :+: S s :+: phraseNP t2) CapFirst CapWords
+insertStringOp str t1 t2 = nounPhrase'' (phraseNP t1 .+. npS str .+. phraseNP t2) (pluralNP t1 .+. npS str .+. phraseNP t2) CapFirst CapWords
 
 -- | Helper function that places a 'String' in between two 'NP's. Plural case is
 -- given by two generic functions.
 insertStringGen :: String -> (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
-insertStringGen s f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 :+: S s :+: phraseNP t2) (f1 t1 :+: S s :+: f2 t2) CapFirst CapWords
+insertStringGen str f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 .+. npS str .+. phraseNP t2) (f1 t1 .+. npS str .+. f2 t2) CapFirst CapWords
 
 -- | Helper function that prepends a 'String' to a 'NP'.
 prependString :: String -> NP -> NP
-prependString s t1 = nounPhrase'' (S s :+: phraseNP t1) (S s :+: pluralNP t1) CapFirst CapWords
+prependString str t1 = nounPhrase'' (npS str .+. phraseNP t1) (npS str .+. pluralNP t1) CapFirst CapWords
 
 -- | Prepends a 'String' to an 'NP' and adjust the plural
 prependStringGen :: String -> (NP -> NPStruct) -> NP -> NP
-prependStringGen s f t = nounPhrase'' (S s :+: phraseNP t) (S s :+: f t) CapFirst CapWords
+prependStringGen str f t = nounPhrase'' (npS str .+. phraseNP t) (npS str .+. f t) CapFirst CapWords
 
 -- surrounding something makes it no capitalizatble at all
 surround :: String -> String -> NP -> NP

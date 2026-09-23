@@ -3,7 +3,7 @@ module Drasil.Projectile.Changes (likelyChgs) where
 import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (likeChgDom)
-import Language.Drasil.Document (chgsStart)
+import Language.Drasil.Document (ConceptInstance, chgsStart, cic)
 
 import Drasil.Projectile.Assumptions (neglectDrag)
 import Drasil.Projectile.Concepts (projectile)

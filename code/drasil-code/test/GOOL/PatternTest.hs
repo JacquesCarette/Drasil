@@ -4,11 +4,11 @@ module GOOL.PatternTest (patternTest) where
 
 import Drasil.GOOL (GSProgram, SVariable, SValue, OOProg, MS, VS, ProgramSym(..),
   FileSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..),
-  StatementSym(..), DeclStatement(..), PrintConsole(..), initObserverList,
-  addObserver, VariableSym(var), OOVariableSym(..), ScopeSym(..), Literal(..),
-  VariableValue(..), OOValueExpression(..), extNewObj, OOFunctionSym(..),
-  GetSet(..), ObserverPattern(..), StrategyPattern(..), MethodSym(..),
-  ModuleSym(..), TypeData)
+  ValueStatement(valStmt), DeclStatement(..), PrintConsole(..), initObserverList,
+  addObserver, VariableSym(var), ScopeSym(..), Literal(..), VariableValue(..),
+  OOValueExpression(..), extNewObj, OOFunctionSym(..), GetSet(..),
+  ObserverPattern(..), StrategyPattern(..), MethodSym(..), ModuleSym(..),
+  TypeData)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import GOOL.Observer (observer, observerName, printNum, x)
 
@@ -27,29 +27,34 @@ observerType :: (OOTypeSym r) => VS (r TypeData)
 observerType = obj observerName
 
 -- | Variables used in the generated code.
-n, obs1, obs2 :: (OOVariableSym r) => SVariable r
+n :: (VariableSym r) => SVariable r
 n = var nName int
+obs1, obs2 :: (OOTypeSym r, VariableSym r) => SVariable r
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
 -- | New Observer object.
-newObserver :: (OOValueExpression r) => SValue r
+newObserver :: (OOTypeSym r, OOValueExpression r) => SValue r
 newObserver = extNewObj observerName observerType []
 
 -- | Creates the pattern test program.
 patternTest
-  :: ( OOProg r vis stmt mthd stvr attch prg
-     , StrategyPattern r stmt
-     , ObserverPattern r stmt
+  ::
+    ( OOProg r vis stmt mthd stvr attch prg file mod bod block
+    , GetSet r
+    , StrategyPattern r bod block
+    , ObserverPattern r stmt
   ) => GSProgram r prg
 patternTest = prog progName "" [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
 -- | Creates the main function for PatternTest.
 patternTestMainMethod
-  :: ( OOProg r vis stmt mthd stvr attch prg
-     , StrategyPattern r stmt
-     , ObserverPattern r stmt
+  ::
+    ( OOProg r vis stmt mthd stvr attch prg file mod bod block
+    , GetSet r
+    , StrategyPattern r bod block
+    , ObserverPattern r stmt
   ) => MS (r mthd)
 patternTestMainMethod = mainFunction (body [block [
   varDec n mainFn],

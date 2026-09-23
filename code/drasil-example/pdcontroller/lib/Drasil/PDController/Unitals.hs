@@ -55,7 +55,7 @@ symbols
      dqdProcessVariableTD, dqdProcessVariableFD,
      dqdProcessErrorFD, dqdDerivativeControlFD, dqdPropControlFD,
      dqdCtrlVarFD, dqdStepTime, dqdSimTime,
-     dqdDampingCoeff, dqdStiffnessCoeff]
+     dqdDampingCoeff, dqdStiffnessCoeff, dqdAbsTol, dqdRelTol]
 
 dqdLaplaceTransform, dqdFreqDomain, dqdFxnTDomain,
                     dqdInvLaplaceTransform, dqdPropGain, dqdDerivGain,
@@ -85,34 +85,34 @@ ipPropGain, ipDerivGain, ipSetPt, ipStepTime, ipSimTime, opProcessVariable ::
 ipSetPtUnc, ipPropGainUnc, ipDerGainUnc, ipStepTimeUnc, ipSimTimeUnc :: UncertQ
 
 ipPropGain
-  = constrained' (dqdNoUnit propGain symKp Real) [gtZeroConstr] (exactDbl 20)
+  = constrained' dqdPropGain [gtZeroConstr] (exactDbl 20)
 ipPropGainUnc = uq ipPropGain defaultUncrt
-dqdPropGain = dqdWr ipPropGain
+dqdPropGain = dqdNoUnit propGain symKp Real
 
 ipDerivGain
-  = constrained' (dqdNoUnit derGain symKd Real) [physRange $ UpFrom (Inc, exactDbl 0)]
+  = constrained' dqdDerivGain [physRange $ UpFrom (Inc, exactDbl 0)]
       (exactDbl 1)
 ipDerGainUnc = uq ipDerivGain defaultUncrt
-dqdDerivGain = dqdWr ipDerivGain
+dqdDerivGain = dqdNoUnit derGain symKd Real
 
-ipSetPt = constrained' (dqdNoUnit setPoint symYrT Real) [gtZeroConstr] (exactDbl 1)
+ipSetPt = constrained' dqdSetPointTD [gtZeroConstr] (exactDbl 1)
 ipSetPtUnc = uq ipSetPt defaultUncrt
-dqdSetPointTD = dqdWr ipSetPt
+dqdSetPointTD = dqdNoUnit setPoint symYrT Real
 
 --FIXME: the original timeStep is 0.01, this will trigger an error in Java ODE solver
 --change it from 0.01 to 0.001 is a temporary fix to make ODE solver working
-ipStepTime = constrained' (dqd stepTime symTStep Real second)
+ipStepTime = constrained' dqdStepTime
   [physRange $ Bounded (Inc, frac 1 1000) (Exc, sy ipSimTime)]
   (dbl 0.001)
 ipStepTimeUnc = uq ipStepTime defaultUncrt
-dqdStepTime = dqdWr ipStepTime
+dqdStepTime = dqd stepTime symTStep Real second
 
 ipSimTime
-  = constrained' (dqd simulationTime symTSim Real second)
+  = constrained' dqdSimTime
       [physRange $ Bounded (Inc, exactDbl 1) (Inc, exactDbl 60)]
       (exactDbl 10)
 ipSimTimeUnc = uq ipSimTime defaultUncrt
-dqdSimTime = dqdWr ipSimTime
+dqdSimTime = dqd simulationTime symTSim Real second
 
 odeAbsTolConst, odeRelTolConst :: ConstQDef
 
@@ -126,10 +126,10 @@ odeAbsTolConst = mkQuantDef dqdAbsTol (dbl 1.0e-10)
 odeRelTolConst = mkQuantDef dqdRelTol (dbl 1.0e-10)
 
 opProcessVariable
-  = constrained' (dqdNoUnit processVariable symYT (Vect Real))
+  = constrained' dqdProcessVariableTD
       [gtZeroConstr]
       (exactDbl 1)
-dqdProcessVariableTD = dqdWr opProcessVariable
+dqdProcessVariableTD = dqdNoUnit processVariable symYT (Vect Real)
 
 dqdSetPointFD
   = quantNoUnit (mkUid "dqdSetPointFD") (setPoint `inThe` ccFrequencyDomain)

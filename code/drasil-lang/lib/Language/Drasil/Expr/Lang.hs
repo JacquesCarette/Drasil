@@ -1,7 +1,3 @@
-{-# LANGUAGE GADTs                 #-}
-{-# LANGUAGE InstanceSigs          #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 -- | The Drasil Expression language
 module Language.Drasil.Expr.Lang (
   Relation, ArithBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..),

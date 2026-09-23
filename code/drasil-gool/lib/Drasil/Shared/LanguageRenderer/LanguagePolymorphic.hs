@@ -1,8 +1,4 @@
-{-# LANGUAGE PostfixOperators #-}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Redundant return" #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | Implementations defined here are valid for any language renderer.
 module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
@@ -21,18 +17,18 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
-  Variable, SVariable, Value, SValue, NamedArgs, MixedCall, MixedCtorCall,
-  bodyStatements, oneLiner, VisibilitySym(..),
-  VariableElim(variableName, variableType), ValueSym(valueType),
-  NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
-  StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
-  PrintConsole(printStr, printStrLn),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Variable,
+  SVariable, Value, SValue, NamedArgs, MixedCall, MixedCtorCall, bodyStatements,
+  oneLiner, VisibilitySym(..), VariableElim(variableName, variableType),
+  ValueSym(valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
+  Comparison(..), funcApp, MultiStatement(multi), AssignStatement((&++)), (&=),
+  TypeElim(..), PrintConsole(printStr, printStrLn),
   PrintFile(printFile, printFileStr, printFileStrLn), ifNoElse, convType,
-  VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression)
+  VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression,
+  VariableValue, BlockSym, BodySym)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (OOStatement, File, Module, Class, Initializers,
-  CSStateVar, newObj, objMethodCallNoParams, ($.), AttachmentSym(..))
+import Drasil.GOOL.InterfaceGOOL (Class, Initializers, CSStateVar, newObj,
+  objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym, OOVariableSym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
@@ -72,7 +68,7 @@ import qualified Text.PrettyPrint.HughesPJ as D
 
 -- Bodies --
 
-multiBody :: (RC.BodyElim r, Monad r) => [MS (r Body)] -> MS (r Doc)
+multiBody :: (RC.BodyElim r bod, Monad r) => [MS (r bod)] -> MS (r Doc)
 multiBody bs = onStateList (toCode . vibcat) $ map (onStateValue RC.body) bs
 
 -- Blocks --
@@ -82,7 +78,7 @@ block
   => [MS (r stmt)] -> MS (r Doc)
 block sts = onStateList (toCode . R.block . map RC.statement) (map RC.stmt sts)
 
-multiBlock :: (RC.BlockElim r, Monad r) => [MS (r Block)] -> MS (r Doc)
+multiBlock :: (RC.BlockElim r block, Monad r) => [MS (r block)] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
@@ -119,6 +115,7 @@ smartAdd v1 v2 = do
   v2' <- v2
   case (RC.valueInt v1', RC.valueInt v2') of
     (Just i1, Just i2) -> litInt (i1 + i2)
+    (_, Just i2) | i2 < 0 -> v1 #- litInt (negate i2)
     _                  -> v1 #+ v2
 
 smartSub
@@ -298,7 +295,9 @@ get
   => SValue r -> SVariable r -> SValue r
 get v vToGet = v $. RO.getFunc vToGet
 
-set :: (RO.InternalGetSet r, IG.OOFunctionSym r) => SValue r -> SVariable r -> SValue r -> SValue r
+set
+  :: (RO.InternalGetSet r, IC.FunctionSym r, IG.OOFunctionSym r)
+  => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. RO.setFunc (onStateValue valueType v) vToSet toVal
 
 -- TODO [Brandon Bosman, 06/10/2026]: Figure out what to do with this
@@ -370,13 +369,30 @@ subAssign t vr' v' = do
   stmtFromData (R.subAssign vr v) t
 
 objDecNew
-  :: (IC.DeclStatement r stmt, IG.OOValueExpression r, VariableElim r)
+  :: (IC.DeclStatement r stmt bod, IG.OOValueExpression r, VariableElim r)
   => SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
-printList :: (IC.SharedStatement r stmt) => Integer -> SValue r ->
-  (SValue r -> MS (r stmt)) -> (String -> MS (r stmt)) ->
-  (String -> MS (r stmt)) -> MS (r stmt)
+printList
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , MultiStatement r stmt
+    , IC.DeclStatement r stmt bod
+    , AssignStatement r stmt
+    , IC.ControlStatement r stmt bod
+    , IC.Literal r
+    , NumericExpression r
+    , Comparison r
+    , IC.VariableValue r
+    , IC.List r
+    )
+  => Integer
+  -> SValue r
+  -> (SValue r -> MS (r stmt))
+  -> (String -> MS (r stmt))
+  -> (String -> MS (r stmt))
+  -> MS (r stmt)
 printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
   IC.for (IC.varDecDef i IC.local (IC.litInt 0))
     (IC.valueOf i ?< (IC.listSize v #- IC.litInt 1)) (i &++)
@@ -387,9 +403,21 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
   where l_i = "list_i" ++ show n
         i = IC.var l_i IC.int
 
-printSet :: (IC.SharedStatement r stmt) => Integer -> SValue r ->
-  (SValue r -> MS (r stmt)) -> (String -> MS (r stmt)) ->
-  (String -> MS (r stmt)) -> VS (r TypeData) -> MS (r stmt)
+printSet
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , MultiStatement r stmt
+    , IC.ControlStatement r stmt bod
+    , IC.VariableValue r
+    )
+  => Integer
+  -> SValue r
+  -> (SValue r -> MS (r stmt))
+  -> (String -> MS (r stmt))
+  -> (String -> MS (r stmt))
+  -> VS (r TypeData)
+  -> MS (r stmt)
 printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ",
   IC.forEach i v
     (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
@@ -401,7 +429,23 @@ printObj :: ClassName -> (String -> MS (r stmt)) -> MS (r stmt)
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
 print
-  :: (RC.InternalIOStmt r stmt, IC.SharedStatement r stmt, TypeElim r)
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , MultiStatement r stmt
+    , PrintConsole r stmt
+    , PrintFile r stmt
+    , IC.DeclStatement r stmt bod
+    , AssignStatement r stmt
+    , IC.ControlStatement r stmt bod
+    , IC.Literal r
+    , NumericExpression r
+    , Comparison r
+    , IC.VariableValue r
+    , IC.List r
+    , TypeElim r
+    , RC.InternalIOStmt r stmt
+    )
   => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
   where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn prLnFn
@@ -414,7 +458,7 @@ print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
           printStr printFileStr f
 
 closeFile
-  :: (IG.InternalValueExp r, StatementSym r stmt)
+  :: (IC.TypeSym r, IG.InternalValueExp r, IC.ValueStatement r stmt)
   => Label -> SValue r -> MS (r stmt)
 closeFile n f = IC.valStmt $ objMethodCallNoParams IC.void f n
 
@@ -455,15 +499,15 @@ optSpaceDoc OSpace {oSpace = sp} = sp
 -- 4th parameter is the syntax for ending a block in an if-condition
 -- 5th parameter is the syntax for ending an if-statement
 ifCond
-  :: (RC.BodyElim r, RenderStatement r stmt, ValueElim r)
+  :: (RC.BodyElim r bod, RenderStatement r stmt, ValueElim r)
   => (Doc -> Doc)
   -> Doc
   -> OptionalSpace
   -> Doc
   -> Doc
   -> Doc
-  -> [(SValue r, MS (r Body))]
-  -> MS (r Body)
+  -> [(SValue r, MS (r bod))]
+  -> MS (r bod)
   -> MS (r stmt)
 ifCond _ _ _ _ _ _ [] _ = error "if condition created with no cases"
 ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
@@ -482,8 +526,8 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
     in sequence (ifSect c : map elseIfSect cs ++ [elseSect])
       >>= (mkStmtNoEnd . vcat)
 
-tryCatch :: (RenderStatement r stmt) => (r Body -> r Body -> Doc) ->
-  MS (r Body) -> MS (r Body) -> MS (r stmt)
+tryCatch :: (RenderStatement r stmt) => (r bod -> r bod -> Doc) ->
+  MS (r bod) -> MS (r bod) -> MS (r stmt)
 tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
 -- Methods --
@@ -502,41 +546,70 @@ param f v' = do
   paramFromData v' $ f v
 
 method
-  :: (OORenderMethod r vis mthd attch)
+  :: (MethodTypeSym r, OORenderMethod r vis mthd attch bod)
   => Label
   -> r vis
   -> r attch
   -> VS (r TypeData)
   -> [MS (r ParamData)]
-  -> MS (r Body)
+  -> MS (r bod)
   -> MS (r mthd)
 method n s p t = intMethod False n s p (mType t)
 
-getMethod :: (OORenderSym r vis stmt mthd stvr attch) => SVariable r -> MS (r mthd)
-getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
+getMethod
+  :: (OORenderSym r vis stmt mthd stvr attch file mod bod block)
+  => SVariable r -> MS (r mthd)
+getMethod v = zoom lensMStoVS v >>= (\vr -> method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
-setMethod :: (OORenderSym r vis stmt mthd stvr attch) => SVariable r -> MS (r mthd)
-setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
+setMethod
+  :: (OORenderSym r vis stmt mthd stvr attch file mod bod block)
+  => SVariable r -> MS (r mthd)
+setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
 
-initStmts :: (OOStatement r stmt) => Initializers r -> MS (r Body)
+initStmts
+  ::
+    ( OOVariableSym r
+    , VariableValue r
+    , SelfSym r
+    , AssignStatement r stmt
+    , BlockSym r block stmt
+    , BodySym r bod block
+    )
+  => Initializers r -> MS (r bod)
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
-  :: (AttachmentSym r attch, OORenderMethod r vis mthd attch)
-  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+  ::
+    ( AttachmentSym r attch
+    , MethodTypeSym r
+    , OORenderMethod r vis mthd attch bod
+    )
+  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 function n s t = RO.intFunc False n s classLevel (mType t)
 
-docFuncRepr :: (RenderMethod r mthd) => FuncDocRenderer -> String ->
-  [String] -> [String] -> MS (r mthd) -> MS (r mthd)
+docFuncRepr
+  :: (BlockCommentSym r, RenderMethod r mthd)
+  => FuncDocRenderer
+  -> String
+  -> [String]
+  -> [String]
+  -> MS (r mthd)
+  -> MS (r mthd)
 docFuncRepr f desc pComms rComms = commentedFunc (docComment $ onStateValue
   (\ps -> f desc (zip ps pComms) rComms) getParameters)
 
-docFunc :: (RenderMethod r mthd) => FuncDocRenderer -> String -> [String] ->
-  Maybe String -> MS (r mthd) -> MS (r mthd)
+docFunc
+  :: (BlockCommentSym r, RenderMethod r mthd)
+  => FuncDocRenderer
+  -> String
+  -> [String]
+  -> Maybe String
+  -> MS (r mthd)
+  -> MS (r mthd)
 docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 -- Classes --
@@ -565,14 +638,14 @@ commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
 
 -- Modules --
 
-modFromData :: Label -> (Doc -> r Module) -> FS Doc -> FS (r Module)
+modFromData :: Label -> (Doc -> r mod) -> FS Doc -> FS (r mod)
 modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Files --
 
 fileDoc
-  :: (RC.BlockElim r, RenderMod r, RenderFile r)
-  => String -> (r Module -> r Block) -> r Block -> FS (r Module) -> FS (r File)
+  :: (RC.BlockElim r block, RenderMod r mod, RenderFile r file mod)
+  => String -> (r mod -> r block) -> r block -> FS (r mod) -> FS (r file)
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName
@@ -590,21 +663,21 @@ fileDoc ext topb botb mdl = do
 --   dt is the date
 --   fl is the file
 docMod
-  :: (RenderFile r)
+  :: (RenderFile r file mod)
   => ModuleDocRenderer
   -> String
   -> String
   -> String
   -> [String]
   -> String
-  -> FS (r File)
-  -> FS (r File)
+  -> FS (r file)
+  -> FS (r file)
 docMod mdr e wm d a dt fl = commentedMod fl (docComment $ mdr wm d a dt . addExt e
   <$> getModuleName)
 
 fileFromData
-  :: (RO.ModuleElim r)
-  => (FilePath -> r Module -> r File) -> FilePath -> FS (r Module) -> FS (r File)
+  :: (RO.ModuleElim r mod)
+  => (FilePath -> r mod -> r file) -> FilePath -> FS (r mod) -> FS (r file)
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'

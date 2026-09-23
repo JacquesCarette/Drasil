@@ -9,4 +9,4 @@ import qualified Language.Drasil.Sentence.Combinators as S
 main :: IO ()
 main = concretizeAndWrite si opts drasilMakefileReqOpts
   where
-    opts = JupyterGenOptions nbDecl S.forT "Projectile_Lesson"
+    opts = JupyterGenOptions nbDecl S.forT' "Projectile_Lesson"

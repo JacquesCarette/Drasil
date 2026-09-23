@@ -55,8 +55,6 @@ instance Definition         TheoryModel where defn = mk . defn
 instance HasReference       TheoryModel where getReferences l = map ref $ rf l-}
 -- | Finds 'DecRef's contained in the 'TheoryModel'.
 instance HasDecRef          TheoryModel where getDecRefs = rf
--- | Finds the domain of the 'ConceptChunk' contained in a 'TheoryModel'.
-instance ConceptDomain      TheoryModel where cdom = cdom . view mk
 -- | Finds any additional notes for the 'TheoryModel'.
 instance HasAdditionalNotes TheoryModel where getNotes = notes
 

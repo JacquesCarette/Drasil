@@ -42,10 +42,10 @@ import Drasil.Database ((+++!))
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, idea')
 import Language.Drasil.Classes (Idea, NamedIdea(..))
-import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, CapitalizationRule(CapWords, Replace,
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, CapitalizationRuleG(CapWords, Replace,
   CapFirst), NounPhrase(phraseNP, pluralNP), nounPhrase'', compoundPhrase,
-  compoundPhrase'', compoundPhrase''')
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct(S,(:+:)))
+  compoundPhrase'', compoundPhrase''', npS, (.+.))
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct)
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase as D (NounPhrase(pluralNP, phraseNP))
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP (
   insertString, insertStringOp, insertStringGen)
@@ -69,8 +69,8 @@ and_PS t1 t2 = NP.insertStringOp "and" (t1 ^. term) (t2 ^. term)
 -- their terms. Plural case is @(pluralNP t1) "and" (pluralNP t2)@.
 and_PP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 and_PP t1 t2 = nounPhrase''
-  (phrase t1 :+: S "and" :+: phrase t2)
-  (plural t1 :+: S "and" :+: plural t2)
+  (phrase t1 .+. npS "and" .+. phrase t2)
+  (plural t1 .+. npS "and" .+. plural t2)
   CapFirst
   CapWords
 
@@ -78,10 +78,10 @@ and_PP t1 t2 = nounPhrase''
 and_TGen :: (NamedIdea c, NamedIdea d) =>
   (c -> NPStruct) -> (d -> NPStruct) -> c -> d -> NP
 and_TGen f1 f2 t1 t2 = nounPhrase''
-  (phrase t1 :+: S "and" :+: phrase t2)
-  (plural t1 :+: S "and" :+: plural t2)
+  (phrase t1 .+. npS "and" .+. phrase t2)
+  (plural t1 .+. npS "and" .+. plural t2)
   CapFirst
-  (Replace (f1 t1 :+: S "and" :+: f2 t2))
+  (Replace (f1 t1 .+. npS "and" .+. f2 t2))
 
 -- | Creates a 'NP' by combining two 'NamedIdea's with the words "and its" between
 -- their terms. Plural case is @(phraseNP t1) "and its" (pluralNP t2)@.
@@ -193,10 +193,10 @@ for t1 t2 = NP.insertString "for" (t1 ^. term) (t2 ^. term)
 -- | Similar to 'for', but takes two functions that determine the 'titleCase'.
 forTGen :: (NamedIdea c, Idea d) => (c -> NPStruct) -> (d -> NPStruct) -> c -> d -> NP
 forTGen f1 f2 t1 t2 = nounPhrase''
-  (phrase t1 :+: S "for" :+: phrase t2)
-  (plural t1 :+: S "for" :+: phrase t2)
+  (phrase t1 .+. npS "for" .+. phrase t2)
+  (plural t1 .+. npS "for" .+. phrase t2)
   CapFirst
-  (Replace (f1 t1 :+: S "for" :+: f2 t2))
+  (Replace (f1 t1 .+. npS "for" .+. f2 t2))
 
 -- | Creates a 'NP' by combining two 'NamedIdea's with the word "in" between
 -- their terms. Plural case is @(phraseNP t1) "in" (pluralNP t2)@.
@@ -219,19 +219,19 @@ is t1 t2 = NP.insertString "is" (t1 ^. term) (t2 ^. term)
 
 -- | Prepends "the" to a 'NamedIdea'.
 the :: (NamedIdea t) => t -> NP
-the t = nounPhrase'' (S "the" :+: phrase t) (S "the" :+: plural t) CapFirst CapWords
+the t = nounPhrase'' (npS "the" .+. phrase t) (npS "the" .+. plural t) CapFirst CapWords
 
 -- | A customizable version of 'the'. The given function is applied to both singular and pluralNP cases.
 theGen :: (t -> NPStruct) -> t -> NP
-theGen f t = nounPhrase'' (S "the" :+: f t) (S "the" :+: f t) CapFirst CapWords
+theGen f t = nounPhrase'' (npS "the" .+. f t) (npS "the" .+. f t) CapFirst CapWords
 
 -- | Prepends "a" to a 'NamedIdea' (similar to 'the').
 a_ :: (NamedIdea c) => c -> NP
-a_ t = nounPhrase'' (S "a" :+: phrase t) (S "a" :+: plural t) CapFirst CapWords
+a_ t = nounPhrase'' (npS "a" .+. phrase t) (npS "a" .+. plural t) CapFirst CapWords
 
 -- | Customizable version of 'a'.
 a_Gen :: (c -> NPStruct) -> c -> NP
-a_Gen f t = nounPhrase'' (S "a" :+: f t) (S "a" :+: f t) CapFirst CapWords
+a_Gen f t = nounPhrase'' (npS "a" .+. f t) (npS "a" .+. f t) CapFirst CapWords
 
 -- | Combinator for combining two 'NamedIdeas's into a 'IdeaDict'.
 -- Plural case only makes second term plural.
@@ -272,8 +272,8 @@ compoundNCPSPP = compoundNCGenP D.pluralNP
 -- | Helper function that combines a 'NamedIdea' and a 'NP' without any words in between.
 -- Plural case is @(phraseNP t1) :+: (pluralNP t2)@.
 combineNINP :: (NamedIdea c) => c -> NP -> NP
-combineNINP t1 t2 = nounPhrase'' (phrase t1 :+: phraseNP t2) (phrase t1 :+: pluralNP t2) CapFirst CapWords
+combineNINP t1 t2 = nounPhrase'' (phrase t1 .+. phraseNP t2) (phrase t1 .+. pluralNP t2) CapFirst CapWords
 
 -- | Similar to 'combineNINP' but takes two 'NamedIdea's.
 combineNINI :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-combineNINI t1 t2 = nounPhrase'' (phrase t1 :+: phrase t2) (phrase t1 :+: plural t2) CapFirst CapWords
+combineNINI t1 t2 = nounPhrase'' (phrase t1 .+. phrase t2) (phrase t1 .+. plural t2) CapFirst CapWords

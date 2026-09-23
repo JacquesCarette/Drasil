@@ -1,5 +1,3 @@
-{-# LANGUAGE DeriveLift #-}
-
 -- | External file 'Asset's.
 module Drasil.Assets.Core
   ( -- * Assets

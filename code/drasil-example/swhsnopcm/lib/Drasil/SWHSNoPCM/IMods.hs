@@ -1,6 +1,7 @@
 module Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, iMods, instModIntro, eBalanceOnWtrRC) where
 
 import Control.Lens ((^.))
+import Data.List.NonEmpty (NonEmpty((:|)), singleton)
 
 import Data.Drasil.Citations (koothoor2013)
 import Data.Drasil.Concepts.Documentation (goal)
@@ -57,9 +58,9 @@ eBalanceOnWtrRC =
     "eBalanceOnWtrRC"
     (nounPhraseSP $ "Energy balance on " ++ "water to find the temperature of the water")
     (tempW ^. defn)
-    where coeffs = [[exactDbl 1, recip_ (sy tauW)]]
+    where coeffs = singleton (exactDbl 1 :| [recip_ (sy tauW)])
           unknowns = [1, 0]
-          constants = [recip_ (sy tauW) $* sy tempC]
+          constants = singleton $ recip_ (sy tauW) $* sy tempC
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [

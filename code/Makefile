@@ -210,7 +210,7 @@ debug: setup_debug_vars test ##@Examples Run test target with better debugging t
 $(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): setup_debug_vars %$(TEST_E_SUFFIX)
 
 pr_ready: stackArgs += --force-dirty
-pr_ready: GHCFLAGS += -Werror -Wwarn=deprecations -fforce-recomp
+pr_ready: GHCFLAGS += -Werror -Wwarn=deprecations -Wwarn=x-partial -fforce-recomp
 pr_ready: all stan hlint check_whitespace ##@General Check if your current work is ready to for a PR via `all` and `hlint` and stan.
 	@echo "Your build/ and stable/ match, and your code currently passes HLint tests."
 	@echo "Feel free to create a PR for your code if you feel it's ready."
@@ -455,7 +455,7 @@ convertAnalyzed: ##@Analysis Convert analyzed dot graphs into SVGs.
 #---------------------------------------#
 
 hlint: check_stack ##@Linters Run HLint through the drasil packages. Uses a local HLint installation.
-	stack install hlint
+	stack install hlint $(stackArgs)
 	hlint .
 
 hot_hlint: ##@Linters Run HLint through the drasil packages. Uses the latest HLint version, downloading the binary each time.
@@ -560,11 +560,13 @@ clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, 
 #--------------------------#
 
 stan: ##@Stan Run Stan static analysis tool on the Drasil packages.
+	stack install stan $(stackArgs)
 	find . -type d -name 'drasil-*' -exec sh -c 'cd {} && stan > stan.log' \;
 	cat drasil-*/stan.log
 #use to display stan logs, cat drasil-*/stan.log
 
 weeder:
+	stack install weeder $(stackArgs)
 	weeder
 
 # Credits to "nowox" from StackOverflow: https://stackoverflow.com/a/30796664/16760741

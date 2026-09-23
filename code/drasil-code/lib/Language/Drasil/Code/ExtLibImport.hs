@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, TupleSections #-}
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines functions for simultaneous interpretation of ExternalLibrary and
 -- ExternalLibraryCall.
 module Language.Drasil.Code.ExtLibImport (ExtLibState(..), auxMods, defs,

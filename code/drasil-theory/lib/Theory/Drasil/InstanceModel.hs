@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, MultiParamTypeClasses #-}
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines types and functions for Instance Models.
 module Theory.Drasil.InstanceModel(
   -- * Type
@@ -45,6 +45,8 @@ instance HasChunkRefs InstanceModel where
     [ chunkRefs (imd ^. mk)
     , chunkRefs (map fst (imd ^. imInputs))
     , chunkRefs (imd ^. imOutput . _1)
+    , chunkRefs (imd ^. rf)
+    , chunkRefs (imd ^. deri)
     , chunkRefs (lb imd)
     , chunkRefs (imd ^. notes)
     ]
@@ -58,8 +60,6 @@ instance NamedIdea          InstanceModel where term = mk . term
 instance Idea               InstanceModel where getA = getA . (^. mk)
 -- | Finds the definition of the 'InstanceModel'.
 instance Definition         InstanceModel where defn = mk . defn
--- | Finds the domain of the 'InstanceModel'.
-instance ConceptDomain      InstanceModel where cdom = cdom . (^. mk)
 -- | Converts the 'InstanceModel's related expression into the display language.
 instance Express            InstanceModel where express = express . (^. mk)
 -- | Finds the derivation of the 'InstanceModel'. May contain Nothing.

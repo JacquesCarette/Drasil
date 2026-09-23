@@ -1,6 +1,6 @@
 {-# LANGUAGE QuasiQuotes #-}
 
-module Drasil.Generator.SRS.TraceabilityGraphs (outputDot) where
+module Drasil.SRS.Generator.TraceabilityGraphs (outputDot) where
 
 import Prelude hiding ((<>))
 

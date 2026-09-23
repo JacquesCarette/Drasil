@@ -1,6 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | Implementations for C-like renderers are defined here.
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
@@ -13,7 +10,7 @@ module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Library, Body, TypeElim(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Library, TypeElim(..),
   SVariable, Value, SValue, MixedCall, MixedCtorCall, VariableSym(..),
   VariableValue(..), VariableElim(..), ValueSym(valueType), getCodeType,
   getTypeString)
@@ -128,7 +125,7 @@ libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
 
 -- Functions --
 
-listSize :: (IG.InternalValueExp r) => String -> SValue r -> SValue r
+listSize :: (ValueSym r, IG.InternalValueExp r) => String -> SValue r -> SValue r
 listSize fnName list = objMethodCallNoParams IC.int list fnName
 
 listSize' :: (IG.OOVariableSym r, VariableValue r) => String -> SValue r -> SValue r
@@ -178,7 +175,7 @@ varDec s d pdoc v' scp = do
         ptrdoc _ = empty
 
 varDecDef
-  :: ( IC.DeclStatement r stmt
+  :: ( IC.DeclStatement r stmt bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
      , ValueElim r
@@ -192,7 +189,7 @@ varDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 setDecDef
-  :: ( IC.DeclStatement r stmt
+  :: ( IC.DeclStatement r stmt bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
      , ValueElim r
@@ -206,7 +203,11 @@ setDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 listDec
-  :: (IC.DeclStatement r stmt, RC.RenderStatement r stmt, RC.StatementElim r stmt)
+  ::
+    ( IC.DeclStatement r stmt bod
+    , RC.RenderStatement r stmt
+    , RC.StatementElim r stmt
+    )
   => (r Value -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r stmt)
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
@@ -214,7 +215,7 @@ listDec f vl v scp = do
   mkStmt (RC.statement vd <> f sz)
 
 extObjDecNew
-  :: (IC.DeclStatement r stmt, IG.OOValueExpression r, VariableElim r)
+  :: (IC.DeclStatement r stmt bod, IG.OOValueExpression r, VariableElim r)
   => Library -> SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 extObjDecNew l v scp vs = IC.varDecDef v scp
   (extNewObj l (onStateValue variableType v) vs)
@@ -222,7 +223,7 @@ extObjDecNew l v scp vs = IC.varDecDef v scp
 -- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)
 -- 2nd parameter is a statement to end every case with
 switch
-  :: ( RC.BodyElim r
+  :: ( RC.BodyElim r bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
      , ValueElim r
@@ -230,8 +231,8 @@ switch
   => (Doc -> Doc)
   -> MS (r stmt)
   -> SValue r
-  -> [(SValue r, MS (r Body))]
-  -> MS (r Body)
+  -> [(SValue r, MS (r bod))]
+  -> MS (r bod)
   -> MS (r stmt)
 switch f st v cs bod = do
   s <- RC.stmt st
@@ -242,7 +243,7 @@ switch f st v cs bod = do
   mkStmt $ R.switch f s val dflt (zip vals bods)
 
 for
-  :: ( RC.BodyElim r
+  :: ( RC.BodyElim r bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
      , ValueElim r
@@ -252,7 +253,7 @@ for
   -> MS (r stmt)
   -> SValue r
   -> MS (r stmt)
-  -> MS (r Body)
+  -> MS (r bod)
   -> MS (r stmt)
 for bStart bEnd sInit vGuard sUpdate b = do
   initl <- RC.loopStmt sInit
@@ -267,8 +268,8 @@ for bStart bEnd sInit vGuard sUpdate b = do
 
 -- Doc function parameter is applied to the render of the while-condition
 while
-  :: (RC.BodyElim r, RC.RenderStatement r stmt, ValueElim r)
-  => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MS (r Body) -> MS (r stmt)
+  :: (RC.BodyElim r bod, RC.RenderStatement r stmt, ValueElim r)
+  => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MS (r bod) -> MS (r stmt)
 while f bStart bEnd v' b'= do
   v <- zoom lensMStoVS v'
   b <- b'

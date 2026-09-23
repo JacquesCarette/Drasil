@@ -1,5 +1,3 @@
-{-# LANGUAGE GADTs #-}
-
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 

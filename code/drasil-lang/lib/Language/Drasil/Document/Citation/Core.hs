@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
 -- | Defines the chunk type to hold citations.
-module Language.Drasil.Chunk.Citation (
+module Language.Drasil.Document.Citation.Core (
   -- * Types
   Citation, BibRef, EntryID,
   -- * Class
@@ -20,12 +20,12 @@ import Drasil.Database (HasUID(..), UID, showUID, mkUid, declareHasChunkRefs,
   Generically(..))
 
 import Language.Drasil.People (People)
-import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
-import Language.Drasil.Data.Citation (HasFields(..), CitationKind(..), CiteField,
+import Language.Drasil.Document.ShortName (HasShortName(..), ShortName, shortname')
+import Language.Drasil.Document.Citation.Components (HasFields(..), CitationKind(..), CiteField,
   author, chapter, pages, editor, bookTitle, title,
   year, school, journal, institution, note, publisher)
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Label.Type (LblType(Citation), Referable(..), HasRefAddress(..))
+import Language.Drasil.Document.Labels (LblType(Citation), Referable(..), HasRefAddress(..))
 
 -- | A list of 'Citation's.
 type BibRef = [Citation]

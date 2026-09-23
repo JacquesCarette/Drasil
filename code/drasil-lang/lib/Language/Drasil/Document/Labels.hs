@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 -- | Even though we do not have 'Label's per se, here we define the
 -- different ways of construction  ways to mark labels.
-module Language.Drasil.Label.Type(
+module Language.Drasil.Document.Labels (
   -- * Types
     LblType(RP, Citation, URI), IRefProg(..)
   -- * Classes

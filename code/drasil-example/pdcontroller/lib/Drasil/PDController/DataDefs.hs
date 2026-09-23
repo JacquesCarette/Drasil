@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.PDController.DataDefs (
   dataDefinitions, ddErrSig, ddCtrlVar
 ) where

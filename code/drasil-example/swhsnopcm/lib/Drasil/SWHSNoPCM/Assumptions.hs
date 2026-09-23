@@ -1,9 +1,9 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHSNoPCM.Assumptions (module Drasil.SWHSNoPCM.Assumptions) where --all of this file is exported
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
+import Language.Drasil.Document (ConceptInstance, cic)
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 

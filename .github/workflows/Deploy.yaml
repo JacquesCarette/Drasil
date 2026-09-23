@@ -39,13 +39,13 @@ jobs:
         run: make stackArgs="--no-terminal" deps
 
       - name: "Build"
-        run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror -Wwarn=deprecations"
+        run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror -Wwarn=deprecations -Wwarn=x-partial"
 
       - name: "Stack Test"
         run: make stack_test stackArgs="--no-terminal"
 
       - name: "Test built artifacts against stable"
-        run: make stackArgs="--no-terminal" GHCFLAGS="-Werror -Wwarn=deprecations" NOISY=yes
+        run: make stackArgs="--no-terminal" GHCFLAGS="-Werror -Wwarn=deprecations -Wwarn=x-partial" NOISY=yes
 
       - name: "Generate module dependency graphs"
         run: make graphs
@@ -149,7 +149,7 @@ jobs:
 
       - name: "Compile GOOL Examples"
         run: make codegenTest
-      
+
       - name: "Compile generated software artifacts"
         run: make gool
 

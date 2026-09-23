@@ -3,6 +3,7 @@ module Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts) where
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
+import Language.Drasil.Document (ConceptInstance, cic)
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 

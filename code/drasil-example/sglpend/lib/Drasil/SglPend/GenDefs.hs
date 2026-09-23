@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SglPend.GenDefs (genDefns, velocityIXGD, velocityIYGD,
          accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD,
          angFrequencyGD, periodPend) where
@@ -149,9 +148,9 @@ hForceOnPendulumMD :: MultiDefn ModelExpr
 hForceOnPendulumMD = mkMultiDefnForQuant xForce EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "hForceOnPendulumViaComponent"
-                      [] EmptyS $ express E.hForceOnPendulumViaComponent,
+                      EmptyS $ express E.hForceOnPendulumViaComponent,
                     mkDefiningExpr "hForceOnPendulumViaAngle"
-                      [] EmptyS $ express E.hForceOnPendulumViaAngle
+                      EmptyS $ express E.hForceOnPendulumViaAngle
                   ]
 
 hForceOnPendulumDeriv :: Derivation
@@ -166,9 +165,9 @@ vForceOnPendulumMD :: MultiDefn ModelExpr
 vForceOnPendulumMD = mkMultiDefnForQuant yForce EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "vForceOnPendulumViaComponent"
-                      [] EmptyS $ express E.vForceOnPendulumViaComponent,
+                      EmptyS $ express E.vForceOnPendulumViaComponent,
                     mkDefiningExpr "vForceOnPendulumViaAngle"
-                      [] EmptyS $ express E.vForceOnPendulumViaAngle
+                      EmptyS $ express E.vForceOnPendulumViaAngle
                   ]
 
 vForceOnPendulumDeriv :: Derivation
@@ -239,5 +238,5 @@ periodPendDerivSent2 = S "Therefore from the data definition of the" +:+
 
 periodPendNotes :: Sentence
 periodPendNotes = D.toSent (atStartNP (NP.the (frequency `and_` period))) +:+
-  S "are defined in the data definitions for" +:+ namedRef frequencyDD (phrase frequencyDD) `S.and_`
-        namedRef periodSHMDD (phrase periodSHMDD) +:+ S "respectively"
+  S "are defined in the data definitions for" +:+ namedRef frequencyDD (phrase frequency) `S.and_`
+        namedRef periodSHMDD (phrase period) +:+ S "respectively"

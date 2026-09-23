@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 -- | Short names are used for displaying references.
-module Language.Drasil.ShortName (
+module Language.Drasil.Document.ShortName (
   ShortName, shortname', getSentSN, HasShortName(..)
 ) where
 

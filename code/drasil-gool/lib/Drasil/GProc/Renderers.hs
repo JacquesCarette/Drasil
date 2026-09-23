@@ -1,6 +1,4 @@
-{-# LANGUAGE FlexibleContexts #-}
 -- | Contains renderer-related functions specific to GOOL
-
 module Drasil.GProc.Renderers (
   renderType, renderParam, renderListDec, renderConstDecDef
 ) where

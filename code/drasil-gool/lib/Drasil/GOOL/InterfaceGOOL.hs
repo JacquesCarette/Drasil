@@ -22,7 +22,7 @@ module Drasil.GOOL.InterfaceGOOL (
 
 import Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, SVariable, SValue, NamedArgs, MixedCtorCall, PosCall,
+  Label, Library, SVariable, Value, NamedArgs, MixedCtorCall, PosCall,
   PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   BodySym(body), BlockSym, TypeSym(..), MethodSym(..), VariableSym(var),
@@ -109,7 +109,7 @@ class ClassSym r mthd stvr | r -> mthd stvr where
 
   docClass :: String -> CS (r Class) -> CS (r Class)
 
-type Initializers r = [(SVariable r, SValue r)]
+type Initializers r = [(SVariable r, VS (r Value))]
 
 class OOMethodSym r vis typ mthd attch bod | r -> vis typ mthd attch bod where
   method      :: Label -> r vis -> r attch -> VS (r typ) ->
@@ -163,10 +163,10 @@ class StateVarSym r vis stvr attch | r -> vis stvr attch where
   stateVar :: r vis -> r attch -> SVariable r -> CSStateVar r stvr
   -- | Given a visibility, attachment, variable, and initial value,
   -- represent the declaration of a state variable with the given initial value.
-  stateVarDef :: r vis -> r attch -> SVariable r -> SValue r -> CSStateVar r stvr
+  stateVarDef :: r vis -> r attch -> SVariable r -> VS (r Value) -> CSStateVar r stvr
   -- | Given a visibility, variable, and value, represent the declaration of
   -- a state constant with the given value.
-  constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r stvr
+  constVar :: r vis ->  SVariable r -> VS (r Value) -> CSStateVar r stvr
 
 privDVar
   :: (AttachmentSym r attch, VisibilitySym r vis, StateVarSym r vis stvr attch)
@@ -202,9 +202,9 @@ class OOVariableSym r typ | r -> typ where
   -- performs any necessary imports and creates `C.v`
   extClassVarAccess :: VS (r typ) -> SVariable r -> SVariable r
   -- | Given an instance `i` and an instance-level variable `v`, creates `i.v`
-  instanceVarAccess :: SValue r -> SVariable r -> SVariable r
+  instanceVarAccess :: VS (r Value) -> SVariable r -> SVariable r
 
-($->) :: (OOVariableSym r typ) => SValue r -> SVariable r -> SVariable r
+($->) :: (OOVariableSym r typ) => VS (r Value) -> SVariable r -> SVariable r
 infixl 9 $->
 ($->) = instanceVarAccess
 
@@ -245,71 +245,71 @@ class InternalValueExp r typ | r -> typ where
   -- | Generic function for calling a method.
   --   Takes the function name, the return type, the object, a list of
   --   positional arguments, and a list of named arguments.
-  objMethodCallMixedArgs' :: Label -> VS (r typ) -> SValue r -> [SValue r] ->
-    NamedArgs r -> SValue r
+  objMethodCallMixedArgs' :: Label -> VS (r typ) -> VS (r Value) -> [VS (r Value)] ->
+    NamedArgs r -> VS (r Value)
   -- | Generic function for calling a class method.
   --   Takes the function name, the return type, the class type,
   --   a list of positional arguments, and a list of named arguments.
-  classMethodCallMixedArgs' :: Label -> VS (r typ) -> VS (r typ) -> [SValue r] ->
-    NamedArgs r -> SValue r
+  classMethodCallMixedArgs' :: Label -> VS (r typ) -> VS (r typ) -> [VS (r Value)] ->
+    NamedArgs r -> VS (r Value)
 
 -- | Calling a method. t is the return type of the method, o is the
 --   object, f is the method name, and ps is a list of positional arguments.
 objMethodCall
   :: (InternalValueExp r typ)
-  => VS (r typ) -> SValue r -> Label -> [SValue r] -> SValue r
+  => VS (r typ) -> VS (r Value) -> Label -> [VS (r Value)] -> VS (r Value)
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
 -- | Calling a method with named arguments.
 objMethodCallNamedArgs
   :: (InternalValueExp r typ)
-  => VS (r typ) -> SValue r -> Label -> NamedArgs r -> SValue r
+  => VS (r typ) -> VS (r Value) -> Label -> NamedArgs r -> VS (r Value)
 objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
 
 -- | Calling a method with a mix of positional and named arguments.
 objMethodCallMixedArgs
   :: (InternalValueExp r typ)
-  => VS (r typ) -> SValue r -> Label -> [SValue r] -> NamedArgs r -> SValue r
+  => VS (r typ) -> VS (r Value) -> Label -> [VS (r Value)] -> NamedArgs r -> VS (r Value)
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
 -- | Calling a method with no parameters.
 objMethodCallNoParams
   :: (InternalValueExp r typ)
-  => VS (r typ) -> SValue r -> Label -> SValue r
+  => VS (r typ) -> VS (r Value) -> Label -> VS (r Value)
 objMethodCallNoParams t o f = objMethodCall t o f []
 
 -- | Calling a class method. t is the return type of the method, c is the
 --   class, f is the method name, and ps is a list of positional arguments.
 classMethodCall
   :: (InternalValueExp r typ)
-  => VS (r typ) -> VS (r typ) -> Label -> [SValue r] -> SValue r
+  => VS (r typ) -> VS (r typ) -> Label -> [VS (r Value)] -> VS (r Value)
 classMethodCall t c f ps = classMethodCallMixedArgs' f t c ps []
 
 -- | Calling a class method with named arguments.
 classMethodCallNamedArgs
   :: (InternalValueExp r typ)
-  => VS (r typ) -> VS (r typ) -> Label -> NamedArgs r -> SValue r
+  => VS (r typ) -> VS (r typ) -> Label -> NamedArgs r -> VS (r Value)
 classMethodCallNamedArgs t c f = classMethodCallMixedArgs' f t c []
 
 -- | Calling a class method with a mix of positional and named arguments.
 classMethodCallMixedArgs
   :: (InternalValueExp r typ)
-  => VS (r typ) -> VS (r typ) -> Label -> [SValue r] -> NamedArgs r -> SValue r
+  => VS (r typ) -> VS (r typ) -> Label -> [VS (r Value)] -> NamedArgs r -> VS (r Value)
 classMethodCallMixedArgs t c f = classMethodCallMixedArgs' f t c
 
 -- | Calling a class method with no parameters.
 classMethodCallNoParams
   :: (InternalValueExp r typ)
-  => VS (r typ) -> VS (r typ) -> Label -> SValue r
+  => VS (r typ) -> VS (r typ) -> Label -> VS (r Value)
 classMethodCallNoParams t c f = classMethodCall t c f []
 
 class OODeclStatement r stmt | r -> stmt where
-  objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
+  objDecDef    :: SVariable r -> r ScopeData -> VS (r Value) -> MS (r stmt)
   -- Parameters: variable to store the object, scope of the variable,
   --             constructor arguments.  Object type is not needed,
   --             as it is inferred from the variable's type.
-  objDecNew    :: SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
-  extObjDecNew :: Library -> SVariable r -> r ScopeData -> [SValue r]
+  objDecNew    :: SVariable r -> r ScopeData -> [VS (r Value)] -> MS (r stmt)
+  extObjDecNew :: Library -> SVariable r -> r ScopeData -> [VS (r Value)]
     -> MS (r stmt)
 
 objDecNewNoParams :: (OODeclStatement r stmt) => SVariable r -> r ScopeData
@@ -331,7 +331,7 @@ observerListName = "observerList"
 
 initObserverList
   :: (TypeSym r typ, VariableSym r typ, DeclStatement r stmt bod)
-  => VS (r typ) -> [SValue r] -> r ScopeData -> MS (r stmt)
+  => VS (r typ) -> [VS (r Value)] -> r ScopeData -> MS (r stmt)
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
 addObserver
@@ -343,31 +343,31 @@ addObserver
     , List r
     , ListStatement r stmt
     )
-  => SValue r -> MS (r stmt)
+  => VS (r Value) -> MS (r stmt)
 addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
 class StrategyPattern r bod block | r -> bod block where
-  runStrategy :: Label -> [(Label, MS (r bod))] -> Maybe (SValue r) ->
+  runStrategy :: Label -> [(Label, MS (r bod))] -> Maybe (VS (r Value)) ->
     Maybe (SVariable r) -> MS (r block)
 
 class OOFunctionSym r typ | r -> typ where
-  func :: Label -> VS (r typ) -> [SValue r] -> VS (r FuncData)
-  objAccess :: SValue r -> VS (r FuncData) -> SValue r
+  func :: Label -> VS (r typ) -> [VS (r Value)] -> VS (r FuncData)
+  objAccess :: VS (r Value) -> VS (r FuncData) -> VS (r Value)
 
-($.) :: (OOFunctionSym r typ) => SValue r -> VS (r FuncData) -> SValue r
+($.) :: (OOFunctionSym r typ) => VS (r Value) -> VS (r FuncData) -> VS (r Value)
 infixl 9 $.
 ($.) = objAccess
 
 selfAccess
   :: (VariableValue r, SelfSym r, OOFunctionSym r typ)
-  => VS (r FuncData) -> SValue r
+  => VS (r FuncData) -> VS (r Value)
 selfAccess = objAccess (valueOf self)
 
 class GetSet r where
-  get :: SValue r -> SVariable r -> SValue r
-  set :: SValue r -> SVariable r -> SValue r -> SValue r
+  get :: VS (r Value) -> SVariable r -> VS (r Value)
+  set :: VS (r Value) -> SVariable r -> VS (r Value) -> VS (r Value)
 
 convTypeOO :: (TypeSym r typ, OOTypeSym r typ) => CodeType -> VS (r typ)
 convTypeOO (Object n) = obj n

@@ -5,7 +5,7 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
+import Drasil.Shared.InterfaceCommon (Label, Value, Variable, SVariable,
   getCodeType, UnRepr(..), Body, Block, BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
@@ -641,7 +641,7 @@ mlLineCmt = vcat . map ((mlCmtStart <+>) . text)
 
 -- | A stand-in print function. mlPrint never uses it, but it must be a real
 --   value so the print methods type-check.
-mlPrintFunc :: SValue MatlabCode
+mlPrintFunc :: VS (MatlabCode Value)
 mlPrintFunc = mkStateVal void (text "fprintf")
 
 -- | Gets a command-line argument: argv(){n}.
@@ -656,7 +656,7 @@ mlMainFunc n = do
      indent b,
      text "end"]
 
-mlArg :: SValue MatlabCode -> SValue MatlabCode
+mlArg :: VS (MatlabCode Value) -> VS (MatlabCode Value)
 mlArg n' = do
   n <- n'
   s <- string
@@ -665,7 +665,8 @@ mlArg n' = do
 -- | Indexes into a vector. MATLAB is 1-indexed while GOOL is 0-indexed, so the
 --   index is translated with 'intToIndex' (which folds constants, e.g. @a(1)@
 --   for index 0, and yields @a(i + 1)@ for a variable @i@).
-mlVecIndex :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+mlVecIndex
+  :: VS (MatlabCode Value) -> VS (MatlabCode Value) -> VS (MatlabCode Value)
 mlVecIndex v' i' = do
   v <- v'
   i <- intToIndex i'
@@ -680,18 +681,22 @@ mlListType t' = do
   mlTy (List $ getCodeType t) "vector"
 
 -- | A vector literal, rendered as a MATLAB row vector.
-mlLitList :: VS (MatlabCode TypeData) -> [SValue MatlabCode] -> SValue MatlabCode
+mlLitList
+  :: VS (MatlabCode TypeData) -> [VS (MatlabCode Value)] -> VS (MatlabCode Value)
 mlLitList t es = do
   elems <- sequence es
   mkStateVal (listType t) (brackets (valueList elems))
 
 -- | Reads one line from a file as text: fgetl(f).
-mlReadLine :: SValue MatlabCode -> SValue MatlabCode
+mlReadLine :: VS (MatlabCode Value) -> VS (MatlabCode Value)
 mlReadLine f = funcApp "fgetl" string [f]
 
 -- | Reads a value into v. Numbers go through str2double; text is kept as-is.
 --   The type of v says which one to use.
-mlInput :: SValue MatlabCode -> SVariable MatlabCode -> MS (MatlabCode (Doc, Terminator))
+mlInput
+  :: VS (MatlabCode Value)
+  -> SVariable MatlabCode
+  -> MS (MatlabCode (Doc, Terminator))
 mlInput inSrc v = v &= (v >>= mlInput' . getCodeType . variableType)
   where mlInput' Integer = funcApp "str2double" int [inSrc]
         mlInput' Float   = funcApp "str2double" float [inSrc]
@@ -702,8 +707,12 @@ mlInput inSrc v = v &= (v >>= mlInput' . getCodeType . variableType)
 -- | Prints a value: fprintf([fid, ]'fmt', value). The format is %s for text
 --   and %g for numbers. A line-print adds \n. A file handle, if given, comes
 --   first. (We always use fprintf, so the print-function argument is ignored.)
-mlPrint :: Bool -> Maybe (SValue MatlabCode) -> SValue MatlabCode
-  -> SValue MatlabCode -> MS (MatlabCode (Doc, Terminator))
+mlPrint
+  :: Bool
+  -> Maybe (VS (MatlabCode Value))
+  -> VS (MatlabCode Value)
+  -> VS (MatlabCode Value)
+  -> MS (MatlabCode (Doc, Terminator))
 mlPrint newLn f' _ v' = do
   v  <- zoom lensMStoVS v'
   mf <- traverse (zoom lensMStoVS) f'
@@ -717,8 +726,11 @@ mlPrint newLn f' _ v' = do
     parens (fileArg <> text ("'" ++ fmt ++ nl ++ "'") <> listSep' <> RC.value v))
     Semi
 
-mlInlineIf :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
-  -> SValue MatlabCode
+mlInlineIf
+  :: VS (MatlabCode Value)
+  -> VS (MatlabCode Value)
+  -> VS (MatlabCode Value)
+  -> VS (MatlabCode Value)
 mlInlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
@@ -727,7 +739,8 @@ mlInlineIf c' v1' v2' = do
     (parens (parens (RC.value c) <+> text ".*" <+> parens (RC.value v1)
     <+> text "+ ~" <> parens (RC.value c) <+> text ".*" <+> parens (RC.value v2)))
 
-mlCast :: VS (MatlabCode TypeData) -> SValue MatlabCode -> SValue MatlabCode
+mlCast
+  :: VS (MatlabCode TypeData) -> VS (MatlabCode Value) -> VS (MatlabCode Value)
 mlCast t' v' = do
   t <- t'
   v <- v'
@@ -744,7 +757,11 @@ mlCast t' v' = do
     (_,      Char)    -> funcApp "char" rt [rv]
     _                 -> return v
 
-mlEqOp :: Bool -> SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+mlEqOp
+  :: Bool
+  -> VS (MatlabCode Value)
+  -> VS (MatlabCode Value)
+  -> VS (MatlabCode Value)
 mlEqOp neg v1' v2' = do
   v1 <- v1'
   v2 <- v2'
@@ -757,7 +774,9 @@ mlEqOp neg v1' v2' = do
     _      -> if neg then typeBinExpr notEqualOp bool (return v1) (return v2)
                      else typeBinExpr equalOp bool (return v1) (return v2)
 
-mlListDec :: SVariable MatlabCode -> MatlabCode ScopeData
+mlListDec
+  :: SVariable MatlabCode
+  -> MatlabCode ScopeData
   -> MS (MatlabCode (Doc, Terminator))
 mlListDec v scp = do
   vr <- zoom lensMStoVS v
@@ -767,7 +786,9 @@ mlListDec v scp = do
   CS.varDecDef (return vr) scp
     (Just (mkStateVal (toState $ variableType vr) emptyInit))
 
-mlReadAllLines :: SValue MatlabCode -> SVariable MatlabCode
+mlReadAllLines
+  :: VS (MatlabCode Value)
+  -> SVariable MatlabCode
   -> MS (MatlabCode (Doc, Terminator))
 mlReadAllLines f v = do
   let var_line = var "mlLine" string
@@ -793,7 +814,7 @@ mlForEach i lstVar b = vcat [
 
 mlRange
   :: (CommonRenderSym r vis typ stmt mthd bod block)
-  => SValue r -> SValue r -> SValue r -> SValue r
+  => VS (r Value) -> VS (r Value) -> VS (r Value) -> VS (r Value)
 mlRange initv finalv stepv = do
   ini <- initv
   fin <- finalv
@@ -810,14 +831,18 @@ mlTryCatch tryB catchB = vcat [
   indent $ RC.body catchB,
   mlEnd]
 
-mlArrayElem :: SValue MatlabCode -> SValue MatlabCode -> SVariable MatlabCode
+mlArrayElem
+  :: VS (MatlabCode Value) -> VS (MatlabCode Value) -> SVariable MatlabCode
 mlArrayElem arr' i' = do
   i <- intToIndex i'
   arr <- arr'
   mkStateVar (render $ RC.value arr) (A.innerType $ return $ valueType arr)
     (RC.value arr <> parens (RC.value i))
 
-mlListAdd :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+mlListAdd
+  :: VS (MatlabCode Value)
+  -> VS (MatlabCode Value)
+  -> VS (MatlabCode Value)
   -> MS (MatlabCode (Doc, Terminator))
 mlListAdd lst' idx' val' = do
   lst <- zoom lensMStoVS lst'
@@ -832,7 +857,10 @@ mlListAdd lst' idx' val' = do
      <> text "," <+> valDoc
      <> text "," <+> lstDoc <> parens (idxDoc <> text ":end")))
 
-mlListSet :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+mlListSet
+  :: VS (MatlabCode Value)
+  -> VS (MatlabCode Value)
+  -> VS (MatlabCode Value)
   -> MS (MatlabCode (Doc, Terminator))
 mlListSet lst' idx' val' = do
   lst <- zoom lensMStoVS lst'

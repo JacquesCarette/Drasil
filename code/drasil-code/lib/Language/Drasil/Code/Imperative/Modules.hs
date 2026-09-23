@@ -24,7 +24,7 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
   Space(..))
 import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
   oneLineCodeExprDoc)
-import Drasil.GOOL (SVariable, SValue, CS, FS, MS, CSStateVar, Class, OOProg,
+import Drasil.GOOL (SVariable, Value, VS, CS, FS, MS, CSStateVar, Class, OOProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), AttachmentSym(..),
   TypeSym(..), ValueSym, VariableSym(..), ScopeSym(..), ScopeData, Literal(..),
   OOTypeSym, OOVariableSym, VariableValue(..), CommandLineArgs(..),
@@ -279,7 +279,7 @@ constVarFunc
     , StateVarSym r vis stvr attch
     )
   => ConstantRepr
-  -> (SVariable r -> SValue r -> CSStateVar r stvr)
+  -> (SVariable r -> VS (r Value) -> CSStateVar r stvr)
 constVarFunc Var = stateVarDef public instanceLevel
 constVarFunc Const = constVar public
 
@@ -2053,7 +2053,7 @@ writeOutputValue
     , PrintFile r stmt
     , List r
     )
-  => SValue r -> SValue r -> Space -> [MS (r stmt)]
+  => VS (r Value) -> VS (r Value) -> Space -> [MS (r stmt)]
 writeOutputValue out = writeTop
   where
     writeTop curr (Vect inner) =

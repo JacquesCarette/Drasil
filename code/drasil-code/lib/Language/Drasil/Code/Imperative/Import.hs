@@ -48,7 +48,7 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 import Language.Drasil.Printers (showHasSymbImpl)
 
-import Drasil.GOOL (Label, SVariable, SValue, Class, CSStateVar, NamedArgs,
+import Drasil.GOOL (Label, SVariable, Value, Class, CSStateVar, NamedArgs,
   Initializers, OOProg, CS, FS, MS, VS, AttachmentSym(..), bodyStatements,
   BlockSym(..), TypeSym(..), OOTypeSym(..), VariableSym(..), VariableElim(..),
   VariableValue(..), ScopeSym(..), ScopeData, OOVariableSym(..), SelfSym(..),
@@ -107,7 +107,7 @@ value
     , TypeElim r typ
     , VariableElim r typ
     )
-  => UID -> Name -> VS (r typ) -> GenState (SValue r)
+  => UID -> Name -> VS (r typ) -> GenState (VS (r Value))
 value u s t = do
   g <- get
   let cs = g
@@ -253,7 +253,7 @@ mkVal
     , TypeElim r typ
     , VariableElim r typ
     )
-  => CodeVarChunk -> GenState (SValue r)
+  => CodeVarChunk -> GenState (VS (r Value))
 mkVal v = do
   t <- codeType v
   let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
@@ -483,7 +483,7 @@ convExpr
     , TypeElim r typ
     , VariableElim r typ
     )
-  => CodeExpr -> GenState (SValue r)
+  => CodeExpr -> GenState (VS (r Value))
 convExpr (Lit (Dbl d)) = do
   sm <- spaceCodeType Real
   let getLiteral Double = litDouble d
@@ -599,9 +599,9 @@ convCall
   => UID
   -> [CodeExpr]
   -> [(UID, CodeExpr)]
-  -> (Name -> Name -> VS (r typ) -> [SValue r] -> NamedArgs r -> GenState (SValue r))
-  -> (Name -> Name -> VS (r typ) -> [SValue r] -> NamedArgs r -> SValue r)
-  -> GenState (SValue r)
+  -> (Name -> Name -> VS (r typ) -> [VS (r Value)] -> NamedArgs r -> GenState (VS (r Value)))
+  -> (Name -> Name -> VS (r typ) -> [VS (r Value)] -> NamedArgs r -> VS (r Value))
+  -> GenState (VS (r Value))
 convCall c x ns f libf = do
   g <- get
   let mem = eMap g
@@ -638,7 +638,7 @@ renderSet :: (IsChunk c, HasSymbol c) => c -> CodeExpr -> CodeExpr
 renderSet e s = in' (Variable ("set_" ++ showHasSymbImpl e) s) (sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
-unop :: (NumericExpression r, Reference r) => UFunc -> (SValue r -> SValue r)
+unop :: (NumericExpression r, Reference r) => UFunc -> (VS (r Value) -> VS (r Value))
 unop Sqrt = (#/^)
 unop Log  = log
 unop Ln   = ln
@@ -657,62 +657,62 @@ unop Neg  = (#~)
 unop MakeRef = makeRef
 
 -- | Similar to 'unop', but for the 'Not' constructor.
-unopB :: (BooleanExpression r) => UFuncB -> (SValue r -> SValue r)
+unopB :: (BooleanExpression r) => UFuncB -> (VS (r Value) -> VS (r Value))
 unopB Not = (?!)
 
 -- | Similar to 'unop', but for vectors.
-unopVN :: (List r) => UFuncVN -> (SValue r -> SValue r)
+unopVN :: (List r) => UFuncVN -> (VS (r Value) -> VS (r Value))
 unopVN Dim = listSize
 unopVN Norm = error "unop: Norm not implemented" -- TODO
 
 -- | Similar to 'unop', but for vectors.
-unopVV :: (ValueSym r typ) => UFuncVV -> (SValue r -> SValue r)
+unopVV :: (ValueSym r typ) => UFuncVV -> (VS (r Value) -> VS (r Value))
 unopVV NegV = error "unop: Negation on Vectors not implemented" -- TODO
 
 -- Maps an 'ArithBinOp' to it's corresponding GOOL binary function.
-arithBfunc :: (NumericExpression r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)
+arithBfunc :: (NumericExpression r) => ArithBinOp -> (VS (r Value) -> VS (r Value) -> VS (r Value))
 arithBfunc Pow  = (#^)
 arithBfunc Subt = (#-)
 arithBfunc Frac = (#/)
 
 -- Maps an 'EqBinOp' to it's corresponding GOOL binary function.
-eqBfunc :: (Comparison r) => EqBinOp -> (SValue r -> SValue r -> SValue r)
+eqBfunc :: (Comparison r) => EqBinOp -> (VS (r Value) -> VS (r Value) -> VS (r Value))
 eqBfunc Eq  = (?==)
 eqBfunc NEq = (?!=)
 
 -- Maps an 'LABinOp' to it's corresponding GOOL binary function.
-laBfunc :: (List r) => LABinOp -> (SValue r -> SValue r -> SValue r)
+laBfunc :: (List r) => LABinOp -> (VS (r Value) -> VS (r Value) -> VS (r Value))
 laBfunc Index = listAccess
 laBfunc IndexOf = indexOf
 
 -- Maps an 'OrdBinOp' to it's corresponding GOOL binary function.
-ordBfunc :: (Comparison r) => OrdBinOp -> (SValue r -> SValue r -> SValue r)
+ordBfunc :: (Comparison r) => OrdBinOp -> (VS (r Value) -> VS (r Value) -> VS (r Value))
 ordBfunc Gt  = (?>)
 ordBfunc Lt  = (?<)
 ordBfunc LEq = (?<=)
 ordBfunc GEq = (?>=)
 
 -- Maps a 'VVVBinOp' to it's corresponding GOOL binary function.
-vecVecVecBfunc :: VVVBinOp -> (SValue r -> SValue r -> SValue r)
+vecVecVecBfunc :: VVVBinOp -> (VS (r Value) -> VS (r Value) -> VS (r Value))
 vecVecVecBfunc Cross = error "bfunc: Cross not implemented"
 vecVecVecBfunc VAdd = error "bfunc: Vector addition not implemented"
 vecVecVecBfunc VSub = error "bfunc: Vector subtraction not implemented"
 
 -- Maps a 'VVNBinOp' to it's corresponding GOOL binary function.
-vecVecNumBfunc :: VVNBinOp -> (SValue r -> SValue r -> SValue r)
+vecVecNumBfunc :: VVNBinOp -> (VS (r Value) -> VS (r Value) -> VS (r Value))
 vecVecNumBfunc Dot = error "convExpr DotProduct"
 
 -- Maps a 'NVVBinOp' to it's corresponding GOOL binary function.
-numVecVecBfunc :: NVVBinOp -> (SValue r -> SValue r -> SValue r)
+numVecVecBfunc :: NVVBinOp -> (VS (r Value) -> VS (r Value) -> VS (r Value))
 numVecVecBfunc Scale = error "convExpr Scaling of Vectors"
 
 -- Maps a 'ESSBinOp' to its corresponding GOOL binary function.
-elementSetSetBfunc :: (OO.Set r) => ESSBinOp -> (SValue r -> SValue r -> SValue r)
+elementSetSetBfunc :: (OO.Set r) => ESSBinOp -> (VS (r Value) -> VS (r Value) -> VS (r Value))
 elementSetSetBfunc SAdd = OO.setAdd
 elementSetSetBfunc SRemove = OO.setRemove
 
 -- Maps a 'ESSBinOp' to it's corresponding GOOL binary function.
-elementSetBoolBfunc :: (OO.Set r) => ESBBinOp -> (SValue r -> SValue r -> SValue r)
+elementSetBoolBfunc :: (OO.Set r) => ESBBinOp -> (VS (r Value) -> VS (r Value) -> VS (r Value))
 elementSetBoolBfunc SContains = OO.contains
 
 -- medium hacks --
@@ -1141,7 +1141,7 @@ valueProc
     , OO.Set r
     , TypeElim r typ
     )
-  => UID -> Name -> VS (r typ) -> GenState (SValue r)
+  => UID -> Name -> VS (r typ) -> GenState (VS (r Value))
 valueProc u s t = do
   g <- get
   let cs = g
@@ -1224,7 +1224,7 @@ mkValProc
     , OO.Set r
     , TypeElim r typ
     )
-  => CodeVarChunk -> GenState (SValue r)
+  => CodeVarChunk -> GenState (VS (r Value))
 mkValProc v = do
   t <- codeType v
   let toGOOLVal Nothing = valueProc (v ^. uid) (codeName v) (convType t)
@@ -1652,7 +1652,7 @@ convExprProc
     , List r
     , TypeElim r typ
     )
-  => CodeExpr -> GenState (SValue r)
+  => CodeExpr -> GenState (VS (r Value))
 convExprProc (Lit (Dbl d)) = do
   sm <- spaceCodeType Real
   let getLiteral Double = litDouble d
@@ -1754,9 +1754,9 @@ convCallProc
   => UID
   -> [CodeExpr]
   -> [(UID, CodeExpr)]
-  -> (Name -> Name -> VS (r typ) -> [SValue r] -> NamedArgs r -> GenState (SValue r))
-  -> (Name -> Name -> VS (r typ) -> [SValue r] -> NamedArgs r -> SValue r)
-  -> GenState (SValue r)
+  -> (Name -> Name -> VS (r typ) -> [VS (r Value)] -> NamedArgs r -> GenState (VS (r Value)))
+  -> (Name -> Name -> VS (r typ) -> [VS (r Value)] -> NamedArgs r -> VS (r Value))
+  -> GenState (VS (r Value))
 convCallProc c x ns f libf = do
   g <- get
   let mem = eMap g
@@ -2045,7 +2045,7 @@ l_line, l_lines, l_linetokens, l_infile, l_i :: Label
 var_line, var_lines, var_linetokens, var_infile, var_i ::
   (TypeSym r typ, VariableSym r typ) => SVariable r
 v_line, v_lines, v_linetokens, v_infile, v_i ::
-  (TypeSym r typ, VariableSym r typ, VariableValue r) => SValue r
+  (TypeSym r typ, VariableSym r typ, VariableValue r) => VS (r Value)
 l_line = "line"
 var_line = var l_line string
 v_line = valueOf var_line

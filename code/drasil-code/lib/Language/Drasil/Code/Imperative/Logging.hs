@@ -9,7 +9,7 @@ import Control.Monad.State (get)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, HasChoices(..))
 import Language.Drasil.Choices (Logging(..))
 
-import Drasil.GOOL (Label, block, SVariable, SValue, MS, BodySym(..),
+import Drasil.GOOL (Label, block, SVariable, Value, VS, MS, BodySym(..),
   BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
   VariableValue(..), MultiStatement(..), DeclStatement(..), FileHandling(..),
   PrintFile(..), lensMStoVS, ScopeSym(..), VariableSym)
@@ -82,5 +82,5 @@ varLogFile :: (TypeSym r typ, VariableSym r typ) => SVariable r
 varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.
-valLogFile :: (TypeSym r typ, VariableSym r typ, VariableValue r) => SValue r
+valLogFile :: (TypeSym r typ, VariableSym r typ, VariableValue r) => VS (r Value)
 valLogFile = valueOf varLogFile

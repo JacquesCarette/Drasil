@@ -3,9 +3,9 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, Body, Block, VSBinder, Variable, SVariable, Value, SValue,
-  NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
-  InOutFunc, DocInOutFunc,
+  Label, Library, Body, Block, VSBinder, Variable, SVariable, Value, NamedArgs,
+  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
+  DocInOutFunc,
   -- Typeclasses
   UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), getTypeString, VariableSym(..), ScopeSym(..), convScope,
@@ -133,7 +133,6 @@ listOf
 listOf = listVar
 
 type Value = ValData
-type SValue a = VS (a Value)
 
 -- | Class for representing a value.
 class ValueSym r typ | r -> typ where
@@ -143,21 +142,21 @@ class TypeElim r typ | r -> typ where
   getCodeType :: r typ -> CodeType
 
 class Argument r where
-  pointerArg :: SValue r -> SValue r
+  pointerArg :: VS (r Value) -> VS (r Value)
 
 class Literal r typ | r -> typ where
-  litTrue   :: SValue r
-  litFalse  :: SValue r
-  litChar   :: Char -> SValue r
-  litDouble :: Double -> SValue r
-  litFloat  :: Float -> SValue r
-  litInt    :: Integer -> SValue r
-  litString :: String -> SValue r
-  litArray  :: VS (r typ) -> [SValue r] -> SValue r
-  litList   :: VS (r typ) -> [SValue r] -> SValue r
-  litSet    :: VS (r typ) -> [SValue r] -> SValue r
+  litTrue   :: VS (r Value)
+  litFalse  :: VS (r Value)
+  litChar   :: Char -> VS (r Value)
+  litDouble :: Double -> VS (r Value)
+  litFloat  :: Float -> VS (r Value)
+  litInt    :: Integer -> VS (r Value)
+  litString :: String -> VS (r Value)
+  litArray  :: VS (r typ) -> [VS (r Value)] -> VS (r Value)
+  litList   :: VS (r typ) -> [VS (r Value)] -> VS (r Value)
+  litSet    :: VS (r typ) -> [VS (r Value)] -> VS (r Value)
 
-litZero :: (Literal r typ, TypeElim r typ) => VS (r typ) -> SValue r
+litZero :: (Literal r typ, TypeElim r typ) => VS (r typ) -> VS (r Value)
 litZero t = do
   t' <- t
   case getCodeType t' of
@@ -167,82 +166,82 @@ litZero t = do
     _ -> error "litZero expects a numeric type"
 
 class MathConstant r where
-  pi :: SValue r
+  pi :: VS (r Value)
 
 class VariableValue r where
-  valueOf       :: SVariable r -> SValue r
+  valueOf       :: SVariable r -> VS (r Value)
 
 class CommandLineArgs r where
-  arg          :: Integer -> SValue r
-  argsList     :: SValue r
-  argExists    :: Integer -> SValue r
+  arg          :: Integer -> VS (r Value)
+  argsList     :: VS (r Value)
+  argExists    :: Integer -> VS (r Value)
 
 class NumericExpression r where
-  (#~)  :: SValue r -> SValue r
+  (#~)  :: VS (r Value) -> VS (r Value)
   infixl 8 #~ -- Negation
-  (#/^) :: SValue r -> SValue r
+  (#/^) :: VS (r Value) -> VS (r Value)
   infixl 7 #/^ -- Square root
-  (#|)  :: SValue r -> SValue r
+  (#|)  :: VS (r Value) -> VS (r Value)
   infixl 7 #| -- Absolute value
-  (#+)  :: SValue r -> SValue r -> SValue r
+  (#+)  :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 5 #+
-  (#-)  :: SValue r -> SValue r -> SValue r
+  (#-)  :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 5 #-
-  (#*)  :: SValue r -> SValue r -> SValue r
+  (#*)  :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 6 #*
-  (#/)  :: SValue r -> SValue r -> SValue r
+  (#/)  :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 6 #/
-  (#%)  :: SValue r -> SValue r -> SValue r
+  (#%)  :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 6 #% -- Modulo
-  (#^)  :: SValue r -> SValue r -> SValue r
+  (#^)  :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 7 #^ -- Exponentiation
 
-  log    :: SValue r -> SValue r
-  ln     :: SValue r -> SValue r
-  exp    :: SValue r -> SValue r
-  sin    :: SValue r -> SValue r
-  cos    :: SValue r -> SValue r
-  tan    :: SValue r -> SValue r
-  csc    :: SValue r -> SValue r
-  sec    :: SValue r -> SValue r
-  cot    :: SValue r -> SValue r
-  arcsin :: SValue r -> SValue r
-  arccos :: SValue r -> SValue r
-  arctan :: SValue r -> SValue r
-  floor  :: SValue r -> SValue r
-  ceil   :: SValue r -> SValue r
+  log    :: VS (r Value) -> VS (r Value)
+  ln     :: VS (r Value) -> VS (r Value)
+  exp    :: VS (r Value) -> VS (r Value)
+  sin    :: VS (r Value) -> VS (r Value)
+  cos    :: VS (r Value) -> VS (r Value)
+  tan    :: VS (r Value) -> VS (r Value)
+  csc    :: VS (r Value) -> VS (r Value)
+  sec    :: VS (r Value) -> VS (r Value)
+  cot    :: VS (r Value) -> VS (r Value)
+  arcsin :: VS (r Value) -> VS (r Value)
+  arccos :: VS (r Value) -> VS (r Value)
+  arctan :: VS (r Value) -> VS (r Value)
+  floor  :: VS (r Value) -> VS (r Value)
+  ceil   :: VS (r Value) -> VS (r Value)
 
 class BooleanExpression r where
-  (?!)  :: SValue r -> SValue r
+  (?!)  :: VS (r Value) -> VS (r Value)
   infixr 6 ?! -- Boolean 'not'
-  (?&&) :: SValue r -> SValue r -> SValue r
+  (?&&) :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 2 ?&&
-  (?||) :: SValue r -> SValue r -> SValue r
+  (?||) :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 1 ?||
 
 class Comparison r where
-  (?<)  :: SValue r -> SValue r -> SValue r
+  (?<)  :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 4 ?<
-  (?<=) :: SValue r -> SValue r -> SValue r
+  (?<=) :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 4 ?<=
-  (?>)  :: SValue r -> SValue r -> SValue r
+  (?>)  :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 4 ?>
-  (?>=) :: SValue r -> SValue r -> SValue r
+  (?>=) :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 4 ?>=
-  (?==) :: SValue r -> SValue r -> SValue r
+  (?==) :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 3 ?==
-  (?!=) :: SValue r -> SValue r -> SValue r
+  (?!=) :: VS (r Value) -> VS (r Value) -> VS (r Value)
   infixl 3 ?!=
 
-type NamedArgs r = [(SVariable r, SValue r)]
+type NamedArgs r = [(SVariable r, VS (r Value))]
 -- Function call with both positional and named arguments
-type MixedCall r typ = Label -> VS (r typ) -> [SValue r] -> NamedArgs r -> SValue r
+type MixedCall r typ = Label -> VS (r typ) -> [VS (r Value)] -> NamedArgs r -> VS (r Value)
 -- Constructor call with both positional and named arguments
-type MixedCtorCall r typ = VS (r typ) -> [SValue r] -> NamedArgs r -> SValue r
+type MixedCtorCall r typ = VS (r typ) -> [VS (r Value)] -> NamedArgs r -> VS (r Value)
 -- Function call with only positional arguments
-type PosCall r typ = Label -> VS (r typ) -> [SValue r] -> SValue r
+type PosCall r typ = Label -> VS (r typ) -> [VS (r Value)] -> VS (r Value)
 -- Constructor call with only positional arguments
-type PosCtorCall r typ = VS (r typ) -> [SValue r] -> SValue r
+type PosCtorCall r typ = VS (r typ) -> [VS (r Value)] -> VS (r Value)
 
 type VSBinder a = VS (a BinderD)
 
@@ -261,22 +260,22 @@ class BinderElim r typ | r -> typ where
 class ValueExpression r typ | r -> typ where
   -- An inline if-statement, aka the ternary operator.  Inputs:
   -- Condition, True-value, False-value
-  inlineIf     :: SValue r -> SValue r -> SValue r -> SValue r
+  inlineIf     :: VS (r Value) -> VS (r Value) -> VS (r Value) -> VS (r Value)
 
   funcAppMixedArgs     ::            MixedCall r typ
   extFuncAppMixedArgs  :: Library -> MixedCall r typ
   libFuncAppMixedArgs  :: Library -> MixedCall r typ
 
-  lambda :: [VSBinder r] -> SValue r -> SValue r
+  lambda :: [VSBinder r] -> VS (r Value) -> VS (r Value)
 
-  notNull :: SValue r -> SValue r
+  notNull :: VS (r Value) -> VS (r Value)
 
 funcApp          :: (ValueExpression r typ) => PosCall r typ
 funcApp n t vs = funcAppMixedArgs n t vs []
 
 funcAppNamedArgs
   :: (ValueExpression r typ)
-  => Label -> VS (r typ) -> NamedArgs r -> SValue r
+  => Label -> VS (r typ) -> NamedArgs r -> VS (r Value)
 funcAppNamedArgs n t = funcAppMixedArgs n t []
 
 extFuncApp       :: (ValueExpression r typ) => Library -> PosCall r typ
@@ -285,7 +284,7 @@ extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
 libFuncApp       :: (ValueExpression r typ) => Library -> PosCall r typ
 libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
 
-exists :: (ValueExpression r typ) => SValue r -> SValue r
+exists :: (ValueExpression r typ) => VS (r Value) -> VS (r Value)
 exists = notNull
 
 -- | Helper class for representing the conversion between integers and array indices.
@@ -294,71 +293,71 @@ exists = notNull
 class IndexTranslator r where
   -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
   --   the target language's assumptions
-  intToIndex :: SValue r -> SValue r
+  intToIndex :: VS (r Value) -> VS (r Value)
   -- | Does any necessary conversions from the target language's indexing
   --   assumptions assumptions to GOOL's zero-indexed assumptions
-  indexToInt :: SValue r -> SValue r
+  indexToInt :: VS (r Value) -> VS (r Value)
 
 -- | A class for representing references.
 -- By "reference" we basically mean "C++ pointer" or "OCaml reference".
 class Reference r where
   -- | Given a value, convert it to a reference to that value
-  makeRef :: SValue r -> SValue r
+  makeRef :: VS (r Value) -> VS (r Value)
   -- | Given a value that may be a reference type,
   -- apply any necessary dereference operation.
-  maybeDeref :: SValue r -> SValue r
+  maybeDeref :: VS (r Value) -> VS (r Value)
 
 class Array r where
-  -- TODO [Brandon Bosman, 05/19/2026]: Change return type to SValue
+  -- TODO [Brandon Bosman, 05/19/2026]: Change return type to VS Value
   -- | Given array `a` and index `i`, creates `a[i]`
-  arrayElem :: SValue r -> SValue r -> SVariable r
+  arrayElem :: VS (r Value) -> VS (r Value) -> SVariable r
   -- TODO [Brandon Bosman, 06/03/2026]: Consider switching to a polymorphic `length`
   -- for Array, List, and Set
   -- | Given an array, return its length
-  arrayLength :: SValue r -> SValue r
+  arrayLength :: VS (r Value) -> VS (r Value)
   -- TODO [Brandon Bosman, 05/21/2026]: Consider switching this to a polymorphic `copy`,
   -- more like how `print` currently works
   -- | Given a source array, create a (shallow) copy of it
-  arrayCopy :: SValue r -> SValue r
+  arrayCopy :: VS (r Value) -> VS (r Value)
 
 class List r where
   -- | Finds the size of a list.
   --   Arguments are: List
-  listSize   :: SValue r -> SValue r
+  listSize   :: VS (r Value) -> VS (r Value)
   -- | Gets the value of an index of a list.
   --   Arguments are: List, Index
-  listAccess :: SValue r -> SValue r -> SValue r
+  listAccess :: VS (r Value) -> VS (r Value) -> VS (r Value)
   -- | Finds the index of the first occurrence of a value in a list.
   --   Arguments are: List, Value
-  indexOf :: SValue r -> SValue r -> SValue r
+  indexOf :: VS (r Value) -> VS (r Value) -> VS (r Value)
 
 class ListStatement r stmt | r -> stmt where
   -- | Inserts a value into a list.
   --   Arguments are: List, Index, Value
-  listAdd    :: SValue r -> SValue r -> SValue r -> MS (r stmt)
+  listAdd    :: VS (r Value) -> VS (r Value) -> VS (r Value) -> MS (r stmt)
   -- | Appens a value to a list.
   --   Arguments are: List, Value
-  listAppend :: SValue r -> SValue r -> MS (r stmt)
+  listAppend :: VS (r Value) -> VS (r Value) -> MS (r stmt)
   -- | Sets the value of an index of a list.
   --   Arguments are: List, Index, Value
-  listSet    :: SValue r -> SValue r -> SValue r -> MS (r stmt)
+  listSet    :: VS (r Value) -> VS (r Value) -> VS (r Value) -> MS (r stmt)
 
 class Set r where
   -- | Checks membership
   -- Arguments are: Set, Value
-  contains :: SValue r -> SValue r -> SValue r
+  contains :: VS (r Value) -> VS (r Value) -> VS (r Value)
   -- | Inserts a value into a set
   -- Arguments are: Set, Value
-  setAdd :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: Make this a Statement
+  setAdd :: VS (r Value) -> VS (r Value) -> VS (r Value) -- TODO [Brandon Bosman, 06/24/2026]: Make this a Statement
   -- | Removes a value from a set
   -- Arguments are: Set, Value
-  setRemove :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: Make this a SStatement
+  setRemove :: VS (r Value) -> VS (r Value) -> VS (r Value) -- TODO [Brandon Bosman, 06/24/2026]: Make this a SStatement
   -- | Removes a value from a set
   -- Arguments are: Set, Set
-  setUnion :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: See if we should make this a Statement
+  setUnion :: VS (r Value) -> VS (r Value) -> VS (r Value) -- TODO [Brandon Bosman, 06/24/2026]: See if we should make this a Statement
 
 -- | Vector operations for languages with native vector support (e.g. MATLAB,
---   Julia). Expression-based: every operation takes and returns 'SValue's, so
+--   Julia). Expression-based: every operation takes and returns 'VS Value's, so
 --   operations compose like math (e.g. @vecAdd (vecScale s a) b@).
 --   Vectors have their own 'vecType' and 'litVec' so callers don't depend on
 --   how vectors are represented; these default to 'listType' and 'litList'.
@@ -368,29 +367,29 @@ class NativeVector r typ | r -> typ where
   vecType :: VS (r typ) -> VS (r typ)
   -- | A vector literal with the given element type and elements.
   --   For most languages it will be 'litList'.
-  litVec :: VS (r typ) -> [SValue r] -> SValue r
+  litVec :: VS (r typ) -> [VS (r Value)] -> VS (r Value)
   -- | Scales a vector by a scalar.
   --   Arguments are: Scalar, Vector
-  vecScale :: SValue r -> SValue r -> SValue r
+  vecScale :: VS (r Value) -> VS (r Value) -> VS (r Value)
   -- | Adds two vectors elementwise.
   --   Arguments are: Vector, Vector
-  vecAdd :: SValue r -> SValue r -> SValue r
+  vecAdd :: VS (r Value) -> VS (r Value) -> VS (r Value)
   -- | Gets the element of a vector at an index.
   --   Arguments are: Vector, Index
-  vecIndex :: SValue r -> SValue r -> SValue r
+  vecIndex :: VS (r Value) -> VS (r Value) -> VS (r Value)
   -- | Dot product of two vectors (returns a scalar).
   --   Arguments are: Vector, Vector
-  vecDot :: SValue r -> SValue r -> SValue r
+  vecDot :: VS (r Value) -> VS (r Value) -> VS (r Value)
   -- | Euclidean norm (magnitude) of a vector (returns a scalar).
   --   Argument is: Vector
-  vecMag :: SValue r -> SValue r
+  vecMag :: VS (r Value) -> VS (r Value)
   -- | Unit vector in the direction of a vector (returns a vector).
   --   Argument is: Vector
-  vecUnit :: SValue r -> SValue r
+  vecUnit :: VS (r Value) -> VS (r Value)
 
 class InternalList r block | r -> block where
-  listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
-    -> SVariable r -> SValue r -> MS (r block)
+  listSlice'      :: Maybe (VS (r Value)) -> Maybe (VS (r Value)) -> Maybe (VS (r Value))
+    -> SVariable r -> VS (r Value) -> MS (r block)
 
 -- | Creates a slice of a list and assigns it to a variable.
 --   Arguments are:
@@ -401,14 +400,22 @@ class InternalList r block | r -> block where
 --   (optional) End index exclusive.
 --      (if Nothing, then list end if step > 0, list start if step > 0)
 --   (optional) Step (if Nothing, then defaults to 1)
-listSlice :: (InternalList r block) => SVariable r -> SValue r ->
-  Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MS (r block)
+listSlice
+  :: (InternalList r block)
+  => SVariable r
+  -> VS (r Value)
+  -> Maybe (VS (r Value))
+  -> Maybe (VS (r Value))
+  -> Maybe (VS (r Value))
+  -> MS (r block)
 listSlice vnew vold b e tp = listSlice' b e tp vnew vold
 
-listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
+listIndexExists
+  :: (List r, Comparison r)
+  => VS (r Value) -> VS (r Value) -> VS (r Value)
 listIndexExists lst index = listSize lst ?> index
 
-at :: (List r) => SValue r -> SValue r -> SValue r
+at :: (List r) => VS (r Value) -> VS (r Value) -> VS (r Value)
 at = listAccess
 
 class EmptyStatement r stmt | r -> stmt where
@@ -421,21 +428,21 @@ class MultiStatement r stmt | r -> stmt where
 
 class ValueStatement r stmt | r -> stmt where
   -- | Converts a value to statement
-  valStmt :: SValue r -> MS (r stmt)
+  valStmt :: VS (r Value) -> MS (r stmt)
 
 class AssignStatement r stmt | r -> stmt where
-  (&-=)  :: SVariable r -> SValue r -> MS (r stmt)
+  (&-=)  :: SVariable r -> VS (r Value) -> MS (r stmt)
   infixl 1 &-=
-  (&+=)  :: SVariable r -> SValue r -> MS (r stmt)
+  (&+=)  :: SVariable r -> VS (r Value) -> MS (r stmt)
   infixl 1 &+=
   (&++)  :: SVariable r -> MS (r stmt)
   infixl 8 &++
   (&--)  :: SVariable r -> MS (r stmt)
   infixl 8 &--
 
-  assign :: SVariable r -> SValue r -> MS (r stmt)
+  assign :: SVariable r -> VS (r Value) -> MS (r stmt)
 
-(&=) :: (AssignStatement r stmt) => SVariable r -> SValue r -> MS (r stmt)
+(&=) :: (AssignStatement r stmt) => SVariable r -> VS (r Value) -> MS (r stmt)
 infixr 1 &=
 (&=) = assign
 
@@ -445,25 +452,25 @@ class DeclStatement r stmt bod | r -> stmt bod where
   varDec       :: SVariable r -> r ScopeData -> MS (r stmt)
   -- | Declare a variable and give it a value.
   -- Not for use with arrays; use `arrayDecDef` instead.
-  varDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
+  varDecDef    :: SVariable r -> r ScopeData -> VS (r Value) -> MS (r stmt)
   -- | Given the size of the list, the variable to store the list in,
   -- and the scope of the variable, declare a list of the given size.
   listDec      :: Integer -> SVariable r -> r ScopeData -> MS (r stmt)
-  listDecDef   :: SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
+  listDecDef   :: SVariable r -> r ScopeData -> [VS (r Value)] -> MS (r stmt)
   setDec       :: SVariable r -> r ScopeData -> MS (r stmt)
-  setDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
+  setDecDef    :: SVariable r -> r ScopeData -> VS (r Value) -> MS (r stmt)
   -- | Given the size of the aray, the default value to fill the array with,
   -- the variable to store the array in, and the scope of the variable,
   -- declare an array of the given size.
-  arrayDec     :: Integer -> SValue r -> SVariable r -> r ScopeData -> MS (r stmt)
-  arrayDecDef  :: SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
-  constDecDef  :: SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
+  arrayDec     :: Integer -> VS (r Value) -> SVariable r -> r ScopeData -> MS (r stmt)
+  arrayDecDef  :: SVariable r -> r ScopeData -> [VS (r Value)] -> MS (r stmt)
+  constDecDef  :: SVariable r -> r ScopeData -> VS (r Value) -> MS (r stmt)
   funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MS (r bod)
     -> MS (r stmt)
 
 class PrintConsole r stmt | r -> stmt where
-  print      :: SValue r -> MS (r stmt)
-  printLn    :: SValue r -> MS (r stmt)
+  print      :: VS (r Value) -> MS (r stmt)
+  printLn    :: VS (r Value) -> MS (r stmt)
   -- TODO [Brandon Bosman, 07/23/2026]: Could these be helpers?
   printStr   :: String -> MS (r stmt)
   printStrLn :: String -> MS (r stmt)
@@ -473,38 +480,42 @@ class ReadConsole r stmt | r -> stmt where
   discardInput     :: MS (r stmt)
 
 class FileHandling r stmt | r -> stmt where
-  openFileR :: SVariable r -> SValue r -> MS (r stmt)
-  openFileW :: SVariable r -> SValue r -> MS (r stmt)
-  openFileA :: SVariable r -> SValue r -> MS (r stmt)
-  closeFile :: SValue r -> MS (r stmt)
+  openFileR :: SVariable r -> VS (r Value) -> MS (r stmt)
+  openFileW :: SVariable r -> VS (r Value) -> MS (r stmt)
+  openFileA :: SVariable r -> VS (r Value) -> MS (r stmt)
+  closeFile :: VS (r Value) -> MS (r stmt)
 
 class PrintFile r stmt | r -> stmt where
   -- | Given the file handle and value to print, print the value to the file.
-  printFile      :: SValue r -> SValue r -> MS (r stmt)
-  printFileLn    :: SValue r -> SValue r -> MS (r stmt)
-  printFileStr   :: SValue r -> String -> MS (r stmt)
-  printFileStrLn :: SValue r -> String -> MS (r stmt)
+  printFile      :: VS (r Value) -> VS (r Value) -> MS (r stmt)
+  printFileLn    :: VS (r Value) -> VS (r Value) -> MS (r stmt)
+  printFileStr   :: VS (r Value) -> String -> MS (r stmt)
+  printFileStrLn :: VS (r Value) -> String -> MS (r stmt)
 
 class ReadFile r stmt | r -> stmt where
-  getFileInput     :: SValue r -> SVariable r -> MS (r stmt)
-  discardFileInput :: SValue r -> MS (r stmt)
-  getFileInputLine :: SValue r -> SVariable r -> MS (r stmt)
-  discardFileLine  :: SValue r -> MS (r stmt)
-  getFileInputAll  :: SValue r -> SVariable r -> MS (r stmt)
+  getFileInput     :: VS (r Value) -> SVariable r -> MS (r stmt)
+  discardFileInput :: VS (r Value) -> MS (r stmt)
+  getFileInputLine :: VS (r Value) -> SVariable r -> MS (r stmt)
+  discardFileLine  :: VS (r Value) -> MS (r stmt)
+  getFileInputAll  :: VS (r Value) -> SVariable r -> MS (r stmt)
 
 class StringStatement r stmt | r -> stmt where
   -- | Given a char to split on, variable to store result in, and string to split,
   -- generates a statement splitting the string into a list of strings
   -- delimited by the char.
-  stringSplit :: Char -> SVariable r -> SValue r -> MS (r stmt)
-  stringListVals  :: [SVariable r] -> SValue r -> MS (r stmt)
+  stringSplit :: Char -> SVariable r -> VS (r Value) -> MS (r stmt)
+  stringListVals  :: [SVariable r] -> VS (r Value) -> MS (r stmt)
   -- | Given a list of variables and a value containing a list of strings,
   -- assign the ith element of the list of strings into the ith variable
-  stringListLists :: [SVariable r] -> SValue r -> MS (r stmt)
+  stringListLists :: [SVariable r] -> VS (r Value) -> MS (r stmt)
 
 -- The three lists are inputs, outputs, and both, respectively
-type InOutCall r stmt = Label -> [SValue r] -> [SVariable r] -> [SVariable r] ->
-  MS (r stmt)
+type InOutCall r stmt =
+     Label
+  -> [VS (r Value)]
+  -> [SVariable r]
+  -> [SVariable r]
+  -> MS (r stmt)
 
 class FuncAppStatement r stmt | r -> stmt where
   inOutCall    ::            InOutCall r stmt
@@ -517,38 +528,38 @@ class ControlStatement r stmt bod | r -> stmt bod where
   break :: MS (r stmt)
   continue :: MS (r stmt)
 
-  returnStmt :: SValue r -> MS (r stmt)
+  returnStmt :: VS (r Value) -> MS (r stmt)
 
   throw :: Label -> MS (r stmt)
 
   -- | String of if-else statements.
   --   Arguments: List of predicates and bodies (if this then that),
   --   Body for else branch
-  ifCond     :: [(SValue r, MS (r bod))] -> MS (r bod) -> MS (r stmt)
-  switch     :: SValue r -> [(SValue r, MS (r bod))] -> MS (r bod) -> MS (r stmt)
+  ifCond     :: [(VS (r Value), MS (r bod))] -> MS (r bod) -> MS (r stmt)
+  switch     :: VS (r Value) -> [(VS (r Value), MS (r bod))] -> MS (r bod) -> MS (r stmt)
 
-  ifExists :: SValue r -> MS (r bod) -> MS (r bod) -> MS (r stmt)
+  ifExists :: VS (r Value) -> MS (r bod) -> MS (r bod) -> MS (r stmt)
 
-  for      :: MS (r stmt) -> SValue r -> MS (r stmt) -> MS (r bod) ->
+  for      :: MS (r stmt) -> VS (r Value) -> MS (r stmt) -> MS (r bod) ->
     MS (r stmt)
   -- Iterator variable, start value, end value, step value, loop body
-  forRange :: SVariable r -> SValue r -> SValue r -> SValue r -> MS (r bod) ->
+  forRange :: SVariable r -> VS (r Value) -> VS (r Value) -> VS (r Value) -> MS (r bod) ->
     MS (r stmt)
-  forEach  :: SVariable r -> SValue r -> MS (r bod) -> MS (r stmt)
-  while    :: SValue r -> MS (r bod) -> MS (r stmt)
+  forEach  :: SVariable r -> VS (r Value) -> MS (r bod) -> MS (r stmt)
+  while    :: VS (r Value) -> MS (r bod) -> MS (r stmt)
 
   tryCatch :: MS (r bod) -> MS (r bod) -> MS (r stmt)
 
-  assert :: SValue r -> SValue r -> MS (r stmt)
+  assert :: VS (r Value) -> VS (r Value) -> MS (r stmt)
 
 ifNoElse
   :: (BodySym r bod block, ControlStatement r stmt bod)
-  => [(SValue r, MS (r bod))] -> MS (r stmt)
+  => [(VS (r Value), MS (r bod))] -> MS (r stmt)
 ifNoElse bs = ifCond bs $ body []
 
 switchAsIf
   :: (ControlStatement r stmt bod, Comparison r)
-  => SValue r -> [(SValue r, MS (r bod))] -> MS (r bod) -> MS (r stmt)
+  => VS (r Value) -> [(VS (r Value), MS (r bod))] -> MS (r bod) -> MS (r stmt)
 switchAsIf v = ifCond . map (first (v ?==))
 
 -- TODO [Brandon Bosman, 07/22/2026]: move this to InterfaceGOOL

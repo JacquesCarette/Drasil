@@ -6,7 +6,7 @@ module Drasil.Shared.LanguageRenderer.Macros (
 ) where
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, SVariable, SValue, bodyStatements,
+import Drasil.Shared.InterfaceCommon (Label, SVariable, Value, bodyStatements,
   oneLiner, VariableSym, VariableElim(..), getCodeType, listOf,
   ValueSym(valueType), NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), List, at, EmptyStatement(emptyStmt),
@@ -33,7 +33,7 @@ import Text.PrettyPrint.HughesPJ (Doc, vcat)
 
 ifExists
   :: (IC.ControlStatement r stmt bod, IC.ValueExpression r typ)
-  => SValue r -> MS (r bod) -> MS (r bod) -> MS (r stmt)
+  => VS (r Value) -> MS (r bod) -> MS (r bod) -> MS (r stmt)
 ifExists v ifBody = IC.ifCond [(IC.notNull v, ifBody)]
 
 decrement1
@@ -43,7 +43,7 @@ decrement1 v = v &-= IC.litInt 1
 
 increment
   :: (IC.AssignStatement r stmt, IC.NumericExpression r, IC.VariableValue r)
-  => SVariable r -> SValue r -> MS (r stmt)
+  => SVariable r -> VS (r Value) -> MS (r stmt)
 increment vr vl = vr &= IC.valueOf vr #+ vl
 
 increment1
@@ -67,7 +67,7 @@ runStrategy
      )
   => Label
   -> [(Label, MS (r bod))]
-  -> Maybe (SValue r)
+  -> Maybe (VS (r Value))
   -> Maybe (SVariable r)
   -> MS (r Doc)
 runStrategy l strats rv av = maybe
@@ -101,11 +101,11 @@ listSlice
     , ValueElim r
     , VariableElim r typ
     )
-  => Maybe (SValue r)
-  -> Maybe (SValue r)
-  -> Maybe (SValue r)
+  => Maybe (VS (r Value))
+  -> Maybe (VS (r Value))
+  -> Maybe (VS (r Value))
   -> SVariable r
-  -> SValue r
+  -> VS (r Value)
   -> MS (r block)
 listSlice beg end step vnew vold = do
 
@@ -162,12 +162,12 @@ listSlice beg end step vnew vold = do
 -- | Gets the expression and code for setting bounds in a list slice
 --   Input:
 --   - String: Variable name for bound (to be created if necessary),
---   - SValue: step value
+--   - VS Value: step value
 --   - Maybe Integer: literal value of step, if exists
---   - Maybe SValue: given value of bound
---   - SValue: value of bound if bound not given and step is positive
---   - SValue: value of bound if bound not given and step is negative
---   Output: (SValue): (setter, value) of bound
+--   - Maybe VS Value: given value of bound
+--   - VS Value: value of bound if bound not given and step is positive
+--   - VS Value: value of bound if bound not given and step is negative
+--   Output: (VS Value): (setter, value) of bound
 makeSetterVal
   ::
     ( EmptyStatement r stmt
@@ -181,13 +181,13 @@ makeSetterVal
     , IC.VariableValue r
     )
   => Label
-  -> SValue r
+  -> VS (r Value)
   -> Maybe Integer
-  -> Maybe (SValue r)
-  -> SValue r
-  -> SValue r
+  -> Maybe (VS (r Value))
+  -> VS (r Value)
+  -> VS (r Value)
   -> r ScopeData
-  -> (MS (r stmt), SValue r)
+  -> (MS (r stmt), VS (r Value))
 makeSetterVal _     _    _      (Just v) _  _  _   = (emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb _   = (emptyStmt, if s > 0 then lb else rb)
 makeSetterVal vName step _       _       lb rb  scp =
@@ -205,7 +205,7 @@ stringListVals
      , IC.TypeElim r typ
      , VariableElim r typ
      )
-  => [SVariable r] -> SValue r -> MS (r stmt)
+  => [SVariable r] -> VS (r Value) -> MS (r stmt)
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
   (getCodeType $ valueType slst))
   where checkList (List String) = assignVals vars 0
@@ -232,7 +232,7 @@ stringListLists
     , VariableElim r typ
     , S.RenderValue r typ
     )
-  => [SVariable r] -> SValue r -> MS (r stmt)
+  => [SVariable r] -> VS (r Value) -> MS (r stmt)
 stringListLists lsts sl = do
   slst <- zoom lensMStoVS sl
   l_i <- genLoopIndex
@@ -267,9 +267,9 @@ forRange
     , IC.VariableValue r
     )
   => SVariable r
-  -> SValue r
-  -> SValue r
-  -> SValue r
+  -> VS (r Value)
+  -> VS (r Value)
+  -> VS (r Value)
   -> MS (r bod)
   -> MS (r stmt)
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
@@ -280,12 +280,12 @@ observerIndex = IC.var "observerIndex" IC.int
 
 observerIdxVal
   :: (IC.TypeSym r typ, VariableSym r typ, IC.VariableValue r)
-  => SValue r
+  => VS (r Value)
 observerIdxVal = IC.valueOf observerIndex
 
 obsList
   :: (IC.TypeSym r typ, VariableSym r typ, IC.VariableValue r)
-  => VS (r typ) -> SValue r
+  => VS (r typ) -> VS (r Value)
 obsList t = IC.valueOf $ listOf observerListName t
 
 notify
@@ -356,7 +356,7 @@ arrayDecAsList
     , IC.ListStatement r stmt
     , VariableElim r typ
     )
-  => Integer -> SValue r -> SVariable r -> r ScopeData -> MS (r stmt)
+  => Integer -> VS (r Value) -> SVariable r -> r ScopeData -> MS (r stmt)
 arrayDecAsList len dflt vr scp = do
   vr' <- zoom lensMStoVS vr
   let innerTp = IC.innerType $ return $ variableType vr'

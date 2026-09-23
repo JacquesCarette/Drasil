@@ -9,7 +9,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
-  SVariable, Value, SValue, BodySym(..), oneLiner, bodyStatements, BlockSym(..),
+  SVariable, Value, BodySym(..), oneLiner, bodyStatements, BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -781,21 +781,23 @@ swiftName, swiftVersion :: String
 swiftName = "Swift"
 swiftVersion = "5.2.4"
 
-swiftUnwrapVal :: (RenderValue r typ, ValueElim r, ValueSym r typ) => SValue r -> SValue r
+swiftUnwrapVal
+  :: (RenderValue r typ, ValueElim r, ValueSym r typ)
+  => VS (r Value) -> VS (r Value)
 swiftUnwrapVal v' = do
   v <- v'
   mkVal (valueType v) (RC.value v <> swiftUnwrap')
 
 swiftTryVal
   :: (RenderValue r typ, ValueElim r, ValueSym r typ)
-  => SValue r -> SValue r
+  => VS (r Value) -> VS (r Value)
 swiftTryVal v' = do
   v <- v'
   mkVal (valueType v) (tryLabel <+> RC.value v)
 
 swiftArgVal
   :: (RenderValue r typ, ValueElim r, ValueSym r typ)
-  => SValue r -> SValue r
+  => VS (r Value) -> VS (r Value)
 swiftArgVal v' = do
   v <- v'
   mkVal (valueType v) (swiftInOutArg <> RC.value v)
@@ -805,7 +807,7 @@ swiftContentsVar, swiftLineVar :: SVariable SwiftCode
 swiftContentsVar = var "goolContents" (listType $ listType string)
 swiftLineVar = var "goolLine" (listType string)
 
-swiftContentsVal, swiftLineVal :: SValue SwiftCode
+swiftContentsVal, swiftLineVal :: VS (SwiftCode Value)
 swiftContentsVal = valueOf swiftContentsVar
 swiftLineVal = valueOf swiftLineVar
 
@@ -931,8 +933,11 @@ swiftUnion = "union"
 swiftUnaryMath :: (Monad r) => String -> VSOp r
 swiftUnaryMath = addMathImport . unOpPrec
 
-swiftNumBinExpr :: (SValue SwiftCode -> SValue SwiftCode -> SValue SwiftCode) ->
-  SValue SwiftCode -> SValue SwiftCode -> SValue SwiftCode
+swiftNumBinExpr
+  :: (VS (SwiftCode Value) -> VS (SwiftCode Value) -> VS (SwiftCode Value))
+  -> VS (SwiftCode Value)
+  -> VS (SwiftCode Value)
+  -> VS (SwiftCode Value)
 swiftNumBinExpr f v1' v2' = do
   v1 <- v1'
   v2 <- v2'
@@ -944,7 +949,7 @@ swiftNumBinExpr f v1' v2' = do
       exprT' _ _      = f (pure v1) (pure v2)
   exprT (getCodeType $ valueType v1) (getCodeType $ valueType v2)
 
-swiftLitFloat :: (RenderValue r typ, TypeSym r typ) => Float -> SValue r
+swiftLitFloat :: (RenderValue r typ, TypeSym r typ) => Float -> VS (r Value)
 swiftLitFloat = mkStateVal float . D.float
 
 swiftLambda :: [SwiftCode BinderD] -> SwiftCode Value -> Doc
@@ -957,7 +962,8 @@ swiftLambda ps ex = braces $ parens (hicat listSep'
 swiftReadableTypes :: [CodeType]
 swiftReadableTypes = [Integer, Double, Float, Boolean, Char]
 
-swiftCast :: VS (SwiftCode TypeData) -> SValue SwiftCode -> SValue SwiftCode
+swiftCast
+  :: VS (SwiftCode TypeData) -> VS (SwiftCode Value) -> VS (SwiftCode Value)
 swiftCast t' v' = do
   t <- t'
   v <- v'
@@ -967,7 +973,7 @@ swiftCast t' v' = do
 
 swiftIndexFunc
   :: (TypeSym r typ, ValueSym r typ, InternalValueExp r typ, VariableSym r typ)
-  => SValue r -> SValue r -> SValue r
+  => VS (r Value) -> VS (r Value) -> VS (r Value)
 swiftIndexFunc l v' = do
   v <- v'
   let t = pure $ valueType v
@@ -976,7 +982,7 @@ swiftIndexFunc l v' = do
 
 swiftStrideFunc
   :: (TypeSym r typ, VariableSym r typ, RenderValue r typ, ValueExpression r typ)
-  => SValue r -> SValue r -> SValue r -> SValue r
+  => VS (r Value) -> VS (r Value) -> VS (r Value) -> VS (r Value)
 swiftStrideFunc beg end step = let t = listType int
                                    fromArg = var swiftFrom int
                                    toArg = var swiftTo int
@@ -985,10 +991,12 @@ swiftStrideFunc beg end step = let t = listType int
     [(fromArg, beg), (toArg, end), (byArg, step)])
 
 swiftMapFunc
-  :: (ValueSym r typ, InternalValueExp r typ) => SValue r -> SValue r -> SValue r
+  :: (ValueSym r typ, InternalValueExp r typ)
+  => VS (r Value) -> VS (r Value) -> VS (r Value)
 swiftMapFunc lst f = objMethodCall (onStateValue valueType lst) lst swiftMap [f]
 
-swiftWriteFunc :: SValue SwiftCode -> SValue SwiftCode -> SValue SwiftCode
+swiftWriteFunc
+  :: VS (SwiftCode Value) -> VS (SwiftCode Value) -> VS (SwiftCode Value)
 swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)
   in swiftTryVal $ objMethodCallNamedArgs void f swiftWrite
     [(contentsArg, newObj (obj swiftData) [v $. funcFromData (R.func swiftUTF8)
@@ -1002,7 +1010,7 @@ swiftReadLineFunc
     , ValueElim r
     , ValueExpression r typ
     )
-  => SValue r
+  => VS (r Value)
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
 
 swiftReadFileFunc
@@ -1014,7 +1022,7 @@ swiftReadFileFunc
     , ValueElim r
     , ValueExpression r typ
     )
-  => SValue r -> SValue r
+  => VS (r Value) -> VS (r Value)
 swiftReadFileFunc v = swiftTryVal $
   funcAppNamedArgs CP.stringRender' string [contentsArg, encodingArg]
   where
@@ -1024,26 +1032,27 @@ swiftReadFileFunc v = swiftTryVal $
 
 swiftSplitFunc
   :: (InternalValueExp r typ, TypeSym r typ, Literal r typ, VariableSym r typ)
-  => Char -> SValue r -> SValue r
+  => Char -> VS (r Value) -> VS (r Value)
 swiftSplitFunc d s = let sepArg = var swiftSepBy char
   in objMethodCallNamedArgs (listType string) s swiftSplit [(sepArg, litChar d)]
 
 swiftJoinedFunc
   :: (InternalValueExp r typ, TypeSym r typ, Literal r typ, VariableSym r typ)
-  => Char -> SValue r -> SValue r
+  => Char -> VS (r Value) -> VS (r Value)
 swiftJoinedFunc d s = let sepArg = var swiftSep char
   in objMethodCallNamedArgs string s swiftJoined [(sepArg, litChar d)]
 
-swiftIndexOf :: SValue SwiftCode -> SValue SwiftCode -> SValue SwiftCode
+swiftIndexOf
+  :: VS (SwiftCode Value) -> VS (SwiftCode Value) -> VS (SwiftCode Value)
 swiftIndexOf = swiftUnwrapVal .: swiftIndexFunc
 
 -- | Swift's syntactic sugar for list slicing.
 swiftListSlice
   :: SVariable SwiftCode
-  -> SValue SwiftCode
-  -> Maybe (SValue SwiftCode)
-  -> Maybe (SValue SwiftCode)
-  -> SValue SwiftCode
+  -> VS (SwiftCode Value)
+  -> Maybe (VS (SwiftCode Value))
+  -> Maybe (VS (SwiftCode Value))
+  -> VS (SwiftCode Value)
   -> MS (SwiftCode Block)
 swiftListSlice vn vo beg end step = do
 
@@ -1070,10 +1079,14 @@ swiftListSlice vn vo beg end step = do
       setToSlice
     ]
 
-swiftPrint :: Bool -> Maybe (SValue SwiftCode) -> SValue SwiftCode ->
-  SValue SwiftCode -> MS (SwiftCode (Doc, Terminator))
+swiftPrint
+  :: Bool
+  -> Maybe (VS (SwiftCode Value))
+  -> VS (SwiftCode Value)
+  -> VS (SwiftCode Value)
+  -> MS (SwiftCode (Doc, Terminator))
 swiftPrint newLn Nothing _ v = do
-  let s = litString "" :: SValue SwiftCode
+  let s = litString "" :: VS (SwiftCode Value)
       nl = [(var swiftTerm string, s) | not newLn]
   valStmt $ funcAppMixedArgs printLabel void [v] nl
 swiftPrint newLn (Just f) _ v' = do
@@ -1088,13 +1101,17 @@ swiftPrint newLn (Just f) _ v' = do
     (oneLiner $ throw "Error printing to file.")
 
 -- swiftPrint can handle lists, so don't use G.print for lists.
-swiftOut :: Bool -> Maybe (SValue SwiftCode) -> SValue SwiftCode ->
-  SValue SwiftCode -> MS (SwiftCode (Doc, Terminator))
+swiftOut
+  :: Bool
+  -> Maybe (VS (SwiftCode Value))
+  -> VS (SwiftCode Value)
+  -> VS (SwiftCode Value)
+  -> MS (SwiftCode (Doc, Terminator))
 swiftOut newLn f printFn v = zoom lensMStoVS v >>= swOut . getCodeType . valueType
   where swOut (List _) = printSt newLn f printFn v
         swOut _ = G.print newLn f printFn v
 
-swiftInput :: SVariable SwiftCode -> SValue SwiftCode -> SValue SwiftCode
+swiftInput :: SVariable SwiftCode -> VS (SwiftCode Value) -> VS (SwiftCode Value)
 swiftInput vr vl = do
   vr' <- vr
   let swiftInput' String = vl
@@ -1103,7 +1120,8 @@ swiftInput vr vl = do
         | otherwise = error "Attempt to read value of unreadable type"
   swiftInput' (getCodeType $ variableType vr')
 
-swiftOpenFile :: SValue SwiftCode -> VS (SwiftCode TypeData) -> SValue SwiftCode
+swiftOpenFile
+  :: VS (SwiftCode Value) -> VS (SwiftCode TypeData) -> VS (SwiftCode Value)
 swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
                         dirVal = mkStateVal (obj swiftSearchDir) swiftDocDir
                         inArg = var swiftIn (obj swiftPathMask)
@@ -1112,13 +1130,17 @@ swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
     funcAppNamedArgs swiftUrls (listType t) [(forArg, dirVal), (inArg, maskVal)]
     $. funcFromData (R.func swiftFirst) t) swiftAppendPath [n]
 
-swiftOpenFileHdl :: SValue SwiftCode -> VS (SwiftCode TypeData) -> SValue SwiftCode
+swiftOpenFileHdl
+  :: VS (SwiftCode Value) -> VS (SwiftCode TypeData) -> VS (SwiftCode Value)
 swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType
   in swiftTryVal $ funcAppNamedArgs swiftFileHdl outfile
     [(forWritingArg, swiftOpenFile n t)]
 
 swiftOpenFileWA
-  :: Bool -> SVariable SwiftCode -> SValue SwiftCode -> MS (SwiftCode (Doc, Terminator))
+  :: Bool
+  -> SVariable SwiftCode
+  -> VS (SwiftCode Value)
+  -> MS (SwiftCode (Doc, Terminator))
 swiftOpenFileWA app f' n' = tryCatch
     (bodyStatements [CP.openFileW (\f n _ -> swiftOpenFileHdl f n) f' n',
       if app
@@ -1129,7 +1151,7 @@ swiftOpenFileWA app f' n' = tryCatch
     -- will have no guarantees that the file variable has been initialized.
     (oneLiner $ throw "Error opening file.")
 
-swiftCloseFile :: SValue SwiftCode -> MS (SwiftCode (Doc, Terminator))
+swiftCloseFile :: VS (SwiftCode Value) -> MS (SwiftCode (Doc, Terminator))
 swiftCloseFile f' = do
   f <- zoom lensMStoVS f'
   -- How I've currently implemented file-reading, files don't need to be
@@ -1142,7 +1164,9 @@ swiftCloseFile f' = do
   swClose (getCodeType $ valueType f)
 
 swiftReadFile
-  :: SVariable SwiftCode -> SValue SwiftCode -> MS (SwiftCode (Doc, Terminator))
+  :: SVariable SwiftCode
+  -> VS (SwiftCode Value)
+  -> MS (SwiftCode (Doc, Terminator))
 swiftReadFile v f =
   let l_binder = binder "l" string
       l_var = var "l" string
@@ -1151,7 +1175,10 @@ swiftReadFile v f =
     (lambda [l_binder] (swiftSplitFunc ' ' (valueOf l_var))))
   (oneLiner $ throw "Error reading from file.")
 
-swiftVarDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData
+swiftVarDec
+  :: Doc
+  -> SVariable SwiftCode
+  -> SwiftCode ScopeData
   -> MS (SwiftCode (Doc, Terminator))
 swiftVarDec dec v' scp = do
   v <- zoom lensMStoVS v'
@@ -1163,8 +1190,11 @@ swiftVarDec dec v' scp = do
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> renderType (variableType v))
 
-swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData ->
-  MS (SwiftCode (Doc, Terminator))
+swiftSetDec
+  :: Doc
+  -> SVariable SwiftCode
+  -> SwiftCode ScopeData
+  -> MS (SwiftCode (Doc, Terminator))
 swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
   innerTp <- zoom lensMStoVS (innerType $ return $ variableType v)
@@ -1263,7 +1293,7 @@ swiftClassDoc desc = [desc | not (null desc)]
 
 typeDfltVal
   :: (Literal r typ, TypeSym r typ, OOTypeSym r typ)
-  => CodeType -> SValue r
+  => CodeType -> VS (r Value)
 typeDfltVal Boolean = litFalse
 typeDfltVal Integer = litInt 0
 typeDfltVal Float = litFloat 0.0

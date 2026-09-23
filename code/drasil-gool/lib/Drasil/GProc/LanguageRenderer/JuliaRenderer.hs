@@ -8,17 +8,17 @@ module Drasil.GProc.LanguageRenderer.JuliaRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, SValue,
-  Variable, SVariable, Block, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, libFuncApp,
-  IndexTranslator(..), Reference(..), Array(..), List(..), ListStatement(..),
-  Set(..), NativeVector(..), InternalList(..), EmptyStatement(..),
-  MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
-  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, Variable,
+  SVariable, Block, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  getTypeString, VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, libFuncApp, IndexTranslator(..),
+  Reference(..), Array(..), List(..), ListStatement(..), Set(..),
+  NativeVector(..), InternalList(..), EmptyStatement(..), MultiStatement(..),
+  ValueStatement(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
   BinderSym(..), BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
@@ -273,7 +273,7 @@ instance Literal JuliaCode TypeData where
   litSet = CP.litSet (text "Set" <>) (parens . brackets)
 
 instance MathConstant JuliaCode where
-  pi :: SValue JuliaCode
+  pi :: VS (JuliaCode Value)
   pi = mkStateVal double jlPi
 
 instance VariableValue JuliaCode where
@@ -621,10 +621,11 @@ jlFile = "IOStream"
 jlVoid = "Nothing"
 
 -- The only consistent way of creating floats is by casting
-jlLitFloat :: (RenderValue r typ, TypeSym r typ) => Float -> SValue r
+jlLitFloat :: (RenderValue r typ, TypeSym r typ) => Float -> VS (r Value)
 jlLitFloat f = mkStateVal float (text jlFloatConc <> parens (D.float f))
 
-jlLitList :: VS (JuliaCode TypeData) -> [SValue JuliaCode] -> SValue JuliaCode
+jlLitList
+  :: VS (JuliaCode TypeData) -> [VS (JuliaCode Value)] -> VS (JuliaCode Value)
 jlLitList t' es = do
   t <- t'
   let lt' = listType t'
@@ -632,7 +633,7 @@ jlLitList t' es = do
   let typeDec = if null es then renderType t else empty
   mkStateVal lt' (typeDec <> brackets (valueList elems))
 
-jlCast :: VS (JuliaCode TypeData) -> SValue JuliaCode -> SValue JuliaCode
+jlCast :: VS (JuliaCode TypeData) -> VS (JuliaCode Value) -> VS (JuliaCode Value)
 jlCast t' v' = do
   t <- t'
   v <- v'
@@ -653,21 +654,30 @@ jlCast t' v' = do
       jlCast' _      _    vDoc' tDoc' = tDoc' <> parens vDoc'
   mkVal t (jlCast' vTp tTp vDoc tDoc)
 
-jlAssign :: SVariable JuliaCode -> SValue JuliaCode -> MS (JuliaCode (Doc, Terminator))
+jlAssign
+  :: SVariable JuliaCode
+  -> VS (JuliaCode Value)
+  -> MS (JuliaCode (Doc, Terminator))
 jlAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
   mkStmtNoEnd $ jlGlobalDec scpData <+> R.assign vr v
 
-jlSubAssign :: SVariable JuliaCode -> SValue JuliaCode -> MS (JuliaCode (Doc, Terminator))
+jlSubAssign
+  :: SVariable JuliaCode
+  -> VS (JuliaCode Value)
+  -> MS (JuliaCode (Doc, Terminator))
 jlSubAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
   mkStmtNoEnd $ jlGlobalDec scpData <+> R.subAssign vr v
 
-jlIncrement :: SVariable JuliaCode -> SValue JuliaCode -> MS (JuliaCode (Doc, Terminator))
+jlIncrement
+  :: SVariable JuliaCode
+  -> VS (JuliaCode Value)
+  -> MS (JuliaCode (Doc, Terminator))
 jlIncrement vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -683,7 +693,7 @@ jlGlobal = text "global"
 jlConstDecDef
   :: SVariable JuliaCode
   -> JuliaCode ScopeData
-  -> SValue JuliaCode
+  -> VS (JuliaCode Value)
   -> MS (JuliaCode (Doc, Terminator))
 jlConstDecDef v' scp def' = do
   let scpData = scopeData scp
@@ -711,9 +721,9 @@ jlIndexOf
     , VariableValue r
     , Comparison r
     )
-  => SValue r
-  -> SValue r
-  -> SValue r
+  => VS (r Value)
+  -> VS (r Value)
+  -> VS (r Value)
 jlIndexOf l v = do
   v' <- v
   let t = toCode $ valueType v'
@@ -724,10 +734,10 @@ jlIndexOf l v = do
 -- possible outputs of this function.
 jlListSlice
   :: SVariable JuliaCode
-  -> SValue JuliaCode
-  -> Maybe (SValue JuliaCode)
-  -> Maybe (SValue JuliaCode)
-  -> SValue JuliaCode
+  -> VS (JuliaCode Value)
+  -> Maybe (VS (JuliaCode Value))
+  -> Maybe (VS (JuliaCode Value))
+  -> VS (JuliaCode Value)
   -> MS (JuliaCode Block)
 jlListSlice vn vo beg end step = do
 
@@ -779,10 +789,10 @@ jlListSlice vn vo beg end step = do
 
 jlListSlice'
   :: SVariable JuliaCode
-  -> SValue JuliaCode
-  -> SValue JuliaCode
-  -> SValue JuliaCode
-  -> SValue JuliaCode
+  -> VS (JuliaCode Value)
+  -> VS (JuliaCode Value)
+  -> VS (JuliaCode Value)
+  -> VS (JuliaCode Value)
   -> Maybe Integer
   -> MS (JuliaCode (Doc, Terminator))
 jlListSlice' vn vo beg end step mStep = do
@@ -797,7 +807,11 @@ jlListSlice' vn vo beg end step mStep = do
   vn &= theSlice
 
 -- Other functionality
-jlRange :: SValue JuliaCode -> SValue JuliaCode -> SValue JuliaCode -> SValue JuliaCode
+jlRange
+  :: VS (JuliaCode Value)
+  -> VS (JuliaCode Value)
+  -> VS (JuliaCode Value)
+  -> VS (JuliaCode Value)
 jlRange initv finalv stepv = do
   t <- listType int
   iv <- initv
@@ -974,8 +988,12 @@ jlModStart :: Label -> Doc
 jlModStart n = jlMod <+> text n
 
 -- IO
-jlPrint :: Bool -> Maybe (SValue JuliaCode) -> SValue JuliaCode ->
-  SValue JuliaCode -> MS (JuliaCode (Doc, Terminator))
+jlPrint
+  :: Bool
+  -> Maybe (VS (JuliaCode Value))
+  -> VS (JuliaCode Value)
+  -> VS (JuliaCode Value)
+  -> MS (JuliaCode (Doc, Terminator))
 -- Printing to console
 jlPrint _ f' p' v' = do
   f <- zoom lensMStoVS $ fromMaybe (mkStateVal void empty) f' -- The file to print to
@@ -1007,12 +1025,15 @@ jlOut
     , TypeElim r typ
     , InternalIOStmt r stmt
     )
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
+  => Bool -> Maybe (VS (r Value)) -> VS (r Value) -> VS (r Value) -> MS (r stmt)
 jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getCodeType . valueType
   where jlOut' (List _) = printSt newLn f printFn v
         jlOut' _ = G.print newLn f printFn v
 
-jlInput :: SValue JuliaCode -> SVariable JuliaCode -> MS (JuliaCode (Doc, Terminator))
+jlInput
+  :: VS (JuliaCode Value)
+  -> SVariable JuliaCode
+  -> MS (JuliaCode (Doc, Terminator))
 jlInput inSrc v = v &= (v >>= jlInput' . getCodeType . variableType)
   where jlInput' Integer = jlParse jlIntConc int inSrc
         jlInput' Float = jlParse jlFloatConc float inSrc
@@ -1024,7 +1045,7 @@ jlInput inSrc v = v &= (v >>= jlInput' . getCodeType . variableType)
 
 readLine, readLines
   :: (TypeSym r typ, ValueExpression r typ)
-  => SValue r -> SValue r
+  => VS (r Value) -> VS (r Value)
 readLine f = funcApp jlReadLineFunc string [f]
 readLines f = funcApp jlReadLinesFunc (listType string) [f]
 
@@ -1041,7 +1062,7 @@ jlArgs = "ARGS"
 
 jlParse
   :: (TypeSym r typ, RenderValue r typ, ValueExpression r typ)
-  => Label -> VS (r typ) -> SValue r -> SValue r
+  => Label -> VS (r typ) -> VS (r Value) -> VS (r Value)
 jlParse tl tp v = let
   typeLabel = mkStateVal void (text tl)
   in funcApp jlParseFunc tp [typeLabel, v]

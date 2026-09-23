@@ -25,7 +25,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import Drasil.GOOL (SValue, MS, VS, TypeSym(..), OOTypeSym, ScopeSym, ValueSym,
+import Drasil.GOOL (Value, MS, VS, TypeSym(..), OOTypeSym, ScopeSym, ValueSym,
   OOVariableSym, VariableValue(..), ValueStatement(valStmt), DeclStatement(..),
   convType, convTypeOO, FuncAppStatement, TypeElim, VariableSym,
   VariableElim, Argument, Set, ValueExpression, Comparison, BooleanExpression,
@@ -236,7 +236,7 @@ genFuncCall
   => Name
   -> VS (r typ)
   -> GenState [CodeVarChunk]
-  -> GenState (Maybe (SValue r))
+  -> GenState (Maybe (VS (r Value)))
 genFuncCall n t funcPs = do
   mm <- genCall n
   let genFuncCall' Nothing = return Nothing
@@ -455,7 +455,7 @@ genFuncCallProc
   => Name
   -> VS (r typ)
   -> GenState [CodeVarChunk]
-  -> GenState (Maybe (SValue r))
+  -> GenState (Maybe (VS (r Value)))
 genFuncCallProc n t funcPs = do
   mm <- genCall n
   let genFuncCall' Nothing = return Nothing

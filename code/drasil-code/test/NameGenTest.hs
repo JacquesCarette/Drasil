@@ -10,12 +10,14 @@ import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
-nameGenTestOO :: OOProg r vis stmt mthd stvr attch prg file mod bod block => OO.GSProgram r prg
+nameGenTestOO
+  :: OOProg r vis typ stmt mthd stvr attch prg file mod bod block
+  => OO.GSProgram r prg
 nameGenTestOO = OO.prog "NameGenTest" "" [OO.fileDoc $ OO.buildModule
   "NameGenTest" [] [main, helper] []]
 
 nameGenTestProc
-  :: (ProcProg r vis stmt mthd prg file mod bod block)
+  :: (ProcProg r vis typ stmt mthd prg file mod bod block)
   => GProc.GSProgram r prg
 nameGenTestProc = GProc.prog "NameGenTest" "" [GProc.fileDoc $ GProc.buildModule
   "NameGenTest" [] [main, helper]]
@@ -24,14 +26,19 @@ helper
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , Literal r
+    , TypeSym r typ
+    , Literal r typ
+    , ScopeSym r
+    , VariableSym r typ
     , VariableValue r
     , Comparison r
     , List r
     , InternalList r block
+    , ParameterSym r
+    , VisibilitySym r vis
     , DeclStatement r stmt bod
     , ControlStatement r stmt bod
-    , MethodSym r vis mthd bod
+    , MethodSym r vis typ mthd bod
     )
   => MS (r mthd)
 helper = function "helper" private void [param temp] $ body
@@ -46,14 +53,17 @@ main
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , Literal r
+    , TypeSym r typ
+    , Literal r typ
+    , ScopeSym r
+    , VariableSym r typ
     , VariableValue r
     , Comparison r
     , List r
     , InternalList r block
     , DeclStatement r stmt bod
     , ControlStatement r stmt bod
-    , MethodSym r vis mthd bod
+    , MethodSym r vis typ mthd bod
     )
   => MS (r mthd)
 main = mainFunction $ body

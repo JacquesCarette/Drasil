@@ -73,7 +73,7 @@ extractEntryData fileName filePath = do
       typeDecl = formatType scriptFileLines
 
   -- returns all types within a file
-  return EntryData {dRNs=dataDeclRec,dCNs=dataDeclConst,ntNs=newtypeDecl,tNs=typeDecl}
+  pure EntryData {dRNs=dataDeclRec,dCNs=dataDeclConst,ntNs=newtypeDecl,tNs=typeDecl}
 
 ---TODO: use map/filter/fold for most of these, I just need to visualize what is happening for now.
 

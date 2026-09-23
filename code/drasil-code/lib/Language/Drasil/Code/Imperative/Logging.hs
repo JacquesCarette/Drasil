@@ -20,20 +20,23 @@ import Drasil.GOOL (Label, block, SVariable, SValue, MS, BodySym(..),
 -- the beginning of the body.
 logBody
   ::
-    ( Literal r
+    ( TypeSym r typ
+    , Literal r typ
+    , VariableSym r typ
     , VariableValue r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
     , BlockSym r block stmt
     , BodySym r bod block
-    , VariableElim r
+    , VariableElim r typ
     )
   => Label -> [SVariable r] -> [MS (r block)] -> GenState (MS (r bod))
 logBody n vars b = do
   g <- get
-  return $ body $
+  pure $ body $
     [loggedMethod (g ^. logName) n vars | LogFunc `elem` g ^. logKind] ++ b
 
 -- | Generates a block that logs, to the given 'FilePath', the name of a function,
@@ -42,14 +45,17 @@ logBody n vars b = do
 -- inputs it was called with.
 loggedMethod
   ::
-    ( Literal r
+    ( TypeSym r typ
+    , Literal r typ
+    , VariableSym r typ
     , VariableValue r
+    , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
     , BlockSym r block stmt
-    , VariableElim r
+    , VariableElim r typ
     )
   => FilePath -> Label -> [SVariable r] -> MS (r block)
 loggedMethod lName n vars = block [
@@ -72,9 +78,9 @@ loggedMethod lName n vars = block [
       printFileStrLn valLogFile ", "] ++ printInputs vs
 
 -- | The variable representing the log file in write mode.
-varLogFile :: (VariableSym r) => SVariable r
+varLogFile :: (TypeSym r typ, VariableSym r typ) => SVariable r
 varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.
-valLogFile :: (VariableValue r) => SValue r
+valLogFile :: (TypeSym r typ, VariableSym r typ, VariableValue r) => SValue r
 valLogFile = valueOf varLogFile

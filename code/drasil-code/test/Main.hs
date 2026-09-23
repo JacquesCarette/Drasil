@@ -59,11 +59,11 @@ codeGenTestGroup =
 
 goolTestGroup
   :: String
-  -> ( forall r vis stmt mthd stvr attch prg file mod bod block.
-       ( OOProg r vis stmt mthd stvr attch prg file mod bod block
+  -> ( forall r vis typ stmt mthd stvr attch prg file mod bod block.
+       ( OOProg r vis typ stmt mthd stvr attch prg file mod bod block
        , GetSet r
        , StrategyPattern r bod block
-       , ObserverPattern r stmt
+       , ObserverPattern r typ stmt
        ) => OO.GSProgram r prg
      )
   -> TestTree
@@ -82,12 +82,13 @@ goolTestGroup n p =
 gProcTestGroup
   :: String
   ->
-    ( forall r vis stmt mthd prg file mod bod block.
-      ( Literal r
+    ( forall r vis typ stmt mthd prg file mod bod block.
+      -- TODO [Brandon Bosman, 09/21/2026]: Add Literal, Comparision, DeclStatement, ControlStatement to ProcProg
+      ( Literal r typ
       , Comparison r
       , DeclStatement r stmt bod
       , ControlStatement r stmt bod
-      , ProcProg r vis stmt mthd prg file mod bod block
+      , ProcProg r vis typ stmt mthd prg file mod bod block
       )
     => Proc.GSProgram r prg)
   -> TestTree
@@ -103,12 +104,12 @@ gProcTestGroup n p =
 gProcVectorTestGroup
   :: String
   ->
-    ( forall r vis stmt mthd prg file mod bod block.
+    ( forall r vis typ stmt mthd prg file mod bod block.
       ( Comparison r
-      , NativeVector r
+      , NativeVector r typ
       , DeclStatement r stmt bod
       , ControlStatement r stmt bod
-      , ProcProg r vis stmt mthd prg file mod bod block
+      , ProcProg r vis typ stmt mthd prg file mod bod block
       )
     => Proc.GSProgram r prg
     )
@@ -124,18 +125,18 @@ gProcVectorTestGroup n p =
 
 genCodeProcNoMake
   ::
-    ( NativeVector r
-    , ProcProg r vis stmt mthd ProgData file mod bod block
+    ( NativeVector r typ
+    , ProcProg r vis typ stmt mthd ProgData file mod bod block
     , Monad r'
     )
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
   ->
-    ( forall s vis' stmt' mthd' prg' file' mod' bod' block'.
+    ( forall s vis' typ' stmt' mthd' prg' file' mod' bod' block'.
       ( Comparison s
-      , NativeVector s
+      , NativeVector s typ'
       , DeclStatement s stmt' bod'
-      , ProcProg s vis' stmt' mthd' prg' file' mod' bod' block'
+      , ProcProg s vis' typ' stmt' mthd' prg' file' mod' bod' block'
       )
     => Proc.GSProgram s prg'
     )
@@ -148,20 +149,20 @@ genCodeProcNoMake unRepr unRepr' p =
 
 genCodeGOOL
   ::
-    ( OOProg r vis stmt mthd stvr attch ProgData file mod bod block
+    ( OOProg r vis typ stmt mthd stvr attch ProgData file mod bod block
     , GetSet r
     , StrategyPattern r bod block
-    , ObserverPattern r stmt
+    , ObserverPattern r typ stmt
     , SoftwareDossierSym r'
     , Monad r'
     )
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> ( forall s vis' stmt' mthd' stvr' attch' prg' file' mod' bod' block'.
-       ( OOProg s vis' stmt' mthd' stvr' attch' prg' file' mod' bod' block'
+  -> ( forall s vis' typ' stmt' mthd' stvr' attch' prg' file' mod' bod' block'.
+       ( OOProg s vis' typ' stmt' mthd' stvr' attch' prg' file' mod' bod' block'
        , GetSet s
        , StrategyPattern s bod' block'
-       , ObserverPattern s stmt'
+       , ObserverPattern s typ' stmt'
        ) => OO.GSProgram s prg'
      )
   -> [FileLayout]
@@ -172,10 +173,14 @@ genCodeGOOL unRepr unRepr' p =
   in genCode' (unRepr p') gs' unRepr'
 
 genCodeProc
-  :: (ProcProg r vis stmt mthd ProgData file mod bod block, SoftwareDossierSym r', Monad r')
+  ::
+    ( ProcProg r vis typ stmt mthd ProgData file mod bod block
+    , SoftwareDossierSym r'
+    , Monad r'
+    )
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> (forall s vis' stmt' mthd' prg' file' mod' bod' block'. (ProcProg s vis' stmt' mthd' prg' file' mod' bod' block') => Proc.GSProgram s prg')
+  -> (forall s vis' typ' stmt' mthd' prg' file' mod' bod' block'. (ProcProg s vis' typ' stmt' mthd' prg' file' mod' bod' block') => Proc.GSProgram s prg')
   -> [FileLayout]
 genCodeProc unRepr unRepr' p =
   let

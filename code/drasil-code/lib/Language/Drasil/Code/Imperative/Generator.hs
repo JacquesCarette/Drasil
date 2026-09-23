@@ -118,7 +118,7 @@ generator l dt sd chs cs = let
 
 data SomeProgGenerator where
   SomeProgGenerator
-    :: forall repr vis stmt mthd stvr attch prg file mod bod block. (OOProg repr vis stmt mthd stvr attch prg file mod bod block)
+    :: forall repr vis typ stmt mthd stvr attch prg file mod bod block. (OOProg repr vis typ stmt mthd stvr attch prg file mod bod block)
     => (repr prg -> ProgData) -> SomeProgGenerator
 
 -- | Generates a package with the given 'DrasilState'. The passed
@@ -176,7 +176,7 @@ insertFile (p, d) m =
 -- used by the language renderer.
 genPackage
   ::
-    ( OOProg progRepr vis stmt mthd stvr attch prg file mod bod block
+    ( OOProg progRepr vis typ stmt mthd stvr attch prg file mod bod block
     , SoftwareDossierSym packRepr
     , Monad packRepr
     )
@@ -217,11 +217,11 @@ genPackage unRepr = do
         exampleScope = scp,
         folderNum = getVal g,
         inputOutput = (sampleInputName, "output.txt")} -- This needs a more permanent solution
-  return $ package pd (m:catMaybes [i,rm,d])
+  pure $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.
 genProgram
-  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
   => GenState (OO.GSProgram r prg)
 genProgram = do
   g <- get
@@ -229,19 +229,19 @@ genProgram = do
   let n = g ^. projAbrv
   -- FIXME: The below code does `Doc -> String` conversion!
   let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ g ^. purpose
-  return $ OO.prog n p ms
+  pure $ OO.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
 chooseModules
-  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
   => Modularity -> GenState [FS (r file)]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules Modular = genModules
 
 -- | Generates an entire SCS program as a single module.
 genUnmodular
-  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
   => GenState (FS (r file))
 genUnmodular = do
   g <- get
@@ -262,7 +262,7 @@ genUnmodular = do
 
 -- | Generates all modules for an SCS program.
 genModules
-  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
   => GenState [FS (r file)]
 genModules = do
   g <- get
@@ -272,7 +272,7 @@ genModules = do
   cal    <- genCalcMod
   out    <- genOutputMod
   moddef <- traverse genModDef (modules g) -- hack ?
-  return $ mn : inp ++ con ++ cal : out ++ moddef
+  pure $ mn : inp ++ con ++ cal : out ++ moddef
 
 -- Procedural Versions --
 
@@ -281,8 +281,8 @@ genModules = do
 -- be generated in.
 generateCodeProc
   ::
-    ( NativeVector progRepr
-    , ProcProg progRepr vis stmt mthd prg file mod bod block
+    ( NativeVector progRepr typ
+    , ProcProg progRepr vis typ stmt mthd prg file mod bod block
     , SoftwareDossierSym packRepr
     , Monad packRepr
     )
@@ -312,8 +312,8 @@ generateCodeProc l unReprProg unReprPack g =
 -- used by the language renderer.
 genPackageProc
   ::
-    ( NativeVector progRepr
-    , ProcProg progRepr vis stmt mthd prg file mod bod block
+    ( NativeVector progRepr typ
+    , ProcProg progRepr vis typ stmt mthd prg file mod bod block
     , SoftwareDossierSym packRepr
     , Monad packRepr
     )
@@ -351,30 +351,30 @@ genPackageProc unRepr = do
         exampleScope = scp,
         folderNum = getVal g,
         inputOutput = (sampleInputName, "output.txt")} -- This needs a more permanent solution
-  return $ package pd (m:catMaybes [i,rm,d])
+  pure $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.
 genProgramProc
-  :: (NativeVector r, ProcProg r vis stmt mthd prg file mod bod block)
+  :: (NativeVector r typ, ProcProg r vis typ stmt mthd prg file mod bod block)
   => GenState (Proc.GSProgram r prg)
 genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ g ^. modular
   let n = g ^. projAbrv
   let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ g ^. purpose
-  return $ Proc.prog n p ms
+  pure $ Proc.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
 chooseModulesProc
-  :: (NativeVector r, ProcProg r vis stmt mthd prg file mod bod block)
+  :: (NativeVector r typ, ProcProg r vis typ stmt mthd prg file mod bod block)
   => Modularity -> GenState [FS (r file)]
 chooseModulesProc Unmodular = liftS genUnmodularProc
 chooseModulesProc Modular = genModulesProc
 
 -- | Generates an entire SCS program as a single module.
 genUnmodularProc
-  :: (NativeVector r, ProcProg r vis stmt mthd prg file mod bod block)
+  :: (NativeVector r typ, ProcProg r vis typ stmt mthd prg file mod bod block)
   => GenState (FS (r file))
 genUnmodularProc = do
   g <- get
@@ -394,7 +394,7 @@ genUnmodularProc = do
 
 -- | Generates all modules for an SCS program.
 genModulesProc
-  :: ( NativeVector r, ProcProg r vis stmt mthd prg file mod bod block)
+  :: ( NativeVector r typ, ProcProg r vis typ stmt mthd prg file mod bod block)
   => GenState [FS (r file)]
 genModulesProc = do
   g <- get
@@ -405,7 +405,7 @@ genModulesProc = do
   out    <- genOutputModProc
   moddef <- traverse genModDefProc (modules g) -- hack ?
   if con then error "genModulesProc: Procedural renderers do not support classes"
-  else return $ mn : inp ++ cal : out ++ moddef
+  else pure $ mn : inp ++ cal : out ++ moddef
 
 -- | Private utilities used in 'generateCode'.
 getDir :: Lang -> String

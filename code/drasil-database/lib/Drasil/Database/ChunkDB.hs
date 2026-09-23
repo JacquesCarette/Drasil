@@ -217,10 +217,15 @@ insertAllOutOfOrder13 strtr as bs cs ds es fs gs hs is js ks ls ms =
     -- Calculate what chunks are depended on (i.e., UID -> Dependants)
     chDpdts = invert $ M.fromList $ map (\c -> (c ^. uid, S.toList $ chunkRefs c)) calt
 
+    fmtIDnTy c = show (c ^. uid) ++ " :: " ++ show (chunkType c)
+    dupeError c1 c2 = error $
+      "duplicate chunk found in mass insertion between `" ++
+      fmtIDnTy c1 ++ "` and `" ++ fmtIDnTy c2 ++ "`"
+
     -- Insert all incoming chunks with the existing chunk table, asserting that
     -- none of the inserted chunks were already inserted.
     chTab = M.unionWith
-      (\(x, _) _ -> error $ "duplicate chunk found in mass insertion: " ++ show (x ^. uid))
+      (\(c1, _) (c2, _) -> dupeError c1 c2)
       (chunkTable strtr)
       (M.fromListWith
         (\(c1, _) (c2, _) -> error

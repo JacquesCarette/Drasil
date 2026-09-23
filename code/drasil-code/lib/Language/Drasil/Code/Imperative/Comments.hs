@@ -15,7 +15,7 @@ import Language.Drasil.Printers (oneLineSentenceDoc, oneLineUnitDoc)
 getTermDoc :: (CodeIdea c) => c -> GenState Doc
 getTermDoc c = do
   g <- get
-  return $ oneLineSentenceDoc (printfo g) $ phrase $ codeChunk c
+  pure $ oneLineSentenceDoc (printfo g) $ phrase $ codeChunk c
 
 -- | Gets a plain rendering of the unit of a chunk in parentheses,
 -- or empty if it has no unit.
@@ -27,4 +27,4 @@ getCommentBrief :: (CodeIdea c) => c -> GenState String
 getCommentBrief l = do
   t <- getTermDoc l
   let u = getUnitsDoc l
-  return $ render $ t <+> u
+  pure $ render $ t <+> u

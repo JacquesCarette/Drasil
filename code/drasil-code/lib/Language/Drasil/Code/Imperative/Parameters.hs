@@ -48,7 +48,7 @@ getInConstructorParams = do
   let getCParams False = []
       getCParams True = ifPs ++ dvPs ++ icPs
   ps <- getParams ipName In $ getCParams (ipName `elem` defSet g)
-  return $ filter ((Just ipName /=) . flip Map.lookup (clsMap g) . codeName) ps
+  pure $ filter ((Just ipName /=) . flip Map.lookup (clsMap g) . codeName) ps
 
 -- | The inputs to the function for reading inputs are the input file name.
 getInputFormatIns :: GenState [CodeVarChunk]
@@ -140,7 +140,7 @@ getParams n pt cs' = do
         (cs \\ (ins ++ cnsnts))
   inVs <- getInputVars n pt (g ^. inStruct) Var inpVars
   conVs <- getConstVars n pt (g ^. conStruct) (g ^. conRepr) conVars
-  return $ nub $ inVs ++ conVs ++ csSubIns
+  pure $ nub $ inVs ++ conVs ++ csSubIns
 
 -- | If the passed list of input variables is empty, then return empty list.
 -- If the user has chosen 'Unbundled' inputs, then the input variables are
@@ -159,13 +159,13 @@ getParams n pt cs' = do
 -- an object, so no parameters are required.
 getInputVars :: Name -> ParamType -> Structure -> ConstantRepr ->
   [CodeVarChunk] -> GenState [CodeVarChunk]
-getInputVars _ _ _ _ [] = return []
-getInputVars _ _ Unbundled _ cs = return cs
+getInputVars _ _ _ _ [] = pure []
+getInputVars _ _ Unbundled _ cs = pure cs
 getInputVars n pt Bundled Var _ = do
   g <- get
   cname <- genICName InputParameters
-  return [quantvar inParams | Map.lookup n (clsMap g) /= Just cname && isIn pt]
-getInputVars _ _ Bundled Const _ = return []
+  pure [quantvar inParams | Map.lookup n (clsMap g) /= Just cname && isIn pt]
+getInputVars _ _ Bundled Const _ = pure []
 
 -- | If the passed list of constant variables is empty, then return empty list.
 -- If the user has chosen 'Unbundled' constants, then the constant variables are
@@ -182,11 +182,11 @@ getInputVars _ _ Bundled Const _ = return []
 -- an object, so no parameters are required.
 getConstVars :: Name -> ParamType -> ConstantStructure -> ConstantRepr ->
   [CodeVarChunk] -> GenState [CodeVarChunk]
-getConstVars _ _ _ _ [] = return []
-getConstVars _ _ (Store Unbundled) _ cs = return cs
-getConstVars _ pt (Store Bundled) Var _ = return [quantvar consts | isIn pt]
-getConstVars _ _ (Store Bundled) Const _ = return []
+getConstVars _ _ _ _ [] = pure []
+getConstVars _ _ (Store Unbundled) _ cs = pure cs
+getConstVars _ pt (Store Bundled) Var _ = pure [quantvar consts | isIn pt]
+getConstVars _ _ (Store Bundled) Const _ = pure []
 getConstVars n pt WithInputs cr cs = do
   g <- get
   getInputVars n pt (g ^. inStruct) cr cs
-getConstVars _ _ Inline _ _ = return []
+getConstVars _ _ Inline _ _ = pure []

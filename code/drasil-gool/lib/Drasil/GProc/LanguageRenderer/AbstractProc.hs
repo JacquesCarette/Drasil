@@ -50,7 +50,7 @@ fileFromData f fpath mdl' = do
       if s ^. currMain && isSource (s ^. currFileType)
         then over lensFStoGS (setMainMod fpath) s
         else s)
-  return $ f fpath mdl
+  pure $ f fpath mdl
 
 -- Parameters: Module name, Doc for imports, Doc to put at bottom of module,
 -- methods
@@ -62,7 +62,7 @@ buildModule n imps bot fs = RP.modFromData n (do
   is <- imps
   bt <- bot
   let fnDocs = vibcat (map RC.method fns ++ [bt])
-  return $ emptyIfEmpty fnDocs (vibcat (filter (not . isEmpty) [is, fnDocs])))
+  pure $ emptyIfEmpty fnDocs (vibcat (filter (not . isEmpty) [is, fnDocs])))
 
 docMod
   :: (RC.BlockCommentSym r, RP.RenderFile r file mod)
@@ -111,7 +111,7 @@ arrayElem arr' i' = do
   i <- IC.intToIndex i'
   arr <- arr'
   let vName = render $ RC.value arr
-      vType = innerType $ return $ IC.valueType arr
+      vType = innerType $ pure $ IC.valueType arr
       vRender = RC.value arr <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
@@ -123,7 +123,7 @@ funcDecDef v scp ps b = do
   modify $ useVarName $ variableName vr
   modify $ setVarScope (variableName vr) (RC.scopeData scp)
   s <- get
-  f <- IC.function (variableName vr) private (return $ variableType vr)
+  f <- IC.function (variableName vr) private (pure $ variableType vr)
     (map IC.param ps) b
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RC.method f

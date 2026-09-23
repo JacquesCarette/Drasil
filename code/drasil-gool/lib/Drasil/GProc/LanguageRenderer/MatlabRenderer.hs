@@ -367,7 +367,7 @@ instance InternalListFunc MatlabCode TypeData where
   listAccessFunc t v = do
     t' <- t
     iv <- intValue v
-    funcFromData (mlListAccessFunc (cType (unMLC t')) iv) (return t')
+    funcFromData (mlListAccessFunc (cType (unMLC t')) iv) (pure t')
 
 mlListAccessFunc :: CodeType -> MatlabCode Value -> Doc
 mlListAccessFunc ct v = mlCellWrap ct $ RC.value v
@@ -577,8 +577,8 @@ instance ModuleSym MatlabCode ModData MethodData where
         content = vibcat (filter (not . isEmpty) [entryFn, fnDocs])
     case fns of
       (f:_) | isEmpty entryFn -> modify (setModuleName (mthdName (unMLC f)))
-      _                       -> return ()
-    return $ emptyIfEmpty content content)
+      _                       -> pure ()
+    pure $ emptyIfEmpty content content)
 
 instance RenderMod MatlabCode ModData where
   modFromData n = A.modFromData n (toCode . md n)
@@ -733,8 +733,8 @@ mlCast t' v' = do
   v <- v'
   let vTp = getCodeType $ valueType v
       tTp = getCodeType t
-      rv  = return v
-      rt  = return t
+      rv  = pure v
+      rt  = pure t
   case (vTp, tTp) of
     (String, Integer) -> funcApp "str2double" rt [rv]
     (String, Float)   -> funcApp "str2double" rt [rv]
@@ -742,7 +742,7 @@ mlCast t' v' = do
     (String, Boolean) -> funcApp "logical" rt [funcApp "str2double" double [rv]]
     (_,      String)  -> funcApp "num2str" rt [rv]
     (_,      Char)    -> funcApp "char" rt [rv]
-    _                 -> return v
+    _                 -> pure v
 
 mlEqOp :: Bool -> SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
 mlEqOp neg v1' v2' = do
@@ -754,8 +754,8 @@ mlEqOp neg v1' v2' = do
       strDoc = if neg then text "~" <> d else d
   case tp of
     String -> mkVal t strDoc
-    _      -> if neg then typeBinExpr notEqualOp bool (return v1) (return v2)
-                     else typeBinExpr equalOp bool (return v1) (return v2)
+    _      -> if neg then typeBinExpr notEqualOp bool (pure v1) (pure v2)
+                     else typeBinExpr equalOp bool (pure v1) (pure v2)
 
 mlListDec :: SVariable MatlabCode -> MatlabCode ScopeData
   -> MS (MatlabCode (Doc, Terminator))
@@ -764,7 +764,7 @@ mlListDec v scp = do
   let emptyInit = case getCodeType (variableType vr) of
         List String -> braces empty
         _           -> brackets empty
-  CS.varDecDef (return vr) scp
+  CS.varDecDef (pure vr) scp
     (Just (mkStateVal (toState $ variableType vr) emptyInit))
 
 mlReadAllLines :: SValue MatlabCode -> SVariable MatlabCode
@@ -814,7 +814,7 @@ mlArrayElem :: SValue MatlabCode -> SValue MatlabCode -> SVariable MatlabCode
 mlArrayElem arr' i' = do
   i <- intToIndex i'
   arr <- arr'
-  mkStateVar (render $ RC.value arr) (A.innerType $ return $ valueType arr)
+  mkStateVar (render $ RC.value arr) (A.innerType $ pure $ valueType arr)
     (RC.value arr <> parens (RC.value i))
 
 mlListAdd :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
@@ -841,6 +841,6 @@ mlListSet lst' idx' val' = do
         List t -> mlCellWrap t
         _      -> parens
       lvar = mkStateVar (render $ RC.value lst)
-               (A.innerType $ return $ valueType lst)
+               (A.innerType $ pure $ valueType lst)
                (RC.value lst <> wrap (RC.value idx))
   lvar &= val'

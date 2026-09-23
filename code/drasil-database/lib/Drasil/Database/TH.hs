@@ -47,4 +47,4 @@ deriveGenerically clss ty = do
       -- Gather all classes we want to derive generically
       clsDrvs = map drvCls clss
 
-  return $ drvGeneric : clsDrvs
+  pure $ drvGeneric : clsDrvs

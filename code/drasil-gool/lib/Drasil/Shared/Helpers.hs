@@ -45,10 +45,10 @@ emptyIfNull :: [a] -> Doc -> Doc
 emptyIfNull lst elseDoc = if null lst then empty else elseDoc
 
 toCode :: (Monad r) => a -> r a
-toCode = return
+toCode = pure
 
 toState :: a -> State s a
-toState = return
+toState = pure
 
 onCodeValue :: (Functor r) => (a -> b) -> r a -> r b
 onCodeValue = fmap

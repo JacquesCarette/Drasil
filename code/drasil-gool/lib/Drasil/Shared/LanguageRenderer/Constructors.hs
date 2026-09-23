@@ -61,7 +61,7 @@ mkClassVar = varFromData ClassLevel
 
 -- Types --
 typeFromData :: (Monad r) => CodeType -> String -> Doc -> VS (r TypeData)
-typeFromData t s d = return $ return $ td t s d
+typeFromData t s d = pure $ pure $ td t s d
 
 -- Operators --
 

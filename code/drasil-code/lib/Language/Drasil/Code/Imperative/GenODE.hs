@@ -25,7 +25,7 @@ type ODEGenInfo = (Maybe FilePath, [(Name, ExtLibState)], (Name,Version))
 -- The internal helper chooseODELib' keeps a read only preference list and a currently considered
 -- preference list (which can change), this facilitates the 'firstChoiceODELib' check.
 chooseODELib :: Lang -> Maybe ODE -> State [Sentence] ODEGenInfo
-chooseODELib _ Nothing = return (Nothing, [], ("",""))
+chooseODELib _ Nothing = pure (Nothing, [], ("",""))
 chooseODELib l (Just ode) = chooseODELib' (odeLib ode) (odeLib ode)
   where chooseODELib' :: [ODELibPckg] -> [ODELibPckg] -> State [Sentence] ODEGenInfo
         chooseODELib' _ [] = error $ "None of the chosen ODE libraries are " ++
@@ -33,7 +33,7 @@ chooseODELib l (Just ode) = chooseODELib' (odeLib ode) (odeLib ode)
         chooseODELib' prefLibList (o:os) = if l `elem` compatibleLangs o
           then do
             modify (++ [firstChoiceODELib prefLibList o])
-            return (libPath o, map (\ode' -> (codeName $ odeDef ode',
+            pure (libPath o, map (\ode' -> (codeName $ odeDef ode',
               genExternalLibraryCall (libSpec o) $ libCall o ode')) $ odeInfo ode,
                 (libName o, libVers o))
           else modify (++ [incompatibleLib l o]) >> chooseODELib' prefLibList os

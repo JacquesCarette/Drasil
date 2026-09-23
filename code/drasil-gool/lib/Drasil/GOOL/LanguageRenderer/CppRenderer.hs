@@ -1659,7 +1659,7 @@ instance MethodElim CppSrcCode MethodData where
   method = mthdDoc . unCPPSC
 
 instance StateVarSym CppSrcCode (Doc, VisibilityTag) StateVarData AttachmentData where
-  stateVar s _ _ = return $ return $ svd (snd (unCPPSC s)) empty
+  stateVar s _ _ = pure $ pure $ svd (snd (unCPPSC s)) empty
   stateVarDef = cppsStateVarDef empty
   constVar s = cppsStateVarDef constDec' s classLevel
 
@@ -2284,11 +2284,11 @@ instance StateVarSym CppHdrCode (Doc, VisibilityTag) StateVarData AttachmentData
       (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec))
   stateVarDef s p vr vl = do
     d <- cpphStateVarDef empty p vr vl
-    return $ return $ svd (snd $ unCPPHC s) d
+    pure $ pure $ svd (snd $ unCPPHC s) d
   constVar s vr _ = do
     vr' <- zoom lensCStoVS vr
     let attch = R.constVar empty endStatement (attachmentDoc (unCPPHC classLevel)) (unCPPHC vr')
-    return $ return $ svd (snd $ unCPPHC s) attch
+    pure $ pure $ svd (snd $ unCPPHC s) attch
   -- constVar s vr _ = on2StateValues (on3CodeValues svd (onCodeValue snd s) .
   --   on2CodeValues (R.constVar empty endStatement) (attachmentDoc <$> classLevel))
   --   (zoom lensCStoVS vr) (zoom lensCStoMS emptyStmt)
@@ -2420,7 +2420,7 @@ arrayDecBase vr scp = do
   vr' <- zoom lensMStoVS vr
   modify $ useVarName $ variableName vr'
   modify $ setVarScope (variableName vr') (scopeData scp)
-  return $ renderType (variableType vr') <+> RC.variable vr'
+  pure $ renderType (variableType vr') <+> RC.variable vr'
 
 cppReferenceType :: (Monad r, TypeElim r TypeData, UnRepr r TypeData) =>
   VS (r TypeData) -> VS (r TypeData)

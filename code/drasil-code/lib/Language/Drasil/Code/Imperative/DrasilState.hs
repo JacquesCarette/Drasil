@@ -380,7 +380,7 @@ getExpOutput n chs _ = [(icNames chs WriteOutput, oMod $ modularity $ architectu
 genICName :: InternalConcept -> GenState Name
 genICName ic = do
   ds <- get
-  return $ (ds ^. dsICNames) ic
+  pure $ (ds ^. dsICNames) ic
 
 -- | Gets the 'DefinedQuantityDict' corresponding to a 'UID'.
 lookupC :: DrasilState -> UID -> DefinedQuantityDict

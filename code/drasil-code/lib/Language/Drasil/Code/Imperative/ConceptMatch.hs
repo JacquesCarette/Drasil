@@ -26,7 +26,7 @@ chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch $ map
           "ConceptMatchMap"
         chooseConcept' uid (c:_) = do
             modify (++ [S "Code Concept" +:+ S (show uid) +:+ S "selected as" +:+. showChs c])
-            return c
+            pure c
 
 -- | Translates a 'CodeConcept' into GOOL.
 conceptToGOOL :: (MathConstant r) => CodeConcept -> SValue r

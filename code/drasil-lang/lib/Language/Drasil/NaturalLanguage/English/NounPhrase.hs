@@ -19,7 +19,7 @@ module Language.Drasil.NaturalLanguage.English.NounPhrase (
   -- * Re-exported Types
   CapitalizationRuleG(..), CapitalizationRule, PluralRule(..), NPStruct,
   PluralForm, NPG, NPStructG,
-  -- * Re-exported Smart Constructors 
+  -- * Re-exported Smart Constructors
   npS, npP, (.-.), (.+.)
   ) where
 

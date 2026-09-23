@@ -65,10 +65,9 @@ balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
   [ch tauW `S.is` S "calculated from", refS balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
-   S "is in", phrase liquid, S "form" `sC` eS (realInterval tempW $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)),
-   sParen (unitSym tempW), S "where", eS (exactDbl 0),
-   sParen (unitSym tempW) `S.and_` eS (exactDbl 100),
-   sParen (unitSym tempW), S "are the", D.toSent (pluralNP ((melting `and_`
+   S "is in", phrase liquid, S "form" `sC` exprWUnit (realInterval tempW $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)) tempW,
+   S "where", exprWUnit (exactDbl 0) tempW `S.and_` exprWUnit (exactDbl 100) tempW,
+   S "are the", D.toSent (pluralNP ((melting `and_`
    boilPt) `of_PSNPNI` water)) `sC` S "respectively", sParen (refS assumpWAL)]]
 
 ----------------------------------------------

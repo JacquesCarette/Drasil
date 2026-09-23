@@ -11,7 +11,7 @@ module Language.Drasil.Document.SentenceCombinators (
   -- | See Reference-related Functions as well.
   addPercent, maybeChanged, maybeExpanded,
   maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
-  chWithUnit, introduceVar, unitSym, phraseWithUnit, fterms, eqN, eqnWSource,
+  chWithUnit, introduceVar, exprWUnit, unitSym, phraseWithUnit, fterms, eqN, eqnWSource,
   -- * List-related Functions
   bulletFlat, bulletNested, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, refineChain,
@@ -162,6 +162,12 @@ phraseWithUnit x = maybe (phrase x) (\u -> phrase x +:+ sParen (Sy (usymb u))) (
 -- time a variable is mentioned in a document).
 introduceVar :: (Quantity a, MayHaveUnit a) => a -> Sentence
 introduceVar x = maybe (phrase x `sC` ch x) (\u -> phrase x `sC` ch x `sC` sParen (Sy (usymb u))) (getUnit x)
+
+-- | Outputs "e (unit of x)", or just "e" if x has no unit.
+-- For pairing an expression with a unit borrowed from a related quantity,
+-- when the expression itself doesn't carry a unit directly.
+exprWUnit :: MayHaveUnit c => ModelExpr -> c -> Sentence
+exprWUnit e x = maybe (eS e) (\u -> eS e +:+ sParen (Sy (usymb u))) (getUnit x)
 
 -- | Converts lists of simple 'ItemType's into a list which may be used
 -- in 'Contents' but is not directly referable.

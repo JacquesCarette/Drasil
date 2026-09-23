@@ -77,9 +77,9 @@ balWtrDesc = map foldlSent [
   [S "The initial", plural condition, S "for the", short ode `S.are`
    eS (apply tempW [exactDbl 0] $= apply tempPCM [exactDbl 0] $= sy tempInit) `follows` assumpSITWP],
   [S "The", short ode, S "applies as long as the", phrase water `S.is` EmptyS `S.in_`
-   phrase liquid, S "form" `sC` eS (realInterval tempW (Bounded (Exc, exactDbl 0) (Exc, exactDbl 100))),
-   sParen (unitSym tempW), S "where", eS (exactDbl 0), sParen (unitSym tempW) `S.and_`
-   eS (exactDbl 100), sParen (unitSym tempW) `S.are` D.toSent (pluralNP (NP.the ((melting `and_`
+   phrase liquid, S "form" `sC` exprWUnit (realInterval tempW (Bounded (Exc, exactDbl 0) (Exc, exactDbl 100))) tempW,
+   S "where", exprWUnit (exactDbl 0) tempW `S.and_`
+   exprWUnit (exactDbl 100) tempW `S.are` D.toSent (pluralNP (NP.the ((melting `and_`
    boilPt) `of_PSNPNI` water))) `sC` S "respectively",
    fromSources [assumpWAL, assumpAPT]]]
 
@@ -291,7 +291,7 @@ htWtrNotes :: [Sentence]
 htWtrNotes = map foldlSent [
   [S "The above", phrase equation `S.is` S "derived using", refS sensHtE],
   [D.toSent (atStartNP (NP.the (change `in_`temp))) `S.isThe` S "difference between the",
-   phrase temp, S "at", phrase time, ch time, sParen (unitSym tInitMelt) `sC`
+   phrase temp, S "at", introduceVar time `sC`
   ch tempW `S.andThe` introduceVar tempInit],
   [S "This", phrase equation, S "applies as long as",
    eS (realInterval tempW (Bounded (Exc, exactDbl 0) (Exc, exactDbl 100))) :+:

@@ -18,8 +18,8 @@ module Language.Drasil.NaturalLanguage.English.NounPhrase (
   surroundNPStruct,
   -- * Re-exported Types
   CapitalizationRuleG(..), CapitalizationRule, PluralRule(..), NPStruct,
-  NPG, NPStructG,
-  -- * Re-exported Smart Constructors
+  PluralForm, NPG, NPStructG,
+  -- * Re-exported Smart Constructors 
   npS, npP, (.-.), (.+.)
   ) where
 

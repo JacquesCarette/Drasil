@@ -57,12 +57,12 @@ becquerel = derCUC' "becquerel"
   "becquerel" "activity" (label "Bq") --of a Radionuclide
   (second ^: (-1))
 
-calorie = derUC "calorie"
-  "calorie" "energy" (label "cal") (scale 4.184 joule)
+calorie = derUC' "calorie"
+  "calorie" "energy" (label "cal") (scale 4.184 joule) joule
 
 centigrade = derUC "centigrade"
   "centigrade" "temperature" (Special Circle <> label "C")
-  (shift 273.15 kelvin)
+  (shift 273.15 kelvin) kelvin
 
 coulomb = derCUC' "coulomb"
   "coulomb" "electric charge" (label "C") (ampere *: second)
@@ -88,13 +88,13 @@ katal = derCUC' "katal"
 
 kilopascal = derUC' "kilopascal"
   "kilopascal" "pressure"
-  (label "k" <> label "Pa") (scale 1000 pascal)
+  (label "k" <> label "Pa") (scale 1000 pascal) pascal
 
 kilowatt = derUC' "kilowatt"
-  "kilowatt" "power" (label "k" <> label "W") (scale 1000 watt)
+  "kilowatt" "power" (label "k" <> label "W") (scale 1000 watt) watt
 
 litre = derUC' "litre"
-  "litre" "volume" (label "L") (scale (1/1000) m_3)
+  "litre" "volume" (label "L") (scale (1/1000) m_3) m_3
 
 lumen = derCUC' "lumen"
   "lumen" "luminous flux" (label "lm") (candela *: steradian)
@@ -103,7 +103,7 @@ lux = derCUC "lux"
   "lux" "illuminance" (label "lx") (lumen /: m_2)
 
 millimetre = derUC' "millimetre"
-  "millimetre" "length" (label "mm") (scale 0.0001 metre)
+  "millimetre" "length" (label "mm") (scale 0.001 metre) metre
 
 newton = derCUC' "newton"
   "newton" "force" (label "N") (kilogram *$ (metre *$ (second ^: (-2))))

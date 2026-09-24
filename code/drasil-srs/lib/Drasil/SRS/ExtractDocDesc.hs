@@ -158,18 +158,13 @@ collectUnitDeps db = go . mapMaybe (getUnitLup db)
     -- Rules:
     -- 1. Fundamental and derived SI units have their own symbols and are shown
     --    in the Table of Units.
-    -- 2. Defined (compound) units are broken down into their constituent units.
-    --
-    -- Scaled units (e.g. millimetre in GlassBR) are currently constructed via
-    -- `derUC` as `DerivedSI` with `UScale`. We treat them as `dontShow` so they
-    -- are not added as redundant prefixed entries in the Table of Units (which
-    -- already contains their base unit, e.g. metre).
+    -- 2. Defined (compound) units, including scaled ones like millimetre, are
+    --    broken down into their constituent units.
     shouldShow ud =
       case unitSymbol ud of
-        BaseSI{}               -> True
-        DerivedSI _ _ UScale{} -> False -- FIXME: Hack to avoid 'millimetre' being displayed in SRS.
-        DerivedSI{}            -> True
-        Defined{}              -> False
+        BaseSI{}    -> True
+        DerivedSI{} -> True
+        Defined{}   -> False
 
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)

@@ -91,17 +91,18 @@ makeDerU concept eqn = UD concept (Defined (usymb eqn) (USynonym $ usymb eqn)) (
 -- FIXME: Shouldn't need to use the UID constructor here.
 derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
 -- | Create a 'SI_Unit' with two 'Symbol' representations. The created 'NP' is self-plural.
-derCUC a b c s ue = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [mkUid a]
+derCUC a b c s ue = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) (getCu ue)
 -- | Similar to 'derCUC', but the created 'NP' has the 'AddS' plural rule.
-derCUC' a b c s ue = UD (cncpt''' (mkUid a) (cn' b) (S c)) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [mkUid a]
+derCUC' a b c s ue = UD (cncpt''' (mkUid a) (cn' b) (S c)) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) (getCu ue)
 
--- | Create a derived unit chunk from a 'UID', term ('String'), definition,
--- 'Symbol', and unit equation.
-derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
--- | Uses self-plural term.
-derUC  a b c s u = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
--- | Uses term that pluralizes by adding "s" to the end.
-derUC' a b c s u = UD (cncpt''' (mkUid a) (cn' b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
+-- | Create a unit from a 'UID', term ('String'), definition, 'Symbol', a
+-- scale/shift relation ('UDefn'), and the unit that relation is based on.
+derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn -> UnitDefn
+-- | Derived unit with its own special symbol (e.g. °C). Uses self-plural term.
+derUC  a b c s u from = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) [from ^. uid]
+-- | Compound unit that is a scaled version of another (e.g. mm, kPa). Uses
+-- term that pluralizes by adding "s" to the end.
+derUC' a b c s u from = UD (cncpt''' (mkUid a) (cn' b) (S c)) (Defined (US [(s,1)]) u) [from ^. uid]
 
 -- | Create a derived unit chunk from a 'UID', term ('NP'), definition,
 -- 'Symbol', and unit equation.
@@ -109,8 +110,8 @@ derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
 derCUC'' a b c s ue = UD (cncpt''' (mkUid a) b (S c)) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) (getCu ue)
 -- | Create a derived unit chunk from a 'UID', term ('NP'), definition,
 -- 'Symbol', and unit equation.
-derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
-derUC'' a b c s u = UD (cncpt''' (mkUid a) b (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
+derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn -> UnitDefn
+derUC'' a b c s u from = UD (cncpt''' (mkUid a) b (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) [from ^. uid]
 
 --FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same 'String'
@@ -119,20 +120,13 @@ unitCon :: String -> ConceptChunk
 unitCon s = cncpt''' (mkUid s) (cn' s) (S s)
 ---------------------------------------------------------
 
--- | Helper to get derived units if they exist.
-getSecondSymb :: UnitDefn -> Maybe USymb
-getSecondSymb c = get_symb2 $ view cas c
-  where
-    get_symb2 :: UnitSymbol -> Maybe USymb
-    get_symb2 (BaseSI _) = Nothing
-    get_symb2 (DerivedSI _ v _) = Just v
-    get_symb2 (Defined _ _) = Nothing
-
--- | Helper to break down unit symbols into 'BaseSI' units.
+-- | The units a unit contributes when used inside a unit equation. Base and
+-- derived units contribute themselves; compound units contribute the units
+-- they are made of.
 helperUnit :: UnitDefn -> [UID]
-helperUnit a = case getSecondSymb a of
-  Just _ -> [a ^. uid]
-  Nothing -> getUnits a
+helperUnit ud = case ud ^. cas of
+  Defined{} -> getUnits ud
+  _         -> [ud ^. uid]
 
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power.
@@ -186,12 +180,12 @@ newUnit s = makeDerU (unitCon s)
 
 -- | Smart constructor for a "fundamental" unit.
 fund :: String -> String -> String -> UnitDefn
-fund nam desc sym = UD (cncpt''' u (cn' nam) (S desc)) (BaseSI $ US [(Label sym, 1)]) [u]
+fund nam desc sym = UD (cncpt''' u (cn' nam) (S desc)) (BaseSI $ US [(Label sym, 1)]) []
   where u = nsUid "unit" (mkUid nam)
 
 -- | Variant of the 'fund', useful for degree.
 fund' :: String -> String -> Symbol -> UnitDefn
-fund' nam desc sym = UD (cncpt''' u (cn' nam) (S desc)) (BaseSI $ US [(sym, 1)]) [u]
+fund' nam desc sym = UD (cncpt''' u (cn' nam) (S desc)) (BaseSI $ US [(sym, 1)]) []
   where u = nsUid "unit" (mkUid nam)
 
 -- | We don't want an Ord on units, but this still allows us to compare them.

@@ -93,7 +93,7 @@ module Language.Drasil (
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , getCu, MayHaveUnit(getUnit), unitSymbol, UnitSymbol(..), UDefn(UScale)
+  , getCu, MayHaveUnit(getUnit), unitSymbol, UnitSymbol(..)
 
   -- *** Constrained and Uncertain Values
   -- Language.Drasil.Constraint
@@ -234,7 +234,7 @@ import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, fullName, nameStr, rendPersLFM,
   rendPersLFM', rendPersLFM'', comparePeople)
 
-import Language.Drasil.UnitLang (USymb(US), UnitSymbol(..), UDefn(UScale))
+import Language.Drasil.UnitLang (USymb(US), UnitSymbol(..))
 import Language.Drasil.Uncertainty
 
 import Language.Drasil.Development.Sentence -- are these really development?

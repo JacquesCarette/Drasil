@@ -76,11 +76,11 @@ instance (LiftLogging u1 l1, LiftLogging u2 l2) => LiftLogging (u1, u2) (l1, l2)
 varLogFile :: (TypeSym r typ, VariableSym r typ) => SVariable r
 varLogFile = var "outfile" outfile
 
-valLogFile :: (TypeSym r typ, VariableSym r typ, VariableValue r) => SValue r
+valLogFile :: (TypeSym r typ, VariableSym r typ, VariableValue r) => VS (r Value)
 valLogFile = valueOf varLogFile
 
 -- TODO [Brandon Bosman, 06/19/2026]: This should be passed down from drasil-code
-logName :: (Literal r typ) => SValue r
+logName :: (Literal r typ) => VS (r Value)
 logName = litString "log.txt"
 
 logVarUpdate

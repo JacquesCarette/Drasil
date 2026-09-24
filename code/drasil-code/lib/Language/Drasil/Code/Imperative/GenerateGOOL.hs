@@ -24,7 +24,7 @@ import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
 import Drasil.System (HasSystemMeta(..), HasProjectName(..))
 
-import Drasil.GOOL (SVariable, SValue, Class, CSStateVar, NamedArgs, OOProg, CS,
+import Drasil.GOOL (SVariable, Value, Class, CSStateVar, NamedArgs, OOProg, CS,
   FS, MS, VS, ValueSym(..), Argument(..), ValueExpression(..),
   InternalValueExp, OOValueExpression(..), SelfSym(..), VariableValue(..),
   FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..),
@@ -123,7 +123,7 @@ auxClass = mkClass Auxiliary
 
 -- | Converts lists or objects to pointer arguments, since we use pointerParam
 -- for list or object-type parameters.
-mkArg :: (ValueSym r typ, Argument r, TypeElim r typ) => SValue r -> SValue r
+mkArg :: (ValueSym r typ, Argument r, TypeElim r typ) => VS (r Value) -> VS (r Value)
 mkArg v = do
   vl <- v
   let mkArg' (List _) = pointerArg
@@ -135,10 +135,10 @@ mkArg v = do
 -- Called by more specific function call generators ('fApp' and 'ctorCall').
 fCall
   :: (ValueSym r typ, Argument r, TypeElim r typ)
-  => (Name -> [SValue r] -> NamedArgs r -> SValue r)
-  -> [SValue r]
+  => (Name -> [VS (r Value)] -> NamedArgs r -> VS (r Value))
+  -> [VS (r Value)]
   -> NamedArgs r
-  -> GenState (SValue r)
+  -> GenState (VS (r Value))
 fCall f vl ns = do
   g <- get
   let cm = currentModule g
@@ -165,7 +165,7 @@ fApp
     , ValueExpression r typ
     , TypeElim r typ
     )
-  => Name -> Name -> VS (r typ) -> [SValue r] -> NamedArgs r -> GenState (SValue r)
+  => Name -> Name -> VS (r typ) -> [VS (r Value)] -> NamedArgs r -> GenState (VS (r Value))
 fApp m s t vl ns = do
   g <- get
   fCall (\cm args nargs ->
@@ -177,7 +177,7 @@ fApp m s t vl ns = do
 -- (because constructor will never be private). Calls 'newObjMixedArgs'.
 ctorCall
   :: (ValueSym r typ, Argument r, OOValueExpression r typ, TypeElim r typ)
-  => Name -> VS (r typ) -> [SValue r] -> NamedArgs r -> GenState (SValue r)
+  => Name -> VS (r typ) -> [VS (r Value)] -> NamedArgs r -> GenState (VS (r Value))
 ctorCall m t = fCall (\cm args nargs -> if m /= cm then
   extNewObjMixedArgs m t args nargs else newObjMixedArgs t args nargs)
 
@@ -186,7 +186,7 @@ fAppInOut
   :: (FuncAppStatement r stmt, OOFuncAppStatement r stmt)
   => Name
   -> Name
-  -> [SValue r]
+  -> [VS (r Value)]
   -> [SVariable r]
   -> [SVariable r]
   -> GenState (MS (r stmt))
@@ -244,9 +244,9 @@ fAppProc
   => Name
   -> Name
   -> VS (r typ)
-  -> [SValue r]
+  -> [VS (r Value)]
   -> NamedArgs r
-  -> GenState (SValue r)
+  -> GenState (VS (r Value))
 fAppProc m s t vl ns = do
   g <- get
   fCall (\cm args nargs ->
@@ -255,7 +255,7 @@ fAppProc m s t vl ns = do
       else error "fAppProc: Procedural languages do not support method calls.") vl ns
 
 -- | Logic similar to 'fApp', but for In/Out calls.
-fAppInOutProc :: (FuncAppStatement r stmt) => Name -> Name -> [SValue r] ->
+fAppInOutProc :: (FuncAppStatement r stmt) => Name -> Name -> [VS (r Value)] ->
   [SVariable r] -> [SVariable r] -> GenState (MS (r stmt))
 fAppInOutProc m n ins outs both = do
   g <- get

@@ -9,7 +9,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
-  Value, SValue, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  Value, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
   getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -790,8 +790,11 @@ csOutfileType :: (Monad r) => VS (r TypeData)
 csOutfileType = join $ modifyReturn (addLangImportVS csIO) $
   typeFromData OutFile csWriter (text csWriter)
 
-csLitList :: (VS (CSharpCode TypeData) -> VS (CSharpCode TypeData)) ->
-  VS (CSharpCode TypeData) -> [SValue CSharpCode] -> SValue CSharpCode
+csLitList
+  :: (VS (CSharpCode TypeData) -> VS (CSharpCode TypeData))
+  -> VS (CSharpCode TypeData)
+  -> [VS (CSharpCode Value)]
+  -> VS (CSharpCode Value)
 csLitList f t' es' = do
   es <- sequence es'
   lt <- f t'
@@ -801,28 +804,29 @@ csLitList f t' es' = do
 csLambda :: [CSharpCode BinderD] -> CSharpCode Value -> Doc
 csLambda ps ex = parens (binderList ps) <+> csLambdaSep <+> RC.value ex
 
-csReadLineFunc :: SValue CSharpCode
+csReadLineFunc :: VS (CSharpCode Value)
 csReadLineFunc = extFuncApp csConsole csReadLine string []
 
-csIntParse :: SValue CSharpCode -> SValue CSharpCode
+csIntParse :: VS (CSharpCode Value) -> VS (CSharpCode Value)
 csIntParse v = extFuncApp csInt csParse int [v]
 
-csFloatParse :: SValue CSharpCode -> SValue CSharpCode
+csFloatParse :: VS (CSharpCode Value) -> VS (CSharpCode Value)
 csFloatParse v = extFuncApp csFloat csParse float [v]
 
-csDblParse :: SValue CSharpCode -> SValue CSharpCode
+csDblParse :: VS (CSharpCode Value) -> VS (CSharpCode Value)
 csDblParse v = extFuncApp CP.doubleRender csParse double [v]
 
-csBoolParse :: SValue CSharpCode -> SValue CSharpCode
+csBoolParse :: VS (CSharpCode Value) -> VS (CSharpCode Value)
 csBoolParse v = extFuncApp csBool csParse bool [v]
 
-csCharParse :: SValue CSharpCode -> SValue CSharpCode
+csCharParse :: VS (CSharpCode Value) -> VS (CSharpCode Value)
 csCharParse v = extFuncApp csChar csParse char [v]
 
 csSplitFunc :: Char -> VS (CSharpCode FuncData)
 csSplitFunc d = func csSplit (listType string) [litChar d]
 
-csCast :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode
+csCast
+  :: VS (CSharpCode TypeData) -> VS (CSharpCode Value) -> VS (CSharpCode Value)
 csCast = join .: on2StateValues (\t v -> csCast' (getCodeType t) (getCodeType $
   valueType v) t v)
   where csCast' Double String _ v = csDblParse (toState v)
@@ -869,13 +873,15 @@ csAssert condition errorMessage = vcat [
   text "Debug.Assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")" <> semi
   ]
 
-csDiscardInput :: SValue CSharpCode -> MS (CSharpCode (Doc, Terminator))
+csDiscardInput :: VS (CSharpCode Value) -> MS (CSharpCode (Doc, Terminator))
 csDiscardInput = valStmt
 
-csFileInput :: (TypeSym r typ, InternalValueExp r typ) => SValue r -> SValue r
+csFileInput
+  :: (TypeSym r typ, InternalValueExp r typ) => VS (r Value) -> VS (r Value)
 csFileInput f = objMethodCallNoParams string f csReadLine
 
-csInput :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode
+csInput
+  :: VS (CSharpCode TypeData) -> VS (CSharpCode Value) -> VS (CSharpCode Value)
 csInput tp inFn = do
   t <- tp
   csInputImport (getCodeType t) (csInput' (getCodeType t) inFn)
@@ -889,11 +895,13 @@ csInput tp inFn = do
         csInputImport t = if t `elem` [Integer, Float, Double, Boolean, Char]
           then addSystemImport else id
 
-csOpenFileR :: (OOValueExpression r typ) => SValue r -> VS (r typ) -> SValue r
+csOpenFileR
+  :: (OOValueExpression r typ) => VS (r Value) -> VS (r typ) -> VS (r Value)
 csOpenFileR n r = newObj r [n]
 
-csOpenFileWorA :: (OOValueExpression r typ) => SValue r ->
-  VS (r typ) -> SValue r -> SValue r
+csOpenFileWorA
+  :: (OOValueExpression r typ)
+  => VS (r Value) -> VS (r typ) -> VS (r Value) -> VS (r Value)
 csOpenFileWorA n w a = newObj w [n, a]
 
 csRef :: Doc -> Doc
@@ -902,9 +910,13 @@ csRef p = text "ref" <+> p
 csOut :: Doc -> Doc
 csOut p = text "out" <+> p
 
-csInOutCall :: (Label -> VS (CSharpCode TypeData) -> [SValue CSharpCode] ->
-  SValue CSharpCode) -> Label -> [SValue CSharpCode] -> [SVariable CSharpCode]
-  -> [SVariable CSharpCode] -> MS (CSharpCode (Doc, Terminator))
+csInOutCall
+  :: (Label -> VS (CSharpCode TypeData) -> [VS (CSharpCode Value)] -> VS (CSharpCode Value))
+  -> Label
+  -> [VS (CSharpCode Value)]
+  -> [SVariable CSharpCode]
+  -> [SVariable CSharpCode]
+  -> MS (CSharpCode (Doc, Terminator))
 csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
 csInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)
@@ -954,7 +966,7 @@ csPrint
     , InternalIOStmt r stmt
     , TypeElim r typ
     )
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
+  => Bool -> Maybe (VS (r Value)) -> VS (r Value) -> VS (r Value) -> MS (r stmt)
 csPrint newLn f printFn v = zoom lensMStoVS v >>= csPrint' . getCodeType . valueType
   where csPrint' (Array _) = multi [printStr "[",
           print $ extFuncApp "string" "Join" string [litString ", ", v],

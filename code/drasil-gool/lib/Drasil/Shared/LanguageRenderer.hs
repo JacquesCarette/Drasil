@@ -27,7 +27,7 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 import Utils.Drasil (capitalize, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, Variable, Value, SValue,
+import Drasil.Shared.InterfaceCommon (Label, Library, Variable, Value,
   ValueSym(..), TypeElim(..))
 import Drasil.Shared.RendererClassesCommon (ValueElim, StatementElim, BodyElim,
   InternalVarElim, InternalBinderElim, ParamElim)
@@ -37,6 +37,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
 import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod,
   updateMod, TypeData(..), VarData(..), BinderD, ParamData)
 import Drasil.Shared.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
+import Drasil.Shared.State (VS)
 
 import Data.List (last, intercalate)
 import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,
@@ -436,7 +437,7 @@ getterName s = "get" ++ capitalize s
 setterName :: String -> String
 setterName s = "set" ++ capitalize s
 
-intValue :: (TypeElim r typ, ValueSym r typ) => SValue r -> SValue r
+intValue :: (TypeElim r typ, ValueSym r typ) => VS (r Value) -> VS (r Value)
 intValue i = i >>= intValue' . getCodeType . valueType
   where intValue' Integer = i
         intValue' _ = error "Value passed to intValue must be Integer"

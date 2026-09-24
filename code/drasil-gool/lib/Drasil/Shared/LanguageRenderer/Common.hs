@@ -11,9 +11,8 @@ import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Body, Variable, SVariable, MixedCall,
-  Value, SValue, ValueSym, TypeSym(int), VariableElim(variableName), Label,
-  Library, funcApp, getCodeType, EmptyStatement, AssignStatement,
-  ValueExpression)
+  Value, ValueSym, TypeSym(int), VariableElim(variableName), Label, Library,
+  funcApp, getCodeType, EmptyStatement, AssignStatement, ValueExpression)
 import Drasil.Shared.RendererClassesCommon (scopeData, call,
   RenderFunction(funcFromData), RenderVariable, RenderValue, ValueElim,
   RenderStatement, ScopeElim, InternalVarElim)
@@ -57,13 +56,13 @@ extFuncAppMixedArgs l = call (Just l) Nothing
 
 listAccessFunc
   :: (RenderFunction r typ, IC.TypeElim r typ, ValueElim r, ValueSym r typ)
-  => VS (r typ) -> SValue r -> VS (r FuncData)
+  => VS (r typ) -> VS (r Value) -> VS (r FuncData)
 listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Python, Swift, and Julia --
 
 forEach' :: (RenderStatement r stmt) => (r Variable -> r Value ->
-  r Body -> Doc) -> SVariable r -> SValue r -> MS (r Body) -> MS (r stmt)
+  r Body -> Doc) -> SVariable r -> VS (r Value) -> MS (r Body) -> MS (r stmt)
 forEach' f i' v' b' = do
   i <- zoom lensMStoVS i'
   v <- zoom lensMStoVS v'
@@ -79,7 +78,7 @@ varDecDef
     , ScopeElim r
     , VariableElim r typ
     )
-  => SVariable r -> r ScopeData -> Maybe (SValue r) -> MS (r stmt)
+  => SVariable r -> r ScopeData -> Maybe (VS (r Value)) -> MS (r stmt)
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v
   modify $ useVarName (variableName v')
@@ -93,7 +92,7 @@ varDecDef v scp e = do
 
 increment
   :: (InternalVarElim r, RenderStatement r stmt, ValueElim r)
-  => SVariable r -> SValue r -> MS (r stmt)
+  => SVariable r -> VS (r Value) -> MS (r stmt)
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -104,5 +103,5 @@ increment vr' v'= do
 -- | Call to get the size of a list as a function call
 listSize
   :: (TypeSym r typ, ValueExpression r typ)
-  => String -> SValue r -> SValue r
+  => String -> VS (r Value) -> VS (r Value)
 listSize fnName list = funcApp fnName int [list]

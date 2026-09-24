@@ -9,7 +9,7 @@ import Control.Monad.State (State, modify)
 
 import Drasil.Database (UID)
 import Language.Drasil (Sentence(S), (+:+), (+:+.))
-import Drasil.GOOL (SValue, MathConstant(..))
+import Drasil.GOOL (VS, Value, MathConstant(..))
 
 import Language.Drasil.Choices (Choices(..), CodeConcept(..),
     MatchedConceptMap, showChs, Maps(..))
@@ -29,5 +29,5 @@ chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch $ map
             pure c
 
 -- | Translates a 'CodeConcept' into GOOL.
-conceptToGOOL :: (MathConstant r) => CodeConcept -> SValue r
+conceptToGOOL :: (MathConstant r) => CodeConcept -> VS (r Value)
 conceptToGOOL Pi = pi

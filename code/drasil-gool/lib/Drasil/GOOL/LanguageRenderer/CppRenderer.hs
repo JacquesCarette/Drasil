@@ -9,8 +9,8 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
-  SVariable, Value, SValue, NamedArgs, BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  SVariable, Value, NamedArgs, BodySym(..), oneLiner, BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
@@ -1461,7 +1461,7 @@ instance DeclStatement CppSrcCode (Doc, Terminator) Body where
   listDecDef = cppListDecDef cppListDecDefDoc
   arrayDec n _ vr scp = do
     decBase <- arrayDecBase vr scp
-    let sz' = litInt n :: SValue CppSrcCode
+    let sz' = litInt n :: VS (CppSrcCode Value)
     sz <- zoom lensMStoVS sz'
     mkStmt $ decBase <> parens (RC.value sz)
   arrayDecDef vr scp vals = do
@@ -2409,10 +2409,10 @@ iterator t = do
     modify (addLangImportVS cppIterator)
     cppIterType $ listType t
 
-iterBegin :: SValue CppSrcCode -> SValue CppSrcCode
+iterBegin :: VS (CppSrcCode Value) -> VS (CppSrcCode Value)
 iterBegin v = v $. cppIterBeginFunc (innerType $ onStateValue valueType v)
 
-iterEnd :: SValue CppSrcCode -> SValue CppSrcCode
+iterEnd :: VS (CppSrcCode Value) -> VS (CppSrcCode Value)
 iterEnd v = v $. cppIterEndFunc (innerType $ onStateValue valueType v)
 
 arrayDecBase :: SVariable CppSrcCode -> CppSrcCode ScopeData -> MS Doc
@@ -2570,20 +2570,23 @@ cppUnaryMath = addMathHImport . unOpPrec
 cppPowerOp :: (Monad r) => VSOp r
 cppPowerOp = powerPrec R.pow
 
-getLineFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
+getLineFunc
+  :: VS (CppSrcCode Value) -> VS (CppSrcCode Value) -> VS (CppSrcCode Value)
 getLineFunc f v = funcApp cppGetLine string [f, v]
 
-getLine3ArgFunc :: SValue CppSrcCode -> SValue CppSrcCode -> Char ->
-  SValue CppSrcCode
+getLine3ArgFunc :: VS (CppSrcCode Value) -> VS (CppSrcCode Value) -> Char ->
+  VS (CppSrcCode Value)
 getLine3ArgFunc s v d = funcApp cppGetLine string [s, v, litChar d]
 
 clearFunc :: VS (CppSrcCode FuncData)
 clearFunc = func cppClear void []
 
-strFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
+strFunc
+  :: VS (CppSrcCode Value) -> VS (CppSrcCode Value) -> VS (CppSrcCode Value)
 strFunc v s = objMethodCall string v cppStr [s]
 
-cppIndexFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
+cppIndexFunc
+  :: VS (CppSrcCode Value) -> VS (CppSrcCode Value) -> VS (CppSrcCode Value)
 cppIndexFunc l v = funcApp cppIndex int [iterBegin l, iterEnd l, v]
 
 cppIterBeginFunc :: VS (CppSrcCode TypeData) -> VS (CppSrcCode FuncData)
@@ -2597,7 +2600,7 @@ cppListDecDef
   => ([r Value] -> Doc)
   -> SVariable r
   -> r ScopeData
-  -> [SValue r]
+  -> [VS (r Value)]
   -> MS (r stmt)
 cppListDecDef f v scp vls = do
   vdc <- varDec v scp
@@ -2657,19 +2660,20 @@ cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>)
   (map (renderType . binderType) ps) (map RC.binderElim ps)) <+>
   bodyStart <> returnLabel <+> RC.value ex <> endStatement <> bodyEnd
 
-stodFunc :: SValue CppSrcCode -> SValue CppSrcCode
+stodFunc :: VS (CppSrcCode Value) -> VS (CppSrcCode Value)
 stodFunc v = funcApp stod double [v]
 
-stofFunc :: SValue CppSrcCode -> SValue CppSrcCode
+stofFunc :: VS (CppSrcCode Value) -> VS (CppSrcCode Value)
 stofFunc v = funcApp stof float [v]
 
-ignoreFunc :: Char -> SValue CppSrcCode -> SValue CppSrcCode
+ignoreFunc :: Char -> VS (CppSrcCode Value) -> VS (CppSrcCode Value)
 ignoreFunc sep inFn = objMethodCall void inFn cppIgnore [maxFunc, litChar sep]
 
-maxFunc :: SValue CppSrcCode
+maxFunc :: VS (CppSrcCode Value)
 maxFunc = funcApp ((numLimits `containing` streamsize) `nmSpcAccess` max) int []
 
-cppCast :: VS (CppSrcCode TypeData) -> SValue CppSrcCode -> SValue CppSrcCode
+cppCast
+  :: VS (CppSrcCode TypeData) -> VS (CppSrcCode Value) -> VS (CppSrcCode Value)
 cppCast = join .: on2StateValues (\t v -> cppCast' (getCodeType t) (getCodeType $
   valueType v) t v)
   where cppCast' Double String _ v = stodFunc (toState v)
@@ -2698,7 +2702,7 @@ cppFuncDecDef v scp ps bod = do
 
 cppPrint
   :: (RenderStatement r stmt, ValueElim r)
-  => Bool -> SValue r -> SValue r -> MS (r stmt)
+  => Bool -> VS (r Value) -> VS (r Value) -> MS (r stmt)
 cppPrint newLn pf vl = do
   e <- zoom lensMStoVS end
   printFn <- zoom lensMStoVS pf
@@ -2724,10 +2728,14 @@ cppAssert condition errorMessage = vcat [
   text "assert(" <> RC.value condition <+> text "&&" <+> RC.value errorMessage <> text ")" <> semi
   ]
 
-cppDiscardInput :: Char -> SValue CppSrcCode -> MS (CppSrcCode (Doc, Terminator))
+cppDiscardInput
+  :: Char -> VS (CppSrcCode Value) -> MS (CppSrcCode (Doc, Terminator))
 cppDiscardInput sep inFn = valStmt $ ignoreFunc sep inFn
 
-cppInput :: SVariable CppSrcCode -> SValue CppSrcCode -> MS (CppSrcCode (Doc, Terminator))
+cppInput
+  :: SVariable CppSrcCode
+  -> VS (CppSrcCode Value)
+  -> MS (CppSrcCode (Doc, Terminator))
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ do
   v <- zoom lensMStoVS vr
   inFn <- zoom lensMStoVS i
@@ -2737,7 +2745,7 @@ cppInput vr i = addAlgorithmImport $ addLimitsImport $ do
 cppOpenFile
   ::  Label
   -> SVariable CppSrcCode
-  -> SValue CppSrcCode
+  -> VS (CppSrcCode Value)
   -> MS (CppSrcCode (Doc, Terminator))
 cppOpenFile mode f n = valStmt $ objMethodCall void (valueOf f) cppOpen [n,
   mkStateVal void $ text mode]
@@ -2828,9 +2836,13 @@ cppCommentedFunc ft cmt fn = do
       ret Combined = error "Combined passed to cppCommentedFunc"
   ret ft
 
-cppsStateVarDef :: Doc -> CppSrcCode (Doc, VisibilityTag) ->
-  CppSrcCode AttachmentData -> SVariable CppSrcCode ->
-  SValue CppSrcCode -> CSStateVar CppSrcCode StateVarData
+cppsStateVarDef
+  :: Doc
+  -> CppSrcCode (Doc, VisibilityTag)
+  -> CppSrcCode AttachmentData
+  -> SVariable CppSrcCode
+  -> VS (CppSrcCode Value)
+  -> CSStateVar CppSrcCode StateVarData
 cppsStateVarDef cns s p vr' vl' = do
   vr <- zoom lensCStoVS vr'
   vl <- zoom lensCStoVS vl'
@@ -2840,8 +2852,15 @@ cppsStateVarDef cns s p vr' vl' = do
       text n `nmSpcAccess'` RC.variable vr <+> equals <+> RC.value vl <>
       endStatement) empty)
 
-cppForEach :: Doc -> Doc -> Doc -> Doc -> SVariable CppSrcCode -> SValue CppSrcCode
-  -> MS (CppSrcCode Body) -> MS (CppSrcCode (Doc, Terminator))
+cppForEach
+  :: Doc
+  -> Doc
+  -> Doc
+  -> Doc
+  -> SVariable CppSrcCode
+  -> VS (CppSrcCode Value)
+  -> MS (CppSrcCode Body)
+  -> MS (CppSrcCode (Doc, Terminator))
 cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
@@ -2854,7 +2873,7 @@ cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
 
 cppLitSet
   :: (RenderValue r typ, ValueElim r)
-  => (VS (r typ) -> VS (r typ)) -> VS (r typ) -> [SValue r] -> SValue r
+  => (VS (r typ) -> VS (r typ)) -> VS (r typ) -> [VS (r Value)] -> VS (r Value)
 cppLitSet f t' es' = do
   es <- sequence es'
   lt <- f t'
@@ -2864,7 +2883,7 @@ cpphStateVarDef
   :: Doc
   -> CppHdrCode AttachmentData
   -> SVariable CppHdrCode
-  -> SValue CppHdrCode -> CS Doc
+  -> VS (CppHdrCode Value) -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
   RC.statement) (zoom lensCStoMS $ stmt $ onAttachment (binding p)
   (varDec vr local) (varDecDef vr local vl))
@@ -2899,9 +2918,13 @@ cpphClass n ps vars funcs pub priv = let
     indentList indLi,
     bodyEnd <> endStatement]) ps
 
-cppInOutCall :: (Label -> VS (CppSrcCode TypeData) -> [SValue CppSrcCode] ->
-  SValue CppSrcCode) -> Label -> [SValue CppSrcCode] -> [SVariable CppSrcCode]
-  -> [SVariable CppSrcCode] -> MS (CppSrcCode (Doc, Terminator))
+cppInOutCall
+  :: (Label -> VS (CppSrcCode TypeData) -> [VS (CppSrcCode Value)] -> VS (CppSrcCode Value))
+  -> Label
+  -> [VS (CppSrcCode Value)]
+  -> [SVariable CppSrcCode]
+  -> [SVariable CppSrcCode]
+  -> MS (CppSrcCode (Doc, Terminator))
 cppInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
 cppInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)
@@ -2909,10 +2932,13 @@ cppInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)
 cppInOutCall f n ins outs both = valStmt $ f n void (map valueOf both ++ ins
   ++ map valueOf outs)
 
-cppsInOut :: (VS (CppSrcCode TypeData) ->
-  [MS (CppSrcCode ParamData)] -> MS (CppSrcCode Body) ->
-  MS (CppSrcCode mthd)) -> [SVariable CppSrcCode] -> [SVariable CppSrcCode] ->
-  [SVariable CppSrcCode] -> MS (CppSrcCode Body) -> MS (CppSrcCode mthd)
+cppsInOut
+  :: (VS (CppSrcCode TypeData) -> [MS (CppSrcCode ParamData)] -> MS (CppSrcCode Body) -> MS (CppSrcCode mthd))
+  -> [SVariable CppSrcCode]
+  -> [SVariable CppSrcCode]
+  -> [SVariable CppSrcCode]
+  -> MS (CppSrcCode Body)
+  -> MS (CppSrcCode mthd)
 cppsInOut f ins [v] [] b = f (onStateValue variableType v)
   (cppInOutParams ins [v] []) (on3StateValues (on3CodeValues surroundBody)
   (varDec v local) b (returnStmt $ valueOf v))
@@ -2921,10 +2947,13 @@ cppsInOut f ins [] [v] b = f (onStateValue variableType v)
   (returnStmt $ valueOf v))
 cppsInOut f ins outs both b = f void (cppInOutParams ins outs both) b
 
-cpphInOut :: (VS (CppHdrCode TypeData) ->
-  [MS (CppHdrCode ParamData)] -> MS (CppHdrCode Body) ->
-  MS (CppHdrCode mthd)) -> [SVariable CppHdrCode] -> [SVariable CppHdrCode] ->
-  [SVariable CppHdrCode] -> MS (CppHdrCode Body) -> MS (CppHdrCode mthd)
+cpphInOut
+  :: (VS (CppHdrCode TypeData) -> [MS (CppHdrCode ParamData)] -> MS (CppHdrCode Body) -> MS (CppHdrCode mthd))
+  -> [SVariable CppHdrCode]
+  -> [SVariable CppHdrCode]
+  -> [SVariable CppHdrCode]
+  -> MS (CppHdrCode Body)
+  -> MS (CppHdrCode mthd)
 cpphInOut f ins [v] [] b = f (onStateValue variableType v)
   (cppInOutParams ins [v] []) b
 cpphInOut f ins [] [v] b = f (onStateValue variableType v)

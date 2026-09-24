@@ -1,5 +1,5 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GOOL (Label, GSProgram, Body, CS, FS, MS, VS, SVariable, SValue,
+module Drasil.GOOL (Label, GSProgram, Body, CS, FS, MS, VS, SVariable, Value,
   CSStateVar, Class, NamedArgs, Initializers, OOProg, ProgramSym(..),
   FileSym(..), AttachmentSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), OOTypeSym(..), BinderSym(..), EmptyStatement(..),
@@ -33,7 +33,7 @@ module Drasil.GOOL (Label, GSProgram, Body, CS, FS, MS, VS, SVariable, SValue,
   TypeElim(..), getTypeString
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Body, SVariable, SValue, NamedArgs,
+import Drasil.Shared.InterfaceCommon (Label, Body, SVariable, Value, NamedArgs,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   BinderSym(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),

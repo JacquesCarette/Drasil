@@ -13,7 +13,7 @@ module Drasil.Shared.RendererClassesCommon (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, Variable, SVariable, Value,
-  SValue, MixedCall, TypeSym(..), VariableElim(..), Argument(..), Literal(..),
+  MixedCall, TypeSym(..), VariableElim(..), Argument(..), Literal(..),
   MathConstant(..), VariableSym, ValueSym, VariableValue(..),
   ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
@@ -130,13 +130,13 @@ class InternalBinderElim r where
   binderElim  :: r BinderD -> Doc
 
 class RenderValue r typ | r -> typ where
-  inputFunc       :: SValue r
-  printFunc       :: SValue r
-  printLnFunc     :: SValue r
-  printFileFunc   :: SValue r -> SValue r
-  printFileLnFunc :: SValue r -> SValue r
+  inputFunc       :: VS (r Value)
+  printFunc       :: VS (r Value)
+  printLnFunc     :: VS (r Value)
+  printFileFunc   :: VS (r Value) -> VS (r Value)
+  printFileLnFunc :: VS (r Value) -> VS (r Value)
 
-  cast :: VS (r typ) -> SValue r -> SValue r
+  cast :: VS (r typ) -> VS (r Value) -> VS (r Value)
 
   -- | Very generic internal function for generating calls, to reduce repeated
   -- code throughout generators.
@@ -145,7 +145,7 @@ class RenderValue r typ | r -> typ where
   -- calls.
   call :: Maybe Library -> Maybe Doc -> MixedCall r typ
 
-  valFromData :: Maybe Int -> Maybe Integer -> VS (r typ) -> Doc -> SValue r
+  valFromData :: Maybe Int -> Maybe Integer -> VS (r typ) -> Doc -> VS (r Value)
 
 class ValueElim r where
   valuePrec :: r Value -> Maybe Int
@@ -154,7 +154,7 @@ class ValueElim r where
 
 class InternalListFunc r typ | r -> typ where
   -- | List, Index
-  listAccessFunc :: VS (r typ) -> SValue r -> VS (r FuncData)
+  listAccessFunc :: VS (r typ) -> VS (r Value) -> VS (r FuncData)
 
 class RenderFunction r typ | r -> typ where
   funcFromData :: Doc -> VS (r typ) -> VS (r FuncData)
@@ -164,14 +164,14 @@ class FunctionElim r typ | r -> typ where
   function :: r FuncData -> Doc
 
 class InternalAssignStmt r stmt | r -> stmt where
-  multiAssign       :: [SVariable r] -> [SValue r] -> MS (r stmt)
+  multiAssign       :: [SVariable r] -> [VS (r Value)] -> MS (r stmt)
 
 class InternalIOStmt r stmt | r -> stmt where
   -- newLn, maybe a file to print to, printFunc, value to print
-  printSt :: Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
+  printSt :: Bool -> Maybe (VS (r Value)) -> VS (r Value) -> VS (r Value) -> MS (r stmt)
 
 class InternalControlStmt r stmt | r -> stmt where
-  multiReturn :: [SValue r] -> MS (r stmt)
+  multiReturn :: [VS (r Value)] -> MS (r stmt)
 
 class RenderStatement r stmt | r -> stmt where
   stmt     :: MS (r stmt) -> MS (r stmt)

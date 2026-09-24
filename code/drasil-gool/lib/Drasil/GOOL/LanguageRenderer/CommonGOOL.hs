@@ -4,7 +4,7 @@ module Drasil.GOOL.LanguageRenderer.CommonGOOL (
 ) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), TypeElim(..), SVariable,
-  SValue, NamedArgs, VariableElim(..), TypeSym(void), IndexTranslator(..),
+  Value, NamedArgs, VariableElim(..), TypeSym(void), IndexTranslator(..),
   getCodeType, ValueStatement(valStmt))
 import Drasil.GOOL.InterfaceGOOL (objMethodCall, convTypeOO, InternalValueExp,
   OOTypeSym)
@@ -28,7 +28,7 @@ constDecDef
      , ValueElim r
      , VariableElim r TypeData
      )
-  => SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
+  => SVariable r -> r ScopeData -> VS (r Value) -> MS (r stmt)
 constDecDef vr' scp v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -41,16 +41,16 @@ classMethodCall
   => String
   -> VS (r TypeData)
   -> VS (r TypeData)
-  -> [SValue r]
+  -> [VS (r Value)]
   -> NamedArgs r
-  -> SValue r
+  -> VS (r Value)
 classMethodCall f t cls vs ns = do
   c <- cls
   call Nothing (Just $ renderType c <> dot) f t vs ns
 
 listAppend
   :: (TypeSym r typ, InternalValueExp r typ, ValueStatement r stmt)
-  => String -> SValue r -> SValue r -> MS (r stmt)
+  => String -> VS (r Value) -> VS (r Value) -> MS (r stmt)
 listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 
 listAdd
@@ -60,7 +60,7 @@ listAdd
     , InternalValueExp r typ
     , ValueStatement r stmt
     )
-  => String -> SValue r -> SValue r -> SValue r -> MS (r stmt)
+  => String -> VS (r Value) -> VS (r Value) -> VS (r Value) -> MS (r stmt)
 listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]
 
 innerType

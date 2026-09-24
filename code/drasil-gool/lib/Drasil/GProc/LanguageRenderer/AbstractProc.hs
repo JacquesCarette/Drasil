@@ -5,7 +5,7 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   listAdd, funcDecDef, function
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable,
+import Drasil.Shared.InterfaceCommon (Label, Value, SVariable,
   VariableElim(variableName, variableType), TypeSym, VisibilitySym(..), funcApp,
   getCodeType, convType, ValueStatement(..), ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
@@ -81,7 +81,7 @@ innerType t = t >>= (convType . getInnerType . getCodeType)
 -- | Call to append a value to a list using a function call
 listAppend
   :: (TypeSym r typ, ValueStatement r stmt, ValueExpression r typ)
-  => String -> SValue r -> SValue r -> MS (r stmt)
+  => String -> VS (r Value) -> VS (r Value) -> MS (r stmt)
 listAppend fnName list val = valStmt $
   funcApp fnName IC.void [list, val]
 
@@ -93,7 +93,7 @@ listAdd
     , ValueStatement r stmt
     , ValueExpression r typ
     )
-  => String -> SValue r -> SValue r -> SValue r -> MS (r stmt)
+  => String -> VS (r Value) -> VS (r Value) -> VS (r Value) -> MS (r stmt)
 listAdd fnName list idx val = valStmt $
   funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
@@ -106,7 +106,7 @@ arrayElem
     , IC.TypeElim r typ
     , RC.ValueElim r
     )
-  => SValue r -> SValue r -> SVariable r
+  => VS (r Value) -> VS (r Value) -> SVariable r
 arrayElem arr' i' = do
   i <- IC.intToIndex i'
   arr <- arr'

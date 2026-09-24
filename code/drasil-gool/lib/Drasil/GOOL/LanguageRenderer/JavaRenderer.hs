@@ -9,7 +9,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
-  Value, SValue, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  Value, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
   getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -865,7 +865,8 @@ jSetType t = do
 jArrayType :: VS (JavaCode TypeData)
 jArrayType = arrayType (obj jObject)
 
-jLitArray :: VS (JavaCode TypeData) -> [SValue JavaCode] -> SValue JavaCode
+jLitArray
+  :: VS (JavaCode TypeData) -> [VS (JavaCode Value)] -> VS (JavaCode Value)
 jLitArray t' es' = do
   es <- sequence es'
   lt <- arrayType t'
@@ -882,19 +883,20 @@ jFileWriterType = do
   tpf <- obj jFileWriter
   modifyReturn (addLangImportVS $ ioImport jFileWriter) tpf
 
-jAsListFunc :: VS (JavaCode TypeData) -> [SValue JavaCode] -> SValue JavaCode
+jAsListFunc
+  :: VS (JavaCode TypeData) -> [VS (JavaCode Value)] -> VS (JavaCode Value)
 jAsListFunc t = funcApp jAsList (listType t)
 
-jEqualsFunc :: SValue JavaCode -> VS (JavaCode FuncData)
+jEqualsFunc :: VS (JavaCode Value) -> VS (JavaCode FuncData)
 jEqualsFunc v = func jEquals bool [v]
 
-jParseIntFunc :: SValue JavaCode -> SValue JavaCode
+jParseIntFunc :: VS (JavaCode Value) -> VS (JavaCode Value)
 jParseIntFunc v = funcApp jParseInt int [v]
 
-jParseDblFunc :: SValue JavaCode -> SValue JavaCode
+jParseDblFunc :: VS (JavaCode Value) -> VS (JavaCode Value)
 jParseDblFunc v = funcApp jParseDbl double [v]
 
-jParseFloatFunc :: SValue JavaCode -> SValue JavaCode
+jParseFloatFunc :: VS (JavaCode Value) -> VS (JavaCode Value)
 jParseFloatFunc v = funcApp jParseFloat float [v]
 
 jNextFunc :: VS (JavaCode FuncData)
@@ -912,10 +914,12 @@ jHasNextLineFunc = func jHasNextLine bool []
 jCharAtFunc :: VS (JavaCode FuncData)
 jCharAtFunc = func jCharAt char [litInt 0]
 
-jSplitFunc :: (TypeSym r typ, Literal r typ, OOFunctionSym r typ) => Char -> VS (r FuncData)
+jSplitFunc
+  :: (TypeSym r typ, Literal r typ, OOFunctionSym r typ)
+  => Char -> VS (r FuncData)
 jSplitFunc d = func jSplit (listType string) [litString [d]]
 
-jEquality :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode
+jEquality :: VS (JavaCode Value) -> VS (JavaCode Value) -> VS (JavaCode Value)
 jEquality v1 v2 = v2 >>= jEquality' . getCodeType . valueType
   where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
@@ -923,7 +927,7 @@ jEquality v1 v2 = v2 >>= jEquality' . getCodeType . valueType
 jLambda :: [r BinderD] -> r Value -> Doc
 jLambda = error "Lambdas not supported in Java (yet). See #4956 for updates." -- \ps ex -> parens (binderList ps) <+> jLambdaSep <+> RC.value ex
 
-jCast :: VS (JavaCode TypeData) -> SValue JavaCode -> SValue JavaCode
+jCast :: VS (JavaCode TypeData) -> VS (JavaCode Value) -> VS (JavaCode Value)
 jCast = join .: on2StateValues
   (\t v -> jCast' (getCodeType t) (getCodeType $ valueType v) t v)
   where jCast' Double String _ v = jParseDblFunc (toState v)
@@ -931,8 +935,11 @@ jCast = join .: on2StateValues
         jCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast (renderType t))
           (RC.value v))
 
-jConstDecDef :: SVariable JavaCode -> JavaCode ScopeData -> SValue JavaCode ->
-  MS (JavaCode (Doc, Terminator))
+jConstDecDef
+  :: SVariable JavaCode
+  -> JavaCode ScopeData
+  -> VS (JavaCode Value)
+  -> MS (JavaCode (Doc, Terminator))
 jConstDecDef v' scp def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
@@ -941,8 +948,12 @@ jConstDecDef v' scp def' = do
   mkStmt $ jFinal <+> renderType (variableType v) <+>
     RC.variable v <+> equals <+> RC.value def
 
-jFuncDecDef :: SVariable JavaCode -> JavaCode ScopeData ->
-  [SVariable JavaCode] -> MS (JavaCode Body) -> MS (JavaCode (Doc, Terminator))
+jFuncDecDef
+  :: SVariable JavaCode
+  -> JavaCode ScopeData
+  -> [SVariable JavaCode]
+  -> MS (JavaCode Body)
+  -> MS (JavaCode (Doc, Terminator))
 jFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -994,7 +1005,7 @@ jOut
     , InternalIOStmt r stmt
     , TypeElim r typ
     )
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
+  => Bool -> Maybe (VS (r Value)) -> VS (r Value) -> VS (r Value) -> MS (r stmt)
 jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getCodeType . valueType
   where jOut' (List (Object _)) = G.print newLn f printFn v
         jOut' (List _) = printSt newLn f printFn v
@@ -1003,10 +1014,10 @@ jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getCodeType . valueType
           printSt newLn f printFn (extFuncApp jArrays "toString" string [v])
         jOut' _ = G.print newLn f printFn v
 
-jDiscardInput :: SValue JavaCode -> MS (JavaCode (Doc, Terminator))
+jDiscardInput :: VS (JavaCode Value) -> MS (JavaCode (Doc, Terminator))
 jDiscardInput inFn = valStmt $ inFn $. jNextFunc
 
-jInput :: SVariable JavaCode -> SValue JavaCode -> SValue JavaCode
+jInput :: SVariable JavaCode -> VS (JavaCode Value) -> VS (JavaCode Value)
 jInput vr inFn = do
   v <- vr
   let jInput' Integer = jParseIntFunc $ inFn $. jNextLineFunc
@@ -1020,16 +1031,16 @@ jInput vr inFn = do
 
 jOpenFileR
   :: (OOTypeSym r typ, OOValueExpression r typ)
-  => SValue r -> VS (r typ) -> SValue r
+  => VS (r Value) -> VS (r typ) -> VS (r Value)
 jOpenFileR n t = newObj t [newObj jFileType [n]]
 
 jOpenFileWorA
   :: (OOTypeSym r typ, OOValueExpression r typ)
-  => SValue r -> VS (r typ) -> SValue r -> SValue r
+  => VS (r Value) -> VS (r typ) -> VS (r Value) -> VS (r Value)
 jOpenFileWorA n t wa = newObj t
   [newObj jFileWriterType [newObj jFileType [n], wa]]
 
-jStringSplit :: SVariable JavaCode -> SValue JavaCode -> VS Doc
+jStringSplit :: SVariable JavaCode -> VS (JavaCode Value) -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
   new' <+> renderType (variableType vnew) <> parens (RC.value s))
 
@@ -1051,9 +1062,13 @@ jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
   (valueOf $ arrayElem (valueOf outputs) (litInt c))) : jAssignFromArray (c+1) vs
 
-jInOutCall :: (Label -> VS (JavaCode TypeData) -> [SValue JavaCode] ->
-  SValue JavaCode) -> Label -> [SValue JavaCode] -> [SVariable JavaCode] ->
-  [SVariable JavaCode] -> MS (JavaCode (Doc, Terminator))
+jInOutCall
+  :: (Label -> VS (JavaCode TypeData) -> [VS (JavaCode Value)] -> VS (JavaCode Value))
+  -> Label
+  -> [VS (JavaCode Value)]
+  -> [SVariable JavaCode]
+  -> [SVariable JavaCode]
+  -> MS (JavaCode (Doc, Terminator))
 jInOutCall f n ins [] [] = valStmt $ f n void ins
 jInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
@@ -1067,10 +1082,13 @@ jInOutCall f n ins outs both = fCall rets
           multi ((if odec then assign else (`varDecDef` local)) outputs
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs))
 
-jInOut :: (VS (JavaCode TypeData) -> [MS (JavaCode ParamData)] ->
-  MS (JavaCode Body) -> MS (JavaCode mthd)) -> [SVariable JavaCode] ->
-  [SVariable JavaCode] -> [SVariable JavaCode] -> MS (JavaCode Body) ->
-  MS (JavaCode mthd)
+jInOut
+  :: (VS (JavaCode TypeData) -> [MS (JavaCode ParamData)] -> MS (JavaCode Body) -> MS (JavaCode mthd))
+  -> [SVariable JavaCode]
+  -> [SVariable JavaCode]
+  -> [SVariable JavaCode]
+  -> MS (JavaCode Body)
+  -> MS (JavaCode mthd)
 jInOut f ins [] [] b = f void (map param ins) b
 jInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
@@ -1087,7 +1105,10 @@ jInOut f ins outs both b = f (returnTp rets)
         returnSt _ = multi (arrayDec (toInteger $ length rets) undefined outputs local
           : assignArray 0 (map valueOf rets)
           ++ [returnStmt (valueOf outputs)])
-        assignArray :: Integer -> [SValue JavaCode] -> [MS (JavaCode (Doc, Terminator))]
+        assignArray
+          :: Integer
+          -> [VS (JavaCode Value)]
+          -> [MS (JavaCode (Doc, Terminator))]
         assignArray _ [] = []
         assignArray c (v:vs) =
           (arrayElem (valueOf outputs) (litInt c) &= v)
@@ -1128,7 +1149,7 @@ addCallExcsCurrMod n = do
 
 addConstructorCallExcsCurrMod
   :: (UnRepr r TypeData)
-  => VS (r TypeData) -> (VS (r TypeData) -> SValue r) -> SValue r
+  => VS (r TypeData) -> (VS (r TypeData) -> VS (r Value)) -> VS (r Value)
 addConstructorCallExcsCurrMod ot f = do
   t <- ot
   cm <- zoom lensVStoFS getModuleName

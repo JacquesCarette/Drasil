@@ -3,7 +3,7 @@
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), VSBinder, Variable, Value,
-  SValue, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..),
@@ -518,15 +518,17 @@ updateMEMandCM n b = do
   modify (updateCallMap n . updateMethodExcMap n)
   noInfo
 
-evalConds :: [(SValue CodeInfoOO, MS (CodeInfoOO ()))] -> MS (CodeInfoOO ()) ->
-  MS (CodeInfoOO ())
+evalConds
+  :: [(VS (CodeInfoOO Value), MS (CodeInfoOO ()))]
+  -> MS (CodeInfoOO ())
+  -> MS (CodeInfoOO ())
 evalConds cs def = do
   mapM_ (zoom lensMStoVS . fst) cs
   mapM_ snd cs
   _ <- def
   noInfo
 
-addCurrModCallVal :: String -> SValue CodeInfoOO
+addCurrModCallVal :: String -> VS (CodeInfoOO Value)
 addCurrModCallVal n = do
   mn <- zoom lensVStoFS getModuleName
   modify (addCall (qualName mn n))
@@ -543,7 +545,7 @@ addExternalCallSmt l n = do
   modify (addCall (qualName l n))
   pure $ error "[addExternalCall] The return value of this isn't used, and the thunk shouldn't fire."
 
-addExternalCallVal :: String -> String -> SValue CodeInfoOO
+addExternalCallVal :: String -> String -> VS (CodeInfoOO Value)
 addExternalCallVal l n = do
   modify (addCall (qualName l n))
   pure $ error "[addExternalCall] The return value of this isn't used, and the thunk shouldn't fire."

@@ -9,7 +9,7 @@ import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
-  Variable, SVariable, Value, SValue, MixedCtorCall, BodySym(..), BlockSym(..),
+  Variable, SVariable, Value, MixedCtorCall, BodySym(..), BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -878,18 +878,26 @@ mathFunc = addmathImport . unOpPrec . access pyMath
 splitFunc :: (TypeSym r typ, Literal r typ, OOFunctionSym r typ) => Char -> VS (r FuncData)
 splitFunc d = func pySplit (listType string) [litString [d]]
 
-readline, readlines :: (TypeSym r typ, InternalValueExp r typ) => SValue r -> SValue r
+readline, readlines
+  :: (TypeSym r typ, InternalValueExp r typ)
+  => VS (r Value) -> VS (r Value)
 readline f = objMethodCall string f pyReadline []
 readlines f = objMethodCall (listType string) f pyReadlines []
 
-readInt, readDouble :: (TypeSym r typ, ValueExpression r typ) => SValue r -> SValue r
+readInt, readDouble
+  :: (TypeSym r typ, ValueExpression r typ)
+  => VS (r Value) -> VS (r Value)
 readInt inSrc = funcApp pyInt int [inSrc]
 readDouble inSrc = funcApp pyDouble double [inSrc]
 
-readString :: (TypeSym r typ, InternalValueExp r typ) => SValue r -> SValue r
+readString
+  :: (TypeSym r typ, InternalValueExp r typ)
+  => VS (r Value) -> VS (r Value)
 readString inSrc = objMethodCall string inSrc pyRstrip []
 
-range :: (TypeSym r typ, ValueExpression r typ) => SValue r -> SValue r -> SValue r -> SValue r
+range
+  :: (TypeSym r typ, ValueExpression r typ)
+  => VS (r Value) -> VS (r Value) -> VS (r Value) -> VS (r Value)
 range initv finalv stepv = funcApp pyRange (listType int) [initv, finalv, stepv]
 
 pyClassVarAccess :: Doc -> Doc -> Doc
@@ -897,7 +905,7 @@ pyClassVarAccess c v = c <> dot <> c <> dot <> v
 
 pyInlineIf
   :: (RenderValue r typ, ValueElim r, ValueSym r typ)
-  => SValue r -> SValue r -> SValue r -> SValue r
+  => VS (r Value) -> VS (r Value) -> VS (r Value) -> VS (r Value)
 pyInlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
@@ -919,13 +927,13 @@ pyExtNewObjMixedArgs
 pyExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing
   (getTypeString t) (pure t) vs ns)
 
-pyPrint :: Bool -> Maybe (SValue PythonCode) -> SValue PythonCode ->
-  SValue PythonCode -> MS (PythonCode (Doc, Terminator))
+pyPrint :: Bool -> Maybe (VS (PythonCode Value)) -> VS (PythonCode Value) ->
+  VS (PythonCode Value) -> MS (PythonCode (Doc, Terminator))
 pyPrint newLn f' p' v' = do
     f <- zoom lensMStoVS $ fromMaybe (mkStateVal void empty) f'
     prf <- zoom lensMStoVS p'
     v <- zoom lensMStoVS v'
-    s <- zoom lensMStoVS (litString "" :: SValue PythonCode)
+    s <- zoom lensMStoVS (litString "" :: VS (PythonCode Value))
     let nl = if newLn then empty else listSep' <> text "end" <> equals <>
                RC.value s
         fl = emptyIfEmpty (RC.value f) $ listSep' <> text "file" <> equals
@@ -954,12 +962,15 @@ pyOut
     , InternalIOStmt r stmt
     , TypeElim r typ
     )
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
+  => Bool -> Maybe (VS (r Value)) -> VS (r Value) -> VS (r Value) -> MS (r stmt)
 pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getCodeType . valueType
   where pyOut' (List _) = printSt newLn f printFn v
         pyOut' _ = G.print newLn f printFn v
 
-pyInput :: SValue PythonCode -> SVariable PythonCode -> MS (PythonCode (Doc, Terminator))
+pyInput
+  :: VS (PythonCode Value)
+  -> SVariable PythonCode
+  -> MS (PythonCode (Doc, Terminator))
 pyInput inSrc v = v &= (v >>= pyInput' . getCodeType . variableType)
   where pyInput' Integer = readInt inSrc
         pyInput' Float = readDouble inSrc
@@ -994,8 +1005,14 @@ pyTryCatch tryB catchB = vcat [
 pyAssert :: (ValueElim r) => r Value -> r Value -> Doc
 pyAssert condition message = text "assert" <+> RC.value condition <> comma <+> RC.value message
 
-pyListSlice :: (InternalVarElim r, Monad r, ValueElim r) => SVariable r ->
-  SValue r -> SValue r -> SValue r -> SValue r -> MS (r Doc)
+pyListSlice
+  :: (InternalVarElim r, Monad r, ValueElim r)
+  => SVariable r
+  -> VS (r Value)
+  -> VS (r Value)
+  -> VS (r Value)
+  -> VS (r Value)
+  -> MS (r Doc)
 pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   vnew <- vn
   vold <- vo

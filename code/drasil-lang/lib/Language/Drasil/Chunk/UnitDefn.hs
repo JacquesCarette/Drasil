@@ -15,7 +15,7 @@ module Language.Drasil.Chunk.UnitDefn (
   -- * Unit Relation Functions
   scale, shift,
   -- * Helpers
-  fromUDefn, unitCon, getCu, compUnitDefn
+  fromUDefn, unitCon, getCu, compUnitDefn, unitSymbol
 ) where
 
 import Control.Lens ((^.), makeLenses, view)
@@ -75,6 +75,10 @@ data UnitEquation = UE {_contributingUnit :: [UID]
 makeLenses ''UnitEquation
 instance HasUnitSymbol UnitEquation where usymb u = u ^. us
 -- ^ Finds the unit symbol ('USymb') for a 'UnitEquation'.
+
+-- | Extract the 'UnitSymbol' of a 'UnitDefn'.
+unitSymbol :: UnitDefn -> UnitSymbol
+unitSymbol = (^. cas)
 
 -- | Get a list of 'UID' of the units that make up the 'UnitEquation'.
 getCu :: UnitEquation -> [UID]

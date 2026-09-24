@@ -11,7 +11,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Library, TypeElim(..),
-  SVariable, Value, MixedCall, MixedCtorCall, VariableSym(..), VariableValue(..),
+  SVariable, MixedCall, MixedCtorCall, VariableSym(..), VariableValue(..),
   VariableElim(..), ValueSym(valueType), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (extNewObj, objMethodCallNoParams, ($->))
@@ -96,18 +96,18 @@ self = do
 
 -- Values --
 
-litTrue :: (RenderValue r typ, IC.TypeSym r typ) => VS (r Value)
+litTrue :: (RenderValue r typ val, IC.TypeSym r typ) => VS (r val)
 litTrue = mkStateVal IC.bool (text "true")
 
-litFalse :: (RenderValue r typ, IC.TypeSym r typ) => VS (r Value)
+litFalse :: (RenderValue r typ val, IC.TypeSym r typ) => VS (r val)
 litFalse = mkStateVal IC.bool (text "false")
 
-litFloat :: (RenderValue r typ, IC.TypeSym r typ) => Float -> VS (r Value)
+litFloat :: (RenderValue r typ val, IC.TypeSym r typ) => Float -> VS (r val)
 litFloat f = mkStateVal IC.float (D.float f <> text "f")
 
 inlineIf
-  :: (RenderValue r typ, ValueElim r, ValueSym r typ)
-  => VS (r Value) -> VS (r Value) -> VS (r Value) -> VS (r Value)
+  :: (RenderValue r typ val, ValueElim r val, ValueSym r typ val)
+  => VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
 inlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
@@ -116,38 +116,40 @@ inlineIf c' v1' v2' = do
     (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2)
   where prec cd = valuePrec cd <|> Just 0
 
-libFuncAppMixedArgs :: (IC.ValueExpression r typ) => Library -> MixedCall r typ
+libFuncAppMixedArgs
+  :: (IC.ValueExpression r typ val)
+  => Library -> MixedCall r typ val
 libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >>
   IC.funcAppMixedArgs n t vs ns
 
 libNewObjMixedArgs
-  :: (IG.OOValueExpression r typ)
-  => Library -> MixedCtorCall r typ
+  :: (IG.OOValueExpression r typ val)
+  => Library -> MixedCtorCall r typ val
 libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
   IG.newObjMixedArgs tp vs ns
 
 -- Functions --
 
 listSize
-  :: (IC.TypeSym r typ, IG.InternalValueExp r typ)
-  => String -> VS (r Value) -> VS (r Value)
+  :: (IC.TypeSym r typ, IG.InternalValueExp r typ val)
+  => String -> VS (r val) -> VS (r val)
 listSize fnName list = objMethodCallNoParams IC.int list fnName
 
 listSize'
   ::
     ( IC.TypeSym r typ
     , VariableSym r typ
-    , IG.OOVariableSym r typ
-    , VariableValue r
+    , IG.OOVariableSym r typ val
+    , VariableValue r val
     )
-  => String -> VS (r Value) -> VS (r Value)
+  => String -> VS (r val) -> VS (r val)
 listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
 -- Statements --
 
 increment
-  :: (InternalVarElim r, RC.RenderStatement r stmt, ValueElim r)
-  => SVariable r -> VS (r Value) -> MS (r stmt)
+  :: (InternalVarElim r, RC.RenderStatement r stmt, ValueElim r val)
+  => SVariable r -> VS (r val) -> MS (r stmt)
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -187,12 +189,12 @@ varDec s d pdoc v' scp = do
         ptrdoc _ = empty
 
 varDecDef
-  :: ( IC.DeclStatement r stmt bod
+  :: ( IC.DeclStatement r val stmt bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
-     , ValueElim r
+     , ValueElim r val
      )
-  => Terminator -> SVariable r -> r ScopeData -> VS (r Value) -> MS (r stmt)
+  => Terminator -> SVariable r -> r ScopeData -> VS (r val) -> MS (r stmt)
 varDecDef t vr scp vl' = do
   vd <- IC.varDec vr scp
   vl <- zoom lensMStoVS vl'
@@ -201,12 +203,12 @@ varDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 setDecDef
-  :: ( IC.DeclStatement r stmt bod
+  :: ( IC.DeclStatement r val stmt bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
-     , ValueElim r
+     , ValueElim r val
      )
-  => Terminator -> SVariable r -> r ScopeData -> VS (r Value) -> MS (r stmt)
+  => Terminator -> SVariable r -> r ScopeData -> VS (r val) -> MS (r stmt)
 setDecDef t vr scp vl' = do
   vd <- IC.setDec vr scp
   vl <- zoom lensMStoVS vl'
@@ -216,11 +218,11 @@ setDecDef t vr scp vl' = do
 
 listDec
   ::
-    ( IC.DeclStatement r stmt bod
+    ( IC.DeclStatement r val stmt bod
     , RC.RenderStatement r stmt
     , RC.StatementElim r stmt
     )
-  => (r Value -> Doc) -> VS (r Value) -> SVariable r -> r ScopeData -> MS (r stmt)
+  => (r val -> Doc) -> VS (r val) -> SVariable r -> r ScopeData -> MS (r stmt)
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
@@ -228,11 +230,11 @@ listDec f vl v scp = do
 
 extObjDecNew
   ::
-    ( IC.DeclStatement r stmt bod
-    , IG.OOValueExpression r typ
+    ( IC.DeclStatement r val stmt bod
+    , IG.OOValueExpression r typ val
     , VariableElim r typ
     )
-  => Library -> SVariable r -> r ScopeData -> [VS (r Value)] -> MS (r stmt)
+  => Library -> SVariable r -> r ScopeData -> [VS (r val)] -> MS (r stmt)
 extObjDecNew l v scp vs = IC.varDecDef v scp
   (extNewObj l (onStateValue variableType v) vs)
 
@@ -242,12 +244,12 @@ switch
   :: ( RC.BodyElim r bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
-     , ValueElim r
+     , ValueElim r val
      )
   => (Doc -> Doc)
   -> MS (r stmt)
-  -> VS (r Value)
-  -> [(VS (r Value), MS (r bod))]
+  -> VS (r val)
+  -> [(VS (r val), MS (r bod))]
   -> MS (r bod)
   -> MS (r stmt)
 switch f st v cs bod = do
@@ -262,12 +264,12 @@ for
   :: ( RC.BodyElim r bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
-     , ValueElim r
+     , ValueElim r val
      )
   => Doc
   -> Doc
   -> MS (r stmt)
-  -> VS (r Value)
+  -> VS (r val)
   -> MS (r stmt)
   -> MS (r bod)
   -> MS (r stmt)
@@ -284,8 +286,8 @@ for bStart bEnd sInit vGuard sUpdate b = do
 
 -- Doc function parameter is applied to the render of the while-condition
 while
-  :: (RC.BodyElim r bod, RC.RenderStatement r stmt, ValueElim r)
-  => (Doc -> Doc) -> Doc -> Doc -> VS (r Value) -> MS (r bod) -> MS (r stmt)
+  :: (RC.BodyElim r bod, RC.RenderStatement r stmt, ValueElim r val)
+  => (Doc -> Doc) -> Doc -> Doc -> VS (r val) -> MS (r bod) -> MS (r stmt)
 while f bStart bEnd v' b'= do
   v <- zoom lensMStoVS v'
   b <- b'

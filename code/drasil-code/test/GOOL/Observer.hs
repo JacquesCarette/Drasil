@@ -17,7 +17,9 @@ observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
 -- | Creates the observer class.
-observer :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => FS (r file)
+observer
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  => FS (r file)
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
@@ -29,9 +31,9 @@ x = var "x" int
 selfX ::
   ( TypeSym r typ
   , VariableSym r typ
-  , OOVariableSym r typ
+  , OOVariableSym r typ val
   , SelfSym r
-  , VariableValue r
+  , VariableValue r val
   )
   => SVariable r
 selfX = instanceVarSelf x
@@ -43,16 +45,16 @@ helperClass
     , BodySym r bod block
     , AttachmentSym r attch
     , VisibilitySym r vis
-    , StateVarSym r vis stvr attch
+    , StateVarSym r vis val stvr attch
     , ClassSym r mthd stvr
-    , OOMethodSym r vis typ mthd attch bod
-    , PrintConsole r stmt
+    , OOMethodSym r vis typ val mthd attch bod
+    , PrintConsole r val stmt
     , TypeSym r typ
-    , Literal r typ
+    , Literal r typ val
     , VariableSym r typ
-    , OOVariableSym r typ
+    , OOVariableSym r typ val
     , SelfSym r
-    , VariableValue r
+    , VariableValue r val
     )
   => CS (r Class)
 helperClass = buildClass Nothing [stateVar public instanceLevel x]
@@ -64,8 +66,8 @@ observerConstructor
     ( BodySym r bod block
     , TypeSym r typ
     , VariableSym r typ
-    , OOMethodSym r vis typ mthd attch bod
-    , Literal r typ
+    , OOMethodSym r vis typ val mthd attch bod
+    , Literal r typ val
     )
   => MS (r mthd)
 observerConstructor = initializer [] [(x, litInt 5)]
@@ -76,14 +78,14 @@ printNumMethod
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , OOMethodSym r vis typ mthd attch bod
+    , OOMethodSym r vis typ val mthd attch bod
     , AttachmentSym r attch
     , VisibilitySym r vis
-    , PrintConsole r stmt
+    , PrintConsole r val stmt
     , VariableSym r typ
-    , OOVariableSym r typ
+    , OOVariableSym r typ val
     , SelfSym r
-    , VariableValue r
+    , VariableValue r val
     )
   => MS (r mthd)
 printNumMethod = method printNum public instanceLevel void [] $

@@ -24,11 +24,11 @@ import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
 import Drasil.System (HasSystemMeta(..), HasProjectName(..))
 
-import Drasil.GOOL (SVariable, Value, Class, CSStateVar, NamedArgs, OOProg, CS,
-  FS, MS, VS, ValueSym(..), Argument(..), ValueExpression(..),
-  InternalValueExp, OOValueExpression(..), SelfSym(..), VariableValue(..),
-  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..),
-  TypeElim(..), objMethodCallMixedArgs)
+import Drasil.GOOL (SVariable, Class, CSStateVar, NamedArgs, OOProg, CS, FS, MS,
+  VS, ValueSym(..), Argument(..), ValueExpression(..), InternalValueExp,
+  OOValueExpression(..), SelfSym(..), VariableValue(..), FuncAppStatement(..),
+  OOFuncAppStatement(..), ClassSym(..), CodeType(..), TypeElim(..),
+  objMethodCallMixedArgs)
 import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
@@ -37,7 +37,7 @@ import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImports
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
   => Name
   -> Description
   -> [Import]
@@ -57,7 +57,7 @@ genModuleWithImports n desc is maybeMs maybeCs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModule
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
   => Name
   -> Description
   -> [GenState (Maybe (MS (r mthd)))]
@@ -123,7 +123,9 @@ auxClass = mkClass Auxiliary
 
 -- | Converts lists or objects to pointer arguments, since we use pointerParam
 -- for list or object-type parameters.
-mkArg :: (ValueSym r typ, Argument r, TypeElim r typ) => VS (r Value) -> VS (r Value)
+mkArg
+  :: (ValueSym r typ val, Argument r val, TypeElim r typ)
+  => VS (r val) -> VS (r val)
 mkArg v = do
   vl <- v
   let mkArg' (List _) = pointerArg
@@ -134,11 +136,11 @@ mkArg v = do
 -- | Gets the current module and calls mkArg on the arguments.
 -- Called by more specific function call generators ('fApp' and 'ctorCall').
 fCall
-  :: (ValueSym r typ, Argument r, TypeElim r typ)
-  => (Name -> [VS (r Value)] -> NamedArgs r -> VS (r Value))
-  -> [VS (r Value)]
-  -> NamedArgs r
-  -> GenState (VS (r Value))
+  :: (ValueSym r typ val, Argument r val, TypeElim r typ)
+  => (Name -> [VS (r val)] -> NamedArgs r val -> VS (r val))
+  -> [VS (r val)]
+  -> NamedArgs r val
+  -> GenState (VS (r val))
 fCall f vl ns = do
   g <- get
   let cm = currentModule g
@@ -157,15 +159,20 @@ fCall f vl ns = do
 --   which is true for this generator.
 fApp
   ::
-    ( ValueSym r typ
-    , Argument r
-    , VariableValue r
+    ( ValueSym r typ val
+    , Argument r val
+    , VariableValue r val
     , SelfSym r
-    , InternalValueExp r typ
-    , ValueExpression r typ
+    , InternalValueExp r typ val
+    , ValueExpression r typ val
     , TypeElim r typ
     )
-  => Name -> Name -> VS (r typ) -> [VS (r Value)] -> NamedArgs r -> GenState (VS (r Value))
+  => Name
+  -> Name
+  -> VS (r typ)
+  -> [VS (r val)]
+  -> NamedArgs r val
+  -> GenState (VS (r val))
 fApp m s t vl ns = do
   g <- get
   fCall (\cm args nargs ->
@@ -176,17 +183,26 @@ fApp m s t vl ns = do
 -- | Logic similar to 'fApp', but the self case is not required here
 -- (because constructor will never be private). Calls 'newObjMixedArgs'.
 ctorCall
-  :: (ValueSym r typ, Argument r, OOValueExpression r typ, TypeElim r typ)
-  => Name -> VS (r typ) -> [VS (r Value)] -> NamedArgs r -> GenState (VS (r Value))
+  ::
+    ( ValueSym r typ val
+    , Argument r val
+    , OOValueExpression r typ val
+    , TypeElim r typ
+    )
+  => Name
+  -> VS (r typ)
+  -> [VS (r val)]
+  -> NamedArgs r val
+  -> GenState (VS (r val))
 ctorCall m t = fCall (\cm args nargs -> if m /= cm then
   extNewObjMixedArgs m t args nargs else newObjMixedArgs t args nargs)
 
 -- | Logic similar to 'fApp', but for In/Out calls.
 fAppInOut
-  :: (FuncAppStatement r stmt, OOFuncAppStatement r stmt)
+  :: (FuncAppStatement r val stmt, OOFuncAppStatement r val stmt)
   => Name
   -> Name
-  -> [VS (r Value)]
+  -> [VS (r val)]
   -> [SVariable r]
   -> [SVariable r]
   -> GenState (MS (r stmt))
@@ -205,7 +221,7 @@ fAppInOut m n ins outs both = do
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImportsProc
-  :: (ProcProg r vis typ stmt mthd prg file mod bod block)
+  :: (ProcProg r vis typ val stmt mthd prg file mod bod block)
   => Name
   -> Description
   -> [Import]
@@ -223,7 +239,7 @@ genModuleWithImportsProc n desc is maybeMs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModuleProc
-  :: (ProcProg r vis typ stmt mthd prg file mod bod block)
+  :: (ProcProg r vis typ val stmt mthd prg file mod bod block)
   => Name
   -> Description
   -> [GenState (Maybe (MS (r mthd)))]
@@ -240,13 +256,13 @@ genModuleProc n desc = genModuleWithImportsProc n desc []
 --   calling a method on self. This assumes all private methods are dynamic,
 --   which is true for this generator.
 fAppProc
-  :: (ValueSym r typ, Argument r, TypeElim r typ, ValueExpression r typ)
+  :: (ValueSym r typ val, Argument r val, TypeElim r typ, ValueExpression r typ val)
   => Name
   -> Name
   -> VS (r typ)
-  -> [VS (r Value)]
-  -> NamedArgs r
-  -> GenState (VS (r Value))
+  -> [VS (r val)]
+  -> NamedArgs r val
+  -> GenState (VS (r val))
 fAppProc m s t vl ns = do
   g <- get
   fCall (\cm args nargs ->
@@ -255,8 +271,14 @@ fAppProc m s t vl ns = do
       else error "fAppProc: Procedural languages do not support method calls.") vl ns
 
 -- | Logic similar to 'fApp', but for In/Out calls.
-fAppInOutProc :: (FuncAppStatement r stmt) => Name -> Name -> [VS (r Value)] ->
-  [SVariable r] -> [SVariable r] -> GenState (MS (r stmt))
+fAppInOutProc
+  :: (FuncAppStatement r val stmt)
+  => Name
+  -> Name
+  -> [VS (r val)]
+  -> [SVariable r]
+  -> [SVariable r]
+  -> GenState (MS (r stmt))
 fAppInOutProc m n ins outs both = do
   g <- get
   let cm = currentModule g

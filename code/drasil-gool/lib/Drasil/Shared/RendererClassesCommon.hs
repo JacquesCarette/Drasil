@@ -12,7 +12,7 @@ module Drasil.Shared.RendererClassesCommon (
   BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Library, Variable, SVariable, Value,
+import Drasil.Shared.InterfaceCommon (Label, Library, Variable, SVariable,
   MixedCall, TypeSym(..), VariableElim(..), Argument(..), Literal(..),
   MathConstant(..), VariableSym, ValueSym, VariableValue(..),
   ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
@@ -28,24 +28,25 @@ import Drasil.Shared.State (MS, VS)
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (BodySym r bod block, BlockSym r block stmt, AssignStatement r stmt,
-  ScopeSym r, DeclStatement r stmt bod, StringStatement r stmt, FuncAppStatement r stmt,
-  CommentStatement r stmt, ControlStatement r stmt bod, Argument r,
-  Literal r typ, MathConstant r, ValueSym r typ, VariableSym r typ,
-  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
-  Comparison r, IndexTranslator r, List r, ListStatement r stmt,
-  InternalList r block, VariableElim r typ, BinderElim r typ,
+class (BodySym r bod block, BlockSym r block stmt, AssignStatement r val stmt,
+  ScopeSym r, DeclStatement r val stmt bod, StringStatement r val stmt,
+  FuncAppStatement r val stmt, CommentStatement r stmt,
+  ControlStatement r val stmt bod, Argument r val, Literal r typ val,
+  MathConstant r val, ValueSym r typ val, VariableSym r typ, VariableValue r val,
+  CommandLineArgs r val, NumericExpression r val, BooleanExpression r val,
+  Comparison r val, IndexTranslator r val, List r val, ListStatement r val stmt,
+  InternalList r val block, VariableElim r typ, BinderElim r typ,
   RenderBlock r block, BlockElim r block, RenderBody r bod, BodyElim r bod,
-  InternalListFunc r typ, RenderFunction r typ, FunctionElim r typ, OpElim r,
+  InternalListFunc r typ val, RenderFunction r typ, FunctionElim r typ, OpElim r,
   RenderParam r, ParamElim r typ, RenderVisibility r vis, VisibilityElim r vis,
-  InternalAssignStmt r stmt, InternalIOStmt r stmt, InternalControlStmt r stmt,
-  RenderStatement r stmt, StatementElim r stmt, RenderType r typ,
-  RenderValue r typ, ValueElim r, RenderVariable r typ, InternalVarElim r,
-  InternalBinderElim r, ImportSym r, UnaryOpSym r, BinaryOpSym r,
-  BlockCommentSym r, BlockCommentElim r, ValueExpression r typ, TypeSym r typ,
-  MethodTypeSym r typ, RenderMethod r mthd, MethodElim r mthd, ParameterSym r,
-  ScopeElim r
-  ) => CommonRenderSym r vis typ stmt mthd bod block
+  InternalAssignStmt r val stmt, InternalIOStmt r val stmt,
+  InternalControlStmt r val stmt, RenderStatement r stmt, StatementElim r stmt,
+  RenderType r typ, RenderValue r typ val, ValueElim r val, RenderVariable r typ,
+  InternalVarElim r, InternalBinderElim r, ImportSym r, UnaryOpSym r,
+  BinaryOpSym r, BlockCommentSym r, BlockCommentElim r,
+  ValueExpression r typ val, TypeSym r typ, MethodTypeSym r typ,
+  RenderMethod r mthd, MethodElim r mthd, ParameterSym r, ScopeElim r
+  ) => CommonRenderSym r vis typ val stmt mthd bod block
 
 -- Common Typeclasses --
 
@@ -129,32 +130,32 @@ class InternalVarElim r where
 class InternalBinderElim r where
   binderElim  :: r BinderD -> Doc
 
-class RenderValue r typ | r -> typ where
-  inputFunc       :: VS (r Value)
-  printFunc       :: VS (r Value)
-  printLnFunc     :: VS (r Value)
-  printFileFunc   :: VS (r Value) -> VS (r Value)
-  printFileLnFunc :: VS (r Value) -> VS (r Value)
+class RenderValue r typ val | r -> typ val where
+  inputFunc       :: VS (r val)
+  printFunc       :: VS (r val)
+  printLnFunc     :: VS (r val)
+  printFileFunc   :: VS (r val) -> VS (r val)
+  printFileLnFunc :: VS (r val) -> VS (r val)
 
-  cast :: VS (r typ) -> VS (r Value) -> VS (r Value)
+  cast :: VS (r typ) -> VS (r val) -> VS (r val)
 
   -- | Very generic internal function for generating calls, to reduce repeated
   -- code throughout generators.
   -- Parameters are: maybe name of external module, maybe Doc for object
   -- variable (including separator between object and function) for method
   -- calls.
-  call :: Maybe Library -> Maybe Doc -> MixedCall r typ
+  call :: Maybe Library -> Maybe Doc -> MixedCall r typ val
 
-  valFromData :: Maybe Int -> Maybe Integer -> VS (r typ) -> Doc -> VS (r Value)
+  valFromData :: Maybe Int -> Maybe Integer -> VS (r typ) -> Doc -> VS (r val)
 
-class ValueElim r where
-  valuePrec :: r Value -> Maybe Int
-  valueInt :: r Value -> Maybe Integer
-  value :: r Value -> Doc
+class ValueElim r val | r -> val where
+  valuePrec :: r val -> Maybe Int
+  valueInt :: r val -> Maybe Integer
+  value :: r val -> Doc
 
-class InternalListFunc r typ | r -> typ where
+class InternalListFunc r typ val | r -> typ val where
   -- | List, Index
-  listAccessFunc :: VS (r typ) -> VS (r Value) -> VS (r FuncData)
+  listAccessFunc :: VS (r typ) -> VS (r val) -> VS (r FuncData)
 
 class RenderFunction r typ | r -> typ where
   funcFromData :: Doc -> VS (r typ) -> VS (r FuncData)
@@ -163,15 +164,15 @@ class FunctionElim r typ | r -> typ where
   functionType :: r FuncData -> r typ
   function :: r FuncData -> Doc
 
-class InternalAssignStmt r stmt | r -> stmt where
-  multiAssign       :: [SVariable r] -> [VS (r Value)] -> MS (r stmt)
+class InternalAssignStmt r val stmt | r -> val stmt where
+  multiAssign       :: [SVariable r] -> [VS (r val)] -> MS (r stmt)
 
-class InternalIOStmt r stmt | r -> stmt where
+class InternalIOStmt r val stmt | r -> val stmt where
   -- newLn, maybe a file to print to, printFunc, value to print
-  printSt :: Bool -> Maybe (VS (r Value)) -> VS (r Value) -> VS (r Value) -> MS (r stmt)
+  printSt :: Bool -> Maybe (VS (r val)) -> VS (r val) -> VS (r val) -> MS (r stmt)
 
-class InternalControlStmt r stmt | r -> stmt where
-  multiReturn :: [VS (r Value)] -> MS (r stmt)
+class InternalControlStmt r val stmt | r -> val stmt where
+  multiReturn :: [VS (r val)] -> MS (r stmt)
 
 class RenderStatement r stmt | r -> stmt where
   stmt     :: MS (r stmt) -> MS (r stmt)

@@ -16,11 +16,11 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderMethod(..))
 
-class (CommonRenderSym r vis typ stmt mthd bod block, ParameterSym r,
+class (CommonRenderSym r vis typ val stmt mthd bod block, ParameterSym r,
   VisibilitySym r vis, MethodSym r vis typ mthd bod, IP.ModuleSym r mod mthd,
   IP.FileSym r file mod, RenderFile r file mod, RenderMod r mod,
   ModuleElim r mod, RenderMethod r mthd, ProcRenderMethod r vis typ mthd bod
-  ) => ProcRenderSym r vis typ stmt mthd file mod bod block
+  ) => ProcRenderSym r vis typ val stmt mthd file mod bod block
 -- Procedural-Only Typeclasses --
 
 class RenderFile r file mod | r -> file mod where

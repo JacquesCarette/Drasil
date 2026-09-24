@@ -4,8 +4,8 @@ module Drasil.GOOL.LanguageRenderer.CommonGOOL (
 ) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), TypeElim(..), SVariable,
-  Value, NamedArgs, VariableElim(..), TypeSym(void), IndexTranslator(..),
-  getCodeType, ValueStatement(valStmt))
+  NamedArgs, VariableElim(..), TypeSym(void), IndexTranslator(..), getCodeType,
+  ValueStatement(valStmt))
 import Drasil.GOOL.InterfaceGOOL (objMethodCall, convTypeOO, InternalValueExp,
   OOTypeSym)
 import Drasil.Shared.RendererClassesCommon (ScopeElim(..), RenderValue(..),
@@ -25,10 +25,10 @@ constDecDef
      , RenderStatement r stmt
      , ScopeElim r
      , UnRepr r TypeData
-     , ValueElim r
+     , ValueElim r val
      , VariableElim r TypeData
      )
-  => SVariable r -> r ScopeData -> VS (r Value) -> MS (r stmt)
+  => SVariable r -> r ScopeData -> VS (r val) -> MS (r stmt)
 constDecDef vr' scp v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -37,30 +37,30 @@ constDecDef vr' scp v'= do
   mkStmt (renderConstDecDef vr v)
 
 classMethodCall
-  :: (RenderValue r TypeData, UnRepr r TypeData)
+  :: (RenderValue r TypeData val, UnRepr r TypeData)
   => String
   -> VS (r TypeData)
   -> VS (r TypeData)
-  -> [VS (r Value)]
-  -> NamedArgs r
-  -> VS (r Value)
+  -> [VS (r val)]
+  -> NamedArgs r val
+  -> VS (r val)
 classMethodCall f t cls vs ns = do
   c <- cls
   call Nothing (Just $ renderType c <> dot) f t vs ns
 
 listAppend
-  :: (TypeSym r typ, InternalValueExp r typ, ValueStatement r stmt)
-  => String -> VS (r Value) -> VS (r Value) -> MS (r stmt)
+  :: (TypeSym r typ, InternalValueExp r typ val, ValueStatement r val stmt)
+  => String -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 
 listAdd
   ::
     ( TypeSym r typ
-    , IndexTranslator r
-    , InternalValueExp r typ
-    , ValueStatement r stmt
+    , IndexTranslator r val
+    , InternalValueExp r typ val
+    , ValueStatement r val stmt
     )
-  => String -> VS (r Value) -> VS (r Value) -> VS (r Value) -> MS (r stmt)
+  => String -> VS (r val) -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]
 
 innerType

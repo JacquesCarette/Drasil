@@ -14,13 +14,13 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 -- | Creates Helper module that contains an addition function.
 helperOO
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
   => FS (r file)
 helperOO = OO.fileDoc (OO.buildModule "Helper" [] [doubleAndAdd] [])
 
 -- | Creates Helper module that contains an addition function.
 helperProc
-  :: (ProcProg r vis typ stmt mthd prg file mod bod block)
+  :: (ProcProg r vis typ val stmt mthd prg file mod bod block)
   => FS (r file)
 helperProc = GProc.fileDoc (GProc.buildModule "Helper" [] [doubleAndAdd])
 
@@ -30,16 +30,16 @@ doubleAndAdd
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , Literal r typ
+    , Literal r typ val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , NumericExpression r
+    , VariableValue r val
+    , NumericExpression r val
     , ParameterSym r
     , VisibilitySym r vis
-    , DeclStatement r stmt bod
-    , AssignStatement r stmt
-    , ControlStatement r stmt bod
+    , DeclStatement r val stmt bod
+    , AssignStatement r val stmt
+    , ControlStatement r val stmt bod
     , MethodSym r vis typ mthd bod
     )
   => MS (r mthd)

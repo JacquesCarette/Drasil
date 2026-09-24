@@ -27,8 +27,8 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 import Utils.Drasil (capitalize, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, Variable, Value,
-  ValueSym(..), TypeElim(..))
+import Drasil.Shared.InterfaceCommon (Label, Library, Variable, ValueSym(..),
+  TypeElim(..))
 import Drasil.Shared.RendererClassesCommon (ValueElim, StatementElim, BodyElim,
   InternalVarElim, InternalBinderElim, ParamElim)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
@@ -193,7 +193,7 @@ body bs = vibcat $ filter (not . isEmpty) bs
 
 -- IO --
 
-print :: (ValueElim r) => r Value -> r Value -> Doc
+print :: (ValueElim r val) => r val -> r val -> Doc
 print printFn v = RC.value printFn <> parens (RC.value v)
 
 printFile :: Label -> Doc -> Doc
@@ -214,12 +214,12 @@ stateVarList = vcat
 -- Controls --
 
 switch
-  :: (BodyElim r bod, StatementElim r stmt, ValueElim r)
+  :: (BodyElim r bod, StatementElim r stmt, ValueElim r val)
   => (Doc -> Doc)
   -> r stmt
-  -> r Value
+  -> r val
   -> r bod
-  -> [(r Value, r bod)]
+  -> [(r val, r bod)]
   -> Doc
 switch f st v defBody cs =
   let caseDoc (l, result) = vcat [
@@ -242,14 +242,14 @@ switch f st v defBody cs =
 -- Statements --
 
 assign
-  :: (InternalVarElim r, ValueElim r)
-  => r Variable -> r Value -> Doc
+  :: (InternalVarElim r, ValueElim r val)
+  => r Variable -> r val -> Doc
 assign vr vl = RC.variable vr <+> equals <+> RC.value vl
 
-addAssign :: (InternalVarElim r, ValueElim r) => r Variable -> r Value -> Doc
+addAssign :: (InternalVarElim r, ValueElim r val) => r Variable -> r val -> Doc
 addAssign vr vl = RC.variable vr <+> text "+=" <+> RC.value vl
 
-subAssign :: (InternalVarElim r, ValueElim r) => r Variable -> r Value -> Doc
+subAssign :: (InternalVarElim r, ValueElim r val) => r Variable -> r val -> Doc
 subAssign vr vl = RC.variable vr <+> text "-=" <+> RC.value vl
 
 increment :: (InternalVarElim r) => r Variable -> Doc
@@ -258,7 +258,7 @@ increment v = RC.variable v <> text "++"
 decrement :: (InternalVarElim r) => r Variable -> Doc
 decrement v = RC.variable v <> text "--"
 
-return' :: (ValueElim r) => [r Value] -> Doc
+return' :: (ValueElim r val) => [r val] -> Doc
 return' vs = returnLabel <+> valueList vs
 
 comment :: Label -> Doc -> Doc
@@ -279,7 +279,7 @@ var = text
 extVar :: Library -> Label -> Doc
 extVar l n = text l <> dot <> text n
 
-arg :: (ValueElim r) => r Value -> r Value -> Doc
+arg :: (ValueElim r val) => r val -> r val -> Doc
 arg n argsList = RC.value argsList <> brackets (RC.value n)
 
 classVarAccess :: Doc -> Doc -> Doc
@@ -308,7 +308,7 @@ func fnApp = dot <> fnApp
 cast :: Doc -> Doc
 cast = parens
 
-listAccessFunc :: (ValueElim r) => r Value -> Doc
+listAccessFunc :: (ValueElim r val) => r val -> Doc
 listAccessFunc v = brackets $ RC.value v
 
 objAccess :: Doc -> Doc -> Doc
@@ -402,7 +402,7 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem $ cmt $+$ blank) (f
 
 -- Helper Functions --
 
-valueList :: (ValueElim r) => [r Value] -> Doc
+valueList :: (ValueElim r val) => [r val] -> Doc
 valueList = hicat listSep' . map RC.value
 
 variableList :: (InternalVarElim r) => [r Variable] -> Doc
@@ -415,8 +415,8 @@ parameterList :: (ParamElim r typ) => [r ParamData] -> Doc
 parameterList = hicat listSep' . map RC.parameter
 
 namedArgList
-  :: (InternalVarElim r, ValueElim r)
-  => Doc -> [(r Variable, r Value)] -> Doc
+  :: (InternalVarElim r, ValueElim r val)
+  => Doc -> [(r Variable, r val)] -> Doc
 namedArgList sep = hicat listSep' . map (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 
@@ -437,7 +437,7 @@ getterName s = "get" ++ capitalize s
 setterName :: String -> String
 setterName s = "set" ++ capitalize s
 
-intValue :: (TypeElim r typ, ValueSym r typ) => VS (r Value) -> VS (r Value)
+intValue :: (TypeElim r typ, ValueSym r typ val) => VS (r val) -> VS (r val)
 intValue i = i >>= intValue' . getCodeType . valueType
   where intValue' Integer = i
         intValue' _ = error "Value passed to intValue must be Integer"

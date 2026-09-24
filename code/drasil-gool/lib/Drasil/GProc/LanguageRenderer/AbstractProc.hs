@@ -5,7 +5,7 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   listAdd, funcDecDef, function
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Value, SVariable,
+import Drasil.Shared.InterfaceCommon (Label, SVariable,
   VariableElim(variableName, variableType), TypeSym, VisibilitySym(..), funcApp,
   getCodeType, convType, ValueStatement(..), ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
@@ -80,8 +80,8 @@ innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
 listAppend
-  :: (TypeSym r typ, ValueStatement r stmt, ValueExpression r typ)
-  => String -> VS (r Value) -> VS (r Value) -> MS (r stmt)
+  :: (TypeSym r typ, ValueStatement r val stmt, ValueExpression r typ val)
+  => String -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAppend fnName list val = valStmt $
   funcApp fnName IC.void [list, val]
 
@@ -89,24 +89,24 @@ listAppend fnName list val = valStmt $
 listAdd
   ::
     ( TypeSym r typ
-    , IndexTranslator r
-    , ValueStatement r stmt
-    , ValueExpression r typ
+    , IndexTranslator r val
+    , ValueStatement r val stmt
+    , ValueExpression r typ val
     )
-  => String -> VS (r Value) -> VS (r Value) -> VS (r Value) -> MS (r stmt)
+  => String -> VS (r val) -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAdd fnName list idx val = valStmt $
   funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
 arrayElem
   ::
     ( TypeSym r typ
-    , IC.ValueSym r typ
-    , IndexTranslator r
+    , IC.ValueSym r typ val
+    , IndexTranslator r val
     , RC.RenderVariable r typ
     , IC.TypeElim r typ
-    , RC.ValueElim r
+    , RC.ValueElim r val
     )
-  => VS (r Value) -> VS (r Value) -> SVariable r
+  => VS (r val) -> VS (r val) -> SVariable r
 arrayElem arr' i' = do
   i <- IC.intToIndex i'
   arr <- arr'
@@ -116,7 +116,7 @@ arrayElem arr' i' = do
   mkStateVar vName vType vRender
 
 funcDecDef
-  :: (RP.ProcRenderSym r vis typ stmt mthd file mod bod block)
+  :: (RP.ProcRenderSym r vis typ val stmt mthd file mod bod block)
   => SVariable r -> r ScopeData -> [SVariable r] -> MS (r bod) -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v

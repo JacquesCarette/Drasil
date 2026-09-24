@@ -7,7 +7,7 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Block, SVariable, Value, TypeSym,
+import Drasil.Shared.InterfaceCommon (Label, Block, SVariable, TypeSym,
   ParameterSym, MethodSym, ValueSym, VariableSym, VisibilitySym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (Class, CSStateVar,
   OOTypeSym, OOVariableSym, SelfSym, OOValueExpression(..), InternalValueExp(..),
@@ -21,19 +21,20 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, MethodTypeSym(..),
   RenderMethod(..))
 
-class (CommonRenderSym r vis typ stmt mthd bod block, ParameterSym r,
-  MethodSym r vis typ mthd bod, IG.OOMethodSym r vis typ mthd attch bod,
-  VisibilitySym r vis, IG.AttachmentSym r attch, IG.StateVarSym r vis stvr attch,
-  IG.ClassSym r mthd stvr, IG.ModuleSym r mod mthd, IG.FileSym r file mod,
-  ValueSym r typ, IG.InternalValueExp r typ, IG.GetSet r,
-  IG.ObserverPattern r typ stmt, IG.StrategyPattern r bod block,
-  VariableSym r typ, TypeSym r typ, IG.OOTypeSym r typ, IG.OOVariableSym r typ,
-  IG.SelfSym r, IG.OOValueExpression r typ, RenderClass r vis mthd stvr,
-  ClassElim r, RenderFile r file mod, InternalGetSet r typ, MethodTypeSym r typ,
+class (CommonRenderSym r vis typ val stmt mthd bod block, ParameterSym r,
+  MethodSym r vis typ mthd bod, IG.OOMethodSym r vis typ val mthd attch bod,
+  VisibilitySym r vis, IG.AttachmentSym r attch,
+  IG.StateVarSym r vis val stvr attch, IG.ClassSym r mthd stvr,
+  IG.ModuleSym r mod mthd, IG.FileSym r file mod, ValueSym r typ val,
+  IG.InternalValueExp r typ val, IG.GetSet r val, IG.ObserverPattern r typ stmt,
+  IG.StrategyPattern r val bod block, VariableSym r typ, TypeSym r typ,
+  IG.OOTypeSym r typ, IG.OOVariableSym r typ val, IG.SelfSym r,
+  IG.OOValueExpression r typ val, RenderClass r vis mthd stvr, ClassElim r,
+  RenderFile r file mod, InternalGetSet r typ val, MethodTypeSym r typ,
   OOMethodTypeSym r typ, RenderMethod r mthd,
   OORenderMethod r vis typ mthd attch bod, RenderMod r mod, ModuleElim r mod,
   StateVarElim r stvr, PermElim r attch
-  ) => OORenderSym r vis typ stmt mthd stvr attch file mod bod block
+  ) => OORenderSym r vis typ val stmt mthd stvr attch file mod bod block
 
 -- OO-Only Typeclasses --
 
@@ -52,9 +53,9 @@ class PermElim r attch where
   perm :: r attch -> Doc
   binding :: r attch -> AttachmentTag
 
-class InternalGetSet r typ | r -> typ where
+class InternalGetSet r typ val | r -> typ val where
   getFunc :: SVariable r -> VS (r FuncData)
-  setFunc :: VS (r typ) -> SVariable r -> VS (r Value) -> VS (r FuncData)
+  setFunc :: VS (r typ) -> SVariable r -> VS (r val) -> VS (r FuncData)
 
 class OOMethodTypeSym r typ | r -> typ where
   construct :: Label -> MS (r typ)

@@ -15,7 +15,6 @@ module Language.Drasil.Classes (
   , HasAdditionalNotes(getNotes)
     -- the unsorted rest
   , IsUnit(udefn, getUnits)
-  , UnitEq(uniteq)
     -- ** Expr and expressions
   , Express(express, mexpress)
   , DefiningExpr(defnExpr)
@@ -114,12 +113,6 @@ class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
   udefn :: u -> Maybe UDefn
   -- | Holds units as a list of 'UID'.
   getUnits :: u -> [UID]
-
--- Investigate (TODO): is this really needed?
--- | Contains a 'UDefn'
-class UnitEq u where
-  -- | Provides the 'Lens' to a unit definition.
-  uniteq :: Lens' u UDefn
 
 -----------------------------------------------------
 

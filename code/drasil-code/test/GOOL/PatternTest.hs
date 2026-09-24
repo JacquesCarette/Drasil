@@ -2,7 +2,7 @@
 -- the Observer class both work.
 module GOOL.PatternTest (patternTest) where
 
-import Drasil.GOOL (GSProgram, SVariable, Value, OOProg, MS, VS, ProgramSym(..),
+import Drasil.GOOL (GSProgram, SVariable, OOProg, MS, VS, ProgramSym(..),
   FileSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..),
   ValueStatement(valStmt), DeclStatement(..), PrintConsole(..), initObserverList,
   addObserver, VariableSym(var), ScopeSym(..), Literal(..), VariableValue(..),
@@ -33,15 +33,15 @@ obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
 -- | New Observer object.
-newObserver :: (OOTypeSym r typ, OOValueExpression r typ) => VS (r Value)
+newObserver :: (OOTypeSym r typ, OOValueExpression r typ val) => VS (r val)
 newObserver = extNewObj observerName observerType []
 
 -- | Creates the pattern test program.
 patternTest
   ::
-    ( OOProg r vis typ stmt mthd stvr attch prg file mod bod block
-    , GetSet r
-    , StrategyPattern r bod block
+    ( OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+    , GetSet r val
+    , StrategyPattern r val bod block
     , ObserverPattern r typ stmt
   ) => GSProgram r prg
 patternTest = prog progName "" [fileDoc (buildModule progName []
@@ -50,9 +50,9 @@ patternTest = prog progName "" [fileDoc (buildModule progName []
 -- | Creates the main function for PatternTest.
 patternTestMainMethod
   ::
-    ( OOProg r vis typ stmt mthd stvr attch prg file mod bod block
-    , GetSet r
-    , StrategyPattern r bod block
+    ( OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+    , GetSet r val
+    , StrategyPattern r val bod block
     , ObserverPattern r typ stmt
   ) => MS (r mthd)
 patternTestMainMethod = mainFunction (body [block [

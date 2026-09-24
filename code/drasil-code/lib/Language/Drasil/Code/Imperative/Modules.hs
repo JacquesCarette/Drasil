@@ -24,7 +24,7 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
   Space(..))
 import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
   oneLineCodeExprDoc)
-import Drasil.GOOL (SVariable, Value, VS, CS, FS, MS, CSStateVar, Class, OOProg,
+import Drasil.GOOL (SVariable, VS, CS, FS, MS, CSStateVar, Class, OOProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), AttachmentSym(..),
   TypeSym(..), ValueSym, VariableSym(..), ScopeSym(..), ScopeData, Literal(..),
   OOTypeSym, OOVariableSym, VariableValue(..), CommandLineArgs(..),
@@ -85,7 +85,9 @@ type ConstraintCE = Constraint CodeExpr
 ---- MAIN ---
 
 -- | Generates a controller module.
-genMain :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => GenState (FS (r file))
+genMain
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  => GenState (FS (r file))
 genMain = genModule "Control" "Controls the flow of the program"
   [genMainFunc] []
 
@@ -95,7 +97,7 @@ genMain = genModule "Control" "Controls the flow of the program"
 -- constraints, calculating outputs, and printing outputs.
 -- Returns Nothing if the user chose to generate a library.
 genMainFunc
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
   => GenState (Maybe (MS (r mthd)))
 genMainFunc = do
     g <- get
@@ -130,29 +132,29 @@ genMainFunc = do
 -- 'extObjDecNew' if they are exported by a different module.
 getInputDecl
   ::
-    ( ValueSym r typ
-    , Argument r
-    , Literal r typ
-    , MathConstant r
+    ( ValueSym r typ val
+    , Argument r val
+    , Literal r typ val
+    , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
     , VariableSym r typ
-    , OOVariableSym r typ
-    , VariableValue r
+    , OOVariableSym r typ val
+    , VariableValue r val
     , ScopeSym r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
     , SelfSym r
-    , InternalValueExp r typ
-    , ValueExpression r typ
-    , OOValueExpression r typ
-    , List r
-    , Reference r
-    , Set r
+    , InternalValueExp r typ val
+    , ValueExpression r typ val
+    , OOValueExpression r typ val
+    , List r val
+    , Reference r val
+    , Set r val
     , MultiStatement r stmt
-    , DeclStatement r stmt bod
-    , OODeclStatement r stmt
+    , DeclStatement r val stmt bod
+    , OODeclStatement r val stmt
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -193,29 +195,29 @@ getInputDecl = do
 -- If constants are 'Inlined', nothing needs to be declared.
 initConsts
   ::
-    ( ValueSym r typ
-    , Argument r
-    , MathConstant r
+    ( ValueSym r typ val
+    , Argument r val
+    , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
     , ScopeSym r
     , VariableSym r typ
-    , OOVariableSym r typ
-    , VariableValue r
-    , Literal r typ
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
+    , OOVariableSym r typ val
+    , VariableValue r val
+    , Literal r typ val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
     , SelfSym r
-    , InternalValueExp r typ
-    , ValueExpression r typ
-    , OOValueExpression r typ
-    , List r
-    , Reference r
-    , Set r
+    , InternalValueExp r typ val
+    , ValueExpression r typ val
+    , OOValueExpression r typ val
+    , List r val
+    , Reference r val
+    , Set r val
     , MultiStatement r stmt
-    , DeclStatement r stmt bod
-    , OODeclStatement r stmt
+    , DeclStatement r val stmt bod
+    , OODeclStatement r val stmt
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -247,7 +249,7 @@ initConsts = do
 -- | Generates a statement to declare the variable representing the log file,
 -- if the user chose to turn on logs for variable assignments.
 initLogFileVar
-  :: (TypeSym r typ, VariableSym r typ, DeclStatement r stmt bod)
+  :: (TypeSym r typ, VariableSym r typ, DeclStatement r val stmt bod)
   => [Logging] -> r ScopeData -> [MS (r stmt)]
 initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 
@@ -255,12 +257,13 @@ initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 
 -- | Generates a single module containing all input-related components.
 genInputMod
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => GenState [FS (r file)]
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  => GenState [FS (r file)]
 genInputMod = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
   let genMod
-        :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
         => Maybe (CS (r Class)) -> GenState (FS (r file))
       genMod Nothing = genModule cname ipDesc [genInputFormat Pub,
         genInputDerived Pub, genInputConstraints Pub] []
@@ -276,10 +279,10 @@ constVarFunc
   ::
     ( AttachmentSym r attch
     , VisibilitySym r vis
-    , StateVarSym r vis stvr attch
+    , StateVarSym r vis val stvr attch
     )
   => ConstantRepr
-  -> (SVariable r -> VS (r Value) -> CSStateVar r stvr)
+  -> (SVariable r -> VS (r val) -> CSStateVar r stvr)
 constVarFunc Var = stateVarDef public instanceLevel
 constVarFunc Const = constVar public
 
@@ -290,7 +293,7 @@ constVarFunc Const = constVar public
 -- variables. If the InputParameters constructor is also exported, then the
 -- generated class also contains the input-related functions as private methods.
 genInputClass
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
   => ClassType -> GenState (Maybe (CS (r Class)))
 genInputClass scp = do
   g <- get
@@ -301,18 +304,20 @@ genInputClass scp = do
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
       constructors
-        :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => GenState [MS (r mthd)]
+        :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+        => GenState [MS (r mthd)]
       constructors = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputConstructor]
         else pure []
       methods
-        :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => GenState [MS (r mthd)]
+        :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+        => GenState [MS (r mthd)]
       methods = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputFormat Priv,
         genInputDerived Priv, genInputConstraints Priv]
         else pure []
       genClass
-        :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
         => [CodeVarChunk] -> [CodeDefinition] -> GenState (Maybe (CS (r Class)))
       genClass [] [] = pure Nothing
       genClass inps csts = do
@@ -334,7 +339,7 @@ genInputClass scp = do
 -- input-related functions. Returns 'Nothing' if no input-related functions are
 -- generated.
 genInputConstructor
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
   => GenState (Maybe (MS (r mthd)))
 genInputConstructor = do
   g <- get
@@ -356,7 +361,7 @@ genInputConstructor = do
 
 -- | Generates a function for calculating derived inputs.
 genInputDerived
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputDerived s = do
   g <- get
@@ -366,7 +371,7 @@ genInputDerived s = do
       getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
       genDerived
-        :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
         => Bool -> GenState (Maybe (MS (r mthd)))
       genDerived False = pure Nothing
       genDerived _ = do
@@ -380,7 +385,7 @@ genInputDerived s = do
 
 -- | Generates function that checks constraints on the input.
 genInputConstraints
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputConstraints s = do
   g <- get
@@ -390,7 +395,7 @@ genInputConstraints s = do
       getFunc Pub = publicFunc
       getFunc Priv = privateMethod
       genConstraints
-        :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
         => Bool -> GenState (Maybe (MS (r mthd)))
       genConstraints False = pure Nothing
       genConstraints _ = do
@@ -411,30 +416,30 @@ sfwrCBody
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , ValueSym r typ
-    , Argument r
-    , MathConstant r
+    , ValueSym r typ val
+    , Argument r val
+    , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
     , ScopeSym r
     , VariableSym r typ
-    , OOVariableSym r typ
-    , VariableValue r
-    , Literal r typ
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
+    , OOVariableSym r typ val
+    , VariableValue r val
+    , Literal r typ val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
     , SelfSym r
-    , InternalValueExp r typ
-    , ValueExpression r typ
-    , OOValueExpression r typ
-    , List r
-    , Reference r
-    , Set r
+    , InternalValueExp r typ val
+    , ValueExpression r typ val
+    , OOValueExpression r typ val
+    , List r val
+    , Reference r val
+    , Set r val
     , EmptyStatement r stmt
-    , DeclStatement r stmt bod
-    , ControlStatement r stmt bod
-    , PrintConsole r stmt
+    , DeclStatement r val stmt bod
+    , ControlStatement r val stmt bod
+    , PrintConsole r val stmt
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -449,30 +454,30 @@ physCBody
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , ValueSym r typ
-    , Argument r
-    , MathConstant r
+    , ValueSym r typ val
+    , Argument r val
+    , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
     , ScopeSym r
     , VariableSym r typ
-    , OOVariableSym r typ
-    , VariableValue r
-    , Literal r typ
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
+    , OOVariableSym r typ val
+    , VariableValue r val
+    , Literal r typ val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
     , SelfSym r
-    , InternalValueExp r typ
-    , ValueExpression r typ
-    , OOValueExpression r typ
-    , List r
-    , Reference r
-    , Set r
+    , InternalValueExp r typ val
+    , ValueExpression r typ val
+    , OOValueExpression r typ val
+    , List r val
+    , Reference r val
+    , Set r val
     , EmptyStatement r stmt
-    , DeclStatement r stmt bod
-    , ControlStatement r stmt bod
-    , PrintConsole r stmt
+    , DeclStatement r val stmt bod
+    , ControlStatement r val stmt bod
+    , PrintConsole r val stmt
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -488,30 +493,30 @@ chooseConstr
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , ValueSym r typ
-    , Argument r
-    , MathConstant r
+    , ValueSym r typ val
+    , Argument r val
+    , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
     , ScopeSym r
     , VariableSym r typ
-    , OOVariableSym r typ
-    , VariableValue r
-    , Literal r typ
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
+    , OOVariableSym r typ val
+    , VariableValue r val
+    , Literal r typ val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
     , SelfSym r
-    , InternalValueExp r typ
-    , OOValueExpression r typ
-    , List r
-    , Reference r
-    , Set r
+    , InternalValueExp r typ val
+    , OOValueExpression r typ val
+    , List r val
+    , Reference r val
+    , Set r val
     , EmptyStatement r stmt
-    , DeclStatement r stmt bod
-    , ControlStatement r stmt bod
-    , PrintConsole r stmt
+    , DeclStatement r val stmt bod
+    , ControlStatement r val stmt bod
+    , PrintConsole r val stmt
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -538,26 +543,26 @@ chooseConstr cb cs = do
 -- what value was \"suggested\".
 constrWarn
   ::
-    ( ValueSym r typ
-    , Argument r
-    , MathConstant r
+    ( ValueSym r typ val
+    , Argument r val
+    , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , OOVariableSym r typ
+    , OOVariableSym r typ val
     , VariableSym r typ
-    , VariableValue r
-    , Literal r typ
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
+    , VariableValue r val
+    , Literal r typ val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
     , SelfSym r
-    , InternalValueExp r typ
-    , ValueExpression r typ
-    , OOValueExpression r typ
-    , List r
-    , Reference r
-    , Set r
-    , PrintConsole r stmt
+    , InternalValueExp r typ val
+    , ValueExpression r typ val
+    , OOValueExpression r typ val
+    , List r val
+    , Reference r val
+    , Set r val
+    , PrintConsole r val stmt
     , BlockSym r block stmt
     , BodySym r bod block
     , TypeElim r typ
@@ -577,27 +582,27 @@ constrExc
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , ValueSym r typ
-    , Argument r
-    , MathConstant r
+    , ValueSym r typ val
+    , Argument r val
+    , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
     , VariableSym r typ
-    , OOVariableSym r typ
-    , VariableValue r
-    , Literal r typ
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
+    , OOVariableSym r typ val
+    , VariableValue r val
+    , Literal r typ val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
     , SelfSym r
-    , InternalValueExp r typ
-    , ValueExpression r typ
-    , OOValueExpression r typ
-    , List r
-    , Reference r
-    , Set r
-    , ControlStatement r stmt bod
-    , PrintConsole r stmt
+    , InternalValueExp r typ val
+    , ValueExpression r typ val
+    , OOValueExpression r typ val
+    , List r val
+    , Reference r val
+    , Set r val
+    , ControlStatement r val stmt bod
+    , PrintConsole r val stmt
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -611,27 +616,27 @@ constrExc c = do
 -- | Generates set variable dec
 constrVarDec
   ::
-    ( ValueSym r typ
-    , Argument r
-    , MathConstant r
+    ( ValueSym r typ val
+    , Argument r val
+    , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
     , ScopeSym r
     , VariableSym r typ
-    , OOVariableSym r typ
-    , VariableValue r
-    , Literal r typ
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
+    , OOVariableSym r typ val
+    , VariableValue r val
+    , Literal r typ val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
     , SelfSym r
-    , InternalValueExp r typ
-    , ValueExpression r typ
-    , OOValueExpression r typ
-    , List r
-    , Reference r
-    , Set r
-    , DeclStatement r stmt bod
+    , InternalValueExp r typ val
+    , ValueExpression r typ val
+    , OOValueExpression r typ val
+    , List r val
+    , Reference r val
+    , Set r val
+    , DeclStatement r val stmt bod
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -647,26 +652,26 @@ constrVarDec v e = do
 -- description of the constraint that is violated.
 constraintViolatedMsg
   ::
-    ( ValueSym r typ
-    , Argument r
-    , MathConstant r
+    ( ValueSym r typ val
+    , Argument r val
+    , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
     , VariableSym r typ
-    , OOVariableSym r typ
-    , VariableValue r
-    , Literal r typ
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
+    , OOVariableSym r typ val
+    , VariableValue r val
+    , Literal r typ val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
     , SelfSym r
-    , InternalValueExp r typ
-    , ValueExpression r typ
-    , OOValueExpression r typ
-    , List r
-    , Reference r
-    , Set r
-    , PrintConsole r stmt
+    , InternalValueExp r typ val
+    , ValueExpression r typ val
+    , OOValueExpression r typ val
+    , List r val
+    , Reference r val
+    , Set r val
+    , PrintConsole r val stmt
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -683,26 +688,26 @@ constraintViolatedMsg q s c = do
 -- expression they originated from, using printExpr.
 printConstraint
   ::
-    ( ValueSym r typ
-    , Argument r
-    , MathConstant r
+    ( ValueSym r typ val
+    , Argument r val
+    , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
     , VariableSym r typ
-    , OOVariableSym r typ
-    , VariableValue r
-    , Literal r typ
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
+    , OOVariableSym r typ val
+    , VariableValue r val
+    , Literal r typ val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
     , SelfSym r
-    , InternalValueExp r typ
-    , ValueExpression r typ
-    , OOValueExpression r typ
-    , List r
-    , Reference r
-    , Set r
-    , PrintConsole r stmt
+    , InternalValueExp r typ val
+    , ValueExpression r typ val
+    , OOValueExpression r typ val
+    , List r val
+    , Reference r val
+    , Set r val
+    , PrintConsole r val stmt
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -712,26 +717,26 @@ printConstraint v c = do
   let db = printfo g
       printConstraint'
         ::
-          ( ValueSym r typ
-          , Argument r
-          , MathConstant r
+          ( ValueSym r typ val
+          , Argument r val
+          , MathConstant r val
           , TypeSym r typ
           , OOTypeSym r typ
           , VariableSym r typ
-          , OOVariableSym r typ
-          , VariableValue r
-          , Literal r typ
-          , BooleanExpression r
-          , Comparison r
-          , NumericExpression r
+          , OOVariableSym r typ val
+          , VariableValue r val
+          , Literal r typ val
+          , BooleanExpression r val
+          , Comparison r val
+          , NumericExpression r val
           , SelfSym r
-          , InternalValueExp r typ
-          , ValueExpression r typ
-          , OOValueExpression r typ
-          , List r
-          , Reference r
-          , Set r
-          , PrintConsole r stmt
+          , InternalValueExp r typ val
+          , ValueExpression r typ val
+          , OOValueExpression r typ val
+          , List r val
+          , Reference r val
+          , Set r val
+          , PrintConsole r val stmt
           , TypeElim r typ
           , VariableElim r typ
           )
@@ -756,13 +761,15 @@ printConstraint v c = do
 -- | Don't print expressions that are just literals, because that would be
 -- redundant (the values are already printed by printConstraint).
 -- If expression is more than just a literal, print it in parentheses.
-printExpr :: (PrintConsole r stmt) => CodeExpr -> PrintingInformation -> [MS (r stmt)]
+printExpr
+  :: (PrintConsole r val stmt)
+  => CodeExpr -> PrintingInformation -> [MS (r stmt)]
 printExpr Lit{} _     = []
 printExpr e     pinfo = [printStr $ " " ++ render (parens (oneLineCodeExprDoc pinfo e))]
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputFormat s = do
   g <- get
@@ -772,7 +779,7 @@ genInputFormat s = do
   let getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
       genInFormat
-        :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
         => Bool -> GenState (Maybe (MS (r mthd)))
       genInFormat False = pure Nothing
       genInFormat _ = do
@@ -806,7 +813,8 @@ genSampleInput = do
 
 -- | Generates a module containing the class where constants are stored.
 genConstMod
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => GenState [FS (r file)]
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  => GenState [FS (r file)]
 genConstMod = do
   cDesc <- modDesc $ liftS constModDesc
   cName <- genICName Constants
@@ -815,7 +823,7 @@ genConstMod = do
 -- | Generates a class to store constants, if constants are mapped to the
 -- Constants class in the class definition map, otherwise returns Nothing.
 genConstClass
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
   => ClassType -> GenState (Maybe (CS (r Class)))
 genConstClass scp = do
   g <- get
@@ -823,7 +831,7 @@ genConstClass scp = do
   cname <- genICName Constants
   let cs = g ^. constDefns
       genClass
-        :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
         => [CodeDefinition] -> GenState (Maybe (CS (r Class)))
       genClass [] = pure Nothing
       genClass vs = do
@@ -844,7 +852,8 @@ genConstClass scp = do
 
 -- | Generates a module containing calculation functions.
 genCalcMod
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => GenState (FS (r file))
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  => GenState (FS (r file))
 genCalcMod = do
   g <- get
   cName <- genICName Calculations
@@ -856,7 +865,7 @@ genCalcMod = do
 -- For solving ODEs, the 'ExtLibState' containing the information needed to
 -- generate code is found by looking it up in the external library map.
 genCalcFunc
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
   => CodeDefinition -> GenState (MS (r mthd))
 genCalcFunc cdef = do
   g <- get
@@ -895,27 +904,27 @@ genCalcBlock
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , ValueSym r typ
-    , Argument r
-    , MathConstant r
+    , ValueSym r typ val
+    , Argument r val
+    , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
     , VariableSym r typ
-    , OOVariableSym r typ
-    , VariableValue r
-    , Literal r typ
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
+    , OOVariableSym r typ val
+    , VariableValue r val
+    , Literal r typ val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
     , SelfSym r
-    , InternalValueExp r typ
-    , ValueExpression r typ
-    , OOValueExpression r typ
-    , List r
-    , Reference r
-    , Set r
-    , AssignStatement r stmt
-    , ControlStatement r stmt bod
+    , InternalValueExp r typ val
+    , ValueExpression r typ val
+    , OOValueExpression r typ val
+    , List r val
+    , Reference r val
+    , Set r val
+    , AssignStatement r val stmt
+    , ControlStatement r val stmt bod
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -934,27 +943,27 @@ genCaseBlock
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , ValueSym r typ
-    , Argument r
-    , MathConstant r
+    , ValueSym r typ val
+    , Argument r val
+    , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
     , VariableSym r typ
-    , OOVariableSym r typ
-    , VariableValue r
-    , Literal r typ
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
+    , OOVariableSym r typ val
+    , VariableValue r val
+    , Literal r typ val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
     , SelfSym r
-    , InternalValueExp r typ
-    , ValueExpression r typ
-    , OOValueExpression r typ
-    , List r
-    , Reference r
-    , Set r
-    , AssignStatement r stmt
-    , ControlStatement r stmt bod
+    , InternalValueExp r typ val
+    , ValueExpression r typ val
+    , OOValueExpression r typ val
+    , List r val
+    , Reference r val
+    , Set r val
+    , AssignStatement r val stmt
+    , ControlStatement r val stmt bod
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -980,7 +989,8 @@ genCaseBlock t v c cs = do
 
 -- | Generates a module containing the function for printing outputs.
 genOutputMod
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block) => GenState [FS (r file)]
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  => GenState [FS (r file)]
 genOutputMod = do
   ofName <- genICName OutputFormat
   ofDesc <- modDesc $ liftS outputFormatDesc
@@ -988,14 +998,14 @@ genOutputMod = do
 
 -- | Generates a function for printing output values.
 genOutputFormat
-  :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
   => GenState (Maybe (MS (r mthd)))
 genOutputFormat = do
   g <- get
   modify (\st -> st {currentScope = Local})
   woName <- genICName WriteOutput
   let genOutput
-        :: (OOProg r vis typ stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
         => Maybe String -> GenState (Maybe (MS (r mthd)))
       genOutput Nothing = pure Nothing
       genOutput (Just _) = do
@@ -1022,7 +1032,7 @@ genOutputFormat = do
 
 -- | Generates a controller module.
 genMainProc
-  :: (NativeVector r typ, ProcProg r vis typ stmt mthd prg file mod bod block)
+  :: (NativeVector r typ val, ProcProg r vis typ val stmt mthd prg file mod bod block)
   => GenState (FS (r file))
 genMainProc = genModuleProc "Control" "Controls the flow of the program"
   [genMainFuncProc]
@@ -1037,26 +1047,26 @@ genMainFuncProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , ValueSym r typ
-    , CommandLineArgs r
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , CommandLineArgs r val
+    , Literal r typ val
+    , MathConstant r val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
     , MultiStatement r stmt
-    , ValueStatement r stmt
-    , DeclStatement r stmt bod
-    , FuncAppStatement r stmt
-    , Argument r
-    , List r
-    , NativeVector r typ
-    , Reference r
-    , Set r
+    , ValueStatement r val stmt
+    , DeclStatement r val stmt bod
+    , FuncAppStatement r val stmt
+    , Argument r val
+    , List r val
+    , NativeVector r typ val
+    , Reference r val
+    , Set r val
     , MethodSym r vis typ mthd bod
     , TypeElim r typ
     )
@@ -1095,22 +1105,22 @@ genMainFuncProc = do
 initConstsProc
   ::
     ( TypeSym r typ
-    , ValueSym r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , Literal r typ val
+    , MathConstant r val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , DeclStatement r stmt bod
-    , Argument r
-    , List r
-    , NativeVector r typ
-    , Reference r
-    , Set r
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , DeclStatement r val stmt bod
+    , Argument r val
+    , List r val
+    , NativeVector r typ val
+    , Reference r val
+    , Set r val
     , MultiStatement r stmt
     , TypeElim r typ
     )
@@ -1148,15 +1158,15 @@ checkConstClass = do
 
 -- | Generates a single module containing all input-related components.
 genInputModProc
-  :: (NativeVector r typ, ProcProg r vis typ stmt mthd prg file mod bod block)
+  :: (NativeVector r typ val, ProcProg r vis typ val stmt mthd prg file mod bod block)
   => GenState [FS (r file)]
 genInputModProc = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
   let genMod
         ::
-          ( NativeVector r typ
-          , ProcProg r vis typ stmt mthd prg file mod bod block
+          ( NativeVector r typ val
+          , ProcProg r vis typ val stmt mthd prg file mod bod block
           )
         => Bool -> GenState (FS (r file))
       genMod False = genModuleProc cname ipDesc [genInputFormatProc Pub,
@@ -1194,7 +1204,7 @@ getInputDeclProc
     , TypeSym r typ
     , VariableSym r typ
     , MultiStatement r stmt
-    , DeclStatement r stmt bo
+    , DeclStatement r val stmt bo
     )
   => GenState (Maybe (MS (r stmt)))
 getInputDeclProc = do
@@ -1210,7 +1220,10 @@ getInputDeclProc = do
 
 -- | Generates a module containing calculation functions.
 genCalcModProc
-  :: (NativeVector r typ, ProcProg r vis typ stmt mthd prg file mod bod block)
+  ::
+    ( NativeVector r typ val
+    , ProcProg r vis typ val stmt mthd prg file mod bod block
+    )
   => GenState (FS (r file))
 genCalcModProc = do
   g <- get
@@ -1227,34 +1240,34 @@ genCalcFuncProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , ValueSym r typ
-    , NativeVector r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , NativeVector r typ val
+    , Literal r typ val
+    , MathConstant r val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , Array r
-    , List r
-    , ListStatement r stmt
-    , Reference r
-    , Set r
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , Array r val
+    , List r val
+    , ListStatement r val stmt
+    , Reference r val
+    , Set r val
     , ParameterSym r
     , VisibilitySym r vis
     , MultiStatement r stmt
-    , ValueStatement r stmt
-    , DeclStatement r stmt bod
-    , AssignStatement r stmt
-    , ControlStatement r stmt bod
-    , StringStatement r stmt
-    , FileHandling r stmt
-    , PrintFile r stmt
-    , ReadFile r stmt
+    , ValueStatement r val stmt
+    , DeclStatement r val stmt bod
+    , AssignStatement r val stmt
+    , ControlStatement r val stmt bod
+    , StringStatement r val stmt
+    , FileHandling r val stmt
+    , PrintFile r val stmt
+    , ReadFile r val stmt
     , MethodSym r vis typ mthd bod
     , TypeElim r typ
     , VariableElim r typ
@@ -1295,28 +1308,28 @@ genCalcBlockProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , ValueSym r typ
-    , NativeVector r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , NativeVector r typ val
+    , Literal r typ val
+    , MathConstant r val
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , Array r
-    , List r
-    , Reference r
-    , Set r
-    , DeclStatement r stmt bod
-    , AssignStatement r stmt
-    , ControlStatement r stmt bod
-    , StringStatement r stmt
-    , FileHandling r stmt
-    , PrintFile r stmt
-    , ReadFile r stmt
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , Array r val
+    , List r val
+    , Reference r val
+    , Set r val
+    , DeclStatement r val stmt bod
+    , AssignStatement r val stmt
+    , ControlStatement r val stmt bod
+    , StringStatement r val stmt
+    , FileHandling r val stmt
+    , PrintFile r val stmt
+    , ReadFile r val stmt
     , TypeElim r typ
     )
   => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r block))
@@ -1335,28 +1348,28 @@ genCaseBlockProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , ValueSym r typ
-    , NativeVector r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , NativeVector r typ val
+    , Literal r typ val
+    , MathConstant r val
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , DeclStatement r stmt bod
-    , AssignStatement r stmt
-    , ControlStatement r stmt bod
-    , StringStatement r stmt
-    , FileHandling r stmt
-    , ReadFile r stmt
-    , PrintFile r stmt
-    , Argument r
-    , Array r
-    , List r
-    , Reference r
-    , Set r
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , DeclStatement r val stmt bod
+    , AssignStatement r val stmt
+    , ControlStatement r val stmt bod
+    , StringStatement r val stmt
+    , FileHandling r val stmt
+    , ReadFile r val stmt
+    , PrintFile r val stmt
+    , Argument r val
+    , Array r val
+    , List r val
+    , Reference r val
+    , Set r val
     , TypeElim r typ
     )
   => CalcType
@@ -1383,30 +1396,30 @@ genInputFormatProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , ValueSym r typ
-    , NativeVector r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , NativeVector r typ val
+    , Literal r typ val
+    , MathConstant r val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
     , VisibilitySym r vis
     , MultiStatement r stmt
-    , DeclStatement r stmt bod
-    , ControlStatement r stmt bod
-    , StringStatement r stmt
-    , FileHandling r stmt
-    , PrintFile r stmt
-    , ReadFile r stmt
-    , Argument r
-    , List r
-    , ListStatement r stmt
-    , Reference r
-    , Set r
+    , DeclStatement r val stmt bod
+    , ControlStatement r val stmt bod
+    , StringStatement r val stmt
+    , FileHandling r val stmt
+    , PrintFile r val stmt
+    , ReadFile r val stmt
+    , Argument r val
+    , List r val
+    , ListStatement r val stmt
+    , Reference r val
+    , Set r val
     , MethodSym r vis typ mthd bod
     , TypeElim r typ
     , VariableElim r typ
@@ -1424,30 +1437,30 @@ genInputFormatProc s = do
           ( BlockSym r block stmt
           , BodySym r bod block
           , TypeSym r typ
-          , ValueSym r typ
-          , NativeVector r typ
-          , Literal r typ
-          , MathConstant r
+          , ValueSym r typ val
+          , NativeVector r typ val
+          , Literal r typ val
+          , MathConstant r val
           , ScopeSym r
           , VariableSym r typ
-          , VariableValue r
-          , BooleanExpression r
-          , Comparison r
-          , NumericExpression r
-          , ValueExpression r typ
+          , VariableValue r val
+          , BooleanExpression r val
+          , Comparison r val
+          , NumericExpression r val
+          , ValueExpression r typ val
           , VisibilitySym r vis
           , MultiStatement r stmt
-          , DeclStatement r stmt bod
-          , ControlStatement r stmt bod
-          , StringStatement r stmt
-          , FileHandling r stmt
-          , PrintFile r stmt
-          , ReadFile r stmt
-          , Argument r
-          , List r
-          , ListStatement r stmt
-          , Reference r
-          , Set r
+          , DeclStatement r val stmt bod
+          , ControlStatement r val stmt bod
+          , StringStatement r val stmt
+          , FileHandling r val stmt
+          , PrintFile r val stmt
+          , ReadFile r val stmt
+          , Argument r val
+          , List r val
+          , ListStatement r val stmt
+          , Reference r val
+          , Set r val
           , MethodSym r vis typ mthd bod
           , TypeElim r typ
           , VariableElim r typ
@@ -1469,31 +1482,31 @@ genInputDerivedProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , ValueSym r typ
-    , NativeVector r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , NativeVector r typ val
+    , Literal r typ val
+    , MathConstant r val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , Array r
-    , List r
-    , Reference r
-    , Set r
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , Array r val
+    , List r val
+    , Reference r val
+    , Set r val
     , VisibilitySym r vis
     , MultiStatement r stmt
-    , DeclStatement r stmt bod
-    , AssignStatement r stmt
-    , ControlStatement r stmt bod
-    , StringStatement r stmt
-    , FileHandling r stmt
-    , PrintFile r stmt
-    , ReadFile r stmt
+    , DeclStatement r val stmt bod
+    , AssignStatement r val stmt
+    , ControlStatement r val stmt bod
+    , StringStatement r val stmt
+    , FileHandling r val stmt
+    , PrintFile r val stmt
+    , ReadFile r val stmt
     , MethodSym r vis typ mthd bod
     , TypeElim r typ
     , VariableElim r typ
@@ -1511,31 +1524,31 @@ genInputDerivedProc s = do
           ( BlockSym r block stmt
           , BodySym r bod block
           , TypeSym r typ
-          , ValueSym r typ
-          , NativeVector r typ
-          , Literal r typ
-          , MathConstant r
+          , ValueSym r typ val
+          , NativeVector r typ val
+          , Literal r typ val
+          , MathConstant r val
           , ScopeSym r
           , VariableSym r typ
-          , VariableValue r
-          , BooleanExpression r
-          , Comparison r
-          , NumericExpression r
-          , ValueExpression r typ
-          , Argument r
-          , Array r
-          , List r
-          , Reference r
-          , Set r
+          , VariableValue r val
+          , BooleanExpression r val
+          , Comparison r val
+          , NumericExpression r val
+          , ValueExpression r typ val
+          , Argument r val
+          , Array r val
+          , List r val
+          , Reference r val
+          , Set r val
           , VisibilitySym r vis
           , MultiStatement r stmt
-          , DeclStatement r stmt bod
-          , AssignStatement r stmt
-          , ControlStatement r stmt bod
-          , StringStatement r stmt
-          , FileHandling r stmt
-          , PrintFile r stmt
-          , ReadFile r stmt
+          , DeclStatement r val stmt bod
+          , AssignStatement r val stmt
+          , ControlStatement r val stmt bod
+          , StringStatement r val stmt
+          , FileHandling r val stmt
+          , PrintFile r val stmt
+          , ReadFile r val stmt
           , MethodSym r vis typ mthd bod
           , TypeElim r typ
           , VariableElim r typ
@@ -1557,30 +1570,30 @@ genInputConstraintsProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , ValueSym r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , Literal r typ val
+    , MathConstant r val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , NativeVector r typ
-    , Reference r
-    , Set r
-    , List r
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , NativeVector r typ val
+    , Reference r val
+    , Set r val
+    , List r val
     , ParameterSym r
     , VisibilitySym r vis
     , EmptyStatement r stmt
     , MultiStatement r stmt
-    , DeclStatement r stmt bod
-    , PrintConsole r stmt
-    , FileHandling r stmt
-    , PrintFile r stmt
-    , ControlStatement r stmt bod
+    , DeclStatement r val stmt bod
+    , PrintConsole r val stmt
+    , FileHandling r val stmt
+    , PrintFile r val stmt
+    , ControlStatement r val stmt bod
     , MethodSym r vis typ mthd bod
     , TypeElim r typ
     , VariableElim r typ
@@ -1598,30 +1611,30 @@ genInputConstraintsProc s = do
           ( BlockSym r block stmt
           , BodySym r bod block
           , TypeSym r typ
-          , ValueSym r typ
-          , Literal r typ
-          , MathConstant r
+          , ValueSym r typ val
+          , Literal r typ val
+          , MathConstant r val
           , ScopeSym r
           , VariableSym r typ
-          , VariableValue r
-          , BooleanExpression r
-          , Comparison r
-          , NumericExpression r
-          , ValueExpression r typ
-          , Argument r
-          , NativeVector r typ
-          , Reference r
-          , Set r
-          , List r
+          , VariableValue r val
+          , BooleanExpression r val
+          , Comparison r val
+          , NumericExpression r val
+          , ValueExpression r typ val
+          , Argument r val
+          , NativeVector r typ val
+          , Reference r val
+          , Set r val
+          , List r val
           , ParameterSym r
           , VisibilitySym r vis
           , EmptyStatement r stmt
           , MultiStatement r stmt
-          , DeclStatement r stmt bod
-          , PrintConsole r stmt
-          , FileHandling r stmt
-          , PrintFile r stmt
-          , ControlStatement r stmt bod
+          , DeclStatement r val stmt bod
+          , PrintConsole r val stmt
+          , FileHandling r val stmt
+          , PrintFile r val stmt
+          , ControlStatement r val stmt bod
           , MethodSym r vis typ mthd bod
           , TypeElim r typ
           , VariableElim r typ
@@ -1647,25 +1660,25 @@ sfwrCBodyProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , ValueSym r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , Literal r typ val
+    , MathConstant r val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , NativeVector r typ
-    , Reference r
-    , Set r
-    , List r
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , NativeVector r typ val
+    , Reference r val
+    , Set r val
+    , List r val
     , EmptyStatement r stmt
-    , DeclStatement r stmt bod
-    , PrintConsole r stmt
-    , ControlStatement r stmt bod
+    , DeclStatement r val stmt bod
+    , PrintConsole r val stmt
+    , ControlStatement r val stmt bod
     , TypeElim r typ
     )
  => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r stmt)]
@@ -1680,25 +1693,25 @@ physCBodyProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , ValueSym r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , Literal r typ val
+    , MathConstant r val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , NativeVector r typ
-    , Reference r
-    , Set r
-    , List r
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , NativeVector r typ val
+    , Reference r val
+    , Set r val
+    , List r val
     , EmptyStatement r stmt
-    , DeclStatement r stmt bod
-    , PrintConsole r stmt
-    , ControlStatement r stmt bod
+    , DeclStatement r val stmt bod
+    , PrintConsole r val stmt
+    , ControlStatement r val stmt bod
     , TypeElim r typ
     )
   => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r stmt)]
@@ -1714,25 +1727,25 @@ chooseConstrProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , ValueSym r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , Literal r typ val
+    , MathConstant r val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , NativeVector r typ
-    , Reference r
-    , Set r
-    , List r
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , NativeVector r typ val
+    , Reference r val
+    , Set r val
+    , List r val
     , EmptyStatement r stmt
-    , DeclStatement r stmt bod
-    , PrintConsole r stmt
-    , ControlStatement r stmt bod
+    , DeclStatement r val stmt bod
+    , PrintConsole r val stmt
+    , ControlStatement r val stmt bod
     , TypeElim r typ
     )
   => ConstraintBehaviour -> [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r stmt)]
@@ -1755,21 +1768,21 @@ chooseConstrProc cb cs = do
 constrWarnProc
   ::
     ( TypeSym r typ
-    , ValueSym r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , Literal r typ val
+    , MathConstant r val
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , NativeVector r typ
-    , Reference r
-    , Set r
-    , List r
-    , PrintConsole r stmt
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , NativeVector r typ val
+    , Reference r val
+    , Set r val
+    , List r val
+    , PrintConsole r val stmt
     , BlockSym r block stmt
     , BodySym r bod block
     , TypeElim r typ
@@ -1789,22 +1802,22 @@ constrExcProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , ValueSym r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , Literal r typ val
+    , MathConstant r val
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , NativeVector r typ
-    , Reference r
-    , Set r
-    , List r
-    , PrintConsole r stmt
-    , ControlStatement r stmt bod
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , NativeVector r typ val
+    , Reference r val
+    , Set r val
+    , List r val
+    , PrintConsole r val stmt
+    , ControlStatement r val stmt bod
     , TypeElim r typ
     )
   => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r bod)]
@@ -1818,22 +1831,22 @@ constrExcProc c = do
 constrVarDecProc
   ::
     ( TypeSym r typ
-    , ValueSym r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , Literal r typ val
+    , MathConstant r val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , NativeVector r typ
-    , Reference r
-    , Set r
-    , List r
-    , DeclStatement r stmt bod
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , NativeVector r typ val
+    , Reference r val
+    , Set r val
+    , List r val
+    , DeclStatement r val stmt bod
     , TypeElim r typ
     )
   => CodeVarChunk -> CodeExpr ->
@@ -1850,21 +1863,21 @@ constrVarDecProc v e = do
 constraintViolatedMsgProc
   ::
     ( TypeSym r typ
-    , ValueSym r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , Literal r typ val
+    , MathConstant r val
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , NativeVector r typ
-    , Reference r
-    , Set r
-    , List r
-    , PrintConsole r stmt
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , NativeVector r typ val
+    , Reference r val
+    , Set r val
+    , List r val
+    , PrintConsole r val stmt
     , TypeElim r typ
     )
   => CodeVarChunk -> String -> ConstraintCE -> GenState [MS (r stmt)]
@@ -1881,21 +1894,21 @@ constraintViolatedMsgProc q s c = do
 printConstraintProc
   ::
     ( TypeSym r typ
-    , ValueSym r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , Literal r typ val
+    , MathConstant r val
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , NativeVector r typ
-    , Reference r
-    , Set r
-    , List r
-    , PrintConsole r stmt
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , NativeVector r typ val
+    , Reference r val
+    , Set r val
+    , List r val
+    , PrintConsole r val stmt
     , TypeElim r typ
     )
   => ConstraintCE -> GenState [MS (r stmt)]
@@ -1905,21 +1918,21 @@ printConstraintProc c = do
       printConstraint'
         ::
           ( TypeSym r typ
-          , ValueSym r typ
-          , Literal r typ
-          , MathConstant r
+          , ValueSym r typ val
+          , Literal r typ val
+          , MathConstant r val
           , VariableSym r typ
-          , VariableValue r
-          , BooleanExpression r
-          , Comparison r
-          , NumericExpression r
-          , ValueExpression r typ
-          , Argument r
-          , NativeVector r typ
-          , Reference r
-          , Set r
-          , List r
-          , PrintConsole r stmt
+          , VariableValue r val
+          , BooleanExpression r val
+          , Comparison r val
+          , NumericExpression r val
+          , ValueExpression r typ val
+          , Argument r val
+          , NativeVector r typ val
+          , Reference r val
+          , Set r val
+          , List r val
+          , PrintConsole r val stmt
           , TypeElim r typ
           )
         => ConstraintCE -> GenState [MS (r stmt)]
@@ -1942,7 +1955,10 @@ printConstraintProc c = do
 
 -- | Generates a module containing the function for printing outputs.
 genOutputModProc
-  :: (NativeVector r typ, ProcProg r vis typ stmt mthd prg file mod bod block)
+  ::
+    ( NativeVector r typ val
+    , ProcProg r vis typ val stmt mthd prg file mod bod block
+    )
   => GenState [FS (r file)]
 genOutputModProc = do
   ofName <- genICName OutputFormat
@@ -1955,28 +1971,28 @@ genOutputFormatProc
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , ValueSym r typ
-    , NativeVector r typ
-    , Literal r typ
-    , MathConstant r
+    , ValueSym r typ val
+    , NativeVector r typ val
+    , Literal r typ val
+    , MathConstant r val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r typ
-    , Argument r
-    , List r
-    , Reference r
-    , Set r
+    , VariableValue r val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r typ val
+    , Argument r val
+    , List r val
+    , Reference r val
+    , Set r val
     , VisibilitySym r vis
     , ParameterSym r
     , MultiStatement r stmt
-    , DeclStatement r stmt bod
-    , ControlStatement r stmt bod
-    , FileHandling r stmt
-    , PrintFile r stmt
+    , DeclStatement r val stmt bod
+    , ControlStatement r val stmt bod
+    , FileHandling r val stmt
+    , PrintFile r val stmt
     , MethodSym r vis typ mthd bod
     , TypeElim r typ
     , VariableElim r typ
@@ -1991,28 +2007,28 @@ genOutputFormatProc = do
           ( BlockSym r block stmt
           , BodySym r bod block
           , TypeSym r typ
-          , NativeVector r typ
-          , ValueSym r typ
-          , Literal r typ
-          , MathConstant r
+          , NativeVector r typ val
+          , ValueSym r typ val
+          , Literal r typ val
+          , MathConstant r val
           , ScopeSym r
           , VariableSym r typ
-          , VariableValue r
-          , BooleanExpression r
-          , Comparison r
-          , NumericExpression r
-          , ValueExpression r typ
-          , Argument r
-          , List r
-          , Reference r
-          , Set r
+          , VariableValue r val
+          , BooleanExpression r val
+          , Comparison r val
+          , NumericExpression r val
+          , ValueExpression r typ val
+          , Argument r val
+          , List r val
+          , Reference r val
+          , Set r val
           , VisibilitySym r vis
           , ParameterSym r
           , MultiStatement r stmt
-          , DeclStatement r stmt bod
-          , ControlStatement r stmt bod
-          , FileHandling r stmt
-          , PrintFile r stmt
+          , DeclStatement r val stmt bod
+          , ControlStatement r val stmt bod
+          , FileHandling r val stmt
+          , PrintFile r val stmt
           , MethodSym r vis typ mthd bod
           , TypeElim r typ
           , VariableElim r typ
@@ -2044,16 +2060,16 @@ writeOutputValue
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , Literal r typ
+    , Literal r typ val
     , VariableSym r typ
-    , VariableValue r
-    , Comparison r
-    , NumericExpression r
-    , ControlStatement r stmt bod
-    , PrintFile r stmt
-    , List r
+    , VariableValue r val
+    , Comparison r val
+    , NumericExpression r val
+    , ControlStatement r val stmt bod
+    , PrintFile r val stmt
+    , List r val
     )
-  => VS (r Value) -> VS (r Value) -> Space -> [MS (r stmt)]
+  => VS (r val) -> VS (r val) -> Space -> [MS (r stmt)]
 writeOutputValue out = writeTop
   where
     writeTop curr (Vect inner) =

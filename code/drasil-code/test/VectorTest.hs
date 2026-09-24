@@ -16,8 +16,8 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan)
 -- | A program with one function that applies each vector operation.
 vectorTestProc
   ::
-    ( NativeVector r typ
-    , ProcProg r vis typ stmt mthd prg file mod bod block
+    ( NativeVector r typ val
+    , ProcProg r vis typ val stmt mthd prg file mod bod block
     )
   => GProc.GSProgram r prg
 vectorTestProc = GProc.prog "VectorTest" ""
@@ -28,8 +28,8 @@ vectorTestProc = GProc.prog "VectorTest" ""
 -- their dot product.
 vectorOps
   ::
-    ( NativeVector r typ
-    , ProcProg r vis typ stmt mthd prg file mod bod block
+    ( NativeVector r typ val
+    , ProcProg r vis typ val stmt mthd prg file mod bod block
     )
   => MS (r mthd)
 vectorOps =

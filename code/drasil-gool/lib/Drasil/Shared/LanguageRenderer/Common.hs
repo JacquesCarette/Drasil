@@ -11,8 +11,8 @@ import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Body, Variable, SVariable, MixedCall,
-  Value, ValueSym, TypeSym(int), VariableElim(variableName), Label, Library,
-  funcApp, getCodeType, EmptyStatement, AssignStatement, ValueExpression)
+  ValueSym, TypeSym(int), VariableElim(variableName), Label, Library, funcApp,
+  getCodeType, EmptyStatement, AssignStatement, ValueExpression)
 import Drasil.Shared.RendererClassesCommon (scopeData, call,
   RenderFunction(funcFromData), RenderVariable, RenderValue, ValueElim,
   RenderStatement, ScopeElim, InternalVarElim)
@@ -49,20 +49,25 @@ funcType ps' r' =  do
   typeFromData (Func (map getCodeType ps) (getCodeType r)) "" empty
 
 -- Python, Java, C#, Swift, and Julia --
-extFuncAppMixedArgs :: (RenderValue r typ) => Library -> MixedCall r typ
+extFuncAppMixedArgs :: (RenderValue r typ val) => Library -> MixedCall r typ val
 extFuncAppMixedArgs l = call (Just l) Nothing
 
 -- Python, C#, Swift, and Julia --
 
 listAccessFunc
-  :: (RenderFunction r typ, IC.TypeElim r typ, ValueElim r, ValueSym r typ)
-  => VS (r typ) -> VS (r Value) -> VS (r FuncData)
+  ::
+    ( RenderFunction r typ
+    , IC.TypeElim r typ
+    , ValueElim r val
+    , ValueSym r typ val
+    )
+  => VS (r typ) -> VS (r val) -> VS (r FuncData)
 listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Python, Swift, and Julia --
 
-forEach' :: (RenderStatement r stmt) => (r Variable -> r Value ->
-  r Body -> Doc) -> SVariable r -> VS (r Value) -> MS (r Body) -> MS (r stmt)
+forEach' :: (RenderStatement r stmt) => (r Variable -> r val ->
+  r Body -> Doc) -> SVariable r -> VS (r val) -> MS (r Body) -> MS (r stmt)
 forEach' f i' v' b' = do
   i <- zoom lensMStoVS i'
   v <- zoom lensMStoVS v'
@@ -74,11 +79,11 @@ forEach' f i' v' b' = do
 varDecDef
   ::
     ( EmptyStatement r stmt
-    , AssignStatement r stmt
+    , AssignStatement r val stmt
     , ScopeElim r
     , VariableElim r typ
     )
-  => SVariable r -> r ScopeData -> Maybe (VS (r Value)) -> MS (r stmt)
+  => SVariable r -> r ScopeData -> Maybe (VS (r val)) -> MS (r stmt)
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v
   modify $ useVarName (variableName v')
@@ -91,8 +96,8 @@ varDecDef v scp e = do
 -- Python and Swift --
 
 increment
-  :: (InternalVarElim r, RenderStatement r stmt, ValueElim r)
-  => SVariable r -> VS (r Value) -> MS (r stmt)
+  :: (InternalVarElim r, RenderStatement r stmt, ValueElim r val)
+  => SVariable r -> VS (r val) -> MS (r stmt)
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -102,6 +107,6 @@ increment vr' v'= do
 
 -- | Call to get the size of a list as a function call
 listSize
-  :: (TypeSym r typ, ValueExpression r typ)
-  => String -> VS (r Value) -> VS (r Value)
+  :: (TypeSym r typ, ValueExpression r typ val)
+  => String -> VS (r val) -> VS (r val)
 listSize fnName list = funcApp fnName int [list]

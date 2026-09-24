@@ -11,13 +11,13 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
 nameGenTestOO
-  :: OOProg r vis typ stmt mthd stvr attch prg file mod bod block
+  :: OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
   => OO.GSProgram r prg
 nameGenTestOO = OO.prog "NameGenTest" "" [OO.fileDoc $ OO.buildModule
   "NameGenTest" [] [main, helper] []]
 
 nameGenTestProc
-  :: (ProcProg r vis typ stmt mthd prg file mod bod block)
+  :: (ProcProg r vis typ val stmt mthd prg file mod bod block)
   => GProc.GSProgram r prg
 nameGenTestProc = GProc.prog "NameGenTest" "" [GProc.fileDoc $ GProc.buildModule
   "NameGenTest" [] [main, helper]]
@@ -27,17 +27,17 @@ helper
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , Literal r typ
+    , Literal r typ val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , Comparison r
-    , List r
-    , InternalList r block
+    , VariableValue r val
+    , Comparison r val
+    , List r val
+    , InternalList r val block
     , ParameterSym r
     , VisibilitySym r vis
-    , DeclStatement r stmt bod
-    , ControlStatement r stmt bod
+    , DeclStatement r val stmt bod
+    , ControlStatement r val stmt bod
     , MethodSym r vis typ mthd bod
     )
   => MS (r mthd)
@@ -54,15 +54,15 @@ main
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , Literal r typ
+    , Literal r typ val
     , ScopeSym r
     , VariableSym r typ
-    , VariableValue r
-    , Comparison r
-    , List r
-    , InternalList r block
-    , DeclStatement r stmt bod
-    , ControlStatement r stmt bod
+    , VariableValue r val
+    , Comparison r val
+    , List r val
+    , InternalList r val block
+    , DeclStatement r val stmt bod
+    , ControlStatement r val stmt bod
     , MethodSym r vis typ mthd bod
     )
   => MS (r mthd)

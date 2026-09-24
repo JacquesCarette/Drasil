@@ -9,10 +9,10 @@ import Control.Monad.State (get)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, HasChoices(..))
 import Language.Drasil.Choices (Logging(..))
 
-import Drasil.GOOL (Label, block, SVariable, Value, VS, MS, BodySym(..),
-  BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
-  VariableValue(..), MultiStatement(..), DeclStatement(..), FileHandling(..),
-  PrintFile(..), lensMStoVS, ScopeSym(..), VariableSym)
+import Drasil.GOOL (Label, block, SVariable, VS, MS, BodySym(..), BlockSym(..),
+  TypeSym(..), var, VariableElim(..), Literal(..), VariableValue(..),
+  MultiStatement(..), DeclStatement(..), FileHandling(..), PrintFile(..),
+  lensMStoVS, ScopeSym(..), VariableSym)
 
 -- | Generates the body of a function with the given name, list of parameters,
 -- and blocks to include in the body. If the user chose to turn on logging of
@@ -21,14 +21,14 @@ import Drasil.GOOL (Label, block, SVariable, Value, VS, MS, BodySym(..),
 logBody
   ::
     ( TypeSym r typ
-    , Literal r typ
+    , Literal r typ val
     , VariableSym r typ
-    , VariableValue r
+    , VariableValue r val
     , ScopeSym r
     , MultiStatement r stmt
-    , DeclStatement r stmt bod
-    , FileHandling r stmt
-    , PrintFile r stmt
+    , DeclStatement r val stmt bod
+    , FileHandling r val stmt
+    , PrintFile r val stmt
     , BlockSym r block stmt
     , BodySym r bod block
     , VariableElim r typ
@@ -46,14 +46,14 @@ logBody n vars b = do
 loggedMethod
   ::
     ( TypeSym r typ
-    , Literal r typ
+    , Literal r typ val
     , VariableSym r typ
-    , VariableValue r
+    , VariableValue r val
     , ScopeSym r
     , MultiStatement r stmt
-    , DeclStatement r stmt bod
-    , FileHandling r stmt
-    , PrintFile r stmt
+    , DeclStatement r val stmt bod
+    , FileHandling r val stmt
+    , PrintFile r val stmt
     , BlockSym r block stmt
     , VariableElim r typ
     )
@@ -82,5 +82,7 @@ varLogFile :: (TypeSym r typ, VariableSym r typ) => SVariable r
 varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.
-valLogFile :: (TypeSym r typ, VariableSym r typ, VariableValue r) => VS (r Value)
+valLogFile
+  :: (TypeSym r typ, VariableSym r typ, VariableValue r val)
+  => VS (r val)
 valLogFile = valueOf varLogFile

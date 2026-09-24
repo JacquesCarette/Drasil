@@ -517,7 +517,7 @@ type InOutCall r val stmt =
   -> [SVariable r]
   -> MS (r stmt)
 
-class FuncAppStatement r stmt | r -> stmt where
+class FuncAppStatement r val stmt | r -> val stmt where
   inOutCall    ::            InOutCall r val stmt
   extInOutCall :: Library -> InOutCall r val stmt
 

@@ -57,8 +57,8 @@ becquerel = derivedUnit "becquerel"
   (cn' "becquerel") "activity" (label "Bq") --of a Radionuclide
   (second ^: (-1))
 
-calorie = derUC "calorie"
-  "calorie" "energy" (label "cal") (scale 4.184 joule)
+calorie = scaledUnit "calorie"
+  (cn' "calorie") "energy" (label "cal") 4.184 joule
 
 centigrade = derUC "centigrade"
   "centigrade" "temperature" (Special Circle <> label "C")
@@ -86,15 +86,15 @@ joule = derivedUnit "joule"
 katal = derivedUnit "katal"
   (cn' "katal") "catalytic activity" (label "kat") (mole /: second)
 
-kilopascal = derUC' "kilopascal"
-  "kilopascal" "pressure"
-  (label "k" <> label "Pa") (scale 1000 pascal)
+kilopascal = scaledUnit "kilopascal"
+  (cn' "kilopascal") "pressure"
+  (label "k" <> label "Pa") 1000 pascal
 
-kilowatt = derUC' "kilowatt"
-  "kilowatt" "power" (label "k" <> label "W") (scale 1000 watt)
+kilowatt = scaledUnit "kilowatt"
+  (cn' "kilowatt") "power" (label "k" <> label "W") 1000 watt
 
-litre = derUC' "litre"
-  "litre" "volume" (label "L") (scale (1/1000) m_3)
+litre = scaledUnit "litre"
+  (cn' "litre") "volume" (label "L") 0.001 m_3
 
 lumen = derivedUnit "lumen"
   (cn' "lumen") "luminous flux" (label "lm") (candela *: steradian)
@@ -102,8 +102,8 @@ lumen = derivedUnit "lumen"
 lux = derivedUnit "lux"
   (cn "lux") "illuminance" (label "lx") (lumen /: m_2)
 
-millimetre = derUC' "millimetre"
-  "millimetre" "length" (label "mm") (scale 0.0001 metre)
+millimetre = scaledUnit "millimetre"
+  (cn' "millimetre") "length" (label "mm") 0.001 metre
 
 newton = derivedUnit "newton"
   (cn' "newton") "force" (label "N") (kilogram *$ (metre *$ (second ^: (-2))))

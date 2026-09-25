@@ -7,12 +7,12 @@ module Language.Drasil.Chunk.UnitDefn (
   -- * Chunk Type
   UnitDefn(..),
   -- * Constructors
-  baseUnit, derivedUnit, compoundUnit, compoundUnit',
-  derUC, derUC', derUC'',
+  baseUnit, derivedUnit, compoundUnit, compoundUnit', scaledUnit,
+  derUC,
   -- * Unit Combinators ('UnitEquation's)
   (^:), (/:), (*:), (*$), (/$), (^$),
   -- * Unit Relation Functions
-  scale, shift,
+  shift,
   -- * Helpers
   fromUDefn, unitCon, getCu, compUnitDefn, unitSymbol
 ) where
@@ -83,12 +83,12 @@ unitSymbol = (^. cas)
 getCu :: UnitEquation -> [UID]
 getCu = view contributingUnit
 
--- | Create a compound unit (a combination of other units without its own 
+-- | Create a compound unit (a combination of other units without its own
 -- special symbol, e.g. m/s) from a concept and a unit equation.
 compoundUnit :: ConceptChunk -> UnitEquation -> UnitDefn
 compoundUnit cc ueq = UD cc (Defined (usymb ueq)(USynonym $ usymb ueq)) (getCu ueq)
 
--- | Create a derived unit (a combination of other units that has its own 
+-- | Create a derived unit (a combination of other units that has its own
 -- special symbol, e.g. N) from a 'UID' string, term, definition, its symbol,
 -- and the unit equation it is defined by.
 -- FIXME: Shouldn't need to use the UID constructor here.
@@ -100,20 +100,19 @@ derivedUnit idStr trm dsc sym ueq =
      [selfId]
   where selfId = mkUid idStr
 
+-- | Create a derived unit from a 'UID', term ('String'), definition, 'Symbol',
+-- and a relation to another unit ('UDefn', e.g. a shift). Uses self-plural term.
+derUC :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
+derUC a b c s u = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
 
--- | Create a derived unit chunk from a 'UID', term ('String'), definition,
--- 'Symbol', and unit equation.
-derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
--- | Uses self-plural term.
-derUC  a b c s u = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
--- | Uses term that pluralizes by adding "s" to the end.
-derUC' a b c s u = UD (cncpt''' (mkUid a) (cn' b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
-
-
--- | Create a derived unit chunk from a 'UID', term ('NP'), definition,
--- 'Symbol', and unit equation.
-derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
-derUC'' a b c s u = UD (cncpt''' (mkUid a) b (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
+-- | Create a defined unit that is a scaled version of another unit
+-- (e.g. millimetre = 0.001 × metre) from a 'UID' string, term, definition,
+-- its symbol, the scaling factor, and the unit being scaled.
+scaledUnit :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
+scaledUnit idStr trm dsc sym factor base =
+  UD (cncpt''' (mkUid idStr) trm (S dsc))
+     (Defined (US [(sym, 1)]) (UScale factor (usymb base)))
+     (helperUnit base)
 
 --FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same 'String'
@@ -175,10 +174,6 @@ u1 ^$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
   UE (getCu u1 ++ getCu u2) (US $ l1 ++ l2)
 
--- | Combinator for scaling one unit by some number.
-scale :: IsUnit s => Double -> s -> UDefn
-scale a b = UScale a (usymb b)
-
 -- | Combinator for shifting one unit by some number.
 shift :: IsUnit s => Double -> s -> UDefn
 shift a b = UShift a (usymb b)
@@ -188,7 +183,6 @@ shift a b = UShift a (usymb b)
 compoundUnit' :: String -> UnitEquation -> UnitDefn
 compoundUnit' nm = compoundUnit (unitCon nm)
 
-
 -- | Create a base unit (one not defined in terms of any other unit, e.g. m, kg).
 -- FIXME: Contributing units should be empty; it currently lists itself so the
 -- Table of Units picks it up.
@@ -196,7 +190,6 @@ baseUnit :: String -> String -> Symbol -> UnitDefn
 baseUnit nm quantityKind sy =
   UD (cncpt''' baseId (cn' nm) (S quantityKind)) (BaseSI $ US [(sy, 1)]) [baseId]
   where baseId = nsUid "unit" (mkUid nm)
-
 
 -- | We don't want an Ord on units, but this still allows us to compare them.
 compUnitDefn :: UnitDefn -> UnitDefn -> Ordering

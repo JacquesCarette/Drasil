@@ -27,6 +27,12 @@ More precisely, we will focus on discussing things exposed through classy lenses
 
 ### Visualized
 
+**Legend**:
+
+1. Subgraphs (boxes) indicate that all nodes contained within share the same `UID`.
+2. Edge labels of dashed arrows describe their meaning. Meaningless without.
+3. Plain arrows mean "contains."
+
 ```mermaid
 flowchart TD
     subgraph UID_SLR ["UID: 'newtonSLR'"]
@@ -56,10 +62,10 @@ flowchart TD
     CDB[("ChunkDB")]
     TM -.->|registered| CDB
     DQD2 -.->|registered| CDB
-
-    Call["phrase newtonSLRQD"] -->|UID 'torque'| CDB
-    CDB -->|resolves| DQD2
-    DQD2 --> Out["'torque' (incorrect)"]
+    
+    Call["phrase newtonSLRQD"] -.->|Carries ref. to 'torque' UID| QD
+    Call -.->|refers to|QD
+    CDB -.->|resolves 'torque' to|DQD2
 ```
 
 ### 1. A `TheoryModel`

@@ -1,8 +1,8 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GOOL (Label, GSProgram, Body, CS, FS, MS, VS, Variable, Value,
-  CSStateVar, Class, NamedArgs, Initializers, OOProg, ProgramSym(..),
-  FileSym(..), AttachmentSym(..), BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), TypeSym(..), OOTypeSym(..), BinderSym(..), EmptyStatement(..),
+module Drasil.GOOL (Label, GSProgram, Body, CS, FS, MS, VS, Value, CSStateVar,
+  Class, NamedArgs, Initializers, OOProg, ProgramSym(..), FileSym(..),
+  AttachmentSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
+  TypeSym(..), OOTypeSym(..), BinderSym(..), EmptyStatement(..),
   MultiStatement(..), ValueStatement(..), AssignStatement(..), (&=),
   DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, PrintConsole(..), ReadConsole(..), FileHandling(..),
@@ -32,9 +32,9 @@ module Drasil.GOOL (Label, GSProgram, Body, CS, FS, MS, VS, Variable, Value,
   TypeElim(..), getTypeString
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Body, Variable, Value, NamedArgs,
-  BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  BinderSym(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+import Drasil.Shared.InterfaceCommon (Label, Body, Value, NamedArgs, BodySym(..),
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), BinderSym(..),
+  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),

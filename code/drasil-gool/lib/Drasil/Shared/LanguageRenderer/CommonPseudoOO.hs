@@ -51,7 +51,7 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
 import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd,
-  TypeData, ParamData, FuncData)
+  TypeData, FuncData)
 import Drasil.Shared.State (MS, VS, FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
@@ -90,9 +90,9 @@ int :: (Monad r) => VS (r TypeData)
 int = typeFromData Integer intRender (text intRender)
 
 constructor
-  :: (OORenderSym r vis typ val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis typ param val stmt mthd stvr attch file mod bod block)
   => Label
-  -> [MS (r ParamData)]
+  -> [MS (r param)]
   -> Initializers r val
   -> MS (r bod)
   -> MS (r mthd)
@@ -293,7 +293,7 @@ mainDesc = "Controls the flow of the program"
 argsDesc = "List of command-line arguments"
 
 docMain
-  :: (OORenderSym r vis typ val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis typ param val stmt mthd stvr attch file mod bod block)
   => MS (r bod) -> MS (r mthd)
 docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
@@ -303,8 +303,8 @@ mainFunction
      , TypeSym r TypeData
      , IC.VariableSym r TypeData
      , MethodTypeSym r TypeData
-     , OORenderMethod r vis TypeData mthd attch bod
-     , IC.ParameterSym r
+     , OORenderMethod r vis TypeData param mthd attch bod
+     , IC.ParameterSym r param
      , UnRepr r TypeData
      , Monad r
      , VisibilitySym r vis
@@ -322,7 +322,7 @@ mainFunction s n = RG.intFunc True n public classLevel (mType IC.void)
 --   cs is the classes
 buildModule'
   ::
-    ( OORenderSym r vis typ val stmt mthd stvr attch file mod bod block
+    ( OORenderSym r vis typ param val stmt mthd stvr attch file mod bod block
     , UnRepr r Doc
     )
   => Label
@@ -452,7 +452,7 @@ destructorError l = "Destructors not allowed in " ++ l
 
 stateVarDef
   ::
-    ( OORenderSym r vis typ val stmt mthd stvr attch file mod bod block
+    ( OORenderSym r vis typ param val stmt mthd stvr attch file mod bod block
     , Monad r
     )
   => r vis -> r attch -> SVariable r -> VS (r val) -> CS (r Doc)
@@ -461,7 +461,7 @@ stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.stmt $ IC.varDecDef vr IC.local vl)
 
 constVar
-  :: (CommonRenderSym r vis typ val stmt mthd bod block, Monad r)
+  :: (CommonRenderSym r vis typ param val stmt mthd bod block, Monad r)
   => Doc -> r vis -> SVariable r -> VS (r val) -> CS (r Doc)
 constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility s) p . RC.statement) (RC.stmt $ IC.constDecDef vr IC.local vl)
@@ -523,7 +523,7 @@ openFileW
 openFileW f vr vl = vr &= f vl outfile IC.litFalse
 
 stateVar
-  :: (Monad r, OORenderSym r vis typ val stmt mthd stvr attch file mod bod block)
+  :: (Monad r, OORenderSym r vis typ param val stmt mthd stvr attch file mod bod block)
   => r vis -> r attch -> SVariable r -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility s) (RG.perm p) . RC.statement) (RC.stmt $ IC.varDec v IC.local)
@@ -581,7 +581,7 @@ listDec
 listDec v scp = listDecDef v scp []
 
 funcDecDef
-  :: (OORenderSym r vis typ val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis typ param val stmt mthd stvr attch file mod bod block)
   => SVariable r -> r ScopeData -> [SVariable r] -> MS (r bod) -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
@@ -626,7 +626,7 @@ mainBody b = do
 inOutFunc
   ::
     ( IC.VariableValue r val
-    , IC.ParameterSym r
+    , IC.ParameterSym r param
     , TypeSym r typ
     , IC.ScopeSym r
     , IC.DeclStatement r val stmt bod
@@ -637,7 +637,7 @@ inOutFunc
     , RenderType r typ
     , RC.InternalControlStmt r val stmt
     )
-  => (VS (r typ) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd))
+  => (VS (r typ) -> [MS (r param)] -> MS (r bod) -> MS (r mthd))
   -> [SVariable r]
   -> [SVariable r]
   -> [SVariable r]

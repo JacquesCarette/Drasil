@@ -13,7 +13,7 @@ import Drasil.Shared.RendererClassesCommon (InternalVarElim(..),
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..))
 import Drasil.GOOL.RendererClassesOO (PermElim(..))
 import Drasil.Shared.LanguageRenderer (parameterList, new', constDec')
-import Drasil.Shared.AST (TypeData(..), ParamData)
+import Drasil.Shared.AST (TypeData(..))
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), (<>), vcat, text, lbrace, rbrace,
@@ -29,7 +29,7 @@ renderParam v = renderType (variableType v) <+> variable v
 
 renderMethod
   :: ( RC.BodyElim r bod
-     , ParamElim r typ
+     , ParamElim r typ param
      , PermElim r attch
      , UnRepr r TypeData
      , VisibilityElim r vis
@@ -38,7 +38,7 @@ renderMethod
   -> r vis
   -> r attch
   -> r TypeData
-  -> [r ParamData]
+  -> [r param]
   -> r bod
   -> Doc
 renderMethod n s p t ps b = vcat [

@@ -91,7 +91,7 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance ProcProg MatlabCode Doc TypeData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
+instance ProcProg MatlabCode Doc TypeData ParamData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
 
 instance ProgramSym MatlabCode ProgData FileData where
   prog n st files = do
@@ -99,8 +99,8 @@ instance ProgramSym MatlabCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym MatlabCode Doc TypeData Value (Doc, Terminator) MethodData Body Block
-instance ProcRenderSym MatlabCode Doc TypeData Value (Doc, Terminator) MethodData FileData ModData Body Block
+instance CommonRenderSym MatlabCode Doc TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance ProcRenderSym MatlabCode Doc TypeData ParamData Value (Doc, Terminator) MethodData FileData ModData Body Block
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
@@ -522,22 +522,22 @@ instance VisibilityElim MatlabCode Doc where
 instance MethodTypeSym MatlabCode TypeData where
   mType = zoom lensMStoVS
 
-instance ParameterSym MatlabCode where
+instance ParameterSym MatlabCode ParamData where
   -- A MATLAB parameter is just the variable name.
   param = G.param mlParam
   pointerParam = param
 
-instance RenderParam MatlabCode where
+instance RenderParam MatlabCode ParamData where
   paramFromData v' d = do
     v <- zoom lensMStoVS v'
     toState $ on2CodeValues pd v (toCode d)
 
-instance ParamElim MatlabCode TypeData where
+instance ParamElim MatlabCode TypeData ParamData where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unMLC
 
-instance MethodSym MatlabCode Doc TypeData MethodData Body where
+instance MethodSym MatlabCode Doc TypeData ParamData MethodData Body where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
@@ -558,7 +558,7 @@ instance RenderMethod MatlabCode MethodData where
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance ProcRenderMethod MatlabCode Doc TypeData MethodData Body where
+instance ProcRenderMethod MatlabCode Doc TypeData ParamData MethodData Body where
   intFunc _ n _ t ps b = do
     pms <- sequence ps
     tp  <- t
@@ -619,8 +619,9 @@ mlParam = RC.variable
 -- | Renders a MATLAB function: @function [outs] = name(ins) ... end@.
 --   With no outputs the @[outs] =@ part is dropped; with a single output the
 --   brackets are dropped (@function out = name(ins)@).
-mlFuncDoc :: (ParamElim r typ) => Label -> [Doc] ->
-  [r ParamData] -> Doc -> Doc
+mlFuncDoc
+  :: (ParamElim r typ param)
+  => Label -> [Doc] -> [r param] -> Doc -> Doc
 mlFuncDoc n outs pms bod =
   vcat [text "function" <+> (retDoc <> text n) <> parens (R.parameterList pms),
         indent bod,
@@ -805,7 +806,7 @@ mlEnd = text "end"
 mlElseIf = text "elseif"
 
 mlForEach
-  :: (CommonRenderSym r vis typ val stmt mthd bod block)
+  :: (CommonRenderSym r vis typ param val stmt mthd bod block)
   => r Variable -> r val -> r bod -> Doc
 mlForEach i lstVar b = vcat [
   text "for" <+> RC.variable i <+> equals <+> RC.value lstVar,
@@ -813,7 +814,7 @@ mlForEach i lstVar b = vcat [
   mlEnd]
 
 mlRange
-  :: (CommonRenderSym r vis typ val stmt mthd bod block)
+  :: (CommonRenderSym r vis typ param val stmt mthd bod block)
   => VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
 mlRange initv finalv stepv = do
   ini <- initv
@@ -823,7 +824,7 @@ mlRange initv finalv stepv = do
   mkVal d (RC.value ini <> text ":" <> RC.value stp <> text ":" <> RC.value fin)
 
 mlTryCatch
-  :: (CommonRenderSym r vis typ val stmt mthd bod block)
+  :: (CommonRenderSym r vis typ param val stmt mthd bod block)
   => r bod -> r bod -> Doc
 mlTryCatch tryB catchB = vcat [
   text "try",

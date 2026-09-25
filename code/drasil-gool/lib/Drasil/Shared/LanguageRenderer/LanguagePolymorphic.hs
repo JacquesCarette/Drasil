@@ -42,7 +42,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(commentedMod),
   RenderMod(updateModuleDoc))
 import qualified Drasil.GOOL.RendererClassesOO as RO
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource,
-  ScopeTag(Local), ScopeData, sd, TypeData(..), BinderD, ParamData, FuncData)
+  ScopeTag(Local), ScopeData, sd, TypeData(..), BinderD, FuncData)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getNestDegree,
   on2StateWrapped)
@@ -618,8 +618,8 @@ construct :: (Monad r) => Label -> MS (r TypeData)
 construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param
-  :: (RenderParam r, VariableElim r typ)
-  => (r Variable -> Doc) -> SVariable r -> MS (r ParamData)
+  :: (RenderParam r param, VariableElim r typ)
+  => (r Variable -> Doc) -> SVariable r -> MS (r param)
 param f v' = do
   v <- zoom lensMStoVS v'
   let n = variableName v
@@ -628,25 +628,25 @@ param f v' = do
   paramFromData v' $ f v
 
 method
-  :: (MethodTypeSym r typ, OORenderMethod r vis typ mthd attch bod)
+  :: (MethodTypeSym r typ, OORenderMethod r vis typ param mthd attch bod)
   => Label
   -> r vis
   -> r attch
   -> VS (r typ)
-  -> [MS (r ParamData)]
+  -> [MS (r param)]
   -> MS (r bod)
   -> MS (r mthd)
 method n s p t = intMethod False n s p (mType t)
 
 getMethod
-  :: (OORenderSym r vis typ val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis typ param val stmt mthd stvr attch file mod bod block)
   => SVariable r -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
 setMethod
-  :: (OORenderSym r vis typ val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis typ param val stmt mthd stvr attch file mod bod block)
   => SVariable r -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
@@ -668,9 +668,9 @@ function
   ::
     ( AttachmentSym r attch
     , MethodTypeSym r typ
-    , OORenderMethod r vis typ mthd attch bod
+    , OORenderMethod r vis typ param mthd attch bod
     )
-  => Label -> r vis -> VS (r typ) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
+  => Label -> r vis -> VS (r typ) -> [MS (r param)] -> MS (r bod) -> MS (r mthd)
 function n s t = RO.intFunc False n s classLevel (mType t)
 
 docFuncRepr

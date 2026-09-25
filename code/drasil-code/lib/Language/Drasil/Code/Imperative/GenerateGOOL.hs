@@ -37,7 +37,7 @@ import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImports
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Name
   -> Description
   -> [Import]
@@ -57,7 +57,7 @@ genModuleWithImports n desc is maybeMs maybeCs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModule
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Name
   -> Description
   -> [GenState (Maybe (MS (r mthd)))]
@@ -221,7 +221,7 @@ fAppInOut m n ins outs both = do
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImportsProc
-  :: (ProcProg r vis typ val stmt mthd prg file mod bod block)
+  :: (ProcProg r vis typ param val stmt mthd prg file mod bod block)
   => Name
   -> Description
   -> [Import]
@@ -239,7 +239,7 @@ genModuleWithImportsProc n desc is maybeMs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModuleProc
-  :: (ProcProg r vis typ val stmt mthd prg file mod bod block)
+  :: (ProcProg r vis typ param val stmt mthd prg file mod bod block)
   => Name
   -> Description
   -> [GenState (Maybe (MS (r mthd)))]

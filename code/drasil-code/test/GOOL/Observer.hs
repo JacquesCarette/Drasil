@@ -18,7 +18,7 @@ printNum = "printNum"
 
 -- | Creates the observer class.
 observer
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => FS (r file)
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
@@ -47,7 +47,7 @@ helperClass
     , VisibilitySym r vis
     , StateVarSym r vis val stvr attch
     , ClassSym r mthd stvr
-    , OOMethodSym r vis typ val mthd attch bod
+    , OOMethodSym r vis typ param val mthd attch bod
     , PrintConsole r val stmt
     , TypeSym r typ
     , Literal r typ val
@@ -66,7 +66,7 @@ observerConstructor
     ( BodySym r bod block
     , TypeSym r typ
     , VariableSym r typ
-    , OOMethodSym r vis typ val mthd attch bod
+    , OOMethodSym r vis typ param val mthd attch bod
     , Literal r typ val
     )
   => MS (r mthd)
@@ -78,7 +78,7 @@ printNumMethod
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , OOMethodSym r vis typ val mthd attch bod
+    , OOMethodSym r vis typ param val mthd attch bod
     , AttachmentSym r attch
     , VisibilitySym r vis
     , PrintConsole r val stmt

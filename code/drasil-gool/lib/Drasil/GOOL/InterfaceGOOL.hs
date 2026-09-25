@@ -38,7 +38,7 @@ import Drasil.Shared.InterfaceCommon (
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
-import Drasil.Shared.AST (ScopeData, ParamData, FuncData, ProgData)
+import Drasil.Shared.AST (ScopeData, FuncData, ProgData)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -51,9 +51,9 @@ class (UnRepr r typ, Argument r val, BodySym r bod block, BlockSym r block stmt,
   NumericExpression r val, ValueSym r typ val, InternalValueExp r typ val,
   ValueExpression r typ val, OOValueExpression r typ val, IndexTranslator r val,
   Array r val, List r val, ListStatement r val stmt, Reference r val, Set r val,
-  OOFunctionSym r typ val, ParameterSym r, ScopeSym r, BinderSym r typ,
-  InternalList r val block, MethodSym r vis typ mthd bod,
-  OOMethodSym r vis typ val mthd attch bod, AttachmentSym r attch,
+  OOFunctionSym r typ val, ParameterSym r param, ScopeSym r, BinderSym r typ,
+  InternalList r val block, MethodSym r vis typ param mthd bod,
+  OOMethodSym r vis typ param val mthd attch bod, AttachmentSym r attch,
   VisibilitySym r vis, StateVarSym r vis val stvr attch, ClassSym r mthd stvr,
   TypeElim r typ, VariableElim r typ, EmptyStatement r stmt,
   MultiStatement r stmt, ValueStatement r val stmt, CommentStatement r stmt,
@@ -63,7 +63,7 @@ class (UnRepr r typ, Argument r val, BodySym r bod block, BlockSym r block stmt,
   StringStatement r val stmt, PrintConsole r val stmt, ReadConsole r stmt,
   FileHandling r val stmt, PrintFile r val stmt, ReadFile r val stmt,
   ModuleSym r mod mthd, FileSym r file mod, ProgramSym r prg file
-  ) => OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+  ) => OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)
@@ -113,12 +113,12 @@ class ClassSym r mthd stvr | r -> mthd stvr where
 
 type Initializers r val = [(SVariable r, VS (r val))]
 
-class OOMethodSym r vis typ val mthd attch bod | r -> vis typ val mthd attch bod where
+class OOMethodSym r vis typ param val mthd attch bod | r -> vis typ param val mthd attch bod where
   method      :: Label -> r vis -> r attch -> VS (r typ) ->
-    [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
+    [MS (r param)] -> MS (r bod) -> MS (r mthd)
   getMethod   :: SVariable r -> MS (r mthd)
   setMethod   :: SVariable r -> MS (r mthd)
-  constructor :: [MS (r ParamData)] -> Initializers r val -> MS (r bod) -> MS (r mthd)
+  constructor :: [MS (r param)] -> Initializers r val -> MS (r bod) -> MS (r mthd)
 
   -- inOutMethod and docInOutMethod both need AttachmentSym
   inOutMethod :: Label -> r vis -> r attch -> InOutFunc r mthd bod
@@ -126,30 +126,30 @@ class OOMethodSym r vis typ val mthd attch bod | r -> vis typ val mthd attch bod
 
 privMethod
   ::
-    ( OOMethodSym r vis typ val mthd attch bod
+    ( OOMethodSym r vis typ param val mthd attch bod
     , AttachmentSym r attch
     , VisibilitySym r vis
     )
-  => Label -> VS (r typ) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
+  => Label -> VS (r typ) -> [MS (r param)] -> MS (r bod) -> MS (r mthd)
 privMethod n = method n private instanceLevel
 
 pubMethod
   ::
-    ( OOMethodSym r vis typ val mthd attch bod
+    ( OOMethodSym r vis typ param val mthd attch bod
     , AttachmentSym r attch
     , VisibilitySym r vis
     )
-  => Label -> VS (r typ) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
+  => Label -> VS (r typ) -> [MS (r param)] -> MS (r bod) -> MS (r mthd)
 pubMethod n = method n public instanceLevel
 
 initializer
-  :: (OOMethodSym r vis typ val mthd attch bod, BodySym r bod block)
-  => [MS (r ParamData)] -> Initializers r val -> MS (r mthd)
+  :: (OOMethodSym r vis typ param val mthd attch bod, BodySym r bod block)
+  => [MS (r param)] -> Initializers r val -> MS (r mthd)
 initializer ps is = constructor ps is (body [])
 
 nonInitConstructor
-  :: (OOMethodSym r vis val typ mthd attch bod)
-  => [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
+  :: (OOMethodSym r vis typ param val mthd attch bod)
+  => [MS (r param)] -> MS (r bod) -> MS (r mthd)
 nonInitConstructor ps = constructor ps []
 
 type StateVar = Doc

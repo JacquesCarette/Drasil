@@ -10,17 +10,16 @@ import Drasil.Shared.InterfaceCommon (Label, Block, ParameterSym, VisibilitySym,
   MethodSym)
 import qualified Drasil.GProc.InterfaceProc as IP (FileSym(..), ModuleSym)
 import Drasil.Shared.State (FS, MS)
-import Drasil.Shared.AST (ParamData)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderMethod(..))
 
-class (CommonRenderSym r vis typ val stmt mthd bod block, ParameterSym r,
-  VisibilitySym r vis, MethodSym r vis typ mthd bod, IP.ModuleSym r mod mthd,
+class (CommonRenderSym r vis typ param val stmt mthd bod block, ParameterSym r param,
+  VisibilitySym r vis, MethodSym r vis typ param mthd bod, IP.ModuleSym r mod mthd,
   IP.FileSym r file mod, RenderFile r file mod, RenderMod r mod,
-  ModuleElim r mod, RenderMethod r mthd, ProcRenderMethod r vis typ mthd bod
-  ) => ProcRenderSym r vis typ val stmt mthd file mod bod block
+  ModuleElim r mod, RenderMethod r mthd, ProcRenderMethod r vis typ param mthd bod
+  ) => ProcRenderSym r vis typ param val stmt mthd file mod bod block
 -- Procedural-Only Typeclasses --
 
 class RenderFile r file mod | r -> file mod where
@@ -41,8 +40,8 @@ class RenderMod r mod | r -> mod where
 class ModuleElim r mod | r -> mod where
   module' :: r mod -> Doc
 
-class ProcRenderMethod r vis typ mthd bod | r -> vis typ bod where
+class ProcRenderMethod r vis typ param mthd bod | r -> vis typ param bod where
   -- | Main method?, name, public/private,
   --   return type, parameters, body
   intFunc     :: Bool -> Label -> r vis -> MS (r typ) ->
-    [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
+    [MS (r param)] -> MS (r bod) -> MS (r mthd)

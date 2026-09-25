@@ -22,7 +22,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, Variable, SVariable,
   CommentStatement(..), ControlStatement(..), ParameterSym(..), BinderElim(..),
   UnRepr(..), BodySym, BlockSym)
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
-  OpData, BinderD, ParamData, FuncData)
+  OpData, BinderD, FuncData)
 import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)
@@ -38,15 +38,15 @@ class (BodySym r bod block, BlockSym r block stmt, AssignStatement r val stmt,
   InternalList r val block, VariableElim r typ, BinderElim r typ,
   RenderBlock r block, BlockElim r block, RenderBody r bod, BodyElim r bod,
   InternalListFunc r typ val, RenderFunction r typ, FunctionElim r typ, OpElim r,
-  RenderParam r, ParamElim r typ, RenderVisibility r vis, VisibilityElim r vis,
-  InternalAssignStmt r val stmt, InternalIOStmt r val stmt,
+  RenderParam r param, ParamElim r typ param, RenderVisibility r vis,
+  VisibilityElim r vis, InternalAssignStmt r val stmt, InternalIOStmt r val stmt,
   InternalControlStmt r val stmt, RenderStatement r stmt, StatementElim r stmt,
   RenderType r typ, RenderValue r typ val, ValueElim r val, RenderVariable r typ,
   InternalVarElim r, InternalBinderElim r, ImportSym r, UnaryOpSym r,
   BinaryOpSym r, BlockCommentSym r, BlockCommentElim r,
   ValueExpression r typ val, TypeSym r typ, MethodTypeSym r typ,
-  RenderMethod r mthd, MethodElim r mthd, ParameterSym r, ScopeElim r
-  ) => CommonRenderSym r vis typ val stmt mthd bod block
+  RenderMethod r mthd, MethodElim r mthd, ParameterSym r param, ScopeElim r
+  ) => CommonRenderSym r vis typ param val stmt mthd bod block
 
 -- Common Typeclasses --
 
@@ -190,13 +190,13 @@ class RenderVisibility r vis | r -> vis where
 class VisibilityElim r vis | r -> vis where
   visibility :: r vis -> Doc
 
-class RenderParam r where
-  paramFromData :: SVariable r -> Doc -> MS (r ParamData)
+class RenderParam r param | r -> param where
+  paramFromData :: SVariable r -> Doc -> MS (r param)
 
-class ParamElim r typ | r -> typ where
-  parameterName :: r ParamData -> Label
-  parameterType :: r ParamData -> r typ
-  parameter     :: r ParamData -> Doc
+class ParamElim r typ param | r -> typ param where
+  parameterName :: r param -> Label
+  parameterType :: r param -> r typ
+  parameter     :: r param -> Doc
 
 class BlockCommentSym r where
   blockComment :: [String] -> r Doc

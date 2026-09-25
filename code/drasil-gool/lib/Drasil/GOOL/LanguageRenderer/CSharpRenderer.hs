@@ -128,7 +128,7 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOProg CSharpCode Doc TypeData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
+instance OOProg CSharpCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym CSharpCode ProgData FileData where
   prog n st files = do
@@ -136,8 +136,8 @@ instance ProgramSym CSharpCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym CSharpCode Doc TypeData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CSharpCode Doc TypeData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
+instance CommonRenderSym CSharpCode Doc TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym CSharpCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
@@ -622,21 +622,21 @@ instance MethodTypeSym CSharpCode TypeData where
 instance OOMethodTypeSym CSharpCode TypeData where
   construct = G.construct
 
-instance ParameterSym CSharpCode where
+instance ParameterSym CSharpCode ParamData where
   param = G.param renderParam
   pointerParam = param
 
-instance RenderParam CSharpCode where
+instance RenderParam CSharpCode ParamData where
   paramFromData v' d = do
     v <- zoom lensMStoVS v'
     toState $ on2CodeValues pd v (toCode d)
 
-instance ParamElim CSharpCode TypeData where
+instance ParamElim CSharpCode TypeData ParamData where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCSC
 
-instance MethodSym CSharpCode Doc TypeData MethodData Body where
+instance MethodSym CSharpCode Doc TypeData ParamData MethodData Body where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string csMain
@@ -645,7 +645,7 @@ instance MethodSym CSharpCode Doc TypeData MethodData Body where
   inOutFunc n s = csInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CSharpCode Doc TypeData Value MethodData Doc Body where
+instance OOMethodSym CSharpCode Doc TypeData ParamData Value MethodData Doc Body where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -660,7 +660,7 @@ instance RenderMethod CSharpCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance OORenderMethod CSharpCode Doc TypeData MethodData Doc Body where
+instance OORenderMethod CSharpCode Doc TypeData ParamData MethodData Doc Body where
   intMethod m n s p t ps b = do
     modify (if m then setCurrMain else id)
     tp <- t

@@ -60,8 +60,8 @@ import Drasil.GOOL (Label, SVariable, Class, CSStateVar, NamedArgs, Initializers
   FileHandling(..), ReadFile(..), StringStatement(..), ControlStatement(..),
   ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
   pubDVar, privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
-  CodeType(..), onStateValue, ParamData, TypeElim, OODeclStatement, MathConstant,
-  Argument, PrintFile, BodySym, InternalValueExp)
+  CodeType(..), onStateValue, TypeElim, OODeclStatement, MathConstant, Argument,
+  PrintFile, BodySym, InternalValueExp)
 import qualified Drasil.GOOL as OO (CodeType(List, Array), Set(..), Literal)
 import Drasil.GProc (ProcProg, NativeVector(..))
 import Drasil.System (systemdb)
@@ -293,10 +293,10 @@ mkParam
     , OOVariableSym r typ val
     , VariableValue r val
     , SelfSym r
-    , ParameterSym r
+    , ParameterSym r param
     , VariableElim r typ
     )
-  => ParameterChunk -> GenState (MS (r ParamData))
+  => ParameterChunk -> GenState (MS (r param))
 mkParam p = do
   v <- mkVar (quantvar p)
   pure $ paramFunc (passBy p) v
@@ -305,7 +305,7 @@ mkParam p = do
 
 -- | Generates a public function.
 publicFunc
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> VS (r typ)
   -> Description
@@ -319,7 +319,7 @@ publicFunc n t desc ps r b = do
 
 -- | Generates a public method.
 publicMethod
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> VS (r typ)
   -> Description
@@ -332,7 +332,7 @@ publicMethod n t = do
 
 -- | Generates a private method.
 privateMethod
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> VS (r typ)
   -> Description
@@ -345,7 +345,7 @@ privateMethod n t = do
 
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFunc
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> Description
   -> [CodeVarChunk]
@@ -356,7 +356,7 @@ publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 
 -- | Generates a private method, defined by its inputs and outputs.
 privateInOutMethod
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> Description
   -> [CodeVarChunk]
@@ -368,7 +368,7 @@ privateInOutMethod n = genInOutFunc (inOutMethod n private instanceLevel)
 
 -- | Generates a constructor.
 genConstructor
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> Description
   -> [ParameterChunk]
@@ -379,7 +379,7 @@ genConstructor n desc p = do
 
 -- | Generates a constructor that includes initialization of variables.
 genInitConstructor
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> Description
   -> [ParameterChunk]
@@ -393,8 +393,8 @@ genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
 genMethod
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
-  => ([MS (r ParamData)] -> MS (r bod) -> MS (r mthd))
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  => ([MS (r param)] -> MS (r bod) -> MS (r mthd))
   -> Label
   -> Description
   -> [ParameterChunk]
@@ -729,7 +729,7 @@ elementSetBoolBfunc SContains = OO.contains
 
 -- | Converts a 'Mod' to GOOL.
 genModDef
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> GenState (FS (r file))
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
@@ -739,20 +739,20 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
 
 -- | Converts a 'Mod'\'s functions to GOOL.
 genModFuncs
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> [GenState (MS (r mthd))]
 genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
 genModClasses
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> [GenState (CS (r Class))]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
 genClass
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => (Name -> Maybe Name -> Description -> [CSStateVar r stvr] -> GenState [MS (r mthd)] -> GenState [MS (r mthd)] -> GenState (CS (r Class)))
   -> M.Class
   -> GenState (CS (r Class))
@@ -771,7 +771,7 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
 genFunc
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => (Name -> VS (r typ) -> Description -> [ParameterChunk] -> Maybe Description -> [MS (r block)] -> GenState (MS (r mthd)))
   -> [StateVariable]
   -> Func
@@ -933,7 +933,7 @@ convStmt (FAppend a b) = do
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
 genDataFunc
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => Name -> Description -> DataDesc -> GenState (MS (r mthd))
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
@@ -1273,7 +1273,7 @@ genModDefProc
     , List r val
     , Reference r val
     , OO.Set r val
-    , ProcProg r vis typ val stmt mthd prg file mod bod block
+    , ProcProg r vis typ param val stmt mthd prg file mod bod block
     , TypeElim r typ
     )
   => Mod -> GenState (FS (r file))
@@ -1284,8 +1284,8 @@ genModDefProc (Mod n desc is cs fs) = case cs of
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
 mkParamProc
-  :: (TypeSym r typ, VariableSym r typ, ParameterSym r)
-  => ParameterChunk -> GenState (MS (r ParamData))
+  :: (TypeSym r typ, VariableSym r typ, ParameterSym r param)
+  => ParameterChunk -> GenState (MS (r param))
 mkParamProc p = do
   v <- mkVarProc (quantvar p)
   pure $ paramFunc (passBy p) v
@@ -1299,7 +1299,7 @@ publicFuncProc
     , OO.Literal r typ val
     , VariableSym r typ
     , VariableValue r val
-    , ParameterSym r
+    , ParameterSym r param
     , VisibilitySym r vis
     , ScopeSym r
     , MultiStatement r stmt
@@ -1308,7 +1308,7 @@ publicFuncProc
     , PrintFile r val stmt
     , BlockSym r block stmt
     , BodySym r bod block
-    , MethodSym r vis typ mthd bod
+    , MethodSym r vis typ param mthd bod
     , VariableElim r typ
     )
   => Label
@@ -1329,7 +1329,7 @@ privateFuncProc
     , OO.Literal r typ val
     , VariableSym r typ
     , VariableValue r val
-    , ParameterSym r
+    , ParameterSym r param
     , VisibilitySym r vis
     , ScopeSym r
     , MultiStatement r stmt
@@ -1338,7 +1338,7 @@ privateFuncProc
     , PrintFile r val stmt
     , BlockSym r block stmt
     , BodySym r bod block
-    , MethodSym r vis typ mthd bod
+    , MethodSym r vis typ param mthd bod
     , VariableElim r typ
     )
   => Label
@@ -1361,7 +1361,7 @@ genMethodProc
     , OO.Literal r typ val
     , VariableSym r typ
     , VariableValue r val
-    , ParameterSym r
+    , ParameterSym r param
     , ScopeSym r
     , MultiStatement r stmt
     , DeclStatement r val stmt bod
@@ -1369,10 +1369,10 @@ genMethodProc
     , PrintFile r val stmt
     , BlockSym r block stmt
     , BodySym r bod block
-    , MethodSym r vis typ mthd bod
+    , MethodSym r vis typ param mthd bod
     , VariableElim r typ
     )
-  => ([MS (r ParamData)] -> MS (r bod) -> MS (r mthd))
+  => ([MS (r param)] -> MS (r bod) -> MS (r mthd))
   -> Label
   -> Description
   -> [ParameterChunk]
@@ -1409,7 +1409,7 @@ genFuncProc
     , ValueExpression r typ val
     , VariableSym r typ
     , VariableValue r val
-    , ParameterSym r
+    , ParameterSym r param
     , VisibilitySym r vis
     , ScopeSym r
     , MultiStatement r stmt
@@ -1426,7 +1426,7 @@ genFuncProc
     , List r val
     , ListStatement r val stmt
     , Reference r val
-    , MethodSym r vis typ mthd bod
+    , MethodSym r vis typ param mthd bod
     , OO.Set r val
     , TypeElim r typ
     , VariableElim r typ
@@ -1462,7 +1462,7 @@ genModFuncsProc
     , ValueExpression r typ val
     , VariableSym r typ
     , VariableValue r val
-    , ParameterSym r
+    , ParameterSym r param
     , VisibilitySym r vis
     , ScopeSym r
     , MultiStatement r stmt
@@ -1479,7 +1479,7 @@ genModFuncsProc
     , List r val
     , ListStatement r val stmt
     , Reference r val
-    , MethodSym r vis typ mthd bod
+    , MethodSym r vis typ param mthd bod
     , OO.Set r val
     , TypeElim r typ
     , VariableElim r typ
@@ -1929,7 +1929,7 @@ genDataFuncProc
     , ScopeSym r
     , VariableSym r typ
     , VariableValue r val
-    , ParameterSym r
+    , ParameterSym r param
     , VisibilitySym r vis
     , DeclStatement r val stmt bod
     , ControlStatement r val stmt bod
@@ -1943,7 +1943,7 @@ genDataFuncProc
     , Reference r val
     , OO.Set r val
     , MultiStatement r stmt
-    , MethodSym r vis typ mthd bod
+    , MethodSym r vis typ param mthd bod
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -1969,7 +1969,7 @@ publicInOutFuncProc
     , DeclStatement r val stmt bod
     , FileHandling r val stmt
     , PrintFile r val stmt
-    , MethodSym r vis typ mthd bod
+    , MethodSym r vis typ param mthd bod
     , VariableElim r typ
     )
   => Label
@@ -1995,7 +1995,7 @@ privateInOutFuncProc
     , DeclStatement r val stmt bod
     , FileHandling r val stmt
     , PrintFile r val stmt
-    , MethodSym r vis typ mthd bod
+    , MethodSym r vis typ param mthd bod
     , VariableElim r typ
     )
   => Label

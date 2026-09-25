@@ -316,13 +316,13 @@ lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   angVeloOutCons, orientOutCons, posOutCons :: ConstrConcept
 
 inputConstraints :: [UncertQ]
-inputConstraints = fmap (`uq` defaultUncrt)
-  [lengthCons, massCons, mmntOfInCons, gravAccelCons, orientCons,
+inputConstraints = (`uq` defaultUncrt)
+  <$> [lengthCons, massCons, mmntOfInCons, gravAccelCons, orientCons,
   veloCons, angVeloCons, forceCons, torqueCons, restCoefCons, posCons]
 
 outputConstraints :: [UncertQ]
-outputConstraints = fmap (`uq` defaultUncrt)
-  [posOutCons, veloOutCons, orientOutCons, angVeloOutCons]
+outputConstraints = (`uq` defaultUncrt)
+  <$> [posOutCons, veloOutCons, orientOutCons, angVeloOutCons]
 
 lengthCons     = constrained' QPP.len               [gtZeroConstr] (dbl 44.2)
 massCons       = constrained' QPP.mass              [gtZeroConstr] (dbl 56.2)

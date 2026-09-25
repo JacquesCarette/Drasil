@@ -123,8 +123,8 @@ instance HasContents  UnlabelledContent where accessContents = cntnts
 
 -- | Access the 'RawContent' within 'Contents'.
 instance HasContents Contents where
-  accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
-  accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)
+  accessContents f (UlC c) = UlC . (\x -> set cntnts x c) <$> f (c ^. cntnts)
+  accessContents f (LlC c) = LlC . (\x -> set ctype x c) <$> f (c ^. ctype)
 
 -- | Finds the reference information of 'LabelledContent'.
 instance Referable LabelledContent where

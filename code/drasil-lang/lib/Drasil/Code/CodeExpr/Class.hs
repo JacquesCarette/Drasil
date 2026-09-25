@@ -38,8 +38,8 @@ class CodeExprC r where
 instance CodeExprC CodeExpr where
   new c ps = New (c ^. uid) ps []
 
-  newWithNamedArgs c ps ns = New (c ^. uid) ps (zip (fmap ((^. uid) . fst) ns)
-    (fmap snd ns))
+  newWithNamedArgs c ps ns = New (c ^. uid) ps (zip ((^. uid) . fst <$> ns)
+    (snd <$> ns))
 
   msg o m ps = checkObj (o ^. typ)
     where checkObj (Actor _) = Message (o ^. uid) (m ^. uid) ps []
@@ -48,7 +48,7 @@ instance CodeExprC CodeExpr where
 
   msgWithNamedArgs o m ps as = checkObj (o ^. typ)
     where checkObj (Actor _) = Message (o ^. uid) (m ^. uid) ps
-            (zip (fmap ((^. uid) . fst) as) (fmap snd as))
+            (zip ((^. uid) . fst <$> as) (snd <$> as))
           checkObj _ = error $ "Invalid actor message: Actor should have " <>
             "Actor space"
 
@@ -59,5 +59,5 @@ instance CodeExprC CodeExpr where
 
   -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
   applyWithNamedArgs f [] [] = sy f
-  applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (fmap ((^. uid) . fst) ns)
-    (fmap snd ns))
+  applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip ((^. uid) . fst <$> ns)
+    (snd <$> ns))

@@ -40,7 +40,7 @@ hFromtQD = mkQuantDef minThick hFromtEq
 
 hFromt :: DataDefinition
 hFromt = ddE hFromtQD [dRef astm2009] Nothing "minThick"
-  [hMin, S "nominal thickness t is in" +:+ eS (mkSet Rational (fmap dbl nominalThicknesses)) ]
+  [hMin, S "nominal thickness t is in" +:+ eS (mkSet Rational (dbl <$> nominalThicknesses)) ]
 
 -- ** Load Duration Factor
 
@@ -55,7 +55,7 @@ loadDFDD = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
   [stdVals [loadDur, sflawParamM], ldfConst]
 
 glaTyFacEq :: Expr
-glaTyFacEq = incompleteCase (zipWith glaTyFacHelper glassTypeFactors $ fmap (abrv . snd) glassType)
+glaTyFacEq = incompleteCase (zipWith glaTyFacHelper glassTypeFactors $ abrv . snd <$> glassType)
 
 glaTyFacHelper :: Integer -> String -> (Expr, Relation)
 glaTyFacHelper result condition = (int result, sy glassTypeCon $= str condition)
@@ -148,7 +148,7 @@ hRef   = definedIn' hFromt (S "and is based on the nominal thicknesses")
 
 --- Helper
 stdVals :: Quantity s => [s] -> Sentence
-stdVals s = foldlList Comma List (fmap ch s) +:+ sent +:+. refS assumpSV
+stdVals s = foldlList Comma List (ch <$> s) +:+ sent +:+. refS assumpSV
   where sent = case s of [ ]   -> error "stdVals needs quantities"
                          [_]   -> S "comes from"
                          (_:_) -> S "come from"

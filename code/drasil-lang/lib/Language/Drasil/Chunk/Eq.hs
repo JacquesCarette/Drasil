@@ -73,7 +73,7 @@ instance Express e => Express (QDefinition e) where
     where
       f = case q ^. inputs of
         [] -> defines (sy q)
-        is -> defines $ apply q (fmap M.C is)
+        is -> defines $ apply q (M.C <$> is)
         -- FIXME: The fact that we have to manually use `C` here is because our
         -- UID references don't carry enough information. This feels hacky at
         -- the moment, and should eventually be fixed.
@@ -84,7 +84,7 @@ instance RequiresChecking (QDefinition Expr) Expr Space where
   -- "normal" way does not work for Functions because it leaves function input
   -- parameters left unchecked. It's probably preferred to be doing type
   -- checking at time of chunk creation rather than here, really.
-  requiredChecks q = pure (apply (q ^. qua) (fmap E.C (q ^. inputs)) $= (q ^. expr), Boolean)
+  requiredChecks q = pure (apply (q ^. qua) (E.C <$> (q ^. inputs)) $= (q ^. expr), Boolean)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.
@@ -150,7 +150,7 @@ mkFuncDef0 :: (IsChunk f, HasSymbol f, HasSpace f,
 mkFuncDef0 f n s u is = QD
   (f ^. uid)
   (quantAU (f ^. uid) n s Nothing (symbol f) (f ^. typ) u)
-  (fmap (^. uid) is)
+  ((^. uid) <$> is)
 
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs,
 -- resultant units, and a defining Expr

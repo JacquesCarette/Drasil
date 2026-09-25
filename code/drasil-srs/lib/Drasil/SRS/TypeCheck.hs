@@ -22,7 +22,7 @@ typeCheckSI sys = do
         dds = sys ^. dataDefns
         qts = sys ^. quantities
     -- build a variable context (a map of UIDs to "Space"s [types])
-    let cxt = M.fromList $ fmap (\x -> (x ^. uid, x ^. typ)) qts
+    let cxt = M.fromList $ (\x -> (x ^. uid, x ^. typ)) <$> qts
 
     -- dump out the list of variables (commented out for now)
     -- putStr "Symbol Table: "
@@ -46,7 +46,7 @@ typeCheckSI sys = do
       notChkd
 
     -- type check them
-    let chkdd = fmap (second (fmap (uncurry (check cxt)))) chkd
+    let chkdd = second (fmap (uncurry (check cxt))) <$> chkd
 
     -- format 'ok' messages and 'type error' messages, as applicable
     let formattedChkd :: [Either (String, [Either TypeError Space]) ()]

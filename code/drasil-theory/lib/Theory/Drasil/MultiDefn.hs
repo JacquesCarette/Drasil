@@ -76,7 +76,7 @@ instance RequiresChecking (MultiDefn Expr) Expr Space where
 -- | The complete Relation of a MultiDefn is defined as the quantity and the
 --   related expressions being equal (e.g., `q $= a $= b $= ... $= z`)
 instance Express e => Express (MultiDefn e) where
-  express q = equiv $ sy q : NE.toList (fmap (express . (^. expr)) (q ^. rvs))
+  express q = equiv $ sy q : NE.toList (express . (^. expr) <$> (q ^. rvs))
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment.
 mkMultiDefn :: UID -> DefinedQuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e

@@ -78,7 +78,7 @@ allExampleSI = [
   SWHS.si]
 
 allExampleProjNames :: [ProjectName]
-allExampleProjNames = fmap (^. projectName) allExampleSI
+allExampleProjNames = (^. projectName) <$> allExampleSI
 
 -- To developer: Fill this list in when more examples can run code. The list
 -- needs to be of this form since projectile comes with a list of choice combos.
@@ -100,11 +100,11 @@ examples = allExamples allExampleSI allExampleChoices
 
 -- | Create the full list of examples.
 fullExList :: FilePath -> FilePath -> RawContent
-fullExList codePth srsDoxPth = Enumeration $ Bullet $ fmap (, Nothing) (allExampleList $ examples codePth srsDoxPth)
+fullExList codePth srsDoxPth = Enumeration $ Bullet $ (, Nothing) <$> allExampleList (examples codePth srsDoxPth)
 
 -- | Create each example point and call 'individualExList' to do the rest.
 allExampleList :: [Example] -> [ItemType]
-allExampleList = fmap (\x -> Nested (nameAndDesc x) $ Bullet $ fmap (, Nothing) (individualExList x))
+allExampleList = fmap (\x -> Nested (nameAndDesc x) $ Bullet $ (, Nothing) <$> individualExList x)
   where
     nameAndDesc E{systemE = si} = S (si ^. projAbrv) +:+ S "- To" +:+ foldlSent (si ^. purpose)
 
@@ -123,8 +123,8 @@ individualExList ex@E{codePath = srsP} =
   +:+ namedRef (getSRSRef srsP TeX ex) (S "[PDF]")
   +:+ namedRef (getSRSRef srsP MDBook ex) (S "[mdBook]")
   +:+ namedRef (getSRSRef srsP Jupyter ex) (S "[Jupyter (HTML)]"),
-  Nested (S generatedCodeTitle) $ Bullet $ fmap (, Nothing) (versionList getCodeRef ex),
-  Nested (S generatedCodeDocsTitle) $ Bullet $ fmap (, Nothing) (versionList getDoxRef noSwiftJlEx)]
+  Nested (S generatedCodeTitle) $ Bullet $ (, Nothing) <$> versionList getCodeRef ex,
+  Nested (S generatedCodeDocsTitle) $ Bullet $ (, Nothing) <$> versionList getDoxRef noSwiftJlEx]
     where
       -- For now, swift does not generate any references using doxygen, so we pretend it doesn't exist in the doxygen list
       noSwiftJlEx = ex {choicesE = (\x -> x {lang = filter
@@ -138,7 +138,7 @@ versionList _ E{choicesE = []} = [] -- If the choices are empty, then we don't d
                                     -- match (this case should be caught in the function that calls this one),
                                     -- but it is here just to be extra careful.
 versionList getRef ex@E{choicesE = chcs} =
-  fmap versionItem chcs
+  versionItem <$> chcs
   where
     -- Version item displays version name and appends the languages of generated code below.
     versionItem chc = Flat $ S (verHRName chc) +:+ foldlSent_ (makeLangRef chc <$> lang chc)

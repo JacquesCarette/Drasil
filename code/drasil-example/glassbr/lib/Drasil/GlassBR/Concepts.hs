@@ -178,7 +178,7 @@ specDeLoad    = cncpt''' (mkUid "specDeLoad")    (nounPhraseSP "specified design
   (S "the magnitude in Pa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority")
 
 glassTypeAbbrs :: [Sentence]
-glassTypeAbbrs = fmap short [annealedGl, fTemperedGl, hStrengthGl]
+glassTypeAbbrs = short <$> [annealedGl, fTemperedGl, hStrengthGl]
 
 annealed, fullyT, heatS :: CI
 annealed      = commonIdea (mkUid "annealed")      (nounPhraseSP "annealed")                "AN"       [glass]

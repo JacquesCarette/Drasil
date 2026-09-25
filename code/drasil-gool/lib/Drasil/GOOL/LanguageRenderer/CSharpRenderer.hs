@@ -734,9 +734,9 @@ csFuncType :: [VS (CSharpCode TypeData)] -> VS (CSharpCode TypeData) -> VS (CSha
 csFuncType ps r = do
   pts <- sequence ps
   rt <- r
-  typeFromData (Func (fmap getCodeType pts) (getCodeType rt))
-    (csFunc `containing` intercalate listSep (fmap getTypeString $ pts P.<> [rt]))
-    (text csFunc <> angles (hicat listSep' $ fmap renderType $ pts P.<> [rt]))
+  typeFromData (Func (getCodeType <$> pts) (getCodeType rt))
+    (csFunc `containing` intercalate listSep (getTypeString <$> pts P.<> [rt]))
+    (text csFunc <> angles (hicat listSep' $ renderType <$> pts P.<> [rt]))
 
 csForEach, csNamedArgSep, csLambdaSep :: Doc
 csForEach = text "foreach"
@@ -852,7 +852,7 @@ csFuncDecDef v scp ps bod = do
   modify $ useVarName $ variableName vr
   modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
-  t <- zoom lensMStoVS $ funcType (fmap (pure . variableType) pms)
+  t <- zoom lensMStoVS $ funcType (pure . variableType <$> pms)
     (pure $ variableType vr)
   b <- bod
   modify (addLangImport csSystem)
@@ -941,11 +941,11 @@ csInOut
   -> [VS (CSharpCode Variable)]
   -> MS (CSharpCode Body)
   -> MS (CSharpCode mthd)
-csInOut f ins [v] [] b = f (onStateValue variableType v) (fmap param ins)
+csInOut f ins [v] [] b = f (onStateValue variableType v) (param <$> ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
   valueOf v))
 csInOut f ins [] [v] b = f (onStateValue variableType v)
-  (fmap param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b
+  (param <$> v : ins) (on2StateValues (on2CodeValues appendToBody) b
   (returnStmt $ valueOf v))
 csInOut f ins outs both b = f void (fmap (onStateValue (onCodeValue
   (updateParam csRef)) . param) both P.<> fmap param ins P.<> fmap (onStateValue

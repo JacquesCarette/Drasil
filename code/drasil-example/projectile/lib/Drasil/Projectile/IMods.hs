@@ -42,7 +42,7 @@ timeQD :: SimpleQDef
 timeQD = mkQuantDef flightDur E.flightDur'
 
 timeDeriv :: Derivation
-timeDeriv = mkDerivName (phrase flightDur) (weave timeDerivSents $ fmap eS timeDerivEqns)
+timeDeriv = mkDerivName (phrase flightDur) (weave timeDerivSents $ eS <$> timeDerivEqns)
 
 timeDerivSents :: [Sentence]
 timeDerivSents = [timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4, timeDerivSent5]
@@ -81,7 +81,7 @@ landPosQD :: SimpleQDef
 landPosQD = mkQuantDef landPos E.landPosExpr
 
 landPosDeriv :: Derivation
-landPosDeriv = mkDerivName (phrase landPos) (weave landPosDerivSents $ fmap eS landPosDerivEqns)
+landPosDeriv = mkDerivName (phrase landPos) (weave landPosDerivSents $ eS <$> landPosDerivEqns)
 
 landPosDerivSents :: [Sentence]
 landPosDerivSents = [landPosDerivSent1, landPosDerivSent2, landPosDerivSent3, landPosDerivSent4]

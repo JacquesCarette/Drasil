@@ -133,7 +133,7 @@ instance Monad JavaCode where
 instance OOProg JavaCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym JavaCode ProgData FileData where
-  prog n st fs = modifyReturnList (fmap (zoom lensGStoFS) fs) (revFiles .
+  prog n st fs = modifyReturnList (zoom lensGStoFS <$> fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . fmap (R.package n
     endStatement)))
 
@@ -695,7 +695,7 @@ instance OORenderMethod JavaCode Doc TypeData ParamData MethodData Doc Body wher
     let excs = unJC . toConcreteExc <$> maybe es (nub . (++ es))
           (Map.lookup (qualName mn n) mem)
     modify ((if m then setCurrMain else id) . addExceptionImports excs)
-    pure $ toCode $ mthd n $ jMethod n (fmap exc excs) s p tp pms bd
+    pure $ toCode $ mthd n $ jMethod n (exc <$> excs) s p tp pms bd
   intFunc = intMethod
   destructor _ = error $ CP.destructorError jName
 
@@ -1091,21 +1091,21 @@ jInOut
   -> [VS (JavaCode Variable)]
   -> MS (JavaCode Body)
   -> MS (JavaCode mthd)
-jInOut f ins [] [] b = f void (fmap param ins) b
-jInOut f ins [v] [] b = f (onStateValue variableType v) (fmap param ins)
+jInOut f ins [] [] b = f void (param <$> ins) b
+jInOut f ins [v] [] b = f (onStateValue variableType v) (param <$> ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
   valueOf v))
 jInOut f ins [] [v] b = f (onStateValue variableType v)
-  (fmap param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b
+  (param <$> v : ins) (on2StateValues (on2CodeValues appendToBody) b
   (returnStmt $ valueOf v))
 jInOut f ins outs both b = f (returnTp rets)
-  (fmap param $ both P.<> ins) (on3StateValues (on3CodeValues surroundBody) decls
+  (param <$> both P.<> ins) (on3StateValues (on3CodeValues surroundBody) decls
   b (returnSt rets))
   where returnTp [x] = onStateValue variableType x
         returnTp _ = jArrayType
         returnSt [x] = returnStmt $ valueOf x
         returnSt _ = multi (arrayDec (toInteger $ length rets) undefined outputs local
-          : assignArray 0 (fmap valueOf rets)
+          : assignArray 0 (valueOf <$> rets)
           P.<> [returnStmt (valueOf outputs)])
         assignArray
           :: Integer
@@ -1115,7 +1115,7 @@ jInOut f ins outs both b = f (returnTp rets)
         assignArray c (v:vs) =
           (arrayElem (valueOf outputs) (litInt c) &= v)
           : assignArray (c+1) vs
-        decls = multi $ fmap (`varDec` local) outs
+        decls = multi $ (`varDec` local) <$> outs
         rets = both P.<> outs
 
 jDocInOut
@@ -1127,14 +1127,14 @@ jDocInOut
   -> [(String, VS (r Variable))]
   -> MS (r Body)
   -> MS (r mthd)
-jDocInOut f desc is [] [] b = docFuncRepr functionDox desc (fmap fst is) []
-  (f (fmap snd is) [] [] b)
-jDocInOut f desc is [o] [] b = docFuncRepr functionDox desc (fmap fst is)
-  [fst o] (f (fmap snd is) [snd o] [] b)
-jDocInOut f desc is [] [both] b = docFuncRepr functionDox desc (fmap fst (both :
-  is)) [fst both] (f (fmap snd is) [] [snd both] b)
-jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (fmap fst $ bs P.<> is)
-  rets (f (fmap snd is) (fmap snd os) (fmap snd bs) b)
+jDocInOut f desc is [] [] b = docFuncRepr functionDox desc (fst <$> is) []
+  (f (snd <$> is) [] [] b)
+jDocInOut f desc is [o] [] b = docFuncRepr functionDox desc (fst <$> is)
+  [fst o] (f (snd <$> is) [snd o] [] b)
+jDocInOut f desc is [] [both] b = docFuncRepr functionDox desc (fst <$> (both :
+  is)) [fst both] (f (snd <$> is) [] [snd both] b)
+jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (fst <$> bs P.<> is)
+  rets (f (snd <$> is) (snd <$> os) (snd <$> bs) b)
   where rets = "array containing the following values:" : fmap fst bs P.<>
           fmap fst os
 

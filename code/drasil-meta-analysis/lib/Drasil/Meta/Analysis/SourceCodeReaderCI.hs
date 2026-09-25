@@ -42,10 +42,10 @@ extractEntryData fileName filePath = do
         | "=>" `isSuffixOf` line = "=> " <> rScriptFileLines !! (num + 1)
         | otherwise = gL (num + 1) (rScriptFileLines !! (num + 1))
 
-  let dataNames = fmap (takeWhile (/=' ') . (\\ "data ")) dataTypes
-      newtypeNames = fmap (takeWhile (/=' ') . (\\ "newtype ")) newtypeTypes
-      ordClassNames = fmap getClassName allClasslines
-      stripInstances = fmap getStripInstance definInstances
+  let dataNames = takeWhile (/=' ') . (\\ "data ") <$> dataTypes
+      newtypeNames = takeWhile (/=' ') . (\\ "newtype ") <$> newtypeTypes
+      ordClassNames = getClassName <$> allClasslines
+      stripInstances = getStripInstance <$> definInstances
 
   pure EntryData {dNs=dataNames,ntNs=newtypeNames,cNs=ordClassNames,cITs=stripInstances}
 

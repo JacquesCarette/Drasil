@@ -17,7 +17,7 @@ data Plurality = Sing | Plu
 
 -- | Helper to create default `Sentence`s for empty sections using `NamedIdea`s
 emptySectSent :: NamedIdea n => Plurality -> [n] -> Sentence
-emptySectSent p n = foldlSent [verb p (S "There") (S "no"), foldlList Comma Options (fmap (f p) n)]
+emptySectSent p n = foldlSent [verb p (S "There") (S "no"), foldlList Comma Options (f p <$> n)]
     where
         verb Sing = is
         verb Plu  = are

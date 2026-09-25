@@ -197,7 +197,7 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", D.toSent $ phraseNP (p
    `andThe` system)), S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = fmap foldlSent [[S "Provide initial", D.toSent $ pluralNP (condition `ofThePS`
+sysCtxUsrResp = foldlSent <$> [[S "Provide initial", D.toSent $ pluralNP (condition `ofThePS`
   physical), S "state" `S.ofThe` phrase motion `S.andThe` plural inDatum, S "related" `S.toThe`
   projTitleS projName `sC` S "ensuring no errors" `S.inThe` plural datum, S "entry"],
   [S "Ensure that consistent units" `S.are` S "used for",
@@ -207,19 +207,19 @@ sysCtxUsrResp = fmap foldlSent [[S "Provide initial", D.toSent $ pluralNP (condi
   phrase problem, phrase input_ `S.toThe` phrase software]]
 
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = fmap foldlSent [[S "Detect data type mismatch" `sC` S "such as a string of characters",
+sysCtxSysResp = foldlSent <$> [[S "Detect data type mismatch" `sC` S "such as a string of characters",
   phrase input_, S "instead of a floating point number"],
   [S "Determine if the", plural input_, S "satisfy the required",
   D.toSent $ pluralNP (physical `and_` softwareConstraint)],
   [S "Calculate the required", plural output_]]
 
 sysCtxResp :: [Sentence]
-sysCtxResp = fmap (\x -> x +:+ S "Responsibilities")
-  [titleize user, projAbrvS projName]
+sysCtxResp = (\x -> x +:+ S "Responsibilities")
+  <$> [titleize user, projAbrvS projName]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  fmap bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp, sysCtxSysResp]
 
 -------------------------
 --User Characteristics --
@@ -250,8 +250,8 @@ terms = [launcher, projectile, target, gravity, cartesian, rectilinear]
 ---------------------------------
 
 physSystParts :: [Sentence]
-physSystParts = fmap (!.)
-  [D.toSent $ atStartNP (the launcher),
+physSystParts = (!.)
+  <$> [D.toSent $ atStartNP (the launcher),
   D.toSent (atStartNP (the projectile)) +:+ sParen (S "with" +:+ getTandS iVel `S.and_` getTandS launAngle),
   D.toSent $ atStartNP (the target)]
 
@@ -269,7 +269,7 @@ constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst]
 
 unitalQuants :: [DefinedQuantityDict]
-unitalQuants = fmap dqdWr constrained
+unitalQuants = dqdWr <$> constrained
 
 inConstraints :: [UncertQ]
 inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]

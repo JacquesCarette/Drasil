@@ -43,7 +43,7 @@ scipyODE :: ExternalLibrary
 scipyODE = externalLib [
   mandatoryStep $ callStep $ libFunctionWithResult scipyImport
     odefunc [
-      functionArg f (fmap unnamedParam [Real, Array Real])
+      functionArg f (unnamedParam <$> [Real, Array Real])
       returnExprList] r,
   choiceStep [
     setIntegratorMethod [vode, methodArg "adams", atol, rtol],
@@ -58,11 +58,11 @@ scipyODE = externalLib [
 scipyCall :: ODEInfo -> ExternalLibraryCall
 scipyCall info = externalLibCall [
   mandatoryStepFill $ callStepFill $ libCallFill [functionArgFill
-    (fmap unnamedParamFill [indepVar info, depVar info])
+    (unnamedParamFill <$> [indepVar info, depVar info])
     (returnExprListFill $ odeSyst info)],
   uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
-  mandatoryStepsFill [callStepFill $ libCallFill $ fmap basicArgFill
-      [matrix [initVal info], tInit info],
+  mandatoryStepsFill [callStepFill $ libCallFill $ basicArgFill
+      <$> [matrix [initVal info], tInit info],
     initSolListWithValFill (solListVar info False) (matrix [initVal info]),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info)
     (libCallFill [basicArgFill (field r t $+ stepSize (odeOpts info))])
@@ -70,8 +70,8 @@ scipyCall info = externalLibCall [
   where chooseMethod Adams = (0, solveMethodFill)
         chooseMethod BDF = (1, solveMethodFill)
         chooseMethod RK45 = (2, solveMethodFill)
-        solveMethodFill = callStepFill $ libCallFill $ fmap basicArgFill
-          [absTol $ odeOpts info, relTol $ odeOpts info]
+        solveMethodFill = callStepFill $ libCallFill $ basicArgFill
+          <$> [absTol $ odeOpts info, relTol $ odeOpts info]
 
 scipyImport :: String
 scipyImport = "scipy.integrate"
@@ -182,10 +182,10 @@ oslo :: ExternalLibrary
 oslo = externalLib [
   mandatoryStep $ callStep $ libConstructor osloImport
     vector [inlineArg Real] initv,
-  choiceStep $ fmap (\s -> callStep $ libFunctionWithResult osloImport s odeArgs
-    sol) [rk547m, gearBDF],
+  choiceStep $ (\s -> callStep $ libFunctionWithResult osloImport s odeArgs
+    sol) <$> [rk547m, gearBDF],
   mandatorySteps (callStep (libMethodWithResult osloImport sol
-      solveFromToStep (fmap inlineArg [Real, Real, Real]) points) :
+      solveFromToStep (inlineArg <$> [Real, Real, Real]) points) :
     populateSolListOslo points sp x xTemp osloIdx)]
 
 osloCall :: ODEInfo -> ExternalLibraryCall
@@ -193,12 +193,12 @@ osloCall info = externalLibCall [
   mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ matrix [initVal info]],
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $
     libCallFill [basicArgFill $ tInit info,
-      functionArgFill (fmap unnamedParamFill [indepVar info, vecDepVar info]) $
-        callStepFill $ libCallFill $ fmap userDefinedArgFill (modifiedODESyst "arrayvec" info),
+      functionArgFill (unnamedParamFill <$> [indepVar info, vecDepVar info]) $
+        callStepFill $ libCallFill $ userDefinedArgFill <$> modifiedODESyst "arrayvec" info,
       recordArgFill [absTol $ odeOpts info, relTol $ odeOpts info]],
   mandatoryStepsFill [
-    callStepFill (libCallFill $ fmap basicArgFill
-      [tInit info, tFinal info, stepSize $ odeOpts info]),
+    callStepFill (libCallFill $ basicArgFill
+      <$> [tInit info, tFinal info, stepSize $ odeOpts info]),
     StatementF [solListVar info False] [],
     StatementF [solListVar info False] [int $ toInteger $ length $ initVal info]
     ]]
@@ -208,7 +208,7 @@ osloCall info = externalLibCall [
 
 odeArgs :: [Argument]
 odeArgs = [inlineArg Real, lockedArg (sy initv),
-  functionArg fOslo (fmap unnamedParam [Real, vecT])
+  functionArg fOslo (unnamedParam <$> [Real, vecT])
     (callStep $ constructAndReturn osloImport vector []),
   recordArg osloImport options opts [aTol, rTol]]
 
@@ -351,10 +351,10 @@ apacheODE = externalLib [
         stepHandler stepHandlerCtor (implementation sh [
           methodInfoNoReturn initMethod
             "initializes step handler with initial conditions"
-            (fmap lockedParam [t0, y0, t]) [initSolListFromArrayJava y0 y0List y0El],
+            (lockedParam <$> [t0, y0, t]) [initSolListFromArrayJava y0 y0List y0El],
           methodInfoNoReturn handleStep
             "appends solution point at each ODE solution step"
-            (fmap lockedParam [interpolator, isLast])
+            (lockedParam <$> [interpolator, isLast])
             [callStep $ libMethodWithResult siImp interpolator getInterpState
               [] curr,
             appendCurrSolFromArrayJava (sy curr) currList currEl]])],
@@ -374,7 +374,7 @@ apacheODE = externalLib [
 apacheODECall :: ODEInfo -> ExternalLibraryCall
 apacheODECall info = externalLibCall [
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $
-    libCallFill (fmap (basicArgFill . ($ odeOpts info)) [stepSize, stepSize, absTol, relTol]),
+    libCallFill (basicArgFill . ($ odeOpts info) <$> [stepSize, stepSize, absTol, relTol]),
   mandatoryStepsFill [callStepFill $ libCallFill [
       customObjArgFill [pubStateVar $ solListVar info False] (implementationFill [
         methodInfoFill [] [initSolListFromArrayFill $ solListVar info False], methodInfoFill []
@@ -385,7 +385,7 @@ apacheODECall info = externalLibCall [
         constructorInfoFill (userDefinedParamFill <$> otherVars info)
           (zip (otherVars info) (sy <$> otherVars info)) [],
         methodInfoFill [] [fixedStatementFill' $ int $ toInteger $ length $ initVal info],
-        methodInfoFill (fmap (unnamedParamFill . listToArray) [depVar info, ddep])
+        methodInfoFill (unnamedParamFill . listToArray <$> [depVar info, ddep])
           [assignArrayIndexFill (listToArray ddep) (modifiedODESyst "array" info)]])
       : fmap basicArgFill [tInit info, matrix [initVal info], tFinal info,
         matrix [initVal info]],
@@ -396,7 +396,7 @@ apacheODECall info = externalLibCall [
         ddep = diffCodeChunk $ depVar info
 
 itArgs :: [Argument]
-itArgs = fmap inlineArg [Real, Real, Real, Real]
+itArgs = inlineArg <$> [Real, Real, Real, Real]
 
 apacheImport, adams, dp54, foi, foiImp, sampling, sh, shImp, si, siImp, fode :: String
 apacheImport = "org.apache.commons.math3.ode."
@@ -575,8 +575,8 @@ odeintCall info = externalLibCall [
       (customClassFill [constructorInfoFill [unnamedParamFill $ solListVar info False]
          [(solListVar info True, UnaryOp MakeRef (sy $ solListVar info False))] [],
          methodInfoFill [] [appendCurrSolFill $ solListVar info True]])]]
-  where chooseMethod RK45 = (0, fmap (callStepFill . libCallFill . fmap
-          basicArgFill) [[], [absTol $ odeOpts info, relTol $ odeOpts info]])
+  where chooseMethod RK45 = (0, callStepFill . libCallFill . fmap
+          basicArgFill <$> [[], [absTol $ odeOpts info, relTol $ odeOpts info]])
         chooseMethod Adams = (1, [callStepFill $ libCallFill []])
         chooseMethod _ = error odeMethodUnavailable
         ddep = diffCodeChunk $ depVar info
@@ -715,20 +715,20 @@ diffCodeChunk c = quantvar $ implVarAU' (c +++ "d" )
 -- So we need a way to switch the dependent variable from list to array,
 -- and the array version must have a distinct UID so it can be stored in the DB.
 modifiedODESyst :: String -> ODEInfo -> [CodeExpr]
-modifiedODESyst sufx info = fmap replaceDepVar (odeSyst info)
+modifiedODESyst sufx info = replaceDepVar <$> odeSyst info
   where
     replaceDepVar cc@(C c) | c == depVar info ^. uid = C $ depVar info +++ ("_" <> sufx)
                            | otherwise               = cc
-    replaceDepVar (AssocA a es)           = AssocA a (fmap replaceDepVar es)
-    replaceDepVar (AssocB b es)           = AssocB b (fmap replaceDepVar es)
-    replaceDepVar (FCall u es nes)        = FCall u (fmap replaceDepVar es)
-      (fmap (over _2 replaceDepVar) nes)
-    replaceDepVar (New u es nes)          = New u (fmap replaceDepVar es)
-      (fmap (over _2 replaceDepVar) nes)
-    replaceDepVar (Message au mu es nes)  = Message au mu (fmap replaceDepVar es)
-      (fmap (over _2 replaceDepVar) nes)
-    replaceDepVar (Case c cs)             = Case c (fmap (over _1 replaceDepVar) cs)
-    replaceDepVar (Matrix es)             = Matrix $ fmap (fmap replaceDepVar) es
+    replaceDepVar (AssocA a es)           = AssocA a (replaceDepVar <$> es)
+    replaceDepVar (AssocB b es)           = AssocB b (replaceDepVar <$> es)
+    replaceDepVar (FCall u es nes)        = FCall u (replaceDepVar <$> es)
+      (over _2 replaceDepVar <$> nes)
+    replaceDepVar (New u es nes)          = New u (replaceDepVar <$> es)
+      (over _2 replaceDepVar <$> nes)
+    replaceDepVar (Message au mu es nes)  = Message au mu (replaceDepVar <$> es)
+      (over _2 replaceDepVar <$> nes)
+    replaceDepVar (Case c cs)             = Case c (over _1 replaceDepVar <$> cs)
+    replaceDepVar (Matrix es)             = Matrix $ fmap replaceDepVar <$> es
     replaceDepVar (UnaryOp u e)           = UnaryOp u $ replaceDepVar e
     replaceDepVar (UnaryOpB u e)          = UnaryOpB u $ replaceDepVar e
     replaceDepVar (UnaryOpVV u e)         = UnaryOpVV u $ replaceDepVar e
@@ -757,7 +757,7 @@ modifiedODESyst sufx info = fmap replaceDepVar (odeSyst info)
 odeInfoChunks :: ODEInfo -> [DefinedQuantityDict]
 odeInfoChunks info =
   let dv = depVar info
-  in fmap dqdWr [ listToArray dv
+  in dqdWr <$> [ listToArray dv
                , arrayVecDepVar info
                , diffCodeChunk dv
                , listToArray $ diffCodeChunk dv

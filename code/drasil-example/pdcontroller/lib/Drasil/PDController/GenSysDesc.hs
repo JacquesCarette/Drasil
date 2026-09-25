@@ -52,7 +52,7 @@ gsdSysContextList
   = UlC $
       ulcc $
         Enumeration $
-          bulletNested gsdTitle $ fmap bulletFlat [gsdUsrResp, gsdSysResp]
+          bulletNested gsdTitle $ bulletFlat <$> [gsdUsrResp, gsdSysResp]
 
 gsduserCharacteristics :: Contents
 gsduserCharacteristics

@@ -42,7 +42,7 @@ makeProject sm (Document titleLb authorName _ sections) =
 
 -- | Helper function for creating sections as Files.
 createFiles :: PrintingInformation -> [Section] -> [T.File]
-createFiles sm secs = fmap (file sm) secs'
+createFiles sm secs = file sm <$> secs'
   where
     secs' = concatMap (extractSubS 0) secs
 
@@ -66,7 +66,7 @@ createRefMap fn (T.List t)           = pass t
     process  = concatMap (\(_, l)    -> foldMap (createRef fn) l)
     process' = concatMap (\(_, _, l) -> foldMap (createRef fn) l)
 createRefMap fn (T.Figure l _ _ _)   = createRef fn l
-createRefMap fn (T.Bib ls)           = fmap bibRefs ls
+createRefMap fn (T.Bib ls)           = bibRefs <$> ls
   where
     bibRefs (P.Cite l _ _) = (l, fn)
 createRefMap _ _                     = []
@@ -132,7 +132,7 @@ layLabelled sm x@(LblC _ _ (Figure c f wp hc))  = T.Figure
   (if hc == WithCaption then Just (spec sm c) else Nothing)
   f wp
 layLabelled sm x@(LblC _ _ (Graph ps w h t))    = T.Graph
-  (fmap (bimap (spec sm) (spec sm)) ps) w h (spec sm t)
+  (bimap (spec sm) (spec sm) <$> ps) w h (spec sm t)
   (P.S $ getAdd $ getRefAdd x)
 layLabelled sm x@(LblC _ _ (Defini pairs)) =
   T.Definition (layPairs pairs) (P.S $ getAdd $ getRefAdd x)
@@ -155,21 +155,21 @@ layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
 layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp hc)  = T.Figure (P.S "nolabel2")
   (if hc == WithCaption then Just (spec sm c) else Nothing) f wp
-layUnlabelled sm (Graph ps w h t) = T.Graph (fmap (bimap (spec sm) (spec sm)) ps)
+layUnlabelled sm (Graph ps w h t) = T.Graph (bimap (spec sm) (spec sm) <$> ps)
                                w h (spec sm t) (P.S "nolabel6")
 layUnlabelled sm (Defini pairs)  = T.Definition (layPairs pairs) (P.S "nolabel7")
   where layPairs = fmap (second (fmap temp))
         temp  y   = layUnlabelled sm (y ^. accessContents)
-layUnlabelled  _ (Bib bib)              = T.Bib $ fmap layCite bib
+layUnlabelled  _ (Bib bib)              = T.Bib $ layCite <$> bib
 layUnlabelled sm (CodeBlock c)     = T.CodeBlock (P.E (codeExpr sm (expr c)))
 
 -- | Translates lists to be printable.
 makeL :: PrintingInformation -> ListType -> P.ListType
-makeL sm (Bullet bs)      = P.Unordered   $ fmap (bimap (item sm) (fmap P.S)) bs
-makeL sm (Numeric ns)     = P.Ordered     $ fmap (bimap (item sm) (fmap P.S)) ns
-makeL sm (Simple ps)      = P.Simple      $ fmap (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
-makeL sm (Desc ps)        = P.Desc        $ fmap (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
-makeL sm (Definitions ps) = P.Definitions $ fmap (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
+makeL sm (Bullet bs)      = P.Unordered   $ bimap (item sm) (fmap P.S) <$> bs
+makeL sm (Numeric ns)     = P.Ordered     $ bimap (item sm) (fmap P.S) <$> ns
+makeL sm (Simple ps)      = P.Simple      $ (\(x,y,z) -> (spec sm x, item sm y, P.S <$> z)) <$> ps
+makeL sm (Desc ps)        = P.Desc        $ (\(x,y,z) -> (spec sm x, item sm y, P.S <$> z)) <$> ps
+makeL sm (Definitions ps) = P.Definitions $ (\(x,y,z) -> (spec sm x, item sm y, P.S <$> z)) <$> ps
 
 -- | Helper for translating list items to be printable.
 item :: PrintingInformation -> ItemType -> P.ItemType

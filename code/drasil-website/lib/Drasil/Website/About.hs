@@ -49,8 +49,8 @@ aboutParagraph3 :: Sentence
 aboutParagraph3 = S "The following is a list of artifacts that Drasil currently generates:"
 
 currentlyGeneratedArtifacts :: Contents
-currentlyGeneratedArtifacts = enumBulletU $ fmap foldlSent_
-  [[S "SRS"],
+currentlyGeneratedArtifacts = enumBulletU $ foldlSent_
+  <$> [[S "SRS"],
   [S "code"],
   [S "README"],
   [S "Makefile"]]
@@ -60,8 +60,8 @@ aboutParagraph4 :: Sentence
 aboutParagraph4 = S "We hope to generate the following artifacts in the future:"
 
 futureGeneratedArtifacts :: Contents
-futureGeneratedArtifacts = enumBulletU $ fmap foldlSent_
-  [[S "License"],
+futureGeneratedArtifacts = enumBulletU $ foldlSent_
+  <$> [[S "License"],
   [S "Installation Instructions"],
   [S "Dependency List"],
   [S "Authors"],

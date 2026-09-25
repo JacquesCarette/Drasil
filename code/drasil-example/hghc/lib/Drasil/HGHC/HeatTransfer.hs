@@ -24,7 +24,7 @@ htVars = cladThick :| [coolFilmCond, gapFilmCond, cladCond]
 
 htInputs, htOutputs :: NE.NonEmpty DefinedQuantityDict
 htInputs = htVars
-htOutputs = fmap dqdWr qDefs
+htOutputs = dqdWr <$> qDefs
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: DefinedQuantityDict
 cladThick    = quantNoUnit (mkUid "cladThick")    (cn''' "clad thickness")

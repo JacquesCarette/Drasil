@@ -119,8 +119,8 @@ mkDocDesc sys = fmap sec where
   sec (IntroSec i) = DL.IntroSec i
   sec (StkhldrSec s) = DL.StkhldrSec s
   sec (GSDSec g) = DL.GSDSec g
-  sec (SSDSec (SSDProg s)) = DL.SSDSec $ DL.SSDProg $ fmap ssdSec s
-  sec (ReqrmntSec (ReqsProg r)) = DL.ReqrmntSec $ DL.ReqsProg $ fmap reqSec r
+  sec (SSDSec (SSDProg s)) = DL.SSDSec $ DL.SSDProg $ ssdSec <$> s
+  sec (ReqrmntSec (ReqsProg r)) = DL.ReqrmntSec $ DL.ReqsProg $ reqSec <$> r
   sec LCsSec = DL.LCsSec $ DL.LCsProg $ fromConcInsDB likeChgDom
   sec UCsSec = DL.UCsSec $ DL.UCsProg $ fromConcInsDB unlikeChgDom
   sec (TraceabilitySec t) = DL.TraceabilitySec t
@@ -134,8 +134,8 @@ mkDocDesc sys = fmap sec where
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
 
   ssdSec :: SSDSub -> DL.SSDSub
-  ssdSec (SSDProblem (PDProg s ls p)) = DL.SSDProblem $ DL.PDProg s ls $ fmap pdSub p
-  ssdSec (SSDSolChSpec (SCSProg scs)) = DL.SSDSolChSpec $ DL.SCSProg $ fmap scsSub scs
+  ssdSec (SSDProblem (PDProg s ls p)) = DL.SSDProblem $ DL.PDProg s ls $ pdSub <$> p
+  ssdSec (SSDSolChSpec (SCSProg scs)) = DL.SSDSolChSpec $ DL.SCSProg $ scsSub <$> scs
 
   pdSub :: PDSub -> DL.PDSub
   pdSub (TermsAndDefs s c) = DL.TermsAndDefs s c

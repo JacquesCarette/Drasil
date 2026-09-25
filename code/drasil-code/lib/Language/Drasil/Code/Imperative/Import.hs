@@ -524,10 +524,10 @@ convExpr (Field o f) = do
       fld = quantvar (lookupC g f)
   v <- mkVar (ccObjVar ob fld)
   pure $ valueOf v
-convExpr (UnaryOp o u)    = fmap (unop o) (convExpr u)
-convExpr (UnaryOpB o u)   = fmap (unopB o) (convExpr u)
-convExpr (UnaryOpVV o u)  = fmap (unopVV o) (convExpr u)
-convExpr (UnaryOpVN o u)  = fmap (unopVN o) (convExpr u)
+convExpr (UnaryOp o u)    = unop o <$> convExpr u
+convExpr (UnaryOpB o u)   = unopB o <$> convExpr u
+convExpr (UnaryOpVV o u)  = unopVV o <$> convExpr u
+convExpr (UnaryOpVN o u)  = unopVN o <$> convExpr u
 convExpr (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
@@ -552,7 +552,7 @@ convExpr (Case c l)            = doit l -- FIXME this is sub-optimal
 convExpr (Matrix [l]) = do
   ar <- mapM convExpr l
                                     -- hd will never fail here
-  pure $ litArray (fmap valueType (head ar)) ar
+  pure $ litArray (valueType <$> head ar) ar
 convExpr Matrix{} = error "convExpr: Matrix"
 convExpr (S.Set s l) = do
   ar <- mapM convExpr l
@@ -731,8 +731,8 @@ elementSetBoolBfunc SContains = OO.contains
 genModDef
   :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> GenState (FS (r file))
-genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (fmap (fmap
-  Just . genFunc publicFunc []) fs)
+genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (fmap
+  Just . genFunc publicFunc [] <$> fs)
   (case cs of [] -> []
               (cl:cls) -> fmap Just (genClass primaryClass cl) :
                 fmap (fmap Just . genClass auxClass) cls)
@@ -741,13 +741,13 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (fmap (fmap
 genModFuncs
   :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> [GenState (MS (r mthd))]
-genModFuncs (Mod _ _ _ _ fs) = fmap (genFunc publicFunc []) fs
+genModFuncs (Mod _ _ _ _ fs) = genFunc publicFunc [] <$> fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
 genModClasses
   :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> [GenState (CS (r Class))]
-genModClasses (Mod _ _ _ cs _) = fmap (genClass auxClass) cs
+genModClasses (Mod _ _ _ cs _) = genClass auxClass <$> cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
@@ -760,8 +760,8 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
                                                  svar Priv = privDVar
   in do
   modify (\st -> st {currentScope = Local})
-  svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) .
-                convTypeOO) (codeType v)) svs
+  svrs <- mapM (\(SV s v) -> svar s . var (codeName v) .
+                convTypeOO <$> codeType v) svs
   f n i desc svrs (mapM (genFunc publicMethod svs) cs)
                   (mapM (genFunc publicMethod svs) ms)
 
@@ -783,18 +783,18 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   vars <- mapM mkVar (fstdecl (g ^. systemdb) s
     \\ (fmap quantvar parms <> fmap stVar svs))
   t <- spaceCodeType o
-  f n (convTypeOO t) desc parms rd [block $ fmap (`varDec` local) vars, block stmts]
+  f n (convTypeOO t) desc parms rd [block $ (`varDec` local) <$> vars, block stmts]
 genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   inits <- mapM (convExpr . snd) i
-  initvars <- mapM ((\iv -> fmap (var (codeName iv) . convTypeOO)
-    (codeType iv)) . fst) i
+  initvars <- mapM ((\iv -> var (codeName iv) . convTypeOO
+    <$> codeType iv) . fst) i
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (g ^. systemdb) s
     \\ (fmap quantvar parms <> fmap stVar svs))
   genInitConstructor n desc parms (zip initvars inits)
-    [block $ fmap (`varDec` local) vars, block stmts]
+    [block $ (`varDec` local) <$> vars, block stmts]
 genFunc _ _ (FData (FuncData n desc ddef)) = do
   modify (\st -> st {currentScope = Local})
   genDataFunc n desc ddef
@@ -842,7 +842,7 @@ convStmt (FAsg v (Matrix [es])) = do
   let listFunc (OO.List _) = litList
       listFunc (OO.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
-  pure $ assign v' (listFunc t (innerType $ fmap variableType v') els)
+  pure $ assign v' (listFunc t (innerType $ variableType <$> v') els)
 convStmt (FAsg v e) = do
   e' <- convExpr e
   v' <- mkVar v
@@ -896,7 +896,7 @@ convStmt (FDecDef v (Matrix [[]])) = do
   let convDec (OO.List _) = listDec 0 vari
       convDec (OO.Array _) = arrayDec 0 undefined vari
       convDec _ = varDec vari
-  fmap (`convDec` scp) (codeType v)
+  (`convDec` scp) <$> codeType v
 convStmt (FDecDef v e) = do
   g <- get
   let scp = convScope $ currentScope g
@@ -938,7 +938,7 @@ genDataFunc
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readData ddef
-  publicFunc nameTitle void desc (fmap pcAuto $ quantvar inFileName : parms)
+  publicFunc nameTitle void desc (pcAuto <$> quantvar inFileName : parms)
     Nothing bod
 
 -- this is really ugly!!
@@ -1068,7 +1068,7 @@ readData ddef = do
             )
           => Maybe String -> [DataItem] -> r scope -> [GenState (MS (r stmt))]
         clearTemps Nothing    _  _   = []
-        clearTemps (Just sfx) es scp = fmap (\v -> clearTemp sfx v scp) es
+        clearTemps (Just sfx) es scp = (\v -> clearTemp sfx v scp) <$> es
         ---------------
         clearTemp
           ::
@@ -1080,8 +1080,8 @@ readData ddef = do
             , OODeclStatement r scope val stmt
             )
           => String -> DataItem -> r scope -> GenState (MS (r stmt))
-        clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v <> sfx)
-          (innerType $ convTypeOO t)) scp []) (codeType v)
+        clearTemp sfx v scp = (\t -> listDecDef (var (codeName v <> sfx)
+          (innerType $ convTypeOO t)) scp []) <$> codeType v
         ---------------
         appendTemps
           ::
@@ -1093,7 +1093,7 @@ readData ddef = do
             )
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
-        appendTemps (Just sfx) es = fmap (appendTemp sfx) es
+        appendTemps (Just sfx) es = appendTemp sfx <$> es
         ---------------
         appendTemp
           ::
@@ -1104,9 +1104,9 @@ readData ddef = do
             , OOTypeSym r typ
             )
           => String -> DataItem -> GenState (MS (r stmt))
-        appendTemp sfx v = fmap (\t -> listAppend
+        appendTemp sfx v = (\t -> listAppend
           (valueOf $ var (codeName v) (convTypeOO t))
-          (valueOf $ var (codeName v <> sfx) (convTypeOO t))) (codeType v)
+          (valueOf $ var (codeName v <> sfx) (convTypeOO t))) <$> codeType v
 
 -- | Get entry variables.
 getEntryVars
@@ -1282,7 +1282,7 @@ genModDefProc
   => Mod -> GenState (FS (r file))
 genModDefProc (Mod n desc is cs fs) = case cs of
   [] -> genModuleWithImportsProc n desc is
-          (fmap (fmap Just . genFuncProc publicFuncProc []) fs)
+          (fmap Just . genFuncProc publicFuncProc [] <$> fs)
   _  -> error "genModDefProc: Procedural renderers do not support classes"
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
@@ -1445,7 +1445,7 @@ genFuncProc f svs (FDef (FuncDef n desc parms o rd s)) = do
   vars <- mapM mkVarProc (fstdecl (g ^. systemdb) s
     \\ (fmap quantvar parms <> fmap stVar svs))
   t <- spaceCodeType o
-  f n (convType t) desc parms rd [block $ fmap (`varDec` local) vars, block stmts]
+  f n (convType t) desc parms rd [block $ (`varDec` local) <$> vars, block stmts]
 genFuncProc _ _ (FDef (CtorDef {})) = error "genFuncProc: Procedural renderers do not support constructors"
 genFuncProc _ _ (FData (FuncData n desc ddef)) = genDataFuncProc n desc ddef
 
@@ -1488,7 +1488,7 @@ genModFuncsProc
     , VariableElim r typ
     )
   => Mod -> [GenState (MS (r mthd))]
-genModFuncsProc (Mod _ _ _ _ fs) = fmap (genFuncProc publicFuncProc []) fs
+genModFuncsProc (Mod _ _ _ _ fs) = genFuncProc publicFuncProc [] <$> fs
 
 -- this is really ugly!!
 -- | Read from a data description into an 'MS block' of 'MS Statement's.
@@ -1601,7 +1601,7 @@ readDataProc ddef = do
             )
           => Maybe String -> [DataItem] -> r scope -> [GenState (MS (r stmt))]
         clearTemps Nothing    _  _   = []
-        clearTemps (Just sfx) es scp = fmap (\v -> clearTemp sfx v scp) es
+        clearTemps (Just sfx) es scp = (\v -> clearTemp sfx v scp) <$> es
         ---------------
         clearTemp
           ::
@@ -1611,8 +1611,8 @@ readDataProc ddef = do
             , DeclStatement r scope val stmt bod
             )
           => String -> DataItem -> r scope -> GenState (MS (r stmt))
-        clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v <> sfx)
-          (innerType $ convType t)) scp []) (codeType v)
+        clearTemp sfx v scp = (\t -> listDecDef (var (codeName v <> sfx)
+          (innerType $ convType t)) scp []) <$> codeType v
         ---------------
         appendTemps
           ::
@@ -1623,7 +1623,7 @@ readDataProc ddef = do
             )
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
-        appendTemps (Just sfx) es = fmap (appendTemp sfx) es
+        appendTemps (Just sfx) es = appendTemp sfx <$> es
         ---------------
         appendTemp
           ::
@@ -1633,9 +1633,9 @@ readDataProc ddef = do
             , VariableValue r val
             )
           => String -> DataItem -> GenState (MS (r stmt))
-        appendTemp sfx v = fmap (\t -> listAppend
+        appendTemp sfx v = (\t -> listAppend
           (valueOf $ var (codeName v) (convType t))
-          (valueOf $ var (codeName v <> sfx) (convType t))) (codeType v)
+          (valueOf $ var (codeName v <> sfx) (convType t))) <$> codeType v
 
 -- | Get entry variables.
 getEntryVarsProc
@@ -1694,11 +1694,11 @@ convExprProc (FCall c x ns) = convCallProc c x ns fAppProc libFuncAppMixedArgs
 convExprProc (New {}) = error "convExprProc: Procedural renderers do not support object creation"
 convExprProc (Message {}) = error "convExprProc: Procedural renderers do not support methods"
 convExprProc (Field _ _) = error "convExprProc: Procedural renderers do not support object field access"
-convExprProc (UnaryOp o u)    = fmap (unop o) (convExprProc u)
-convExprProc (UnaryOpB o u)   = fmap (unopB o) (convExprProc u)
-convExprProc (UnaryOpVV NegV u) = fmap (vecScale (litDouble (-1))) (convExprProc u)
-convExprProc (UnaryOpVN Dim u)  = fmap listSize (convExprProc u)
-convExprProc (UnaryOpVN Norm u) = fmap vecMag (convExprProc u)
+convExprProc (UnaryOp o u)    = unop o <$> convExprProc u
+convExprProc (UnaryOpB o u)   = unopB o <$> convExprProc u
+convExprProc (UnaryOpVV NegV u) = vecScale (litDouble (-1)) <$> convExprProc u
+convExprProc (UnaryOpVN Dim u)  = listSize <$> convExprProc u
+convExprProc (UnaryOpVN Norm u) = vecMag <$> convExprProc u
 convExprProc (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
@@ -1725,7 +1725,7 @@ convExprProc (Case c l)            = doit l -- FIXME this is sub-optimal
 convExprProc (Matrix [l]) = do
   ar <- mapM convExprProc l
                                     -- hd will never fail here
-  pure $ litArray (fmap valueType (head ar)) ar
+  pure $ litArray (valueType <$> head ar) ar
 convExprProc Matrix{} = error "convExprProc: Matrix"
 convExprProc (S.Set s l) = do
   ar <- mapM convExprProc l
@@ -1825,7 +1825,7 @@ convStmtProc (FAsg v (Matrix [es])) = do
   let listFunc (OO.List _) = litList
       listFunc (OO.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
-  pure $ assign v' (listFunc t (innerType $ fmap variableType v')
+  pure $ assign v' (listFunc t (innerType $ variableType <$> v')
     els)
 convStmtProc (FAsg v e) = do
   e' <- convExprProc e
@@ -1880,7 +1880,7 @@ convStmtProc (FDecDef v (Matrix [[]])) = do
   let convDec (OO.List _) = listDec 0 vari
       convDec (OO.Array _) = arrayDec 0 undefined vari
       convDec _ = varDec vari
-  fmap (`convDec` scp) (codeType v)
+  (`convDec` scp) <$> codeType v
 convStmtProc (FDecDef v e) = do
   g <- get
   let scp = convScope $ currentScope g
@@ -1954,7 +1954,7 @@ genDataFuncProc
 genDataFuncProc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readDataProc ddef
-  publicFuncProc nameTitle void desc (fmap pcAuto $ quantvar inFileName : parms)
+  publicFuncProc nameTitle void desc (pcAuto <$> quantvar inFileName : parms)
     Nothing bod
 
 -- | Generates a public function, defined by its inputs and outputs.

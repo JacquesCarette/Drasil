@@ -95,7 +95,7 @@ mkDoc si srsDecl headingComb =
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
       heading = titleize srs `headingComb` projTitleS (si ^. projectName)
-      authorsList = foldlList Comma List $ fmap (S . fullName) $ si ^. authors
+      authorsList = foldlList Comma List $ S . fullName <$> si ^. authors
       toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl
       sections' = mkSections si' dd' (Just refdCites)
@@ -143,14 +143,14 @@ buildTraceMaps sd si
 
 -- | Helper for creating the different document sections.
 mkSections :: SmithEtAlSRS -> DocDesc -> Maybe BibRef -> [Section]
-mkSections si dd mbib = fmap (either renderRefSec id) partialRender
+mkSections si dd mbib = either renderRefSec id <$> partialRender
   where
     delayRenderRefSec :: DocSection -> Either RefSec Section
     delayRenderRefSec (RefSec rs) = Left rs
     delayRenderRefSec x           = Right (render x)
 
     partialRender :: [Either RefSec Section]
-    partialRender = fmap delayRenderRefSec dd
+    partialRender = delayRenderRefSec <$> dd
 
     nonRefSecs :: [Section]
     nonRefSecs = rights partialRender
@@ -179,7 +179,7 @@ mkSections si dd mbib = fmap (either renderRefSec id) partialRender
 
 -- | Helper for making the Table of Contents section.
 mkToC :: DocDesc -> Section
-mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ fmap ((, Nothing) . toToC) dd] []
+mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ (, Nothing) . toToC <$> dd] []
   where
     intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
 
@@ -188,7 +188,7 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ fmap ((, Noth
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
 mkRefSec :: SmithEtAlSRS -> DocDesc -> RefSec -> [Section] -> Section
-mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (fmap mkSubRef l)
+mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (mkSubRef <$> l)
   where
     projNameUID = si ^. projName . uid
     db = si ^. systemdb
@@ -221,11 +221,11 @@ collectDocumentAbbreviations rms renderedSecs cdb =
     foundInDoc = concatMap (Set.toList . shortdep) $ concatMap getSec renderedSecs
     -- Terms that could not be found in `Sentence`s, but are important to
     -- include in the table of abbreviations and acronyms.
-    missingFromDocHACK = fmap (^. uid) [assumption, dataDefn, genDefn, goalStmt,
+    missingFromDocHACK = (^. uid) <$> [assumption, dataDefn, genDefn, goalStmt,
       inModel, requirement, thModel, refName, refBy]
     -- Filter out the system name and duplicates
     filtered = nub (foundInDoc <> missingFromDocHACK) \\ rms
-    allTerms = fmap (termResolve' cdb) filtered
+    allTerms = termResolve' cdb <$> filtered
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
@@ -249,7 +249,7 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 -- | Makes the Introduction section into a 'Section'.
 mkIntroSec :: SmithEtAlSRS -> IntroSec -> Section
 mkIntroSec si (IntroProg probIntro extraInfo l) =
-  Intro.introductionSection probIntro si extraInfo l $ fmap mkSubIntro l
+  Intro.introductionSection probIntro si extraInfo l $ mkSubIntro <$> l
   where
     im = SRS.inModel [] []
     mkSubIntro :: IntroSub -> Section
@@ -264,7 +264,7 @@ mkIntroSec si (IntroProg probIntro extraInfo l) =
 
 -- | Helper for making the Stakeholders section.
 mkStkhldrSec :: ProjectName -> StkhldrSec -> Section
-mkStkhldrSec progN (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ fmap mkSubs l
+mkStkhldrSec progN (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ mkSubs <$> l
   where
     mkSubs :: StkhldrSub -> Section
     mkSubs (Client details) = Stk.tClientF progN details
@@ -274,7 +274,7 @@ mkStkhldrSec progN (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ fm
 
 -- | Helper for making the General System Description section.
 mkGSDSec :: GSDSec -> Section
-mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ fmap mkSubs l
+mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ mkSubs <$> l
    where
      mkSubs :: GSDSub -> Section
      mkSubs (SysCntxt cs)            = GSD.sysContxt cs
@@ -286,7 +286,7 @@ mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ fmap mkSubs l
 -- | Helper for making the Specific System Description section.
 mkSSDSec :: SmithEtAlSRS -> SSDSec -> Section
 mkSSDSec si (SSDProg l) =
-  SSD.specSysDescr $ fmap (mkSubSSD si) l
+  SSD.specSysDescr $ mkSubSSD si <$> l
   where
     mkSubSSD :: SmithEtAlSRS -> SSDSub -> Section
     mkSubSSD sysi (SSDProblem pd)    = mkSSDProb sysi pd
@@ -303,7 +303,7 @@ mkSSDProb si (PDProg prob subSec subPD) = SSD.probDescF prob (subSec <> fmap mkS
 mkSolChSpec :: SmithEtAlSRS -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
   SRS.solCharSpec [SSD.solutionCharSpecIntro (si ^. projName) SSD.imStub] $
-    fmap (mkSubSCS si) l
+    mkSubSCS si <$> l
   where
     mkSubSCS :: SmithEtAlSRS -> SCSSub -> Section
     mkSubSCS si' (TMs intro fields ts) =
@@ -325,7 +325,7 @@ mkSolChSpec si (SCSProg l) =
       SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub $ fmap mkParagraph intro <>
       fmap (LlC . instanceModel fields si') ims
     mkSubSCS si' (Assumptions ci) =
-      SSD.assumpF $ mkEnumSimpleD $ fmap (`SSD.helperCI` si') ci
+      SSD.assumpF $ mkEnumSimpleD $ (`SSD.helperCI` si') <$> ci
     mkSubSCS _ (Constraints end cs)  = SSD.datConF end cs
     mkSubSCS _ (CorrSolnPpties c cs) = SSD.propCorSolF c cs
 
@@ -333,7 +333,7 @@ mkSolChSpec si (SCSProg l) =
 
 -- | Helper for making the Requirements section.
 mkReqrmntSec :: ReqrmntSec -> Section
-mkReqrmntSec (ReqsProg l) = R.reqF $ fmap mkSubs l
+mkReqrmntSec (ReqsProg l) = R.reqF $ mkSubs <$> l
   where
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub  frs tbs) = R.fReqF (mkEnumSimpleD frs <> fmap LlC tbs)
@@ -362,11 +362,11 @@ introChgs xs _ = foldlSP [S "This", phrase section_, S "lists the",
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SmithEtAlSRS -> Section
 mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
-  (fmap (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
-  (fmap LlC trace) []
+  ((\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) <$> fProgs)
+  (LlC <$> trace) []
   where
-    trace = fmap (\(TraceConfig u _ desc cols rows) ->
-      TM.generateTraceTableView u desc cols rows si) fProgs
+    trace = (\(TraceConfig u _ desc cols rows) ->
+      TM.generateTraceTableView u desc cols rows si) <$> fProgs
     notNull xs = not (null (header (TM.layoutUIDs xs si) si))
     fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
       notNull rows && notNull cols) progs

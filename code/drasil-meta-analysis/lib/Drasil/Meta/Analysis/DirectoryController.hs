@@ -38,8 +38,8 @@ iterator folder = do
   rawContents <- listDirectory (folderName folder)
 
   let bakedContents = (folders,files)
-      folders = fmap (createFolder workingDirectory currentDrasilPack) folderNames
-      files = fmap (createFile workingDirectory currentDrasilPack) fileNames
+      folders = createFolder workingDirectory currentDrasilPack <$> folderNames
+      files = createFile workingDirectory currentDrasilPack <$> fileNames
 
       folderNames = sort $ rawContents \\ filter (isInfixOf ".") rawContents
       fileNames = sort $ filter (isSuffixOf ".hs") rawContents
@@ -71,7 +71,7 @@ getDirectories directoryPath filterPrefix = do
   allPaths <- listDirectory directoryPath
   -- raw drasil- package directories + package names
   let rawPackages = sort $ filter (isPrefixOf filterPrefix) allPaths
-      packageNames = fmap (\\"drasil-") rawPackages
+      packageNames = (\\"drasil-") <$> rawPackages
   -- convert list of directories into folder data types
       directories = zipWith (createFolder directoryPath) packageNames rawPackages
   pure directories
@@ -79,7 +79,7 @@ getDirectories directoryPath filterPrefix = do
 -- verifies that each folder/directory exists
 verifyDirectories :: [Folder] -> IO [Folder]
 verifyDirectories rawFolders = do
-  let rawDirectories = fmap getFolderPath rawFolders
+  let rawDirectories = getFolderPath <$> rawFolders
   boolFolders <- mapM doesDirectoryExist rawDirectories
   let verifiedDirectories = snd $ partition nullFolder (zipWith fBool boolFolders rawFolders)
   pure verifiedDirectories

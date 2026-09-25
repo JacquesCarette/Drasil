@@ -55,10 +55,10 @@ foldlList s f lst    = foldle1 (sep s) (\a b -> end f (sep s a EmptyS) b) lst
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
 foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (enumList e w $ length lst) lst
   where
-    enumList enum wt len = fmap (wrap wt . S) (take len (chList enum))
-    chList Numb  = fmap show ([1..] :: [Integer])
-    chList Upper = fmap show ['A'..'Z']
-    chList Lower = fmap show ['a'..'z']
+    enumList enum wt len = wrap wt . S <$> take len (chList enum)
+    chList Numb  = show <$> ([1..] :: [Integer])
+    chList Upper = show <$> ['A'..'Z']
+    chList Lower = show <$> ['a'..'z']
     wrap Parens x = sParen x
     wrap Period x = x :+: S "."
 
@@ -74,7 +74,7 @@ sep SemiCol = \a b -> a :+: S ";" +:+ b
 
 -- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and 13").
 foldNums :: String -> [Int] -> Sentence
-foldNums s x = foldlList Comma List $ fmap S (numList s x)
+foldNums s x = foldlList Comma List $ S <$> numList s x
 
 -- | Parses a list of integers into a list of strings (ie. ["1", "4-7", "13"]).
 numList :: String -> [Int] -> [String]
@@ -82,7 +82,7 @@ numList _ []  = error "Empty list used with foldNums"
 numList _ [y] = [show y]
 numList s [y, z]
   | z == y + 1 = [rangeSep y z s]
-  | otherwise  = fmap show [y, z]
+  | otherwise  = show <$> [y, z]
 numList s (y:z:xs)
   | z == y + 1 = range y z xs
   | otherwise  = show y : numList s (z:xs)

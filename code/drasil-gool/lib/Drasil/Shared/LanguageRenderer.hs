@@ -345,7 +345,7 @@ public = text "public"
 -- Comment Functions --
 
 blockCmt :: [String] -> Doc -> Doc -> Doc
-blockCmt lns start end = start <+> vcat (fmap text lns) <+> end
+blockCmt lns start end = start <+> vcat (text <$> lns) <+> end
 
 docCmt :: [String] -> Doc -> Doc -> Doc
 docCmt lns start end = emptyIfNull lns $

@@ -74,7 +74,7 @@ class RenderChoices a where
     showChs :: a -> Sentence
     showChsList :: [a] -> Sentence
     showChsList [] = S "None"
-    showChsList lst = foldlSent_ (fmap showChs lst)
+    showChsList lst = foldlSent_ (showChs <$> lst)
 
 -- | Architecture of a program
 data Architecture = Archt {
@@ -378,20 +378,20 @@ spaceToCodeType S.Rational       = [Double, Float]
 spaceToCodeType S.Boolean        = [Boolean]
 spaceToCodeType S.Char           = [Char]
 spaceToCodeType S.String         = [String]
-spaceToCodeType (S.Vect s)       = fmap List (spaceToCodeType s)
-spaceToCodeType (S.Matrix _ _ s) = fmap (List . List) (spaceToCodeType s)
-spaceToCodeType (S.Set s)        = fmap List (spaceToCodeType s)
-spaceToCodeType (S.Array s)      = fmap Array (spaceToCodeType s)
+spaceToCodeType (S.Vect s)       = List <$> spaceToCodeType s
+spaceToCodeType (S.Matrix _ _ s) = List . List <$> spaceToCodeType s
+spaceToCodeType (S.Set s)        = List <$> spaceToCodeType s
+spaceToCodeType (S.Array s)      = Array <$> spaceToCodeType s
 spaceToCodeType (S.Actor s)      = [Object s]
 spaceToCodeType S.Void           = [Void]
-spaceToCodeType (S.Reference s)  = fmap Reference (spaceToCodeType s)
+spaceToCodeType (S.Reference s)  = Reference <$> spaceToCodeType s
 spaceToCodeType (S.Function i t) = [Func is ts | is <- ins, ts <- trgs]
     where trgs = spaceToCodeType t
-          ins  = fmap spaceToCodeType (toList i)
+          ins  = spaceToCodeType <$> toList i
 
 -- | Renders 'Choices' as 'Sentence's.
 choicesSent :: Choices -> [Sentence]
-choicesSent chs = fmap chsFieldSent [
+choicesSent chs = chsFieldSent <$> [
     (S "Modularity",                    showChs $ modularity $ architecture chs),
     (S "Input Structure",               showChs $ inputStructure $ dataInfo chs),
     (S "Constant Structure",            showChs $ constStructure $ dataInfo chs),

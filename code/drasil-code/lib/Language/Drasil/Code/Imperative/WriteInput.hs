@@ -37,8 +37,8 @@ convDataDesc db (Line (Repeat dis) dl : ds) es = let
   (l,ls) = splitAt (length dis) es
   in dataLine db dl (concat $ orderVecs l)
   : convDataDesc db ds ls
-convDataDesc db (Lines (Straight _) Nothing dl : _) es = fmap (dataLine db dl)
-  (orderVecs es)
+convDataDesc db (Lines (Straight _) Nothing dl : _) es = dataLine db dl
+  <$> orderVecs es
 convDataDesc db (Lines (Straight dis) (Just n) dl : ds) es = let
   (l,ls) = splitAt (length dis) es
   vs = orderVecs l
@@ -66,13 +66,13 @@ dataLine db dl = hcat . intersperse (char dl) . fmap (oneLineExprDoc db)
 docLine :: PrintingInformation -> DataDesc -> Delim -> [Expr] -> [Doc]
 docLine db ds dl es = let dis = getDataInputs (head ds)
   in text "#" <+> hcat (intersperse (char dl <> space)
-  (fmap (\di -> (oneLineSentenceDoc db . phrase) di <+>
-  maybe empty (parens . oneLineUnitDoc . usymb) (getUnit di)) dis))
+  ((\di -> (oneLineSentenceDoc db . phrase) di <+>
+  maybe empty (parens . oneLineUnitDoc . usymb) (getUnit di)) <$> dis))
   : convDataDesc db ds es
 
 -- | Order vectors.
 orderVecs :: [Expr] -> [[Expr]]
-orderVecs vs = transpose $ fmap getVecList vs
+orderVecs vs = transpose $ getVecList <$> vs
 
 -- | Helper to get a vector (singular 'Matrix') in list form.
 getVecList :: Expr -> [Expr]
@@ -81,7 +81,7 @@ getVecList _ = error "makeInputFile encountered unexpected type, expected vector
 
 -- | Order matricies.
 orderMtxs :: [Expr] -> [[[Expr]]]
-orderMtxs ms = transpose $ fmap getMtxLists ms
+orderMtxs ms = transpose $ getMtxLists <$> ms
 
 -- | Helper to get a 'Matrix' in a 2D list form.
 getMtxLists :: Expr -> [[Expr]]

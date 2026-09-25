@@ -104,7 +104,7 @@ generator l dt sd chs cs = let
         showDate Show = dt
         showDate Hide = ""
         ((pth, elmap, lname), libLog) = runState (chooseODELib l $ getODE $ extLibs chs) []
-        els = fmap snd elmap
+        els = snd <$> elmap
         nms = [lname]
         mem = modExportMap cs chs modules'
         lem = fromList (concatMap (^. modExports) els)
@@ -112,7 +112,7 @@ generator l dt sd chs cs = let
         modules' = (cs ^. mods) <> concatMap (^. auxMods) els
         nonPrefChs = choicesSent chs
         des = vcat $
-          fmap (oneLineSentenceDoc pinfo) (nonPrefChs <> concLog <> libLog)
+          oneLineSentenceDoc pinfo <$> (nonPrefChs <> concLog <> libLog)
 
 -- OO Versions --
 
@@ -150,7 +150,7 @@ toFileLayout fc =
     entryToLayout (n, File d) = file [ps|{n}|] d
     entryToLayout (n, Folder m) = directory [ps|{n}|] $ entryToLayout <$> M.assocs m
   in
-    fmap entryToLayout (M.assocs root)
+    entryToLayout <$> M.assocs root
 
 data Entry a = File a | Folder (M.Map String (Entry a))
   deriving (Show)
@@ -191,7 +191,7 @@ genPackage unRepr = do
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
-      as = fmap fullName (g ^. authors)
+      as = fullName <$> (g ^. authors)
       cfp = g ^. configFiles
       pinfo = printfo g
       -- FIXME: The below code does `Doc -> String` conversion.
@@ -326,7 +326,7 @@ genPackageProc unRepr = do
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
-      as = fmap fullName (g ^. authors)
+      as = fullName <$> (g ^. authors)
       cfp = g ^. configFiles
       pinfo = printfo g
       prps = show $ oneLineSentenceDoc pinfo (foldlSent $ g ^. purpose)

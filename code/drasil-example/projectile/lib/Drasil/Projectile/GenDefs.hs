@@ -141,7 +141,7 @@ vecDeriv :: [(DefinedQuantityDict, ModelExpr)] -> GenDefn -> Sentence
 vecDeriv vecs gdef = foldlSentCol [
   S "For a", D.toSent $ phraseNP (combineNINI twoD cartesian), sParen (refS twoDMotion `S.and_` refS cartSyst) `sC`
   S "we can represent" +:+. foldlList Comma List
-  (fmap (\(c, e) -> foldlSent_ [D.toSent $ phraseNP (the c), phrase vector, S "as", eS e]) vecs),
+  ((\(c, e) -> foldlSent_ [D.toSent $ phraseNP (the c), phrase vector, S "as", eS e]) <$> vecs),
   D.toSent (atStartNP (the acceleration)) `S.is` S "assumed to be constant", sParen (refS constAccel) `S.andThe`
   phrase constAccelV `S.is` S "represented as" +:+. eS E.constAccelXY,
   D.toSent (atStartNP (the iVel)) +:+ sParen (S "at" +:+ eS (sy time $= exactDbl 0) `sC` S "from" +:+ refS timeStartZero) `S.is`

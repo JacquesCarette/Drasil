@@ -194,19 +194,19 @@ insertAllOutOfOrder13 ::
 insertAllOutOfOrder13 strtr as bs cs ds es fs gs hs is js ks ls ms =
   let
     -- Box all of our chunks
-    as' = fmap mkChunk as
-    bs' = fmap mkChunk bs
-    cs' = fmap mkChunk cs
-    ds' = fmap mkChunk ds
-    es' = fmap mkChunk es
-    fs' = fmap mkChunk fs
-    gs' = fmap mkChunk gs
-    hs' = fmap mkChunk hs
-    is' = fmap mkChunk is
-    js' = fmap mkChunk js
-    ks' = fmap mkChunk ks
-    ls' = fmap mkChunk ls
-    ms' = fmap mkChunk ms
+    as' = mkChunk <$> as
+    bs' = mkChunk <$> bs
+    cs' = mkChunk <$> cs
+    ds' = mkChunk <$> ds
+    es' = mkChunk <$> es
+    fs' = mkChunk <$> fs
+    gs' = mkChunk <$> gs
+    hs' = mkChunk <$> hs
+    is' = mkChunk <$> is
+    js' = mkChunk <$> js
+    ks' = mkChunk <$> ks
+    ls' = mkChunk <$> ls
+    ms' = mkChunk <$> ms
 
     -- Put all of our chunks in a list of lists, with each list carrying a
     -- unique type of chunk, filtering out empty lists
@@ -215,7 +215,7 @@ insertAllOutOfOrder13 strtr as bs cs ds es fs gs hs is js ks ls ms =
     calt = concat altogether
 
     -- Calculate what chunks are depended on (i.e., UID -> Dependants)
-    chDpdts = invert $ M.fromList $ fmap (\c -> (c ^. uid, S.toList $ chunkRefs c)) calt
+    chDpdts = invert $ M.fromList $ (\c -> (c ^. uid, S.toList $ chunkRefs c)) <$> calt
 
     fmtIDnTy c = show (c ^. uid) <> " :: " <> show (chunkType c)
     dupeError c1 c2 = error $
@@ -232,14 +232,14 @@ insertAllOutOfOrder13 strtr as bs cs ds es fs gs hs is js ks ls ms =
           $ "insertAllOutOfOrder error: UID `" <> showUID c1 <>
             "` is shared between two different chunks of types: `" <>
             show (chunkType c1) <> "` and `" <> show (chunkType c2) <> "`")
-        $ fmap (\c -> (c ^. uid, (c, []))) calt)
+        $ (\c -> (c ^. uid, (c, []))) <$> calt)
 
     -- Merge the chunk-deps table with that existing chunks table
     chTabWDeps = M.foldlWithKey'
       (\acc k dpdts -> insertRefsExpectingExistence dpdts k acc) chTab chDpdts
 
     -- Create the list of new chunk types and add them to the previous list of chunk types
-    chTys = M.fromList (fmap (\chs -> (chunkType $ head chs, chs)) altogether)
+    chTys = M.fromList ((\chs -> (chunkType $ head chs, chs)) <$> altogether)
     chTT = M.unionWith (++) (chunkTypeTable strtr) chTys
   in
     -- Create the updated chunk database, adding the LCs and Rs, ignoring their dependencies.

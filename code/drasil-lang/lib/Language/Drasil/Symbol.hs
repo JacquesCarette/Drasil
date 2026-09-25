@@ -192,6 +192,6 @@ compsy Empty Empty    = EQ
 
 -- | Helper for 'compsy' that compares lower case 'String's.
 compsyLower :: String -> String -> Ordering
-compsyLower x y = case compare (fmap toLower x) (fmap toLower y) of
+compsyLower x y = case compare (toLower <$> x) (toLower <$> y) of
   EQ    -> compare x y
   other -> other

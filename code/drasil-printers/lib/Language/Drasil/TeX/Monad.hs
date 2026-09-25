@@ -102,7 +102,7 @@ infixr 6 $+$
 
 -- | Concatenates a list of 'D' using a function from ['TP.Doc'] -> 'TP.Doc'.
 tpRunPrint :: ([TP.Doc] -> TP.Doc) -> [D] -> D
-tpRunPrint f l = PL $ \ctx -> f $ fmap (`runPrint` ctx) l
+tpRunPrint f l = PL $ \ctx -> f $ (`runPrint` ctx) <$> l
 
 -- | List version of 'TP.$$'. Above, except that if the last line of the first
 -- argument stops at least one position before the first line of the second begins,

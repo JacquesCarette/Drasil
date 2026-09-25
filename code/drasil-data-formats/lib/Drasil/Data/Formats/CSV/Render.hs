@@ -32,7 +32,7 @@ csvRenderOpts = CSVRO
 
 -- | Render a 'CSV' to a 'Doc' with the given options.
 renderCSV :: CSVRenderOptions -> CSV -> Doc ann
-renderCSV (CSVRO dqp) csv = vcat $ fmap renderRow allRs
+renderCSV (CSVRO dqp) csv = vcat $ renderRow <$> allRs
   where
     rs = rows csv
     allRs = maybe rs (: rs) $ header csv

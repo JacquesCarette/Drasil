@@ -47,7 +47,7 @@ renderCite f (Cite e _ cfs)         = (text e, renderF cfs (useStyleArtcl f)) --
 
 -- | Render fields to be used in the document.
 renderF :: [CiteField] -> (StyleGuide -> (CiteField -> Doc)) -> Doc
-renderF fields styl = hsep $ fmap (styl bibStyleH) (sortBy compCiteField fields)
+renderF fields styl = hsep $ styl bibStyleH <$> sortBy compCiteField fields
 
 -- | Compares two cite fields.
 compCiteField :: CiteField -> CiteField -> Ordering
@@ -176,7 +176,7 @@ artclChicago f i = bookChicago f i
 -- | Render a list of people (after applying a given function).
 rendPeople :: (Person -> String) -> People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
-rendPeople f people = S . foldlList $ fmap f people --foldlList is in drasil-utils
+rendPeople f people = S . foldlList $ f <$> people --foldlList is in drasil-utils
 
 -- | Render a list of people (of form FirstName LastName).
 rendPeople' :: People -> Spec
@@ -189,7 +189,7 @@ foldPages = text . foldlList . numList "&ndash;"
 
 -- | Organize a list of people.
 foldPeople :: People -> Doc
-foldPeople p = text . foldlList $ fmap fullName p
+foldPeople p = text . foldlList $ fullName <$> p
 
 -- | Renders a person's last name.
 rendPersL :: Person -> String

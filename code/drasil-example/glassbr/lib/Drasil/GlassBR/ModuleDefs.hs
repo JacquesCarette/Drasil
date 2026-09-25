@@ -36,7 +36,7 @@ readTable :: Func
 readTable = funcData "read_table"
   "Reads glass ASTM data from a file with the given file name"
   [ singleLine (repeated [quantvar zVector]) ',',
-    multiLine (repeated (fmap quantvar [xMatrix, yMatrix])) ','
+    multiLine (repeated (quantvar <$> [xMatrix, yMatrix])) ','
   ]
 
 -----
@@ -123,7 +123,7 @@ getCol :: (HasSymbol a, HasSymbol i, IsChunk a, IsChunk i) => a -> i -> CodeExpr
 getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, sy i_ $+ p]
 
 call :: Func -> [DefinedQuantityDict] -> FuncStmt
-call f l = FVal $ apply (asVC f) $ fmap sy l
+call f l = FVal $ apply (asVC f) $ sy <$> l
 
 find :: (IsChunk zv, IsChunk z, HasSymbol zv, HasSymbol z) => zv -> z -> CodeExpr
 find zv z_ = apply (asVC findCT) [sy zv, sy z_]

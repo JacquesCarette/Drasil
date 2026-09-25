@@ -58,7 +58,7 @@ printMath = (`runPrint` Math)
 printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = text "" $$ h (n + 1) <> pSpec contents $$ refID (pSpec l)
 printLO (Cell _)                         = empty
-printLO (HDiv _ layoutObs _)             = vcat (fmap printLO layoutObs)
+printLO (HDiv _ layoutObs _)             = vcat (printLO <$> layoutObs)
 printLO (Paragraph contents)             = text "" $$ stripnewLine (show (pSpec contents))
 printLO (EqnBlock contents)              = mathEqn
   where
@@ -68,7 +68,7 @@ printLO (EqnBlock contents)              = mathEqn
 printLO (Table _ rows r _ _)            = text "" $$ makeTable rows (pSpec r)
 printLO (Definition ssPs l)             = text "<br>" $$ makeDefn ssPs (pSpec l)
 printLO (List t)                        = text "" $$ makeList t False
-printLO (Figure r c f wp)               = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
+printLO (Figure r c f wp)               = makeFigure (pSpec r) (pSpec <$> c) (text f) wp
 printLO (Bib bib)                       = makeBib bib
 printLO Graph{}                         = empty
 printLO CodeBlock {}                    = empty
@@ -87,7 +87,7 @@ printLO' (EqnBlock contents)              = [markdownCell mathEqn]
 printLO' (Table _ rows r _ _)             = [markdownCell $ makeTable rows (pSpec r)]
 printLO' Definition{}                     = []
 printLO' (List t)                         = [markdownCell $ makeList t False]
-printLO' (Figure r c f wp)                = [markdownCell $ makeFigure (pSpec r) (fmap pSpec c) (text f) wp]
+printLO' (Figure r c f wp)                = [markdownCell $ makeFigure (pSpec r) (pSpec <$> c) (text f) wp]
 printLO' (Bib bib)                        = [markdownCell $ makeBib bib]
 printLO' Graph{}                          = []
 printLO' (CodeBlock contents)             = [codeCell $ cSpec contents]
@@ -135,8 +135,8 @@ pExpr NotebookMath (Div n d) =
 pExpr ctx (Div n d)    = mkDiv "frac" (pExpr ctx n) (pExpr ctx d)
 pExpr NotebookMath (Row [x]) =
   braces $ pExpr NotebookMath x
-pExpr ctx (Row l)      = hcat $ fmap (pExpr ctx) l
-pExpr ctx (Set l)      = hcat $ fmap (pExpr ctx) l
+pExpr ctx (Row l)      = hcat $ pExpr ctx <$> l
+pExpr ctx (Set l)      = hcat $ pExpr ctx <$> l
 pExpr _ (Ident s)      = text s
 pExpr NotebookMath (Label s) =
   printMath $ toMath $ TeX.pExpr (Label s)
@@ -243,11 +243,11 @@ makeRows = foldr (($$) . makeColumns) empty
 -- | makeColumns: Helper for creating table columns
 makeHeaderCols, makeColumns :: [Spec] -> Doc
 makeHeaderCols l = text header $$ text (genMDtable P.<> "|")
-  where header = show (text "|" <> hcat (punctuate (text "|") (fmap pSpec l)) <> text "|")
+  where header = show (text "|" <> hcat (punctuate (text "|") (pSpec <$> l)) <> text "|")
         c = count '|' header
         genMDtable = concat (replicate (c-1) "|:--- ")
 
-makeColumns ls = text "|" <> hcat (punctuate (text "|") (fmap pSpec ls)) <> text "|"
+makeColumns ls = text "|" <> hcat (punctuate (text "|") (pSpec <$> ls)) <> text "|"
 
 count :: Char -> String -> Int
 count _ [] = 0
@@ -264,18 +264,18 @@ makeDefn ps l = refID l $$ table ["defn-table"]
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
-makeDRows [(f,d)]    = tr (th (text f) $$ td (vcat $ fmap printLO d))
-makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ fmap printLO d)) $$ makeDRows ps
+makeDRows [(f,d)]    = tr (th (text f) $$ td (vcat $ printLO <$> d))
+makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ printLO <$> d)) $$ makeDRows ps
 
 -- | Renders lists
 makeList :: ListType -> Bool -> Doc -- FIXME: ref id's should be folded into the li
 makeList (Simple items) _      = vcat $
-  fmap (\(b,e,l) -> mlref l $ pSpec b <> text ": " <> sItem e $$ text "") items
+  (\(b,e,l) -> mlref l $ pSpec b <> text ": " <> sItem e $$ text "") <$> items
 makeList (Desc items) bl       = vcat $
-  fmap (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b <> text ": " <> pItem e bl) items
-makeList (Ordered items) bl    = vcat $ fmap (\(i,l) -> mlref l $ pItem i bl) items
-makeList (Unordered items) bl  = vcat $ fmap (\(i,l) -> mlref l $ pItem i bl) items
-makeList (Definitions items) _ = vcat $ fmap (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the" <+> sItem e) items
+  (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b <> text ": " <> pItem e bl) <$> items
+makeList (Ordered items) bl    = vcat $ (\(i,l) -> mlref l $ pItem i bl) <$> items
+makeList (Unordered items) bl  = vcat $ (\(i,l) -> mlref l $ pItem i bl) <$> items
+makeList (Definitions items) _ = vcat $ (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the" <+> sItem e) <$> items
 
 -- | Helper for setting up references
 mlref :: Maybe Label -> Doc -> Doc

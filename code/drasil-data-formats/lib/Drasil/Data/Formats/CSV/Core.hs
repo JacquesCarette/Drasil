@@ -71,7 +71,7 @@ saneLengths :: (Natural, String) -> Maybe [Text] -> [[Text]] -> Maybe String
 saneLengths (expLen, expLenSrc) mhr rs =
   case mhr of
     Just hdr | let l = len hdr, l /= expLen -> Just $ formatErr "Header" l
-    _ -> format <$> find ((/= expLen) . snd) (zip [1 :: Natural ..] (fmap len rs))
+    _ -> format <$> find ((/= expLen) . snd) (zip [1 :: Natural ..] (len <$> rs))
   where
     formatErr target actualLen = concat [
         target, " has ", show actualLen, " columns, but expected ",

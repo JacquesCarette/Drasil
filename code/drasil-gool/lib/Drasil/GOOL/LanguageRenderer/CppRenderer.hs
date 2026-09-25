@@ -141,8 +141,8 @@ instance (Pair p) => OOProg (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) Scope
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) ProgData FileData where
   prog n st mods = do
     m <-  mapM (zoom lensGStoFS) mods
-    let fm = fmap pfst m
-        sm = fmap (hdrToSrc . psnd) m
+    let fm = pfst <$> m
+        sm = hdrToSrc . psnd <$> m
     p1 <- prog n st $ fmap pure sm P.<> fmap pure fm
     modify revFiles
     pure $ pair p1 (toCode emptyProg)
@@ -455,10 +455,10 @@ instance (Pair p) => Set (p CppSrcCode CppHdrCode) Value where
 
 instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) Value Block where
   listSlice' b e s vr vl = pair2
-    (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e)
-      (fmap (onStateValue pfst) s))
-    (listSlice' (fmap (onStateValue psnd) b) (fmap (onStateValue psnd) e)
-      (fmap (onStateValue psnd) s))
+    (listSlice' (onStateValue pfst <$> b) (onStateValue pfst <$> e)
+      (onStateValue pfst <$> s))
+    (listSlice' (onStateValue psnd <$> b) (onStateValue psnd <$> e)
+      (onStateValue psnd <$> s))
     (zoom lensMStoVS vr) (zoom lensMStoVS vl)
 
 instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) TypeData Value where
@@ -487,13 +487,13 @@ instance (Pair p) => FunctionElim (p CppSrcCode CppHdrCode) TypeData where
 
 instance (Pair p) => InternalAssignStmt (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
   multiAssign vrs vls = pair2Lists multiAssign multiAssign
-    (fmap (zoom lensMStoVS) vrs) (fmap (zoom lensMStoVS) vls)
+    (zoom lensMStoVS <$> vrs) (zoom lensMStoVS <$> vls)
 
 instance (Pair p) => InternalIOStmt (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
   -- Another Maybe/State combination
   printSt nl f p v = pair2
-    (printSt nl (fmap (onStateValue pfst) f))
-    (printSt nl (fmap (onStateValue psnd) f))
+    (printSt nl (onStateValue pfst <$> f))
+    (printSt nl (onStateValue psnd <$> f))
     (zoom lensMStoVS p) (zoom lensMStoVS v)
 
 instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
@@ -536,25 +536,25 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) ScopeData Value (Do
   listDec n vr scp = pair1 (\v -> listDec n v (pfst scp))
     (\v -> listDec n v (psnd scp)) (zoom lensMStoVS vr)
   listDecDef vr scp vs = pair1Val1List (`listDecDef` pfst scp)
-    (`listDecDef` psnd scp) (zoom lensMStoVS vr) (fmap (zoom lensMStoVS) vs)
+    (`listDecDef` psnd scp) (zoom lensMStoVS vr) (zoom lensMStoVS <$> vs)
   arrayDec n dflt vr scp = pair2 (\v d -> arrayDec n d v (pfst scp))
     (\v d -> arrayDec n d v (psnd scp)) (zoom lensMStoVS vr) (zoom lensMStoVS dflt)
   arrayDecDef vr scp vs = pair1Val1List (`arrayDecDef` pfst scp)
-    (`arrayDecDef` psnd scp) (zoom lensMStoVS vr) (fmap (zoom lensMStoVS) vs)
+    (`arrayDecDef` psnd scp) (zoom lensMStoVS vr) (zoom lensMStoVS <$> vs)
   constDecDef vr scp vl = pair2 (`constDecDef` pfst scp)
     (`constDecDef` psnd scp) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   funcDecDef v scp ps = pairValListVal (`funcDecDef` pfst scp)
-    (`funcDecDef` psnd scp) (zoom lensMStoVS v) (fmap (zoom lensMStoVS) ps)
+    (`funcDecDef` psnd scp) (zoom lensMStoVS v) (zoom lensMStoVS <$> ps)
 
 instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) ScopeData Value (Doc, Terminator) where
   objDecDef o scp v = pair2 (`objDecDef` pfst scp) (`objDecDef` psnd scp)
     (zoom lensMStoVS o) (zoom lensMStoVS v)
   objDecNew vr scp vs = pair1Val1List (`objDecNew` pfst scp)
-    (`objDecNew` psnd scp) (zoom lensMStoVS vr) (fmap (zoom lensMStoVS) vs)
+    (`objDecNew` psnd scp) (zoom lensMStoVS vr) (zoom lensMStoVS <$> vs)
   extObjDecNew lib vr scp vs = pair1Val1List
     (\vr' -> extObjDecNew lib vr' (pfst scp))
     (\vr' -> extObjDecNew lib vr' (psnd scp))
-    (zoom lensMStoVS vr) (fmap (zoom lensMStoVS) vs)
+    (zoom lensMStoVS vr) (zoom lensMStoVS <$> vs)
 
 instance (Pair p) => PrintConsole (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
   print = pair1 print print . zoom lensMStoVS
@@ -600,22 +600,22 @@ instance (Pair p) => StringStatement (p CppSrcCode CppHdrCode) Value (Doc, Termi
     (zoom lensMStoVS vnew) (zoom lensMStoVS s)
 
   stringListVals vars sl = pair1List1Val stringListVals stringListVals
-    (fmap (zoom lensMStoVS) vars) (zoom lensMStoVS sl)
+    (zoom lensMStoVS <$> vars) (zoom lensMStoVS sl)
   stringListLists lsts sl = pair1List1Val stringListLists stringListLists
-    (fmap (zoom lensMStoVS) lsts) (zoom lensMStoVS sl)
+    (zoom lensMStoVS <$> lsts) (zoom lensMStoVS sl)
 
 instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
   inOutCall n is os bs = pair3Lists (inOutCall n) (inOutCall n)
-    (fmap (zoom lensMStoVS) is) (fmap (zoom lensMStoVS) os)
-    (fmap (zoom lensMStoVS) bs)
+    (zoom lensMStoVS <$> is) (zoom lensMStoVS <$> os)
+    (zoom lensMStoVS <$> bs)
   extInOutCall m n is os bs = pair3Lists (extInOutCall m n) (extInOutCall m n)
-    (fmap (zoom lensMStoVS) is) (fmap (zoom lensMStoVS) os)
-    (fmap (zoom lensMStoVS) bs)
+    (zoom lensMStoVS <$> is) (zoom lensMStoVS <$> os)
+    (zoom lensMStoVS <$> bs)
 
 instance (Pair p) => OOFuncAppStatement (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
   selfInOutCall n is os bs = pair3Lists (selfInOutCall n) (selfInOutCall n)
-    (fmap (zoom lensMStoVS) is) (fmap (zoom lensMStoVS) os)
-    (fmap (zoom lensMStoVS) bs)
+    (zoom lensMStoVS <$> is) (zoom lensMStoVS <$> os)
+    (zoom lensMStoVS <$> bs)
 
 instance (Pair p) => CommentStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
   comment cmt = on2StateValues pair (comment cmt) (comment cmt)
@@ -631,11 +631,11 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) Value (Doc, Term
   ifCond bs = pair2Lists1Val
     (\cs bods -> ifCond (zip cs bods))
     (\cs bods -> ifCond (zip cs bods))
-    (fmap (zoom lensMStoVS . fst) bs) (fmap snd bs)
+    (zoom lensMStoVS . fst <$> bs) (snd <$> bs)
   switch v cs = pairVal2ListsVal
     (\s cv cb -> switch s (zip cv cb))
     (\s cv cb -> switch s (zip cv cb))
-    (zoom lensMStoVS v) (fmap (zoom lensMStoVS . fst) cs) (fmap snd cs)
+    (zoom lensMStoVS v) (zoom lensMStoVS . fst <$> cs) (snd <$> cs)
 
   ifExists v = pair3 ifExists ifExists (zoom lensMStoVS v)
 
@@ -665,10 +665,10 @@ instance (Pair p) => StrategyPattern (p CppSrcCode CppHdrCode) Value Body Block 
   -- functions rewrap the values in Maybes. This would be messy so I don't want to
   -- do it unless there's a need.
   runStrategy l strats rv av = pair1List
-    (\s -> runStrategy l (zip (fmap fst strats) s) (fmap (onStateValue pfst) rv)
-      (fmap (onStateValue pfst) av))
-    (\s -> runStrategy l (zip (fmap fst strats) s) (fmap (onStateValue psnd) rv)
-      (fmap (onStateValue psnd) av)) (fmap snd strats)
+    (\s -> runStrategy l (zip (fst <$> strats) s) (onStateValue pfst <$> rv)
+      (onStateValue pfst <$> av))
+    (\s -> runStrategy l (zip (fst <$> strats) s) (onStateValue psnd <$> rv)
+      (onStateValue psnd <$> av)) (snd <$> strats)
 
 instance (Pair p) => VisibilitySym (p CppSrcCode CppHdrCode)
     (Doc, VisibilityTag) where
@@ -712,15 +712,15 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) Ty
 
   inOutFunc n s is os bs = pair3Lists1Val
     (inOutFunc n (pfst s)) (inOutFunc n (psnd s))
-    (fmap (zoom lensMStoVS) is) (fmap (zoom lensMStoVS) os)
-    (fmap (zoom lensMStoVS) bs)
+    (zoom lensMStoVS <$> is) (zoom lensMStoVS <$> os)
+    (zoom lensMStoVS <$> bs)
   docInOutFunc n s desc is os bs = pair3Lists1Val
-    (\ins outs both -> docInOutFunc n (pfst s) desc (zip (fmap fst
-      is) ins) (zip (fmap fst os) outs) (zip (fmap fst bs) both))
-    (\ins outs both -> docInOutFunc n (psnd s) desc (zip (fmap fst
-      is) ins) (zip (fmap fst os) outs) (zip (fmap fst bs) both))
-    (fmap (zoom lensMStoVS . snd) is) (fmap (zoom lensMStoVS . snd) os)
-    (fmap (zoom lensMStoVS . snd) bs)
+    (\ins outs both -> docInOutFunc n (pfst s) desc (zip (fst
+      <$> is) ins) (zip (fst <$> os) outs) (zip (fst <$> bs) both))
+    (\ins outs both -> docInOutFunc n (psnd s) desc (zip (fst
+      <$> is) ins) (zip (fst <$> os) outs) (zip (fst <$> bs) both))
+    (zoom lensMStoVS . snd <$> is) (zoom lensMStoVS . snd <$> os)
+    (zoom lensMStoVS . snd <$> bs)
 
 instance (Pair p) => OOMethodSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) TypeData ParamData Value MethodData AttachmentData Body where
   method n s p t = pairValListVal
@@ -731,19 +731,19 @@ instance (Pair p) => OOMethodSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) 
   constructor ps is = pair3Lists1Val
     (\pms ivars ivals -> constructor pms (zip ivars ivals))
     (\pms ivars ivals -> constructor pms (zip ivars ivals))
-    ps (fmap (zoom lensMStoVS . fst) is) (fmap (zoom lensMStoVS . snd) is)
+    ps (zoom lensMStoVS . fst <$> is) (zoom lensMStoVS . snd <$> is)
 
   inOutMethod n s p is os bs = pair3Lists1Val
     (inOutMethod n (pfst s) (pfst p)) (inOutMethod n (psnd s) (psnd p))
-    (fmap (zoom lensMStoVS) is) (fmap (zoom lensMStoVS) os)
-    (fmap (zoom lensMStoVS) bs)
+    (zoom lensMStoVS <$> is) (zoom lensMStoVS <$> os)
+    (zoom lensMStoVS <$> bs)
   docInOutMethod n s p desc is os bs = pair3Lists1Val
-    (\ins outs both -> docInOutMethod n (pfst s) (pfst p) desc (zip (fmap fst
-      is) ins) (zip (fmap fst os) outs) (zip (fmap fst bs) both))
-    (\ins outs both -> docInOutMethod n (psnd s) (psnd p) desc (zip (fmap fst
-      is) ins) (zip (fmap fst os) outs) (zip (fmap fst bs) both))
-    (fmap (zoom lensMStoVS . snd) is) (fmap (zoom lensMStoVS . snd) os)
-    (fmap (zoom lensMStoVS . snd) bs)
+    (\ins outs both -> docInOutMethod n (pfst s) (pfst p) desc (zip (fst
+      <$> is) ins) (zip (fst <$> os) outs) (zip (fst <$> bs) both))
+    (\ins outs both -> docInOutMethod n (psnd s) (psnd p) desc (zip (fst
+      <$> is) ins) (zip (fst <$> os) outs) (zip (fst <$> bs) both))
+    (zoom lensMStoVS . snd <$> is) (zoom lensMStoVS . snd <$> os)
+    (zoom lensMStoVS . snd <$> bs)
 
 instance (Pair p) => RenderMethod (p CppSrcCode CppHdrCode) MethodData where
   commentedFunc = pair2 commentedFunc commentedFunc
@@ -776,14 +776,14 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) MethodData StateVarData 
   buildClass p vs cs fs = do
     n <- zoom lensCStoFS getModuleName
     modify (setClassName n)
-    pair3Lists (buildClass p) (buildClass p) vs (fmap (zoom lensCStoMS) cs)
-      (fmap (zoom lensCStoMS) fs)
+    pair3Lists (buildClass p) (buildClass p) vs (zoom lensCStoMS <$> cs)
+      (zoom lensCStoMS <$> fs)
   extraClass n p vs cs fs = modify (setClassName n) >> pair3Lists
     (extraClass n p) (extraClass n p)
-    vs (fmap (zoom lensCStoMS) cs) (fmap (zoom lensCStoMS) fs)
+    vs (zoom lensCStoMS <$> cs) (zoom lensCStoMS <$> fs)
   implementingClass n is vs cs fs = modify (setClassName n) >> pair3Lists
     (implementingClass n is) (implementingClass n is)
-    vs (fmap (zoom lensCStoMS) cs) (fmap (zoom lensCStoMS) fs)
+    vs (zoom lensCStoMS <$> cs) (zoom lensCStoMS <$> fs)
 
   docClass d = pair1 (docClass d) (docClass d)
 
@@ -791,7 +791,7 @@ instance (Pair p) => RenderClass (p CppSrcCode CppHdrCode)
     (Doc, VisibilityTag) MethodData StateVarData where
   intClass n s i vs cs fs = pair3Lists
     (intClass n (pfst s) (pfst i)) (intClass n (psnd s) (psnd i))
-    vs (fmap (zoom lensCStoMS) cs) (fmap (zoom lensCStoMS) fs)
+    vs (zoom lensCStoMS <$> cs) (zoom lensCStoMS <$> fs)
 
   inherit n = pair (inherit n) (inherit n)
   implements is = pair (implements is) (implements is)
@@ -805,7 +805,7 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) ModData MethodData wher
   buildModule n is ms cs = do
     modify (setModuleName n)
     pair2Lists (buildModule n is) (buildModule n is)
-      (fmap (zoom lensFStoMS) ms) (fmap (zoom lensFStoCS) cs)
+      (zoom lensFStoMS <$> ms) (zoom lensFStoCS <$> cs)
 
 instance (Pair p) => RenderMod (p CppSrcCode CppHdrCode) ModData where
   modFromData n d = on2StateValues pair (modFromData n d) (modFromData n d)
@@ -882,8 +882,8 @@ pair1List :: (Pair p) => ([SrcState r a] -> SrcState s b) -> ([HdrState r a] ->
   HdrState s b) -> [PairState s p a] -> PairState s p b
 pair1List srcf hdrf stv = do
   v <- sequence stv
-  let fl = fmap (pure . pfst) v
-      sl = fmap (pure . psnd) v
+  let fl = pure . pfst <$> v
+      sl = pure . psnd <$> v
   p1 <- srcf fl
   p2 <- hdrf sl
   pure $ pair p1 p2
@@ -893,8 +893,8 @@ pair2Lists :: (Pair p) => ([SrcState r a] -> [SrcState s b] -> SrcState t c) ->
   [PairState t p b] -> PairState t p c
 pair2Lists srcf hdrf stv1 stv2 = do
   v1 <- sequence stv1
-  let fl1 = fmap (pure . pfst) v1
-      sl1 = fmap (pure . psnd) v1
+  let fl1 = pure . pfst <$> v1
+      sl1 = pure . psnd <$> v1
   pair1List (srcf fl1) (hdrf sl1) stv2
 
 pair3Lists :: (Pair p) => ([SrcState r a] -> [SrcState s b] -> [SrcState t c] ->
@@ -903,8 +903,8 @@ pair3Lists :: (Pair p) => ([SrcState r a] -> [SrcState s b] -> [SrcState t c] ->
   -> PairState u p d
 pair3Lists srcf hdrf stv1 stv2 stv3 = do
   v1 <- sequence stv1
-  let fl1 = fmap (pure . pfst) v1
-      sl1 = fmap (pure . psnd) v1
+  let fl1 = pure . pfst <$> v1
+      sl1 = pure . psnd <$> v1
   pair2Lists (srcf fl1) (hdrf sl1) stv2 stv3
 
 pair1List1Val :: (Pair p) => ([SrcState r a] -> SrcState s b -> SrcState t c) ->
@@ -912,8 +912,8 @@ pair1List1Val :: (Pair p) => ([SrcState r a] -> SrcState s b -> SrcState t c) ->
   PairState t p b -> PairState t p c
 pair1List1Val srcf hdrf stv1 stv2 = do
   v1 <- sequence stv1
-  let fl1 = fmap (pure . pfst) v1
-      sl1 = fmap (pure . psnd) v1
+  let fl1 = pure . pfst <$> v1
+      sl1 = pure . psnd <$> v1
   pair1 (srcf fl1) (hdrf sl1) stv2
 
 pair1Val1List :: (Pair p) => (SrcState r a -> [SrcState s b] -> SrcState t c) ->
@@ -931,8 +931,8 @@ pair2Lists1Val :: (Pair p) => ([SrcState r a] -> [SrcState s b] -> SrcState t c
   PairState u p d
 pair2Lists1Val srcf hdrf stv1 stv2 stv3 = do
   v1 <- sequence stv1
-  let fl1 = fmap (pure . pfst) v1
-      sl1 = fmap (pure . psnd) v1
+  let fl1 = pure . pfst <$> v1
+      sl1 = pure . psnd <$> v1
   pair1List1Val (srcf fl1) (hdrf sl1) stv2 stv3
 
 pairValListVal :: (Pair p) => (SrcState r a -> [SrcState s b] -> SrcState t c ->
@@ -952,8 +952,8 @@ pair3Lists1Val :: (Pair p) => ([SrcState r a] -> [SrcState s b] ->
   -> PairState v p e
 pair3Lists1Val srcf hdrf stv1 stv2 stv3 stv4 = do
   v1 <- sequence stv1
-  let fl1 = fmap (pure . pfst) v1
-      sl1 = fmap (pure . psnd) v1
+  let fl1 = pure . pfst <$> v1
+      sl1 = pure . psnd <$> v1
   pair2Lists1Val (srcf fl1) (hdrf sl1) stv2 stv3 stv4
 
 pair1Val3Lists :: (Pair p) => (SrcState r a -> [SrcState s b] ->
@@ -968,12 +968,12 @@ pair1Val3Lists srcf hdrf stv1 stv2 stv34 = do
   v4 <- mapM snd stv34
   let fv1 = pure $ pfst v1
       sv1 = pure $ psnd v1
-      fv2 = fmap (pure . pfst) v2
-      sv2 = fmap (pure . psnd) v2
-      fv3 = fmap (pure . pfst) v3
-      sv3 = fmap (pure . psnd) v3
-      fv4 = fmap (pure . pfst) v4
-      sv4 = fmap (pure . psnd) v4
+      fv2 = pure . pfst <$> v2
+      sv2 = pure . psnd <$> v2
+      fv3 = pure . pfst <$> v3
+      sv3 = pure . psnd <$> v3
+      fv4 = pure . pfst <$> v4
+      sv4 = pure . psnd <$> v4
   p1 <- srcf fv1 fv2 (zip fv3 fv4)
   p2 <- hdrf sv1 sv2 (zip sv3 sv4)
   pure $ pair p1 p2
@@ -1676,10 +1676,10 @@ instance ClassSym CppSrcCode MethodData StateVarData where
 instance RenderClass CppSrcCode (Doc, VisibilityTag) MethodData StateVarData where
   intClass n _ _ vs cs fs = do
     modify (setClassName n)
-    on2StateLists cppsClass vs (fmap (zoom lensCStoMS) $ cs P.<> fs)
+    on2StateLists cppsClass vs (zoom lensCStoMS <$> cs P.<> fs)
 
   inherit n = onCodeValue (cppInherit n . fst) public
-  implements is = onCodeValue ((\p -> colon <+> hcat (fmap ((p <+>) . text) is))
+  implements is = onCodeValue ((\p -> colon <+> hcat ((p <+>) . text <$> is))
     . fst) public
 
   commentedClass _ cs = cs
@@ -1697,10 +1697,10 @@ instance ModuleSym CppSrcCode ModData MethodData where
     mn <- getCurrMain
     pure $ vibcat [
       if mn && length ms + length cs == 1 then empty else RC.import' $ mi n,
-      vcat (fmap ((define <+>) . text) ds),
-      vcat (fmap (RC.import' . li) lis),
-      vcat (fmap (RC.import' . mi) (sort (is P.<> libis) P.<> mis)),
-      vcat (fmap (usingNameSpace std . Just) us)])
+      vcat ((define <+>) . text <$> ds),
+      vcat (RC.import' . li <$> lis),
+      vcat (RC.import' . mi <$> (sort (is P.<> libis) P.<> mis)),
+      vcat (usingNameSpace std . Just <$> us)])
     (pure empty) (pure empty) ms cs
     where mi, li :: Label -> CppSrcCode Doc
           mi = modImport
@@ -2309,10 +2309,10 @@ instance RenderClass CppHdrCode (Doc, VisibilityTag) MethodData StateVarData whe
     vars <- sequence vs
     funcs <- sequence fs
     pure $ cpphClass n i vars funcs public private
-    where fs = fmap (zoom lensCStoMS) $ cstrs P.<> mths
+    where fs = zoom lensCStoMS <$> cstrs P.<> mths
 
   inherit n = onCodeValue (cppInherit n . fst) public
-  implements is = onCodeValue ((\p -> colon <+> hcat (fmap ((p <+>) . text) is))
+  implements is = onCodeValue ((\p -> colon <+> hcat ((p <+>) . text <$> is))
     . fst) public
 
   commentedClass = G.commentedClass
@@ -2328,10 +2328,10 @@ instance ModuleSym CppHdrCode ModData MethodData where
     mis <- getHeaderModImports
     us <- getHeaderUsing
     pure $ vibcat [
-      vcat (fmap ((define <+>) . text) ds),
-      vcat (fmap (RC.import' . li) lis),
-      vcat (fmap (RC.import' . mi) (sort (is P.<> libis) P.<> mis)),
-      vcat (fmap (usingNameSpace std . Just) us)])
+      vcat ((define <+>) . text <$> ds),
+      vcat (RC.import' . li <$> lis),
+      vcat (RC.import' . mi <$> (sort (is P.<> libis) P.<> mis)),
+      vcat (usingNameSpace std . Just <$> us)])
     (pure empty) (pure empty)
     where mi, li :: Label -> CppHdrCode Doc
           mi = modImport
@@ -2657,11 +2657,11 @@ cppFuncType
 cppFuncType ps' r' =  do
   ps <- sequence ps'
   r <- r'
-  typeFromData (Func (fmap getCodeType ps) (getCodeType r)) "auto" (text "auto")
+  typeFromData (Func (getCodeType <$> ps) (getCodeType r)) "auto" (text "auto")
 
 cppLambda :: [CppSrcCode BinderD] -> CppSrcCode Value -> Doc
 cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>)
-  (fmap (renderType . binderType) ps) (fmap RC.binderElim ps)) <+>
+  (renderType . binderType <$> ps) (RC.binderElim <$> ps)) <+>
   bodyStart <> returnLabel <+> RC.value ex <> endStatement <> bodyEnd
 
 stodFunc :: VS (CppSrcCode Value) -> VS (CppSrcCode Value)
@@ -2704,8 +2704,8 @@ cppFuncDecDef v scp ps bod = do
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
   mkStmt $ renderType (variableType vr) <+> RC.variable vr <+> equals <+>
-    cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>) (fmap (renderType .
-    variableType) pms) (fmap RC.variable pms)) <+>  bodyStart $$
+    cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>) (renderType .
+    variableType <$> pms) (RC.variable <$> pms)) <+>  bodyStart $$
     indent (RC.body b) $$ bodyEnd
 
 cppPrint
@@ -2906,8 +2906,8 @@ cpphVarsFuncsList st vs fs =
 cppsClass :: [CppSrcCode StateVarData] ->
   [CppSrcCode MethodData] -> CppSrcCode Class
 cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
-  where vars = fmap RC.stateVar vs
-        funcs = fmap RC.method fs
+  where vars = RC.stateVar <$> vs
+        funcs = RC.method <$> fs
 
 cpphClass :: Label -> CppHdrCode ParentSpec ->
   [CppHdrCode StateVarData] -> [CppHdrCode MethodData] ->
@@ -2974,7 +2974,7 @@ cppInOutParams
   -> [VS (r Variable)]
   -> [VS (r Variable)]
   -> [MS (r param)]
-cppInOutParams ins [_] [] = fmap getParam ins
-cppInOutParams ins [] [v] = fmap getParam $ v : ins
+cppInOutParams ins [_] [] = getParam <$> ins
+cppInOutParams ins [] [v] = getParam <$> v : ins
 cppInOutParams ins outs both = fmap pointerParam both P.<> fmap getParam ins P.<>
   fmap pointerParam outs

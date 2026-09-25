@@ -140,7 +140,7 @@ helperUnit a = case getSecondSymb a of
 u ^: i = UE (helperUnit u) (upow (usymb u))
 --u ^: i = UE ((helperUnit u) ^. uid) (upow (u ^. usymb))
   where
-    upow (US l) = US $ fmap (second (* i)) l
+    upow (US l) = US $ second (* i) <$> l
 
 -- | Combinator for dividing one unit by another.
 (/:) :: UnitDefn -> UnitDefn -> UnitEquation

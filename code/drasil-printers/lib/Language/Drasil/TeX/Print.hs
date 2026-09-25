@@ -69,7 +69,7 @@ lo (List l)               _ = toText $ makeList l
 lo (Figure r c f wp)      _ = toText $ makeFigure (lspec r) (maybe empty spec c) f wp
 lo (Bib bib)             sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)    _  = toText $ makeGraph
-  (fmap (bimap spec spec) ps)
+  (bimap spec spec <$> ps)
   (pure $ text $ maybe "" (\x -> "text width = " <> show x <> "em ,") w)
   (pure $ text $ maybe "" (\x -> "minimum height = " <> show x <> "em, ") h)
   (spec c) (lspec l)
@@ -108,8 +108,8 @@ pExpr (Div n d)      = command2D "frac" (pExpr n) (pExpr d)
 pExpr (Case ps)      = mkEnv "cases" ($+$) (cases ps vpunctuate dbs pExpr)
 pExpr (Mtx a)        = mkEnv "bmatrix" ($+$) (pMatrix a vpunctuate dbs pExpr)
 pExpr (Row [x])      = brace $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
-pExpr (Row l)        = foldl1 (<>) (fmap pExpr l)
-pExpr (Set l)        = foldl1 (<>) (fmap pExpr l)
+pExpr (Row l)        = foldl1 (<>) (pExpr <$> l)
+pExpr (Set l)        = foldl1 (<>) (pExpr <$> l)
 pExpr (Ident s@[_])  = pure . text . escapeIdentSymbols $ s
 pExpr (Ident s)      = commandD "mathit" (pure . text . escapeIdentSymbols $ s)
 pExpr (Label s)      = command "text" s
@@ -196,14 +196,14 @@ fence _ Norm      = pure $ text "\\|"
 
 -- | For printing a Matrix.
 pMatrix :: [[Expr]] -> (TP.Doc -> [D] -> D) -> TP.Doc -> (Expr -> D) -> D
-pMatrix e catf esc f = catf esc (fmap pIn e)
-  where pIn x = hpunctuate (text " & ") (fmap f x)
+pMatrix e catf esc f = catf esc (pIn <$> e)
+  where pIn x = hpunctuate (text " & ") (f <$> x)
 
 -- | Helper for printing case expression.
 cases :: [(Expr,Expr)] -> (TP.Doc -> [D] -> D) -> TP.Doc -> (Expr -> D) -> D
 cases [] _ _ _ = error "Attempt to create case expression without cases"
-cases e catf esc f = catf esc (fmap _case e)
-  where _case (x, y) = hpunctuate (text ", & ") (fmap f [x, y])
+cases e catf esc f = catf esc (_case <$> e)
+  where _case (x, y) = hpunctuate (text ", & ") (f <$> [x, y])
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
@@ -247,16 +247,16 @@ dontCount = "\\/[]{}()_^$:"
 
 -- | Creates the header for a table.
 makeHeaders :: [Spec] -> D
-makeHeaders ls = hpunctuate (text " & ") (fmap (bold . spec) ls) %% pure dbs
+makeHeaders ls = hpunctuate (text " & ") (bold . spec <$> ls) %% pure dbs
 
 -- | Create rows for a table with a single line break between them.
 makeRows :: [[Spec]] -> D
 makeRows [] = mempty
-makeRows lls = foldr1 ((%%) . (%% pure dbs)) $ fmap makeColumns lls
+makeRows lls = foldr1 ((%%) . (%% pure dbs)) $ makeColumns <$> lls
 
 -- | Creates the columns for a table.
 makeColumns :: [Spec] -> D
-makeColumns ls = hpunctuate (text " & ") $ fmap spec ls
+makeColumns ls = hpunctuate (text " & ") $ spec <$> ls
 
 ------------------ Spec -----------------------------------
 
@@ -316,7 +316,7 @@ pUnit (L.US ls) = formatu t b
     formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> D
     formatu [] l = line l
     formatu l [] = foldr ((<>) . pow) empty l
-    formatu nu de = toMath $ fraction (line nu) $ line $ fmap (second negate) de
+    formatu nu de = toMath $ fraction (line nu) $ line $ second negate <$> de
     line :: [(L.Symbol,Integer)] -> D
     line []  = empty
     line [n] = pow n
@@ -325,7 +325,7 @@ pUnit (L.US ls) = formatu t b
     pow (n,1) = p_symb n
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
-    p_symb (LD.Concat s) = foldl' (<>) empty $ fmap p_symb s
+    p_symb (LD.Concat s) = foldl' (<>) empty $ p_symb <$> s
     p_symb n = let cn = symbolNeeds n in switch (const cn) $ pExpr $ symbol n
 
 -----------------------------------------------------------------
@@ -354,9 +354,9 @@ makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth <> col (rr <> "\\a
 -- | Helper that makes the rows of a definition table.
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []      = error "No fields to create Defn table"
-makeDRows sm ls      = foldl1 (%%) $ fmap (\(f, d) ->
+makeDRows sm ls      = foldl1 (%%) $ (\(f, d) ->
   pure (dbs <+> text "\\midrule") %%
-  pure (text (f <> " & ")) <> print sm d) ls
+  pure (text (f <> " & ")) <> print sm d) <$> ls
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------
@@ -385,8 +385,8 @@ makeList (Ordered []   )     = empty
 makeList (Definitions []   ) = empty
 makeList (Simple items)      = description' $ vcat $ simItem items
 makeList (Desc items)        = description  $ vcat $ simItem items
-makeList (Unordered items)   = itemize      $ vcat $ fmap plItem items
-makeList (Ordered items)     = enumerate    $ vcat $ fmap plItem items
+makeList (Unordered items)   = itemize      $ vcat $ plItem <$> items
+makeList (Ordered items)     = enumerate    $ vcat $ plItem <$> items
 makeList (Definitions items) = symbDescription $ vcat $ defItem items
 
 -- | Helper that renders items in 'makeList'.
@@ -544,7 +544,7 @@ showFieldCom s = wrapField (Command s)
 rendPeople :: PrintingInformation -> L.People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
 rendPeople sm people = I.spec sm $
-  foldl1 (\x y -> x L.+:+ L.S "and" L.+:+ y) $ fmap (L.S . L.rendPersLFM) people
+  foldl1 (\x y -> x L.+:+ L.S "and" L.+:+ y) $ L.S . L.rendPersLFM <$> people
 
 -- | Helper that renders months for citations.
 bibTeXMonth :: L.Month -> Spec

@@ -58,7 +58,7 @@ fromReplace src c = S "From" +:+ refS src `sC` S "we can replace" +: ch c
 -- | Takes a list of 'Referable's and 'Symbol's and outputs as a Sentence "By substituting @symbols@, this can be written as:".
 substitute :: (Referable r, HasShortName r, DefinesQuantity r) => [r] -> Sentence
 substitute s = S "By substituting" +: (foldlList Comma List l `sC` S "this can be written as")
-  where l = fmap (\x -> ch (x ^. defLhs) +:+ fromSource x) s
+  where l = (\x -> ch (x ^. defLhs) +:+ fromSource x) <$> s
 
 -- | Takes a 'HasSymbol' that is also 'Referable' and outputs as a 'Sentence': "@symbol@ is defined in @reference@."
 definedIn :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence
@@ -83,7 +83,7 @@ definedIn''' q src = ch q `S.is` S "defined in" +:+ refS src
 --     * t - the title of the list ('Sentence'),
 --     * l - the list to be enumerated (['Sentence']).
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
-mkEnumAbbrevList s t l = zip [t :+: S (show x) | x <- [s..]] $ fmap Flat l
+mkEnumAbbrevList s t l = zip [t :+: S (show x) | x <- [s..]] $ Flat <$> l
 
 -- | Takes an amount as a 'Sentence' and appends a unit to it.
 fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
@@ -122,7 +122,7 @@ makeTMatrix rowName rows cols = zipSentList [] rowName [zipFTable' x cols | x <-
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
 mkTableFromColumns l =
   let l' = filter (not . all isEmpty . snd) l in
-  (fmap fst l', transpose $ fmap (fmap replaceEmptyS . snd) l')
+  (fst <$> l', transpose $ fmap replaceEmptyS . snd <$> l')
   where
     isEmpty       EmptyS = True
     isEmpty       _      = False
@@ -218,7 +218,7 @@ fromSource r = sParen (S "from" +:+ refS r)
 
 -- | Similar to `fromSource` but takes a list of references instead of one.
 fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
-fromSources rs = sParen (S "from" +:+ foldlList Comma List (fmap refS rs))
+fromSources rs = sParen (S "from" +:+ foldlList Comma List (refS <$> rs))
 
 -- | Output is of the form "@reference - sentence@".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

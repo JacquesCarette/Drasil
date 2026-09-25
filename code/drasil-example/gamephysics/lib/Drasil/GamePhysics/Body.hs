@@ -227,7 +227,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  fmap bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp, sysCtxSysResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -256,7 +256,7 @@ userCharacteristicsIntro = foldlSP
 
 probDescIntro :: Sentence
 probDescIntro = foldlSent_
-  [purp, S "in a", foldlList Comma List $ fmap S ["simple", "lightweight", "fast", "portable"],
+  [purp, S "in a", foldlList Comma List $ S <$> ["simple", "lightweight", "fast", "portable"],
   S "manner" `sC` S "which will allow" `S.for` S "the production of higher quality" +:+. plural product_,
   S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
   S "need", plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,

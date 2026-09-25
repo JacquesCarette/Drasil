@@ -79,7 +79,7 @@ getDerivedOuts :: GenState [CodeVarChunk]
 getDerivedOuts = do
   g <- get
   dvName <- genICName DerivedValuesFn
-  getParams dvName Out $ fmap codeChunk $ g ^. derivedInputs
+  getParams dvName Out $ codeChunk <$> g ^. derivedInputs
 
 -- | The parameters to the function for checking constraints on the inputs are
 -- any inputs with constraints, and any variables used in the expressions of
@@ -109,7 +109,7 @@ getOutputParams :: GenState [CodeVarChunk]
 getOutputParams = do
   g <- get
   woName <- genICName WriteOutput
-  getParams woName In $ fmap (resolveOutputDefType g) (g ^. outputs)
+  getParams woName In $ resolveOutputDefType g <$> (g ^. outputs)
 
 -- | Prefer the calculated definition's type when an output is produced by a
 -- generated definition (notably ODE outputs, whose solved result may have a
@@ -120,7 +120,7 @@ resolveOutputDefType g out =
     Map.lookup (out ^. uid) (Map.fromList defsByUID)
   where
     defsByUID :: [(UID, CodeDefinition)]
-    defsByUID = fmap (\d -> (d ^. uid, d)) (g ^. execOrder)
+    defsByUID = (\d -> (d ^. uid, d)) <$> (g ^. execOrder)
 
 -- | Passes parameters that are inputs to 'getInputVars' for further processing.
 -- Passes parameters that are constants to 'getConstVars' for further processing.
@@ -131,9 +131,9 @@ getParams :: (Quantity c, MayHaveUnit c, Concept c) => Name -> ParamType -> [c] 
 getParams n pt cs' = do
   g <- get
   let s = g
-      cs = fmap quantvar cs'
+      cs = quantvar <$> cs'
       ins = s ^. inputs
-      cnsnts = fmap quantvar $ s ^. constDefns
+      cnsnts = quantvar <$> s ^. constDefns
       inpVars = filter (`elem` ins) cs
       conVars = filter (`elem` cnsnts) cs
       csSubIns = filter ((`notMember` (g ^. concMatches)) . (^. uid))

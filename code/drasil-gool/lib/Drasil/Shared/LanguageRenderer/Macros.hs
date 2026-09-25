@@ -246,7 +246,7 @@ stringListLists lsts sl = do
     listVals _ = error
       "All values passed to stringListLists must have list types"
     loop = IC.forRange var_i (IC.litInt 0) (IC.listSize sl #/ numLists)
-      (IC.litInt 1) (bodyStatements $ appendLists (fmap IC.valueOf lsts) 0)
+      (IC.litInt 1) (bodyStatements $ appendLists (IC.valueOf <$> lsts) 0)
     appendLists [] _ = []
     appendLists (v:vs) n = IC.listAppend v (cast
       (IC.innerType $ onStateValue valueType v)

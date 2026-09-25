@@ -252,7 +252,7 @@ getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure 
   where inExp _ Unbundled = []
         inExp Unmodular Bundled = (ipName, prn) : inVarDefs prn
         inExp Modular Bundled = (ipName , ipName) : inVarDefs ipName
-        inVarDefs n = fmap ((, n) . codeName) ins
+        inVarDefs n = (, n) . codeName <$> ins
         ipName = icNames chs InputParameters
 
 -- | Gets input variables for classes for InputParameters module.
@@ -264,7 +264,7 @@ getInputCls _ [] = []
 getInputCls chs ins = inCls (inputStructure $ dataInfo chs)
   where inCls Unbundled = []
         inCls Bundled = (ipName, ipName) : inVarDefs
-        inVarDefs = fmap ((, ipName) . codeName) ins
+        inVarDefs = (, ipName) . codeName <$> ins
         ipName = icNames chs InputParameters
 
 -- | Gets constants to be exported for InputParameters or Constants module.
@@ -282,7 +282,7 @@ getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure 
         cExp _ (Store Bundled) _ = zipCs $ repeat (icNames chs Constants)
         cExp _ WithInputs Bundled = zipCs $ repeat (icNames chs InputParameters)
         cExp _ _ _ = []
-        zipCs = zip (fmap codeName cs)
+        zipCs = zip (codeName <$> cs)
 
 -- | Gets state variables for constants in a class for InputParameters or Constants module.
 -- If there are no constants, state variables for the constants are not defined in any class.
@@ -295,7 +295,7 @@ getConstantsCls chs cs = cnCls (constStructure $ dataInfo chs) (inputStructure $
   where cnCls (Store Bundled) _ = zipCs Constants
         cnCls WithInputs Bundled = zipCs InputParameters
         cnCls _ _ = []
-        zipCs ic = fmap ((, icNames chs ic) . codeName) cs
+        zipCs ic = (, icNames chs ic) . codeName <$> cs
 
 -- | Get derived input functions (for @derived_values@).
 -- If there are no derived inputs, a derived inputs function is not generated.

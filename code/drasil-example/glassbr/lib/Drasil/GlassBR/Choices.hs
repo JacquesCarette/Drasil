@@ -24,4 +24,4 @@ choices = defaultChoices {
 }
 
 configFp :: [RelativeFile]
-configFp = fmap relativeFile ["SDF.txt", "TSD.txt"]
+configFp = relativeFile <$> ["SDF.txt", "TSD.txt"]

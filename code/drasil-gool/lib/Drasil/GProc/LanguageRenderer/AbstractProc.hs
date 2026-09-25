@@ -129,7 +129,7 @@ funcDecDef v scp ps b = do
   modify $ setVarScope (variableName vr) (RC.scopeData scp)
   s <- get
   f <- IC.function (variableName vr) private (pure $ variableType vr)
-    (fmap IC.param ps) b
+    (IC.param <$> ps) b
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RC.method f
 

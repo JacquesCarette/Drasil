@@ -84,8 +84,8 @@ unicodeConv (Variable st) = Variable $ unicodeString st
 unicodeConv (Label    st) = Label    $ unicodeString st
 unicodeConv (Atop    d s) = Atop d   $ unicodeConv s
 unicodeConv (Corners a b c d s) =
-  Corners (fmap unicodeConv a) (fmap unicodeConv b) (fmap unicodeConv c) (fmap unicodeConv d) (unicodeConv s)
-unicodeConv (Concat ss) = Concat $ fmap unicodeConv ss
+  Corners (unicodeConv <$> a) (unicodeConv <$> b) (unicodeConv <$> c) (unicodeConv <$> d) (unicodeConv s)
+unicodeConv (Concat ss) = Concat $ unicodeConv <$> ss
 unicodeConv x = x
 
 -- | Helper for 'unicodeConv' that converts each Unicode character to text equivalent.

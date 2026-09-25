@@ -71,11 +71,11 @@ assertAllEq cxt es expect s
   | allTsAreSp = pure ()
   | otherwise  = Left $ temporaryIndent "  " (s <> "\nReceived:\n" <> dumpAllTs)
   where
-    allTs = fmap (infer cxt) es
+    allTs = infer cxt <$> es
     allTsAreSp = all (\case
       Right  t -> t == expect
       Left _   -> False) allTs
-    dumpAllTs = intercalate "\n" $ fmap (("- " ++) . either ("ERROR: " ++) show) allTs
+    dumpAllTs = intercalate "\n" $ ("- " ++) . either ("ERROR: " ++) show <$> allTs
 
 -- | A temporary, hacky, indentation function. It should be removed when we
 -- switch to using something else for error messages, which can be later

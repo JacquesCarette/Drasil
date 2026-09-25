@@ -100,7 +100,7 @@ helloInitVariables
 helloInitVariables = block [comment "Initializing variables",
   varDec (var "a" int) mainFn,
   varDecDef (var "b" int) mainFn (litInt 5),
-  arrayDecDef (var "arr" (arrayType int)) mainFn (fmap litInt [1..3]),
+  arrayDecDef (var "arr" (arrayType int)) mainFn (litInt <$> [1..3]),
   printStr "Value of arr: ",
   printLn $ valueOf (var "arr" (arrayType int)),
   printStr "Length of arr: ",

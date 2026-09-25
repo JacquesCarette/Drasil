@@ -46,7 +46,7 @@ instance SoftwareDossierSym SwiftProject where
 -- | Create a build configuration for Swift files. Takes in 'FilePath's and the type of implementation.
 swiftBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
 swiftBuildConfig fs it = buildAll (\i o -> [asFragment "swiftc" : i P.<>
-  [asFragment "-o", o] P.<> concatMap (\f -> fmap asFragment ["-I", f]) fs P.<>
+  [asFragment "-o", o] P.<> concatMap (\f -> asFragment <$> ["-I", f]) fs P.<>
   asLib it]) (outName it)
   where asLib Library = [asFragment "-emit-library"]
         asLib Program = []

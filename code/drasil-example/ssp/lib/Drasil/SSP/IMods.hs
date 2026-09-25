@@ -57,7 +57,7 @@ fctSfty :: InstanceModel
 fctSfty = im (equationalModel' fctSftyQD)
  [qwUC slopeDist, qwUC slopeHght, qwUC waterHght, qwUC effCohesion, qwUC fricAngle,
   qwUC dryWeight, qwUC satWeight, qwUC waterWeight, qwUC slipDist, qwUC slipHght, qwUC constF]
-  (dqdWr fs) [] (fmap dRef [chen2005, karchewski2012])
+  (dqdWr fs) [] (dRef <$> [chen2005, karchewski2012])
   (Just fctSftyDeriv) "fctSfty" [fctSftyDesc]
 
 fctSftyQD :: SimpleQDef
@@ -76,20 +76,20 @@ fctSftyDesc = foldlList Comma List [shearRNoIntsl `definedIn'''` resShearWOGD,
   shearFNoIntsl `definedIn'''` mobShearWOGD]
 
 fctSftyDeriv :: Derivation
-fctSftyDeriv = mkDerivNoHeader (weave fctSftyDerivSentences1 (fmap eS fctSftyDerivEqns1) <>
+fctSftyDeriv = mkDerivNoHeader (weave fctSftyDerivSentences1 (eS <$> fctSftyDerivEqns1) <>
   fmap eS [fctSftyDerivEqn10b, fctSftyDerivEqn10c] <> [fctSftyDerivEllipsis] <>
   fmap eS [fctSftyDerivEqn10d, fctSftyDerivEqn10e, fctSftyDerivEqn10f] <>
-  weave fctSftyDerivSentences2 (fmap eS fctSftyDerivEqns2) <>
+  weave fctSftyDerivSentences2 (eS <$> fctSftyDerivEqns2) <>
   fctSftyDerivSentence20)
 
 fctSftyDerivSentences1 :: [Sentence]
-fctSftyDerivSentences1 = fmap foldlSentCol [fctSftyDerivSentence1,
+fctSftyDerivSentences1 = foldlSentCol <$> [fctSftyDerivSentence1,
   fctSftyDerivSentence2, fctSftyDerivSentence3, fctSftyDerivSentence4,
   fctSftyDerivSentence5, fctSftyDerivSentence6, fctSftyDerivSentence7,
   fctSftyDerivSentence8, fctSftyDerivSentence9, fctSftyDerivSentence10]
 
 fctSftyDerivSentences2 :: [Sentence]
-fctSftyDerivSentences2 = fmap foldlSentCol [fctSftyDerivSentence11,
+fctSftyDerivSentences2 = foldlSentCol <$> [fctSftyDerivSentence11,
   fctSftyDerivSentence12, fctSftyDerivSentence13, fctSftyDerivSentence14,
   fctSftyDerivSentence15, fctSftyDerivSentence16, fctSftyDerivSentence17,
   fctSftyDerivSentence18, fctSftyDerivSentence19]
@@ -377,7 +377,7 @@ fctSftyDerivEqn18 = sy fs $* (idx (sy mobShrC) (sy numbSlices $- int 1) $*
 nrmShrFor :: InstanceModel
 nrmShrFor = im nrmShrForMK [qwUC slopeDist, qwUC slopeHght, qwUC waterHght,
   qwUC waterWeight, qwUC slipDist, qwUC slipHght, qwUC constF]
-  normToShear [] (fmap dRef [chen2005, karchewski2012])
+  normToShear [] (dRef <$> [chen2005, karchewski2012])
   (Just nrmShrDeriv) "nrmShrFor" [nrmShrFDesc]
 
 nrmShrForMK :: ModelKind Expr
@@ -396,7 +396,7 @@ nrmShrFDesc = nrmShearNum `definedIn'''`
   nrmShrForDen !.)
 
 nrmShrDeriv :: Derivation
-nrmShrDeriv = mkDerivNoHeader (weave nrmShrDerivationSentences (fmap eS nrmShrDerivEqns) <>
+nrmShrDeriv = mkDerivNoHeader (weave nrmShrDerivationSentences (eS <$> nrmShrDerivEqns) <>
   nrmShrDerivSentence5)
 
 nrmShrDerivSentence1 :: [Sentence]
@@ -432,7 +432,7 @@ nrmShrDerivSentence5 = [eqN 16 `S.for` ch normToShear +:+
   getTandS fs +:+. sParen (refS fctSfty)]
 
 nrmShrDerivationSentences :: [Sentence]
-nrmShrDerivationSentences = fmap foldlSentCol [nrmShrDerivSentence1,
+nrmShrDerivationSentences = foldlSentCol <$> [nrmShrDerivSentence1,
   nrmShrDerivSentence2, nrmShrDerivSentence3, nrmShrDerivSentence4]
 
 nrmShrDerivEqns :: (ExprC r, LiteralC r) => [r]
@@ -465,7 +465,7 @@ nrmShrDerivEqn4 = sy normToShear $= sum1toN
 nrmShrForNum :: InstanceModel
 nrmShrForNum = im (othModel' nrmShrForNumRC) [qwUC slopeDist, qwUC slopeHght, qwUC waterHght,
   qwUC waterWeight, qwUC slipDist, qwUC slipHght]
-  nrmShearNum [] (fmap dRef [chen2005, karchewski2012])
+  nrmShearNum [] (dRef <$> [chen2005, karchewski2012])
   (Just nrmShrFNumDeriv) "nrmShrForNum" [nrmShrFNumDesc]
 
 nrmShrForNumRC :: RelationConcept
@@ -502,7 +502,7 @@ nrmShrFNumDesc = (foldlList Comma List [baseWthX `definedIn'''` lengthB,
 
 nrmShrForDen :: InstanceModel
 nrmShrForDen = im (othModel' nrmShrForDenRC) [qwUC slipDist, qwUC constF]
-  nrmShearDen [] (fmap dRef [chen2005, karchewski2012])
+  nrmShearDen [] (dRef <$> [chen2005, karchewski2012])
   (Just nrmShrFDenDeriv) "nrmShrForDen" [nrmShrFDenDesc]
 
 nrmShrForDenRC :: RelationConcept
@@ -557,7 +557,7 @@ sliceFsDesc = (foldlList Comma List [shearFNoIntsl `definedIn'''` mobShearWOGD,
   mobShrC `definedIn'''` convertFunc2] !.)
 
 intrSlcDeriv :: Derivation
-intrSlcDeriv = mkDerivNoHeader (weave intrSlcDerivationSentences (fmap eS intrSlcDerivEqns) <> intrSlcDerivSentence3)
+intrSlcDeriv = mkDerivNoHeader (weave intrSlcDerivationSentences (eS <$> intrSlcDerivEqns) <> intrSlcDerivSentence3)
 
 intrSlcDerivSentence1 :: [Sentence]
 intrSlcDerivSentence1 = [S "This derivation" `S.is` S "identical to the derivation for",
@@ -578,7 +578,7 @@ intrSlcDerivSentence3 = [S "The cases shown in" +:+ refS intsliceFs +:+
   ch normToShear +:+. sParen (refS nrmShrFor)]
 
 intrSlcDerivationSentences :: [Sentence]
-intrSlcDerivationSentences = fmap foldlSentCol [intrSlcDerivSentence1,
+intrSlcDerivationSentences = foldlSentCol <$> [intrSlcDerivSentence1,
   intrSlcDerivSentence2]
 
 intrSlcDerivEqns :: (ExprC r, LiteralC r) => [r]
@@ -659,8 +659,8 @@ instModIntro = [instModIntro1, instModIntro2]
 instModIntro1, instModIntro2 :: Sentence
 
 instModIntro1 = foldlSent [D.toSent (atStartNP' (the goal)), foldlList Comma List
-  (fmap refS goals) `S.are` S "met by the simultaneous" +:+. (phrase solution `S.of_`
-  foldlList Comma List (fmap refS [fctSfty, nrmShrFor, intsliceFs])), D.toSent $ atStartNP (the goal),
+  (refS <$> goals) `S.are` S "met by the simultaneous" +:+. (phrase solution `S.of_`
+  foldlList Comma List (refS <$> [fctSfty, nrmShrFor, intsliceFs])), D.toSent $ atStartNP (the goal),
   refS identifyCritAndFSGS `S.is` S "also contributed to by",
   refS crtSlpId]
 

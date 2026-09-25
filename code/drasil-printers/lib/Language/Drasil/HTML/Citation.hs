@@ -196,7 +196,7 @@ artclChicago i = bookChicago i
 -- | Internal: Generate a list of people (after applying a given function).
 rendPeople :: (Person -> String) -> People -> Spec
 rendPeople _ []     = S "N.a." -- "No authors given"
-rendPeople f people = S . foldlList $ fmap f people --foldlList is in drasil-utils
+rendPeople f people = S . foldlList $ f <$> people --foldlList is in drasil-utils
 
 -- | Internal: Generate a list of people (of form FirstName LastName).
 rendPeople' :: People -> Spec
@@ -209,7 +209,7 @@ foldPages = rawText' . foldlList . numList "–"
 
 -- | Internal: Organize a list of people.
 foldPeople :: People -> HTMLBody
-foldPeople p = rawText' . foldlList $ fmap fullName p
+foldPeople p = rawText' . foldlList $ fullName <$> p
 
 -- | Internal: Generate a person's last name.
 rendPersL :: Person -> String

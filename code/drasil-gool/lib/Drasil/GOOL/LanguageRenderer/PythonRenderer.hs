@@ -725,13 +725,13 @@ instance ModuleSym PythonCode ModData MethodData where
     libis <- getLibImports
     mis <- getModuleImports
     pure $ vibcat [
-      vcat (fmap (RC.import' .
-        (langImport :: Label -> PythonCode Doc)) lis),
-      vcat (fmap (RC.import' .
-        (langImport :: Label -> PythonCode Doc)) (sort $ is P.<>
+      vcat (RC.import' .
+        (langImport :: Label -> PythonCode Doc) <$> lis),
+      vcat (RC.import' .
+        (langImport :: Label -> PythonCode Doc) <$> sort (is P.<>
         libis)),
-      vcat (fmap (RC.import' .
-        (modImport :: Label -> PythonCode Doc)) mis)])
+      vcat (RC.import' .
+        (modImport :: Label -> PythonCode Doc) <$> mis)])
     (pure empty) getMainDoc
 
 instance RenderMod PythonCode ModData where
@@ -1072,7 +1072,7 @@ pyMultCstrsError :: String
 pyMultCstrsError = "Python classes cannot have multiple constructors"
 
 pyBlockComment :: [String] -> Doc -> Doc
-pyBlockComment lns cmt = vcat $ fmap ((<+>) cmt . text) lns
+pyBlockComment lns cmt = vcat $ (<+>) cmt . text <$> lns
 
 pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty

@@ -65,7 +65,7 @@ readWithDataDesc fp ddsc = do
 -- | Defines the DataDesc for the file containing a sample data set, which a
 -- user must supply if they want to generate a sample input file.
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
-sampleInputDD ds = dataDesc (junk : intersperse junk (fmap toData ds)) "\n"
+sampleInputDD ds = dataDesc (junk : intersperse junk (toData <$> ds)) "\n"
   where toData d = toData' (d ^. typ) d
         toData' t@(Vect _) d = list d
           (take (getDimension t) ([", ", "; "] <> iterate (':':) ":"))
@@ -101,10 +101,10 @@ splitAtFirst = splitAtFirst' []
 
 -- | Converts a list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strListAsExpr :: Space -> [String] -> Expr
-strListAsExpr (Vect t) ss = Matrix [fmap (strAsExpr t) ss]
+strListAsExpr (Vect t) ss = Matrix [strAsExpr t <$> ss]
 strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
 
 -- | Converts a 2D list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strList2DAsExpr :: Space -> [[String]] -> Expr
-strList2DAsExpr (Vect (Vect t)) sss = Matrix $ fmap (fmap (strAsExpr t)) sss
+strList2DAsExpr (Vect (Vect t)) sss = Matrix $ fmap (strAsExpr t) <$> sss
 strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"

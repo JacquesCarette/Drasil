@@ -254,7 +254,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  fmap bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp, sysCtxSysResp]
 
 -- SECTION 3.2 --
 -- User Characteristics automatically generated with the
@@ -302,7 +302,7 @@ terms = [fsConcept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
 
 -- SECTION 4.1.2 --
 physSystParts :: [Sentence]
-physSystParts = fmap foldlSent [
+physSystParts = foldlSent <$> [
   [D.toSent (atStartNP (a_ slope)), S "comprised of one", phrase soilLyr],
   [D.toSent (atStartNP (a_ waterTable)) `sC` S "which may or may not exist"]]
 

@@ -157,8 +157,8 @@ procforAnls = foldlSP [S "Free-flight", phrase projMotion, S "problems can be so
 
 stepOneCont, stepTwoCont, stepThreeCont, stepFourCont, horizMotionEqn1, horizMotionEqn1Sent, horizMotionEqn2, horizMotionEqn3,
   vertMotionEqn1, vertMotionEqn2, vertMotionEqn3, verMotionCont, stepFiveCont :: Contents
-stepOneCont = enumBulletU $ fmap foldlSent
-  [[S "Establish the fixed", P lX `sC` P lY, phrase coordinate +:+. (S "axes and sketch the trajectory" `S.ofThe` S "particle"),
+stepOneCont = enumBulletU $ foldlSent
+  <$> [[S "Establish the fixed", P lX `sC` P lY, phrase coordinate +:+. (S "axes and sketch the trajectory" `S.ofThe` S "particle"),
     S "Between any *two points*" `S.onThe` S "path specify the given problem data and the *three unknowns*.",
     S "In all cases the", phrase acceleration `S.of_` phrase gravity +:+. S "acts downward",
     S "The particle's initial and final", plural velocity +:+ S "should be represented in terms of their",

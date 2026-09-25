@@ -23,7 +23,7 @@ analysisSec analysisPath typePath clsIPath graphPath pkgs =
     section drasilAnalysisTitle -- Section title
     [mkParagraph analysisIntro] -- Section introduction
     [dataTableSec analysisPath, tableOfGraphsSec typePath clsIPath pkgs,
-      graphSec graphPath $ fmap ("drasil-" ++) pkgs] -- Subsections
+      graphSec graphPath $ ("drasil-" ++) <$> pkgs] -- Subsections
     $ makeSecRef "Analysis" $ S "Analysis" -- Section Reference
 
 -- | Analysis section title.
@@ -45,7 +45,7 @@ analysisRefs analysisPath typePath clsIPath graphPath pkgs =
   <> fmap (getGraphsInTableRef "classInst" "" clsIPath) pkgs
   <> fmap (getGraphsInTableRef "datatype" "circo_" typePath) pkgs
   <> fmap (getGraphsInTableRef "classInst" "circo_" clsIPath) pkgs
-  <> drasilDepGraphRefs graphPath (fmap ("drasil-" ++) pkgs)
+  <> drasilDepGraphRefs graphPath (("drasil-" ++) <$> pkgs)
 
 -- * Data Table Subsection (Intersections of Types and Classes)
 --
@@ -218,8 +218,8 @@ drasilDepGraphRefs path pkgs = zipWith (\x y -> makeURI x y $ shortname' $ S x) 
 
 -- | Create the list of folders with the links to dependency graph pdfs.
 folderList :: FilePath -> [String] -> RawContent
-folderList path pkgs = Enumeration $ Bullet $ fmap (, Nothing) (folderListItems path pkgs)
+folderList path pkgs = Enumeration $ Bullet $ (, Nothing) <$> folderListItems path pkgs
 
 -- | Helper to create the list items for dependency graph pdfs.
 folderListItems :: FilePath -> [String] -> [ItemType]
-folderListItems path pkgs = fmap Flat $ zipWith namedRef (drasilDepGraphRefs path pkgs) $ fmap S pkgs
+folderListItems path pkgs = fmap Flat $ zipWith namedRef (drasilDepGraphRefs path pkgs) $ S <$> pkgs

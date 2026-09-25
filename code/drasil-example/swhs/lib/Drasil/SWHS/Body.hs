@@ -161,8 +161,8 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 ------------------------------
 
 introStart :: Sentence
-introStart = foldlSent [S "Due to", foldlList Comma List (fmap S
-  ["increasing costs", "diminishing availability", "negative environmental impact"]) `S.of_`
+introStart = foldlSent [S "Due to", foldlList Comma List (S
+  <$> ["increasing costs", "diminishing availability", "negative environmental impact"]) `S.of_`
   S "fossil fuels" `sC` S "the demand" `S.is` S "high for renewable",
   D.toSent (pluralNP (enerSrc `and_PS` energy)), S "storage technology"]
 
@@ -233,7 +233,7 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent [D.toSent (atStartNP' (the inModel)),
   S "to be solved" `S.are` S "referred to as" +:+.
-  foldlList Comma List (fmap refS iMods), S "The", plural inModel,
+  foldlList Comma List (refS <$> iMods), S "The", plural inModel,
   S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_`
   S "algebraic", plural equation, S "that", phrase model +:+.
   phrase swhs, projAbrvS projName, S "solves these", short ode :+: S "s"]
@@ -279,10 +279,10 @@ sysCntxtRespIntro pro = foldlSPCol [projAbrvS pro +:+. S "is mostly self-contain
 systContRespBullets :: ProjectName -> Contents
 systContRespBullets prog = UlC $ ulcc $ Enumeration $ bulletNested
   [titleize user +: S "Responsibilities", projAbrvS prog +: S "Responsibilities"]
-  $ fmap bulletFlat [userResp, swhsResp]
+  $ bulletFlat <$> [userResp, swhsResp]
 
 userResp :: [Sentence]
-userResp = fmap foldlSent_ [
+userResp = foldlSent_ <$> [
   [S "Provide the", phrase input_, plural datum `S.toThe`
     phrase system `sC` S "ensuring no errors" `S.inThe` plural datum, S "entry"],
   [S "Take care that consistent", plural unit_ `S.are` S "used for",
@@ -290,7 +290,7 @@ userResp = fmap foldlSent_ [
   ]
 
 swhsResp :: [Sentence]
-swhsResp = fmap foldlSent_ [
+swhsResp = foldlSent_ <$> [
   [S "Detect", plural datum, S "type mismatch" `sC` S "such as a string" `S.of_`
     S "characters instead" `S.ofA` S "floating point number"],
   [S "Determine if the", plural input_, S "satisfy the required",
@@ -339,7 +339,7 @@ terms = [htFlux, phaseChangeMaterial, cw heatCapSpec, thermalConduction, transie
 -----------------------------------------
 
 physSystParts :: [Sentence]
-physSystParts = fmap foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC,
+physSystParts = foldlSent_ <$> [physSyst1 tank water, physSyst2 coil tank htFluxC,
   [short phsChgMtrl, S "suspended in" +:+. phrase tank,
   sParen (ch htFluxP +:+ S "represents the" +:+. phrase htFluxP)]]
 
@@ -428,7 +428,7 @@ dataContMid = foldlSent [D.toSent (atStartNP (the column)) `S.for` D.toSent (plu
   S "to reasonable", plural value]
 
 dataContFooter :: Sentence
-dataContFooter = foldlSent_ $ fmap foldlSent [
+dataContFooter = foldlSent_ $ foldlSent <$> [
 
   [sParen (S "*"), S "These", plural quantity, S "cannot be equal to zero" `sC`
   S "or there will be a divide by zero in the", phrase model],

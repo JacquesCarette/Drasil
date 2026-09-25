@@ -448,7 +448,7 @@ getClasses = gets (^. currClasses)
 
 updateClassMap :: String -> FileState -> FileState
 updateClassMap n fs = over (goolState . classMap) (Map.union (Map.fromList $
-  fmap (n,) (fs ^. currClasses))) fs
+  (n,) <$> (fs ^. currClasses))) fs
 
 getClassMap :: VS (Map String String)
 getClassMap = gets (^. (lensVStoFS . goolState . classMap))
@@ -557,7 +557,7 @@ genVarName candidates backup = do
   used <- gets (^. varNames)
   let
     isAvailable (n,c) = all (maybe (const False) (>=) c) $ Map.lookup n used
-    choice = foldr const (splitVarName backup) $ filter isAvailable $ fmap splitVarName candidates
+    choice = foldr const (splitVarName backup) $ filter isAvailable $ splitVarName <$> candidates
   bumpVarName choice
 
 genLoopIndex :: MS String

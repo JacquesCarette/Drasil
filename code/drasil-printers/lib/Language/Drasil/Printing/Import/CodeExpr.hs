@@ -69,7 +69,7 @@ call :: PrintingInformation -> UID -> [CodeExpr] -> [(UID, CodeExpr)] -> P.Expr
 call sm f ps ns = P.Row [symbol $ lookupC' sm f,
   parens $ P.Row $ intersperse (P.MO P.Comma) $ fmap (codeExpr sm) ps <>
   zipWith (\n a -> P.Row [symbol $ lookupC' sm n,
-  P.MO P.Eq, codeExpr sm a]) (fmap fst ns) (fmap snd ns)]
+  P.MO P.Eq, codeExpr sm a]) (fst <$> ns) (snd <$> ns)]
 
 -- | Helper function for addition 'EOperator's.
 eopAdds :: PrintingInformation -> DomainDesc t CodeExpr CodeExpr -> CodeExpr -> P.Expr
@@ -118,9 +118,9 @@ codeExpr sm (Field o f)              = P.Row [symbol $ lookupC' sm o,
 codeExpr sm (Case _ ps)              =
   if length ps < 2
     then error "Attempting to use multi-case codeExpr incorrectly"
-    else P.Case (zip (fmap (codeExpr sm . fst) ps) (fmap (codeExpr sm . snd) ps))
-codeExpr sm (Matrix a)                  = P.Mtx $ fmap (fmap (codeExpr sm)) a
-codeExpr sm (Set _ a)                   = P.Row $ fmap (codeExpr sm) a
+    else P.Case (zip (codeExpr sm . fst <$> ps) (codeExpr sm . snd <$> ps))
+codeExpr sm (Matrix a)                  = P.Mtx $ fmap (codeExpr sm) <$> a
+codeExpr sm (Set _ a)                   = P.Row $ codeExpr sm <$> a
 codeExpr sm (Variable _ l)              = codeExpr sm l
 codeExpr sm (UnaryOp Log u)             = mkCall sm P.Log u
 codeExpr sm (UnaryOp Ln u)              = mkCall sm P.Ln u
@@ -166,11 +166,11 @@ codeExpr sm (RealI c ri)                = renderRealInt sm (lookupC' sm c) ri
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [CodeExpr] -> PrintingInformation -> P.Expr
-assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ fmap (expr' sm prec) exprs
+assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ expr' sm prec <$> exprs
 
 -- | Helper for rendering printable expressions.
 addExpr :: [CodeExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
-addExpr exprs o sm = addExprFilter (fmap (expr' sm (precA o)) exprs)
+addExpr exprs o sm = addExprFilter (expr' sm (precA o) <$> exprs)
 
 -- | Add add symbol only when the second Expr is not negation
 addExprFilter :: [P.Expr] -> [P.Expr]

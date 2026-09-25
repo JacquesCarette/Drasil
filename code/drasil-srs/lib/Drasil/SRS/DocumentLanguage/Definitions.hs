@@ -85,7 +85,7 @@ instanceModel fs m i = mkRawLC (Defini (foldr (mkIMField i m) [] fs)) (ref i)
 -- or IM definition automatically (called automatically by 'SCSSub' program).
 derivation :: (MayHaveDerivation c, HasShortName c, Referable c) => c -> Maybe Contents
 derivation c = fmap
-  (\(Derivation h d) -> LlC $ mkRawLC (DerivBlock h $ fmap makeDerivCons d) (ref c)) $
+  (\(Derivation h d) -> LlC $ mkRawLC (DerivBlock h $ makeDerivCons <$> d) (ref c)) $
   c ^. derivations
 
 -- | Helper function for creating the layout objects
@@ -111,7 +111,7 @@ mkTMField t m l@(Description v u) fs = (show l, toList $
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getDecRefs) : fs
 mkTMField t _ l@Notes fs =
-  nonEmpty fs (\ss -> (show l, fmap mkParagraph ss) : fs) (t ^. getNotes)
+  nonEmpty fs (\ss -> (show l, mkParagraph <$> ss) : fs) (t ^. getNotes)
 mkTMField _ _ l _ = error $ "Label " <> show l <> " not supported " <>
   "for theory models"
 
@@ -135,7 +135,7 @@ helpToRefField trg db
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.
 helperSources :: [DecRef] -> [Contents]
 helperSources [] = [mkParagraph $ S "--"]
-helperSources rs  = [mkParagraph $ foldlList Comma List $ fmap (\r -> Ref (r ^. uid) EmptyS $ refInfo r) rs]
+helperSources rs  = [mkParagraph $ foldlList Comma List $ (\r -> Ref (r ^. uid) EmptyS $ refInfo r) <$> rs]
 
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
 mkDDField :: DataDefinition -> SmithEtAlSRS -> Field -> ModRow -> ModRow
@@ -146,7 +146,7 @@ mkDDField d _ l@DefiningEquation fs = (show l, toList $ unlbldExpr <$> mexpress 
 mkDDField d m l@(Description v u) fs = (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkDDField d _ l@Source fs = (show l, helperSources $ d ^. getDecRefs) : fs
-mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, fmap mkParagraph ss) : fs) (d ^. getNotes)
+mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, mkParagraph <$> ss) : fs) (d ^. getNotes)
 mkDDField _ _ l _ = error $ "Label " <> show l <> " not supported " <>
   "for data definitions"
 
@@ -179,7 +179,7 @@ mkGDField g m l@(Description v u) fs = (show l,
   buildDescription v u (express g) m []) : fs
 mkGDField g m l@RefBy fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
 mkGDField g _ l@Source fs = (show l, helperSources $ g ^. getDecRefs) : fs
-mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, fmap mkParagraph ss) : fs) (g ^. getNotes)
+mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, mkParagraph <$> ss) : fs) (g ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " <> show l <> " not supported for gen defs"
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk.
@@ -193,10 +193,10 @@ mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getDecRefs) : fs
 mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
   where x = eS' $ i ^. output
 mkIMField i _ l@Input fs =
-  case fmap fst (i ^. inputs) of
+  case fst <$> (i ^. inputs) of
     [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
     (_:_) -> (show l, [mkParagraph $ foldl1 sC xs]) : fs
-  where xs = fmap (eS' . fst) $ i ^. inputs
+  where xs = eS' . fst <$> i ^. inputs
 mkIMField i _ l@InConstraints fs  =
   let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i ^. inputs) in
   (show l, foldr ((:) . UlC . ulcc . EqnBlock . express . uncurry realInterval) [] ll) : fs
@@ -204,7 +204,7 @@ mkIMField i _ l@OutConstraints fs =
   (show l, foldr ((:) . UlC . ulcc . EqnBlock . express . realInterval (i ^. output)) []
     (i ^. out_constraints)) : fs
 mkIMField i _ l@Notes fs =
-  nonEmpty fs (\ss -> (show l, fmap mkParagraph ss) : fs) (i ^. getNotes)
+  nonEmpty fs (\ss -> (show l, mkParagraph <$> ss) : fs) (i ^. getNotes)
 mkIMField _ _ l _ = error $ "Label " <> show l <> " not supported " <>
   "for instance models"
 

@@ -257,7 +257,7 @@ terms :: [ConceptChunk]
 terms = [htFlux, heatCapSpec, thermalConduction, transient]
 
 physSystParts :: [Sentence]
-physSystParts = fmap foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]
+physSystParts = foldlSent_ <$> [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
 goalInputs :: [Sentence]
 goalInputs = [D.toSent (phraseNP (temp `the_ofThe` coil)),

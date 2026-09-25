@@ -94,7 +94,7 @@ reflinkURI ref txt = text ("<a href=\\\"" P.<> ref P.<> "\\\">") <> txt <> text 
 --     * The 'String' in the pair is the attribute name,
 --     * The 'Doc' is the value for different attributes.
 wrapInside :: String -> [(String, Doc)] -> Doc
-wrapInside t p = text ("<" P.<> t P.<> " ") <> foldl1 (<>) (fmap foldStr p) <> text ">"
+wrapInside t p = text ("<" P.<> t P.<> " ") <> foldl1 (<>) (foldStr <$> p) <> text ">"
   where foldStr (attr, val) = text (attr P.<> "=\"") <> val <> text "\" "
 
 -- | Image tag wrapper.
@@ -120,7 +120,7 @@ mkDiv s a0 a1 = (bslash <> text s) <> brace a0 <> brace a1
 
 -- Maybe use "lines" instead (Data.List @lines :: String -> [String])
 stripnewLine :: String -> Doc
-stripnewLine s = hcat (fmap text (splitOn "\n" s))
+stripnewLine s = hcat (text <$> splitOn "\n" s)
 
 -- | Construct a Jupyter markdown cell with the given content.
 markdownCell :: Doc -> JSON
@@ -150,7 +150,7 @@ formatSource d =
     d' = render d
     t = T.pack d'
     t' = T.lines t
-  in JArray $ fmap (JString . (Prelude.<> "\n")) t'
+  in JArray $ JString . (Prelude.<> "\n") <$> t'
 
 -- | Generate the metadata necessary for a notebook document.
 makeMetadata :: [(Text, JSON)]

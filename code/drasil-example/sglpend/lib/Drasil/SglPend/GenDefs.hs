@@ -184,7 +184,7 @@ angFrequencyQD = mkQuantDef' angularFrequency (angularFrequency `the_ofThe` pend
 
 angFrequencyDeriv :: Derivation
 angFrequencyDeriv = mkDerivName (D.toSent $ phraseNP (angularFrequency `the_ofThe` pendulum))
-  (weave angFrequencyDerivSents $ fmap eS D.angFrequencyDerivEqns)
+  (weave angFrequencyDerivSents $ eS <$> D.angFrequencyDerivEqns)
 
 angFrequencyDerivSents :: [Sentence]
 angFrequencyDerivSents = [angFrequencyDerivSent1, angFrequencyDerivSent2, angFrequencyDerivSent3,
@@ -224,7 +224,7 @@ periodPendQD = mkQuantDef' period (NP.the (period `ofThe` pendulum)) $ express E
 
 periodPendDeriv :: Derivation
 periodPendDeriv = mkDerivName (D.toSent $ phraseNP (NP.the (period `ofThe` pendulum)))
-  (weave periodPendDerivSents $ fmap eS D.periodPendDerivEqns)
+  (weave periodPendDerivSents $ eS <$> D.periodPendDerivEqns)
 
 periodPendDerivSents :: [Sentence]
 periodPendDerivSents = [periodPendDerivSent1, periodPendDerivSent2]

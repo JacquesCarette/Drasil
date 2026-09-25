@@ -16,7 +16,7 @@ import Drasil.Makefile.MakeString (renderMS)
 -- | Render a 'Makefile' to a 'Doc'.
 printMakefile :: Makefile -> Doc
 printMakefile (M rules) = addCommonFeatures rules $
-  vcat (fmap (\x -> printRule x $+$ text "") rules) $$ printPhony rules
+  vcat ((\x -> printRule x $+$ text "") <$> rules) $$ printPhony rules
 
 -- | Renders specific makefile rules. Called by 'build'.
 printRule :: Rule -> Doc
@@ -45,7 +45,7 @@ printPhony = (<+>) (text ".PHONY:") . hsep . fmap (\(R _ t _ _ _) -> text $ rend
 
 -- | Renders targets with their dependencies.
 printTarget :: Target -> Dependencies -> Doc
-printTarget nameLb deps = text (renderMS nameLb P.<> ":") <+> hsep (fmap (text . renderMS) deps)
+printTarget nameLb deps = text (renderMS nameLb P.<> ":") <+> hsep (text . renderMS <$> deps)
 
 -- | Renders a makefile command.
 printCmd :: Command -> Doc

@@ -102,7 +102,7 @@ choiceSteps sg = fromList sg
 --   use-case-specific factor decides which step to use.
 choiceStep :: [Step] -> StepGroup
 choiceStep [] = error "choiceStep should be called with a non-empty list"
-choiceStep ss = fromList $ fmap (: []) ss
+choiceStep ss = fromList $ (: []) <$> ss
 
 -- | Specifies a step which must exist in some form in every use case.
 mandatoryStep :: Step -> StepGroup

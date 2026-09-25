@@ -79,7 +79,7 @@ mkGraphInfo si = GI {
 -- and system information. Also applies a given colour to the node family.
 mkGraphNodes :: TraceViewCat -> SmithEtAlSRS -> String -> NodeFamily
 mkGraphNodes entry si col = NF {nodeUIDs = nodeContents,
-  nodeLabels = fmap (checkUIDRefAdd s) nodeContents, nfLabel = checkNodeContents nodeContents,
+  nodeLabels = checkUIDRefAdd s <$> nodeContents, nfLabel = checkNodeContents nodeContents,
   nfColour = col}
     where
         checkNodeContents :: [UID] -> String
@@ -167,7 +167,7 @@ traceGCon = fmap LlC genTraceGraphLabCons <> [mkParagraph $ S
   "For convenience, the following graphs can be found at the links below:", traceGLst]
   where
     traceGLst = UlC $ ulcc $ Enumeration $ Bullet $
-      fmap ((, Nothing) . Flat . refS) traceyGraphGetRefs
+      (, Nothing) . Flat . refS <$> traceyGraphGetRefs
 
 -- | Generate the `LabelledContent` chunks
 genTraceGraphLabCons :: [LabelledContent]
@@ -189,8 +189,8 @@ traceyGraphGetRefs :: [Reference]
 traceyGraphPath :: String -> String
 
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
-traceGUIDs = fmap mkUid ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
-traceyGraphPaths = fmap (\x -> resourcePath <> "/" <> x <> ".svg") traceGFiles
+traceGUIDs = mkUid <$> ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
+traceyGraphPaths = (\x -> resourcePath <> "/" <> x <> ".svg") <$> traceGFiles
 traceyGraphGetRefs = zipWith (\x y -> makeURI' x y (shortname' $ S $ show x)) traceGUIDs traceyGraphPaths
 -- for actual use in creating the graph figures
 traceyGraphPath f = resourcePath <> "/" <> f <> ".svg"

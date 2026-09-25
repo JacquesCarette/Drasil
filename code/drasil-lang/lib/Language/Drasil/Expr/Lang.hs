@@ -289,7 +289,7 @@ instance Typed Expr Space where
   infer cxt (FCall uid exs) = do
     ft <- inferFromContext cxt uid
     (params, out) <- assertFunction ft $ \t -> "Function application on non-function `" <> show uid <> "` (" <> t <> ")."
-    let exst = fmap (infer cxt) exs
+    let exst = infer cxt <$> exs
     if NE.toList params == rights exst
       then pure out
       else Left $ "Function `" <> show uid <> "` expects parameters of types: " <> show params <> ", but received: " <> show (rights exst) <> "."
@@ -317,7 +317,7 @@ instance Typed Expr Space where
     where
         rows = length exss
         columns = if rows > 0 then length $ head exss else 0
-        sss = fmap (fmap (infer cxt)) exss
+        sss = fmap (infer cxt) <$> exss
         expT = head $ head sss
         allRowsHaveSameColumnsAndSpace
           = either

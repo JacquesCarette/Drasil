@@ -28,19 +28,19 @@ outputDot gi =
 -- | General output function for making a traceability graph. Takes in the graph information, title, edge generator functions, and node family functions.
 mkOutput :: GraphInfo -> String -> (GraphInfo -> [(UID, [UID])]) -> [GraphInfo -> NodeFamily] -> FileLayout
 mkOutput gi ttl getDirections getLabels =
-  file [ps|{ttl}.dot|] (mkDot ttl (getDirections gi) (fmap ($ gi) getLabels))
+  file [ps|{ttl}.dot|] (mkDot ttl (getDirections gi) (($ gi) <$> getLabels))
 
 -- | Constructs the full DOT document.
 mkDot :: String -> [(UID, [UID])] -> [NodeFamily] -> Doc
 mkDot title edges families =
   vcat
     [ text "digraph" <+> quote title <+> text "{",
-      nest 4 $ vcat $ fmap vcat [fmap mkDirections edges, fmap mkNodes families],
+      nest 4 $ vcat $ vcat <$> [mkDirections <$> edges, mkNodes <$> families],
       text "}"
     ]
 
 mkDirections :: (UID, [UID]) -> Doc
-mkDirections (u, deps) = vcat $ fmap (mkEdge u) (filter (not . null . show) deps)
+mkDirections (u, deps) = vcat $ mkEdge u <$> filter (not . null . show) deps
   where
     mkEdge src dest = quote (show src) <+> text "->" <+> quote (show dest) <> text ";"
 
@@ -63,7 +63,7 @@ mkSubgraph title contents
         [ text "subgraph" <+> quote title <+> text "{",
           nest 4 $ vcat
             [ text "rank=\"same\";",
-              hsep (fmap (quote . show) contents) <> text ";"
+              hsep (quote . show <$> contents) <> text ";"
             ],
           text "}"
         ]

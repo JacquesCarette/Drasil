@@ -87,7 +87,7 @@ funcData n desc d = FData $ FuncData n desc d
 funcDef :: (Quantity c, MayHaveUnit c, Concept c) => Name -> Description -> [c] ->
   Space -> Maybe Description -> [FuncStmt] -> Func
 funcDef s desc i t returnDesc fs = FDef $ FuncDef s desc
-  (fmap (pcAuto . quantvar) i) t returnDesc fs
+  (pcAuto . quantvar <$> i) t returnDesc fs
 
 -- | Like 'funcDef' but uses 'ParameterChunk's to represent the parameters.
 funcDefParams :: Name -> Description -> [ParameterChunk] -> Space ->

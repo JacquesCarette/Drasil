@@ -17,7 +17,7 @@ a $= b = text $ varName a <> "=" <> b
 
 -- | Defines variables dependent on OS.
 defineOsVars :: (MVar -> String) -> [MVar] -> Doc
-defineOsVars f m = msIndent $ vcat $ fmap (\x -> x $= f x) m
+defineOsVars f m = msIndent $ vcat $ (\x -> x $= f x) <$> m
 
 -- | Helper for rendering OS-specific variables.
 osDefinitions :: [MVar] -> Doc

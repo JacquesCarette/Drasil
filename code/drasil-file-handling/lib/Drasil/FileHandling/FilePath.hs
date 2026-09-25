@@ -68,7 +68,7 @@ qPathSeg s = do
       p <- either fail pure (validatePathSegStr s')
       [|PS p|]
     _ ->
-      [|mkPathSegOrErr $ concat $(listE $ fmap pathSegCompToQExp comps)|]
+      [|mkPathSegOrErr $ concat $(listE $ pathSegCompToQExp <$> comps)|]
 
 -- | Internal: Constructor for dynamic path splices.
 mkPathSegOrErr :: String -> PathSegment

@@ -96,7 +96,7 @@ addDef ResizeExpr = vcat [
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let (pkgs, defs) = parseDoc los
   in docclass (show fontSize <> "pt") "article" %%
-     vcat (fmap addPackage pkgs) %% vcat (fmap addDef defs)
+     vcat (addPackage <$> pkgs) %% vcat (addDef <$> defs)
 
 -- | Helper to gather all preamble information.
 parseDoc :: [LayoutObj] -> ([Package], [Def])
@@ -105,11 +105,11 @@ parseDoc los' =
    nub (concatMap fst res)
   , [SetMathFont, GreaterThan, LessThan] <> nub (concatMap snd res))
   where
-    res = fmap parseDoc' los'
+    res = parseDoc' <$> los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
     parseDoc' Table{} = ([Tabularray,TabularX,BookTabs,Caption], [])
     parseDoc' (HDiv _ slos _) =
-      let res1 = fmap parseDoc' slos in
+      let res1 = parseDoc' <$> slos in
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in
       (pp, dd)

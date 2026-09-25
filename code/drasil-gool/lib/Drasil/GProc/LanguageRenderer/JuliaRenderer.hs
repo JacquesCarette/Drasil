@@ -187,7 +187,7 @@ instance TypeElim JuliaCode TypeData where
 instance RenderType JuliaCode TypeData where
   multiType ts = do
     typs <- sequence ts
-    let mt = jlTuple $ fmap getTypeString typs
+    let mt = jlTuple $ getTypeString <$> typs
     typeFromData Void mt (text mt)
 
 instance UnaryOpSym JuliaCode where
@@ -880,9 +880,9 @@ jlModContents n is = A.buildModule n (do
   libis <- getLibImports
   mis <- getModuleImports
   pure $ vibcat [
-    vcat (fmap (RC.import' . li) lis),
-    vcat (fmap (RC.import' . li) (sort $ is P.<> libis)),
-    vcat (fmap (RC.import' . mi) mis)])
+    vcat (RC.import' . li <$> lis),
+    vcat (RC.import' . li <$> sort (is P.<> libis)),
+    vcat (RC.import' . mi <$> mis)])
   (do getMainDoc)
   where mi, li :: Label -> JuliaCode Doc
         mi = modImport

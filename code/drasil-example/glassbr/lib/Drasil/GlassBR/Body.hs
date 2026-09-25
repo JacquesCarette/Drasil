@@ -148,7 +148,7 @@ termsAndDescBullets = UlC $ ulcc $ Enumeration$
 termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
 
 termsAndDescBulletsGlTySubSec = [Nested (EmptyS +: titleize glassTy) $
-  Bullet $ noRefs $ fmap tAndDWAcc glassTypes]
+  Bullet $ noRefs $ tAndDWAcc <$> glassTypes]
 
 termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` capSent (load ^. defn) !.) $
   Bullet $ noRefs $ fmap tAndDWAcc (take 2 loadTypes)
@@ -185,7 +185,7 @@ undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
   phrase blastRisk, D.toSent $ pluralNP (computerApp `in_PS` Edu.civilEng)]
 appStanddIR = [S "applicable" +:+ plural standard +:+
   S "for constructions using glass from" +:+ foldlList Comma List
-  (fmap refS [astm2009, astm2012, astm2016]) `S.in_`
+  (refS <$> [astm2009, astm2012, astm2016]) `S.in_`
   namedRef (SRS.reference ([]::[Contents]) ([]::[Section])) (plural reference)]
 
 scope :: Sentence
@@ -251,13 +251,13 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  fmap bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp, sysCtxSysResp]
 
 {--User Characteristics--}
 
 userCharacteristicsIntro :: Contents
-userCharacteristicsIntro = enumBulletU $ fmap foldlSent
-  [[S "The end user of GlassBR is expected to have completed at least the",
+userCharacteristicsIntro = enumBulletU $ foldlSent
+  <$> [[S "The end user of GlassBR is expected to have completed at least the",
     S "equivalent of the second year of an undergraduate degree in civil engineering or structural engineering"],
   [S "The end user is expected to have an understanding of theory behind glass",
     S "breakage and blast risk"],

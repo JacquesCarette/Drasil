@@ -66,4 +66,4 @@ toColumn = fmap (: [])
 
 -}
 mkTable :: [a -> b] -> [a] -> [[b]]
-mkTable fs = fmap (\x -> fmap ($ x) fs)
+mkTable fs = fmap (\x -> ($ x) <$> fs)

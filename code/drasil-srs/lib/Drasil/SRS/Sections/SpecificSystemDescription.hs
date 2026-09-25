@@ -77,7 +77,7 @@ probDescF prob   = SRS.probDesc [mkParagraph $ foldlSent [D.toSent (atStartNP (a
 -- | Creates the Terms and Definitions section. Can take a ('Just' 'Sentence') if needed or 'Nothing' if not. Also takes 'Concept's that contain the definitions.
 termDefnF :: Concept c => Maybe Sentence -> [c] -> Section
 termDefnF _   []  = SRS.termAndDefn [introNoTermDefn] []
-termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ fmap termDef lst] []
+termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ termDef <$> lst] []
   where intro = foldlSP_ [
                   S "This subsection provides a list of terms that are used in the subsequent",
                   plural section_ `S.and_` S "their meaning, with the", phrase purpose `S.of_`
@@ -265,20 +265,20 @@ inDataConstTbl qlst = mkDataConstraintTable (baseCols <> rationaleCols <> uncert
   where
     sorted = sortBySymbol qlst
     getRVal c = fromMaybe (error $ "getRVal found no Expr for " <> showUID c) (c ^. reasVal)
-    baseCols = [(S "Var", fmap ch sorted),
-                (titleize' physicalConstraint, fmap fmtPhys sorted),
-                (titleize' softwareConstraint, fmap fmtSfwr sorted),
-                (S "Reasonable Value", fmap (\q -> fmtU (eS $ express $ getRVal q ^. reasV) q) sorted)]
-    uncertCols = [(short typUnc, fmap (\q -> typUncr (uncVal q, uncPrec q)) sorted)]
+    baseCols = [(S "Var", ch <$> sorted),
+                (titleize' physicalConstraint, fmtPhys <$> sorted),
+                (titleize' softwareConstraint, fmtSfwr <$> sorted),
+                (S "Reasonable Value", (\q -> fmtU (eS $ express $ getRVal q ^. reasV) q) <$> sorted)]
+    uncertCols = [(short typUnc, (\q -> typUncr (uncVal q, uncPrec q)) <$> sorted)]
     hasAnyRationale = any (\q -> isJust (q ^. reasVal)) sorted
-    rationaleCols = [(S "Rationale", fmap (\q -> fromMaybe EmptyS (q ^. reasVal . _Just . rationale)) sorted) |
+    rationaleCols = [(S "Rationale", (\q -> fromMaybe EmptyS (q ^. reasVal . _Just . rationale)) <$> sorted) |
       hasAnyRationale]
 
 -- | Creates the output Data Constraints Table.
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
-outDataConstTbl qlst = mkDataConstraintTable [(S "Var", fmap ch qlst),
-            (titleize' physicalConstraint, fmap fmtPhys qlst),
-            (titleize' softwareConstraint, fmap fmtSfwr qlst)] (outDatumConstraint ^. uid) $
+outDataConstTbl qlst = mkDataConstraintTable [(S "Var", ch <$> qlst),
+            (titleize' physicalConstraint, fmtPhys <$> qlst),
+            (titleize' softwareConstraint, fmtSfwr <$> qlst)] (outDatumConstraint ^. uid) $
             titleize' outDatumConstraint
 
 --Not actually used here, for exporting references
@@ -298,7 +298,7 @@ fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 -- | Helper for formatting a list of constraints.
 foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
 foldConstraints _ [] = EmptyS
-foldConstraints c e  = E $ foldr1 ($&&) $ fmap constraintToExpr e
+foldConstraints c e  = E $ foldr1 ($&&) $ constraintToExpr <$> e
   where
     constraintToExpr (Range _ ri) = express $ realInterval c ri
     constraintToExpr (Elem _ set) = express set

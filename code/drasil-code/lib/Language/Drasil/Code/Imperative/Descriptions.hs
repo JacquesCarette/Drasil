@@ -147,8 +147,8 @@ inputClassDesc = do
       inClassD True = ""
       inClassD _ = "Structure for holding the " <> stringList [
         inPs $ inIPMap $ g ^. extInputs,
-        dVs $ inIPMap $ fmap quantvar $ g ^. derivedInputs,
-        cVs $ inIPMap $ fmap quantvar $ g ^. constDefns]
+        dVs $ inIPMap $ quantvar <$> g ^. derivedInputs,
+        cVs $ inIPMap $ quantvar <$> g ^. constDefns]
       inPs [] = ""
       inPs _ = "input values"
       dVs [] = ""

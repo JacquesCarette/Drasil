@@ -21,10 +21,10 @@ import qualified Drasil.Projectile.Concepts as C (flightDur, offset,
   flightDur, landPos, launAngle, launSpeed, offset, targPos, projSpeed, projPos)
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = fmap dqdWr $ launSpeed :| [launAngle, targPos]
+inputs = dqdWr <$> launSpeed :| [launAngle, targPos]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
-outputs = fmap dqdWr $ offset :| [flightDur]
+outputs = dqdWr <$> offset :| [flightDur]
 
 projSpeed :: DefinedQuantityDict
 projSpeed = dqd C.projSpeed (Concat [lV, label "(", lT, label ")"]) Real velU

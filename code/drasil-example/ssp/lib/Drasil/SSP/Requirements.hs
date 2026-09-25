@@ -87,12 +87,12 @@ displayShear = cic "displayShear" ( foldlSent [
 
 writeToFile = cic "writeToFile" ( foldlSent [
   S "Provide the option of writing the output result data, as given in",
-  foldlList Comma List (fmap refS [displayInput, displayGraph, displayFS,
+  foldlList Comma List (refS <$> [displayInput, displayGraph, displayFS,
   displayNormal, displayShear]) `sC` S "to a file"]) "Write-Results-To-File"
   funcReqDom
 
 usingIMs :: Sentence
-usingIMs = foldlList Comma List $ fmap refS [fctSfty, nrmShrFor, intsliceFs]
+usingIMs = foldlList Comma List $ refS <$> [fctSfty, nrmShrFor, intsliceFs]
 
 ------------------
 inputDataTable :: LabelledContent

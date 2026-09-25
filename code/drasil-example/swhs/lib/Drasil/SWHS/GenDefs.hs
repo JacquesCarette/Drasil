@@ -90,10 +90,10 @@ newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
 
 rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
 rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ D.toSent (phraseNP (rOfChng `of_` temp)))
-  (weave (rocTempSimpDerivSent s a) $ fmap eS rocTempSimpDerivEqns)
+  (weave (rocTempSimpDerivSent s a) $ eS <$> rocTempSimpDerivEqns)
 
 rocTempSimpDerivSent :: Sentence -> [ConceptInstance] -> [Sentence]
-rocTempSimpDerivSent s a = fmap foldlSentCol [rocTempDerivInteg, rocTempDerivGauss,
+rocTempSimpDerivSent s a = foldlSentCol <$> [rocTempDerivInteg, rocTempDerivGauss,
   rocTempDerivArbVol, rocTempDerivConsFlx s a, rocTempDerivDens]
 
 rocTempDerivInteg :: [Sentence]
@@ -113,11 +113,11 @@ rocTempDerivArbVol = [S "We consider an arbitrary" +:+. phrase vol,
 
 rocTempDerivConsFlx :: Sentence -> [ConceptInstance] -> [Sentence]
 rocTempDerivConsFlx s assumps = [S "Where",
-  foldlList Comma List (fmap ch [htFluxIn, htFluxOut, inSA, outSA]),
+  foldlList Comma List (ch <$> [htFluxIn, htFluxOut, inSA, outSA]),
   S "are explained in" +:+. refS rocTempSimp, s, S "Assuming",
-  foldlList Comma List (fmap ch [density, QT.heatCapSpec, QT.temp]),
+  foldlList Comma List (ch <$> [density, QT.heatCapSpec, QT.temp]),
   S "are constant over the", phrase vol `sC` S "which is true in our case by",
-  foldlList Comma List (fmap refS assumps) `sC` S "we have"]
+  foldlList Comma List (refS <$> assumps) `sC` S "we have"]
 
 rocTempDerivConsFlxSWHS :: Sentence
 rocTempDerivConsFlxSWHS = foldlSent [S "The integral over the", phrase surface,

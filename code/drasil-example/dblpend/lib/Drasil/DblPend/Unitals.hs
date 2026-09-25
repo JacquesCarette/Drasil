@@ -191,7 +191,7 @@ massCon_1         = constrained' massObj_1 [gtZeroConstr] (dbl 0.5)
 massCon_2         = constrained' massObj_2 [gtZeroConstr] (dbl 0.5)
 
 inConstraints :: [UncertQ]
-inConstraints = fmap (`uq` defaultUncrt) [lenRodCon_1, lenRodCon_2, massCon_1, massCon_2]
+inConstraints = (`uq` defaultUncrt) <$> [lenRodCon_1, lenRodCon_2, massCon_1, massCon_2]
 
 outConstraints :: [UncertQ]
 outConstraints = [pendDisAngle `uq` defaultUncrt]

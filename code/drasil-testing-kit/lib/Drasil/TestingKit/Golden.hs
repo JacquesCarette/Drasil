@@ -56,7 +56,7 @@ goldenTestingGroup buildPath goldenPath groupName mkTests =
     setup
     (const $ pure ())
     ( const $
-        testGroup groupName (fmap (\gt -> unGTC gt buildPath goldenPath) mkTests)
+        testGroup groupName ((\gt -> unGTC gt buildPath goldenPath) <$> mkTests)
     )
   where
     setup = do

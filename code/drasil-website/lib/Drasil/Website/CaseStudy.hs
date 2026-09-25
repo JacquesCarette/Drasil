@@ -70,10 +70,10 @@ mkCaseStudy E{choicesE = []} = []
 mkCaseStudy E{systemE = si, choicesE = [x]}
   = [CS{systemCS = si, progName = S $ si ^. projAbrv, choicesCS = x}]
 mkCaseStudy ex@E{systemE = si, choicesE = xs}
-  = fmap (\x -> CS{
+  = (\x -> CS{
       systemCS = si,
       progName = S $ codedHRName ex x, choicesCS = x
-    }) xs
+    }) <$> xs
 
 -- * Display 'CaseStudy' Information as a Table
 --
@@ -85,7 +85,7 @@ mkCaseStudy ex@E{systemE = si, choicesE = xs}
 
 -- | Hardcoded header row for the Case studies table
 headerRow :: [Sentence]
-headerRow = fmap S [caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
+headerRow = S <$> [caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
 
 -- | Creates the case study table body.
 tableBody :: [CaseStudy] -> [[Sentence]]
@@ -121,7 +121,7 @@ data CSLegend = CSL {
 
 -- | Make the legend for the case study table as a list.
 caseStudyLegend :: RawContent
-caseStudyLegend = Enumeration $ Bullet $ fmap ((, Nothing) . mkLegendListFunc) legendEntries
+caseStudyLegend = Enumeration $ Bullet $ (, Nothing) . mkLegendListFunc <$> legendEntries
 
 -- | Helper to convert the Case Study legends into list items.
 mkLegendListFunc :: CSLegend -> ItemType

@@ -46,10 +46,10 @@ weightDeriv :: Derivation
 weightDeriv = mkDerivName (phrase QP.weight) $ weave weightDerivSentences weightDerivEqns
 
 weightDerivSentences, weightDerivEqns :: [Sentence]
-weightDerivSentences = fmap foldlSentCol [weightDerivAccelSentence,
+weightDerivSentences = foldlSentCol <$> [weightDerivAccelSentence,
   weightDerivNewtonSentence, weightDerivReplaceMassSentence,
   weightDerivSpecWeightSentence]
-weightDerivEqns = fmap eS [weightDerivAccelEqn, weightDerivNewtonEqn,
+weightDerivEqns = eS <$> [weightDerivAccelEqn, weightDerivNewtonEqn,
   weightDerivReplaceMassEqn, weightDerivSpecWeightEqn]
 
 weightDerivAccelSentence :: [Sentence]

@@ -111,17 +111,17 @@ standOffDist = uq (constrained' (dqd stdOffDist (variable "SD") Real metre)
 nomThick = cuc' "nomThick" (nounPhraseSP "nominal thickness")
   "the specified standard thickness of the glass plate" lT millimetre
   {-Discrete nominalThicknesses, but not implemented-} Rational
-  [sfwrElem $ mkSet Rational (fmap dbl nominalThicknesses)] $ exactDbl 8 -- for testing
+  [sfwrElem $ mkSet Rational (dbl <$> nominalThicknesses)] $ exactDbl 8 -- for testing
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
-  [sfwrElem $ mkSet String $ fmap (str . abrv . snd) glassType]
+  [sfwrElem $ mkSet String $ str . abrv . snd <$> glassType]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
 outputs = (isSafePb :| [isSafeLR]) <> fmap dqdWr (probBr :| [stressDistFac])
 
 -- | Symbols uniquely relevant to theory models.
 tmSymbols :: [DefinedQuantityDict]
-tmSymbols = fmap dqdWr [probFail, pbTolfail]
+tmSymbols = dqdWr <$> [probFail, pbTolfail]
 
 probBr, probFail, pbTolfail, stressDistFac :: ConstrConcept
 probBr = constrained' (dqdNoUnit probBreak
@@ -330,13 +330,13 @@ loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad, specDeLoad, longDur
 
 --Defined for DataDefs.hs and this file only--
 actualThicknesses :: [Double]
-actualThicknesses = fmap snd glassThickness
+actualThicknesses = snd <$> glassThickness
 
 nominalThicknesses :: [Double]
-nominalThicknesses = fmap fst glassThickness
+nominalThicknesses = fst <$> glassThickness
 
 glassTypeFactors :: [Integer]
-glassTypeFactors = fmap fst glassType
+glassTypeFactors = fst <$> glassType
 
 type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
 

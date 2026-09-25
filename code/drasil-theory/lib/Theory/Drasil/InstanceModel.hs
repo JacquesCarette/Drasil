@@ -43,7 +43,7 @@ makeLenses ''InstanceModel
 instance HasChunkRefs InstanceModel where
   chunkRefs imd = mconcat
     [ chunkRefs (imd ^. mk)
-    , chunkRefs (fmap fst (imd ^. imInputs))
+    , chunkRefs (fst <$> (imd ^. imInputs))
     , chunkRefs (imd ^. imOutput . _1)
     , chunkRefs (imd ^. rf)
     , chunkRefs (imd ^. deri)
@@ -131,4 +131,4 @@ qwC x y = (dqdWr x, Just y)
 
 -- | Grab all related 'QDefinition's from a list of instance models.
 getEqModQdsFromIm :: [InstanceModel] -> [SimpleQDef]
-getEqModQdsFromIm ims = getEqModQds (fmap _mk ims)
+getEqModQdsFromIm ims = getEqModQds (_mk <$> ims)

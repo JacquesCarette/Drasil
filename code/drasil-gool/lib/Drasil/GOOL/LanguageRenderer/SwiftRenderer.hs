@@ -216,7 +216,7 @@ instance OOTypeSym SwiftCode TypeData where
 instance RenderType SwiftCode TypeData where
   multiType ts = do
     typs <- sequence ts
-    let mt = tuple $ fmap getTypeString typs
+    let mt = tuple $ getTypeString <$> typs
     typeFromData Void mt (text mt)
 
 instance UnaryOpSym SwiftCode where
@@ -751,11 +751,11 @@ instance ModuleSym SwiftCode ModData MethodData where
     CP.buildModule modName (do
       lis <- getLangImports
       libis <- getLibImports
-      pure $ vcat $ fmap (RC.import' .
-          (langImport :: Label -> SwiftCode Doc))
-          (sort $ lis P.<> is P.<> libis))
+      pure $ vcat $ RC.import' .
+          (langImport :: Label -> SwiftCode Doc)
+          <$> sort (lis P.<> is P.<> libis))
       (zoom lensFStoMS swiftStringError) getMainDoc
-        (fmap pure fns) (fmap pure cls)
+        (pure <$> fns) (pure <$> cls)
 
 instance RenderMod SwiftCode ModData where
   modFromData n = G.modFromData n (toCode . md n)
@@ -836,10 +836,10 @@ swiftFuncType :: [VS (SwiftCode TypeData)] -> VS (SwiftCode TypeData) -> VS (Swi
 swiftFuncType ps r = do
   pts <- sequence ps
   rt <- r
-  typeFromData (Func (fmap getCodeType pts) (getCodeType rt))
-    ("(" P.<> intercalate listSep (fmap getTypeString pts) P.<> ")" P.<> " " P.<>
+  typeFromData (Func (getCodeType <$> pts) (getCodeType rt))
+    ("(" P.<> intercalate listSep (getTypeString <$> pts) P.<> ")" P.<> " " P.<>
       swiftRetType P.<> " " P.<> getTypeString rt)
-    (parens (hicat listSep' $ fmap renderType pts) <+> swiftRetType' <+>
+    (parens (hicat listSep' $ renderType <$> pts) <+> swiftRetType' <+>
       renderType rt)
 
 swiftVoidType :: (Monad r) => VS (r TypeData)
@@ -956,8 +956,8 @@ swiftLitFloat = mkStateVal float . D.float
 swiftLambda :: [SwiftCode BinderD] -> SwiftCode Value -> Doc
 swiftLambda ps ex = braces $ parens (hicat listSep'
   (zipWith (\n t -> n <> swiftTypeSpec <+> t)
-    (fmap RC.binderElim ps)
-    (fmap (renderType . binderType) ps)))
+    (RC.binderElim <$> ps)
+    (renderType . binderType <$> ps)))
   <+> swiftRetType' <+> renderType (valueType ex) <+> inLabel <+> RC.value ex
 
 swiftReadableTypes :: [CodeType]

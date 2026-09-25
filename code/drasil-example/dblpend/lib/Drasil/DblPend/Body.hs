@@ -231,7 +231,7 @@ sysCtxResp projN = [titleize user +:+ S "Responsibilities",
 
 sysCtxList :: ProjectName -> Contents
 sysCtxList projN = UlC $ ulcc $ Enumeration $ bulletNested (sysCtxResp projN) $
-  fmap bulletFlat [sysCtxUsrResp projN, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp projN, sysCtxSysResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -267,8 +267,8 @@ terms = [gravity, cartesian]
 -- 4.1.2 Physical System Description --
 -----------------------------------
 physSystParts :: [Sentence]
-physSystParts = fmap (!.)
-  [D.toSent (atStartNP (the firstRod)) +:+ sParen (S "with" +:+ getTandS lenRod_1),
+physSystParts = (!.)
+  <$> [D.toSent (atStartNP (the firstRod)) +:+ sParen (S "with" +:+ getTandS lenRod_1),
    D.toSent (atStartNP (the secondRod)) +:+ sParen (S "with" +:+ getTandS lenRod_2),
    D.toSent $ atStartNP (the firstObject),
    D.toSent $ atStartNP (the secondObject)]

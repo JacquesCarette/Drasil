@@ -74,7 +74,7 @@ indx sm a i = P.Row [P.Row [modelExpr a sm], P.Sub $ modelExpr i sm]
 call :: PrintingInformation -> UID -> [ModelExpr] -> P.Expr
 call sm f ps = P.Row [
     symbol $ lookupC' sm f,
-    parens $ P.Row $ intersperse (P.MO P.Comma) $ fmap (`modelExpr` sm) ps
+    parens $ P.Row $ intersperse (P.MO P.Comma) $ (`modelExpr` sm) <$> ps
   ]
 
 -- | Helper function for addition 'EOperator's.
@@ -136,8 +136,8 @@ modelExpr (FCall f l)                sm = call sm f l
 modelExpr (Case _ ps)                sm =
   if length ps < 2
     then error "Attempting to use multi-case modelExpr incorrectly"
-    else P.Case (zip (fmap (flip modelExpr sm . fst) ps) (fmap (flip modelExpr sm . snd) ps))
-modelExpr (Matrix a)                 sm = P.Mtx $ fmap (fmap (`modelExpr` sm)) a
+    else P.Case (zip (flip modelExpr sm . fst <$> ps) (flip modelExpr sm . snd <$> ps))
+modelExpr (Matrix a)                 sm = P.Mtx $ fmap (`modelExpr` sm) <$> a
 modelExpr (Set _ l)                  sm = setExpr P.And (precB And) l sm
 modelExpr (Variable _ l)             sm = modelExpr l sm
 modelExpr (UnaryOp Log u)            sm = mkCall sm P.Log u
@@ -191,10 +191,10 @@ modelExpr (ForAll c s de)            sm = P.Row [
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
-assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ fmap (modelExpr' sm prec) exprs
+assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ modelExpr' sm prec <$> exprs
 
 setExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
-setExpr _ prec exprs sm = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ fmap (modelExpr' sm prec) exprs
+setExpr _ prec exprs sm = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ modelExpr' sm prec <$> exprs
 
 -- | Add add symbol only when the second Expr is not negation
 addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]

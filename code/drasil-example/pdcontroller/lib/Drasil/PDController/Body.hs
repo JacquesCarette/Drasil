@@ -100,7 +100,7 @@ motivation = foldlSent_ [S "The gains of a controller in an application" +:+
 background :: Sentence
 background = foldlSent_ [
   S "Automatic process control with a controller (" :+:
-  foldOpts (fmap short [proportionalCI, piCI, pdControllerCI, pidCI]) :+:
+  foldOpts (short <$> [proportionalCI, piCI, pdControllerCI, pidCI]) :+:
   S ") is used in a variety of applications such as thermostats, automobile",
   S "cruise-control, etc"]
 

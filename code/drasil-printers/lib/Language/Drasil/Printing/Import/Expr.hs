@@ -70,7 +70,7 @@ indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 call :: PrintingInformation -> UID -> [Expr] -> P.Expr
 call sm f ps = P.Row [
     symbol $ lookupC' sm f,
-    parens $ P.Row $ intersperse (P.MO P.Comma) $ fmap (`expr` sm) ps
+    parens $ P.Row $ intersperse (P.MO P.Comma) $ (`expr` sm) <$> ps
   ]
 
 -- | Helper function for addition 'EOperator's.
@@ -115,9 +115,9 @@ expr (FCall f l)              sm = call sm f l
 expr (Case _ ps)              sm =
   if length ps < 2
     then error "Attempting to use multi-case expr incorrectly"
-    else P.Case (zip (fmap (flip expr sm . fst) ps) (fmap (flip expr sm . snd) ps))
-expr (Matrix a)               sm = P.Mtx $ fmap (fmap (`expr` sm)) a
-expr (Set _ a)                sm = P.Set $ fmap (`expr` sm) a
+    else P.Case (zip (flip expr sm . fst <$> ps) (flip expr sm . snd <$> ps))
+expr (Matrix a)               sm = P.Mtx $ fmap (`expr` sm) <$> a
+expr (Set _ a)                sm = P.Set $ (`expr` sm) <$> a
 expr (Variable _ l)           sm = expr l sm
 expr (UnaryOp Log u)          sm = mkCall sm P.Log u
 expr (UnaryOp Ln u)           sm = mkCall sm P.Ln u
@@ -163,11 +163,11 @@ expr (RealI c ri)             sm = renderRealInt sm (lookupC' sm c) ri
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
-assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ fmap (expr' sm prec) exprs
+assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ expr' sm prec <$> exprs
 
 -- | Helper for rendering printable expressions.
 addExpr :: [Expr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
-addExpr exprs o sm = addExprFilter (fmap (expr' sm (precA o)) exprs)
+addExpr exprs o sm = addExprFilter (expr' sm (precA o) <$> exprs)
 
 -- | Add add symbol only when the second Expr is not negation
 addExprFilter :: [P.Expr] -> [P.Expr]

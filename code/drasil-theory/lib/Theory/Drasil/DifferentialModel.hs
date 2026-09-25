@@ -134,7 +134,7 @@ formStdODE d
   | otherwise = equiv (coeffsMatix $. columnVec unknownVec : constantVec)
   where
     size = length (d ^. coefficients)
-    coeffsMatix = express(matrix (fmap NE.toList (NE.toList $ d ^. coefficients)))
+    coeffsMatix = express(matrix (NE.toList <$> NE.toList (d ^. coefficients)))
     unknownVec = formAllUnknown (d ^. unknowns) (d ^. depVar) (d ^. indepVar)
     constantVec = [express (columnVec (NE.toList $ d ^. dmConstants))]
 
@@ -150,7 +150,7 @@ filterZeroCoeff es mes = filter (\x -> fst x /= exactDbl 0) $ zip (NE.toList es)
 
 -- | Form all derivatives for the displaying purpose
 formAllUnknown :: [Unknown] -> ConstrConcept -> DefinedQuantityDict -> [ModelExpr]
-formAllUnknown unks dep ind = fmap (\x -> formAUnknown x dep ind) unks
+formAllUnknown unks dep ind = (\x -> formAUnknown x dep ind) <$> unks
 
 -- | Form a derivative for the displaying purpose
 formAUnknown :: Unknown -> ConstrConcept -> DefinedQuantityDict -> ModelExpr
@@ -234,7 +234,7 @@ transUnknowns (_ : us) = us
 -- of term to the right hand side. Then, reduce its coefficient.
 transCoefficients :: NonEmpty Expr -> [Expr]
 transCoefficients (e :| es) =
-  fmap (\x -> if x == zero then zero else neg x $/ e) es
+  (\x -> if x == zero then zero else neg x $/ e) <$> es
   where zero = exactDbl 0
 
 -- | Add the "Identity Matrix" to Coefficients
@@ -301,9 +301,9 @@ formEquations _ [] _ _ = []
 formEquations _ _ [] _ = []
 formEquations (ex:exs) unks (y:ys) depVa =
   (if y == exactDbl 0 then finalExpr else finalExpr $+ y) : formEquations exs unks ys depVa
-  where indexUnks = fmap (idx (sy depVa) . int) unks -- create X
+  where indexUnks = idx (sy depVa) . int <$> unks -- create X
         filteredExprs = filter (\x -> fst x /= exactDbl 0) (zip ex indexUnks) -- remove zero coefficients
-        termExprs = fmap (uncurry ($*)) filteredExprs -- multiple coefficient with depend variables
+        termExprs = uncurry ($*) <$> filteredExprs -- multiple coefficient with depend variables
         finalExpr = foldl1 ($+) termExprs -- add terms together
 
 -- Construct an InitialValueProblem.

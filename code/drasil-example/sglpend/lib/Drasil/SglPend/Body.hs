@@ -165,7 +165,7 @@ concIns = assumpSingle <> goals <> funcReqs <> nonFuncReqs
 -- 4.1.2 Physical System Description --
 -----------------------------------
 physSystParts :: [Sentence]
-physSystParts = fmap ((!.) . D.toSent . atStartNP) [the rod, the mass]
+physSystParts = (!.) . D.toSent . atStartNP <$> [the rod, the mass]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --

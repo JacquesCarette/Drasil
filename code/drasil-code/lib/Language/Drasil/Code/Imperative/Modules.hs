@@ -167,11 +167,11 @@ getInputDecl = do
   cps <- mapM mkVal constrParams
   cname <- genICName InputParameters
   let getDecl ([],[]) = constIns (partition (flip member (eMap g) .
-        codeName) (fmap quantvar $ g ^. constDefns)) (g ^. conRepr)
+        codeName) (quantvar <$> g ^. constDefns)) (g ^. conRepr)
         (g ^. conStruct)
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
-        pure $ Just $ multi $ fmap (`varDec` scp) vars
+        pure $ Just $ multi $ (`varDec` scp) <$> vars
       getDecl (i:_,[]) = pure $ Just $ (if currentModule g ==
         eMap g ! codeName i then objDecNew
         else extObjDecNew cname) v_params scp cps
@@ -322,10 +322,10 @@ genInputClass scp = do
       genClass [] [] = pure Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . (^. codeExpr)) csts
-        inputVars <- mapM (\x -> fmap (pubDVar .
-          var (codeName x) . convTypeOO) (codeType x)) inps
-        constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (g ^. conRepr)
-          (var (codeName c) (convTypeOO t)) vl) (codeType c))
+        inputVars <- mapM (\x -> pubDVar .
+          var (codeName x) . convTypeOO <$> codeType x) inps
+        constVars <- zipWithM (\c vl -> (\t -> constVarFunc (g ^. conRepr)
+          (var (codeName c) (convTypeOO t)) vl) <$> codeType c)
           csts vals
         let getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
@@ -353,7 +353,7 @@ genInputConstructor = do
         cdesc <- inputConstructorDesc
         cparams <- getInConstructorParams
         ics <- genAllInputCalls
-        ctor <- genConstructor ipName cdesc (fmap pcAuto cparams)
+        ctor <- genConstructor ipName cdesc (pcAuto <$> cparams)
           [block ics]
         pure $ Just ctor
   genCtor $ any (`elem` ds) [giName,
@@ -401,12 +401,12 @@ genInputConstraints s = do
       genConstraints _ = do
         parms <- getConstraintParams
         let varsList = filter (\i -> member (i ^. uid) cm) (g ^. inputs)
-            sfwrCs   = fmap (sfwrLookup cm) varsList
-            physCs   = fmap (physLookup cm) varsList
+            sfwrCs   = sfwrLookup cm <$> varsList
+            physCs   = physLookup cm <$> varsList
         sf <- sfwrCBody sfwrCs
         ph <- physCBody physCs
         desc <- inConsFuncDesc
-        mthd <- getFunc s icName void desc (fmap pcAuto parms)
+        mthd <- getFunc s icName void desc (pcAuto <$> parms)
           Nothing [block sf, block ph]
         pure $ Just mthd
   genConstraints $ icName `elem` defSet g
@@ -573,7 +573,7 @@ constrWarn c = do
   let q = fst c
       cs = snd c
   msgs <- mapM (constraintViolatedMsg q "suggested") cs
-  pure $ fmap (bodyStatements . (printStr "Warning: " :)) msgs
+  pure $ bodyStatements . (printStr "Warning: " :) <$> msgs
 
 -- | Generates body defining constraint violation behaviour if Exception chosen from 'chooseConstr'.
 -- Prints a message that says what value was \"expected\",
@@ -611,7 +611,7 @@ constrExc c = do
   let q = fst c
       cs = snd c
   msgs <- mapM (constraintViolatedMsg q "expected") cs
-  pure $ fmap (bodyStatements . (++ [throw "InputError"])) msgs
+  pure $ bodyStatements . (++ [throw "InputError"]) <$> msgs
 
 -- | Generates set variable dec
 constrVarDec
@@ -798,7 +798,7 @@ genDataDesc :: GenState DataDesc
 genDataDesc = do
   g <- get
   pure $ junkLine :
-    intersperse junkLine (fmap singleton (g ^. extInputs))
+    intersperse junkLine (singleton <$> (g ^. extInputs))
 
 -- | Generates a sample input file compatible with the generated program,
 -- if the user chose to.
@@ -836,8 +836,8 @@ genConstClass scp = do
       genClass [] = pure Nothing
       genClass vs = do
         vals <- mapM (convExpr . (^. codeExpr)) vs
-        vars <- mapM (\x -> fmap (var (codeName x) . convTypeOO)
-          (codeType x)) vs
+        vars <- mapM (\x -> var (codeName x) . convTypeOO
+          <$> codeType x) vs
         let constVars = zipWith (constVarFunc (g ^. conRepr)) vars vals
             getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
@@ -859,7 +859,7 @@ genCalcMod = do
   cName <- genICName Calculations
   let elmap = extLibMap g
   genModuleWithImports cName calcModDesc (concatMap (^. imports) $
-    elems elmap) (fmap (fmap Just . genCalcFunc) (g ^. execOrder)) []
+    elems elmap) (fmap Just . genCalcFunc <$> (g ^. execOrder)) []
 
 -- | Generates a calculation function corresponding to the 'CodeDefinition'.
 -- For solving ODEs, the 'ExtLibState' containing the information needed to
@@ -891,7 +891,7 @@ genCalcFunc cdef = do
     nm
     (convTypeOO tp)
     ("Calculates " <> calcDesc)
-    (fmap pcAuto parms)
+    (pcAuto <$> parms)
     (Just desc)
     blcks
 
@@ -1013,14 +1013,14 @@ genOutputFormat = do
             var_outfile = var l_outfile outfile
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
-        let outs = fmap (resolveOutputDefType g) (g ^. outputs)
+        let outs = resolveOutputDefType g <$> (g ^. outputs)
         outp <- mapM (\x -> do
           v <- mkVal x
           pure $
             printFileStr v_outfile (codeName x <> " = ")
             : writeOutputValue v_outfile v (x ^. typ) ) outs
         desc <- woFuncDesc
-        mthd <- publicFunc woName void desc (fmap pcAuto parms) Nothing
+        mthd <- publicFunc woName void desc (pcAuto <$> parms) Nothing
           [block $ [
           varDec var_outfile local,
           openFileW var_outfile (litString "output.txt") ] <>
@@ -1213,7 +1213,7 @@ getInputDeclProc = do
       getDecl ([],[]) = pure Nothing
       getDecl ([],ins) = do
         vars <- mapM mkVarProc ins
-        pure $ Just $ multi $ fmap (`varDec` scp) vars
+        pure $ Just $ multi $ (`varDec` scp) <$> vars
       getDecl _ = error "getInputDeclProc: Procedural renderers do not support bundled inputs"
   getDecl (partition (flip member (eMap g) . codeName)
     (g ^. inputs))
@@ -1230,7 +1230,7 @@ genCalcModProc = do
   cName <- genICName Calculations
   let elmap = extLibMap g
   genModuleWithImportsProc cName calcModDesc (concatMap (^. imports) $
-    elems elmap) (fmap (fmap Just . genCalcFuncProc) (g ^. execOrder))
+    elems elmap) (fmap Just . genCalcFuncProc <$> (g ^. execOrder))
 
 -- | Generates a calculation function corresponding to the 'CodeDefinition'.
 -- For solving ODEs, the 'ExtLibState' containing the information needed to
@@ -1297,7 +1297,7 @@ genCalcFuncProc cdef = do
     nm
     (convType tp)
     ("Calculates " <> calcDesc)
-    (fmap pcAuto parms)
+    (pcAuto <$> parms)
     (Just desc)
     blcks
 
@@ -1644,12 +1644,12 @@ genInputConstraintsProc s = do
       genConstraints _ = do
         parms <- getConstraintParams
         let varsList = filter (\i -> member (i ^. uid) cm) (g ^. inputs)
-            sfwrCs   = fmap (sfwrLookup cm) varsList
-            physCs   = fmap (physLookup cm) varsList
+            sfwrCs   = sfwrLookup cm <$> varsList
+            physCs   = physLookup cm <$> varsList
         sf <- sfwrCBodyProc sfwrCs
         ph <- physCBodyProc physCs
         desc <- inConsFuncDesc
-        mthd <- getFunc s icName void desc (fmap pcAuto parms)
+        mthd <- getFunc s icName void desc (pcAuto <$> parms)
           Nothing [block sf, block ph]
         pure $ Just mthd
   genConstraints $ icName `elem` defSet g
@@ -1792,7 +1792,7 @@ constrWarnProc c = do
   let q = fst c
       cs = snd c
   msgs <- mapM (constraintViolatedMsgProc q "suggested") cs
-  pure $ fmap (bodyStatements . (printStr "Warning: " :)) msgs
+  pure $ bodyStatements . (printStr "Warning: " :) <$> msgs
 
 -- | Generates body defining constraint violation behaviour if Exception chosen from 'chooseConstr'.
 -- Prints a message that says what value was \"expected\",
@@ -1825,7 +1825,7 @@ constrExcProc c = do
   let q = fst c
       cs = snd c
   msgs <- mapM (constraintViolatedMsgProc q "expected") cs
-  pure $ fmap (bodyStatements . (++ [throw "InputError"])) msgs
+  pure $ bodyStatements . (++ [throw "InputError"]) <$> msgs
 
 -- | Generate a set variable dec
 constrVarDecProc
@@ -2040,14 +2040,14 @@ genOutputFormatProc = do
             var_outfile = var l_outfile outfile
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
-        let outs = fmap (resolveOutputDefType g) (g ^. outputs)
+        let outs = resolveOutputDefType g <$> (g ^. outputs)
         outp <- mapM (\x -> do
           v <- mkValProc x
           pure $
             printFileStr v_outfile (codeName x <> " = ")
             : writeOutputValue v_outfile v (x ^. typ) ) outs
         desc <- woFuncDesc
-        mthd <- publicFuncProc woName void desc (fmap pcAuto parms) Nothing
+        mthd <- publicFuncProc woName void desc (pcAuto <$> parms) Nothing
           [block $ [
           varDec var_outfile local,
           openFileW var_outfile (litString "output.txt") ] <>

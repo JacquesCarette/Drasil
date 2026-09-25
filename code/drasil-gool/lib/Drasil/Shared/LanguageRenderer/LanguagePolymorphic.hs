@@ -71,17 +71,17 @@ import qualified Text.PrettyPrint.HughesPJ as D
 -- Bodies --
 
 multiBody :: (RC.BodyElim r bod, Monad r) => [MS (r bod)] -> MS (r Doc)
-multiBody bs = onStateList (toCode . vibcat) $ fmap (onStateValue RC.body) bs
+multiBody bs = onStateList (toCode . vibcat) $ onStateValue RC.body <$> bs
 
 -- Blocks --
 
 block
   :: (Monad r, RenderStatement r stmt, StatementElim r stmt)
   => [MS (r stmt)] -> MS (r Doc)
-block sts = onStateList (toCode . R.block . fmap RC.statement) (fmap RC.stmt sts)
+block sts = onStateList (toCode . R.block . fmap RC.statement) (RC.stmt <$> sts)
 
 multiBlock :: (RC.BlockElim r block, Monad r) => [MS (r block)] -> MS (r Doc)
-multiBlock bs = onStateList (toCode . vibcat) $ fmap (onStateValue RC.block) bs
+multiBlock bs = onStateList (toCode . vibcat) $ onStateValue RC.block <$> bs
 
 -- Types --
 
@@ -101,7 +101,7 @@ csc
     , TypeElim r typ
     )
   => VS (r val) -> VS (r val)
-csc v = valOfOne (fmap valueType v) #/ sin v
+csc v = valOfOne (valueType <$> v) #/ sin v
 
 sec
   ::
@@ -111,7 +111,7 @@ sec
     , TypeElim r typ
     )
   => VS (r val) -> VS (r val)
-sec v = valOfOne (fmap valueType v) #/ cos v
+sec v = valOfOne (valueType <$> v) #/ cos v
 
 cot
   ::
@@ -121,7 +121,7 @@ cot
     , TypeElim r typ
     )
   => VS (r val) -> VS (r val)
-cot v = valOfOne (fmap valueType v) #/ tan v
+cot v = valOfOne (valueType <$> v) #/ tan v
 
 valOfOne :: (IC.Literal r typ val, TypeElim r typ) => VS (r typ) -> VS (r val)
 valOfOne t = t >>= (getVal . getCodeType)
@@ -322,7 +322,7 @@ lambda
 lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
-  let ft = IC.funcType (fmap (pure . binderType) ps) (pure $ valueType ex)
+  let ft = IC.funcType (pure . binderType <$> ps) (pure $ valueType ex)
   valFromData (Just 0) Nothing ft (f ps ex)
 
 objAccess

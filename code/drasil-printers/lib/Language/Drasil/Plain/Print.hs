@@ -59,8 +59,8 @@ pExprDoc _ (Int i) = integer i
 pExprDoc _ (Str s) = text s
 pExprDoc f (Case cs) = caseDoc f cs
 pExprDoc f (Mtx rs) = mtxDoc f rs
-pExprDoc f (Row es) = hcat $ fmap (pExprDoc f) es
-pExprDoc f (Set es) = hcat $ fmap (pExprDoc f) es
+pExprDoc f (Row es) = hcat $ pExprDoc f <$> es
+pExprDoc f (Set es) = hcat $ pExprDoc f <$> es
 pExprDoc _ (Ident s) = text s
 pExprDoc _ (Label s) = text s
 pExprDoc _ (Spec s) = specialDoc s
@@ -94,28 +94,28 @@ unitDoc f (US us) = formatu t b
   (t,b) = partition ((> 0) . snd) us
   formatu :: [(Symbol,Integer)] -> [(Symbol,Integer)] -> Doc
   formatu [] l = line l
-  formatu l [] = hsep $ fmap pow l
-  formatu nu de = line nu <> text "/" <> line (fmap (\(s,i) -> (s,-i)) de)
+  formatu l [] = hsep $ pow <$> l
+  formatu nu de = line nu <> text "/" <> line ((\(s,i) -> (s,-i)) <$> de)
   line :: [(Symbol,Integer)] -> Doc
   line []  = empty
   line [x] = pow x
-  line l   = paren $ hsep $ fmap pow l
+  line l   = paren $ hsep $ pow <$> l
   pow :: (Symbol,Integer) -> Doc
   pow (x,1) = pExprDoc f $ symbol x
   pow (x,p) = pExprDoc f (symbol x) <> text "^" <> integer p
 
 -- | Helper for printing multicase expressions differently based on linearity (SingleLine).
 caseDoc :: SingleLine -> [(Expr, Expr)] -> Doc
-caseDoc OneLine cs = hsep $ punctuate comma $ fmap (\(e,c) -> pExprDoc OneLine c
-  <+> text "=>" <+> pExprDoc OneLine e) cs
-caseDoc MultiLine cs = vcat $ fmap (\(e,c) -> pExprDoc MultiLine e <> comma <+>
-  pExprDoc MultiLine c) cs
+caseDoc OneLine cs = hsep $ punctuate comma $ (\(e,c) -> pExprDoc OneLine c
+  <+> text "=>" <+> pExprDoc OneLine e) <$> cs
+caseDoc MultiLine cs = vcat $ (\(e,c) -> pExprDoc MultiLine e <> comma <+>
+  pExprDoc MultiLine c) <$> cs
 
 -- | Helper for printing matrices.
 mtxDoc :: SingleLine -> [[Expr]] -> Doc
-mtxDoc OneLine rs = brak $ hsep $ fmap (brak . hsep . fmap (pExprDoc
-  OneLine)) rs
-mtxDoc MultiLine rs = brak $ vcat $ fmap (hsep . fmap (pExprDoc MultiLine)) rs
+mtxDoc OneLine rs = brak $ hsep $ brak . hsep . fmap (pExprDoc
+  OneLine) <$> rs
+mtxDoc MultiLine rs = brak $ vcat $ hsep . fmap (pExprDoc MultiLine) <$> rs
 
 -- TODO: Double check that this is valid in all output languages
 -- | Helper for printing special characters (for degrees and partial derivatives).

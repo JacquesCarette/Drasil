@@ -13,8 +13,8 @@ import Drasil.SRS.Sections.TableOfSymbols (table)
 import Drasil.SRS.Sections.TableOfUnits (tOfUnitNone)
 
 sections :: [Section]
-sections = fmap (flip ($ []) [])
-  [tOfCont, refMat, tOfUnit, tOfSymb, tOfAbbAcc, intro, prpsOfDoc, scpOfReq,
+sections = flip ($ []) []
+  <$> [tOfCont, refMat, tOfUnit, tOfSymb, tOfAbbAcc, intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, genSysDes, sysCont,
   userChar, sysCon, specSysDes, probDesc, termAndDefn, physSyst, goalStmt,
   solCharSpec, assumpt, thModel, genDefn, dataDefn, inModel, datCon, propCorSol,

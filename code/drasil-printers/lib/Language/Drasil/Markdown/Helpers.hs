@@ -54,7 +54,7 @@ tagR t = text $ "</" P.<> t P.<> ">"
 --     * The 'String' in the pair is the attribute name,
 --     * The 'Doc' is the value for different attributes.
 wrapInside :: String -> [(String, Doc)] -> Doc
-wrapInside t p = text ("<" P.<> t P.<> " ") <> foldl1 (<>) (fmap foldStr p) <> text ">"
+wrapInside t p = text ("<" P.<> t P.<> " ") <> foldl1 (<>) (foldStr <$> p) <> text ">"
   where foldStr (attr, val) = text (attr P.<> "=\"") <> val <> text "\" "
 
 -- | Indent the Document by 2 positions.

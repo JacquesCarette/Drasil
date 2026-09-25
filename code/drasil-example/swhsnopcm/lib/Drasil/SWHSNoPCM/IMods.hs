@@ -63,7 +63,7 @@ eBalanceOnWtrRC =
           constants = singleton $ recip_ (sy tauW) $* sy tempC
 
 balWtrNotes :: [Sentence]
-balWtrNotes = fmap foldlSent [
+balWtrNotes = foldlSent <$> [
   [ch tauW `S.is` S "calculated from", refS balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
    S "is in", phrase liquid, S "form" `sC` eS (realInterval tempW $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)),
@@ -77,7 +77,7 @@ balWtrNotes = fmap foldlSent [
 ----------------------------------------------
 eBalanceOnWtrDeriv :: Derivation
 eBalanceOnWtrDeriv = mkDerivName (D.toSent (phraseNP (the energy)) +:+ S "balance on water")
-  (weave eBalanceOnWtrDerivSentences $ fmap eS eBalanceOnWtrDerivEqns)
+  (weave eBalanceOnWtrDerivSentences $ eS <$> eBalanceOnWtrDerivEqns)
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+ ch coilSA) EmptyS assumpNIHGBW,

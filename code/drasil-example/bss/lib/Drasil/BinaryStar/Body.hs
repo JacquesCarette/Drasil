@@ -163,7 +163,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  fmap bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp, sysCtxSysResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -185,8 +185,8 @@ probDescIntro = foldlSent_
    S "star system under mutual gravitational interaction"]
 
 physSystParts :: [Sentence]
-physSystParts = fmap (!.)
-  [S "The" +:+ phrase starOne +:+ S "with" +:+ phrase mass +:+ ch mass_1,
+physSystParts = (!.)
+  <$> [S "The" +:+ phrase starOne +:+ S "with" +:+ phrase mass +:+ ch mass_1,
    S "The" +:+ phrase starTwo +:+ S "with" +:+ phrase mass +:+ ch mass_2,
    S "The" +:+ phrase gravInteraction +:+ S "between the two stars"]
 

@@ -43,13 +43,13 @@ assumpLDFC         = cic "assumpLDFC" ldfConstantDesc                   "ldfCons
 
 glassTypeDesc :: Sentence
 glassTypeDesc = foldlSent [S "The standard E1300-09a for",
-  phrase calculation, S "applies only to", foldlList Comma Options $ fmap S ["monolithic",
+  phrase calculation, S "applies only to", foldlList Comma Options $ S <$> ["monolithic",
   "laminated", "insulating"], S "glass constructions" `S.of_` S "rectangular", phrase shape,
   S "with continuous", phrase lateral, S "support along",
-  foldlList Comma Options (fmap S ["one", "two", "three", "four"]) +:+.
+  foldlList Comma Options (S <$> ["one", "two", "three", "four"]) +:+.
   plural edge, S "This", phrase practice +: S "assumes that",
-  foldlEnumList Numb Parens SemiCol List $ fmap foldlSent_
-  [[S "the supported glass", plural edge, S "for two, three" `S.and_`
+  foldlEnumList Numb Parens SemiCol List $ foldlSent_
+  <$> [[S "the supported glass", plural edge, S "for two, three" `S.and_`
   S "four-sided support", plural condition, S "are simply supported" `S.and_`
   S "free to slip in", phrase plane],
   [S "glass supported on two sides acts as a simply supported", phrase beam],
@@ -57,7 +57,7 @@ glassTypeDesc = foldlSent [S "The standard E1300-09a for",
 
 glassConditionDesc :: Sentence
 glassConditionDesc = foldlSent [S "Following", complexRef astm2009 (Page [1]) `sC`
-  S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ fmap S ["wired",
+  S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ S <$> ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], S "with",
   phrase surface `S.and_` S "edge treatments that alter the glass strength"]
 
@@ -69,7 +69,7 @@ standardValuesDesc :: Quantity q => q -> Sentence
 standardValuesDesc q = foldlSent [D.toSent $ atStartNP' (the value), S "provided in",
   refS $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase q,
   sParen (ch q) `sC` S "and the", plural materialProprty `S.of_`
-  foldlList Comma List (fmap ch (take 3 assumptionConstants))]
+  foldlList Comma List (ch <$> take 3 assumptionConstants)]
 
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [atStart glass, S "under consideration is assumed to be a single",

@@ -29,7 +29,7 @@ buildMakefile d b r s m = printMakefile $ mkMakefile $ maybe [mkRule (openingCom
       addnm = maybe (asFragment "") (renderBuildName s m nameOpts) anm
   in [
   mkRule (openingComments m) buildTarget [outnm] [],
-  mkFile [] outnm (fmap (makeS . filePath) (progMods m)) $
+  mkFile [] outnm (makeS . filePath <$> progMods m) $
     mkCheckedCommand . foldr (+:+) mempty <$>
       comp (getCompilerInput bt s m) outnm addnm
   ]) b <> foldMap (\(Runnable nm no ty) -> [
@@ -70,13 +70,13 @@ renderExt (OtherExt e) _ = e
 
 -- | Helper that records the compiler input information.
 getCompilerInput :: BuildDependencies -> SoftwareDossierState -> ProgData -> [MakeString]
-getCompilerInput BcSource s _ = fmap makeS $ s ^. sources
+getCompilerInput BcSource s _ = makeS <$> s ^. sources
 getCompilerInput (BcSingle n) s p = [renderBuildName s p nameOpts n]
 
 -- | Helper that retrieves commented files.
 getCommentedFiles :: SoftwareDossierState -> [MakeString]
-getCommentedFiles s = fmap makeS (nubOrd (s ^. headers <>
-  maybeToList (s ^. mainMod)))
+getCommentedFiles s = makeS <$> nubOrd (s ^. headers <>
+  maybeToList (s ^. mainMod))
 
 -- | Helper that builds and runs a target.
 buildRunTarget :: MakeString -> RunType -> MakeString

@@ -75,9 +75,9 @@ mobShrGD     = gd (othModel' mobShr)     (getUnit mobShrI)       (Just mobShrDer
 effNormFGD   = gd (othModel' effNormF)   (getUnit nrmFSubWat)    (Just effNormFDeriv)
   [dRef chen2005]                      "effNormF"    [effNormFDesc]
 resShearWOGD = gd (othModel' resShearWO) (getUnit shearRNoIntsl) Nothing
-  (fmap dRef[chen2005, karchewski2012]) "resShearWO"  [resShearWODesc]
+  (dRef <$> [chen2005, karchewski2012]) "resShearWO"  [resShearWODesc]
 mobShearWOGD = gd (othModel' mobShearWO) (getUnit shearFNoIntsl) Nothing
-  (fmap dRef[chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
+  (dRef <$> [chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
 normShrRGD   = gd (equationalModel' normShrR)   (getUnit intShrForce)   Nothing
   [dRef chen2005]                      "normShrR"    [nmShrRDesc]
 momentEqlGD  = gd momentEqlModel        (Just newton)            (Just momEqlDeriv)
@@ -274,7 +274,7 @@ momEqlDeriv :: Derivation
 momEqlDeriv = mkDerivNoHeader (weave momEqlDerivSentences momEqlDerivEqns)
 
 momEqlDerivSentences :: [Sentence]
-momEqlDerivSentences = fmap foldlSentCol [momEqlDerivTorqueSentence,
+momEqlDerivSentences = foldlSentCol <$> [momEqlDerivTorqueSentence,
   momEqlDerivMomentSentence, momEqlDerivNormaliSentence,
   momEqlDerivNormaliM1Sentence, momEqlDerivWateriSentence,
   momEqlDerivWateriM1Sentence, momEqlDerivSheariSentence,
@@ -283,7 +283,7 @@ momEqlDerivSentences = fmap foldlSentCol [momEqlDerivTorqueSentence,
   momEqlDerivHydroSentence, momEqlDerivExtSentence, momEqlDerivFinalSentence]
 
 momEqlDerivEqns :: [Sentence]
-momEqlDerivEqns = fmap eS [momEqlDerivTorqueEqn, momEqlDerivMomentEqn,
+momEqlDerivEqns = eS <$> [momEqlDerivTorqueEqn, momEqlDerivMomentEqn,
   momEqlDerivNormaliEqn, momEqlDerivNormaliM1Eqn, momEqlDerivWateriEqn,
   momEqlDerivWateriM1Eqn, momEqlDerivSheariEqn,
   momEqlDerivSheariM1Eqn, momEqlDerivSeismicIntEqn,
@@ -489,13 +489,13 @@ sliceWghtDeriv :: Derivation
 sliceWghtDeriv = mkDerivNoHeader (weave sliceWghtDerivSentences sliceWghtDerivEqns)
 
 sliceWghtDerivEqns :: [Sentence]
-sliceWghtDerivEqns = fmap eS [sliceWghtDerivSatCaseWeightEqn,
+sliceWghtDerivEqns = eS <$> [sliceWghtDerivSatCaseWeightEqn,
   sliceWghtDerivSatCaseSliceEqn, sliceWghtDerivDryCaseWeightEqn,
   sliceWghtDerivDryCaseSliceEqn, sliceWghtDerivMixCaseWeightEqn,
   sliceWghtDerivMixCaseSliceEqn]
 
 sliceWghtDerivSentences :: [Sentence]
-sliceWghtDerivSentences = fmap foldlSentCol [sliceWghtDerivSatCaseIntroSentence,
+sliceWghtDerivSentences = foldlSentCol <$> [sliceWghtDerivSatCaseIntroSentence,
   sliceWghtDerivSatCase2DSentence, sliceWghtDerivDryCaseIntroSentence,
   sliceWghtDerivDryCase2DSentence, sliceWghtDerivMixCaseIntroSentence,
   sliceWghtDerivMixCase2DSentence]
@@ -613,11 +613,11 @@ bsWtrFDeriv = mkDerivNoHeader (weave bsWtrFDerivSentences bsWtrFDerivEqns <>
   bsWtrFDerivEndSentence)
 
 bsWtrFDerivEqns :: [Sentence]
-bsWtrFDerivEqns = fmap eS [bsWtrFDerivWeightEqn, bsWtrFDerivHeightEqn,
+bsWtrFDerivEqns = eS <$> [bsWtrFDerivWeightEqn, bsWtrFDerivHeightEqn,
   bsWtrFDerivSliceEqn]
 
 bsWtrFDerivSentences :: [Sentence]
-bsWtrFDerivSentences = fmap foldlSentCol [bsWtrFDerivIntroSentence,
+bsWtrFDerivSentences = foldlSentCol <$> [bsWtrFDerivIntroSentence,
   bsWtrFDerivHeightSentence, bsWtrFDeriv2DSentence]
 
 bsWtrFDerivIntroSentence, bsWtrFDerivHeightSentence, bsWtrFDeriv2DSentence,
@@ -696,11 +696,11 @@ srfWtrFDeriv = mkDerivNoHeader (weave srfWtrFDerivSentences srfWtrFDerivEqns <>
   srfWtrFDerivEndSentence)
 
 srfWtrFDerivEqns :: [Sentence]
-srfWtrFDerivEqns = fmap eS [srfWtrFDerivWeightEqn, srfWtrFDerivHeightEqn,
+srfWtrFDerivEqns = eS <$> [srfWtrFDerivWeightEqn, srfWtrFDerivHeightEqn,
   srfWtrFDerivSliceEqn]
 
 srfWtrFDerivSentences :: [Sentence]
-srfWtrFDerivSentences = fmap foldlSentCol [srfWtrFDerivIntroSentence,
+srfWtrFDerivSentences = foldlSentCol <$> [srfWtrFDerivIntroSentence,
   srfWtrFDerivHeightSentence, srfWtrFDeriv2DSentence]
 
 srfWtrFDerivIntroSentence, srfWtrFDerivHeightSentence, srfWtrFDeriv2DSentence,

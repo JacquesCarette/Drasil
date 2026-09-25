@@ -113,8 +113,8 @@ mkCodeSpec si@S.ICO{ S._inputs = ins
       sysMeta = set systemdb db $ si ^. systemMeta
       ddefs = si ^. dataDefns
       inputs' = quantvar <$> NE.toList ins
-      const' = fmap qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
-        cnsts)
+      const' = qtov <$> filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
+        cnsts
       derived = qtov <$> getDerivedInputs ddefs inputs' const' db
       rels = (fmap qtoc (getEqModQdsFromIm (si ^. instModels) <> mapMaybe qdEFromDD ddefs) \\ derived)
         <> mapODE (getODE $ extLibs chs)

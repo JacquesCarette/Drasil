@@ -551,7 +551,7 @@ instance MethodSym MatlabCode Doc TypeData ParamData MethodData Body where
     pms  <- mapM param (both P.<> ins)
     rets <- mapM (zoom lensMStoVS) (both P.<> outs)
     bod  <- b
-    pure $ toCode $ mthd n $ mlFuncDoc n (fmap RC.variable rets) pms (RC.body bod)
+    pure $ toCode $ mthd n $ mlFuncDoc n (RC.variable <$> rets) pms (RC.body bod)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
 instance RenderMethod MatlabCode MethodData where
@@ -574,7 +574,7 @@ instance ModuleSym MatlabCode ModData MethodData where
   buildModule n _ fs = modFromData n (do
     fns <- mapM (zoom lensFStoMS) fs
     entryFn <- mlMainFunc n
-    let fnDocs = vibcat (fmap RC.method fns)
+    let fnDocs = vibcat (RC.method <$> fns)
         content = vibcat (filter (not . isEmpty) [entryFn, fnDocs])
     case fns of
       (f:_) | isEmpty entryFn -> modify (setModuleName (mthdName (unMLC f)))

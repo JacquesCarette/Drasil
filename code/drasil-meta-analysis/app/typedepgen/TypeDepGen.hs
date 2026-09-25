@@ -38,13 +38,13 @@ main = do
   -- gets names + filepaths of all drasil- packages/directories
   drctyList <- DC.getDirectories codeDirectory "drasil-"
 
-  let packageNames = fmap DC.folderDrasilPack drctyList
+  let packageNames = DC.folderDrasilPack <$> drctyList
 
   -- all files + filepaths stored here; obtained from ordered list using finder
   allFiles <- mapM DC.finder drctyList
 
   -- creates Entry instances (w/ file data) from File instances (File -> Entry)
-  rawEntryData <- zipWithM (createEntry codeDirectory) (concat allFiles) (fmap DC.fileName (concat allFiles))
+  rawEntryData <- zipWithM (createEntry codeDirectory) (concat allFiles) (DC.fileName <$> concat allFiles)
 
   -- creates and writes to output data file
   mapM_ (createPackageFiles outputDirectory) packageNames
@@ -141,7 +141,7 @@ separateDigraph outputFilePath col typeDecl = do
 -- Helper to create the drasil.dot graph files from an entry of different kinds of datatypes.
 mkFullOutputSub :: Handle -> Entry -> IO ()
 mkFullOutputSub typeGraph entry = do
-    hPutStrLn typeGraph $ "\tsubgraph " <> replaceInvalidChars (fmap toLower $ fileName entry \\ ".hs") <> " {"
+    hPutStrLn typeGraph $ "\tsubgraph " <> replaceInvalidChars (toLower <$> fileName entry \\ ".hs") <> " {"
     mapM_ (subgraphDTD typeGraph "cyan3") $ dataTypeRecords entry
     mapM_ (subgraphDTD typeGraph "darkviolet") $ dataTypeConstructors entry
     mapM_ (subgraphDTD typeGraph "darkgreen") $ newtypes entry

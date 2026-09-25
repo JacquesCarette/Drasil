@@ -42,7 +42,7 @@ topologicalSort foundOrder allDefs knowns needs db
                   db
   where
     (nextCalcs, notReady) = partition (computable db knowns) allDefs
-    newlyCalculated = fmap quantvar nextCalcs
+    newlyCalculated = quantvar <$> nextCalcs
 
 -- | Check if a 'Def' is computable given a list of 'Known's.
 computable :: ChunkDB -> [Known] -> Def -> Bool

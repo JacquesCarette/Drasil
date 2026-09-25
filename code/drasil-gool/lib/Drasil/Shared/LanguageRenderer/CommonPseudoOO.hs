@@ -175,7 +175,7 @@ intClass
 intClass f n s i svrs cstrs mths = do
   modify (setClassName n)
   svs <- onStateList (R.stateVarList . fmap RG.stateVar) svrs
-  ms <- onStateList (vibcat . fmap RC.method) (fmap (zoom lensCStoMS) (cstrs P.<> mths))
+  ms <- onStateList (vibcat . fmap RC.method) (zoom lensCStoMS <$> (cstrs P.<> mths))
   pure $ onCodeValue (\p -> f n p (RC.visibility s) svs ms) i
 
 -- Python and C++ --
@@ -339,8 +339,8 @@ buildModule' n inc is ms cs = RG.modFromData n (do
   libis <- getLibImports
   mis <- getModuleImports
   pure $ vibcat [
-    vcat (fmap (RC.import' . inc) (lis P.<> sort (is P.<> libis) P.<> mis)),
-    vibcat (fmap RG.class' cls)])
+    vcat (RC.import' . inc <$> (lis P.<> sort (is P.<> libis) P.<> mis)),
+    vibcat (RG.class' <$> cls)])
 
 -- Java and C++ --
 
@@ -379,12 +379,12 @@ docInOutFunc
   -> [(String, VS (r Variable))]
   -> MS (r bod)
   -> MS (r mthd)
-docInOutFunc f desc is [o] [] b = docFuncRepr functionDox desc (fmap fst is)
-  [fst o] (f (fmap snd is) [snd o] [] b)
-docInOutFunc f desc is [] [both] b = docFuncRepr functionDox desc (fmap fst $
-  both : is) [fst both] (f (fmap snd is) [] [snd both] b)
-docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (fmap fst $ bs P.<>
-  is P.<> os) [] (f (fmap snd is) (fmap snd os) (fmap snd bs) b)
+docInOutFunc f desc is [o] [] b = docFuncRepr functionDox desc (fst <$> is)
+  [fst o] (f (snd <$> is) [snd o] [] b)
+docInOutFunc f desc is [] [both] b = docFuncRepr functionDox desc (fst <$>
+  both : is) [fst both] (f (snd <$> is) [] [snd both] b)
+docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (fst <$> bs P.<>
+  is P.<> os) [] (f (snd <$> is) (snd <$> os) (snd <$> bs) b)
 
 -- Python, Java, C#, and Swift --
 
@@ -594,7 +594,7 @@ funcDecDef v scp ps b = do
   modify $ setVarScope (variableName vr) (scopeData scp)
   s <- get
   f <- function (variableName vr) private (pure $ variableType vr)
-    (fmap IC.param ps) b
+    (IC.param <$> ps) b
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RC.method f
 
@@ -648,12 +648,12 @@ inOutFunc
   -> [VS (r Variable)]
   -> MS (r bod)
   -> MS (r mthd)
-inOutFunc f ins [] [] b = f IC.void (fmap IC.param ins) b
+inOutFunc f ins [] [] b = f IC.void (IC.param <$> ins) b
 inOutFunc f ins outs both b = f
-  (multiType $ fmap (onStateValue variableType) rets)
+  (multiType $ onStateValue variableType <$> rets)
   (fmap IC.pointerParam both P.<> fmap IC.param ins)
-  (multiBody [bodyStatements $ fmap (`IC.varDec` IC.local) outs, b,
-    oneLiner $ RC.multiReturn $ fmap IC.valueOf rets])
+  (multiBody [bodyStatements $ (`IC.varDec` IC.local) <$> outs, b,
+    oneLiner $ RC.multiReturn $ IC.valueOf <$> rets])
   where rets = both P.<> outs
 
 docInOutFunc'
@@ -665,8 +665,8 @@ docInOutFunc'
   -> [(String, VS (r Variable))]
   -> [(String, VS (r Variable))]
   -> MS (r bod) -> MS (r mthd)
-docInOutFunc' dfr f desc is os bs b = docFuncRepr dfr desc (fmap fst $ bs P.<> is)
-  (fmap fst $ bs P.<> os) (f (fmap snd is) (fmap snd os) (fmap snd bs) b)
+docInOutFunc' dfr f desc is os bs b = docFuncRepr dfr desc (fst <$> bs P.<> is)
+  (fst <$> bs P.<> os) (f (snd <$> is) (snd <$> os) (snd <$> bs) b)
 
 -- Java and Swift --
 

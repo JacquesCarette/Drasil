@@ -118,7 +118,7 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance OOProg PythonCode Doc TypeData Value (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body Block
+instance OOProg PythonCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body Block
 
 instance ProgramSym PythonCode ProgData FileData where
   prog n st files = do
@@ -126,8 +126,8 @@ instance ProgramSym PythonCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym PythonCode Doc TypeData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym PythonCode Doc TypeData Value (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body Block
+instance CommonRenderSym PythonCode Doc TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym PythonCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body Block
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
@@ -629,21 +629,21 @@ instance MethodTypeSym PythonCode TypeData where
 instance OOMethodTypeSym PythonCode TypeData where
   construct = G.construct
 
-instance ParameterSym PythonCode where
+instance ParameterSym PythonCode ParamData where
   param = G.param RC.variable
   pointerParam = param
 
-instance RenderParam PythonCode where
+instance RenderParam PythonCode ParamData where
   paramFromData v' d = do
     v <- zoom lensMStoVS v'
     toState $ on2CodeValues pd v (toCode d)
 
-instance ParamElim PythonCode TypeData where
+instance ParamElim PythonCode TypeData ParamData where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unPC
 
-instance MethodSym PythonCode Doc TypeData MethodData Body where
+instance MethodSym PythonCode Doc TypeData ParamData MethodData Body where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
@@ -652,7 +652,7 @@ instance MethodSym PythonCode Doc TypeData MethodData Body where
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
 
-instance OOMethodSym PythonCode Doc TypeData Value MethodData AttachmentData Body where
+instance OOMethodSym PythonCode Doc TypeData ParamData Value MethodData AttachmentData Body where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -667,7 +667,7 @@ instance RenderMethod PythonCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance OORenderMethod PythonCode Doc TypeData MethodData AttachmentData Body where
+instance OORenderMethod PythonCode Doc TypeData ParamData MethodData AttachmentData Body where
   intMethod m n _ a _ ps b = do
     modify (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
@@ -1051,7 +1051,7 @@ pyMethod n attch slf ps b = let
        indent bodyD]
 
 pyFunction
-  :: (BodyElim r bod, ParamElim r typ) => Label -> [r ParamData] -> r bod -> Doc
+  :: (BodyElim r bod, ParamElim r typ param) => Label -> [r param] -> r bod -> Doc
 pyFunction n ps b = vcat [
   pyDef <+> text n <> parens (parameterList ps) <> colon,
   indent bodyD]

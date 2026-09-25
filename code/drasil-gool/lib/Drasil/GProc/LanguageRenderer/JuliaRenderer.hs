@@ -107,7 +107,7 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance ProcProg JuliaCode Doc TypeData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
+instance ProcProg JuliaCode Doc TypeData ParamData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
 
 instance ProgramSym JuliaCode ProgData FileData where
   prog n st files = do
@@ -115,8 +115,8 @@ instance ProgramSym JuliaCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym JuliaCode Doc TypeData Value (Doc, Terminator) MethodData Body Block
-instance ProcRenderSym JuliaCode Doc TypeData Value (Doc, Terminator) MethodData FileData ModData Body Block
+instance CommonRenderSym JuliaCode Doc TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance ProcRenderSym JuliaCode Doc TypeData ParamData Value (Doc, Terminator) MethodData FileData ModData Body Block
 
 instance UnRepr JuliaCode inner where
   unRepr = unJLC
@@ -547,21 +547,21 @@ instance VisibilityElim JuliaCode Doc where
 instance MethodTypeSym JuliaCode TypeData where
   mType = zoom lensMStoVS
 
-instance ParameterSym JuliaCode where
+instance ParameterSym JuliaCode ParamData where
   param = G.param jlParam
   pointerParam = param
 
-instance RenderParam JuliaCode where
+instance RenderParam JuliaCode ParamData where
   paramFromData v' d = do
     v <- zoom lensMStoVS v'
     toState $ on2CodeValues pd v (toCode d)
 
-instance ParamElim JuliaCode TypeData where
+instance ParamElim JuliaCode TypeData ParamData where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJLC
 
-instance MethodSym JuliaCode Doc TypeData MethodData Body where
+instance MethodSym JuliaCode Doc TypeData ParamData MethodData Body where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
@@ -575,7 +575,7 @@ instance RenderMethod JuliaCode MethodData where
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance ProcRenderMethod JuliaCode Doc TypeData MethodData Body where
+instance ProcRenderMethod JuliaCode Doc TypeData ParamData MethodData Body where
   intFunc _ n _ _ ps b = do
     pms <- sequence ps
     toCode . mthd n . jlIntFunc n pms <$> b
@@ -891,8 +891,8 @@ jlModContents n is = A.buildModule n (do
 -- | Creates a function.  n is function name, pms is list of parameters, and
 --   bod is body.
 jlIntFunc
-  :: (BodyElim r bod, ParamElim r typ)
-  => Label -> [r ParamData] -> r bod -> Doc
+  :: (BodyElim r bod, ParamElim r typ param)
+  => Label -> [r param] -> r bod -> Doc
 jlIntFunc n pms bod = do
   vcat [jlFunc <+> text n <> parens (parameterList pms),
         indent $ RC.body bod,

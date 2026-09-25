@@ -39,7 +39,7 @@ newObserver = extNewObj observerName observerType []
 -- | Creates the pattern test program.
 patternTest
   ::
-    ( OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+    ( OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block
     , GetSet r val
     , StrategyPattern r val bod block
     , ObserverPattern r typ stmt
@@ -50,7 +50,7 @@ patternTest = prog progName "" [fileDoc (buildModule progName []
 -- | Creates the main function for PatternTest.
 patternTestMainMethod
   ::
-    ( OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+    ( OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block
     , GetSet r val
     , StrategyPattern r val bod block
     , ObserverPattern r typ stmt

@@ -11,7 +11,7 @@ import Drasil.Shared.InterfaceCommon (Label, SVariable,
 import qualified Drasil.Shared.InterfaceCommon as IC
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import qualified Drasil.GProc.RendererClassesProc as RP
-import Drasil.Shared.AST (isSource, ScopeData, ParamData)
+import Drasil.Shared.AST (isSource, ScopeData)
 import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)
@@ -116,7 +116,7 @@ arrayElem arr' i' = do
   mkStateVar vName vType vRender
 
 funcDecDef
-  :: (RP.ProcRenderSym r vis typ val stmt mthd file mod bod block)
+  :: (RP.ProcRenderSym r vis typ param val stmt mthd file mod bod block)
   => SVariable r -> r ScopeData -> [SVariable r] -> MS (r bod) -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
@@ -129,11 +129,11 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 function
-  :: (RC.MethodTypeSym r typ, RP.ProcRenderMethod r vis typ mthd bod)
+  :: (RC.MethodTypeSym r typ, RP.ProcRenderMethod r vis typ param mthd bod)
   => Label
   -> r vis
   -> VS (r typ)
-  -> [MS (r ParamData)]
+  -> [MS (r param)]
   -> MS (r bod)
   -> MS (r mthd)
 function n s t = RP.intFunc False n s (RC.mType t)

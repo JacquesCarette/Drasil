@@ -27,7 +27,7 @@ import Data.Bifunctor (first)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData(..), BinderD,
-  ParamData, VarData, ValData)
+  VarData, ValData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.State (MS, VS)
 
@@ -570,12 +570,12 @@ class VisibilitySym r vis | r -> vis where
   public  :: r vis
 
 -- | A class for representing function/method parameters.
-class ParameterSym r where
-  param :: SVariable r -> MS (r ParamData)
+class ParameterSym r param | r -> param where
+  param :: SVariable r -> MS (r param)
   -- | A parameter that is an "alias" type, e.g. a C++ reference.
   -- This is a minor hack, to get around us not having/wanting
   -- "alias types" in GOOL.
-  pointerParam :: SVariable r -> MS (r ParamData)
+  pointerParam :: SVariable r -> MS (r param)
 
 -- The three lists are inputs, outputs, and both, respectively
 type InOutFunc r mthd bod = [SVariable r] -> [SVariable r] -> [SVariable r] ->
@@ -588,11 +588,11 @@ type DocInOutFunc r mthd bod = String -> [(String, SVariable r)] ->
 
 -- | A class for representing functions/methods.
 -- Usually 'MethodData' is used for the representation.
-class MethodSym r vis typ mthd bod | r -> vis typ mthd bod
+class MethodSym r vis typ param mthd bod | r -> vis typ param mthd bod
   where
   docMain :: MS (r bod) -> MS (r mthd)
 
-  function :: Label -> r vis -> VS (r typ) -> [MS (r ParamData)] ->
+  function :: Label -> r vis -> VS (r typ) -> [MS (r param)] ->
     MS (r bod) -> MS (r mthd)
   mainFunction  :: MS (r bod) -> MS (r mthd)
   -- Parameters are: function description, parameter descriptions,

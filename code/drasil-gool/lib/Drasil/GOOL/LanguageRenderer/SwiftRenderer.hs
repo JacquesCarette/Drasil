@@ -128,7 +128,7 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance OOProg SwiftCode Doc TypeData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
+instance OOProg SwiftCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym SwiftCode ProgData FileData where
   prog n st files = do
@@ -136,8 +136,8 @@ instance ProgramSym SwiftCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym SwiftCode Doc TypeData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym SwiftCode Doc TypeData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
+instance CommonRenderSym SwiftCode Doc TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym SwiftCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
@@ -663,21 +663,21 @@ instance MethodTypeSym SwiftCode TypeData where
 instance OOMethodTypeSym SwiftCode TypeData where
   construct = G.construct
 
-instance ParameterSym SwiftCode where
+instance ParameterSym SwiftCode ParamData where
   param = G.param (swiftParam empty)
   pointerParam = G.param (swiftParam swiftInOut)
 
-instance RenderParam SwiftCode where
+instance RenderParam SwiftCode ParamData where
   paramFromData v' d = do
     v <- zoom lensMStoVS v'
     toState $ on2CodeValues pd v (toCode d)
 
-instance ParamElim SwiftCode TypeData where
+instance ParamElim SwiftCode TypeData ParamData where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unSC
 
-instance MethodSym SwiftCode Doc TypeData MethodData Body where
+instance MethodSym SwiftCode Doc TypeData ParamData MethodData Body where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
@@ -687,7 +687,7 @@ instance MethodSym SwiftCode Doc TypeData MethodData Body where
 
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance OOMethodSym SwiftCode Doc TypeData Value MethodData Doc Body where
+instance OOMethodSym SwiftCode Doc TypeData ParamData Value MethodData Doc Body where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -702,7 +702,7 @@ instance RenderMethod SwiftCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance OORenderMethod SwiftCode Doc TypeData MethodData Doc Body where
+instance OORenderMethod SwiftCode Doc TypeData ParamData MethodData Doc Body where
   intMethod _ = swiftMethod
   intFunc _ n s _ = swiftMethod n s instanceLevel
   destructor _ = error $ CP.destructorError swiftName

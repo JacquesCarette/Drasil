@@ -50,7 +50,7 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance OOProg CodeInfoOO () () () () () () () GOOLState () () () ()
+instance OOProg CodeInfoOO () () () () () () () () GOOLState () () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
@@ -440,11 +440,11 @@ instance VisibilitySym CodeInfoOO () where
   private = pure ()
   public  = pure ()
 
-instance ParameterSym CodeInfoOO where
+instance ParameterSym CodeInfoOO () where
   param        _ = pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
   pointerParam _ = pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance MethodSym CodeInfoOO () () () () where
+instance MethodSym CodeInfoOO () () () () () where
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
   mainFunction = updateMEMandCM "main"
@@ -455,7 +455,7 @@ instance MethodSym CodeInfoOO () () () () where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance OOMethodSym CodeInfoOO () () () () () () where
+instance OOMethodSym CodeInfoOO () () () () () () () where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo

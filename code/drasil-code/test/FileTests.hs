@@ -14,14 +14,14 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
 
 -- | Creates a program in GOOL to test reading and writing to files.
 fileTestsOO
-  :: (OOProg r vis typ val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
   => OO.GSProgram r prg
 fileTestsOO = OO.prog "FileTests" "" [OO.fileDoc (OO.buildModule "FileTests" []
   [fileTestMethod] [])]
 
 -- | Creates a program in GProc to test reading and writing to files.
 fileTestsProc
-  :: (ProcProg r vis typ val stmt mthd prg file mod bod block)
+  :: (ProcProg r vis typ param val stmt mthd prg file mod bod block)
   => GProc.GSProgram r prg
 fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
   "FileTests" [] [fileTestMethod])]
@@ -44,7 +44,7 @@ fileTestMethod
     , FileHandling r val stmt
     , PrintFile r val stmt
     , ReadFile r val stmt
-    , MethodSym r vis typ mthd bod
+    , MethodSym r vis typ param mthd bod
     )
   => MS (r mthd)
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])

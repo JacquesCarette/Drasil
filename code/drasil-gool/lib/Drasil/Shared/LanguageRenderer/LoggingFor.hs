@@ -360,7 +360,7 @@ instance (Literal r typ val) => Literal (LoggingFor r) typ val where
 instance (MathConstant r val) => MathConstant (LoggingFor r) val where
   pi = liftLogging pi
 
-instance (ParameterSym r) => ParameterSym (LoggingFor r) where
+instance (ParameterSym r param) => ParameterSym (LoggingFor r) param where
   param = liftLogging param
   pointerParam = liftLogging pointerParam
 
@@ -368,7 +368,7 @@ instance (VisibilitySym r vis) => VisibilitySym (LoggingFor r) vis where
   private = liftLogging private
   public = liftLogging public
 
-instance (MethodSym r vis typ mthd bod) => MethodSym (LoggingFor r) vis typ mthd bod where
+instance (MethodSym r vis typ param mthd bod) => MethodSym (LoggingFor r) vis typ param mthd bod where
   docMain = liftLogging docMain
   function = liftLogging function
   mainFunction = liftLogging mainFunction
@@ -441,7 +441,7 @@ instance (NativeVector lang typ val) => NativeVector (LoggingFor lang) typ val w
 
 -- GProc
 
-instance (P.ProcProg r vis typ val stmt mthd prg file mod bod block) => P.ProcProg (LoggingFor r) vis typ val stmt mthd prg file mod bod block
+instance (P.ProcProg r vis typ param val stmt mthd prg file mod bod block) => P.ProcProg (LoggingFor r) vis typ param val stmt mthd prg file mod bod block
 
 instance (P.ModuleSym r mod mthd) => P.ModuleSym (LoggingFor r) mod mthd where
   buildModule = liftLogging P.buildModule
@@ -455,7 +455,7 @@ instance (P.ProgramSym r prg file) => P.ProgramSym (LoggingFor r) prg file where
 
 -- GOOL
 
-instance (G.OOProg r vis typ val stmt mthd stvr attch prg file mod bod block) => G.OOProg (LoggingFor r) vis typ val stmt mthd stvr attch prg file mod bod block
+instance (G.OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block) => G.OOProg (LoggingFor r) vis typ param val stmt mthd stvr attch prg file mod bod block
 
 instance (G.GetSet r val) => G.GetSet (LoggingFor r) val where
   get = liftLogging G.get
@@ -503,7 +503,7 @@ instance (G.AttachmentSym r attch) => G.AttachmentSym (LoggingFor r) attch where
   classLevel = liftLogging G.classLevel
   instanceLevel = liftLogging G.instanceLevel
 
-instance (G.OOMethodSym r vis typ val mthd attch bod) => G.OOMethodSym (LoggingFor r) vis typ val mthd attch bod where
+instance (G.OOMethodSym r vis typ param val mthd attch bod) => G.OOMethodSym (LoggingFor r) vis typ param val mthd attch bod where
   method = liftLogging G.method
   getMethod = liftLogging G.getMethod
   setMethod = liftLogging G.setMethod

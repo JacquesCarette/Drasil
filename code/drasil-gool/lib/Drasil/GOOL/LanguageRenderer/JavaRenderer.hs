@@ -129,15 +129,15 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOProg JavaCode Doc TypeData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
+instance OOProg JavaCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym JavaCode ProgData FileData where
   prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n
     endStatement)))
 
-instance CommonRenderSym JavaCode Doc TypeData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym JavaCode Doc TypeData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
+instance CommonRenderSym JavaCode Doc TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym JavaCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
@@ -645,21 +645,21 @@ instance MethodTypeSym JavaCode TypeData where
 instance OOMethodTypeSym JavaCode TypeData where
   construct = G.construct
 
-instance ParameterSym JavaCode where
+instance ParameterSym JavaCode ParamData where
   param = G.param renderParam
   pointerParam = param
 
-instance RenderParam JavaCode where
+instance RenderParam JavaCode ParamData where
   paramFromData v' d = do
     v <- zoom lensMStoVS v'
     toState $ on2CodeValues pd v (toCode d)
 
-instance ParamElim JavaCode TypeData where
+instance ParamElim JavaCode TypeData ParamData where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJC
 
-instance MethodSym JavaCode Doc TypeData MethodData Body where
+instance MethodSym JavaCode Doc TypeData ParamData MethodData Body where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string mainFunc
@@ -668,7 +668,7 @@ instance MethodSym JavaCode Doc TypeData MethodData Body where
   inOutFunc n s = jInOut (function n s)
   docInOutFunc n s = jDocInOut (inOutFunc n s)
 
-instance OOMethodSym JavaCode Doc TypeData Value MethodData Doc Body where
+instance OOMethodSym JavaCode Doc TypeData ParamData Value MethodData Doc Body where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -683,7 +683,7 @@ instance RenderMethod JavaCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance OORenderMethod JavaCode Doc TypeData MethodData Doc Body where
+instance OORenderMethod JavaCode Doc TypeData ParamData MethodData Doc Body where
   intMethod m n s p t ps b = do
     tp <- t
     pms <- sequence ps

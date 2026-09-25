@@ -24,10 +24,10 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
   Space(..))
 import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
   oneLineCodeExprDoc)
-import Drasil.GOOL (Variable, VS, CS, FS, MS, CSStateVar, Class, OOProg,
-  BodySym(..), bodyStatements, oneLiner, BlockSym(..), AttachmentSym(..),
-  TypeSym(..), ValueSym, VariableSym(..), ScopeSym(..), Literal(..), OOTypeSym,
-  OOVariableSym, VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+import Drasil.GOOL (VS, CS, FS, MS, CSStateVar, Class, OOProg, BodySym(..),
+  bodyStatements, oneLiner, BlockSym(..), AttachmentSym(..), TypeSym(..),
+  ValueSym, VariableSym(..), ScopeSym(..), Literal(..), OOTypeSym, OOVariableSym,
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), List(..), ListStatement(..),
   EmptyStatement(emptyStmt), MultiStatement(multi), ValueStatement,
   AssignStatement(..), DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
@@ -86,7 +86,7 @@ type ConstraintCE = Constraint CodeExpr
 
 -- | Generates a controller module.
 genMain
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => GenState (FS (r file))
 genMain = genModule "Control" "Controls the flow of the program"
   [genMainFunc] []
@@ -97,7 +97,7 @@ genMain = genModule "Control" "Controls the flow of the program"
 -- constraints, calculating outputs, and printing outputs.
 -- Returns Nothing if the user chose to generate a library.
 genMainFunc
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => GenState (Maybe (MS (r mthd)))
 genMainFunc = do
     g <- get
@@ -138,25 +138,25 @@ getInputDecl
     , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , ScopeSym r scope
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , ValueExpression r typ val
-    , OOValueExpression r typ val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , ValueExpression r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
     , MultiStatement r stmt
-    , DeclStatement r scope val stmt bod
-    , OODeclStatement r scope val stmt
+    , DeclStatement r scope var val stmt bod
+    , OODeclStatement r scope var val stmt
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => GenState (Maybe (MS (r stmt)))
 getInputDecl = do
@@ -201,25 +201,25 @@ initConsts
     , TypeSym r typ
     , OOTypeSym r typ
     , ScopeSym r scope
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , Literal r typ val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , ValueExpression r typ val
-    , OOValueExpression r typ val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , ValueExpression r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
     , MultiStatement r stmt
-    , DeclStatement r scope val stmt bod
-    , OODeclStatement r scope val stmt
+    , DeclStatement r scope var val stmt bod
+    , OODeclStatement r scope var val stmt
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => GenState (Maybe (MS (r stmt)))
 initConsts = do
@@ -249,7 +249,11 @@ initConsts = do
 -- | Generates a statement to declare the variable representing the log file,
 -- if the user chose to turn on logs for variable assignments.
 initLogFileVar
-  :: (TypeSym r typ, VariableSym r typ, DeclStatement r scope val stmt bod)
+  ::
+    ( TypeSym r typ
+    , VariableSym r typ var
+    , DeclStatement r scope var val stmt bod
+    )
   => [Logging] -> r scope -> [MS (r stmt)]
 initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 
@@ -257,13 +261,13 @@ initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 
 -- | Generates a single module containing all input-related components.
 genInputMod
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => GenState [FS (r file)]
 genInputMod = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
   let genMod
-        :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
         => Maybe (CS (r Class)) -> GenState (FS (r file))
       genMod Nothing = genModule cname ipDesc [genInputFormat Pub,
         genInputDerived Pub, genInputConstraints Pub] []
@@ -279,10 +283,10 @@ constVarFunc
   ::
     ( AttachmentSym r attch
     , VisibilitySym r vis
-    , StateVarSym r vis val stvr attch
+    , StateVarSym r vis var val stvr attch
     )
   => ConstantRepr
-  -> (VS (r Variable) -> VS (r val) -> CSStateVar r stvr)
+  -> (VS (r var) -> VS (r val) -> CSStateVar r stvr)
 constVarFunc Var = stateVarDef public instanceLevel
 constVarFunc Const = constVar public
 
@@ -293,7 +297,7 @@ constVarFunc Const = constVar public
 -- variables. If the InputParameters constructor is also exported, then the
 -- generated class also contains the input-related functions as private methods.
 genInputClass
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => ClassType -> GenState (Maybe (CS (r Class)))
 genInputClass scp = do
   g <- get
@@ -304,20 +308,20 @@ genInputClass scp = do
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
       constructors
-        :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
         => GenState [MS (r mthd)]
       constructors = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputConstructor]
         else pure []
       methods
-        :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
         => GenState [MS (r mthd)]
       methods = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputFormat Priv,
         genInputDerived Priv, genInputConstraints Priv]
         else pure []
       genClass
-        :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
         => [CodeVarChunk] -> [CodeDefinition] -> GenState (Maybe (CS (r Class)))
       genClass [] [] = pure Nothing
       genClass inps csts = do
@@ -339,7 +343,7 @@ genInputClass scp = do
 -- input-related functions. Returns 'Nothing' if no input-related functions are
 -- generated.
 genInputConstructor
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => GenState (Maybe (MS (r mthd)))
 genInputConstructor = do
   g <- get
@@ -361,7 +365,7 @@ genInputConstructor = do
 
 -- | Generates a function for calculating derived inputs.
 genInputDerived
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputDerived s = do
   g <- get
@@ -371,7 +375,7 @@ genInputDerived s = do
       getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
       genDerived
-        :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
         => Bool -> GenState (Maybe (MS (r mthd)))
       genDerived False = pure Nothing
       genDerived _ = do
@@ -385,7 +389,7 @@ genInputDerived s = do
 
 -- | Generates function that checks constraints on the input.
 genInputConstraints
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputConstraints s = do
   g <- get
@@ -395,7 +399,7 @@ genInputConstraints s = do
       getFunc Pub = publicFunc
       getFunc Priv = privateMethod
       genConstraints
-        :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
         => Bool -> GenState (Maybe (MS (r mthd)))
       genConstraints False = pure Nothing
       genConstraints _ = do
@@ -422,26 +426,26 @@ sfwrCBody
     , TypeSym r typ
     , OOTypeSym r typ
     , ScopeSym r scope
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , Literal r typ val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , ValueExpression r typ val
-    , OOValueExpression r typ val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , ValueExpression r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
     , EmptyStatement r stmt
-    , DeclStatement r scope val stmt bod
-    , ControlStatement r val stmt bod
+    , DeclStatement r scope var val stmt bod
+    , ControlStatement r var val stmt bod
     , PrintConsole r val stmt
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r stmt)]
 sfwrCBody cs = do
@@ -460,26 +464,26 @@ physCBody
     , TypeSym r typ
     , OOTypeSym r typ
     , ScopeSym r scope
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , Literal r typ val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , ValueExpression r typ val
-    , OOValueExpression r typ val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , ValueExpression r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
     , EmptyStatement r stmt
-    , DeclStatement r scope val stmt bod
-    , ControlStatement r val stmt bod
+    , DeclStatement r scope var val stmt bod
+    , ControlStatement r var val stmt bod
     , PrintConsole r val stmt
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r stmt)]
 physCBody cs = do
@@ -499,26 +503,26 @@ chooseConstr
     , TypeSym r typ
     , OOTypeSym r typ
     , ScopeSym r scope
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , Literal r typ val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , OOValueExpression r typ val
+    , ValueExpression r typ var val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
     , EmptyStatement r stmt
-    , DeclStatement r scope val stmt bod
-    , ControlStatement r val stmt bod
+    , DeclStatement r scope var val stmt bod
+    , ControlStatement r var val stmt bod
     , PrintConsole r val stmt
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => ConstraintBehaviour
   -> [(CodeVarChunk, [ConstraintCE])]
@@ -548,17 +552,17 @@ constrWarn
     , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , OOVariableSym r typ val
-    , VariableSym r typ
-    , VariableValue r val
+    , OOVariableSym r typ var val
+    , VariableSym r typ var
+    , VariableValue r var val
     , Literal r typ val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , ValueExpression r typ val
-    , OOValueExpression r typ val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , ValueExpression r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
@@ -566,7 +570,7 @@ constrWarn
     , BlockSym r block stmt
     , BodySym r bod block
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r bod)]
 constrWarn c = do
@@ -587,24 +591,24 @@ constrExc
     , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , Literal r typ val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , ValueExpression r typ val
-    , OOValueExpression r typ val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , ValueExpression r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
-    , ControlStatement r val stmt bod
+    , ControlStatement r var val stmt bod
     , PrintConsole r val stmt
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r bod)]
 constrExc c = do
@@ -622,23 +626,23 @@ constrVarDec
     , TypeSym r typ
     , OOTypeSym r typ
     , ScopeSym r scope
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , Literal r typ val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , ValueExpression r typ val
-    , OOValueExpression r typ val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , ValueExpression r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
-    , DeclStatement r scope val stmt bod
+    , DeclStatement r scope var val stmt bod
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => CodeVarChunk -> CodeExpr -> GenState (MS (r stmt))
 constrVarDec v e = do
@@ -657,23 +661,23 @@ constraintViolatedMsg
     , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , Literal r typ val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , ValueExpression r typ val
-    , OOValueExpression r typ val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , ValueExpression r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
     , PrintConsole r val stmt
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => CodeVarChunk -> String -> ConstraintCE -> GenState [MS (r stmt)]
 constraintViolatedMsg q s c = do
@@ -693,23 +697,23 @@ printConstraint
     , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , Literal r typ val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , ValueExpression r typ val
-    , OOValueExpression r typ val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , ValueExpression r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
     , PrintConsole r val stmt
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => String -> ConstraintCE -> GenState [MS (r stmt)]
 printConstraint v c = do
@@ -722,23 +726,23 @@ printConstraint v c = do
           , MathConstant r val
           , TypeSym r typ
           , OOTypeSym r typ
-          , VariableSym r typ
-          , OOVariableSym r typ val
-          , VariableValue r val
+          , VariableSym r typ var
+          , OOVariableSym r typ var val
+          , VariableValue r var val
           , Literal r typ val
           , BooleanExpression r val
           , Comparison r val
           , NumericExpression r val
-          , SelfSym r
-          , InternalValueExp r typ val
-          , ValueExpression r typ val
-          , OOValueExpression r typ val
+          , SelfSym r var
+          , InternalValueExp r typ var val
+          , ValueExpression r typ var val
+          , OOValueExpression r typ var val
           , List r val
           , Reference r val
           , Set r val
           , PrintConsole r val stmt
           , TypeElim r typ
-          , VariableElim r typ
+          , VariableElim r typ var
           )
         => String -> ConstraintCE -> GenState [MS (r stmt)]
       printConstraint' _ (Range _ (Bounded (_, e1) (_, e2))) = do
@@ -769,7 +773,7 @@ printExpr e     pinfo = [printStr $ " " ++ render (parens (oneLineCodeExprDoc pi
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputFormat s = do
   g <- get
@@ -779,7 +783,7 @@ genInputFormat s = do
   let getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
       genInFormat
-        :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
         => Bool -> GenState (Maybe (MS (r mthd)))
       genInFormat False = pure Nothing
       genInFormat _ = do
@@ -813,7 +817,7 @@ genSampleInput = do
 
 -- | Generates a module containing the class where constants are stored.
 genConstMod
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => GenState [FS (r file)]
 genConstMod = do
   cDesc <- modDesc $ liftS constModDesc
@@ -823,7 +827,7 @@ genConstMod = do
 -- | Generates a class to store constants, if constants are mapped to the
 -- Constants class in the class definition map, otherwise returns Nothing.
 genConstClass
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => ClassType -> GenState (Maybe (CS (r Class)))
 genConstClass scp = do
   g <- get
@@ -831,7 +835,7 @@ genConstClass scp = do
   cname <- genICName Constants
   let cs = g ^. constDefns
       genClass
-        :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
         => [CodeDefinition] -> GenState (Maybe (CS (r Class)))
       genClass [] = pure Nothing
       genClass vs = do
@@ -852,7 +856,7 @@ genConstClass scp = do
 
 -- | Generates a module containing calculation functions.
 genCalcMod
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => GenState (FS (r file))
 genCalcMod = do
   g <- get
@@ -865,7 +869,7 @@ genCalcMod = do
 -- For solving ODEs, the 'ExtLibState' containing the information needed to
 -- generate code is found by looking it up in the external library map.
 genCalcFunc
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => CodeDefinition -> GenState (MS (r mthd))
 genCalcFunc cdef = do
   g <- get
@@ -909,24 +913,24 @@ genCalcBlock
     , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , Literal r typ val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , ValueExpression r typ val
-    , OOValueExpression r typ val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , ValueExpression r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
-    , AssignStatement r val stmt
-    , ControlStatement r val stmt bod
+    , AssignStatement r var val stmt
+    , ControlStatement r var val stmt bod
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
    => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r block))
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
@@ -948,24 +952,24 @@ genCaseBlock
     , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , Literal r typ val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , ValueExpression r typ val
-    , OOValueExpression r typ val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , ValueExpression r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
-    , AssignStatement r val stmt
-    , ControlStatement r val stmt bod
+    , AssignStatement r var val stmt
+    , ControlStatement r var val stmt bod
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => CalcType
   -> CodeDefinition
@@ -989,7 +993,7 @@ genCaseBlock t v c cs = do
 
 -- | Generates a module containing the function for printing outputs.
 genOutputMod
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => GenState [FS (r file)]
 genOutputMod = do
   ofName <- genICName OutputFormat
@@ -998,14 +1002,14 @@ genOutputMod = do
 
 -- | Generates a function for printing output values.
 genOutputFormat
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => GenState (Maybe (MS (r mthd)))
 genOutputFormat = do
   g <- get
   modify (\st -> st {currentScope = Local})
   woName <- genICName WriteOutput
   let genOutput
-        :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
         => Maybe String -> GenState (Maybe (MS (r mthd)))
       genOutput Nothing = pure Nothing
       genOutput (Just _) = do
@@ -1032,7 +1036,10 @@ genOutputFormat = do
 
 -- | Generates a controller module.
 genMainProc
-  :: (NativeVector r typ val, ProcProg r vis scope typ param val stmt mthd prg file mod bod block)
+  ::
+    ( NativeVector r typ val
+    , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
+    )
   => GenState (FS (r file))
 genMainProc = genModuleProc "Control" "Controls the flow of the program"
   [genMainFuncProc]
@@ -1052,22 +1059,22 @@ genMainFuncProc
     , Literal r typ val
     , MathConstant r val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , MultiStatement r stmt
     , ValueStatement r val stmt
-    , DeclStatement r scope val stmt bod
-    , FuncAppStatement r val stmt
+    , DeclStatement r scope var val stmt bod
+    , FuncAppStatement r var val stmt
     , Argument r val
     , List r val
     , NativeVector r typ val
     , Reference r val
     , Set r val
-    , MethodSym r vis typ param mthd bod
+    , MethodSym r vis typ var param mthd bod
     , TypeElim r typ
     )
   => GenState (Maybe (MS (r mthd)))
@@ -1109,13 +1116,13 @@ initConstsProc
     , Literal r typ val
     , MathConstant r val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
-    , DeclStatement r scope val stmt bod
+    , ValueExpression r typ var val
+    , DeclStatement r scope var val stmt bod
     , Argument r val
     , List r val
     , NativeVector r typ val
@@ -1158,7 +1165,10 @@ checkConstClass = do
 
 -- | Generates a single module containing all input-related components.
 genInputModProc
-  :: (NativeVector r typ val, ProcProg r vis scope typ param val stmt mthd prg file mod bod block)
+  ::
+    ( NativeVector r typ val
+    , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
+    )
   => GenState [FS (r file)]
 genInputModProc = do
   ipDesc <- modDesc inputParametersDesc
@@ -1166,7 +1176,7 @@ genInputModProc = do
   let genMod
         ::
           ( NativeVector r typ val
-          , ProcProg r vis scope typ param val stmt mthd prg file mod bod block
+          , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
           )
         => Bool -> GenState (FS (r file))
       genMod False = genModuleProc cname ipDesc [genInputFormatProc Pub,
@@ -1202,9 +1212,9 @@ getInputDeclProc
   ::
     ( ScopeSym r scope
     , TypeSym r typ
-    , VariableSym r typ
+    , VariableSym r typ var
     , MultiStatement r stmt
-    , DeclStatement r scope val stmt bo
+    , DeclStatement r scope var val stmt bo
     )
   => GenState (Maybe (MS (r stmt)))
 getInputDeclProc = do
@@ -1222,7 +1232,7 @@ getInputDeclProc = do
 genCalcModProc
   ::
     ( NativeVector r typ val
-    , ProcProg r vis scope typ param val stmt mthd prg file mod bod block
+    , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
     )
   => GenState (FS (r file))
 genCalcModProc = do
@@ -1245,32 +1255,32 @@ genCalcFuncProc
     , Literal r typ val
     , MathConstant r val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
-    , Array r val
+    , Array r var val
     , List r val
     , ListStatement r val stmt
     , Reference r val
     , Set r val
-    , ParameterSym r param
+    , ParameterSym r var param
     , VisibilitySym r vis
     , MultiStatement r stmt
     , ValueStatement r val stmt
-    , DeclStatement r scope val stmt bod
-    , AssignStatement r val stmt
-    , ControlStatement r val stmt bod
-    , StringStatement r val stmt
-    , FileHandling r val stmt
+    , DeclStatement r scope var val stmt bod
+    , AssignStatement r var val stmt
+    , ControlStatement r var val stmt bod
+    , StringStatement r var val stmt
+    , FileHandling r var val stmt
     , PrintFile r val stmt
-    , ReadFile r val stmt
-    , MethodSym r vis typ param mthd bod
+    , ReadFile r var val stmt
+    , MethodSym r vis typ var param mthd bod
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => CodeDefinition -> GenState (MS (r mthd))
 genCalcFuncProc cdef = do
@@ -1312,24 +1322,24 @@ genCalcBlockProc
     , NativeVector r typ val
     , Literal r typ val
     , MathConstant r val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
-    , Array r val
+    , Array r var val
     , List r val
     , Reference r val
     , Set r val
-    , DeclStatement r scope val stmt bod
-    , AssignStatement r val stmt
-    , ControlStatement r val stmt bod
-    , StringStatement r val stmt
-    , FileHandling r val stmt
+    , DeclStatement r scope var val stmt bod
+    , AssignStatement r var val stmt
+    , ControlStatement r var val stmt bod
+    , StringStatement r var val stmt
+    , FileHandling r var val stmt
     , PrintFile r val stmt
-    , ReadFile r val stmt
+    , ReadFile r var val stmt
     , TypeElim r typ
     )
   => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r block))
@@ -1352,21 +1362,21 @@ genCaseBlockProc
     , NativeVector r typ val
     , Literal r typ val
     , MathConstant r val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
-    , DeclStatement r scope val stmt bod
-    , AssignStatement r val stmt
-    , ControlStatement r val stmt bod
-    , StringStatement r val stmt
-    , FileHandling r val stmt
-    , ReadFile r val stmt
+    , ValueExpression r typ var val
+    , DeclStatement r scope var val stmt bod
+    , AssignStatement r var val stmt
+    , ControlStatement r var val stmt bod
+    , StringStatement r var val stmt
+    , FileHandling r var val stmt
+    , ReadFile r var val stmt
     , PrintFile r val stmt
     , Argument r val
-    , Array r val
+    , Array r var val
     , List r val
     , Reference r val
     , Set r val
@@ -1401,28 +1411,28 @@ genInputFormatProc
     , Literal r typ val
     , MathConstant r val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , VisibilitySym r vis
     , MultiStatement r stmt
-    , DeclStatement r scope val stmt bod
-    , ControlStatement r val stmt bod
-    , StringStatement r val stmt
-    , FileHandling r val stmt
+    , DeclStatement r scope var val stmt bod
+    , ControlStatement r var val stmt bod
+    , StringStatement r var val stmt
+    , FileHandling r var val stmt
     , PrintFile r val stmt
-    , ReadFile r val stmt
+    , ReadFile r var val stmt
     , Argument r val
     , List r val
     , ListStatement r val stmt
     , Reference r val
     , Set r val
-    , MethodSym r vis typ param mthd bod
+    , MethodSym r vis typ var param mthd bod
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputFormatProc s = do
@@ -1442,28 +1452,28 @@ genInputFormatProc s = do
           , Literal r typ val
           , MathConstant r val
           , ScopeSym r scope
-          , VariableSym r typ
-          , VariableValue r val
+          , VariableSym r typ var
+          , VariableValue r var val
           , BooleanExpression r val
           , Comparison r val
           , NumericExpression r val
-          , ValueExpression r typ val
+          , ValueExpression r typ var val
           , VisibilitySym r vis
           , MultiStatement r stmt
-          , DeclStatement r scope val stmt bod
-          , ControlStatement r val stmt bod
-          , StringStatement r val stmt
-          , FileHandling r val stmt
+          , DeclStatement r scope var val stmt bod
+          , ControlStatement r var val stmt bod
+          , StringStatement r var val stmt
+          , FileHandling r var val stmt
           , PrintFile r val stmt
-          , ReadFile r val stmt
+          , ReadFile r var val stmt
           , Argument r val
           , List r val
           , ListStatement r val stmt
           , Reference r val
           , Set r val
-          , MethodSym r vis typ param mthd bod
+          , MethodSym r vis typ var param mthd bod
           , TypeElim r typ
-          , VariableElim r typ
+          , VariableElim r typ var
           )
         => Bool -> GenState (Maybe (MS (r mthd)))
       genInFormat False = pure Nothing
@@ -1487,29 +1497,29 @@ genInputDerivedProc
     , Literal r typ val
     , MathConstant r val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
-    , Array r val
+    , Array r var val
     , List r val
     , Reference r val
     , Set r val
     , VisibilitySym r vis
     , MultiStatement r stmt
-    , DeclStatement r scope val stmt bod
-    , AssignStatement r val stmt
-    , ControlStatement r val stmt bod
-    , StringStatement r val stmt
-    , FileHandling r val stmt
+    , DeclStatement r scope var val stmt bod
+    , AssignStatement r var val stmt
+    , ControlStatement r var val stmt bod
+    , StringStatement r var val stmt
+    , FileHandling r var val stmt
     , PrintFile r val stmt
-    , ReadFile r val stmt
-    , MethodSym r vis typ param mthd bod
+    , ReadFile r var val stmt
+    , MethodSym r vis typ var param mthd bod
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputDerivedProc s = do
@@ -1529,29 +1539,29 @@ genInputDerivedProc s = do
           , Literal r typ val
           , MathConstant r val
           , ScopeSym r scope
-          , VariableSym r typ
-          , VariableValue r val
+          , VariableSym r typ var
+          , VariableValue r var val
           , BooleanExpression r val
           , Comparison r val
           , NumericExpression r val
-          , ValueExpression r typ val
+          , ValueExpression r typ var val
           , Argument r val
-          , Array r val
+          , Array r var val
           , List r val
           , Reference r val
           , Set r val
           , VisibilitySym r vis
           , MultiStatement r stmt
-          , DeclStatement r scope val stmt bod
-          , AssignStatement r val stmt
-          , ControlStatement r val stmt bod
-          , StringStatement r val stmt
-          , FileHandling r val stmt
+          , DeclStatement r scope var val stmt bod
+          , AssignStatement r var val stmt
+          , ControlStatement r var val stmt bod
+          , StringStatement r var val stmt
+          , FileHandling r var val stmt
           , PrintFile r val stmt
-          , ReadFile r val stmt
-          , MethodSym r vis typ param mthd bod
+          , ReadFile r var val stmt
+          , MethodSym r vis typ var param mthd bod
           , TypeElim r typ
-          , VariableElim r typ
+          , VariableElim r typ var
           )
         => Bool -> GenState (Maybe (MS (r mthd)))
       genDerived False = pure Nothing
@@ -1574,29 +1584,29 @@ genInputConstraintsProc
     , Literal r typ val
     , MathConstant r val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
     , Set r val
     , List r val
-    , ParameterSym r param
+    , ParameterSym r var param
     , VisibilitySym r vis
     , EmptyStatement r stmt
     , MultiStatement r stmt
-    , DeclStatement r scope val stmt bod
+    , DeclStatement r scope var val stmt bod
     , PrintConsole r val stmt
-    , FileHandling r val stmt
+    , FileHandling r var val stmt
     , PrintFile r val stmt
-    , ControlStatement r val stmt bod
-    , MethodSym r vis typ param mthd bod
+    , ControlStatement r var val stmt bod
+    , MethodSym r vis typ var param mthd bod
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputConstraintsProc s = do
@@ -1615,29 +1625,29 @@ genInputConstraintsProc s = do
           , Literal r typ val
           , MathConstant r val
           , ScopeSym r scope
-          , VariableSym r typ
-          , VariableValue r val
+          , VariableSym r typ var
+          , VariableValue r var val
           , BooleanExpression r val
           , Comparison r val
           , NumericExpression r val
-          , ValueExpression r typ val
+          , ValueExpression r typ var val
           , Argument r val
           , NativeVector r typ val
           , Reference r val
           , Set r val
           , List r val
-          , ParameterSym r param
+          , ParameterSym r var param
           , VisibilitySym r vis
           , EmptyStatement r stmt
           , MultiStatement r stmt
-          , DeclStatement r scope val stmt bod
+          , DeclStatement r scope var val stmt bod
           , PrintConsole r val stmt
-          , FileHandling r val stmt
+          , FileHandling r var val stmt
           , PrintFile r val stmt
-          , ControlStatement r val stmt bod
-          , MethodSym r vis typ param mthd bod
+          , ControlStatement r var val stmt bod
+          , MethodSym r vis typ var param mthd bod
           , TypeElim r typ
-          , VariableElim r typ
+          , VariableElim r typ var
           )
         => Bool -> GenState (Maybe (MS (r mthd)))
       genConstraints False = pure Nothing
@@ -1664,21 +1674,21 @@ sfwrCBodyProc
     , Literal r typ val
     , MathConstant r val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
     , Set r val
     , List r val
     , EmptyStatement r stmt
-    , DeclStatement r scope val stmt bod
+    , DeclStatement r scope var val stmt bod
     , PrintConsole r val stmt
-    , ControlStatement r val stmt bod
+    , ControlStatement r var val stmt bod
     , TypeElim r typ
     )
  => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r stmt)]
@@ -1697,21 +1707,21 @@ physCBodyProc
     , Literal r typ val
     , MathConstant r val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
     , Set r val
     , List r val
     , EmptyStatement r stmt
-    , DeclStatement r scope val stmt bod
+    , DeclStatement r scope var val stmt bod
     , PrintConsole r val stmt
-    , ControlStatement r val stmt bod
+    , ControlStatement r var val stmt bod
     , TypeElim r typ
     )
   => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r stmt)]
@@ -1731,21 +1741,21 @@ chooseConstrProc
     , Literal r typ val
     , MathConstant r val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
     , Set r val
     , List r val
     , EmptyStatement r stmt
-    , DeclStatement r scope val stmt bod
+    , DeclStatement r scope var val stmt bod
     , PrintConsole r val stmt
-    , ControlStatement r val stmt bod
+    , ControlStatement r var val stmt bod
     , TypeElim r typ
     )
   => ConstraintBehaviour -> [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r stmt)]
@@ -1771,12 +1781,12 @@ constrWarnProc
     , ValueSym r typ val
     , Literal r typ val
     , MathConstant r val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1805,19 +1815,19 @@ constrExcProc
     , ValueSym r typ val
     , Literal r typ val
     , MathConstant r val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
     , Set r val
     , List r val
     , PrintConsole r val stmt
-    , ControlStatement r val stmt bod
+    , ControlStatement r var val stmt bod
     , TypeElim r typ
     )
   => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r bod)]
@@ -1835,18 +1845,18 @@ constrVarDecProc
     , Literal r typ val
     , MathConstant r val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
     , Set r val
     , List r val
-    , DeclStatement r scope val stmt bod
+    , DeclStatement r scope var val stmt bod
     , TypeElim r typ
     )
   => CodeVarChunk -> CodeExpr ->
@@ -1866,12 +1876,12 @@ constraintViolatedMsgProc
     , ValueSym r typ val
     , Literal r typ val
     , MathConstant r val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1897,12 +1907,12 @@ printConstraintProc
     , ValueSym r typ val
     , Literal r typ val
     , MathConstant r val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1921,12 +1931,12 @@ printConstraintProc c = do
           , ValueSym r typ val
           , Literal r typ val
           , MathConstant r val
-          , VariableSym r typ
-          , VariableValue r val
+          , VariableSym r typ var
+          , VariableValue r var val
           , BooleanExpression r val
           , Comparison r val
           , NumericExpression r val
-          , ValueExpression r typ val
+          , ValueExpression r typ var val
           , Argument r val
           , NativeVector r typ val
           , Reference r val
@@ -1957,7 +1967,7 @@ printConstraintProc c = do
 genOutputModProc
   ::
     ( NativeVector r typ val
-    , ProcProg r vis scope typ param val stmt mthd prg file mod bod block
+    , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
     )
   => GenState [FS (r file)]
 genOutputModProc = do
@@ -1976,26 +1986,26 @@ genOutputFormatProc
     , Literal r typ val
     , MathConstant r val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
     , List r val
     , Reference r val
     , Set r val
     , VisibilitySym r vis
-    , ParameterSym r param
+    , ParameterSym r var param
     , MultiStatement r stmt
-    , DeclStatement r scope val stmt bod
-    , ControlStatement r val stmt bod
-    , FileHandling r val stmt
+    , DeclStatement r scope var val stmt bod
+    , ControlStatement r var val stmt bod
+    , FileHandling r var val stmt
     , PrintFile r val stmt
-    , MethodSym r vis typ param mthd bod
+    , MethodSym r vis typ var param mthd bod
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => GenState (Maybe (MS (r mthd)))
 genOutputFormatProc = do
@@ -2012,26 +2022,26 @@ genOutputFormatProc = do
           , Literal r typ val
           , MathConstant r val
           , ScopeSym r scope
-          , VariableSym r typ
-          , VariableValue r val
+          , VariableSym r typ var
+          , VariableValue r var val
           , BooleanExpression r val
           , Comparison r val
           , NumericExpression r val
-          , ValueExpression r typ val
+          , ValueExpression r typ var val
           , Argument r val
           , List r val
           , Reference r val
           , Set r val
           , VisibilitySym r vis
-          , ParameterSym r param
+          , ParameterSym r var param
           , MultiStatement r stmt
-          , DeclStatement r scope val stmt bod
-          , ControlStatement r val stmt bod
-          , FileHandling r val stmt
+          , DeclStatement r scope var val stmt bod
+          , ControlStatement r var val stmt bod
+          , FileHandling r var val stmt
           , PrintFile r val stmt
-          , MethodSym r vis typ param mthd bod
+          , MethodSym r vis typ var param mthd bod
           , TypeElim r typ
-          , VariableElim r typ
+          , VariableElim r typ var
           )
         => Maybe String -> GenState (Maybe (MS (r mthd)))
       genOutput Nothing = pure Nothing
@@ -2061,11 +2071,11 @@ writeOutputValue
     , BodySym r bod block
     , TypeSym r typ
     , Literal r typ val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , Comparison r val
     , NumericExpression r val
-    , ControlStatement r val stmt bod
+    , ControlStatement r var val stmt bod
     , PrintFile r val stmt
     , List r val
     )

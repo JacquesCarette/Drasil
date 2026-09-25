@@ -91,7 +91,7 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance ProcProg MatlabCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
+instance ProcProg MatlabCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
 
 instance ProgramSym MatlabCode ProgData FileData where
   prog n st files = do
@@ -99,8 +99,8 @@ instance ProgramSym MatlabCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym MatlabCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData Body Block
-instance ProcRenderSym MatlabCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData FileData ModData Body Block
+instance CommonRenderSym MatlabCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData Body Block
+instance ProcRenderSym MatlabCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData FileData ModData Body Block
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
@@ -210,20 +210,20 @@ instance ScopeSym MatlabCode ScopeData where
 instance ScopeElim MatlabCode ScopeData where
   scopeData = unMLC
 
-instance VariableSym MatlabCode TypeData where
+instance VariableSym MatlabCode TypeData Variable where
   var = G.var
   constant = var
   extVar = undefined
 
-instance VariableElim MatlabCode TypeData where
+instance VariableElim MatlabCode TypeData Variable where
   variableName = varName . unMLC
   variableType = onCodeValue varType
 
-instance InternalVarElim MatlabCode where
+instance InternalVarElim MatlabCode Variable where
   variableBind = varBind . unMLC
   variable = varDoc . unMLC
 
-instance RenderVariable MatlabCode TypeData where
+instance RenderVariable MatlabCode TypeData Variable where
   varFromData b n t' d = do
     t <- t'
     toState $ on2CodeValues (vard b n) t (toCode d)
@@ -249,7 +249,7 @@ instance Literal MatlabCode TypeData Value where
 instance MathConstant MatlabCode Value where
   pi = mkStateVal double (text "pi")
 
-instance VariableValue MatlabCode Value where
+instance VariableValue MatlabCode Variable Value where
   valueOf = G.valueOf
 
 instance CommandLineArgs MatlabCode Value where
@@ -296,7 +296,7 @@ instance Comparison MatlabCode Value where
   (?==) = mlEqOp False
   (?!=) = mlEqOp True
 
-instance ValueExpression MatlabCode TypeData Value where
+instance ValueExpression MatlabCode TypeData Variable Value where
   inlineIf = mlInlineIf
   funcAppMixedArgs = G.funcAppMixedArgs
   extFuncAppMixedArgs _ = G.funcAppMixedArgs
@@ -304,7 +304,7 @@ instance ValueExpression MatlabCode TypeData Value where
   lambda = undefined
   notNull v = (?!) $ funcApp "isempty" bool [v]
 
-instance RenderValue MatlabCode TypeData Value where
+instance RenderValue MatlabCode TypeData Variable Value where
   inputFunc = funcApp "input" string [litString "", litString "s"]
   printFunc = mlPrintFunc
   printLnFunc = mlPrintFunc
@@ -329,7 +329,7 @@ instance Reference MatlabCode Value where
   makeRef = id
   maybeDeref = id
 
-instance Array MatlabCode Value where
+instance Array MatlabCode Variable Value where
   arrayElem = mlArrayElem
   arrayLength = listSize
   arrayCopy = id
@@ -360,7 +360,7 @@ instance NativeVector MatlabCode TypeData Value where
   vecMag a = funcApp "norm" double [a]       -- norm(a)
   vecUnit a = a #/ vecMag a                  -- a / norm(a)
 
-instance InternalList MatlabCode Value Block where
+instance InternalList MatlabCode Variable Value Block where
   listSlice' = M.listSlice
 
 instance InternalListFunc MatlabCode TypeData Value where
@@ -393,7 +393,7 @@ instance FunctionElim MatlabCode TypeData where
   functionType = onCodeValue fType
   function = funcDoc . unMLC
 
-instance InternalAssignStmt MatlabCode Value (Doc, Terminator) where
+instance InternalAssignStmt MatlabCode Variable Value (Doc, Terminator) where
   multiAssign = CP.multiAssign brackets
 
 instance InternalIOStmt MatlabCode Value (Doc, Terminator) where
@@ -420,14 +420,14 @@ instance MultiStatement MatlabCode (Doc, Terminator) where
 instance ValueStatement MatlabCode Value (Doc, Terminator) where
   valStmt = G.valStmt Semi
 
-instance AssignStatement MatlabCode Value (Doc, Terminator) where
+instance AssignStatement MatlabCode Variable Value (Doc, Terminator) where
   assign = G.assign Semi
   (&-=) vr v = vr &= (valueOf vr #- v)
   (&+=) vr v = vr &= G.smartAdd (valueOf vr) v
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement MatlabCode ScopeData Value (Doc, Terminator) Body where
+instance DeclStatement MatlabCode ScopeData Variable Value (Doc, Terminator) Body where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
@@ -445,11 +445,11 @@ instance PrintConsole MatlabCode Value (Doc, Terminator) where
   printStr = G.print False Nothing printFunc . litString
   printStrLn = G.print True Nothing printLnFunc . litString
 
-instance ReadConsole MatlabCode (Doc, Terminator) where
+instance ReadConsole MatlabCode Variable (Doc, Terminator) where
   getInput = mlInput inputFunc
   discardInput = valStmt inputFunc
 
-instance FileHandling MatlabCode Value (Doc, Terminator) where
+instance FileHandling MatlabCode Variable Value (Doc, Terminator) where
   openFileR f n = f &= funcApp "fopen" infile [n, litString "r"]
   openFileW f n = f &= funcApp "fopen" outfile [n, litString "w"]
   openFileA f n = f &= funcApp "fopen" outfile [n, litString "a"]
@@ -461,26 +461,26 @@ instance PrintFile MatlabCode Value (Doc, Terminator) where
   printFileStr f = printFile f . litString
   printFileStrLn f = printFileLn f . litString
 
-instance ReadFile MatlabCode Value (Doc, Terminator) where
+instance ReadFile MatlabCode Variable Value (Doc, Terminator) where
   getFileInput f = mlInput (mlReadLine f)
   discardFileInput f = valStmt (mlReadLine f)
   getFileInputLine = getFileInput
   discardFileLine = discardFileInput
   getFileInputAll = mlReadAllLines
 
-instance StringStatement MatlabCode Value (Doc, Terminator) where
+instance StringStatement MatlabCode Variable Value (Doc, Terminator) where
   stringSplit d vnew s = vnew &= funcApp "strsplit" (listType string) [s, litString [d]]
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
 
-instance FuncAppStatement MatlabCode Value (Doc, Terminator) where
+instance FuncAppStatement MatlabCode Variable Value (Doc, Terminator) where
   inOutCall = CP.inOutCall funcApp
   extInOutCall = undefined
 
 instance CommentStatement MatlabCode (Doc, Terminator) where
   comment = G.comment mlCmtStart
 
-instance ControlStatement MatlabCode Value (Doc, Terminator) Body where
+instance ControlStatement MatlabCode Variable Value (Doc, Terminator) Body where
   break = mkStmtNoEnd R.break
   continue = mkStmtNoEnd R.continue
   -- MATLAB has no `return <expr>`: a function returns by assigning its named
@@ -522,12 +522,12 @@ instance VisibilityElim MatlabCode Doc where
 instance MethodTypeSym MatlabCode TypeData where
   mType = zoom lensMStoVS
 
-instance ParameterSym MatlabCode ParamData where
+instance ParameterSym MatlabCode Variable ParamData where
   -- A MATLAB parameter is just the variable name.
   param = G.param mlParam
   pointerParam = param
 
-instance RenderParam MatlabCode ParamData where
+instance RenderParam MatlabCode Variable ParamData where
   paramFromData v' d = do
     v <- zoom lensMStoVS v'
     toState $ on2CodeValues pd v (toCode d)
@@ -537,7 +537,7 @@ instance ParamElim MatlabCode TypeData ParamData where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unMLC
 
-instance MethodSym MatlabCode Doc TypeData ParamData MethodData Body where
+instance MethodSym MatlabCode Doc TypeData Variable ParamData MethodData Body where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
@@ -806,15 +806,15 @@ mlEnd = text "end"
 mlElseIf = text "elseif"
 
 mlForEach
-  :: (CommonRenderSym r vis scope typ param val stmt mthd bod block)
-  => r Variable -> r val -> r bod -> Doc
+  :: (CommonRenderSym r vis scope typ var param val stmt mthd bod block)
+  => r var -> r val -> r bod -> Doc
 mlForEach i lstVar b = vcat [
   text "for" <+> RC.variable i <+> equals <+> RC.value lstVar,
   indent $ RC.body b,
   mlEnd]
 
 mlRange
-  :: (CommonRenderSym r vis scope typ param val stmt mthd bod block)
+  :: (CommonRenderSym r vis scope typ var param val stmt mthd bod block)
   => VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
 mlRange initv finalv stepv = do
   ini <- initv
@@ -824,7 +824,7 @@ mlRange initv finalv stepv = do
   mkVal d (RC.value ini <> text ":" <> RC.value stp <> text ":" <> RC.value fin)
 
 mlTryCatch
-  :: (CommonRenderSym r vis scope typ param val stmt mthd bod block)
+  :: (CommonRenderSym r vis scope typ var param val stmt mthd bod block)
   => r bod -> r bod -> Doc
 mlTryCatch tryB catchB = vcat [
   text "try",

@@ -106,28 +106,28 @@ class ScopeSym r scope | r -> scope where
 type Variable = VarData
 
 -- | Class for representing variables.
-class VariableSym r typ | r -> typ where
+class VariableSym r typ var | r -> typ var where
   -- | An instance- or function-level variable, separate from its instance (i.e. `v`, not `o.v`)
-  var       :: Label -> VS (r typ) -> VS (r Variable)
+  var       :: Label -> VS (r typ) -> VS (r var)
   -- | An instance- or function-level constant, separate from its instance (i.e. `v`, not `o.v`)
-  constant  :: Label -> VS (r typ) -> VS (r Variable)
+  constant  :: Label -> VS (r typ) -> VS (r var)
   -- | An instance- or module-level variable from an external library.
   -- Given library `Lib`, variable name `v`, and variable type `t`,
   -- it performs the necessary imports and creates `Lib.v`
-  extVar    :: Library -> Label -> VS (r typ) -> VS (r Variable)
+  extVar    :: Library -> Label -> VS (r typ) -> VS (r var)
 
-class VariableElim r typ | r -> typ where
-  variableName :: r Variable -> String
-  variableType :: r Variable -> r typ
+class VariableElim r typ var | r -> typ var where
+  variableName :: r var -> String
+  variableType :: r var -> r typ
 
 listVar
-  :: (TypeSym r typ, VariableSym r typ)
-  => Label -> VS (r typ) -> VS (r Variable)
+  :: (TypeSym r typ, VariableSym r typ var)
+  => Label -> VS (r typ) -> VS (r var)
 listVar n t = var n (listType t)
 
 listOf
-  :: (TypeSym r typ, VariableSym r typ)
-  => Label -> VS (r typ) -> VS (r Variable)
+  :: (TypeSym r typ, VariableSym r typ var)
+  => Label -> VS (r typ) -> VS (r var)
 listOf = listVar
 
 type Value = ValData
@@ -166,8 +166,8 @@ litZero t = do
 class MathConstant r val | r -> val where
   pi :: VS (r val)
 
-class VariableValue r val | r -> val where
-  valueOf       :: VS (r Variable) -> VS (r val)
+class VariableValue r var val | r -> var val where
+  valueOf       :: VS (r var) -> VS (r val)
 
 class CommandLineArgs r val | r -> val where
   arg          :: Integer -> VS (r val)
@@ -231,11 +231,11 @@ class Comparison r val | r -> val where
   (?!=) :: VS (r val) -> VS (r val) -> VS (r val)
   infixl 3 ?!=
 
-type NamedArgs r val = [(VS (r Variable), VS (r val))]
+type NamedArgs r var val = [(VS (r var), VS (r val))]
 -- Function call with both positional and named arguments
-type MixedCall r typ val = Label -> VS (r typ) -> [VS (r val)] -> NamedArgs r val -> VS (r val)
+type MixedCall r typ var val = Label -> VS (r typ) -> [VS (r val)] -> NamedArgs r var val -> VS (r val)
 -- Constructor call with both positional and named arguments
-type MixedCtorCall r typ val = VS (r typ) -> [VS (r val)] -> NamedArgs r val -> VS (r val)
+type MixedCtorCall r typ var val = VS (r typ) -> [VS (r val)] -> NamedArgs r var val -> VS (r val)
 -- Function call with only positional arguments
 type PosCall r typ val = Label -> VS (r typ) -> [VS (r val)] -> VS (r val)
 -- Constructor call with only positional arguments
@@ -255,34 +255,34 @@ class BinderElim r typ | r -> typ where
   binderType :: r BinderD -> r typ
 
 -- | A class for representing values that can include expressions
-class ValueExpression r typ val | r -> typ val where
+class ValueExpression r typ var val | r -> typ var val where
   -- An inline if-statement, aka the ternary operator.  Inputs:
   -- Condition, True-value, False-value
   inlineIf     :: VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
 
-  funcAppMixedArgs     ::            MixedCall r typ val
-  extFuncAppMixedArgs  :: Library -> MixedCall r typ val
-  libFuncAppMixedArgs  :: Library -> MixedCall r typ val
+  funcAppMixedArgs     ::            MixedCall r typ var val
+  extFuncAppMixedArgs  :: Library -> MixedCall r typ var val
+  libFuncAppMixedArgs  :: Library -> MixedCall r typ var val
 
   lambda :: [VSBinder r] -> VS (r val) -> VS (r val)
 
   notNull :: VS (r val) -> VS (r val)
 
-funcApp          :: (ValueExpression r typ val) => PosCall r typ val
+funcApp          :: (ValueExpression r typ var val) => PosCall r typ val
 funcApp n t vs = funcAppMixedArgs n t vs []
 
 funcAppNamedArgs
-  :: (ValueExpression r typ val)
-  => Label -> VS (r typ) -> NamedArgs r val -> VS (r val)
+  :: (ValueExpression r typ var val)
+  => Label -> VS (r typ) -> NamedArgs r var val -> VS (r val)
 funcAppNamedArgs n t = funcAppMixedArgs n t []
 
-extFuncApp       :: (ValueExpression r typ val) => Library -> PosCall r typ val
+extFuncApp :: (ValueExpression r typ var val) => Library -> PosCall r typ val
 extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
 
-libFuncApp       :: (ValueExpression r typ val) => Library -> PosCall r typ val
+libFuncApp :: (ValueExpression r typ var val) => Library -> PosCall r typ val
 libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
 
-exists :: (ValueExpression r typ val) => VS (r val) -> VS (r val)
+exists :: (ValueExpression r typ var val) => VS (r val) -> VS (r val)
 exists = notNull
 
 -- | Helper class for representing the conversion between integers and array indices.
@@ -305,10 +305,10 @@ class Reference r val | r -> val where
   -- apply any necessary dereference operation.
   maybeDeref :: VS (r val) -> VS (r val)
 
-class Array r val | r -> val where
+class Array r var val | r -> var val where
   -- TODO [Brandon Bosman, 05/19/2026]: Change return type to VS val
   -- | Given array `a` and index `i`, creates `a[i]`
-  arrayElem :: VS (r val) -> VS (r val) -> VS (r Variable)
+  arrayElem :: VS (r val) -> VS (r val) -> VS (r var)
   -- TODO [Brandon Bosman, 06/03/2026]: Consider switching to a polymorphic `length`
   -- for Array, List, and Set
   -- | Given an array, return its length
@@ -385,9 +385,9 @@ class NativeVector r typ val | r -> typ val where
   --   Argument is: Vector
   vecUnit :: VS (r val) -> VS (r val)
 
-class InternalList r val block | r -> val block where
+class InternalList r var val block | r -> var val block where
   listSlice'      :: Maybe (VS (r val)) -> Maybe (VS (r val)) -> Maybe (VS (r val))
-    -> VS (r Variable) -> VS (r val) -> MS (r block)
+    -> VS (r var) -> VS (r val) -> MS (r block)
 
 -- | Creates a slice of a list and assigns it to a variable.
 --   Arguments are:
@@ -399,8 +399,8 @@ class InternalList r val block | r -> val block where
 --      (if Nothing, then list end if step > 0, list start if step > 0)
 --   (optional) Step (if Nothing, then defaults to 1)
 listSlice
-  :: (InternalList r val block)
-  => VS (r Variable)
+  :: (InternalList r var val block)
+  => VS (r var)
   -> VS (r val)
   -> Maybe (VS (r val))
   -> Maybe (VS (r val))
@@ -428,43 +428,44 @@ class ValueStatement r val stmt | r -> val stmt where
   -- | Converts a value to statement
   valStmt :: VS (r val) -> MS (r stmt)
 
-class AssignStatement r val stmt | r -> val stmt where
-  (&-=)  :: VS (r Variable) -> VS (r val) -> MS (r stmt)
+class AssignStatement r var val stmt | r -> var val stmt where
+  (&-=)  :: VS (r var) -> VS (r val) -> MS (r stmt)
   infixl 1 &-=
-  (&+=)  :: VS (r Variable) -> VS (r val) -> MS (r stmt)
+  (&+=)  :: VS (r var) -> VS (r val) -> MS (r stmt)
   infixl 1 &+=
-  (&++)  :: VS (r Variable) -> MS (r stmt)
+  (&++)  :: VS (r var) -> MS (r stmt)
   infixl 8 &++
-  (&--)  :: VS (r Variable) -> MS (r stmt)
+  (&--)  :: VS (r var) -> MS (r stmt)
   infixl 8 &--
 
-  assign :: VS (r Variable) -> VS (r val) -> MS (r stmt)
+  assign :: VS (r var) -> VS (r val) -> MS (r stmt)
 
-(&=) :: (AssignStatement r val stmt) => VS (r Variable) -> VS (r val) -> MS (r stmt)
+(&=)
+  :: (AssignStatement r var val stmt)
+  => VS (r var) -> VS (r val) -> MS (r stmt)
 infixr 1 &=
 (&=) = assign
 
-class DeclStatement r scope val stmt bod | r -> scope val stmt bod where
+class DeclStatement r scope var val stmt bod | r -> scope var val stmt bod where
   -- | Declare a variable without giving it a value.
   -- Not for use with arrays; use `arrayDec` instead.
-  varDec       :: VS (r Variable) -> r scope -> MS (r stmt)
+  varDec       :: VS (r var) -> r scope -> MS (r stmt)
   -- | Declare a variable and give it a value.
   -- Not for use with arrays; use `arrayDecDef` instead.
-  varDecDef    :: VS (r Variable) -> r scope -> VS (r val) -> MS (r stmt)
+  varDecDef    :: VS (r var) -> r scope -> VS (r val) -> MS (r stmt)
   -- | Given the size of the list, the variable to store the list in,
   -- and the scope of the variable, declare a list of the given size.
-  listDec      :: Integer -> VS (r Variable) -> r scope -> MS (r stmt)
-  listDecDef   :: VS (r Variable) -> r scope -> [VS (r val)] -> MS (r stmt)
-  setDec       :: VS (r Variable) -> r scope -> MS (r stmt)
-  setDecDef    :: VS (r Variable) -> r scope -> VS (r val) -> MS (r stmt)
+  listDec      :: Integer -> VS (r var) -> r scope -> MS (r stmt)
+  listDecDef   :: VS (r var) -> r scope -> [VS (r val)] -> MS (r stmt)
+  setDec       :: VS (r var) -> r scope -> MS (r stmt)
+  setDecDef    :: VS (r var) -> r scope -> VS (r val) -> MS (r stmt)
   -- | Given the size of the aray, the default value to fill the array with,
   -- the variable to store the array in, and the scope of the variable,
   -- declare an array of the given size.
-  arrayDec     :: Integer -> VS (r val) -> VS (r Variable) -> r scope -> MS (r stmt)
-  arrayDecDef  :: VS (r Variable) -> r scope -> [VS (r val)] -> MS (r stmt)
-  constDecDef  :: VS (r Variable) -> r scope -> VS (r val) -> MS (r stmt)
-  funcDecDef   :: VS (r Variable) -> r scope -> [VS (r Variable)] -> MS (r bod)
-    -> MS (r stmt)
+  arrayDec     :: Integer -> VS (r val) -> VS (r var) -> r scope -> MS (r stmt)
+  arrayDecDef  :: VS (r var) -> r scope -> [VS (r val)] -> MS (r stmt)
+  constDecDef  :: VS (r var) -> r scope -> VS (r val) -> MS (r stmt)
+  funcDecDef   :: VS (r var) -> r scope -> [VS (r var)] -> MS (r bod) -> MS (r stmt)
 
 class PrintConsole r val stmt | r -> val stmt where
   print      :: VS (r val) -> MS (r stmt)
@@ -473,14 +474,14 @@ class PrintConsole r val stmt | r -> val stmt where
   printStr   :: String -> MS (r stmt)
   printStrLn :: String -> MS (r stmt)
 
-class ReadConsole r stmt | r -> stmt where
-  getInput         :: VS (r Variable) -> MS (r stmt)
+class ReadConsole r var stmt | r -> var stmt where
+  getInput         :: VS (r var) -> MS (r stmt)
   discardInput     :: MS (r stmt)
 
-class FileHandling r val stmt | r -> val stmt where
-  openFileR :: VS (r Variable) -> VS (r val) -> MS (r stmt)
-  openFileW :: VS (r Variable) -> VS (r val) -> MS (r stmt)
-  openFileA :: VS (r Variable) -> VS (r val) -> MS (r stmt)
+class FileHandling r var val stmt | r -> var val stmt where
+  openFileR :: VS (r var) -> VS (r val) -> MS (r stmt)
+  openFileW :: VS (r var) -> VS (r val) -> MS (r stmt)
+  openFileA :: VS (r var) -> VS (r val) -> MS (r stmt)
   closeFile :: VS (r val) -> MS (r stmt)
 
 class PrintFile r val stmt | r -> val stmt where
@@ -490,39 +491,39 @@ class PrintFile r val stmt | r -> val stmt where
   printFileStr   :: VS (r val) -> String -> MS (r stmt)
   printFileStrLn :: VS (r val) -> String -> MS (r stmt)
 
-class ReadFile r val stmt | r -> val stmt where
-  getFileInput     :: VS (r val) -> VS (r Variable) -> MS (r stmt)
+class ReadFile r var val stmt | r -> var val stmt where
+  getFileInput     :: VS (r val) -> VS (r var) -> MS (r stmt)
   discardFileInput :: VS (r val) -> MS (r stmt)
-  getFileInputLine :: VS (r val) -> VS (r Variable) -> MS (r stmt)
+  getFileInputLine :: VS (r val) -> VS (r var) -> MS (r stmt)
   discardFileLine  :: VS (r val) -> MS (r stmt)
-  getFileInputAll  :: VS (r val) -> VS (r Variable) -> MS (r stmt)
+  getFileInputAll  :: VS (r val) -> VS (r var) -> MS (r stmt)
 
-class StringStatement r val stmt | r -> val stmt where
+class StringStatement r var val stmt | r -> var val stmt where
   -- | Given a char to split on, variable to store result in, and string to split,
   -- generates a statement splitting the string into a list of strings
   -- delimited by the char.
-  stringSplit :: Char -> VS (r Variable) -> VS (r val) -> MS (r stmt)
-  stringListVals  :: [VS (r Variable)] -> VS (r val) -> MS (r stmt)
+  stringSplit :: Char -> VS (r var) -> VS (r val) -> MS (r stmt)
+  stringListVals  :: [VS (r var)] -> VS (r val) -> MS (r stmt)
   -- | Given a list of variables and a value containing a list of strings,
   -- assign the ith element of the list of strings into the ith variable
-  stringListLists :: [VS (r Variable)] -> VS (r val) -> MS (r stmt)
+  stringListLists :: [VS (r var)] -> VS (r val) -> MS (r stmt)
 
 -- The three lists are inputs, outputs, and both, respectively
-type InOutCall r val stmt =
+type InOutCall r var val stmt =
      Label
   -> [VS (r val)]
-  -> [VS (r Variable)]
-  -> [VS (r Variable)]
+  -> [VS (r var)]
+  -> [VS (r var)]
   -> MS (r stmt)
 
-class FuncAppStatement r val stmt | r -> val stmt where
-  inOutCall    ::            InOutCall r val stmt
-  extInOutCall :: Library -> InOutCall r val stmt
+class FuncAppStatement r var val stmt | r -> var val stmt where
+  inOutCall    ::            InOutCall r var val stmt
+  extInOutCall :: Library -> InOutCall r var val stmt
 
 class CommentStatement r stmt | r -> stmt where
   comment :: String -> MS (r stmt)
 
-class ControlStatement r val stmt bod | r -> val stmt bod where
+class ControlStatement r var val stmt bod | r -> var val stmt bod where
   break :: MS (r stmt)
   continue :: MS (r stmt)
 
@@ -541,9 +542,9 @@ class ControlStatement r val stmt bod | r -> val stmt bod where
   for      :: MS (r stmt) -> VS (r val) -> MS (r stmt) -> MS (r bod) ->
     MS (r stmt)
   -- Iterator variable, start value, end value, step value, loop body
-  forRange :: VS (r Variable) -> VS (r val) -> VS (r val) -> VS (r val) -> MS (r bod) ->
+  forRange :: VS (r var) -> VS (r val) -> VS (r val) -> VS (r val) -> MS (r bod) ->
     MS (r stmt)
-  forEach  :: VS (r Variable) -> VS (r val) -> MS (r bod) -> MS (r stmt)
+  forEach  :: VS (r var) -> VS (r val) -> MS (r bod) -> MS (r stmt)
   while    :: VS (r val) -> MS (r bod) -> MS (r stmt)
 
   tryCatch :: MS (r bod) -> MS (r bod) -> MS (r stmt)
@@ -551,12 +552,12 @@ class ControlStatement r val stmt bod | r -> val stmt bod where
   assert :: VS (r val) -> VS (r val) -> MS (r stmt)
 
 ifNoElse
-  :: (BodySym r bod block, ControlStatement r val stmt bod)
+  :: (BodySym r bod block, ControlStatement r var val stmt bod)
   => [(VS (r val), MS (r bod))] -> MS (r stmt)
 ifNoElse bs = ifCond bs $ body []
 
 switchAsIf
-  :: (ControlStatement r val stmt bod, Comparison r val)
+  :: (ControlStatement r var val stmt bod, Comparison r val)
   => VS (r val) -> [(VS (r val), MS (r bod))] -> MS (r bod) -> MS (r stmt)
 switchAsIf v = ifCond . map (first (v ?==))
 
@@ -568,25 +569,25 @@ class VisibilitySym r vis | r -> vis where
   public  :: r vis
 
 -- | A class for representing function/method parameters.
-class ParameterSym r param | r -> param where
-  param :: VS (r Variable) -> MS (r param)
+class ParameterSym r var param | r -> var param where
+  param :: VS (r var) -> MS (r param)
   -- | A parameter that is an "alias" type, e.g. a C++ reference.
   -- This is a minor hack, to get around us not having/wanting
   -- "alias types" in GOOL.
-  pointerParam :: VS (r Variable) -> MS (r param)
+  pointerParam :: VS (r var) -> MS (r param)
 
 -- The three lists are inputs, outputs, and both, respectively
-type InOutFunc r mthd bod = [VS (r Variable)] -> [VS (r Variable)] -> [VS (r Variable)] ->
+type InOutFunc r var mthd bod = [VS (r var)] -> [VS (r var)] -> [VS (r var)] ->
   MS (r bod) -> MS (r mthd)
 -- Parameters are: brief description of function, input descriptions and
 -- variables, output descriptions and variables, descriptions and variables
 -- for parameters that are both input and output, function body
-type DocInOutFunc r mthd bod = String -> [(String, VS (r Variable))] ->
-  [(String, VS (r Variable))] -> [(String, VS (r Variable))] -> MS (r bod) -> MS (r mthd)
+type DocInOutFunc r var mthd bod = String -> [(String, VS (r var))] ->
+  [(String, VS (r var))] -> [(String, VS (r var))] -> MS (r bod) -> MS (r mthd)
 
 -- | A class for representing functions/methods.
 -- Usually 'MethodData' is used for the representation.
-class MethodSym r vis typ param mthd bod | r -> vis typ param mthd bod
+class MethodSym r vis typ var param mthd bod | r -> vis typ var param mthd bod
   where
   docMain :: MS (r bod) -> MS (r mthd)
 
@@ -597,8 +598,8 @@ class MethodSym r vis typ param mthd bod | r -> vis typ param mthd bod
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> MS (r mthd) -> MS (r mthd)
 
-  inOutFunc :: Label -> r vis -> InOutFunc r mthd bod
-  docInOutFunc :: Label -> r vis -> DocInOutFunc r mthd bod
+  inOutFunc :: Label -> r vis -> InOutFunc r var mthd bod
+  docInOutFunc :: Label -> r vis -> DocInOutFunc r var mthd bod
 
 -- Utility
 

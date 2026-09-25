@@ -17,7 +17,7 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan)
 vectorTestProc
   ::
     ( NativeVector r typ val
-    , ProcProg r vis scope typ param val stmt mthd prg file mod bod block
+    , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
     )
   => GProc.GSProgram r prg
 vectorTestProc = GProc.prog "VectorTest" ""
@@ -29,7 +29,7 @@ vectorTestProc = GProc.prog "VectorTest" ""
 vectorOps
   ::
     ( NativeVector r typ val
-    , ProcProg r vis scope typ param val stmt mthd prg file mod bod block
+    , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
     )
   => MS (r mthd)
 vectorOps =

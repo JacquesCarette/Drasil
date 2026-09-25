@@ -2,7 +2,7 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), VSBinder, Variable,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), VSBinder, var,
   BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -50,7 +50,7 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance OOProg CodeInfoOO () () () () () () () () () GOOLState () () () ()
+instance OOProg CodeInfoOO () () () () () () () () () () GOOLState () () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
@@ -115,22 +115,22 @@ instance ScopeSym CodeInfoOO () where
   mainFn = pure ()
   local = pure ()
 
-instance VariableSym CodeInfoOO () where
+instance VariableSym CodeInfoOO () () where
   var       _ _ = pure $ pure $ error "[var] The return value of this isn't used, and the thunk shouldn't fire."
   constant  _ _ = pure $ pure $ error "[constant] The return value of this isn't used, and the thunk shouldn't fire."
   extVar  _ _ _ = pure $ pure $ error "[extVar] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance OOVariableSym CodeInfoOO () () where
+instance OOVariableSym CodeInfoOO () () () where
   classVar _ _ = pure $ pure $ error "[classVar] The return value of this isn't used, and the thunk shouldn't fire."
   classConst _ _ = pure $ pure $ error "[classConst] The return value of this isn't used, and the thunk shouldn't fire."
   classVarAccess    _ _   = pure $ pure $ error "[classVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
   extClassVarAccess _ _   = pure $ pure $ error "[extClassVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
   instanceVarAccess      _ _   = pure $ pure $ error "[instanceVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance SelfSym CodeInfoOO where
+instance SelfSym CodeInfoOO () where
   self              = pure $ pure $ error "[self] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance VariableElim CodeInfoOO () where
+instance VariableElim CodeInfoOO () () where
   variableName _ = ""
   variableType _ = pure $ error "[variableType] The return value of this isn't used, and the thunk shouldn't fire."
 
@@ -155,7 +155,7 @@ instance Literal CodeInfoOO () () where
 instance MathConstant CodeInfoOO () where
   pi = pure $ error "[pi] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance VariableValue CodeInfoOO () where
+instance VariableValue CodeInfoOO () () where
   valueOf _ = pure $ error "[valueOf] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance CommandLineArgs CodeInfoOO () where
@@ -202,7 +202,7 @@ instance Comparison CodeInfoOO () where
   (?==) = execute2
   (?!=) = execute2
 
-instance ValueExpression CodeInfoOO () () where
+instance ValueExpression CodeInfoOO () () () where
   inlineIf = execute3
   funcAppMixedArgs n _ = do
     _ <- currModCall n
@@ -218,7 +218,7 @@ instance ValueExpression CodeInfoOO () () where
 
   notNull = execute1
 
-instance OOValueExpression CodeInfoOO () () where
+instance OOValueExpression CodeInfoOO () () () where
   newObjMixedArgs _ vs ns = do
     sequence_ vs
     mapM_ fst ns
@@ -231,7 +231,7 @@ instance OOValueExpression CodeInfoOO () () where
     pure $ error "[extNewObjMixedArgs] The return value of this isn't used, and the thunk shouldn't fire."
   libNewObjMixedArgs = extNewObjMixedArgs
 
-instance InternalValueExp CodeInfoOO () () where
+instance InternalValueExp CodeInfoOO () () () where
   objMethodCallMixedArgs' n _ v vs ns = do
     _ <- v
     _ <- currModCall n vs ns
@@ -247,7 +247,7 @@ instance OOFunctionSym CodeInfoOO () () where
     _ <- s2
     pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance GetSet CodeInfoOO () where
+instance GetSet CodeInfoOO () () where
   get v _ = execute1 v
   set v _ = execute2 v
 
@@ -259,7 +259,7 @@ instance Reference CodeInfoOO () where
   makeRef = execute1
   maybeDeref = execute1
 
-instance Array CodeInfoOO () where
+instance Array CodeInfoOO () () where
   arrayElem _ _ = pure $ pure $ error "[arrayElem] The return value of this isn't used, and the thunk shouldn't fire."
   arrayLength _ = pure $ error "[arrayLength] The return value of this isn't used, and the thunk shouldn't fire."
   arrayCopy _ = pure $ error "[arrayCopy] The return value of this isn't used, and the thunk shouldn't fire."
@@ -280,7 +280,7 @@ instance Set CodeInfoOO () where
   setRemove = execute2
   setUnion = execute2
 
-instance InternalList CodeInfoOO () () where
+instance InternalList CodeInfoOO () () () where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe (pure $ error "[listSlice'] The return value of this isn't used, and the thunk shouldn't fire.")) [b,e,s]
     _ <- vl
@@ -298,14 +298,14 @@ instance MultiStatement CodeInfoOO () where
 instance ValueStatement CodeInfoOO () () where
   valStmt = zoom lensMStoVS . execute1
 
-instance AssignStatement CodeInfoOO () () where
+instance AssignStatement CodeInfoOO () () () where
   assign _ = zoom lensMStoVS . execute1
   (&-=)  _ = zoom lensMStoVS . execute1
   (&+=)  _ = zoom lensMStoVS . execute1
   (&++)  _ = noInfo
   (&--)  _ = noInfo
 
-instance DeclStatement CodeInfoOO () () () () where
+instance DeclStatement CodeInfoOO () () () () () where
   varDec               _ _ = noInfo
   varDecDef            _ _ = zoom lensMStoVS . execute1
   setDec               _ _ = noInfo
@@ -319,7 +319,7 @@ instance DeclStatement CodeInfoOO () () () () where
     _ <- bod
     pure $ pure $ error "[funcDecDef] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance OODeclStatement CodeInfoOO () () () where
+instance OODeclStatement CodeInfoOO () () () () where
   objDecDef            _ _ = zoom lensMStoVS . execute1
   objDecNew            _ _ = zoom lensMStoVS . executeListErr
   extObjDecNew       _ _ _ = zoom lensMStoVS . executeListErr
@@ -330,11 +330,11 @@ instance PrintConsole CodeInfoOO () () where
   printStr   _ = noInfo
   printStrLn _ = noInfo
 
-instance ReadConsole CodeInfoOO () where
+instance ReadConsole CodeInfoOO () () where
   getInput       _ = noInfo
   discardInput     = noInfo
 
-instance FileHandling CodeInfoOO () () where
+instance FileHandling CodeInfoOO () () () where
   openFileR _ v = modify (addException FileNotFound) >>
     execute1 (zoom lensMStoVS v)
   openFileW _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
@@ -347,20 +347,20 @@ instance PrintFile CodeInfoOO () () where
   printFileStr   v _ = zoom lensMStoVS $ execute1 v
   printFileStrLn v _ = zoom lensMStoVS $ execute1 v
 
-instance ReadFile CodeInfoOO () () where
+instance ReadFile CodeInfoOO () () () where
   getFileInput v _ = zoom lensMStoVS $ execute1 v
   discardFileInput = zoom lensMStoVS . execute1
   getFileInputLine v _ = zoom lensMStoVS $ execute1 v
   discardFileLine      = zoom lensMStoVS . execute1
   getFileInputAll  v _ = execute1 (zoom lensMStoVS v)
 
-instance StringStatement CodeInfoOO () () where
+instance StringStatement CodeInfoOO () () () where
   stringSplit _ _ = zoom lensMStoVS . execute1
 
   stringListVals  _ = zoom lensMStoVS . execute1
   stringListLists _ = zoom lensMStoVS . execute1
 
-instance FuncAppStatement CodeInfoOO () () where
+instance FuncAppStatement CodeInfoOO () () () where
   inOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCallSmt n
@@ -368,7 +368,7 @@ instance FuncAppStatement CodeInfoOO () () where
     sequence_ vs
     addExternalCallSmt l n
 
-instance OOFuncAppStatement CodeInfoOO () () where
+instance OOFuncAppStatement CodeInfoOO () () () where
   selfInOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCallSmt n
@@ -376,7 +376,7 @@ instance OOFuncAppStatement CodeInfoOO () () where
 instance CommentStatement CodeInfoOO () where
   comment _ = noInfo
 
-instance ControlStatement CodeInfoOO () () () where
+instance ControlStatement CodeInfoOO () () () () where
   break    = noInfo
   continue = noInfo
 
@@ -430,7 +430,7 @@ instance ObserverPattern CodeInfoOO () () where
     _ <- zoom lensMStoVS f
     pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance StrategyPattern CodeInfoOO () () () where
+instance StrategyPattern CodeInfoOO () () () () where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe (pure $ pure $ error "[runStrategy] The return value of this isn't used, and the thunk shouldn't fire.") vl
@@ -440,11 +440,11 @@ instance VisibilitySym CodeInfoOO () where
   private = pure ()
   public  = pure ()
 
-instance ParameterSym CodeInfoOO () where
+instance ParameterSym CodeInfoOO () () where
   param        _ = pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
   pointerParam _ = pure $ pure $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance MethodSym CodeInfoOO () () () () () where
+instance MethodSym CodeInfoOO () () () () () () where
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
   mainFunction = updateMEMandCM "main"
@@ -455,7 +455,7 @@ instance MethodSym CodeInfoOO () () () () () where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance OOMethodSym CodeInfoOO () () () () () () () where
+instance OOMethodSym CodeInfoOO () () () () () () () () where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -469,7 +469,7 @@ instance OOMethodSym CodeInfoOO () () () () () () () where
   inOutMethod    n _ _ _ _ _   = updateMEMandCM n
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
 
-instance StateVarSym CodeInfoOO () () () () where
+instance StateVarSym CodeInfoOO () () () () () where
   stateVar    _ _ _   = noInfo
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
@@ -575,7 +575,7 @@ execute3 s1 s2 s3 = do
   execute2 s2 s3
 
 currModCall :: String -> [VS (CodeInfoOO val)] ->
-  [(VS (CodeInfoOO Variable), VS (CodeInfoOO val))] -> VS (CodeInfoOO val)
+  [(VS (CodeInfoOO var), VS (CodeInfoOO val))] -> VS (CodeInfoOO val)
 currModCall n ps ns = do
   sequence_ ps
   mapM_ fst ns

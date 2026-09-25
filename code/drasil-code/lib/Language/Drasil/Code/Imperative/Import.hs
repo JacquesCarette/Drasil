@@ -48,7 +48,7 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 import Language.Drasil.Printers (showHasSymbImpl)
 
-import Drasil.GOOL (Label, SVariable, Class, CSStateVar, NamedArgs, Initializers,
+import Drasil.GOOL (Label, Variable, Class, CSStateVar, NamedArgs, Initializers,
   OOProg, CS, FS, MS, VS, AttachmentSym(..), bodyStatements, BlockSym(..),
   TypeSym(..), OOTypeSym(..), VariableSym(..), VariableElim(..),
   VariableValue(..), ScopeSym(..), OOVariableSym(..), SelfSym(..),
@@ -138,7 +138,7 @@ variable
     , VariableElim r typ
     , VariableValue r val
     )
-  => Name -> VS (r typ) -> GenState (SVariable r)
+  => Name -> VS (r typ) -> GenState (VS (r Variable))
 variable s t = do
   g <- get
   let cs = g
@@ -168,7 +168,7 @@ inputVariable
     , VariableElim r typ
     , VariableValue r val
     )
-  => Structure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
+  => Structure -> ConstantRepr -> VS (r Variable) -> GenState (VS (r Variable))
 inputVariable Unbundled _ v = pure v
 inputVariable Bundled Var v = do
   g <- get
@@ -197,7 +197,7 @@ constVariable
     , VariableElim r typ
     , VariableValue r val
     )
-  => ConstantStructure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
+  => ConstantStructure -> ConstantRepr -> VS (r Variable) -> GenState (VS (r Variable))
 constVariable (Store Unbundled) _ v = pure v
 constVariable (Store Bundled) Var v = do
   cs <- mkVar (quantvar consts)
@@ -218,7 +218,7 @@ constVariable Inline _ _ = error $ "mkVar called on a constant, but user " ++
 -- If the variable is exported by a different module, use 'extClassVarAccess'.
 classVariable
   :: (OOVariableSym r typ val, VariableElim r typ)
-  => SVariable r -> SVariable r -> GenState (SVariable r)
+  => VS (r Variable) -> VS (r Variable) -> GenState (VS (r Variable))
 classVariable c v = do
   g <- get
   let checkCurrent m = if currentModule g == m then classVarAccess else extClassVarAccess
@@ -274,7 +274,7 @@ mkVar
     , VariableElim r typ
     , VariableValue r val
     )
-  => CodeVarChunk -> GenState (SVariable r)
+  => CodeVarChunk -> GenState (VS (r Variable))
 mkVar v = do
   t <- codeType v
   let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
@@ -433,8 +433,8 @@ genInOutFunc
     , BodySym r bod block
     , VariableElim r typ
     )
-  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r bod) -> MS (r mthd))
-  -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MS (r bod) -> MS (r mthd))
+  => ([VS (r Variable)] -> [VS (r Variable)] -> [VS (r Variable)] -> MS (r bod) -> MS (r mthd))
+  -> (String -> [(String, VS (r Variable))] -> [(String, VS (r Variable))] -> [(String, VS (r Variable))] -> MS (r bod) -> MS (r mthd))
   -> Label
   -> Description
   -> [CodeVarChunk]
@@ -1119,7 +1119,7 @@ getEntryVars
     , VariableElim r typ
     , VariableValue r val
     )
-  => Maybe String -> LinePattern -> GenState [SVariable r]
+  => Maybe String -> LinePattern -> GenState [VS (r Variable)]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
   (variable (codeName v ++ st) . innerType . convTypeOO))
     s) (getPatternInputs lp)
@@ -1175,7 +1175,7 @@ valueProc u s t = do
 -- If variable is neither, just construct it with 'var' and return it.
 variableProc
   :: (VariableSym r typ)
-  => Name -> VS (r typ) -> GenState (SVariable r)
+  => Name -> VS (r typ) -> GenState (VS (r Variable))
 variableProc s t = do
   g <- get
   let cs = g
@@ -1193,7 +1193,7 @@ variableProc s t = do
 -- don't support 'Bundled' inputs yet.
 inputVariableProc
   :: (VariableSym r typ)
-  => Structure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
+  => Structure -> ConstantRepr -> VS (r Variable) -> GenState (VS (r Variable))
 inputVariableProc Unbundled _ v = pure v
 inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers do not support bundled inputs"
 
@@ -1205,7 +1205,10 @@ inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers d
 -- variable for one of the constants.
 constVariableProc
   :: (VariableSym r typ)
-  => ConstantStructure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
+  => ConstantStructure
+  -> ConstantRepr
+  -> VS (r Variable)
+  -> GenState (VS (r Variable))
 constVariableProc (Store Unbundled) _ v = pure v
 constVariableProc (Store Bundled) _ _ = error "constVariableProc: Procedural renderers do not support bundled constants"
 constVariableProc WithInputs cr v = do
@@ -1244,7 +1247,7 @@ mkValProc v = do
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
 mkVarProc
   :: (TypeSym r typ, VariableSym r typ)
-  => CodeVarChunk -> GenState (SVariable r)
+  => CodeVarChunk -> GenState (VS (r Variable))
 mkVarProc v = do
   t <- codeType v
   let toGOOLVar Nothing = variableProc (codeName v) (convType t)
@@ -1637,7 +1640,7 @@ readDataProc ddef = do
 -- | Get entry variables.
 getEntryVarsProc
   :: (TypeSym r typ, VariableSym r typ)
-  => Maybe String -> LinePattern -> GenState [SVariable r]
+  => Maybe String -> LinePattern -> GenState [VS (r Variable)]
 getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
   (variableProc (codeName v ++ st) . innerType . convType))
     s) (getPatternInputs lp)
@@ -2025,8 +2028,8 @@ genInOutFuncProc
     , BodySym r bod block
     , VariableElim r typ
     )
-  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r bod) -> MS (r mthd))
-  -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MS (r bod) -> MS (r mthd))
+  => ([VS (r Variable)] -> [VS (r Variable)] -> [VS (r Variable)] -> MS (r bod) -> MS (r mthd))
+  -> (String -> [(String, VS (r Variable))] -> [(String, VS (r Variable))] -> [(String, VS (r Variable))] -> MS (r bod) -> MS (r mthd))
   -> Label
   -> Description
   -> [CodeVarChunk]
@@ -2053,7 +2056,7 @@ genInOutFuncProc f docf n desc ins' outs' b = do
 -- Used for readData and readDataProc
 l_line, l_lines, l_linetokens, l_infile, l_i :: Label
 var_line, var_lines, var_linetokens, var_infile, var_i ::
-  (TypeSym r typ, VariableSym r typ) => SVariable r
+  (TypeSym r typ, VariableSym r typ) => VS (r Variable)
 v_line, v_lines, v_linetokens, v_infile, v_i ::
   (TypeSym r typ, VariableSym r typ, VariableValue r val) => VS (r val)
 l_line = "line"

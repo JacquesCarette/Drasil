@@ -3,7 +3,7 @@ module Drasil.GOOL.LanguageRenderer.CommonGOOL (
   constDecDef, classMethodCall, listAppend, listAdd, innerType
 ) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), TypeElim(..), SVariable,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), TypeElim(..), Variable,
   NamedArgs, VariableElim(..), TypeSym(void), IndexTranslator(..), getCodeType,
   ValueStatement(valStmt))
 import Drasil.GOOL.InterfaceGOOL (objMethodCall, convTypeOO, InternalValueExp,
@@ -28,7 +28,7 @@ constDecDef
      , ValueElim r val
      , VariableElim r TypeData
      )
-  => SVariable r -> r ScopeData -> VS (r val) -> MS (r stmt)
+  => VS (r Variable) -> r ScopeData -> VS (r val) -> MS (r stmt)
 constDecDef vr' scp v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'

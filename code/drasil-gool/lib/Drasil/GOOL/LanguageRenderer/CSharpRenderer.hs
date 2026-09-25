@@ -8,7 +8,7 @@ module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   Value, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
   getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -840,8 +840,12 @@ csCast = join .: on2StateValues (\t v -> csCast' (getCodeType t) (getCodeType $
 -- all features of C# 7, so we cannot generate local functions.
 -- If support for local functions is added to mcs in the future, this
 -- should be re-written to generate a local function.
-csFuncDecDef :: SVariable CSharpCode -> CSharpCode ScopeData ->
-  [SVariable CSharpCode] -> MS (CSharpCode Body) -> MS (CSharpCode (Doc, Terminator))
+csFuncDecDef
+  :: VS (CSharpCode Variable)
+  -> CSharpCode ScopeData
+  -> [VS (CSharpCode Variable)]
+  -> MS (CSharpCode Body)
+  -> MS (CSharpCode (Doc, Terminator))
 csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -914,8 +918,8 @@ csInOutCall
   :: (Label -> VS (CSharpCode TypeData) -> [VS (CSharpCode Value)] -> VS (CSharpCode Value))
   -> Label
   -> [VS (CSharpCode Value)]
-  -> [SVariable CSharpCode]
-  -> [SVariable CSharpCode]
+  -> [VS (CSharpCode Variable)]
+  -> [VS (CSharpCode Variable)]
   -> MS (CSharpCode (Doc, Terminator))
 csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
@@ -929,10 +933,13 @@ csVarDec :: AttachmentTag -> MS (CSharpCode stmt) -> MS (CSharpCode stmt)
 csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to a function in C#. Use stateVar to make a ClassLevel state variable instead."
 csVarDec InstanceLevel d = d
 
-csInOut :: (VS (CSharpCode TypeData) -> [MS (CSharpCode ParamData)] ->
-  MS (CSharpCode Body) -> MS (CSharpCode mthd)) ->
-  [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] ->
-  MS (CSharpCode Body) -> MS (CSharpCode mthd)
+csInOut
+  :: (VS (CSharpCode TypeData) -> [MS (CSharpCode ParamData)] -> MS (CSharpCode Body) -> MS (CSharpCode mthd))
+  -> [VS (CSharpCode Variable)]
+  -> [VS (CSharpCode Variable)]
+  -> [VS (CSharpCode Variable)]
+  -> MS (CSharpCode Body)
+  -> MS (CSharpCode mthd)
 csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
   valueOf v))

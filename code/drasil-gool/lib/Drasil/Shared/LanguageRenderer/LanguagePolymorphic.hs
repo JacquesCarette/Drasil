@@ -18,7 +18,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Variable,
-  SVariable, NamedArgs, MixedCall, MixedCtorCall, bodyStatements, oneLiner,
+  NamedArgs, MixedCall, MixedCtorCall, bodyStatements, oneLiner,
   VisibilitySym(..), VariableElim(variableName, variableType),
   ValueSym(valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
   Comparison(..), funcApp, MultiStatement(multi), AssignStatement((&++)), (&=),
@@ -194,10 +194,10 @@ moduloOp = multPrec "%"
 
 -- Variables --
 
-var :: (RenderVariable r typ) => Label -> VS (r typ) -> SVariable r
+var :: (RenderVariable r typ) => Label -> VS (r typ) -> VS (r Variable)
 var n t = mkStateVar n t (R.var n)
 
-classVar :: (RenderVariable r typ) => Label -> VS (r typ) -> SVariable r
+classVar :: (RenderVariable r typ) => Label -> VS (r typ) -> VS (r Variable)
 classVar n t = mkClassVar n t (R.var n)
 
 -- | To be used in classVarAccess implementations. Throws an error if the variable is
@@ -215,7 +215,7 @@ instanceVarAccess
     , ValueElim r val
     , VariableElim r typ
     )
-  => VS (r val) -> SVariable r -> SVariable r
+  => VS (r val) -> VS (r Variable) -> VS (r Variable)
 instanceVarAccess o' v' = do
   o <- o'
   v <- v'
@@ -233,7 +233,7 @@ arrayElem
     , RenderVariable r typ
     , ValueElim r val
     )
-  => VS (r val) -> VS (r val) -> SVariable r
+  => VS (r val) -> VS (r val) -> VS (r Variable)
 arrayElem arr' i' = do
   i <- IC.intToIndex i'
   arr <- arr'
@@ -264,7 +264,7 @@ litString s = mkStateVal IC.string (doubleQuotedText s)
 
 valueOf
   :: (InternalVarElim r, RenderValue r typ val, VariableElim r typ)
-  => SVariable r -> VS (r val)
+  => VS (r Variable) -> VS (r val)
 valueOf v' = do
   v <- v'
   mkVal (variableType v) (RC.variable v)
@@ -349,7 +349,7 @@ func l t vs = funcApp l t vs >>= ((`funcFromData` t) . R.func . RC.value)
 
 get
   :: (RO.InternalGetSet r typ val, IG.OOFunctionSym r typ val)
-  => VS (r val) -> SVariable r -> VS (r val)
+  => VS (r val) -> VS (r Variable) -> VS (r val)
 get v vToGet = v $. RO.getFunc vToGet
 
 set
@@ -358,7 +358,7 @@ set
     , RO.InternalGetSet r typ val
     , IG.OOFunctionSym r typ val
     )
-  => VS (r val) -> SVariable r -> VS (r val) -> VS (r val)
+  => VS (r val) -> VS (r Variable) -> VS (r val) -> VS (r val)
 set v vToSet toVal = v $. RO.setFunc (onStateValue valueType v) vToSet toVal
 
 -- TODO [Brandon Bosman, 06/10/2026]: Figure out what to do with this
@@ -388,13 +388,13 @@ listAccess v i = do
 
 getFunc
   :: (IG.OOFunctionSym r typ val, VariableElim r typ)
-  => SVariable r -> VS (r FuncData)
+  => VS (r Variable) -> VS (r FuncData)
 getFunc v = v >>= (\vr -> IG.func (getterName $ variableName vr)
   (toState $ variableType vr) [])
 
 setFunc
   :: (IG.OOFunctionSym r typ val, VariableElim r typ)
-  => VS (r typ) -> SVariable r -> VS (r val) -> VS (r FuncData)
+  => VS (r typ) -> VS (r Variable) -> VS (r val) -> VS (r FuncData)
 setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
   [toVal])
 
@@ -417,7 +417,7 @@ emptyStmt = mkStmtNoEnd empty
 
 assign
   :: (InternalVarElim r, RenderStatement r stmt, ValueElim r val)
-  => Terminator -> SVariable r -> VS (r val) -> MS (r stmt)
+  => Terminator -> VS (r Variable) -> VS (r val) -> MS (r stmt)
 assign t vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -425,7 +425,7 @@ assign t vr' v' = do
 
 subAssign
   :: (InternalVarElim r, RenderStatement r stmt, ValueElim r val)
-  => Terminator -> SVariable r -> VS (r val) -> MS (r stmt)
+  => Terminator -> VS (r Variable) -> VS (r val) -> MS (r stmt)
 subAssign t vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -437,7 +437,7 @@ objDecNew
     , IG.OOValueExpression r typ val
     , VariableElim r typ
     )
-  => SVariable r -> r scope -> [VS (r val)] -> MS (r stmt)
+  => VS (r Variable) -> r scope -> [VS (r val)] -> MS (r stmt)
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
 printList
@@ -619,7 +619,7 @@ construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param
   :: (RenderParam r param, VariableElim r typ)
-  => (r Variable -> Doc) -> SVariable r -> MS (r param)
+  => (r Variable -> Doc) -> VS (r Variable) -> MS (r param)
 param f v' = do
   v <- zoom lensMStoVS v'
   let n = variableName v
@@ -640,14 +640,14 @@ method n s p t = intMethod False n s p (mType t)
 
 getMethod
   :: (OORenderSym r vis scope typ param val stmt mthd stvr attch file mod bod block)
-  => SVariable r -> MS (r mthd)
+  => VS (r Variable) -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
 setMethod
   :: (OORenderSym r vis scope typ param val stmt mthd stvr attch file mod bod block)
-  => SVariable r -> MS (r mthd)
+  => VS (r Variable) -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v

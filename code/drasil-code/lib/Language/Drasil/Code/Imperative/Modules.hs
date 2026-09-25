@@ -24,7 +24,7 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
   Space(..))
 import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
   oneLineCodeExprDoc)
-import Drasil.GOOL (SVariable, VS, CS, FS, MS, CSStateVar, Class, OOProg,
+import Drasil.GOOL (Variable, VS, CS, FS, MS, CSStateVar, Class, OOProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), AttachmentSym(..),
   TypeSym(..), ValueSym, VariableSym(..), ScopeSym(..), Literal(..), OOTypeSym,
   OOVariableSym, VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -282,7 +282,7 @@ constVarFunc
     , StateVarSym r vis val stvr attch
     )
   => ConstantRepr
-  -> (SVariable r -> VS (r val) -> CSStateVar r stvr)
+  -> (VS (r Variable) -> VS (r val) -> CSStateVar r stvr)
 constVarFunc Var = stateVarDef public instanceLevel
 constVarFunc Const = constVar public
 

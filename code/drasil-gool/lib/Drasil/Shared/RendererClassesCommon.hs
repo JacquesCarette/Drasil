@@ -12,15 +12,14 @@ module Drasil.Shared.RendererClassesCommon (
   BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Library, Variable, SVariable,
-  MixedCall, TypeSym(..), VariableElim(..), Argument(..), Literal(..),
-  MathConstant(..), VariableSym, ValueSym, VariableValue(..),
-  ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
-  ListStatement, InternalList(..), AssignStatement(..), ScopeSym,
-  DeclStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ParameterSym(..), BinderElim(..),
-  UnRepr(..), BodySym, BlockSym)
+import Drasil.Shared.InterfaceCommon (Label, Library, Variable, MixedCall,
+  TypeSym(..), VariableElim(..), Argument(..), Literal(..), MathConstant(..),
+  VariableSym, ValueSym, VariableValue(..), ValueExpression(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), IndexTranslator(..), List(..), ListStatement, InternalList(..),
+  AssignStatement(..), ScopeSym, DeclStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ParameterSym(..), BinderElim(..), UnRepr(..), BodySym, BlockSym)
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, OpData,
   BinderD, FuncData)
 import Drasil.Shared.State (MS, VS)
@@ -121,7 +120,7 @@ class ScopeElim r scope | r -> scope where
   scopeData :: r scope -> scope
 
 class RenderVariable r typ | r -> typ where
-  varFromData :: AttachmentTag -> String -> VS (r typ) -> Doc -> SVariable r
+  varFromData :: AttachmentTag -> String -> VS (r typ) -> Doc -> VS (r Variable)
 
 class InternalVarElim r where
   variableBind :: r Variable -> AttachmentTag
@@ -165,7 +164,7 @@ class FunctionElim r typ | r -> typ where
   function :: r FuncData -> Doc
 
 class InternalAssignStmt r val stmt | r -> val stmt where
-  multiAssign       :: [SVariable r] -> [VS (r val)] -> MS (r stmt)
+  multiAssign       :: [VS (r Variable)] -> [VS (r val)] -> MS (r stmt)
 
 class InternalIOStmt r val stmt | r -> val stmt where
   -- newLn, maybe a file to print to, printFunc, value to print
@@ -191,7 +190,7 @@ class VisibilityElim r vis | r -> vis where
   visibility :: r vis -> Doc
 
 class RenderParam r param | r -> param where
-  paramFromData :: SVariable r -> Doc -> MS (r param)
+  paramFromData :: VS (r Variable) -> Doc -> MS (r param)
 
 class ParamElim r typ param | r -> typ param where
   parameterName :: r param -> Label

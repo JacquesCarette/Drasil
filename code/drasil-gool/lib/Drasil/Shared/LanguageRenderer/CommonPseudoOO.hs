@@ -20,7 +20,7 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..))
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
-  extFuncAppMixedArgs,funcType, extVar, Label, Library, SVariable, MixedCall,
+  extFuncAppMixedArgs,funcType, extVar, Label, Library, Variable, MixedCall,
   bodyStatements, oneLiner, TypeSym(infile, outfile, innerType), TypeElim(..),
   getCodeType, getTypeString, VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), (&=), ValueStatement(valStmt),
@@ -129,7 +129,7 @@ classVarAccess
     , UnRepr r TypeData
     , VariableElim r TypeData
     )
-  => (Doc -> Doc -> Doc) -> VS (r TypeData) -> SVariable r -> SVariable r
+  => (Doc -> Doc -> Doc) -> VS (r TypeData) -> VS (r Variable) -> VS (r Variable)
 classVarAccess f c' v'= do
   c <- c'
   v <- v'
@@ -230,7 +230,7 @@ arrayDec
      , RC.ValueElim r val
      , VariableElim r TypeData
      )
-  => VS (r val) -> SVariable r -> r ScopeData -> MS (r stmt)
+  => VS (r val) -> VS (r Variable) -> r ScopeData -> MS (r stmt)
 arrayDec n vr scp = do
   sz <- zoom lensMStoVS n
   v <- zoom lensMStoVS vr
@@ -247,7 +247,7 @@ arrayDecDef
      , RC.StatementElim r stmt
      , RC.ValueElim r val
      )
-  => SVariable r -> r scope -> [VS (r val)] -> MS (r stmt)
+  => VS (r Variable) -> r scope -> [VS (r val)] -> MS (r stmt)
 arrayDecDef v' scp vals' = do
   vs <- mapM (zoom lensMStoVS) vals'
   vd <- IC.varDec v' scp
@@ -256,7 +256,7 @@ arrayDecDef v' scp vals' = do
 openFileA
   :: (IC.AssignStatement r val stmt, TypeSym r typ, IC.Literal r typ val)
   => (VS (r val) -> VS (r typ) -> VS (r val) -> VS (r val))
-  -> SVariable r
+  -> VS (r Variable)
   -> VS (r val)
   -> MS (r stmt)
 openFileA f vr vl = vr &= f vl outfile IC.litTrue
@@ -274,7 +274,7 @@ forEach
   -> Doc
   -> Doc
   -> Doc
-  -> SVariable r
+  -> VS (r Variable)
   -> VS (r val)
   -> MS (r bod)
   -> MS (r stmt)
@@ -371,11 +371,11 @@ string = typeFromData String stringRender (text stringRender)
 
 docInOutFunc
   :: (BlockCommentSym r, RenderMethod r mthd)
-  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r bod) -> MS (r mthd))
+  => ([VS (r Variable)] -> [VS (r Variable)] -> [VS (r Variable)] -> MS (r bod) -> MS (r mthd))
   -> String
-  -> [(String, SVariable r)]
-  -> [(String, SVariable r)]
-  -> [(String, SVariable r)]
+  -> [(String, VS (r Variable))]
+  -> [(String, VS (r Variable))]
+  -> [(String, VS (r Variable))]
   -> MS (r bod)
   -> MS (r mthd)
 docInOutFunc f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)
@@ -407,7 +407,7 @@ listDecDef
     , IC.Literal r typ val
     , VariableElim r typ
     )
-  => SVariable r -> r scope -> [VS (r val)] -> MS (r stmt)
+  => VS (r Variable) -> r scope -> [VS (r val)] -> MS (r stmt)
 listDecDef v scp vals = do
   vr <- zoom lensMStoVS v
   let lst = IC.litList (innerType $ pure $ variableType vr) vals
@@ -420,7 +420,7 @@ setDecDef
     , IC.Literal r typ val
     , VariableElim r typ
     )
-  => SVariable r -> r scope -> [VS (r val)] -> MS (r stmt)
+  => VS (r Variable) -> r scope -> [VS (r val)] -> MS (r stmt)
 setDecDef v scp vals = do
   vr <- zoom lensMStoVS v
   let st = IC.litSet (innerType $ pure $ variableType vr) vals
@@ -434,7 +434,7 @@ setDec
     )
   => (r val -> Doc)
   -> VS (r val)
-  -> SVariable r
+  -> VS (r Variable)
   -> r scope
   -> MS (r stmt)
 setDec f vl v scp = do
@@ -455,14 +455,14 @@ stateVarDef
     ( OORenderSym r vis scope typ param val stmt mthd stvr attch file mod bod block
     , Monad r
     )
-  => r vis -> r attch -> SVariable r -> VS (r val) -> CS (r Doc)
+  => r vis -> r attch -> VS (r Variable) -> VS (r val) -> CS (r Doc)
 stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility  s) (RG.perm p) . RC.statement)
   (RC.stmt $ IC.varDecDef vr IC.local vl)
 
 constVar
   :: (CommonRenderSym r vis scope typ param val stmt mthd bod block, Monad r)
-  => Doc -> r vis -> SVariable r -> VS (r val) -> CS (r Doc)
+  => Doc -> r vis -> VS (r Variable) -> VS (r val) -> CS (r Doc)
 constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility s) p . RC.statement) (RC.stmt $ IC.constDecDef vr IC.local vl)
 
@@ -509,7 +509,7 @@ double = typeFromData Double doubleRender (text doubleRender)
 openFileR
   :: (TypeSym r typ, IC.AssignStatement r val stmt)
   => (VS (r val) -> VS (r typ) -> VS (r val))
-  -> SVariable r
+  -> VS (r Variable)
   -> VS (r val)
   -> MS (r stmt)
 openFileR f vr vl = vr &= f vl infile
@@ -517,20 +517,20 @@ openFileR f vr vl = vr &= f vl infile
 openFileW
   :: (IC.AssignStatement r val stmt, TypeSym r typ, IC.Literal r typ val)
   => (VS (r val) -> VS (r typ) -> VS (r val) -> VS (r val))
-  -> SVariable r
+  -> VS (r Variable)
   -> VS (r val)
   -> MS (r stmt)
 openFileW f vr vl = vr &= f vl outfile IC.litFalse
 
 stateVar
   :: (Monad r, OORenderSym r vis scope typ param val stmt mthd stvr attch file mod bod block)
-  => r vis -> r attch -> SVariable r -> CS (r Doc)
+  => r vis -> r attch -> VS (r Variable) -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility s) (RG.perm p) . RC.statement) (RC.stmt $ IC.varDec v IC.local)
 
 -- Python and Swift --
 
-self :: (OOTypeSym r typ, RenderVariable r typ) => SVariable r
+self :: (OOTypeSym r typ, RenderVariable r typ) => VS (r Variable)
 self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (obj l)
   R.self')
 
@@ -542,7 +542,7 @@ multiAssign
      , RC.RenderVariable r typ
      , RC.ValueElim r val
      )
-  => (Doc -> Doc) -> [SVariable r] -> [VS (r val)] -> MS (r stmt)
+  => (Doc -> Doc) -> [VS (r Variable)] -> [VS (r val)] -> MS (r stmt)
 multiAssign _ [] _ = error "Attempt to write assign statement for no variables."
 multiAssign _ _ [] = error "Attempt to write assign statement with no values."
 multiAssign f vars vals = if length vals /= 1 && length vars /= length vals
@@ -577,12 +577,16 @@ listDec
     , IC.Literal r typ val
     , VariableElim r typ
     )
-  => SVariable r -> r scope -> MS (r stmt)
+  => VS (r Variable) -> r scope -> MS (r stmt)
 listDec v scp = listDecDef v scp []
 
 funcDecDef
   :: (OORenderSym r vis ScopeData typ param val stmt mthd stvr attch file mod bod block)
-  => SVariable r -> r ScopeData -> [SVariable r] -> MS (r bod) -> MS (r stmt)
+  => VS (r Variable)
+  -> r ScopeData
+  -> [VS (r Variable)]
+  -> MS (r bod)
+  -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -603,8 +607,8 @@ inOutCall
   => (Label -> VS (r typ) -> [VS (r val)] -> VS (r val))
   -> Label
   -> [VS (r val)]
-  -> [SVariable r]
-  -> [SVariable r]
+  -> [VS (r Variable)]
+  -> [VS (r Variable)]
   -> MS (r stmt)
 inOutCall f n ins [] [] = IC.valStmt $ f n IC.void ins
 inOutCall f n ins outs both = RC.multiAssign rets [f n IC.void (map IC.valueOf
@@ -638,9 +642,9 @@ inOutFunc
     , RC.InternalControlStmt r val stmt
     )
   => (VS (r typ) -> [MS (r param)] -> MS (r bod) -> MS (r mthd))
-  -> [SVariable r]
-  -> [SVariable r]
-  -> [SVariable r]
+  -> [VS (r Variable)]
+  -> [VS (r Variable)]
+  -> [VS (r Variable)]
   -> MS (r bod)
   -> MS (r mthd)
 inOutFunc f ins [] [] b = f IC.void (map IC.param ins) b
@@ -654,11 +658,11 @@ inOutFunc f ins outs both b = f
 docInOutFunc'
   :: (BlockCommentSym r, RenderMethod r mthd)
   => FuncDocRenderer
-  -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r bod) -> MS (r mthd))
+  -> ([VS (r Variable)] -> [VS (r Variable)] -> [VS (r Variable)] -> MS (r bod) -> MS (r mthd))
   -> String
-  -> [(String, SVariable r)]
-  -> [(String, SVariable r)]
-  -> [(String, SVariable r)]
+  -> [(String, VS (r Variable))]
+  -> [(String, VS (r Variable))]
+  -> [(String, VS (r Variable))]
   -> MS (r bod) -> MS (r mthd)
 docInOutFunc' dfr f desc is os bs b = docFuncRepr dfr desc (map fst $ bs ++ is)
   (map fst $ bs ++ os) (f (map snd is) (map snd os) (map snd bs) b)

@@ -24,7 +24,7 @@ import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
 import Drasil.System (HasSystemMeta(..), HasProjectName(..))
 
-import Drasil.GOOL (SVariable, Class, CSStateVar, NamedArgs, OOProg, CS, FS, MS,
+import Drasil.GOOL (Variable, Class, CSStateVar, NamedArgs, OOProg, CS, FS, MS,
   VS, ValueSym(..), Argument(..), ValueExpression(..), InternalValueExp,
   OOValueExpression(..), SelfSym(..), VariableValue(..), FuncAppStatement(..),
   OOFuncAppStatement(..), ClassSym(..), CodeType(..), TypeElim(..),
@@ -203,8 +203,8 @@ fAppInOut
   => Name
   -> Name
   -> [VS (r val)]
-  -> [SVariable r]
-  -> [SVariable r]
+  -> [VS (r Variable)]
+  -> [VS (r Variable)]
   -> GenState (MS (r stmt))
 fAppInOut m n ins outs both = do
   g <- get
@@ -276,8 +276,8 @@ fAppInOutProc
   => Name
   -> Name
   -> [VS (r val)]
-  -> [SVariable r]
-  -> [SVariable r]
+  -> [VS (r Variable)]
+  -> [VS (r Variable)]
   -> GenState (MS (r stmt))
 fAppInOutProc m n ins outs both = do
   g <- get

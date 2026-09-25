@@ -9,8 +9,8 @@ import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
-  Variable, SVariable, Value, MixedCtorCall, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  Variable, Value, MixedCtorCall, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
@@ -975,7 +975,7 @@ pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getCodeType . valueType
 
 pyInput
   :: VS (PythonCode Value)
-  -> SVariable PythonCode
+  -> VS (PythonCode Variable)
   -> MS (PythonCode (Doc, Terminator))
 pyInput inSrc v = v &= (v >>= pyInput' . getCodeType . variableType)
   where pyInput' Integer = readInt inSrc
@@ -1013,7 +1013,7 @@ pyAssert condition message = text "assert" <+> RC.value condition <> comma <+> R
 
 pyListSlice
   :: (InternalVarElim r, Monad r, ValueElim r val)
-  => SVariable r
+  => VS (r Variable)
   -> VS (r val)
   -> VS (r val)
   -> VS (r val)

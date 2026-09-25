@@ -9,8 +9,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
-  SVariable, Value, BodySym(..), oneLiner, bodyStatements, BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  Value, BodySym(..), oneLiner, bodyStatements, BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
@@ -803,7 +803,7 @@ swiftArgVal v' = do
   mkVal (valueType v) (swiftInOutArg <> RC.value v)
 
 -- Putting "gool" in these names to avoid name conflicts
-swiftContentsVar, swiftLineVar :: SVariable SwiftCode
+swiftContentsVar, swiftLineVar :: VS (SwiftCode Variable)
 swiftContentsVar = var "goolContents" (listType $ listType string)
 swiftLineVar = var "goolLine" (listType string)
 
@@ -1068,7 +1068,7 @@ swiftIndexOf = swiftUnwrapVal .: swiftIndexFunc
 
 -- | Swift's syntactic sugar for list slicing.
 swiftListSlice
-  :: SVariable SwiftCode
+  :: VS (SwiftCode Variable)
   -> VS (SwiftCode Value)
   -> Maybe (VS (SwiftCode Value))
   -> Maybe (VS (SwiftCode Value))
@@ -1131,7 +1131,8 @@ swiftOut newLn f printFn v = zoom lensMStoVS v >>= swOut . getCodeType . valueTy
   where swOut (List _) = printSt newLn f printFn v
         swOut _ = G.print newLn f printFn v
 
-swiftInput :: SVariable SwiftCode -> VS (SwiftCode Value) -> VS (SwiftCode Value)
+swiftInput
+  :: VS (SwiftCode Variable) -> VS (SwiftCode Value) -> VS (SwiftCode Value)
 swiftInput vr vl = do
   vr' <- vr
   let swiftInput' String = vl
@@ -1158,7 +1159,7 @@ swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType
 
 swiftOpenFileWA
   :: Bool
-  -> SVariable SwiftCode
+  -> VS (SwiftCode Variable)
   -> VS (SwiftCode Value)
   -> MS (SwiftCode (Doc, Terminator))
 swiftOpenFileWA app f' n' = tryCatch
@@ -1184,7 +1185,7 @@ swiftCloseFile f' = do
   swClose (getCodeType $ valueType f)
 
 swiftReadFile
-  :: SVariable SwiftCode
+  :: VS (SwiftCode Variable)
   -> VS (SwiftCode Value)
   -> MS (SwiftCode (Doc, Terminator))
 swiftReadFile v f =
@@ -1197,7 +1198,7 @@ swiftReadFile v f =
 
 swiftVarDec
   :: Doc
-  -> SVariable SwiftCode
+  -> VS (SwiftCode Variable)
   -> SwiftCode ScopeData
   -> MS (SwiftCode (Doc, Terminator))
 swiftVarDec dec v' scp = do
@@ -1212,7 +1213,7 @@ swiftVarDec dec v' scp = do
 
 swiftSetDec
   :: Doc
-  -> SVariable SwiftCode
+  -> VS (SwiftCode Variable)
   -> SwiftCode ScopeData
   -> MS (SwiftCode (Doc, Terminator))
 swiftSetDec dec v' scp = do

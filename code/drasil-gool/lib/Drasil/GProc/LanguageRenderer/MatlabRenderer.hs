@@ -5,10 +5,10 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Value, Variable, SVariable,
-  getCodeType, UnRepr(..), Body, Block, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+import Drasil.Shared.InterfaceCommon (Label, Value, Variable, getCodeType,
+  UnRepr(..), Body, Block, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
   ListStatement(..), Set(..), NativeVector(..), InternalList(..),
@@ -696,7 +696,7 @@ mlReadLine f = funcApp "fgetl" string [f]
 --   The type of v says which one to use.
 mlInput
   :: VS (MatlabCode Value)
-  -> SVariable MatlabCode
+  -> VS (MatlabCode Variable)
   -> MS (MatlabCode (Doc, Terminator))
 mlInput inSrc v = v &= (v >>= mlInput' . getCodeType . variableType)
   where mlInput' Integer = funcApp "str2double" int [inSrc]
@@ -776,7 +776,7 @@ mlEqOp neg v1' v2' = do
                      else typeBinExpr equalOp bool (pure v1) (pure v2)
 
 mlListDec
-  :: SVariable MatlabCode
+  :: VS (MatlabCode Variable)
   -> MatlabCode ScopeData
   -> MS (MatlabCode (Doc, Terminator))
 mlListDec v scp = do
@@ -789,7 +789,7 @@ mlListDec v scp = do
 
 mlReadAllLines
   :: VS (MatlabCode Value)
-  -> SVariable MatlabCode
+  -> VS (MatlabCode Variable)
   -> MS (MatlabCode (Doc, Terminator))
 mlReadAllLines f v = do
   let var_line = var "mlLine" string
@@ -834,7 +834,7 @@ mlTryCatch tryB catchB = vcat [
   mlEnd]
 
 mlArrayElem
-  :: VS (MatlabCode Value) -> VS (MatlabCode Value) -> SVariable MatlabCode
+  :: VS (MatlabCode Value) -> VS (MatlabCode Value) -> VS (MatlabCode Variable)
 mlArrayElem arr' i' = do
   i <- intToIndex i'
   arr <- arr'

@@ -10,9 +10,9 @@ import Control.Monad.State (modify)
 import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Body, Variable, SVariable, MixedCall,
-  ValueSym, TypeSym(int), VariableElim(variableName), Label, Library, funcApp,
-  getCodeType, EmptyStatement, AssignStatement, ValueExpression)
+import Drasil.Shared.InterfaceCommon (Body, Variable, MixedCall, ValueSym,
+  TypeSym(int), VariableElim(variableName), Label, Library, funcApp, getCodeType,
+  EmptyStatement, AssignStatement, ValueExpression)
 import Drasil.Shared.RendererClassesCommon (scopeData, call,
   RenderFunction(funcFromData), RenderVariable, RenderValue, ValueElim,
   RenderStatement, ScopeElim, InternalVarElim)
@@ -35,7 +35,9 @@ bool = typeFromData Boolean boolRender (text boolRender)
 
 -- Python, Java, C#, and Julia --
 
-extVar :: (RenderVariable r typ) => Label -> Label -> VS (r typ) -> SVariable r
+extVar
+  :: (RenderVariable r typ)
+  => Label -> Label -> VS (r typ) -> VS (r Variable)
 extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
 -- Python, Java, and Julia --
@@ -66,8 +68,13 @@ listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Python, Swift, and Julia --
 
-forEach' :: (RenderStatement r stmt) => (r Variable -> r val ->
-  r Body -> Doc) -> SVariable r -> VS (r val) -> MS (r Body) -> MS (r stmt)
+forEach'
+  :: (RenderStatement r stmt)
+  => (r Variable -> r val -> r Body -> Doc)
+  -> VS (r Variable)
+  -> VS (r val)
+  -> MS (r Body)
+  -> MS (r stmt)
 forEach' f i' v' b' = do
   i <- zoom lensMStoVS i'
   v <- zoom lensMStoVS v'
@@ -83,7 +90,7 @@ varDecDef
     , ScopeElim r ScopeData
     , VariableElim r typ
     )
-  => SVariable r -> r ScopeData -> Maybe (VS (r val)) -> MS (r stmt)
+  => VS (r Variable) -> r ScopeData -> Maybe (VS (r val)) -> MS (r stmt)
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v
   modify $ useVarName (variableName v')
@@ -97,7 +104,7 @@ varDecDef v scp e = do
 
 increment
   :: (InternalVarElim r, RenderStatement r stmt, ValueElim r val)
-  => SVariable r -> VS (r val) -> MS (r stmt)
+  => VS (r Variable) -> VS (r val) -> MS (r stmt)
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'

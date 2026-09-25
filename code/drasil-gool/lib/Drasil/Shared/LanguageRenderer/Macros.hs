@@ -6,7 +6,7 @@ module Drasil.Shared.LanguageRenderer.Macros (
 ) where
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, SVariable, bodyStatements, oneLiner,
+import Drasil.Shared.InterfaceCommon (Label, Variable, bodyStatements, oneLiner,
   VariableSym, VariableElim(..), getCodeType, listOf, ValueSym(valueType),
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), List, at, EmptyStatement(emptyStmt),
@@ -38,17 +38,17 @@ ifExists v ifBody = IC.ifCond [(IC.notNull v, ifBody)]
 
 decrement1
   :: (IC.AssignStatement r val stmt, IC.Literal r typ val)
-  => SVariable r -> MS (r stmt)
+  => VS (r Variable) -> MS (r stmt)
 decrement1 v = v &-= IC.litInt 1
 
 increment
   :: (IC.AssignStatement r val stmt, IC.NumericExpression r val, IC.VariableValue r val)
-  => SVariable r -> VS (r val) -> MS (r stmt)
+  => VS (r Variable) -> VS (r val) -> MS (r stmt)
 increment vr vl = vr &= IC.valueOf vr #+ vl
 
 increment1
   :: (IC.AssignStatement r val stmt, IC.Literal r typ val)
-  => SVariable r -> MS (r stmt)
+  => VS (r Variable) -> MS (r stmt)
 increment1 vr = vr &+= IC.litInt 1
 
 strat
@@ -68,7 +68,7 @@ runStrategy
   => Label
   -> [(Label, MS (r bod))]
   -> Maybe (VS (r val))
-  -> Maybe (SVariable r)
+  -> Maybe (VS (r Variable))
   -> MS (r Doc)
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy")
@@ -104,7 +104,7 @@ listSlice
   => Maybe (VS (r val))
   -> Maybe (VS (r val))
   -> Maybe (VS (r val))
-  -> SVariable r
+  -> VS (r Variable)
   -> VS (r val)
   -> MS (r block)
 listSlice beg end step vnew vold = do
@@ -205,7 +205,7 @@ stringListVals
      , IC.TypeElim r typ
      , VariableElim r typ
      )
-  => [SVariable r] -> VS (r val) -> MS (r stmt)
+  => [VS (r Variable)] -> VS (r val) -> MS (r stmt)
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
   (getCodeType $ valueType slst))
   where checkList (List String) = assignVals vars 0
@@ -232,7 +232,7 @@ stringListLists
     , VariableElim r typ
     , S.RenderValue r typ val
     )
-  => [SVariable r] -> VS (r val) -> MS (r stmt)
+  => [VS (r Variable)] -> VS (r val) -> MS (r stmt)
 stringListLists lsts sl = do
   slst <- zoom lensMStoVS sl
   l_i <- genLoopIndex
@@ -266,7 +266,7 @@ forRange
     , Comparison r val
     , IC.VariableValue r val
     )
-  => SVariable r
+  => VS (r Variable)
   -> VS (r val)
   -> VS (r val)
   -> VS (r val)
@@ -275,7 +275,7 @@ forRange
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
   (IC.valueOf i ?< finalv) (i &+= stepv)
 
-observerIndex :: (IC.TypeSym r typ, VariableSym r typ) => SVariable r
+observerIndex :: (IC.TypeSym r typ, VariableSym r typ) => VS (r Variable)
 observerIndex = IC.var "observerIndex" IC.int
 
 observerIdxVal
@@ -356,7 +356,7 @@ arrayDecAsList
     , IC.ListStatement r val stmt
     , VariableElim r typ
     )
-  => Integer -> VS (r val) -> SVariable r -> r scope -> MS (r stmt)
+  => Integer -> VS (r val) -> VS (r Variable) -> r scope -> MS (r stmt)
 arrayDecAsList len dflt vr scp = do
   vr' <- zoom lensMStoVS vr
   let innerTp = IC.innerType $ pure $ variableType vr'

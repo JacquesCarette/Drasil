@@ -9,7 +9,7 @@ import Control.Monad.State (get)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, HasChoices(..))
 import Language.Drasil.Choices (Logging(..))
 
-import Drasil.GOOL (Label, block, SVariable, VS, MS, BodySym(..), BlockSym(..),
+import Drasil.GOOL (Label, block, Variable, VS, MS, BodySym(..), BlockSym(..),
   TypeSym(..), var, VariableElim(..), Literal(..), VariableValue(..),
   MultiStatement(..), DeclStatement(..), FileHandling(..), PrintFile(..),
   lensMStoVS, ScopeSym(..), VariableSym)
@@ -33,7 +33,7 @@ logBody
     , BodySym r bod block
     , VariableElim r typ
     )
-  => Label -> [SVariable r] -> [MS (r block)] -> GenState (MS (r bod))
+  => Label -> [VS (r Variable)] -> [MS (r block)] -> GenState (MS (r bod))
 logBody n vars b = do
   g <- get
   pure $ body $
@@ -57,7 +57,7 @@ loggedMethod
     , BlockSym r block stmt
     , VariableElim r typ
     )
-  => FilePath -> Label -> [SVariable r] -> MS (r block)
+  => FilePath -> Label -> [VS (r Variable)] -> MS (r block)
 loggedMethod lName n vars = block [
       varDec varLogFile local,
       openFileA varLogFile (litString lName),
@@ -78,7 +78,7 @@ loggedMethod lName n vars = block [
       printFileStrLn valLogFile ", "] ++ printInputs vs
 
 -- | The variable representing the log file in write mode.
-varLogFile :: (TypeSym r typ, VariableSym r typ) => SVariable r
+varLogFile :: (TypeSym r typ, VariableSym r typ) => VS (r Variable)
 varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.

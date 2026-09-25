@@ -2,8 +2,8 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (Class, Variable, VS, CS, MS, OOProg, BodySym(..),
-  bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..),
+import Drasil.GOOL (Class, VS, CS, MS, OOProg, BodySym(..), bodyStatements,
+  oneLiner, BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..),
   MultiStatement(multi), AssignStatement(..), (&=), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), StringStatement(..), CommentStatement(..),
   ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
@@ -26,7 +26,7 @@ import Helper (helperOO, helperProc)
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldOO
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => OO.GSProgram r prg
 helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
   ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
@@ -34,7 +34,7 @@ helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldProc
-  :: (ProcProg r vis scope typ param val stmt mthd prg file mod bod block)
+  :: (ProcProg r vis scope typ var param val stmt mthd prg file mod bod block)
   => GProc.GSProgram r prg
 helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod descriptionProc
   watermark
@@ -47,12 +47,12 @@ description = "Tests various GOOL functions. It should run without errors."
 descriptionProc = "Tests various GProc functions. It should run without errors."
 
 -- | Variable for a list of doubles
-myOtherList :: (TypeSym r typ, VariableSym r typ) => VS (r Variable)
+myOtherList :: (TypeSym r typ, VariableSym r typ var) => VS (r var)
 myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainOO
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => MS (r mthd)
 helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
@@ -65,7 +65,7 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ lis
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainProc
-  :: (ProcProg r vis scope typ param val stmt mthd prg file mod bod block)
+  :: (ProcProg r vis scope typ var param val stmt mthd prg file mod bod block)
   => MS (r mthd)
 helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
@@ -82,17 +82,17 @@ helloInitVariables
     , TypeSym r typ
     , Literal r typ val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , Comparison r val
-    , Array r val
+    , Array r var val
     , List r val
     , ListStatement r val stmt
     , Set r val
-    , DeclStatement r scope val stmt bod
-    , AssignStatement r val stmt
-    , ControlStatement r val stmt bod
-    , StringStatement r val stmt
+    , DeclStatement r scope var val stmt bod
+    , AssignStatement r var val stmt
+    , ControlStatement r var val stmt bod
+    , StringStatement r var val stmt
     , CommentStatement r stmt
     , PrintConsole r val stmt
     )
@@ -146,7 +146,9 @@ helloInitVariables = block [comment "Initializing variables",
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
 
-objectTests :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block) => MS (r block)
+objectTests
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  => MS (r block)
 objectTests = block [comment "Object tests",
   varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
   varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4]),
@@ -168,8 +170,8 @@ objectTests = block [comment "Object tests",
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
   mySlicedList10, mySlicedList11
-  :: (TypeSym r typ, VariableSym r typ)
-  => VS (r Variable)
+  :: (TypeSym r typ, VariableSym r typ var)
+  => VS (r var)
 mySlicedList = var "mySlicedList" (listType double)
 mySlicedList2 = var "mySlicedList2" (listType double)
 mySlicedList3 = var "mySlicedList3" (listType double)
@@ -187,10 +189,10 @@ listSliceTests
     ( TypeSym r typ
     , Literal r typ val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
-    , InternalList r val block
-    , DeclStatement r scope val stmt bod
+    , VariableSym r typ var
+    , VariableValue r var val
+    , InternalList r var val block
+    , DeclStatement r scope var val stmt bod
     , CommentStatement r stmt
     , PrintConsole r val stmt
     , BlockSym r block stmt
@@ -319,16 +321,16 @@ helloIfBody
     ( TypeSym r typ
     , Literal r typ val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , MultiStatement r stmt
-    , DeclStatement r scope val stmt bod
-    , AssignStatement r val stmt
+    , DeclStatement r scope var val stmt bod
+    , AssignStatement r var val stmt
     , PrintConsole r val stmt
-    , ReadConsole r stmt
+    , ReadConsole r var stmt
     , BlockSym r block stmt
     , BodySym r bod block
     )
@@ -416,9 +418,9 @@ helloIfExists
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , VariableSym r typ
-    , VariableValue r val
-    , ControlStatement r val stmt bod
+    , VariableSym r typ var
+    , VariableValue r var val
+    , ControlStatement r var val stmt bod
     , PrintConsole r val stmt
     )
   => MS (r stmt)
@@ -432,10 +434,10 @@ helloSwitch
     , BodySym r bod block
     , TypeSym r typ
     , Literal r typ val
-    , VariableSym r typ
-    , VariableValue r val
-    , AssignStatement r val stmt
-    , ControlStatement r val stmt bod
+    , VariableSym r typ var
+    , VariableValue r var val
+    , AssignStatement r var val stmt
+    , ControlStatement r var val stmt bod
     )
   => MS (r stmt)
 helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)),
@@ -449,9 +451,9 @@ helloForLoop
     , BodySym r bod block
     , TypeSym r typ
     , Literal r typ val
-    , VariableSym r typ
-    , VariableValue r val
-    , ControlStatement r val stmt bod
+    , VariableSym r typ var
+    , VariableValue r var val
+    , ControlStatement r var val stmt bod
     , PrintConsole r val stmt
     )
   => MS (r stmt)
@@ -466,11 +468,11 @@ helloWhileLoop
     , BodySym r bod block
     , TypeSym r typ
     , Literal r typ val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , Comparison r val
-    , AssignStatement r val stmt
-    , ControlStatement r val stmt bod
+    , AssignStatement r var val stmt
+    , ControlStatement r var val stmt bod
     , PrintConsole r val stmt
     )
   => MS (r stmt)
@@ -484,10 +486,10 @@ helloForEachLoop
     , BodySym r bod block
     , TypeSym r typ
     , Literal r typ val
-    , VariableSym r typ
-    , VariableValue r val
-    , ValueExpression r typ val
-    , ControlStatement r val stmt bod
+    , VariableSym r typ var
+    , VariableValue r var val
+    , ValueExpression r typ var val
+    , ControlStatement r var val stmt bod
     , PrintConsole r val stmt
     )
   => MS (r stmt)
@@ -501,7 +503,7 @@ helloTryCatch
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , ControlStatement r val stmt bod
+    , ControlStatement r var val stmt bod
     , PrintConsole r val stmt
     )
   => MS (r stmt)
@@ -509,7 +511,7 @@ helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
 
 helloWorldClass
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => CS (r Class)
 helloWorldClass = extraClass "TestClass" Nothing
   [stateVar public instanceLevel (var "a" int)]

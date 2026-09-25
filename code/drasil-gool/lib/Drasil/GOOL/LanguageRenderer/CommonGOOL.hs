@@ -3,8 +3,8 @@ module Drasil.GOOL.LanguageRenderer.CommonGOOL (
   constDecDef, classMethodCall, listAppend, listAdd, innerType
 ) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), TypeElim(..), Variable,
-  NamedArgs, VariableElim(..), TypeSym(void), IndexTranslator(..), getCodeType,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), TypeElim(..), NamedArgs,
+  VariableElim(..), TypeSym(void), IndexTranslator(..), getCodeType,
   ValueStatement(valStmt))
 import Drasil.GOOL.InterfaceGOOL (objMethodCall, convTypeOO, InternalValueExp,
   OOTypeSym)
@@ -21,14 +21,14 @@ import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 
 constDecDef
-  :: ( InternalVarElim r
+  :: ( InternalVarElim r var
      , RenderStatement r stmt
      , ScopeElim r ScopeData
      , UnRepr r TypeData
      , ValueElim r val
-     , VariableElim r TypeData
+     , VariableElim r TypeData var
      )
-  => VS (r Variable) -> r ScopeData -> VS (r val) -> MS (r stmt)
+  => VS (r var) -> r ScopeData -> VS (r val) -> MS (r stmt)
 constDecDef vr' scp v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -37,19 +37,19 @@ constDecDef vr' scp v'= do
   mkStmt (renderConstDecDef vr v)
 
 classMethodCall
-  :: (RenderValue r TypeData val, UnRepr r TypeData)
+  :: (RenderValue r TypeData var val, UnRepr r TypeData)
   => String
   -> VS (r TypeData)
   -> VS (r TypeData)
   -> [VS (r val)]
-  -> NamedArgs r val
+  -> NamedArgs r var val
   -> VS (r val)
 classMethodCall f t cls vs ns = do
   c <- cls
   call Nothing (Just $ renderType c <> dot) f t vs ns
 
 listAppend
-  :: (TypeSym r typ, InternalValueExp r typ val, ValueStatement r val stmt)
+  :: (TypeSym r typ, InternalValueExp r typ var val, ValueStatement r val stmt)
   => String -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 
@@ -57,7 +57,7 @@ listAdd
   ::
     ( TypeSym r typ
     , IndexTranslator r val
-    , InternalValueExp r typ val
+    , InternalValueExp r typ var val
     , ValueStatement r val stmt
     )
   => String -> VS (r val) -> VS (r val) -> VS (r val) -> MS (r stmt)

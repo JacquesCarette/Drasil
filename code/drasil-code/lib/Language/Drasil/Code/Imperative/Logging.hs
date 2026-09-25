@@ -9,10 +9,10 @@ import Control.Monad.State (get)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, HasChoices(..))
 import Language.Drasil.Choices (Logging(..))
 
-import Drasil.GOOL (Label, block, Variable, VS, MS, BodySym(..), BlockSym(..),
-  TypeSym(..), var, VariableElim(..), Literal(..), VariableValue(..),
-  MultiStatement(..), DeclStatement(..), FileHandling(..), PrintFile(..),
-  lensMStoVS, ScopeSym(..), VariableSym)
+import Drasil.GOOL (Label, block, VS, MS, BodySym(..), BlockSym(..), TypeSym(..),
+  var, VariableElim(..), Literal(..), VariableValue(..), MultiStatement(..),
+  DeclStatement(..), FileHandling(..), PrintFile(..), lensMStoVS, ScopeSym(..),
+  VariableSym)
 
 -- | Generates the body of a function with the given name, list of parameters,
 -- and blocks to include in the body. If the user chose to turn on logging of
@@ -22,18 +22,18 @@ logBody
   ::
     ( TypeSym r typ
     , Literal r typ val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r scope val stmt bod
-    , FileHandling r val stmt
+    , DeclStatement r scope var val stmt bod
+    , FileHandling r var val stmt
     , PrintFile r val stmt
     , BlockSym r block stmt
     , BodySym r bod block
-    , VariableElim r typ
+    , VariableElim r typ var
     )
-  => Label -> [VS (r Variable)] -> [MS (r block)] -> GenState (MS (r bod))
+  => Label -> [VS (r var)] -> [MS (r block)] -> GenState (MS (r bod))
 logBody n vars b = do
   g <- get
   pure $ body $
@@ -47,17 +47,17 @@ loggedMethod
   ::
     ( TypeSym r typ
     , Literal r typ val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r scope val stmt bod
-    , FileHandling r val stmt
+    , DeclStatement r scope var val stmt bod
+    , FileHandling r var val stmt
     , PrintFile r val stmt
     , BlockSym r block stmt
-    , VariableElim r typ
+    , VariableElim r typ var
     )
-  => FilePath -> Label -> [VS (r Variable)] -> MS (r block)
+  => FilePath -> Label -> [VS (r var)] -> MS (r block)
 loggedMethod lName n vars = block [
       varDec varLogFile local,
       openFileA varLogFile (litString lName),
@@ -78,11 +78,11 @@ loggedMethod lName n vars = block [
       printFileStrLn valLogFile ", "] ++ printInputs vs
 
 -- | The variable representing the log file in write mode.
-varLogFile :: (TypeSym r typ, VariableSym r typ) => VS (r Variable)
+varLogFile :: (TypeSym r typ, VariableSym r typ var) => VS (r var)
 varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.
 valLogFile
-  :: (TypeSym r typ, VariableSym r typ, VariableValue r val)
+  :: (TypeSym r typ, VariableSym r typ var, VariableValue r var val)
   => VS (r val)
 valLogFile = valueOf varLogFile

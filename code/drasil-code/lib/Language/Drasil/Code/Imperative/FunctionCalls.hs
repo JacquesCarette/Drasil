@@ -44,24 +44,24 @@ genAllInputCalls
     , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , OOValueExpression r typ val
+    , ValueExpression r typ var val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
     , ValueStatement r val stmt
-    , FuncAppStatement r val stmt
-    , OOFuncAppStatement r val stmt
+    , FuncAppStatement r var val stmt
+    , OOFuncAppStatement r var val stmt
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => GenState [MS (r stmt)]
 genAllInputCalls = do
@@ -75,13 +75,13 @@ genInputCall
   ::
     ( TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
-    , SelfSym r
-    , FuncAppStatement r val stmt
-    , OOFuncAppStatement r val stmt
-    , VariableElim r typ
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
+    , SelfSym r var
+    , FuncAppStatement r var val stmt
+    , OOFuncAppStatement r var val stmt
+    , VariableElim r typ var
     )
   => GenState (Maybe (MS (r stmt)))
 genInputCall = do
@@ -93,13 +93,13 @@ genDerivedCall
   ::
     ( TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
-    , SelfSym r
-    , FuncAppStatement r val stmt
-    , OOFuncAppStatement r val stmt
-    , VariableElim r typ
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
+    , SelfSym r var
+    , FuncAppStatement r var val stmt
+    , OOFuncAppStatement r var val stmt
+    , VariableElim r typ var
     )
   => GenState (Maybe (MS (r stmt)))
 genDerivedCall = do
@@ -115,22 +115,22 @@ genConstraintCall
     , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , OOValueExpression r typ val
+    , ValueExpression r typ var val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
     , ValueStatement r val stmt
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => GenState (Maybe (MS (r stmt)))
 genConstraintCall = do
@@ -148,23 +148,23 @@ genCalcCall
     , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
     , ScopeSym r scope
-    , VariableValue r val
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , OOValueExpression r typ val
+    , ValueExpression r typ var val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
-    , DeclStatement r scope val stmt bod
+    , DeclStatement r scope var val stmt bod
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => CodeDefinition -> GenState (Maybe (MS (r stmt)))
 genCalcCall c = do
@@ -184,22 +184,22 @@ genOutputCall
     , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , OOValueExpression r typ val
+    , ValueExpression r typ var val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
     , ValueStatement r val stmt
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => GenState (Maybe (MS (r stmt)))
 genOutputCall = do
@@ -217,21 +217,21 @@ genFuncCall
     , MathConstant r val
     , TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
-    , SelfSym r
-    , InternalValueExp r typ val
-    , OOValueExpression r typ val
+    , ValueExpression r typ var val
+    , SelfSym r var
+    , InternalValueExp r typ var val
+    , OOValueExpression r typ var val
     , List r val
     , Reference r val
     , Set r val
     , TypeElim r typ
-    , VariableElim r typ
+    , VariableElim r typ var
     )
   => Name
   -> VS (r typ)
@@ -253,13 +253,13 @@ genInOutCall
   ::
     ( TypeSym r typ
     , OOTypeSym r typ
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , VariableValue r val
-    , SelfSym r
-    , FuncAppStatement r val stmt
-    , OOFuncAppStatement r val stmt
-    , VariableElim r typ
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , VariableValue r var val
+    , SelfSym r var
+    , FuncAppStatement r var val stmt
+    , OOFuncAppStatement r var val stmt
+    , VariableElim r typ var
     )
   => Name
   -> GenState [CodeVarChunk]
@@ -307,14 +307,14 @@ genAllInputCallsProc
     , ValueSym r typ val
     , Literal r typ val
     , MathConstant r val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , NativeVector r typ val
-    , FuncAppStatement r val stmt
+    , FuncAppStatement r var val stmt
     , Argument r val
     , List r val
     , Reference r val
@@ -332,10 +332,10 @@ genAllInputCallsProc = do
 -- | Generates a call to the function for reading inputs from a file.
 genInputCallProc
   ::
-    ( FuncAppStatement r val stmt
+    ( FuncAppStatement r var val stmt
     , TypeSym r typ
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     )
   => GenState (Maybe (MS (r stmt)))
 genInputCallProc = do
@@ -345,10 +345,10 @@ genInputCallProc = do
 -- | Generates a call to the function for calculating derived inputs.
 genDerivedCallProc
   ::
-    ( FuncAppStatement r val stmt
+    ( FuncAppStatement r var val stmt
     , TypeSym r typ
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     )
   => GenState (Maybe (MS (r stmt)))
 genDerivedCallProc = do
@@ -362,12 +362,12 @@ genConstraintCallProc
     , ValueSym r typ val
     , Literal r typ val
     , MathConstant r val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , NativeVector r typ val
     , Argument r val
     , List r val
@@ -390,14 +390,14 @@ genCalcCallProc
     , ValueSym r typ val
     , Literal r typ val
     , MathConstant r val
-    , VariableValue r val
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , VariableSym r typ
+    , VariableSym r typ var
     , ScopeSym r scope
-    , ValueExpression r typ val
-    , DeclStatement r scope val stmt bod
+    , ValueExpression r typ var val
+    , DeclStatement r scope var val stmt bod
     , Argument r val
     , List r val
     , NativeVector r typ val
@@ -421,12 +421,12 @@ genOutputCallProc
     , ValueSym r typ val
     , Literal r typ val
     , MathConstant r val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
     , List r val
     , NativeVector r typ val
@@ -449,12 +449,12 @@ genFuncCallProc
     , ValueSym r typ val
     , Literal r typ val
     , MathConstant r val
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r typ var val
     , Argument r val
     , List r val
     , NativeVector r typ val
@@ -480,10 +480,10 @@ genFuncCallProc n t funcPs = do
 -- function.
 genInOutCallProc
   ::
-    ( FuncAppStatement r val stmt
+    ( FuncAppStatement r var val stmt
     , TypeSym r typ
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     )
   => Name
   -> GenState [CodeVarChunk]

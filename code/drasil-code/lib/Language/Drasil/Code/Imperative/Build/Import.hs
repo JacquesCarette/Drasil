@@ -32,12 +32,12 @@ buildMakefile d b r s m = printMakefile $ mkMakefile $ maybe [mkRule (openingCom
   mkFile [] outnm (fmap (makeS . filePath) (progMods m)) $
     mkCheckedCommand . foldr (+:+) mempty <$>
       comp (getCompilerInput bt s m) outnm addnm
-  ]) b <> maybe [] (\(Runnable nm no ty) -> [
+  ]) b <> foldMap (\(Runnable nm no ty) -> [
   mkRule [] (makeS "run") [buildTarget] [
     mkCheckedCommand $ buildRunTarget (renderBuildName s m no nm) ty +:+
     mkFreeVar "RUNARGS"
     ]
-  ]) r <> maybe [] (\(DocConfig dps cmds) -> [
+  ]) r <> foldMap (\(DocConfig dps cmds) -> [
     mkRule [] (makeS "doc") (dps <> getCommentedFiles s) cmds
   ]) d where
     buildTarget = makeS "build"

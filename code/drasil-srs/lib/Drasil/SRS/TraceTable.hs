@@ -37,7 +37,7 @@ dependencyPlate = preorderFold $ purePlate {
   defs :: Definition a => a -> [Sentence]
   defs x = [x ^. defn]
   derivs :: MayHaveDerivation a => a -> [Sentence]
-  derivs x = maybe [] (\(Derivation h d) -> h : d) $ x ^. derivations
+  derivs x = foldMap (\(Derivation h d) -> h : d) $ x ^. derivations
   notes :: HasAdditionalNotes a => a -> [Sentence]
   notes = (^. getNotes)
 

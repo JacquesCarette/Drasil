@@ -73,7 +73,7 @@ loToHTML _ (AST.Figure r c f wp) =
   [Div [id_ (printSpec r)] [figureImage [] attrs (T.pack f) captionText ("Figure: " <> captionText)]]
   where
     attrs = [attr "width" (T.show wp <> "%") | wp /= 100]
-    captionText = maybe mempty printSpec c
+    captionText = foldMap printSpec c
 loToHTML _ (AST.Bib bib) = [printBib bib]
 loToHTML _ AST.Graph {} = []
 loToHTML _ AST.Cell {} = []
@@ -126,7 +126,7 @@ specToIdAttr s          = [id_ (printSpec s)]
 
 -- | Internal: Convert @Maybe Spec@s into ID `Attr`s if the `Spec` exists.
 mbIdAttr :: Maybe AST.Spec -> [Attr]
-mbIdAttr = maybe [] specToIdAttr
+mbIdAttr = foldMap specToIdAttr
 
 -- | Internal: Generates list items.
 itemToHTML :: AST.ItemType -> [HTMLBody]

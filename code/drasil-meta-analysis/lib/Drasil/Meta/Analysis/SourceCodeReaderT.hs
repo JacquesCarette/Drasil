@@ -95,7 +95,7 @@ filterMultilineComments ls = ls \\ filter (\l -> isPrefixOf "{-" l || isSuffixOf
 
 -- get rid of lines with nothing in them.
 filterEmptyS :: [String] -> [String]
-filterEmptyS = filter (/= "")
+filterEmptyS = filter (not . null)
 
 -- for those few cases of data declarations that start the actual data declaration on a new line after the "=" sign.
 removeNewlineEqual :: [String] -> [String]

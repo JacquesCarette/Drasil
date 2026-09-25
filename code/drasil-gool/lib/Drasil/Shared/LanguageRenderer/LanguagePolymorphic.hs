@@ -59,7 +59,8 @@ import Drasil.Shared.State (VS, FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
 
 import Prelude hiding (print,sin,cos,tan,(<>))
 import qualified Prelude as P ((<>))
-import Data.Maybe (fromMaybe, maybeToList)
+import Data.Foldable (fold)
+import Data.Maybe (maybeToList)
 import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
@@ -292,7 +293,7 @@ call sep lib o n t pas nas = do
   nms <- mapM fst nas
   nargs <- mapM snd nas
   let libDoc = maybe (text n) (text . (`access` n)) lib
-      obDoc = fromMaybe empty o
+      obDoc = fold o
   mkStateVal t $ obDoc <> libDoc <> parens (valueList pargs <>
     (if null pas || null nas then empty else comma) <+> namedArgList sep
     (zip nms nargs))

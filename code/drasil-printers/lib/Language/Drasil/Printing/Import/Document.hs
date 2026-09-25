@@ -63,8 +63,8 @@ createRefMap fn (T.List t)           = pass t
     pass (P.Simple ls)      = process' ls
     pass (P.Desc ls)        = process' ls
     pass (P.Definitions ls) = process' ls
-    process  = concatMap (\(_, l)    -> maybe [] (createRef fn) l)
-    process' = concatMap (\(_, _, l) -> maybe [] (createRef fn) l)
+    process  = concatMap (\(_, l)    -> foldMap (createRef fn) l)
+    process' = concatMap (\(_, _, l) -> foldMap (createRef fn) l)
 createRefMap fn (T.Figure l _ _ _)   = createRef fn l
 createRefMap fn (T.Bib ls)           = fmap bibRefs ls
   where

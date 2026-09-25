@@ -42,7 +42,7 @@ import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2, both, at)
 import Control.Monad.State (State, modify, gets)
 import Data.Char (isDigit)
 import Data.List (nub)
-import Data.Maybe (isNothing, fromMaybe)
+import Data.Maybe (isNothing)
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Tuple (swap)
@@ -549,14 +549,14 @@ resetIndices :: MethodState -> MethodState
 resetIndices = set contentsIndices (0,0)
 
 useVarName :: String -> MethodState -> MethodState
-useVarName v = over (varNames . at prefix) (Just . max nextSuffix . fromMaybe 0)
+useVarName v = over (varNames . at prefix) (Just . max nextSuffix . sum)
   where (prefix, nextSuffix) = over _2 (maybe 0 (+1)) $ splitVarName v
 
 genVarName :: [String] -> String -> MS String
 genVarName candidates backup = do
   used <- gets (^. varNames)
   let
-    isAvailable (n,c) = maybe True (maybe (const False) (>=) c) $ Map.lookup n used
+    isAvailable (n,c) = all (maybe (const False) (>=) c) $ Map.lookup n used
     choice = foldr const (splitVarName backup) $ filter isAvailable $ fmap splitVarName candidates
   bumpVarName choice
 

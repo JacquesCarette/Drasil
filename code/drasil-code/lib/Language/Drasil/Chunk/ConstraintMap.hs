@@ -31,4 +31,4 @@ sfwrLookup m q = constraintLookup q m (filter isSfwrC)
 -- | Returns a chunk and a filtered list of its constraints.
 constraintLookup :: HasUID q => q -> ConstraintCEMap
                       -> ([ConstraintCE] -> [ConstraintCE]) -> (q, [ConstraintCE])
-constraintLookup q m filt = (q, maybe [] filt (Map.lookup (q ^. uid) m))
+constraintLookup q m filt = (q, foldMap filt (Map.lookup (q ^. uid) m))

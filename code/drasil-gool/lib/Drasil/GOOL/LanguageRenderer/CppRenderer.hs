@@ -2716,7 +2716,7 @@ cppPrint newLn pf vl = do
   printFn <- zoom lensMStoVS pf
   v <- zoom lensMStoVS vl
   mkStmt $ RC.value printFn <+> streamL <+> pars v (RC.value v) <+> e
-  where pars v = if maybe False (< 9) (valuePrec v) then parens else id
+  where pars v = if any (< 9) (valuePrec v) then parens else id
         end = if newLn then addIOStreamImport (pure $ streamL <+> text endl)
           else pure empty
 

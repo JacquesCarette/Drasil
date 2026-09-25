@@ -89,14 +89,14 @@ findOrErr u = fromMaybe (error $ "Failed to find chunk " <> show u <> " (expecte
 
 -- | Find all chunks of a specific type in the 'ChunkDB'.
 findAll :: forall a. TypeableChunk a => ChunkDB -> [a]
-findAll cdb = maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
+findAll cdb = foldMap (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
   where
     tr = typeRep (Proxy :: Proxy a)
 
 -- | Find all chunks of a specific type in the 'ChunkDB', returning their 'UID's
 -- rather than the chunks themselves.
 findAll' :: TypeRep -> ChunkDB -> [UID]
-findAll' tr cdb = maybe [] (fmap (^. uid)) $ M.lookup tr (chunkTypeTable cdb)
+findAll' tr cdb = foldMap (fmap (^. uid)) $ M.lookup tr (chunkTypeTable cdb)
 
 -- | Find all chunks that depend on a specific one.
 dependants :: UID -> ChunkDB -> Maybe [UID]

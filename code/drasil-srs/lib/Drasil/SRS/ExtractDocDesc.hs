@@ -130,7 +130,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     notes = concatMap (^. getNotes)
 
     getPDSub :: PDSub -> [Sentence]
-    getPDSub (TermsAndDefs ms c) = def c <> maybe [] pure ms
+    getPDSub (TermsAndDefs ms c) = def c <> foldMap pure ms
     getPDSub (PhySysDesc s lc cs) = s <> extractSents lc <> extractSents' cs
     getPDSub (Goals s c) = s <> def c
 

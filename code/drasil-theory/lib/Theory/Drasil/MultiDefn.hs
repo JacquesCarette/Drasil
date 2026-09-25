@@ -71,19 +71,19 @@ instance HasSpace         (MultiDefn e) where typ     = qd . typ
 instance Definition       (MultiDefn e) where defn    = rDesc
 instance MayHaveUnit      (MultiDefn e) where getUnit = getUnit . view qd
 instance RequiresChecking (MultiDefn Expr) Expr Space where
-  requiredChecks md = map (\x -> (x ^. expr, md ^. typ)) $ NE.toList $ md ^. rvs
+  requiredChecks md = fmap (\x -> (x ^. expr, md ^. typ)) $ NE.toList $ md ^. rvs
 
 -- | The complete Relation of a MultiDefn is defined as the quantity and the
 --   related expressions being equal (e.g., `q $= a $= b $= ... $= z`)
 instance Express e => Express (MultiDefn e) where
-  express q = equiv $ sy q : NE.toList (NE.map (express . (^. expr)) (q ^. rvs))
+  express q = equiv $ sy q : NE.toList (fmap (express . (^. expr)) (q ^. rvs))
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment.
 mkMultiDefn :: UID -> DefinedQuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
 mkMultiDefn u q s des
   | length des == dupsRemovedLen = MultiDefn u q s des
   | otherwise                    = error $
-      "MultiDefn `" ++ show u ++ "` created with non-unique list of expressions"
+      "MultiDefn `" <> show u <> "` created with non-unique list of expressions"
   where
     dupsRemovedLen = length $ NE.nub des
 
@@ -115,6 +115,6 @@ multiDefnGenQDByUID md u =
   case matches of
     [ matched ] ->  multiDefnGenQD md matched
     _           -> error $
-      "Invalid defining expression `" ++ show u ++ "` for QDef creation in MultiDefn `" ++ show u ++ "`"
+      "Invalid defining expression `" <> show u <> "` for QDef creation in MultiDefn `" <> show u <> "`"
   where
     matches = NE.filter (\x -> x ^. uid == u) (md ^. rvs)

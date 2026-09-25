@@ -55,5 +55,5 @@ caseStudyMainSRSWCodeZoo syst srsDecl srsFileName choices = do
   let exampleName = syst ^. projRepoName
   docLayouts <- writeSmithEtAlSrs syst srsDecl srsFileName
   zooLayouts <- genCodeZoo syst choices
-  let layout = directory [ps|{exampleName}|] $ docLayouts ++ zooLayouts
+  let layout = directory [ps|{exampleName}|] $ docLayouts <> zooLayouts
   writeFiles OverwriteAllowed localPath layout

@@ -103,6 +103,7 @@ import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   setVarScope, getVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import qualified Prelude as P ((<>))
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 import Data.Composition ((.:))
@@ -215,7 +216,7 @@ instance OOTypeSym SwiftCode TypeData where
 instance RenderType SwiftCode TypeData where
   multiType ts = do
     typs <- sequence ts
-    let mt = tuple $ map getTypeString typs
+    let mt = tuple $ fmap getTypeString typs
     typeFromData Void mt (text mt)
 
 instance UnaryOpSym SwiftCode where
@@ -750,11 +751,11 @@ instance ModuleSym SwiftCode ModData MethodData where
     CP.buildModule modName (do
       lis <- getLangImports
       libis <- getLibImports
-      pure $ vcat $ map (RC.import' .
+      pure $ vcat $ fmap (RC.import' .
           (langImport :: Label -> SwiftCode Doc))
-          (sort $ lis ++ is ++ libis))
+          (sort $ lis P.<> is P.<> libis))
       (zoom lensFStoMS swiftStringError) getMainDoc
-        (map pure fns) (map pure cls)
+        (fmap pure fns) (fmap pure cls)
 
 instance RenderMod SwiftCode ModData where
   modFromData n = G.modFromData n (toCode . md n)
@@ -828,17 +829,17 @@ swiftFileHdlType = addFoundationImport $ typeFromData OutFile swiftFileHdl
 swiftListType :: VS (SwiftCode TypeData) -> VS (SwiftCode TypeData)
 swiftListType t' = do
   t <- t'
-  typeFromData (List $ getCodeType t) ("[" ++ getTypeString t ++ "]")
+  typeFromData (List $ getCodeType t) ("[" P.<> getTypeString t P.<> "]")
     (brackets $ renderType t)
 
 swiftFuncType :: [VS (SwiftCode TypeData)] -> VS (SwiftCode TypeData) -> VS (SwiftCode TypeData)
 swiftFuncType ps r = do
   pts <- sequence ps
   rt <- r
-  typeFromData (Func (map getCodeType pts) (getCodeType rt))
-    ("(" ++ intercalate listSep (map getTypeString pts) ++ ")" ++ " " ++
-      swiftRetType ++ " " ++ getTypeString rt)
-    (parens (hicat listSep' $ map renderType pts) <+> swiftRetType' <+>
+  typeFromData (Func (fmap getCodeType pts) (getCodeType rt))
+    ("(" P.<> intercalate listSep (fmap getTypeString pts) P.<> ")" P.<> " " P.<>
+      swiftRetType P.<> " " P.<> getTypeString rt)
+    (parens (hicat listSep' $ fmap renderType pts) <+> swiftRetType' <+>
       renderType rt)
 
 swiftVoidType :: (Monad r) => VS (r TypeData)
@@ -955,8 +956,8 @@ swiftLitFloat = mkStateVal float . D.float
 swiftLambda :: [SwiftCode BinderD] -> SwiftCode Value -> Doc
 swiftLambda ps ex = braces $ parens (hicat listSep'
   (zipWith (\n t -> n <> swiftTypeSpec <+> t)
-    (map RC.binderElim ps)
-    (map (renderType . binderType) ps)))
+    (fmap RC.binderElim ps)
+    (fmap (renderType . binderType) ps)))
   <+> swiftRetType' <+> renderType (valueType ex) <+> inLabel <+> RC.value ex
 
 swiftReadableTypes :: [CodeType]
@@ -1225,7 +1226,7 @@ swiftSetDec dec v' scp = do
       bind InstanceLevel = instanceLevel :: SwiftCode Doc
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
-    <+> text (swiftSet ++ "<" ++ getTypeString innerTp ++ ">"))
+    <+> text (swiftSet P.<> "<" P.<> getTypeString innerTp P.<> ">"))
 
 swiftThrowDoc :: (ValueElim r val) => r val -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg

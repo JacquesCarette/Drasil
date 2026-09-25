@@ -14,7 +14,7 @@ import Drasil.PDController.Concepts
 
 sysParts :: [Sentence]
 sysParts
-  = map ((!.) . D.toSent . atStartNP . the)
+  = fmap ((!.) . D.toSent . atStartNP . the)
       [summingPt, pidC, powerPlant]
 
 sysGoalInput :: [Sentence]

@@ -31,7 +31,7 @@ printSpec (AST.Tooltip _ s) = printSpec s
 specToHTML :: AST.Spec -> [HTMLBody]
 -- Non-MathJax
 specToHTML (AST.E e) = [emphasis_ (exprToHTML e)]
-specToHTML (a AST.:+: b) = specToHTML a ++ specToHTML b
+specToHTML (a AST.:+: b) = specToHTML a <> specToHTML b
 specToHTML (AST.S s) = [RawText (T.pack s)]
 specToHTML (AST.Tooltip t s) = [span_ [attr "title" (printSpec t)] (specToHTML s)]
 specToHTML (AST.Sp s) = [RawText (T.pack $ specialToString s)]
@@ -43,7 +43,7 @@ specToHTML (AST.Ref refType r a) = case refType of
   where
     internalRef = Anchor (T.pack ('#' : r)) [] (specToHTML a)
 specToHTML AST.EmptyS = []
-specToHTML (AST.Quote q) = ["\""] ++ specToHTML q ++ ["\""]
+specToHTML (AST.Quote q) = ["\""] <> specToHTML q <> ["\""]
 
 -- | Generates expressions in the HTML document (called by multiple functions).
 exprToHTML :: AST.Expr -> [HTMLBody]
@@ -56,10 +56,10 @@ exprToHTML (AST.Label s) = [rawText' s]
 exprToHTML (AST.Spec s) = [RawText (T.pack $ specialToString s)]
 exprToHTML (AST.Sub e) = [subscript_ (exprToHTML e)]
 exprToHTML (AST.Sup e) = [superscript_ (exprToHTML e)]
-exprToHTML (AST.Over AST.Hat s) = exprToHTML s ++ ["̂"]
+exprToHTML (AST.Over AST.Hat s) = exprToHTML s <> ["̂"]
 exprToHTML (AST.MO o) = [RawText (pOps o)]
 exprToHTML (AST.Fenced l r e) =
-  [RawText (fence Open l)] ++ exprToHTML e ++ [RawText (fence Close r)]
+  [RawText (fence Open l)] <> exprToHTML e <> [RawText (fence Close r)]
 exprToHTML (AST.Font AST.Bold e) = [bold_ (exprToHTML e)]
 exprToHTML (AST.Font AST.Emph e) = [emphasis_ (exprToHTML e)]
 exprToHTML (AST.Spc AST.Thin) = [" "]

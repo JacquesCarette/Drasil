@@ -68,7 +68,7 @@ qPathSeg s = do
       p <- either fail pure (validatePathSegStr s')
       [|PS p|]
     _ ->
-      [|mkPathSegOrErr $ concat $(listE $ map pathSegCompToQExp comps)|]
+      [|mkPathSegOrErr $ concat $(listE $ fmap pathSegCompToQExp comps)|]
 
 -- | Internal: Constructor for dynamic path splices.
 mkPathSegOrErr :: String -> PathSegment
@@ -81,8 +81,8 @@ mkPathSegOrErr = either error PS . validatePathSegStr
 validatePathSegStr :: String -> Either String OsPath
 validatePathSegStr [] = Left "empty path"
 validatePathSegStr s
-  | s `elem` [".", "..", "~"] = Left $ "invalid path segment: " ++ show s ++ "."
-  | pathSeparator `elem` s = Left $ "cannot create path segment with " ++ show pathSeparator ++ " in the name."
+  | s `elem` [".", "..", "~"] = Left $ "invalid path segment: " <> show s <> "."
+  | pathSeparator `elem` s = Left $ "cannot create path segment with " <> show pathSeparator <> " in the name."
   | otherwise = either (Left . ("invalid os path: " ++) . show) pure (encodeUtf s)
 
 -- | Internal: A Haskell variable is just a string. We will make no effort to
@@ -114,7 +114,7 @@ pathSegComps = go []
         (var, _ : rest) -> do
           prefix <- finAcc acc
           next <- go [] rest
-          pure $ prefix ++ HsVar var : next
+          pure $ prefix <> (HsVar var : next)
     go acc (x : xs) = go (x : acc) xs
 
     finAcc [] = pure []

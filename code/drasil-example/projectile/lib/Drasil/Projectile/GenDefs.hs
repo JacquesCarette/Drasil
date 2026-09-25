@@ -51,7 +51,7 @@ rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM
                          S "with a", phrase QP.constAccel `sC` S "represented by", eS' QP.constAccel]
 
 rectVelDerivEqns :: [Sentence]
-rectVelDerivEqns = map eS D.rectVelDeriv ++ [eS' rectVelQD]
+rectVelDerivEqns = fmap eS D.rectVelDeriv <> [eS' rectVelQD]
 
 ----------
 rectPosGD :: GenDefn
@@ -75,7 +75,7 @@ rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
       motSent = D.toSent (atStartNP (the motion)) `S.in_` refS velocityTM `S.is` S "now" +:+. phrase oneD
 
 rectPosDerivEqns :: [Sentence]
-rectPosDerivEqns = map eS D.rectPosDeriv ++ [eS' rectPosQD]
+rectPosDerivEqns = fmap eS D.rectPosDeriv <> [eS' rectPosQD]
 
 ----------
 velVecGD :: GenDefn
@@ -141,7 +141,7 @@ vecDeriv :: [(DefinedQuantityDict, ModelExpr)] -> GenDefn -> Sentence
 vecDeriv vecs gdef = foldlSentCol [
   S "For a", D.toSent $ phraseNP (combineNINI twoD cartesian), sParen (refS twoDMotion `S.and_` refS cartSyst) `sC`
   S "we can represent" +:+. foldlList Comma List
-  (map (\(c, e) -> foldlSent_ [D.toSent $ phraseNP (the c), phrase vector, S "as", eS e]) vecs),
+  (fmap (\(c, e) -> foldlSent_ [D.toSent $ phraseNP (the c), phrase vector, S "as", eS e]) vecs),
   D.toSent (atStartNP (the acceleration)) `S.is` S "assumed to be constant", sParen (refS constAccel) `S.andThe`
   phrase constAccelV `S.is` S "represented as" +:+. eS E.constAccelXY,
   D.toSent (atStartNP (the iVel)) +:+ sParen (S "at" +:+ eS (sy time $= exactDbl 0) `sC` S "from" +:+ refS timeStartZero) `S.is`

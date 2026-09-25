@@ -45,7 +45,7 @@ instance HasSymbol        CodeDefinition where symbol c = symbol (c ^. cchunk)
 -- them from the corresponding variable version.
 instance CodeIdea         CodeDefinition where
   codeName (CD c@(CodeC _ Var) _ _ _) = codeName c
-  codeName (CD c@(CodeC _ Func) _ _ _) = funcPrefix ++ codeName c
+  codeName (CD c@(CodeC _ Func) _ _ _) = funcPrefix <> codeName c
   codeChunk = view cchunk
 -- | Equal if 'UID's are equal.
 instance Eq               CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
@@ -74,7 +74,7 @@ odeDef info = CD
   (codeChunk $ quantfunc odeSolList)
   (matrix [odeSyst info])
   (matrix [initVal info]:
-    map ($ info) [tInit, tFinal, absTol . odeOpts, relTol . odeOpts, stepSize . odeOpts])
+    fmap ($ info) [tInit, tFinal, absTol . odeOpts, relTol . odeOpts, stepSize . odeOpts])
   ODE
   where
     dv = depVar info

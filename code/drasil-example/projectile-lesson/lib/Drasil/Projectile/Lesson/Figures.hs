@@ -12,4 +12,4 @@ resourcePath = "../../../datafiles/Projectile/"
 
 figCSandA :: LabelledContent
 figCSandA = llccFig "CoordSystAndAssumpts" $ fig (D.toSent $ atStartNP $ the coordinateSystem)
-  (resourcePath ++ "CoordSystAndAssumpts.png")
+  (resourcePath <> "CoordSystAndAssumpts.png")

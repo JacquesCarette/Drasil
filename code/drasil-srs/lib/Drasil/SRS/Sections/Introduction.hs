@@ -103,7 +103,7 @@ overviewParagraph si extraInfo introSubs =
         _      -> phrase document :+: subsectionsSentence  -- Has subsections, add them
   in foldlSP ([S "The following", phrase section_,
     S "provides an overview of the", introduceAbb srs, S "for" +:+. projAbrvS (si ^. projName)]
-    ++ extraInfo ++
+    <> extraInfo <>
     [S "This", phrase section_, S "explains the", phrase purpose, S "of this", endingSentence])
 
 -- | Constructor for Purpose of Document section that each example controls.
@@ -129,7 +129,7 @@ purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase docume
 purposeOfDoc :: SmithEtAlSRS -> PurposeDescription -> Section
 purposeOfDoc srd (StdPurp Succinct) = SRS.prpsOfDoc [mkParagraph $ purpDocPara1 $ srd ^. projName] []
 purposeOfDoc srd (StdPurp Verbose) = SRS.prpsOfDoc [mkParagraph $ purpDocPara1 $ srd ^. projName, mkParagraph developmentProcessParagraph] []
-purposeOfDoc _   (CustomPurp ss) = SRS.prpsOfDoc (map (UlC . ulcc . Para) ss) []
+purposeOfDoc _   (CustomPurp ss) = SRS.prpsOfDoc (fmap (UlC . ulcc . Para) ss) []
 
 -- | Constructor for the Scope of Requirements subsection.
 -- Takes in the main requirement for the program.
@@ -162,7 +162,7 @@ intReaderIntro _ [] [] [] _ =
 intReaderIntro progName assumed topic asset sectionRef =
   [foldlSP [S "Reviewers of this", phrase documentation,
   S "should have an understanding of" +:+.
-  foldlList Comma List (assumed ++ topic), assetSent,
+  foldlList Comma List (assumed <> topic), assetSent,
   D.toSent (atStartNP' (the user)) `S.of_` projAbrvS progName, S "can have a lower level" `S.of_`
   S "expertise, as explained" `S.in_` refS sectionRef]]
   where
@@ -187,7 +187,7 @@ orgIntro bottom bottomSec trailingSentence =
       orgOfDocIntro, S "The presentation follows the standard pattern of presenting" +:+.
       -- FIXME: This should be referencing specific sections, if they even
       -- exist.
-      foldlList Comma List (map plural [goal, theory, definition] ++ [plural assumption]),
+      foldlList Comma List (fmap plural [goal, theory, definition] <> [plural assumption]),
       S "For readers that would like a more bottom up approach" `sC`
       S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
       S "trace back to find any additional information they require"
@@ -205,4 +205,4 @@ orgOfDocIntro = foldlSent
   [D.toSent $ atStartNP (the organization), S "of this", phrase document,
   S "follows the", phrase template, S "for an", short srs, S "for",
   phrase sciCompS, S "proposed by", foldlList Comma List $
-    map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
+    fmap refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]

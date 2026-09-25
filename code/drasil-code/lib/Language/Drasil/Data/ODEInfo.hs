@@ -43,7 +43,7 @@ odeInfo' ovs opt dm ivp = ODEInfo
   ovs
   (expr $ initTime ivp)
   (expr $ finalTime ivp)
-  (map expr $ initValues ivp)
+  (expr <$> initValues ivp)
   (createFinalExpr dm)
   opt
 
@@ -68,5 +68,5 @@ data ODEMethod = RK45 | BDF | Adams
 
 -- | Create well-formatted ODE equations which the ODE solvers can solve.
 createFinalExpr :: DifferentialModel -> [CodeExpr]
-createFinalExpr dm = map expr $ formEquations (coeffVects ode) (unknownVect ode) (constantVect ode) (_depVar dm)
+createFinalExpr dm = expr <$> formEquations (coeffVects ode) (unknownVect ode) (constantVect ode) (_depVar dm)
   where ode = makeAODESolverFormat dm

@@ -26,22 +26,22 @@ import Drasil.GlassBR.Concepts (annealedGl, aspectRatioCon, fTemperedGl, glTyFac
 import Drasil.GlassBR.Units (sFlawPU)
 
 symbols :: [DefinedQuantityDict]
-symbols = NE.toList inputs ++ tmSymbols ++ map dqdWr specParamVals ++
-  [modElas] ++ interps ++ unitalSymbols ++
-  unitless ++ map dqdWr [probBr, stressDistFac] ++
-  map dqdWr derivedInputDataConstraints ++
-  mathunitals ++ physicalquants ++ mathquants
+symbols = NE.toList inputs <> tmSymbols <> fmap dqdWr specParamVals <>
+  [modElas] <> interps <> unitalSymbols <>
+  unitless <> fmap dqdWr [probBr, stressDistFac] <>
+  fmap dqdWr derivedInputDataConstraints <>
+  mathunitals <> physicalquants <> mathquants
 
 constrained :: [ConstrConcept]
-constrained = map cnstrw' dataConstraints ++ [nomThick, glassTypeCon]
+constrained = fmap cnstrw' dataConstraints <> [nomThick, glassTypeCon]
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
 pbTol, tNT :: UncertQ
 glassTypeCon, nomThick :: ConstrConcept
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = NE.map dqdWr inputsWUnitsUncrtn <> NE.map dqdWr inputsWUncrtn <>
-  NE.map dqdWr inputsNoUncrtn <> sdVector
+inputs = fmap dqdWr inputsWUnitsUncrtn <> fmap dqdWr inputsWUncrtn <>
+  fmap dqdWr inputsNoUncrtn <> sdVector
 
 --inputs with units and uncertainties
 inputsWUnitsUncrtn :: NE.NonEmpty UncertQ
@@ -68,10 +68,10 @@ inputDataConstraints = NE.toList $ inputsWUnitsUncrtn <> inputsWUncrtn
 
 derivedInputDataConstraints :: [UncertQ]
 derivedInputDataConstraints = derivedInsWUnitsUncrtn
-  ++ derivedInsWUncrtn
+  <> derivedInsWUncrtn
 
 dataConstraints :: [UncertQ]
-dataConstraints = inputDataConstraints ++ derivedInputDataConstraints
+dataConstraints = inputDataConstraints <> derivedInputDataConstraints
 
 plateLen = uqc "plateLen" (nounPhraseSP "plate length (long dimension)")
   "the length (long dimension) of the glass plate" lA metre Real
@@ -111,17 +111,17 @@ standOffDist = uq (constrained' (dqd stdOffDist (variable "SD") Real metre)
 nomThick = cuc' "nomThick" (nounPhraseSP "nominal thickness")
   "the specified standard thickness of the glass plate" lT millimetre
   {-Discrete nominalThicknesses, but not implemented-} Rational
-  [sfwrElem $ mkSet Rational (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
+  [sfwrElem $ mkSet Rational (fmap dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
-  [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
+  [sfwrElem $ mkSet String $ fmap (str . abrv . snd) glassType]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
-outputs = (isSafePb :| [isSafeLR]) <> NE.map dqdWr (probBr :| [stressDistFac])
+outputs = (isSafePb :| [isSafeLR]) <> fmap dqdWr (probBr :| [stressDistFac])
 
 -- | Symbols uniquely relevant to theory models.
 tmSymbols :: [DefinedQuantityDict]
-tmSymbols = map dqdWr [probFail, pbTolfail]
+tmSymbols = fmap dqdWr [probFail, pbTolfail]
 
 probBr, probFail, pbTolfail, stressDistFac :: ConstrConcept
 probBr = constrained' (dqdNoUnit probBreak
@@ -225,7 +225,7 @@ minThick    = quant (mkUid "minThick") (nounPhraseSP "minimum thickness")
   (S "minimum thickness of the glass plate") lH Real metre
 
 sflawParamK = quant (mkUid "sflawParamK") (nounPhraseSP "surface flaw parameter") --parameterize?
-  (S ("surface flaw parameter related to the coefficient of " ++
+  (S ("surface flaw parameter related to the coefficient of " <>
     "variation of the glass strength data")) lK Real sFlawPU
 
 sflawParamM = quant (mkUid "sflawParamM") (nounPhraseSP "surface flaw parameter") --parameterize?
@@ -305,7 +305,7 @@ concepts = [glBreakage, lite, annealedGl, fTemperedGl, hStrengthGl, lateral,
 
 constants :: [ConstQDef]
 constants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
-                ++ specParamVals
+                <> specParamVals
 
 constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: ConstQDef
 constantM       = mkQuantDef sflawParamM $ exactDbl 7
@@ -330,13 +330,13 @@ loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad, specDeLoad, longDur
 
 --Defined for DataDefs.hs and this file only--
 actualThicknesses :: [Double]
-actualThicknesses = map snd glassThickness
+actualThicknesses = fmap snd glassThickness
 
 nominalThicknesses :: [Double]
-nominalThicknesses = map fst glassThickness
+nominalThicknesses = fmap fst glassThickness
 
 glassTypeFactors :: [Integer]
-glassTypeFactors = map fst glassType
+glassTypeFactors = fmap fst glassType
 
 type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
 

@@ -34,7 +34,7 @@ cncpt :: Concept dom =>
   String ->
   -- | The domain the 'term' belongs to.
   [dom] -> ConceptChunk
-cncpt u trm defn accAbbr = ConDict u trm (Just accAbbr) defn . map (^. uid)
+cncpt u trm defn accAbbr = ConDict u trm (Just accAbbr) defn . fmap (^. uid)
 
 -- | Construct a 'ConceptChunk'.
 cncpt' :: Concept dom =>
@@ -46,7 +46,7 @@ cncpt' :: Concept dom =>
   Sentence ->
   -- | The domain the 'term' belongs to.
   [dom] -> ConceptChunk
-cncpt' u trm defn = ConDict u trm Nothing defn . map (^. uid)
+cncpt' u trm defn = ConDict u trm Nothing defn . fmap (^. uid)
 
 -- | Construct a 'ConceptChunk'.
 cncpt'' ::

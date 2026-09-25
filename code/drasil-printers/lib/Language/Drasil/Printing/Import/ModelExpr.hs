@@ -74,7 +74,7 @@ indx sm a i = P.Row [P.Row [modelExpr a sm], P.Sub $ modelExpr i sm]
 call :: PrintingInformation -> UID -> [ModelExpr] -> P.Expr
 call sm f ps = P.Row [
     symbol $ lookupC' sm f,
-    parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`modelExpr` sm) ps
+    parens $ P.Row $ intersperse (P.MO P.Comma) $ fmap (`modelExpr` sm) ps
   ]
 
 -- | Helper function for addition 'EOperator's.
@@ -123,12 +123,12 @@ modelExpr (Deriv 0 Part a _)         sm = P.Row [modelExpr a sm]
 modelExpr (Deriv 0 Total a _)        sm = P.Row [modelExpr a sm]
 modelExpr (Deriv n Part a b)         sm =
   let st = [P.Spc P.Thin, P.MO P.Partial] in
-    P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
-    (P.Row (st ++ [symbol $ lookupC' sm b] ++ sup n))
+    P.Div (P.Row (st <> sup n <> [modelExpr a sm]))
+    (P.Row (st <> [symbol $ lookupC' sm b] <> sup n))
 modelExpr (Deriv n Total a b)        sm =
   let st = [P.Spc P.Thin, P.Ident "d"] in
-    P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
-        (P.Row (st ++ [symbol $ lookupC' sm b] ++ sup n))
+    P.Div (P.Row (st <> sup n <> [modelExpr a sm]))
+        (P.Row (st <> [symbol $ lookupC' sm b] <> sup n))
 modelExpr (C c)                      sm = symbol $ lookupC' sm c
 modelExpr (FCall f [x])              sm =
   P.Row [symbol $ lookupC' sm f, parens $ modelExpr x sm]
@@ -136,8 +136,8 @@ modelExpr (FCall f l)                sm = call sm f l
 modelExpr (Case _ ps)                sm =
   if length ps < 2
     then error "Attempting to use multi-case modelExpr incorrectly"
-    else P.Case (zip (map (flip modelExpr sm . fst) ps) (map (flip modelExpr sm . snd) ps))
-modelExpr (Matrix a)                 sm = P.Mtx $ map (map (`modelExpr` sm)) a
+    else P.Case (zip (fmap (flip modelExpr sm . fst) ps) (fmap (flip modelExpr sm . snd) ps))
+modelExpr (Matrix a)                 sm = P.Mtx $ fmap (fmap (`modelExpr` sm)) a
 modelExpr (Set _ l)                  sm = setExpr P.And (precB And) l sm
 modelExpr (Variable _ l)             sm = modelExpr l sm
 modelExpr (UnaryOp Log u)            sm = mkCall sm P.Log u
@@ -191,10 +191,10 @@ modelExpr (ForAll c s de)            sm = P.Row [
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
-assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (modelExpr' sm prec) exprs
+assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ fmap (modelExpr' sm prec) exprs
 
 setExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
-setExpr _ prec exprs sm = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (modelExpr' sm prec) exprs
+setExpr _ prec exprs sm = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ fmap (modelExpr' sm prec) exprs
 
 -- | Add add symbol only when the second Expr is not negation
 addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
@@ -206,10 +206,10 @@ addExpr (x:xs) o sm = modelExpr' sm (precA o) x : P.MO P.Add: addExpr xs o sm
 -- | Helper for rendering printable expressions.
 mulExpr ::  [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
-  (a, Lit (Int _))      ->  [modelExpr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, Lit (ExactDbl _)) ->  [modelExpr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, Lit (Dbl _))      ->  [modelExpr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, _)                ->  [modelExpr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
+  (a, Lit (Int _))      ->  [modelExpr' sm (precA o) a, P.MO P.Dot] <> mulExpr (hd2 : tl) o sm
+  (a, Lit (ExactDbl _)) ->  [modelExpr' sm (precA o) a, P.MO P.Dot] <> mulExpr (hd2 : tl) o sm
+  (a, Lit (Dbl _))      ->  [modelExpr' sm (precA o) a, P.MO P.Dot] <> mulExpr (hd2 : tl) o sm
+  (a, _)                ->  [modelExpr' sm (precA o) a, P.MO P.Mul] <> mulExpr (hd2 : tl) o sm
 mulExpr [hd]         o sm = [modelExpr' sm (precA o) hd]
 mulExpr []           o sm = [modelExpr' sm (precA o) (int 1)]
 

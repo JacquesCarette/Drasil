@@ -18,7 +18,7 @@ type ConstraintCEMap = Map.Map UID [ConstraintCE]
 
 -- | Creates a map from 'UID' to 'Constraint's for constrained chunks.
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintCEMap
-constraintMap = Map.fromList . map (\x -> (x ^. uid, map constraint $ x ^. constraints))
+constraintMap = Map.fromList . fmap (\x -> (x ^. uid, fmap constraint $ x ^. constraints))
 
 -- | Returns a pair of a chunk and its physical constraints.
 physLookup :: HasUID q => ConstraintCEMap -> q -> (q, [ConstraintCE])

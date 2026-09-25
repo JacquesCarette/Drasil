@@ -87,7 +87,7 @@ funcData n desc d = FData $ FuncData n desc d
 funcDef :: (Quantity c, MayHaveUnit c, Concept c) => Name -> Description -> [c] ->
   Space -> Maybe Description -> [FuncStmt] -> Func
 funcDef s desc i t returnDesc fs = FDef $ FuncDef s desc
-  (map (pcAuto . quantvar) i) t returnDesc fs
+  (fmap (pcAuto . quantvar) i) t returnDesc fs
 
 -- | Like 'funcDef' but uses 'ParameterChunk's to represent the parameters.
 funcDefParams :: Name -> Description -> [ParameterChunk] -> Space ->
@@ -164,35 +164,35 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
   where
     fstvars :: ChunkDB -> FuncStmt -> [CodeVarChunk]
     fstvars sm (FDecDef cch e) = cch:codevars' e sm
-    fstvars sm (FFuncDef cch ps sts) = quantvar cch : map quantvar ps
-      ++ concatMap (fstvars sm) sts
+    fstvars sm (FFuncDef cch ps sts) = quantvar cch : fmap quantvar ps
+      <> concatMap (fstvars sm) sts
     fstvars sm (FAsg cch e) = cch:codevars' e sm
     fstvars sm (FAsgIndex cch _ e) = cch:codevars' e sm
-    fstvars sm (FFor cch s e st fs) = nub $ cch : codevars' e sm ++ codevars' s sm
-       ++ codevars' st sm ++ concatMap (fstvars sm) fs
-    fstvars sm (FForEach cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
-    fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
-    fstvars sm (FCond e tfs efs) = codevars' e sm ++ concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) efs
+    fstvars sm (FFor cch s e st fs) = nub $ cch : codevars' e sm <> codevars' s sm
+       <> codevars' st sm <> concatMap (fstvars sm) fs
+    fstvars sm (FForEach cch e fs) = nub (cch : codevars' e sm <> concatMap (fstvars sm) fs)
+    fstvars sm (FWhile e fs) = codevars' e sm <> concatMap (fstvars sm) fs
+    fstvars sm (FCond e tfs efs) = codevars' e sm <> concatMap (fstvars sm) tfs <> concatMap (fstvars sm) efs
     fstvars sm (FRet e) = codevars' e sm
-    fstvars sm (FTry tfs cfs) = concatMap (fstvars sm) tfs ++ concatMap (fstvars sm ) cfs
+    fstvars sm (FTry tfs cfs) = concatMap (fstvars sm) tfs <> concatMap (fstvars sm ) cfs
     fstvars _  (FThrow _) = [] -- is this right?
     fstvars _  FContinue = []
     fstvars sm (FVal v) = codevars' v sm
     fstvars sm (FMulti ss) = concatMap (fstvars sm) ss
-    fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
+    fstvars sm (FAppend a b) = nub (codevars a sm <> codevars b sm)
 
     declared :: ChunkDB -> FuncStmt -> [CodeVarChunk]
     declared _  (FDecDef cch _) = [cch]
-    declared sm (FFuncDef cch ps sts) = quantvar cch : map quantvar ps
-      ++ concatMap (declared sm) sts
+    declared sm (FFuncDef cch ps sts) = quantvar cch : fmap quantvar ps
+      <> concatMap (declared sm) sts
     declared _  (FAsg _ _) = []
     declared _  FAsgIndex {} = []
     declared sm (FFor cch _ _ _ fs) = cch : concatMap (declared sm) fs
     declared sm (FForEach cch _ fs) = cch : concatMap (declared sm) fs
     declared sm (FWhile _ fs) = concatMap (declared sm) fs
-    declared sm (FCond _ tfs efs) = concatMap (declared sm) tfs ++ concatMap (declared sm) efs
+    declared sm (FCond _ tfs efs) = concatMap (declared sm) tfs <> concatMap (declared sm) efs
     declared _  (FRet _) = []
-    declared sm (FTry tfs cfs) = concatMap (declared sm) tfs ++ concatMap (declared sm) cfs
+    declared sm (FTry tfs cfs) = concatMap (declared sm) tfs <> concatMap (declared sm) cfs
     declared _  (FThrow _) = [] -- is this right?
     declared _  FContinue = []
     declared _  (FVal _) = []

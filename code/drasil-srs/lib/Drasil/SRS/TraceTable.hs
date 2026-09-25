@@ -33,7 +33,7 @@ dependencyPlate = preorderFold $ purePlate {
   ucsSec = Constant . getDependenciesOf [defs] <$> \(UCsProg c) -> c
 } where
   getDependenciesOf :: HasUID a => [a -> [Sentence]] -> [a] -> [(UID, [UID])]
-  getDependenciesOf fs = map (\x -> (x ^. uid, concatMap (lnames' . ($ x)) fs))
+  getDependenciesOf fs = fmap (\x -> (x ^. uid, concatMap (lnames' . ($ x)) fs))
   defs :: Definition a => a -> [Sentence]
   defs x = [x ^. defn]
   derivs :: MayHaveDerivation a => a -> [Sentence]

@@ -108,7 +108,7 @@ codedHRName sys Choices {
 
 -- | Lowercase folder name for a "zoo" of executable softifacts (e.g. "projectile_u_p_nol_u_wi_v_d").
 codedDirName :: (HasProjectName sys) => sys -> Choices -> String
-codedDirName sys chcs = map toLower $ codedHRName sys chcs
+codedDirName sys chcs = toLower <$> codedHRName sys chcs
 
 codedMod :: Modularity -> String
 codedMod Unmodular = "U"

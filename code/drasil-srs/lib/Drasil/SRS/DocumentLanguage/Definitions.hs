@@ -85,7 +85,7 @@ instanceModel fs m i = mkRawLC (Defini (foldr (mkIMField i m) [] fs)) (ref i)
 -- or IM definition automatically (called automatically by 'SCSSub' program).
 derivation :: (MayHaveDerivation c, HasShortName c, Referable c) => c -> Maybe Contents
 derivation c = fmap
-  (\(Derivation h d) -> LlC $ mkRawLC (DerivBlock h $ map makeDerivCons d) (ref c)) $
+  (\(Derivation h d) -> LlC $ mkRawLC (DerivBlock h $ fmap makeDerivCons d) (ref c)) $
   c ^. derivations
 
 -- | Helper function for creating the layout objects
@@ -111,13 +111,13 @@ mkTMField t m l@(Description v u) fs = (show l, toList $
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getDecRefs) : fs
 mkTMField t _ l@Notes fs =
-  nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
-mkTMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
+  nonEmpty fs (\ss -> (show l, fmap mkParagraph ss) : fs) (t ^. getNotes)
+mkTMField _ _ l _ = error $ "Label " <> show l <> " not supported " <>
   "for theory models"
 
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
 helperRefs :: HasUID t => t -> SmithEtAlSRS -> Sentence
-helperRefs t s = foldlList Comma List $ map (`helpToRefField` (s ^. systemdb)) $ nub $
+helperRefs t s = foldlList Comma List $ fmap (`helpToRefField` (s ^. systemdb)) $ nub $
   refbyLookup (t ^. uid) s
 
 -- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of
@@ -130,12 +130,12 @@ helpToRefField trg db
   | (Just c) <- find trg db :: Maybe TheoryModel     = refS c
   | (Just c) <- find trg db :: Maybe ConceptInstance = refS c
   | (Just _) <- find trg db :: Maybe Citation        = EmptyS
-  | otherwise = error $ show trg ++ "Caught."
+  | otherwise = error $ show trg <> "Caught."
 
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.
 helperSources :: [DecRef] -> [Contents]
 helperSources [] = [mkParagraph $ S "--"]
-helperSources rs  = [mkParagraph $ foldlList Comma List $ map (\r -> Ref (r ^. uid) EmptyS $ refInfo r) rs]
+helperSources rs  = [mkParagraph $ foldlList Comma List $ fmap (\r -> Ref (r ^. uid) EmptyS $ refInfo r) rs]
 
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
 mkDDField :: DataDefinition -> SmithEtAlSRS -> Field -> ModRow -> ModRow
@@ -146,8 +146,8 @@ mkDDField d _ l@DefiningEquation fs = (show l, toList $ unlbldExpr <$> mexpress 
 mkDDField d m l@(Description v u) fs = (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkDDField d _ l@Source fs = (show l, helperSources $ d ^. getDecRefs) : fs
-mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
-mkDDField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
+mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, fmap mkParagraph ss) : fs) (d ^. getNotes)
+mkDDField _ _ l _ = error $ "Label " <> show l <> " not supported " <>
   "for data definitions"
 
 -- | Creates the description field for 'Contents' (if necessary) using the given
@@ -179,8 +179,8 @@ mkGDField g m l@(Description v u) fs = (show l,
   buildDescription v u (express g) m []) : fs
 mkGDField g m l@RefBy fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
 mkGDField g _ l@Source fs = (show l, helperSources $ g ^. getDecRefs) : fs
-mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
-mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
+mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, fmap mkParagraph ss) : fs) (g ^. getNotes)
+mkGDField _ _ l _ = error $ "Label " <> show l <> " not supported for gen defs"
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk.
 mkIMField :: InstanceModel -> SmithEtAlSRS -> Field -> ModRow -> ModRow
@@ -193,10 +193,10 @@ mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getDecRefs) : fs
 mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
   where x = eS' $ i ^. output
 mkIMField i _ l@Input fs =
-  case map fst (i ^. inputs) of
+  case fmap fst (i ^. inputs) of
     [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
     (_:_) -> (show l, [mkParagraph $ foldl1 sC xs]) : fs
-  where xs = map (eS' . fst) $ i ^. inputs
+  where xs = fmap (eS' . fst) $ i ^. inputs
 mkIMField i _ l@InConstraints fs  =
   let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i ^. inputs) in
   (show l, foldr ((:) . UlC . ulcc . EqnBlock . express . uncurry realInterval) [] ll) : fs
@@ -204,8 +204,8 @@ mkIMField i _ l@OutConstraints fs =
   (show l, foldr ((:) . UlC . ulcc . EqnBlock . express . realInterval (i ^. output)) []
     (i ^. out_constraints)) : fs
 mkIMField i _ l@Notes fs =
-  nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
-mkIMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
+  nonEmpty fs (\ss -> (show l, fmap mkParagraph ss) : fs) (i ^. getNotes)
+mkIMField _ _ l _ = error $ "Label " <> show l <> " not supported " <>
   "for instance models"
 
 -- | Used for making definitions. The first pair is the symbol of the quantity we are
@@ -219,9 +219,9 @@ firstPair' IncludeUnits d =
 
 -- | Creates the descriptions for each symbol in the relation/equation.
 descPairs :: (Quantity q, MayHaveUnit q, Express q) => InclUnits -> [q] -> [ListTuple]
-descPairs IgnoreUnits = map (\x -> (eS' x, Flat $ phrase x, Nothing))
+descPairs IgnoreUnits = fmap (\x -> (eS' x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
-  map (\x -> (eS' x, Flat $ phrase x +:+ sParen (toSentenceUnitless x), Nothing))
+  fmap (\x -> (eS' x, Flat $ phrase x +:+ sParen (toSentenceUnitless x), Nothing))
   -- FIXME: Need a Units map for looking up units from variables
 
 -- | Defines 'Field's as 'String's.

@@ -25,4 +25,4 @@ goalStatementStruct :: (NamedIdea a) => [a] -> Sentence -> Sentence -> Sentence
 goalStatementStruct outputs condition1 condition2 = foldlSent
   [ S "Determine", condition1, listOfOutputs, S "over a period of",
   phrase time, condition2]
-  where listOfOutputs       = foldlList Comma List $ map plural outputs
+  where listOfOutputs       = foldlList Comma List $ fmap plural outputs

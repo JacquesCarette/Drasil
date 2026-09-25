@@ -144,9 +144,9 @@ variable s t = do
   let cs = g
       defFunc Var = var
       defFunc Const = classConst
-  if s `elem` map codeName (cs ^. inputs)
+  if s `elem` fmap codeName (cs ^. inputs)
     then inputVariable (g ^. inStruct) Var (var s t)
-    else if s `elem` map codeName (cs ^. constDefns)
+    else if s `elem` fmap codeName (cs ^. constDefns)
       then constVariable (g ^. conStruct) (g ^. conRepr)
               ((defFunc $ g ^. conRepr) s t)
       else pure $ var s t
@@ -208,7 +208,7 @@ constVariable (Store Bundled) Const v = do
 constVariable WithInputs cr v = do
   g <- get
   inputVariable (g ^. inStruct) cr v
-constVariable Inline _ _ = error $ "mkVar called on a constant, but user " ++
+constVariable Inline _ _ = error $ "mkVar called on a constant, but user " <>
   "chose to Inline constants. Generator has a bug."
 
 -- | For generating GOOL for a variable that is accessed through a class.
@@ -225,7 +225,7 @@ classVariable c v = do
   pure $ do
     v' <- v
     let nm = variableName v'
-    maybe (error $ "Variable " ++ nm ++ " missing from export map")
+    maybe (error $ "Variable " <> nm <> " missing from export map")
       checkCurrent (Map.lookup nm (eMap g)) (onStateValue variableType c) v
 
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
@@ -450,7 +450,7 @@ genInOutFunc f docf n desc ins' outs' b = do
   inVs <- mapM mkVar ins
   outVs <- mapM mkVar outs
   bothVs <- mapM mkVar both
-  bod <- logBody n (bothVs ++ inVs) b
+  bod <- logBody n (bothVs <> inVs) b
   pComms <- mapM getCommentBrief ins
   oComms <- mapM getCommentBrief outs
   bComms <- mapM getCommentBrief both
@@ -612,7 +612,7 @@ convCall c x ns f libf = do
   args <- mapM convExpr x
   nms <- mapM (mkVar . quantvar . lookupC g . fst) ns
   nargs <- mapM (convExpr . snd) ns
-  maybe (maybe (error $ "Call to non-existent function " ++ funcNm)
+  maybe (maybe (error $ "Call to non-existent function " <> funcNm)
       (\m -> pure $ libf m funcNm (convTypeOO funcTp) args (zip nms nargs))
       (Map.lookup funcNm lem))
     (\m -> f m funcNm (convTypeOO funcTp) args (zip nms nargs))
@@ -635,7 +635,7 @@ renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
 renderSet :: (IsChunk c, HasSymbol c) => c -> CodeExpr -> CodeExpr
-renderSet e s = in' (Variable ("set_" ++ showHasSymbImpl e) s) (sy e)
+renderSet e s = in' (Variable ("set_" <> showHasSymbImpl e) s) (sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop
@@ -731,23 +731,23 @@ elementSetBoolBfunc SContains = OO.contains
 genModDef
   :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> GenState (FS (r file))
-genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
+genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (fmap (fmap
   Just . genFunc publicFunc []) fs)
   (case cs of [] -> []
               (cl:cls) -> fmap Just (genClass primaryClass cl) :
-                map (fmap Just . genClass auxClass) cls)
+                fmap (fmap Just . genClass auxClass) cls)
 
 -- | Converts a 'Mod'\'s functions to GOOL.
 genModFuncs
   :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> [GenState (MS (r mthd))]
-genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
+genModFuncs (Mod _ _ _ _ fs) = fmap (genFunc publicFunc []) fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
 genModClasses
   :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> [GenState (CS (r Class))]
-genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
+genModClasses (Mod _ _ _ cs _) = fmap (genClass auxClass) cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
@@ -781,9 +781,9 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (g ^. systemdb) s
-    \\ (map quantvar parms ++ map stVar svs))
+    \\ (fmap quantvar parms <> fmap stVar svs))
   t <- spaceCodeType o
-  f n (convTypeOO t) desc parms rd [block $ map (`varDec` local) vars, block stmts]
+  f n (convTypeOO t) desc parms rd [block $ fmap (`varDec` local) vars, block stmts]
 genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -792,9 +792,9 @@ genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
     (codeType iv)) . fst) i
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (g ^. systemdb) s
-    \\ (map quantvar parms ++ map stVar svs))
+    \\ (fmap quantvar parms <> fmap stVar svs))
   genInitConstructor n desc parms (zip initvars inits)
-    [block $ map (`varDec` local) vars, block stmts]
+    [block $ fmap (`varDec` local) vars, block stmts]
 genFunc _ _ (FData (FuncData n desc ddef)) = do
   modify (\st -> st {currentScope = Local})
   genDataFunc n desc ddef
@@ -938,7 +938,7 @@ genDataFunc
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readData ddef
-  publicFunc nameTitle void desc (map pcAuto $ quantvar inFileName : parms)
+  publicFunc nameTitle void desc (fmap pcAuto $ quantvar inFileName : parms)
     Nothing bod
 
 -- this is really ugly!!
@@ -986,9 +986,9 @@ readData ddef = do
   pure [block $
     varDec var_infile localScope :
     (if any (\d -> isLine d || isLines d) ddef then [varDec var_line localScope,
-    listDec 0 var_linetokens localScope ] else []) ++
-    [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
-    v_filename : concat inD ++ [closeFile v_infile]]
+    listDec 0 var_linetokens localScope ] else []) <>
+    [listDec 0 var_lines localScope | any isLines ddef] <> (openFileR var_infile
+    v_filename : concat inD <> [closeFile v_infile])]
   where inData
           ::
             ( BlockSym r block stmt
@@ -1018,7 +1018,7 @@ readData ddef = do
         inData (Line lp d) scp = do
           lnI <- lineData Nothing lp scp
           pure $ [getFileInputLine v_infile var_line,
-            stringSplit d var_linetokens v_line] ++ lnI
+            stringSplit d var_linetokens v_line] <> lnI
         inData (Lines lp ls d) scp = do
           lnV <- lineData (Just "_temp") lp scp
           let readLines Nothing = [getFileInputAll v_infile var_lines,
@@ -1030,7 +1030,7 @@ readData ddef = do
                 (bodyStatements $
                   [getFileInputLine v_infile var_line,
                    stringSplit d var_linetokens v_line
-                  ] ++ lnV)]
+                  ] <> lnV)]
           pure $ readLines ls
         ---------------
         lineData
@@ -1054,8 +1054,8 @@ readData ddef = do
           pure [stringListVals vs v_linetokens]
         lineData s p@(Repeat ds) scp = do
           vs <- getEntryVars s p
-          sequence $ clearTemps s ds scp ++ pure
-            (stringListLists vs v_linetokens) : appendTemps s ds
+          sequence $ clearTemps s ds scp <> (pure
+            (stringListLists vs v_linetokens) : appendTemps s ds)
         ---------------
         clearTemps
           ::
@@ -1068,7 +1068,7 @@ readData ddef = do
             )
           => Maybe String -> [DataItem] -> r scope -> [GenState (MS (r stmt))]
         clearTemps Nothing    _  _   = []
-        clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
+        clearTemps (Just sfx) es scp = fmap (\v -> clearTemp sfx v scp) es
         ---------------
         clearTemp
           ::
@@ -1080,7 +1080,7 @@ readData ddef = do
             , OODeclStatement r scope val stmt
             )
           => String -> DataItem -> r scope -> GenState (MS (r stmt))
-        clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
+        clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v <> sfx)
           (innerType $ convTypeOO t)) scp []) (codeType v)
         ---------------
         appendTemps
@@ -1093,7 +1093,7 @@ readData ddef = do
             )
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
-        appendTemps (Just sfx) es = map (appendTemp sfx) es
+        appendTemps (Just sfx) es = fmap (appendTemp sfx) es
         ---------------
         appendTemp
           ::
@@ -1106,7 +1106,7 @@ readData ddef = do
           => String -> DataItem -> GenState (MS (r stmt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convTypeOO t))
-          (valueOf $ var (codeName v ++ sfx) (convTypeOO t))) (codeType v)
+          (valueOf $ var (codeName v <> sfx) (convTypeOO t))) (codeType v)
 
 -- | Get entry variables.
 getEntryVars
@@ -1121,7 +1121,7 @@ getEntryVars
     )
   => Maybe String -> LinePattern -> GenState [VS (r Variable)]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
-  (variable (codeName v ++ st) . innerType . convTypeOO))
+  (variable (codeName v <> st) . innerType . convTypeOO))
     s) (getPatternInputs lp)
 
 -- Procedural Versions --
@@ -1181,9 +1181,9 @@ variableProc s t = do
   let cs = g
       defFunc Var = var
       defFunc Const = constant -- This might be wrong
-  if s `elem` map codeName (cs ^. inputs)
+  if s `elem` fmap codeName (cs ^. inputs)
     then inputVariableProc (g ^. inStruct) Var (var s t)
-    else if s `elem` map codeName (cs ^. constDefns)
+    else if s `elem` fmap codeName (cs ^. constDefns)
       then constVariableProc (g ^. conStruct) (g ^. conRepr)
               ((defFunc $ g ^. conRepr) s t)
       else pure $ var s t
@@ -1214,7 +1214,7 @@ constVariableProc (Store Bundled) _ _ = error "constVariableProc: Procedural ren
 constVariableProc WithInputs cr v = do
   g <- get
   inputVariableProc (g ^. inStruct) cr v
-constVariableProc Inline _ _ = error $ "mkVar called on a constant, but user " ++
+constVariableProc Inline _ _ = error $ "mkVar called on a constant, but user " <>
   "chose to Inline constants. Generator has a bug."
 
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
@@ -1282,7 +1282,7 @@ genModDefProc
   => Mod -> GenState (FS (r file))
 genModDefProc (Mod n desc is cs fs) = case cs of
   [] -> genModuleWithImportsProc n desc is
-          (map (fmap Just . genFuncProc publicFuncProc []) fs)
+          (fmap (fmap Just . genFuncProc publicFuncProc []) fs)
   _  -> error "genModDefProc: Procedural renderers do not support classes"
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
@@ -1443,9 +1443,9 @@ genFuncProc f svs (FDef (FuncDef n desc parms o rd s)) = do
   modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmtProc s
   vars <- mapM mkVarProc (fstdecl (g ^. systemdb) s
-    \\ (map quantvar parms ++ map stVar svs))
+    \\ (fmap quantvar parms <> fmap stVar svs))
   t <- spaceCodeType o
-  f n (convType t) desc parms rd [block $ map (`varDec` local) vars, block stmts]
+  f n (convType t) desc parms rd [block $ fmap (`varDec` local) vars, block stmts]
 genFuncProc _ _ (FDef (CtorDef {})) = error "genFuncProc: Procedural renderers do not support constructors"
 genFuncProc _ _ (FData (FuncData n desc ddef)) = genDataFuncProc n desc ddef
 
@@ -1488,7 +1488,7 @@ genModFuncsProc
     , VariableElim r typ
     )
   => Mod -> [GenState (MS (r mthd))]
-genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
+genModFuncsProc (Mod _ _ _ _ fs) = fmap (genFuncProc publicFuncProc []) fs
 
 -- this is really ugly!!
 -- | Read from a data description into an 'MS block' of 'MS Statement's.
@@ -1529,9 +1529,9 @@ readDataProc ddef = do
   pure [block $
     varDec var_infile localScope :
     (if any (\d -> isLine d || isLines d) ddef then [varDec var_line localScope,
-    listDec 0 var_linetokens localScope] else []) ++
-    [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
-    v_filename : concat inD ++ [closeFile v_infile]]
+    listDec 0 var_linetokens localScope] else []) <>
+    [listDec 0 var_lines localScope | any isLines ddef] <> (openFileR var_infile
+    v_filename : concat inD <> [closeFile v_infile])]
   where inData
           ::
             ( BlockSym r block stmt
@@ -1557,7 +1557,7 @@ readDataProc ddef = do
         inData (Line lp d) scp = do
           lnI <- lineData Nothing lp scp
           pure $ [getFileInputLine v_infile var_line,
-            stringSplit d var_linetokens v_line] ++ lnI
+            stringSplit d var_linetokens v_line] <> lnI
         inData (Lines lp ls d) scp = do
           lnV <- lineData (Just "_temp") lp scp
           let readLines Nothing = [getFileInputAll v_infile var_lines,
@@ -1569,7 +1569,7 @@ readDataProc ddef = do
                 (bodyStatements $
                   [getFileInputLine v_infile var_line,
                    stringSplit d var_linetokens v_line
-                  ] ++ lnV)]
+                  ] <> lnV)]
           pure $ readLines ls
         ---------------
         lineData
@@ -1589,8 +1589,8 @@ readDataProc ddef = do
           pure [stringListVals vs v_linetokens]
         lineData s p@(Repeat ds) scp = do
           vs <- getEntryVarsProc s p
-          sequence $ clearTemps s ds scp ++ pure
-            (stringListLists vs v_linetokens) : appendTemps s ds
+          sequence $ clearTemps s ds scp <> (pure
+            (stringListLists vs v_linetokens) : appendTemps s ds)
         ---------------
         clearTemps
           ::
@@ -1601,7 +1601,7 @@ readDataProc ddef = do
             )
           => Maybe String -> [DataItem] -> r scope -> [GenState (MS (r stmt))]
         clearTemps Nothing    _  _   = []
-        clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
+        clearTemps (Just sfx) es scp = fmap (\v -> clearTemp sfx v scp) es
         ---------------
         clearTemp
           ::
@@ -1611,7 +1611,7 @@ readDataProc ddef = do
             , DeclStatement r scope val stmt bod
             )
           => String -> DataItem -> r scope -> GenState (MS (r stmt))
-        clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
+        clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v <> sfx)
           (innerType $ convType t)) scp []) (codeType v)
         ---------------
         appendTemps
@@ -1623,7 +1623,7 @@ readDataProc ddef = do
             )
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
-        appendTemps (Just sfx) es = map (appendTemp sfx) es
+        appendTemps (Just sfx) es = fmap (appendTemp sfx) es
         ---------------
         appendTemp
           ::
@@ -1635,14 +1635,14 @@ readDataProc ddef = do
           => String -> DataItem -> GenState (MS (r stmt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convType t))
-          (valueOf $ var (codeName v ++ sfx) (convType t))) (codeType v)
+          (valueOf $ var (codeName v <> sfx) (convType t))) (codeType v)
 
 -- | Get entry variables.
 getEntryVarsProc
   :: (TypeSym r typ, VariableSym r typ)
   => Maybe String -> LinePattern -> GenState [VS (r Variable)]
 getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
-  (variableProc (codeName v ++ st) . innerType . convType))
+  (variableProc (codeName v <> st) . innerType . convType))
     s) (getPatternInputs lp)
 
 -- | Converts an 'Expr' to a GOOL Value.
@@ -1780,7 +1780,7 @@ convCallProc c x ns f libf = do
   args <- mapM convExprProc x
   nms <- mapM (mkVarProc . quantvar . lookupC g . fst) ns
   nargs <- mapM (convExprProc . snd) ns
-  maybe (maybe (error $ "Call to non-existent function " ++ funcNm)
+  maybe (maybe (error $ "Call to non-existent function " <> funcNm)
       (\m -> pure $ libf m funcNm (convType funcTp) args (zip nms nargs))
       (Map.lookup funcNm lem))
     (\m -> f m funcNm (convType funcTp) args (zip nms nargs))
@@ -1954,7 +1954,7 @@ genDataFuncProc
 genDataFuncProc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readDataProc ddef
-  publicFuncProc nameTitle void desc (map pcAuto $ quantvar inFileName : parms)
+  publicFuncProc nameTitle void desc (fmap pcAuto $ quantvar inFileName : parms)
     Nothing bod
 
 -- | Generates a public function, defined by its inputs and outputs.
@@ -2045,7 +2045,7 @@ genInOutFuncProc f docf n desc ins' outs' b = do
   inVs <- mapM mkVarProc ins
   outVs <- mapM mkVarProc outs
   bothVs <- mapM mkVarProc both
-  bod <- logBody n (bothVs ++ inVs) b
+  bod <- logBody n (bothVs <> inVs) b
   pComms <- mapM getCommentBrief ins
   oComms <- mapM getCommentBrief outs
   bComms <- mapM getCommentBrief both

@@ -80,7 +80,7 @@ cis = [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  thermocon ++ softwarecon ++ physicalcon ++ con ++ [CP.energy,
+  thermocon <> softwarecon <> physicalcon <> con <> [CP.energy,
   CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
@@ -88,7 +88,7 @@ symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis conceptChun
   SWHS.dataDefs insModel genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
-labelledContent' = labelledContent ++ funcReqsTables
+labelledContent' = labelledContent <> funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -121,9 +121,9 @@ mkSRS = [TableOfContents,
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , GDs [] ([Label, Units] <> stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) ShowDerivation
         , Constraints dataConTail inputConstraints
         , CorrSolnPpties outputConstraints propsDeriv
         ]
@@ -146,8 +146,8 @@ insModel :: [InstanceModel]
 insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
 concIns :: [ConceptInstance]
-concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
-  ++ nfRequirements
+concIns = goals <> assumptions <> likelyChgs <> unlikelyChgs <> funcReqs
+  <> nfRequirements
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -161,7 +161,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 ------------------------------
 
 introStart :: Sentence
-introStart = foldlSent [S "Due to", foldlList Comma List (map S
+introStart = foldlSent [S "Due to", foldlList Comma List (fmap S
   ["increasing costs", "diminishing availability", "negative environmental impact"]) `S.of_`
   S "fossil fuels" `sC` S "the demand" `S.is` S "high for renewable",
   D.toSent (pluralNP (enerSrc `and_PS` energy)), S "storage technology"]
@@ -233,7 +233,7 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent [D.toSent (atStartNP' (the inModel)),
   S "to be solved" `S.are` S "referred to as" +:+.
-  foldlList Comma List (map refS iMods), S "The", plural inModel,
+  foldlList Comma List (fmap refS iMods), S "The", plural inModel,
   S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_`
   S "algebraic", plural equation, S "that", phrase model +:+.
   phrase swhs, projAbrvS projName, S "solves these", short ode :+: S "s"]
@@ -279,10 +279,10 @@ sysCntxtRespIntro pro = foldlSPCol [projAbrvS pro +:+. S "is mostly self-contain
 systContRespBullets :: ProjectName -> Contents
 systContRespBullets prog = UlC $ ulcc $ Enumeration $ bulletNested
   [titleize user +: S "Responsibilities", projAbrvS prog +: S "Responsibilities"]
-  $ map bulletFlat [userResp, swhsResp]
+  $ fmap bulletFlat [userResp, swhsResp]
 
 userResp :: [Sentence]
-userResp = map foldlSent_ [
+userResp = fmap foldlSent_ [
   [S "Provide the", phrase input_, plural datum `S.toThe`
     phrase system `sC` S "ensuring no errors" `S.inThe` plural datum, S "entry"],
   [S "Take care that consistent", plural unit_ `S.are` S "used for",
@@ -290,7 +290,7 @@ userResp = map foldlSent_ [
   ]
 
 swhsResp :: [Sentence]
-swhsResp = map foldlSent_ [
+swhsResp = fmap foldlSent_ [
   [S "Detect", plural datum, S "type mismatch" `sC` S "such as a string" `S.of_`
     S "characters instead" `S.ofA` S "floating point number"],
   [S "Determine if the", plural input_, S "satisfy the required",
@@ -339,7 +339,7 @@ terms = [htFlux, phaseChangeMaterial, cw heatCapSpec, thermalConduction, transie
 -----------------------------------------
 
 physSystParts :: [Sentence]
-physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC,
+physSystParts = fmap foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC,
   [short phsChgMtrl, S "suspended in" +:+. phrase tank,
   sParen (ch htFluxP +:+ S "represents the" +:+. phrase htFluxP)]]
 
@@ -428,7 +428,7 @@ dataContMid = foldlSent [D.toSent (atStartNP (the column)) `S.for` D.toSent (plu
   S "to reasonable", plural value]
 
 dataContFooter :: Sentence
-dataContFooter = foldlSent_ $ map foldlSent [
+dataContFooter = foldlSent_ $ fmap foldlSent [
 
   [sParen (S "*"), S "These", plural quantity, S "cannot be equal to zero" `sC`
   S "or there will be a divide by zero in the", phrase model],

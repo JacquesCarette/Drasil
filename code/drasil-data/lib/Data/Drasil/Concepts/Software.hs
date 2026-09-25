@@ -36,7 +36,7 @@ accuracy, correctness, maintainability, performance, performanceSpd, portability
   reliability, reusability, understandability, verifiability :: ConceptChunk
 
 qualOfBeing :: String -> String
-qualOfBeing s = "the quality or state of being" ++ s
+qualOfBeing s = "the quality or state of being" <> s
 
 accuracy          = cncpt''' (mkUid "accuracy")          (nounPhraseSP "accuracy")
   (S $ qualOfBeing "correct or precise")
@@ -57,7 +57,7 @@ portability       = cncpt''' (mkUid "portability")       (nounPhraseSP "portabil
   (S "the ability of software to be transferred from one machine or system to another")
 
 reliability       = cncpt''' (mkUid "reliability")       (nounPhraseSP "reliability")
-  (S ("the degree to which the result of a measurement, calculation," ++
+  (S ("the degree to which the result of a measurement, calculation," <>
   "or specification can be depended on to be accurate"))
 
 reusability       = cncpt''' (mkUid "reusability")       (nounPhraseSP "reusability")
@@ -76,7 +76,7 @@ verifiability     = cncpt''' (mkUid "verifiability")     (nounPhraseSP "verifiab
 --FIXME: "hiding" is not a noun.
 hwHiding :: ConceptChunk
 hwHiding = cncpt''' (mkUid "hwHiding") (cn "hardware hiding")
-  (S ("hides the exact details of the hardware, and provides a uniform interface" ++
+  (S ("hides the exact details of the hardware, and provides a uniform interface" <>
    " for the rest of the system to use"))
 
 modBehavHiding :: ConceptChunk
@@ -107,7 +107,7 @@ modInputParam = cncpt''' (mkUid "modInputParam") (cn' "input parameter module") 
 
 modInputConstraint :: ConceptChunk
 modInputConstraint = cncpt''' (mkUid "modInputConstraint") (cn' "input constraint module")
-  (S ("defines the constraints on the input data and gives an error if " ++
+  (S ("defines the constraints on the input data and gives an error if " <>
    "a constraint is violated"))
 
 modInputVerif :: ConceptChunk

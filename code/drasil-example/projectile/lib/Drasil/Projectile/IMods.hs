@@ -42,7 +42,7 @@ timeQD :: SimpleQDef
 timeQD = mkQuantDef flightDur E.flightDur'
 
 timeDeriv :: Derivation
-timeDeriv = mkDerivName (phrase flightDur) (weave timeDerivSents $ map eS timeDerivEqns)
+timeDeriv = mkDerivName (phrase flightDur) (weave timeDerivSents $ fmap eS timeDerivEqns)
 
 timeDerivSents :: [Sentence]
 timeDerivSents = [timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4, timeDerivSent5]
@@ -67,7 +67,7 @@ timeDerivSent5 = foldlSentCol [S "From", refS speedIY,
   sParen (S "with" +:+ eS (sy iSpeed $= E.iSpeed)), S "we can replace", ch iyVel]
 
 timeDerivEqns :: [ModelExpr]
-timeDerivEqns = D.timeDeriv ++ [express timeQD]
+timeDerivEqns = D.timeDeriv <> [express timeQD]
 
 ---
 landPosIM :: InstanceModel
@@ -81,7 +81,7 @@ landPosQD :: SimpleQDef
 landPosQD = mkQuantDef landPos E.landPosExpr
 
 landPosDeriv :: Derivation
-landPosDeriv = mkDerivName (phrase landPos) (weave landPosDerivSents $ map eS landPosDerivEqns)
+landPosDeriv = mkDerivName (phrase landPos) (weave landPosDerivSents $ fmap eS landPosDerivEqns)
 
 landPosDerivSents :: [Sentence]
 landPosDerivSents = [landPosDerivSent1, landPosDerivSent2, landPosDerivSent3, landPosDerivSent4]
@@ -101,7 +101,7 @@ landPosDerivSent3 = foldlSentCol [S "From", refS speedIX,
 landPosDerivSent4 = S "Rearranging this gives us the required" +: phrase equation
 
 landPosDerivEqns :: [ModelExpr]
-landPosDerivEqns = D.landPosDeriv ++ [express landPosQD]
+landPosDerivEqns = D.landPosDeriv <> [express landPosQD]
 
 ---
 offsetIM :: InstanceModel

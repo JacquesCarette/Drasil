@@ -102,7 +102,7 @@ choiceSteps sg = fromList sg
 --   use-case-specific factor decides which step to use.
 choiceStep :: [Step] -> StepGroup
 choiceStep [] = error "choiceStep should be called with a non-empty list"
-choiceStep ss = fromList $ map (: []) ss
+choiceStep ss = fromList $ fmap (: []) ss
 
 -- | Specifies a step which must exist in some form in every use case.
 mandatoryStep :: Step -> StepGroup
@@ -155,7 +155,7 @@ libConstructor rq c as r = FI (rq :| []) Constructor c as (Just $ Assign r)
 --   the external library are required, and the result is assigned to a variable.
 libConstructorMultiReqs :: [Requires] -> CodeFuncChunk -> [Argument] ->
   CodeVarChunk -> FunctionInterface
-libConstructorMultiReqs [] _ _ _ = error $ "libConstructorMultiReqs should" ++
+libConstructorMultiReqs [] _ _ _ = error $ "libConstructorMultiReqs should" <>
   " be called with a non-empty list of Requires"
 libConstructorMultiReqs rqs c as r = FI (fromList rqs) Constructor c as
   (Just $ Assign r)
@@ -228,7 +228,7 @@ implementation = Implements
 
 -- | Specifies a constructor.
 constructorInfo :: CodeFuncChunk -> [Parameter] -> [Step] -> MethodInfo
-constructorInfo c = CI ("Constructor for " ++ codeName c ++ " objects")
+constructorInfo c = CI ("Constructor for " <> codeName c <> " objects")
 
 -- | Check if a 'MethodInfo' captures a constructor.
 isConstructor :: MethodInfo -> Bool

@@ -79,6 +79,7 @@ import Control.Monad.State (modify)
 
 import Drasil.FileHandling.Legacy (indent)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import qualified Prelude as P ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, text, (<>), (<+>), vcat,
   hcat, parens, brackets, braces, equals, quotes, punctuate, render)
 
@@ -547,10 +548,10 @@ instance MethodSym MatlabCode Doc TypeData ParamData MethodData Body where
   -- (function [outs] = name(ins)), not through a return statement, so we build
   -- the method directly instead of reusing the shared inOutFunc machinery.
   inOutFunc n _ ins outs both b = do
-    pms  <- mapM param (both ++ ins)
-    rets <- mapM (zoom lensMStoVS) (both ++ outs)
+    pms  <- mapM param (both P.<> ins)
+    rets <- mapM (zoom lensMStoVS) (both P.<> outs)
     bod  <- b
-    pure $ toCode $ mthd n $ mlFuncDoc n (map RC.variable rets) pms (RC.body bod)
+    pure $ toCode $ mthd n $ mlFuncDoc n (fmap RC.variable rets) pms (RC.body bod)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
 instance RenderMethod MatlabCode MethodData where
@@ -573,7 +574,7 @@ instance ModuleSym MatlabCode ModData MethodData where
   buildModule n _ fs = modFromData n (do
     fns <- mapM (zoom lensFStoMS) fs
     entryFn <- mlMainFunc n
-    let fnDocs = vibcat (map RC.method fns)
+    let fnDocs = vibcat (fmap RC.method fns)
         content = vibcat (filter (not . isEmpty) [entryFn, fnDocs])
     case fns of
       (f:_) | isEmpty entryFn -> modify (setModuleName (mthdName (unMLC f)))
@@ -638,7 +639,7 @@ mlCmtStart = text "%"
 -- | Makes a MATLAB comment. Every line starts with %.
 --   (We avoid %{ %} blocks: those need the markers alone on a line.)
 mlLineCmt :: [String] -> Doc
-mlLineCmt = vcat . map ((mlCmtStart <+>) . text)
+mlLineCmt = vcat . fmap ((mlCmtStart <+>) . text)
 
 -- | A stand-in print function. mlPrint never uses it, but it must be a real
 --   value so the print methods type-check.
@@ -724,7 +725,7 @@ mlPrint newLn f' _ v' = do
       nl = if newLn then "\\n" else ""
       fileArg = maybe empty (\fv -> RC.value fv <> listSep') mf
   stmtFromData (text "fprintf" <>
-    parens (fileArg <> text ("'" ++ fmt ++ nl ++ "'") <> listSep' <> RC.value v))
+    parens (fileArg <> text ("'" P.<> fmt P.<> nl P.<> "'") <> listSep' <> RC.value v))
     Semi
 
 mlInlineIf

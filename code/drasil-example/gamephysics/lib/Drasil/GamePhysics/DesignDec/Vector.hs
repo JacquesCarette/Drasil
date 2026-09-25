@@ -65,7 +65,7 @@ vectMult = funcDef "vectMult" [vV1, vV2] (Vect Real)
 vectNeg = funcDef "vectNeg" [v_v] (Vect Real)
   [
     FRet (FCall (funcUID vect)
-      $ map Neg [
+      $ fmap Neg [
         FCall (funcUID getX) [v_v],
         FCall (funcUID getY) [v_v]
       ]

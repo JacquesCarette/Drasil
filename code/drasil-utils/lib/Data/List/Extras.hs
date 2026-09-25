@@ -49,7 +49,7 @@ foldle1 f g (x:y:xs) = foldle f g (f x y) xs
 
 -- | Convert "row" of elements into "column" of elements.
 toColumn :: [a] -> [[a]]
-toColumn = map (: [])
+toColumn = fmap (: [])
 
 {- |
   Create a table body (not including header row) by applying the given
@@ -66,4 +66,4 @@ toColumn = map (: [])
 
 -}
 mkTable :: [a -> b] -> [a] -> [[b]]
-mkTable fs = map (\x -> map ($ x) fs)
+mkTable fs = fmap (\x -> fmap ($ x) fs)

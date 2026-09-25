@@ -96,9 +96,9 @@ allRefs :: FolderLocation -> [Reference]
 allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, paperGOOL, papersWiki,
   quickStartWiki, newWorkspaceSetupWiki, contribGuideWiki, workflowWiki, createProjWiki, debuggingWiki,
   icsePositionPaper, danPoster, wellUnderstoodPaper]
-  ++ exampleRefs (repoRt fl) (exRt fl)
-  ++ docRefs (docsRt fl)
-  ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
+  <> exampleRefs (repoRt fl) (exRt fl)
+  <> docRefs (docsRt fl)
+  <> analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
 
 -- | List of all 'LabelledContent's necessary for the website.
 websiteLCs :: FolderLocation -> [LabelledContent]
@@ -127,45 +127,45 @@ imageContent = llccFig "Drasil" $ figNoCapWithWidth EmptyS imagePath 50
 gitHubRef :: Reference
 gitHubRef = makeURI "gitHubRepo" gitHubInfoURL (shortname' $ S "gitHubRepo")
 wikiRef :: Reference
-wikiRef = makeURI "gitHubWiki" (gitHubInfoURL ++ "/wiki") (shortname' $ S "gitHubWiki")
+wikiRef = makeURI "gitHubWiki" (gitHubInfoURL <> "/wiki") (shortname' $ S "gitHubWiki")
 infoEncodingWiki :: Reference
-infoEncodingWiki = makeURI "InfoEncodingWiki" (gitHubInfoURL ++ "/wiki/Information-Encoding") (shortname' $ S "InfoEncodingWiki")
+infoEncodingWiki = makeURI "InfoEncodingWiki" (gitHubInfoURL <> "/wiki/Information-Encoding") (shortname' $ S "InfoEncodingWiki")
 chunksWiki :: Reference
-chunksWiki = makeURI "chunksWiki" (gitHubInfoURL ++ "/wiki/Chunks") (shortname' $ S "chunksWiki")
+chunksWiki = makeURI "chunksWiki" (gitHubInfoURL <> "/wiki/Chunks") (shortname' $ S "chunksWiki")
 recipesWiki :: Reference
-recipesWiki = makeURI "recipesWiki" (gitHubInfoURL ++ "/wiki/Recipes") (shortname' $ S "recipesWiki")
+recipesWiki = makeURI "recipesWiki" (gitHubInfoURL <> "/wiki/Recipes") (shortname' $ S "recipesWiki")
 paperGOOL :: Reference
-paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL ++ "/blob/main/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
+paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL <> "/blob/main/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
 papersWiki :: Reference
-papersWiki = makeURI "papersWiki" (gitHubInfoURL ++ "/wiki/Drasil-Papers-and-Documents") (shortname' $ S "papersWiki")
+papersWiki = makeURI "papersWiki" (gitHubInfoURL <> "/wiki/Drasil-Papers-and-Documents") (shortname' $ S "papersWiki")
 icsePositionPaper :: Reference
 icsePositionPaper = makeURI "icsePositionPaper" (danContributionPath
-  ++ "/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf") (shortname' $ S "icsePositionPaper")
+  <> "/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf") (shortname' $ S "icsePositionPaper")
 danPoster :: Reference
 danPoster = makeURI "danPoster" (danContributionPath
-  ++ "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
+  <> "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
 wellUnderstoodPaper :: Reference
 wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL
-  ++ "/blob/main/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
+  <> "/blob/main/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
 quickStartWiki :: Reference
-quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL ++ "#quick-start") (shortname' $ S "quickStartWiki")
+quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL <> "#quick-start") (shortname' $ S "quickStartWiki")
 newWorkspaceSetupWiki :: Reference
-newWorkspaceSetupWiki = makeURI "newWorkspaceSetupWiki" (gitHubInfoURL ++ "/wiki/New-Workspace-Setup") (shortname' $ S "newWorkspaceSetupWiki")
+newWorkspaceSetupWiki = makeURI "newWorkspaceSetupWiki" (gitHubInfoURL <> "/wiki/New-Workspace-Setup") (shortname' $ S "newWorkspaceSetupWiki")
 contribGuideWiki :: Reference
-contribGuideWiki = makeURI "contribGuideWiki" (gitHubInfoURL ++ "/wiki/Contributor's-Guide") (shortname' $ S "contribGuideWiki")
+contribGuideWiki = makeURI "contribGuideWiki" (gitHubInfoURL <> "/wiki/Contributor's-Guide") (shortname' $ S "contribGuideWiki")
 workflowWiki :: Reference
-workflowWiki = makeURI "workflowWiki" (gitHubInfoURL ++ "/wiki/Workflow") (shortname' $ S "workflowWiki")
+workflowWiki = makeURI "workflowWiki" (gitHubInfoURL <> "/wiki/Workflow") (shortname' $ S "workflowWiki")
 createProjWiki :: Reference
-createProjWiki = makeURI "createProjWiki" (gitHubInfoURL ++ "/wiki/Creating-Your-Project-in-Drasil") (shortname' $ S "createProjWiki")
+createProjWiki = makeURI "createProjWiki" (gitHubInfoURL <> "/wiki/Creating-Your-Project-in-Drasil") (shortname' $ S "createProjWiki")
 debuggingWiki :: Reference
-debuggingWiki = makeURI "debuggingWiki" (gitHubInfoURL ++ "/wiki/Debugging-in-Drasil") (shortname' $ S "debuggingWiki")
+debuggingWiki = makeURI "debuggingWiki" (gitHubInfoURL <> "/wiki/Debugging-in-Drasil") (shortname' $ S "debuggingWiki")
 
 -- | Hardcoded info for the title, URL, and image path.
 websiteTitle :: String
 gitHubInfoURL, imagePath, danContributionPath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
-danContributionPath = gitHubInfoURL ++ "/blob/main/People/Dan"
+danContributionPath = gitHubInfoURL <> "/blob/main/People/Dan"
 imagePath = "./images/Icon.png"
 
 -- * Footer Section

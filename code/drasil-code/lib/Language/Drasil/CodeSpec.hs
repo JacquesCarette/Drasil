@@ -87,7 +87,7 @@ instance HasProjectName CodeSpec where
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a
-assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
+assocToMap = Map.fromList . fmap (\x -> (x ^. uid, x))
 
 -- | Get ODE from ExtLib
 getODE :: [ExtLib] -> Maybe ODE
@@ -98,7 +98,7 @@ getODE (Math ode: _) = Just ode
 -- | Maps ODE to their respective 'CodeDefinition'.
 mapODE :: Maybe ODE -> [CodeDefinition]
 mapODE Nothing = []
-mapODE (Just ode) = map odeDef $ odeInfo ode
+mapODE (Just ode) = odeDef <$> odeInfo ode
 
 -- | Creates a 'CodeSpec' using the provided 'System', 'Choices', and 'Mod's.
 mkCodeSpec :: S.SmithEtAlSRS -> Choices -> CodeSpec
@@ -109,21 +109,21 @@ mkCodeSpec si@S.ICO{ S._inputs = ins
   let els = extLibs chs
       libReqs = concatMap odeLibReqs els
       infoReqs = concatMap odeInfoReqs els
-      db = insertAll (libReqs ++ infoReqs) $ si ^. systemdb
+      db = insertAll (libReqs <> infoReqs) $ si ^. systemdb
       sysMeta = set systemdb db $ si ^. systemMeta
       ddefs = si ^. dataDefns
-      inputs' = map quantvar $ NE.toList ins
-      const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
+      inputs' = quantvar <$> NE.toList ins
+      const' = fmap qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)
-      derived = map qtov $ getDerivedInputs ddefs inputs' const' db
-      rels = (map qtoc (getEqModQdsFromIm (si ^. instModels) ++ mapMaybe qdEFromDD ddefs) \\ derived)
-        ++ mapODE (getODE $ extLibs chs)
-        ++ map qtoc (handWiredDefs chs)
+      derived = qtov <$> getDerivedInputs ddefs inputs' const' db
+      rels = (fmap qtoc (getEqModQdsFromIm (si ^. instModels) <> mapMaybe qdEFromDD ddefs) \\ derived)
+        <> mapODE (getODE $ extLibs chs)
+        <> fmap qtoc (handWiredDefs chs)
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.
-      outs' = map quantvar $ NE.toList outs
-      allInputs = inputs' ++ map quantvar derived
-      exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
+      outs' = quantvar <$> NE.toList outs
+      allInputs = inputs' <> fmap quantvar derived
+      exOrder = solveExecOrder rels (allInputs <> fmap quantvar cnsts) outs' db
   in CS {
         _csSysMeta = sysMeta,
         -- FIXME: This _should_ be different in at least one way. The SM from
@@ -162,7 +162,7 @@ getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [SimpleQDef]
 getDerivedInputs ddefs ins cnsts db =
   filter ((`subsetOf` refSet) . flip codevars db . expr . (^. defnExpr)) (mapMaybe qdEFromDD ddefs)
-  where refSet = ins ++ map quantvar cnsts
+  where refSet = ins <> fmap quantvar cnsts
 
 -- | Get a list of 'Constraint's for a list of 'CodeChunk's.
 getConstraints :: (HasUID c) => ConstraintCEMap -> [c] -> [ConstraintCE]
@@ -170,5 +170,5 @@ getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
 -- | Get a list of 'CodeVarChunk's from a constraint.
 constraintvars :: ConstraintCE -> ChunkDB -> [CodeVarChunk]
-constraintvars (Range _ ri) m = map (varResolve m) $ nub $ eNamesRI ri
-constraintvars (Elem _ ri)  m = map (varResolve m) $ eDep ri
+constraintvars (Range _ ri) m = fmap (varResolve m) $ nub $ eNamesRI ri
+constraintvars (Elem _ ri)  m = varResolve m <$> eDep ri

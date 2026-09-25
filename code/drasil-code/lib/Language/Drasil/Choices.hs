@@ -74,7 +74,7 @@ class RenderChoices a where
     showChs :: a -> Sentence
     showChsList :: [a] -> Sentence
     showChsList [] = S "None"
-    showChsList lst = foldlSent_ (map showChs lst)
+    showChsList lst = foldlSent_ (fmap showChs lst)
 
 -- | Architecture of a program
 data Architecture = Archt {
@@ -184,7 +184,7 @@ instance RenderChoices CodeConcept where
 
 -- | Builds a 'ConceptMatchMap' from an association list of chunks and 'CodeConcepts'.
 matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
-matchConcepts = Map.fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
+matchConcepts = Map.fromList . fmap (\(cnc,cdc) -> (cnc ^. uid, cdc))
 
 -- | Specifies which 'CodeType' should be used to represent each mathematical
 -- 'Space'. ['CodeType'] is preferentially-ordered, first 'CodeType' that does not
@@ -378,20 +378,20 @@ spaceToCodeType S.Rational       = [Double, Float]
 spaceToCodeType S.Boolean        = [Boolean]
 spaceToCodeType S.Char           = [Char]
 spaceToCodeType S.String         = [String]
-spaceToCodeType (S.Vect s)       = map List (spaceToCodeType s)
-spaceToCodeType (S.Matrix _ _ s) = map (List . List) (spaceToCodeType s)
-spaceToCodeType (S.Set s)        = map List (spaceToCodeType s)
-spaceToCodeType (S.Array s)      = map Array (spaceToCodeType s)
+spaceToCodeType (S.Vect s)       = fmap List (spaceToCodeType s)
+spaceToCodeType (S.Matrix _ _ s) = fmap (List . List) (spaceToCodeType s)
+spaceToCodeType (S.Set s)        = fmap List (spaceToCodeType s)
+spaceToCodeType (S.Array s)      = fmap Array (spaceToCodeType s)
 spaceToCodeType (S.Actor s)      = [Object s]
 spaceToCodeType S.Void           = [Void]
-spaceToCodeType (S.Reference s)  = map Reference (spaceToCodeType s)
+spaceToCodeType (S.Reference s)  = fmap Reference (spaceToCodeType s)
 spaceToCodeType (S.Function i t) = [Func is ts | is <- ins, ts <- trgs]
     where trgs = spaceToCodeType t
-          ins  = map spaceToCodeType (toList i)
+          ins  = fmap spaceToCodeType (toList i)
 
 -- | Renders 'Choices' as 'Sentence's.
 choicesSent :: Choices -> [Sentence]
-choicesSent chs = map chsFieldSent [
+choicesSent chs = fmap chsFieldSent [
     (S "Modularity",                    showChs $ modularity $ architecture chs),
     (S "Input Structure",               showChs $ inputStructure $ dataInfo chs),
     (S "Constant Structure",            showChs $ constStructure $ dataInfo chs),

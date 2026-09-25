@@ -16,8 +16,8 @@ aboutSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Ref
 aboutSec csRef docRef analysisSecRef repoRef wikiRef infoEncodingWiki chunksWiki recipesWiki paperGOOL papersWiki
   icsePositionPaper danPoster wellUnderstoodPaper =
   section (S "About") -- Title
-  (map mkParagraph [aboutParagraph1 repoRef wikiRef, aboutParagraph2 csRef docRef analysisSecRef, aboutParagraph3]
-  ++ [currentlyGeneratedArtifacts] ++ [mkParagraph aboutParagraph4] ++ [futureGeneratedArtifacts] ++ map mkParagraph
+  (fmap mkParagraph [aboutParagraph1 repoRef wikiRef, aboutParagraph2 csRef docRef analysisSecRef, aboutParagraph3]
+  <> [currentlyGeneratedArtifacts] <> [mkParagraph aboutParagraph4] <> [futureGeneratedArtifacts] <> fmap mkParagraph
   [aboutParagraph5 infoEncodingWiki, aboutParagraph6 chunksWiki, aboutParagraph7 recipesWiki, aboutParagraph8 paperGOOL,
   aboutParagraph9 papersWiki icsePositionPaper danPoster wellUnderstoodPaper]) -- Contents
   [] $ makeSecRef "About" $ S "About" -- Section reference
@@ -49,7 +49,7 @@ aboutParagraph3 :: Sentence
 aboutParagraph3 = S "The following is a list of artifacts that Drasil currently generates:"
 
 currentlyGeneratedArtifacts :: Contents
-currentlyGeneratedArtifacts = enumBulletU $ map foldlSent_
+currentlyGeneratedArtifacts = enumBulletU $ fmap foldlSent_
   [[S "SRS"],
   [S "code"],
   [S "README"],
@@ -60,7 +60,7 @@ aboutParagraph4 :: Sentence
 aboutParagraph4 = S "We hope to generate the following artifacts in the future:"
 
 futureGeneratedArtifacts :: Contents
-futureGeneratedArtifacts = enumBulletU $ map foldlSent_
+futureGeneratedArtifacts = enumBulletU $ fmap foldlSent_
   [[S "License"],
   [S "Installation Instructions"],
   [S "Dependency List"],

@@ -22,7 +22,7 @@ typeCheckSI sys = do
         dds = sys ^. dataDefns
         qts = sys ^. quantities
     -- build a variable context (a map of UIDs to "Space"s [types])
-    let cxt = M.fromList $ map (\x -> (x ^. uid, x ^. typ)) qts
+    let cxt = M.fromList $ fmap (\x -> (x ^. uid, x ^. typ)) qts
 
     -- dump out the list of variables (commented out for now)
     -- putStr "Symbol Table: "
@@ -31,10 +31,10 @@ typeCheckSI sys = do
     putStrLn "=====[ Start type checking ]====="
     let
       exprSpaceTups :: (HasUID t, RequiresChecking t Expr Space) => [t] -> [(UID, [(Expr, Space)])]
-      exprSpaceTups = map (\t -> (t ^. uid, requiredChecks t))
+      exprSpaceTups = fmap (\t -> (t ^. uid, requiredChecks t))
 
     -- grab all type-check-able expressions (w.r.t. Space) from DDs and IMs
-    let toChk = exprSpaceTups ims ++ exprSpaceTups dds
+    let toChk = exprSpaceTups ims <> exprSpaceTups dds
 
     -- split up theories by "ones that contain things to type check" vs "not",
     -- but in reverse
@@ -42,17 +42,17 @@ typeCheckSI sys = do
 
     -- note that some theories didn't expose anything to type-check
     mapM_
-      (\(t, _) -> putStrLn $ "WARNING: `" ++ show t ++ "` does not expose any expressions to type check.")
+      (\(t, _) -> putStrLn $ "WARNING: `" <> show t <> "` does not expose any expressions to type check.")
       notChkd
 
     -- type check them
-    let chkdd = map (second (map (uncurry (check cxt)))) chkd
+    let chkdd = fmap (second (fmap (uncurry (check cxt)))) chkd
 
     -- format 'ok' messages and 'type error' messages, as applicable
     let formattedChkd :: [Either (String, [Either TypeError Space]) ()]
-        formattedChkd = map
+        formattedChkd = fmap
                           (\(t, tcs) -> if any isLeft tcs
-                            then Left ("`" ++ show t ++ "` exposes ill-typed expressions!", filter isLeft tcs)
+                            then Left ("`" <> show t <> "` exposes ill-typed expressions!", filter isLeft tcs)
                             else Right () -- pure $ "`" ++ show t ++ "` OK!"
                           )
                           chkdd

@@ -54,8 +54,8 @@ myOtherList = var "myOtherList" (listType double)
 helloWorldMainOO
   :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => MS (r mthd)
-helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ listSliceTests
-    ++ [block [printLn $ litString "", ifCond [
+helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] <> listSliceTests
+    <> [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (var "dummy" string) mainFn (litString "dummy"),
         objDecDef (var "myObj" char) mainFn (litChar 'o')]),
@@ -67,8 +67,8 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ lis
 helloWorldMainProc
   :: (ProcProg r vis scope typ param val stmt mthd prg file mod bod block)
   => MS (r mthd)
-helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
-    ++ [block [printLn $ litString "", ifCond [
+helloWorldMainProc = mainFunction (body ([ helloInitVariables] <> listSliceTests
+    <> [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (var "dummy" string) mainFn (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody,
@@ -100,7 +100,7 @@ helloInitVariables
 helloInitVariables = block [comment "Initializing variables",
   varDec (var "a" int) mainFn,
   varDecDef (var "b" int) mainFn (litInt 5),
-  arrayDecDef (var "arr" (arrayType int)) mainFn (map litInt [1..3]),
+  arrayDecDef (var "arr" (arrayType int)) mainFn (fmap litInt [1..3]),
   printStr "Value of arr: ",
   printLn $ valueOf (var "arr" (arrayType int)),
   printStr "Length of arr: ",

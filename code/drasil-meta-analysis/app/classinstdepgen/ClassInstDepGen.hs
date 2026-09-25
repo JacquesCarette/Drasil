@@ -105,7 +105,7 @@ main :: IO ()
 main = do
   -- directory variables (for code and output directories)
   codeDirectory <- getCurrentDirectory
-  let outputDirectory = codeDirectory ++ "/analysis/ClassInstDep"
+  let outputDirectory = codeDirectory <> "/analysis/ClassInstDep"
 
   -- gets names + filepaths of all drasil- packages/directories
   drctyList <- DC.getDirectories codeDirectory "drasil-"
@@ -119,13 +119,13 @@ main = do
   let rawFileData = intercalate [DC.createFile "" "" "newline"] allFiles
 
   -- creates Entry instances (w/ file data) from File instances (File -> Entry)
-  rawEntryData <- zipWithM (createEntry codeDirectory) rawFileData (map DC.fileName rawFileData)
+  rawEntryData <- zipWithM (createEntry codeDirectory) rawFileData (fmap DC.fileName rawFileData)
 
   let ordrdClasses = ordClasses classInstOrd rawEntryData
-      ordrdClassNames = map className ordrdClasses
+      ordrdClassNames = fmap className ordrdClasses
 
   -- creates EntryString instances containing entry data
-  bakedEntryData <- zipWithM (compileEntryData ordrdClassNames) rawEntryData (map fileName rawEntryData)
+  bakedEntryData <- zipWithM (compileEntryData ordrdClassNames) rawEntryData (fmap fileName rawEntryData)
   -- contains joined string with each file EntryString ("\n" separated)
   let entryData = intercalate "\n" bakedEntryData
 
@@ -163,14 +163,14 @@ outputCSV outputFilePath entryData ordClassInsts = do
 outputGraph :: FilePath -> [Entry] -> IO ()
 outputGraph outputDirectory entries = do
   let sortedEntries = mkEntryPack $ filter (not.null.fst) $ sortByPackage entries
-  mapM_ (mkOutputGraph (outputDirectory ++ "/packagegraphs")) sortedEntries
+  mapM_ (mkOutputGraph (outputDirectory <> "/packagegraphs")) sortedEntries
 
 -- Helper that creates one dot graph per Drasil package.
 mkOutputGraph :: FilePath -> EntryPack -> IO ()
 mkOutputGraph outputDirectory entry = do
   createDirectoryIfMissing True outputDirectory
   setCurrentDirectory outputDirectory
-  handle <- openFile (dPack entry ++ ".dot") WriteMode
+  handle <- openFile (dPack entry <> ".dot") WriteMode
   let nodes = [("turquoise4", concatMap types $ pkgEntries entry),("pink", concatMap usedCls $ pkgEntries entry),("magenta", concatMap cls $ pkgEntries entry)]
       edgs = concatMap edges $ pkgEntries entry
   digraph handle (dPack entry) nodes edgs
@@ -178,20 +178,20 @@ mkOutputGraph outputDirectory entry = do
 -- Extracts the drasil package name from entries and sorts them.
 -- Output form is (drasil-* package, [contents related to package])
 sortByPackage :: [Entry] -> [(String, [Entry])]
-sortByPackage entries = concatOver2 $ map (\e -> (drasilPack e, [e])) entries
+sortByPackage entries = concatOver2 $ fmap (\e -> (drasilPack e, [e])) entries
 
 -- Convert from [(Package, contents)] to [EntryPack].
 -- This makes the data easier to work with and allows us to extract
 -- the datatypes, classes, used (but not defined in the package) classes,
 -- and class instances (which will become edges).
 mkEntryPack :: [(String, [Entry])] -> [EntryPack]
-mkEntryPack = map $ \(n, es) -> makeEntryPack n $ filter isEntryEmpty $ map entryToSmallEntry es
+mkEntryPack = fmap $ \(n, es) -> makeEntryPack n $ filter isEntryEmpty $ fmap entryToSmallEntry es
   where
     -- only take the information needed to construct a graph from a full entry
     entryToSmallEntry :: Entry -> SmallEntry
     entryToSmallEntry Entry{dataTypes = dts, newtypes = nts, classes = clss, classInstances = clsinst} =
-      makeSmallEntry (dts ++ nts) (nubOrd $ map className clss)
-      (nubOrd $ concatMap snd (mkPkgEdges clsinst) \\ map className clss) $ mkPkgEdges clsinst
+      makeSmallEntry (dts <> nts) (nubOrd $ fmap className clss)
+      (nubOrd $ concatMap snd (mkPkgEdges clsinst) \\ fmap className clss) $ mkPkgEdges clsinst
 
 -- Cleanup function to get rid of empty SmallEntries
 isEntryEmpty :: SmallEntry -> Bool
@@ -199,7 +199,7 @@ isEntryEmpty (SE [] [] [] []) = False
 isEntryEmpty _ = True
 
 escapeDotID :: String -> String
-escapeDotID = map go
+escapeDotID = fmap go
   where
     go :: Char -> Char
     go '.' = '_'
@@ -207,7 +207,7 @@ escapeDotID = map go
 
 -- Helper to convert class instances into graph edges.
 mkPkgEdges :: [ClassInstance] -> [Edges]
-mkPkgEdges cis = concatOver2 $ map (\ClassInstance {dnType = typ, clsInstName = clss} -> (escapeDotID typ, [escapeDotID clss])) cis
+mkPkgEdges cis = concatOver2 $ fmap (\ClassInstance {dnType = typ, clsInstName = clss} -> (escapeDotID typ, [escapeDotID clss])) cis
 
 -- Helper to concatenate tuples based on the first part of the tuple
 -- (if two elements have the same thing for the first part of the tuple, concatenate the second parts)
@@ -215,7 +215,7 @@ concatOver2 :: Eq a => [(a, [b])] -> [(a, [b])]
 concatOver2 [] = []
 concatOver2 [x] = [x]
 concatOver2 (x1:x2:xs)
-  | fst x1 == fst x2 = concatOver2 ((fst x1, snd x1 ++ snd x2):xs)
+  | fst x1 == fst x2 = concatOver2 ((fst x1, snd x1 <> snd x2):xs)
   | otherwise = x1:concatOver2 (x2:xs)
 
 ------------
@@ -228,13 +228,13 @@ outputHTML outputFilePath ordClassInsts bakedEntryData = do
   createDirectoryIfMissing False outputFilePath
   setCurrentDirectory outputFilePath
   -- row length needed for lenCheck
-  let columnNames = splitOn "," "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions" ++ ordClassInsts
+  let columnNames = splitOn "," "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions" <> ordClassInsts
       rowLength = length columnNames
 
   dataTableHTML <- openFile "DataTable.html" WriteMode
   hPutStrLn dataTableHTML htmlDataTableTitle
   hPutStrLn dataTableHTML htmlConfig
-  hPutStrLn dataTableHTML $ mkhtmlTitle $ "Package,\t,\t,\t,\t,\t,Class Instances" ++ mkhtmlEmptyCell (rowLength - 7)
+  hPutStrLn dataTableHTML $ mkhtmlTitle $ "Package,\t,\t,\t,\t,\t,Class Instances" <> mkhtmlEmptyCell (rowLength - 7)
   hPutStrLn dataTableHTML $ mkhtmlHeader columnNames
   hPutStr dataTableHTML $ mkhtmlRow $ lenCheck (separateN bakedEntryData) rowLength
   hPutStrLn dataTableHTML htmlEnd
@@ -243,7 +243,7 @@ outputHTML outputFilePath ordClassInsts bakedEntryData = do
 -- | Checks the length of an 'EntryString' to see if it matchs the given length. If not, it will add empty html cells.
 lenCheck :: [EntryString] -> Int -> [EntryString]
 lenCheck [] _ = []
-lenCheck (x:xs) len = (x ++ mkhtmlEmptyCell (len - length (splitOn "," x))) : lenCheck xs len
+lenCheck (x:xs) len = (x <> mkhtmlEmptyCell (len - length (splitOn "," x))) : lenCheck xs len
 
 -- | Separate an 'EntryString' by newspace (used for separating the incoming bakedEntryData in 'output').
 separateN :: [EntryString] -> [EntryString]
@@ -264,7 +264,7 @@ createEntry homeDirectory file filename = do
       fn = filename
       fp = DC.filePath file
       -- entry file path is stripped of home directory and drasil- pack
-      efp = (++ "/") $ (\\ homeDirectory ++ "/drasil-" ++ drpk ++ "/") fp
+      efp = (++ "/") $ (\\ homeDirectory <> "/drasil-" <> drpk <> "/") fp
 
   -- extracts entry data from File data type
   -- stripInstances = [(dataType,classInfo)]
@@ -279,8 +279,8 @@ createEntry homeDirectory file filename = do
         | drpk == "gool" = GOOL
         | otherwise = Drasil
 
-  let clss = map (makeClass clstp) classNames
-      clsint = map makeClassInstance stripInstances
+  let clss = fmap (makeClass clstp) classNames
+      clsint = fmap makeClassInstance stripInstances
 
   let entry = makeEntry drpk fn efp dtl ntl clss clsint
   pure entry
@@ -299,7 +299,7 @@ compileEntryData ordClassInsts entry _ = do
   -- extracts data, newtype and class names + class instances from entry
   let dataNames = dataTypes entry
       newtypeNames = newtypes entry
-      classNames = map className (classes entry)
+      classNames = fmap className (classes entry)
       entryClassInsts = classInstances entry
 
   -- guards determine how to handle first data entry line
@@ -310,22 +310,22 @@ compileEntryData ordClassInsts entry _ = do
       hEnt _ _ _     = f "\t" "\t" "\t"
 
   -- creates heads of each data, newtype and class entry line
-  let dtEntryHds = map (("\t,\t,\t,"++) . (++",\t,\t")) dataNames
-      ntEntryHds = map (("\t,\t,\t,\t,"++) . (++",\t")) newtypeNames
-      clsEntries = map ("\t,\t,\t,\t,\t,"++) classNames
+  let dtEntryHds = fmap (("\t,\t,\t,"++) . (++",\t,\t")) dataNames
+      ntEntryHds = fmap (("\t,\t,\t,\t,"++) . (++",\t")) newtypeNames
+      clsEntries = fmap ("\t,\t,\t,\t,\t,"++) classNames
 
   -- creating "Y" references to class instances for data types
-  let dtInstRefNames = map (getRefNames entryClassInsts) dataNames
+  let dtInstRefNames = fmap (getRefNames entryClassInsts) dataNames
       dtRefLines = createRefLines ordClassInsts dtInstRefNames
       dtEntries = zipWith join' dtEntryHds dtRefLines
 
   -- creating "Y" references to class instances for newtype types
-  let ntInstRefNames = map (getRefNames entryClassInsts) newtypeNames
+  let ntInstRefNames = fmap (getRefNames entryClassInsts) newtypeNames
       ntRefLines = createRefLines ordClassInsts ntInstRefNames
       ntEntries = zipWith join' ntEntryHds ntRefLines
 
   -- creates file entry data by combining data, newtype and class entries
-  let entryData = dtEntries ++ ntEntries ++ clsEntries
+  let entryData = dtEntries <> ntEntries <> clsEntries
 
   -- guards determine how to handle overall file entry output
   -- for single line entry data vs. multi-line entry data
@@ -334,9 +334,9 @@ compileEntryData ordClassInsts entry _ = do
       tEnt 1 (x:_) _ _      = fstl x
       tEnt 1 _ (x:_) _      = fstl x
       tEnt 1 _ _ _          = entryLine
-      tEnt _ (x:_) _ (_:xs) = fstl x ++ "\n" ++ sbE xs
-      tEnt _ _ (x:_) (_:xs) = fstl x ++ "\n" ++ sbE xs
-      tEnt _ _ _ (_:xs)     = entryLine ++ "\n" ++ sbE xs
+      tEnt _ (x:_) _ (_:xs) = fstl x <> "\n" <> sbE xs
+      tEnt _ _ (x:_) (_:xs) = fstl x <> "\n" <> sbE xs
+      tEnt _ _ _ (_:xs)     = entryLine <> "\n" <> sbE xs
       tEnt _ _ _ _          = error "Unexpected case"
       fstl = join' entryLine
       sbE  = intercalate "\n"
@@ -350,7 +350,7 @@ ordClasses cIO rED = concatMap (getClasses hslCls drlCls glCls) cIO where
   (hslCls,drlCls,glCls) = sortClasses dfCls instClsNms
   -- dfCls = all defined classes; instClsNms = all instanced class names
   dfCls = concatMap classes rED
-  instClsNms = nub . map clsInstName $ concatMap classInstances rED
+  instClsNms = nub . fmap clsInstName $ concatMap classInstances rED
 
 -- gets lists of all defined/instanced classes; sorts by class type
 sortClasses :: [Class] -> [ClassName] -> ([Class],[Class],[Class])
@@ -358,11 +358,11 @@ sortClasses dCls iClsN = (haskellCls,drasilCls,goolCls) where
   -- partitions defined classes into GOOL and Drasil type classes
   (goolCls,drasilCls) = partition (isTypeOf GOOL) dCls
   -- gets defined classes names; used to isolate for haskell classes
-  goolClsNms = map className goolCls
-  drasilClsNms = map className drasilCls
-  haskellClsNms = iClsN \\ (goolClsNms ++ drasilClsNms)
+  goolClsNms = fmap className goolCls
+  drasilClsNms = fmap className drasilCls
+  haskellClsNms = iClsN \\ (goolClsNms <> drasilClsNms)
   -- makes new Haskell type classes
-  haskellCls = map (makeClass Haskell) haskellClsNms
+  haskellCls = fmap (makeClass Haskell) haskellClsNms
 
 -- outputs class instance group; used by ordClasses to order the class instances
 -- by class type (as defined in config file settings)
@@ -389,14 +389,14 @@ isTypeOf_ typeName classInstance = dnType classInstance == typeName
 
 -- joins two strings together with ","
 join' :: String -> String -> String
-join' a b = a ++ "," ++ b
+join' a b = a <> "," <> b
 
 -- gets class instance reference names for a data/newtype typename (DNType)
 getRefNames :: [ClassInstance] -> DNType -> [ClassName]
-getRefNames clsInsts tn = map clsInstName $ filter (isTypeOf_ tn) clsInsts
+getRefNames clsInsts tn = clsInstName <$> filter (isTypeOf_ tn) clsInsts
 
 -- class instance ref lines (EntryString fragments) for each data/newtype line
 createRefLines :: [ClassName] -> [[ClassName]] -> [EntryString]
-createRefLines classInsts instRefNames = map (intercalate ",") instRefs where
-  instRefs = zipWith (map . isInstanceOf) instRefNames instanceSkeleton
+createRefLines classInsts instRefNames = fmap (intercalate ",") instRefs where
+  instRefs = zipWith (fmap . isInstanceOf) instRefNames instanceSkeleton
   instanceSkeleton = replicate (length instRefNames) classInsts

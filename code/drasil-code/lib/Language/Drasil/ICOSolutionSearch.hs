@@ -35,14 +35,14 @@ topologicalSort foundOrder allDefs knowns needs db
   -- Continuously looks for the next possible set of 'Needs' that can be
   -- computed until all are consumed.
   | otherwise = topologicalSort
-                  (foundOrder ++ nextCalcs)
+                  (foundOrder <> nextCalcs)
                   notReady
-                  (knowns ++ newlyCalculated)
+                  (knowns <> newlyCalculated)
                   (needs \\ newlyCalculated)
                   db
   where
     (nextCalcs, notReady) = partition (computable db knowns) allDefs
-    newlyCalculated = map quantvar nextCalcs
+    newlyCalculated = fmap quantvar nextCalcs
 
 -- | Check if a 'Def' is computable given a list of 'Known's.
 computable :: ChunkDB -> [Known] -> Def -> Bool
@@ -55,9 +55,9 @@ computable db knowns def = requiredInputs `subsetOf` knowns
 
 prettyError :: [Def] -> [Known] -> [Need] -> a
 prettyError defs knowns needs = error $
-  "The following outputs cannot be computed: " ++ lm needs ++ "\n" ++
-  "Unused definitions are: " ++ lm defs ++ "\n" ++
-  "Known values are: " ++ lm knowns
+  "The following outputs cannot be computed: " <> lm needs <> "\n" <>
+  "Unused definitions are: " <> lm defs <> "\n" <>
+  "Known values are: " <> lm knowns
   where
     lm :: HasUID c => [c] -> String
-    lm = intercalate ", " . map showUID
+    lm = intercalate ", " . fmap showUID

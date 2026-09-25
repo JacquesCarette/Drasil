@@ -3,6 +3,7 @@
 module Drasil.SRS.Generator.TraceabilityGraphs (outputDot) where
 
 import Prelude hiding ((<>))
+import qualified Prelude as P ((<>))
 
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), vcat, nest,
   hsep, empty)
@@ -27,19 +28,19 @@ outputDot gi =
 -- | General output function for making a traceability graph. Takes in the graph information, title, edge generator functions, and node family functions.
 mkOutput :: GraphInfo -> String -> (GraphInfo -> [(UID, [UID])]) -> [GraphInfo -> NodeFamily] -> FileLayout
 mkOutput gi ttl getDirections getLabels =
-  file [ps|{ttl}.dot|] (mkDot ttl (getDirections gi) (map ($ gi) getLabels))
+  file [ps|{ttl}.dot|] (mkDot ttl (getDirections gi) (fmap ($ gi) getLabels))
 
 -- | Constructs the full DOT document.
 mkDot :: String -> [(UID, [UID])] -> [NodeFamily] -> Doc
 mkDot title edges families =
   vcat
     [ text "digraph" <+> quote title <+> text "{",
-      nest 4 $ vcat $ map vcat [map mkDirections edges, map mkNodes families],
+      nest 4 $ vcat $ fmap vcat [fmap mkDirections edges, fmap mkNodes families],
       text "}"
     ]
 
 mkDirections :: (UID, [UID]) -> Doc
-mkDirections (u, deps) = vcat $ map (mkEdge u) (filter (not . null . show) deps)
+mkDirections (u, deps) = vcat $ fmap (mkEdge u) (filter (not . null . show) deps)
   where
     mkEdge src dest = quote (show src) <+> text "->" <+> quote (show dest) <> text ";"
 
@@ -62,7 +63,7 @@ mkSubgraph title contents
         [ text "subgraph" <+> quote title <+> text "{",
           nest 4 $ vcat
             [ text "rank=\"same\";",
-              hsep (map (quote . show) contents) <> text ";"
+              hsep (fmap (quote . show) contents) <> text ";"
             ],
           text "}"
         ]
@@ -70,7 +71,7 @@ mkSubgraph title contents
 quote :: String -> Doc
 quote = text . escape
   where
-    escape s = "\"" ++ concatMap escChar s ++ "\""
+    escape s = "\"" P.<> concatMap escChar s P.<> "\""
     escChar '"' = "\\\""
     escChar '\\' = "\\\\"
     escChar c = [c]

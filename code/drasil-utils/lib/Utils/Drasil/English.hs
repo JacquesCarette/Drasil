@@ -8,7 +8,7 @@ import Data.String (IsString (fromString))
 -- | String capitalization.
 capitalize :: String -> String
 capitalize [] = error "capitalize called on an empty String"
-capitalize (c:cs) = toUpper c:map toLower cs
+capitalize (c:cs) = toUpper c:fmap toLower cs
 
 -- | Organize a list of Strings (or other 'IsString'/'Semigroup' types),
 -- separated by commas and inserting "and" before the last item.

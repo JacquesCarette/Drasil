@@ -313,19 +313,19 @@ addFile Header = addHeader
 
 addHeader :: FilePath -> GOOLState -> GOOLState
 addHeader fp = over headers (\h -> ifElemError fp h $
-  "Multiple files with same name encountered: " ++ fp)
+  "Multiple files with same name encountered: " <> fp)
 
 addSource :: FilePath -> GOOLState -> GOOLState
 addSource fp = over sources (\s -> ifElemError fp s $
-  "Multiple files with same name encountered: " ++ fp)
+  "Multiple files with same name encountered: " <> fp)
 
 addCombinedHeaderSource :: FilePath -> GOOLState -> GOOLState
 addCombinedHeaderSource fp = addSource fp . addHeader fp
 
 addProgNameToPaths :: String -> GOOLState -> GOOLState
-addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
-  over headers (map f)
-  where f = ((n++"/")++)
+addProgNameToPaths n = over mainMod (fmap f) . over sources (fmap f) .
+  over headers (fmap f)
+  where f = ((n<>"/")++)
 
 setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = over mainMod (\m -> if isNothing m then Just n else error
@@ -339,8 +339,8 @@ addLangImportVS i = over methodState (addLangImport i)
 
 addExceptionImports :: [Exception] -> MethodState -> MethodState
 addExceptionImports es = over (lensMStoFS . langImports)
-  (\is -> nubSort $ is ++ imps)
-  where imps = map printExc $ filter hasLoc es
+  (\is -> nubSort $ is <> imps)
+  where imps = printExc <$> filter hasLoc es
 
 getLangImports :: FS [String]
 getLangImports = gets (^. langImports)
@@ -448,7 +448,7 @@ getClasses = gets (^. currClasses)
 
 updateClassMap :: String -> FileState -> FileState
 updateClassMap n fs = over (goolState . classMap) (Map.union (Map.fromList $
-  map (n,) (fs ^. currClasses))) fs
+  fmap (n,) (fs ^. currClasses))) fs
 
 getClassMap :: VS (Map String String)
 getClassMap = gets (^. (lensVStoFS . goolState . classMap))
@@ -472,7 +472,7 @@ callMapTransClosure = over callMap tClosure
         traceCalls :: Map QualifiedName [QualifiedName] -> [QualifiedName] ->
           [QualifiedName]
         traceCalls _ [] = []
-        traceCalls cm (c:cs) = c : traceCalls cm (cs ++
+        traceCalls cm (c:cs) = c : traceCalls cm (cs <>
           Map.findWithDefault [] c cm)
 
 updateMEMWithCalls :: GOOLState -> GOOLState
@@ -481,12 +481,12 @@ updateMEMWithCalls s = over methodExceptionMap (\mem -> Map.mapWithKey
   where addCallExcs :: Map QualifiedName [ExceptionType] ->
           Map QualifiedName [QualifiedName] -> QualifiedName -> [ExceptionType]
           -> [ExceptionType]
-        addCallExcs mem cm f es = nub $ es ++ concatMap (\fn -> Map.findWithDefault
+        addCallExcs mem cm f es = nub $ es <> concatMap (\fn -> Map.findWithDefault
           [] fn mem) (Map.findWithDefault [] f cm)
 
 addParameter :: String -> MethodState -> MethodState
 addParameter p = over currParameters (\ps -> ifElemError p ps $
-  "Function has duplicate parameter: " ++ p)
+  "Function has duplicate parameter: " <> p)
 
 getParameters :: MS [String]
 getParameters = gets (reverse . (^. currParameters))
@@ -501,7 +501,7 @@ addException :: ExceptionType -> MethodState -> MethodState
 addException e = over exceptions (\es -> nub $ e : es)
 
 addExceptions :: [ExceptionType] -> ValueState -> ValueState
-addExceptions es = over (methodState . exceptions) (\exs -> nub $ es ++ exs)
+addExceptions es = over (methodState . exceptions) (\exs -> nub $ es <> exs)
 
 getExceptions :: MS [ExceptionType]
 getExceptions = gets (^. exceptions)
@@ -557,7 +557,7 @@ genVarName candidates backup = do
   used <- gets (^. varNames)
   let
     isAvailable (n,c) = maybe True (maybe (const False) (>=) c) $ Map.lookup n used
-    choice = foldr const (splitVarName backup) $ filter isAvailable $ map splitVarName candidates
+    choice = foldr const (splitVarName backup) $ filter isAvailable $ fmap splitVarName candidates
   bumpVarName choice
 
 genLoopIndex :: MS String
@@ -596,5 +596,5 @@ getVarScope :: String -> MS ScopeData
 getVarScope n = do
   sMap <- gets (^. varScopes)
   pure $ case Map.lookup n sMap of
-    Nothing -> error $ "Variable with no declared scope: " ++ n
+    Nothing -> error $ "Variable with no declared scope: " <> n
     (Just scp) -> scp

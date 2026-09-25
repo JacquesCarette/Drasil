@@ -58,6 +58,7 @@ import Drasil.Shared.State (VS, FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
   addParameter, getParameters, useVarName)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
+import qualified Prelude as P ((<>))
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
@@ -69,17 +70,17 @@ import qualified Text.PrettyPrint.HughesPJ as D
 -- Bodies --
 
 multiBody :: (RC.BodyElim r bod, Monad r) => [MS (r bod)] -> MS (r Doc)
-multiBody bs = onStateList (toCode . vibcat) $ map (onStateValue RC.body) bs
+multiBody bs = onStateList (toCode . vibcat) $ fmap (onStateValue RC.body) bs
 
 -- Blocks --
 
 block
   :: (Monad r, RenderStatement r stmt, StatementElim r stmt)
   => [MS (r stmt)] -> MS (r Doc)
-block sts = onStateList (toCode . R.block . map RC.statement) (map RC.stmt sts)
+block sts = onStateList (toCode . R.block . fmap RC.statement) (fmap RC.stmt sts)
 
 multiBlock :: (RC.BlockElim r block, Monad r) => [MS (r block)] -> MS (r Doc)
-multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
+multiBlock bs = onStateList (toCode . vibcat) $ fmap (onStateValue RC.block) bs
 
 -- Types --
 
@@ -237,7 +238,7 @@ arrayElem
 arrayElem arr' i' = do
   i <- IC.intToIndex i'
   arr <- arr'
-  let vName = render (RC.value arr) ++ "[" ++ render (RC.value i) ++ "]"
+  let vName = render (RC.value arr) P.<> "[" P.<> render (RC.value i) P.<> "]"
       vType = IC.innerType $ pure $ valueType arr
       vRender = RC.value arr <> brackets (RC.value i)
   mkStateVar vName vType vRender
@@ -304,7 +305,7 @@ newObjMixedArgs
   => String -> MixedCtorCall r TypeData val
 newObjMixedArgs s tp vs ns = do
   t <- tp
-  RC.call Nothing Nothing (s ++ getTypeString t) (pure t) vs ns
+  RC.call Nothing Nothing (s P.<> getTypeString t) (pure t) vs ns
 
 lambda
   ::
@@ -320,7 +321,7 @@ lambda
 lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
-  let ft = IC.funcType (map (pure . binderType) ps) (pure $ valueType ex)
+  let ft = IC.funcType (fmap (pure . binderType) ps) (pure $ valueType ex)
   valFromData (Just 0) Nothing ft (f ps ex)
 
 objAccess
@@ -470,7 +471,7 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
   ifNoElse [(IC.listSize v ?> IC.litInt 0, oneLiner $
     prFn (IC.listAccess v (IC.listSize v #- IC.litInt 1)))],
   prLnFn "]"]
-  where l_i = "list_i" ++ show n
+  where l_i = "list_i" P.<> show n
         i = IC.var l_i IC.int
 
 printSet
@@ -493,11 +494,11 @@ printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ",
   IC.forEach i v
     (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
   prLnFn "}"]
-  where set_i = "set_i" ++ show n
+  where set_i = "set_i" P.<> show n
         i = IC.var set_i s
 
 printObj :: ClassName -> (String -> MS (r stmt)) -> MS (r stmt)
-printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
+printObj n prLnFn = prLnFn $ "Instance of " P.<> n P.<> " object"
 
 print
   ::
@@ -605,7 +606,7 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
           elseLabel <> optSpaceDoc os <> ifStart,
           indent $ RC.body bd,
           bEnd]) $+$ ifEnd) eBody
-    in sequence (ifSect c : map elseIfSect cs ++ [elseSect])
+    in sequence (ifSect c : fmap elseIfSect cs P.<> [elseSect])
       >>= (mkStmtNoEnd . vcat)
 
 tryCatch :: (RenderStatement r stmt) => (r bod -> r bod -> Doc) ->
@@ -662,7 +663,7 @@ initStmts
     , BodySym r bod block
     )
   => Initializers r val -> MS (r bod)
-initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
+initStmts = bodyStatements . fmap (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
   ::

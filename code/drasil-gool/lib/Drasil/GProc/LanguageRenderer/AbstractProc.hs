@@ -22,6 +22,7 @@ import Drasil.Shared.State (MS, VS, FS, lensFStoGS, lensFStoMS, lensMStoVS,
   useVarName, currParameters, setVarScope)
 
 import Prelude hiding ((<>))
+import qualified Prelude as P ((<>))
 import Control.Monad.State (get, modify)
 import Control.Lens ((^.), over)
 import qualified Control.Lens as L (set)
@@ -61,7 +62,7 @@ buildModule n imps bot fs = RP.modFromData n (do
   fns <- mapM (zoom lensFStoMS) fs
   is <- imps
   bt <- bot
-  let fnDocs = vibcat (map RC.method fns ++ [bt])
+  let fnDocs = vibcat (fmap RC.method fns P.<> [bt])
   pure $ emptyIfEmpty fnDocs (vibcat (filter (not . isEmpty) [is, fnDocs])))
 
 docMod
@@ -128,7 +129,7 @@ funcDecDef v scp ps b = do
   modify $ setVarScope (variableName vr) (RC.scopeData scp)
   s <- get
   f <- IC.function (variableName vr) private (pure $ variableType vr)
-    (map IC.param ps) b
+    (fmap IC.param ps) b
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RC.method f
 

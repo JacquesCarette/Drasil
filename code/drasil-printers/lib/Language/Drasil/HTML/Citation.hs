@@ -44,7 +44,7 @@ printBib bib =
 
 -- | Internal: For when we add other things to reference like website, newspaper.
 renderCite :: Citation -> ([HTMLBody], [HTMLBody])
-renderCite (Cite e kind cfs) = ([rawText' e], renderF cfs style ++ sufx)
+renderCite (Cite e kind cfs) = ([rawText' e], renderF cfs style <> sufx)
   where
     (style, sufx) = case kind of
       Article   -> (useStyleArtcl, [rawText' $ sufxPrint cfs])
@@ -130,13 +130,13 @@ useStyleArtcl Chicago = artclChicago
 
 -- | Internal: Cite books in MLA format.
 bookMLA :: CiteField -> [HTMLBody]
-bookMLA (Address   s) = specToHTML s ++ [colon]
+bookMLA (Address   s) = specToHTML s <> [colon]
 bookMLA (Edition   s) = [rawText $ T.show s, rawText' $ sufxer s, ed]
 bookMLA (Series    s) = [emphasis_ (specToHTML s), period]
 bookMLA (Title     s) = [emphasis_ (specToHTML s), period] --If there is a series or collection, this should be in quotes, not italics
 bookMLA (Volume    s) = [vol, rawText $ T.show s, comma]
-bookMLA (Publisher s) = specToHTML s ++ [comma]
-bookMLA (Author    p) = specToHTML (rendPeople' p) ++ [period]
+bookMLA (Publisher s) = specToHTML s <> [comma]
+bookMLA (Author    p) = specToHTML (rendPeople' p) <> [period]
 bookMLA (Year      y) = [rawText $ T.show y, period]
 bookMLA (BookTitle s) = [emphasis_ (specToHTML s), period]
 bookMLA (Journal   s) = [emphasis_ (specToHTML s), comma]
@@ -144,15 +144,15 @@ bookMLA (Pages   [p]) = [pg, rawText $ T.show p, period]
 bookMLA (Pages     p) = [pp, foldPages p, period]
 bookMLA (Note      s) = specToHTML s
 bookMLA (Number    n) = [no, rawText $ T.show n, comma]
-bookMLA (School    s) = specToHTML s ++ [comma]
-bookMLA (HowPublished (Verb s)) = specToHTML s ++ [comma]
+bookMLA (School    s) = specToHTML s <> [comma]
+bookMLA (HowPublished (Verb s)) = specToHTML s <> [comma]
 bookMLA (HowPublished (URL s)) = [Anchor (printSpec s) [] (specToHTML s), period]
 bookMLA (Editor       p) = [editedBy, foldPeople p, comma]
 bookMLA (Chapter      _) = []
-bookMLA (Institution  i) = specToHTML i ++ [comma]
-bookMLA (Organization i) = specToHTML i ++ [comma]
+bookMLA (Institution  i) = specToHTML i <> [comma]
+bookMLA (Organization i) = specToHTML i <> [comma]
 bookMLA (Month        m) = [rawText' (show m), comma]
-bookMLA (Type         t) = specToHTML t ++ [comma]
+bookMLA (Type         t) = specToHTML t <> [comma]
 
 -- | Internal: Cite books in APA format.
 bookAPA :: CiteField -> [HTMLBody] -- FIXME: year needs to come after author in APA
@@ -196,12 +196,12 @@ artclChicago i = bookChicago i
 -- | Internal: Generate a list of people (after applying a given function).
 rendPeople :: (Person -> String) -> People -> Spec
 rendPeople _ []     = S "N.a." -- "No authors given"
-rendPeople f people = S . foldlList $ map f people --foldlList is in drasil-utils
+rendPeople f people = S . foldlList $ fmap f people --foldlList is in drasil-utils
 
 -- | Internal: Generate a list of people (of form FirstName LastName).
 rendPeople' :: People -> Spec
 rendPeople' []     = S "N.a." -- "No authors given"
-rendPeople' people = S . foldlList $ map rendPersLFM (init people) ++ [rendPersL (last people)]
+rendPeople' people = S . foldlList $ fmap rendPersLFM (init people) <> [rendPersL (last people)]
 
 -- | Internal: Organize a list of pages.
 foldPages :: [Int] -> HTMLBody
@@ -209,7 +209,7 @@ foldPages = rawText' . foldlList . numList "–"
 
 -- | Internal: Organize a list of people.
 foldPeople :: People -> HTMLBody
-foldPeople p = rawText' . foldlList $ map fullName p
+foldPeople p = rawText' . foldlList $ fmap fullName p
 
 -- | Internal: Generate a person's last name.
 rendPersL :: Person -> String

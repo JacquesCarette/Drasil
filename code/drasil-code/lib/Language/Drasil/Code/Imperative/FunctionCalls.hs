@@ -274,7 +274,7 @@ genInOutCall n inFunc outFunc = do
         ins <- mapM mkVar (ins' \\ outs')
         outs <- mapM mkVar (outs' \\ ins')
         both <- mapM mkVar (ins' `intersect` outs')
-        stmt <- fAppInOut m n (map valueOf ins) outs both
+        stmt <- fAppInOut m n (fmap valueOf ins) outs both
         pure $ Just stmt
   genInOutCall' mm
 
@@ -292,7 +292,7 @@ genCall n = do
       genCallExported m = pure m
       genCallInClass Nothing = pure Nothing
       genCallInClass (Just c) = if c == currc then pure $ Map.lookup c (eMap
-        g) <|> error (c ++ " class missing from export map")
+        g) <|> error (c <> " class missing from export map")
         else pure Nothing
   genCallExported $ Map.lookup n (eMap g)
 
@@ -498,6 +498,6 @@ genInOutCallProc n inFunc outFunc = do
         ins <- mapM mkVarProc (ins' \\ outs')
         outs <- mapM mkVarProc (outs' \\ ins')
         both <- mapM mkVarProc (ins' `intersect` outs')
-        stmt <- fAppInOutProc m n (map valueOf ins) outs both
+        stmt <- fAppInOutProc m n (fmap valueOf ins) outs both
         pure $ Just stmt
   genInOutCall' mm

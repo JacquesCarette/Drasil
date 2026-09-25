@@ -89,7 +89,7 @@ generator l dt sd chs cs = let
   eMap = mem,
   libEMap = lem,
   clsMap = cdm,
-  defSet = Set.fromList $ keys mem ++ keys cdm,
+  defSet = Set.fromList $ keys mem <> keys cdm,
   getVal = folderVal chs,
   _softwareDossierInfo = sdsInfo,
   -- stateful
@@ -104,15 +104,15 @@ generator l dt sd chs cs = let
         showDate Show = dt
         showDate Hide = ""
         ((pth, elmap, lname), libLog) = runState (chooseODELib l $ getODE $ extLibs chs) []
-        els = map snd elmap
+        els = fmap snd elmap
         nms = [lname]
         mem = modExportMap cs chs modules'
         lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap cs chs modules'
-        modules' = (cs ^. mods) ++ concatMap (^. auxMods) els
+        modules' = (cs ^. mods) <> concatMap (^. auxMods) els
         nonPrefChs = choicesSent chs
         des = vcat $
-          map (oneLineSentenceDoc pinfo) (nonPrefChs ++ concLog ++ libLog)
+          fmap (oneLineSentenceDoc pinfo) (nonPrefChs <> concLog <> libLog)
 
 -- OO Versions --
 
@@ -134,8 +134,8 @@ generateCode l (SomeProgGenerator unReprProg) unReprPack g =
       designLogFile = [file [ps|designLog.txt|] (ds ^. designLog) |
                         not $ isEmpty $ ds ^. designLog]
       initFile = [exactFile [ps|__init__.py|] empty | l == Python]
-      packageFiles = toFileLayout (progMods prog) ++ progDossier
-        ++ designLogFile ++ initFile
+      packageFiles = toFileLayout (progMods prog) <> progDossier
+        <> designLogFile <> initFile
   in
     directory
       [ps|{dirName}|]
@@ -148,9 +148,9 @@ toFileLayout fc =
     root = foldl (\m f -> insertFile (filePath f, modDoc $ fileMod f) m) M.empty fc
 
     entryToLayout (n, File d) = file [ps|{n}|] d
-    entryToLayout (n, Folder m) = directory [ps|{n}|] $ map entryToLayout $ M.assocs m
+    entryToLayout (n, Folder m) = directory [ps|{n}|] $ entryToLayout <$> M.assocs m
   in
-    map entryToLayout (M.assocs root)
+    fmap entryToLayout (M.assocs root)
 
 data Entry a = File a | Folder (M.Map String (Entry a))
   deriving (Show)
@@ -166,7 +166,7 @@ insertFile (p, d) m =
       in M.insert fname (Folder $ insertFile (drop 1 rest, d) folderM) m
     else M.insertWith (\_ -> dupError p) p (File d) m
   where
-    dupError fname = error $ "A file or folder with name '" ++ fname ++ "' already exists."
+    dupError fname = error $ "A file or folder with name '" <> fname <> "' already exists."
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
 -- configuration file (all subject to the user's choices).
@@ -191,7 +191,7 @@ genPackage unRepr = do
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
-      as = map fullName (g ^. authors)
+      as = fmap fullName (g ^. authors)
       cfp = g ^. configFiles
       pinfo = printfo g
       -- FIXME: The below code does `Doc -> String` conversion.
@@ -253,12 +253,12 @@ genUnmodular = do
       cls = any (`member` clsMap g) [giName, dvName, icName]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
     (genMainFunc
-      : map (fmap Just) (map genCalcFunc (g ^. execOrder)
-        ++ concatMap genModFuncs (modules g))
-      ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub,
-        genInputConstraints Pub]) ++ [genOutputFormat]))
+      : fmap (fmap Just) (fmap genCalcFunc (g ^. execOrder)
+        <> concatMap genModFuncs (modules g))
+      <> ((if cls then [] else [genInputFormat Pub, genInputDerived Pub,
+        genInputConstraints Pub]) <> [genOutputFormat]))
     ([genInputClass Auxiliary, genConstClass Auxiliary]
-      ++ map (fmap Just) (concatMap genModClasses $ modules g))
+      <> fmap (fmap Just) (concatMap genModClasses $ modules g))
 
 -- | Generates all modules for an SCS program.
 genModules
@@ -272,7 +272,7 @@ genModules = do
   cal    <- genCalcMod
   out    <- genOutputMod
   moddef <- traverse genModDef (modules g) -- hack ?
-  pure $ mn : inp ++ con ++ cal : out ++ moddef
+  pure $ mn : inp <> con <> (cal : out <> moddef)
 
 -- Procedural Versions --
 
@@ -297,8 +297,8 @@ generateCodeProc l unReprProg unReprPack g =
       (PackageData prog progDossier) = unReprPack pckg
       designLogFile = [file [ps|designLog.txt|] (ds ^. designLog) |
                         not $ isEmpty $ ds ^. designLog]
-      packageFiles = toFileLayout (progMods prog) ++ progDossier
-        ++ designLogFile
+      packageFiles = toFileLayout (progMods prog) <> progDossier
+        <> designLogFile
   in
     directory
       [ps|{dirName}|]
@@ -326,7 +326,7 @@ genPackageProc unRepr = do
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
-      as = map fullName (g ^. authors)
+      as = fmap fullName (g ^. authors)
       cfp = g ^. configFiles
       pinfo = printfo g
       prps = show $ oneLineSentenceDoc pinfo (foldlSent $ g ^. purpose)
@@ -387,10 +387,10 @@ genUnmodularProc = do
   if cls then error "genUnmodularProc: Procedural renderers do not support classes"
   else genModuleWithImportsProc n umDesc (concatMap (^. imports) (elems $ extLibMap g))
         (genMainFuncProc
-          : map (fmap Just) (map genCalcFuncProc (g ^. execOrder)
-            ++ concatMap genModFuncsProc (modules g))
-          ++ ([genInputFormatProc Pub, genInputDerivedProc Pub,
-              genInputConstraintsProc Pub] ++ [genOutputFormatProc]))
+          : fmap (fmap Just) (fmap genCalcFuncProc (g ^. execOrder)
+            <> concatMap genModFuncsProc (modules g))
+          <> ([genInputFormatProc Pub, genInputDerivedProc Pub,
+              genInputConstraintsProc Pub] <> [genOutputFormatProc]))
 
 -- | Generates all modules for an SCS program.
 genModulesProc
@@ -405,7 +405,7 @@ genModulesProc = do
   out    <- genOutputModProc
   moddef <- traverse genModDefProc (modules g) -- hack ?
   if con then error "genModulesProc: Procedural renderers do not support classes"
-  else pure $ mn : inp ++ cal : out ++ moddef
+  else pure $ mn : inp <> (cal : out <> moddef)
 
 -- | Private utilities used in 'generateCode'.
 getDir :: Lang -> String

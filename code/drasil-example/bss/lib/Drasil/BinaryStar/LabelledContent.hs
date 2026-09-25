@@ -17,8 +17,8 @@ resourcePath = "../../../../datafiles/bss/"
 
 figBSS :: LabelledContent
 figBSS = llccFig "bssPhysSys" $ figWithWidth (D.toSent $ atStartNP (the physicalSystem))
-  (resourcePath ++ "bss.png") 60
+  (resourcePath <> "bss.png") 60
 
 sysCtxFig1 :: LabelledContent
 sysCtxFig1 = llccFig "sysCtxDiag" $ fig (titleize sysCont)
-  (resourcePath ++ "SystemContextFigure.png")
+  (resourcePath <> "SystemContextFigure.png")

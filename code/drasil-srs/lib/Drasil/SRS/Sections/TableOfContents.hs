@@ -84,9 +84,9 @@ toToC (AppndxSec a)        = mktAppndxSec a
 toToC (OffShelfSolnsSec o) = mktOffShelfSolnSec o
 
 mkHeaderItem :: Sentence -> [Sentence] -> ItemType
-mkHeaderItem hdr itm = Nested hdr $ Bullet $ map (\x -> (Flat x, Nothing)) itm
+mkHeaderItem hdr itm = Nested hdr $ Bullet $ fmap (\x -> (Flat x, Nothing)) itm
 mkHeaderItem' :: Sentence -> [ItemType] -> ItemType
-mkHeaderItem' hdr itm = Nested hdr $ Bullet $ map (, Nothing) itm
+mkHeaderItem' hdr itm = Nested hdr $ Bullet $ fmap (, Nothing) itm
 
 -- | Helper for creating the 'Table of Contents' section ToC entry
 mktToCSec :: ItemType
@@ -95,7 +95,7 @@ mktToCSec = Flat $ namedRef SRS.tOfContLabel $ titleize' tOfCont
 -- | Helper for creating the 'Reference Material' section ToC entry
 mktRefSec :: RefSec -> ItemType
 mktRefSec (RefProg _ l) =
-  mkHeaderItem (namedRef SRS.refMatLabel $ titleize refMat) $ map mktSubRef l
+  mkHeaderItem (namedRef SRS.refMatLabel $ titleize refMat) $ fmap mktSubRef l
   where
     mktSubRef :: RefTab -> Sentence
     mktSubRef TUnits        = namedRef SRS.tOfUnitLabel   $ titleize' Doc.tOfUnit
@@ -107,7 +107,7 @@ mktRefSec (RefProg _ l) =
 -- | Helper for creating the 'Introduction' section ToC entry
 mktIntroSec :: IntroSec -> ItemType
 mktIntroSec (IntroProg _ _ l) =
-  mkHeaderItem (namedRef SRS.introLabel $ titleize Doc.introduction) $ map mktSubIntro l
+  mkHeaderItem (namedRef SRS.introLabel $ titleize Doc.introduction) $ fmap mktSubIntro l
   where
     mktSubIntro :: IntroSub -> Sentence
     mktSubIntro (IPurpose _) = namedRef SRS.docPurposeLabel  $ titleize Doc.prpsOfDoc
@@ -118,7 +118,7 @@ mktIntroSec (IntroProg _ _ l) =
 -- | Helper for creating the 'Stakeholders' section ToC entry
 mktStkhldrSec:: StkhldrSec -> ItemType
 mktStkhldrSec (StkhldrProg l) =
-  mkHeaderItem (namedRef SRS.stakeholderLabel $ titleize' Doc.stakeholder) $ map mktSub l
+  mkHeaderItem (namedRef SRS.stakeholderLabel $ titleize' Doc.stakeholder) $ fmap mktSub l
   where
     mktSub :: StkhldrSub -> Sentence
     mktSub (Client _) = namedRef SRS.customerLabel $ D.toSent $ titleizeNP $ the Doc.customer
@@ -127,7 +127,7 @@ mktStkhldrSec (StkhldrProg l) =
 -- | Helper for creating the 'General System Description' section ToC entry
 mktGSDSec :: GSDSec -> ItemType
 mktGSDSec (GSDProg l) =
-  mkHeaderItem (namedRef SRS.genSysDescLabel $ titleize Doc.generalSystemDescription) $ map mktSub l
+  mkHeaderItem (namedRef SRS.genSysDescLabel $ titleize Doc.generalSystemDescription) $ fmap mktSub l
   where
     mktSub :: GSDSub -> Sentence
     mktSub (SysCntxt _)   = namedRef SRS.sysContextLabel     $ titleize  Doc.sysCont
@@ -137,11 +137,11 @@ mktGSDSec (GSDProg l) =
 -- | Helper for creating the 'Specific System Description' section ToC entry
 mktSSDSec :: SSDSec -> ItemType
 mktSSDSec (SSDProg l) =
-  mkHeaderItem' (namedRef SRS.specSystDescLabel $ titleize Doc.specificsystemdescription) $ map mktSubSSD l
+  mkHeaderItem' (namedRef SRS.specSystDescLabel $ titleize Doc.specificsystemdescription) $ fmap mktSubSSD l
   where
     mktSubSSD :: SSDSub -> ItemType
-    mktSubSSD (SSDProblem (PDProg _ _ sl1)) = mkHeaderItem (namedRef SRS.probDescLabel $ titleize Doc.problemDescription) $ map mktSubPD sl1
-    mktSubSSD (SSDSolChSpec (SCSProg sl2))  = mkHeaderItem (namedRef SRS.solCharSpecLabel $ titleize Doc.solutionCharSpec) $ map mktSubSCS sl2
+    mktSubSSD (SSDProblem (PDProg _ _ sl1)) = mkHeaderItem (namedRef SRS.probDescLabel $ titleize Doc.problemDescription) $ fmap mktSubPD sl1
+    mktSubSSD (SSDSolChSpec (SCSProg sl2))  = mkHeaderItem (namedRef SRS.solCharSpecLabel $ titleize Doc.solutionCharSpec) $ fmap mktSubSCS sl2
 
     mktSubPD :: PDSub -> Sentence
     mktSubPD (TermsAndDefs _ _) = namedRef SRS.termDefsLabel $ titleize' Doc.termAndDef
@@ -160,7 +160,7 @@ mktSSDSec (SSDProg l) =
 -- | Helper for creating the 'Requirements' section ToC entry
 mktReqrmntSec :: ReqrmntSec -> ItemType
 mktReqrmntSec (ReqsProg l) =
-  mkHeaderItem (namedRef SRS.requirementsLabel $ titleize' requirement) $ map mktSubs l
+  mkHeaderItem (namedRef SRS.requirementsLabel $ titleize' requirement) $ fmap mktSubs l
   where
     mktSubs :: ReqsSub -> Sentence
     mktSubs (FReqsSub _ _)  = namedRef SRS.funcReqLabel    $ titleize' Doc.functionalRequirement

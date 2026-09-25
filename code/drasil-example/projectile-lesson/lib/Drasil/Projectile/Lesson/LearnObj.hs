@@ -11,7 +11,7 @@ import Drasil.Projectile.Concepts (projMotion)
 
 learnObjContext :: Contents
 learnObjContext = UlC $ ulcc $ Enumeration $ bulletNested learnObjList $
-  map bulletFlat [[], assumpResp, solveResp]
+  fmap bulletFlat [[], assumpResp, solveResp]
 
 learnObjList :: [Sentence]
 learnObjList = [S "Derive kinematic" +:+ plural equation +:+ S "for 2D" +:+ phrase projMotion

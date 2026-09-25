@@ -62,7 +62,7 @@ type LHS = [Term]
   (exactDbl 1 $+ sy qdDerivGain $* (opProcessVariable $^^ 1)) is the appended element
 -}
 ($++) :: [Term] -> Term -> LHS
-($++) xs x  = xs ++ [x]
+($++) xs x  = xs <> [x]
 
 -- | Describe the structural content of a system of linear ODEs with six necessary fields
 data DifferentialModel = SystemOfLinearODEs {
@@ -124,7 +124,7 @@ instance Definition    DifferentialModel where defn = dmconc . defn
 instance Express       DifferentialModel where express = formStdODE
 
 instance RequiresChecking DifferentialModel Expr Space where
-  requiredChecks dmo = map (, dmo ^. (depVar . typ)) $ formEquations (coeffVects dm) (unknownVect dm) (constantVect dm) (_depVar dmo)
+  requiredChecks dmo = (, dmo ^. (depVar . typ)) <$> formEquations (coeffVects dm) (unknownVect dm) (constantVect dm) (_depVar dmo)
     where dm = makeAODESolverFormat dmo
 
 -- | Set the expression be a system of linear ODE to Ax = b
@@ -134,15 +134,15 @@ formStdODE d
   | otherwise = equiv (coeffsMatix $. columnVec unknownVec : constantVec)
   where
     size = length (d ^. coefficients)
-    coeffsMatix = express(matrix (map NE.toList (NE.toList $ d ^. coefficients)))
+    coeffsMatix = express(matrix (fmap NE.toList (NE.toList $ d ^. coefficients)))
     unknownVec = formAllUnknown (d ^. unknowns) (d ^. depVar) (d ^. indepVar)
     constantVec = [express (columnVec (NE.toList $ d ^. dmConstants))]
 
 -- | Set the single ODE to a flat equation form, "left hand side" = "right hand side"
 formASingleODE :: NonEmpty Expr -> [ModelExpr] -> NonEmpty Expr -> ModelExpr
 formASingleODE coeffs unks consts = equiv (lhs : rhs)
-  where lhs = foldl1 ($+) (map (\(x,y) -> express x $* y) $ filterZeroCoeff coeffs unks)
-        rhs = map express $ NE.toList consts
+  where lhs = foldl1 ($+) ((\(x,y) -> express x $* y) <$> filterZeroCoeff coeffs unks)
+        rhs = express <$> NE.toList consts
 
 -- | Remove zero coefficients for the displaying purpose
 filterZeroCoeff :: NonEmpty Expr -> [ModelExpr] -> [(Expr, ModelExpr)]
@@ -150,7 +150,7 @@ filterZeroCoeff es mes = filter (\x -> fst x /= exactDbl 0) $ zip (NE.toList es)
 
 -- | Form all derivatives for the displaying purpose
 formAllUnknown :: [Unknown] -> ConstrConcept -> DefinedQuantityDict -> [ModelExpr]
-formAllUnknown unks dep ind = map (\x -> formAUnknown x dep ind) unks
+formAllUnknown unks dep ind = fmap (\x -> formAUnknown x dep ind) unks
 
 -- | Form a derivative for the displaying purpose
 formAUnknown :: Unknown -> ConstrConcept -> DefinedQuantityDict -> ModelExpr
@@ -214,7 +214,7 @@ createCoefficients [] _ = error "Left hand side is an empty list"
 createCoefficients _ [] = error "No unknowns"
 createCoefficients lhs (x:xs) =
   genCoefficient (findCoefficient x lhs) :|
-  map (\z ->  genCoefficient (findCoefficient z lhs)) xs
+  fmap (\z ->  genCoefficient (findCoefficient z lhs)) xs
 
 -- | Get the coefficient, if it is Nothing, return zero
 genCoefficient :: Maybe Term -> Expr
@@ -234,7 +234,7 @@ transUnknowns (_ : us) = us
 -- of term to the right hand side. Then, reduce its coefficient.
 transCoefficients :: NonEmpty Expr -> [Expr]
 transCoefficients (e :| es) =
-  map (\x -> if x == zero then zero else neg x $/ e) es
+  fmap (\x -> if x == zero then zero else neg x $/ e) es
   where zero = exactDbl 0
 
 -- | Add the "Identity Matrix" to Coefficients
@@ -251,7 +251,7 @@ constIdentityRowVect len index = addIdentityValue index $ replicate len $ exactD
 
 -- | Recreate the identity row vector with identity value
 addIdentityValue :: Int -> [Expr] -> [Expr]
-addIdentityValue n es = front ++ ident back
+addIdentityValue n es = front <> ident back
   where
     (front, back) = splitAt n es
     ident [] = error "second half should not be empty"
@@ -260,7 +260,7 @@ addIdentityValue n es = front ++ ident back
 -- | Add zeroes to Constants
 -- len is the size of new constant vector
 addIdentityConsts :: [Expr] -> Int -> [Expr]
-addIdentityConsts expr len = replicate (len - 1) (exactDbl 0) ++ expr
+addIdentityConsts expr len = replicate (len - 1) (exactDbl 0) <> expr
 
 -- | divide the leading coefficient in the constant term
 divideConstant :: Expr -> Expr -> Expr
@@ -301,9 +301,9 @@ formEquations _ [] _ _ = []
 formEquations _ _ [] _ = []
 formEquations (ex:exs) unks (y:ys) depVa =
   (if y == exactDbl 0 then finalExpr else finalExpr $+ y) : formEquations exs unks ys depVa
-  where indexUnks = map (idx (sy depVa) . int) unks -- create X
+  where indexUnks = fmap (idx (sy depVa) . int) unks -- create X
         filteredExprs = filter (\x -> fst x /= exactDbl 0) (zip ex indexUnks) -- remove zero coefficients
-        termExprs = map (uncurry ($*)) filteredExprs -- multiple coefficient with depend variables
+        termExprs = fmap (uncurry ($*)) filteredExprs -- multiple coefficient with depend variables
         finalExpr = foldl1 ($+) termExprs -- add terms together
 
 -- Construct an InitialValueProblem.

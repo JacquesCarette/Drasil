@@ -40,7 +40,7 @@ probConstraint = Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)
 risk :: InstanceModel
 risk = imNoDeriv (equationalModelN (riskFun ^. term) riskQD)
   (qwUC modElas : qwUC loadDF : qwUC stressDistFac :
-    map qwUC [sflawParamK, sflawParamM, minThick] ++ abInputConstraints)
+    fmap qwUC [sflawParamK, sflawParamM, minThick] <> abInputConstraints)
     riskFun [] [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
     dRefInfo campidelli $ Equation [14]] "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
 
@@ -116,8 +116,8 @@ tolPreQD = mkQuantDef tolLoad tolPreEq
 
 tolStrDisFac :: InstanceModel
 tolStrDisFac = imNoDeriv (equationalModelN (sdfTol ^. term) tolStrDisFacQD)
-  ((loadDF, Nothing) : qwC pbTol probConstraint : qwUC modElas : abInputConstraints ++
-    map qwUC [sflawParamM, sflawParamK, minThick]) sdfTol []
+  ((loadDF, Nothing) : qwC pbTol probConstraint : qwUC modElas : abInputConstraints <>
+    fmap qwUC [sflawParamM, sflawParamK, minThick]) sdfTol []
   [dRef astm2009] "sdfTol" [pbTolUsr, aGrtrThanB, stdVals [sflawParamM,
       sflawParamK, modElas], hRef, ldfRef]
 
@@ -131,7 +131,7 @@ tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))
 
 probOfBreak :: InstanceModel
 probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
-  [qwUC $ risk ^. output] (dqdWr probBr) [probConstraint] (map dRef [astm2009, beasonEtAl1998]) "probOfBreak"
+  [qwUC $ risk ^. output] (dqdWr probBr) [probConstraint] (fmap dRef [astm2009, beasonEtAl1998]) "probOfBreak"
   [riskRef]
 
 probOfBreakQD :: SimpleQDef

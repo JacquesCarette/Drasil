@@ -33,10 +33,10 @@ vibcat :: [Doc] -> Doc
 vibcat = vicat blank
 
 vmap :: (a -> Doc) -> [a] -> Doc
-vmap f = vcat . map f
+vmap f = vcat . fmap f
 
 vimap :: Doc -> (a -> Doc) -> [a] -> Doc
-vimap c f = vicat c . map f
+vimap c f = vicat c . fmap f
 
 emptyIfEmpty :: Doc -> Doc -> Doc
 emptyIfEmpty ifDoc elseDoc = if isEmpty ifDoc then empty else elseDoc

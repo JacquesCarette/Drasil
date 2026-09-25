@@ -16,7 +16,7 @@ type ChunkType = String
 type DumpedChunkDB = Map ChunkType [UID]
 
 dumpChunkDB :: ChunkDB -> DumpedChunkDB
-dumpChunkDB cdb = SM.fromList $ map (\ty -> (show ty, findAll' ty cdb)) (typesRegistered cdb)
+dumpChunkDB cdb = SM.fromList $ fmap (\ty -> (show ty, findAll' ty cdb)) (typesRegistered cdb)
 
 type Dependencies = Map UID [UID]
 type Dependants = Map UID [UID]

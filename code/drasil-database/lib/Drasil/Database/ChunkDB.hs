@@ -85,7 +85,7 @@ find u cdb = do
 -- | Find a chunk by its 'UID' in the 'ChunkDB', throwing a hard error if it is
 -- not found.
 findOrErr :: forall a. Typeable a => UID -> ChunkDB -> a
-findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u ++ " (expected type: " ++ show (typeRep $ Proxy @a) ++ ")") . find u
+findOrErr u = fromMaybe (error $ "Failed to find chunk " <> show u <> " (expected type: " <> show (typeRep $ Proxy @a) <> ")") . find u
 
 -- | Find all chunks of a specific type in the 'ChunkDB'.
 findAll :: forall a. TypeableChunk a => ChunkDB -> [a]
@@ -96,7 +96,7 @@ findAll cdb = maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
 -- | Find all chunks of a specific type in the 'ChunkDB', returning their 'UID's
 -- rather than the chunks themselves.
 findAll' :: TypeRep -> ChunkDB -> [UID]
-findAll' tr cdb = maybe [] (map (^. uid)) $ M.lookup tr (chunkTypeTable cdb)
+findAll' tr cdb = maybe [] (fmap (^. uid)) $ M.lookup tr (chunkTypeTable cdb)
 
 -- | Find all chunks that depend on a specific one.
 dependants :: UID -> ChunkDB -> Maybe [UID]
@@ -107,7 +107,7 @@ dependants u cdb = do
 -- | Find all chunks that depend on a specific one, throwing a hard error if the
 -- dependency chunk is not found.
 dependantsOrErr :: UID -> ChunkDB -> [UID]
-dependantsOrErr u = fromMaybe (error $ "Failed to find references for unknown chunk " ++ show u) . dependants u
+dependantsOrErr u = fromMaybe (error $ "Failed to find references for unknown chunk " <> show u) . dependants u
 
 -- | List all chunks with dependants.
 allDependants :: ChunkDB -> M.Map UID [UID]
@@ -121,10 +121,10 @@ findTypeOf u cdb = chunkType . fst <$> M.lookup u (chunkTable cdb)
 -- chunks that reference it).
 insertRefsExpectingExistence :: [UID] -> UID -> ChunkByUID -> ChunkByUID
 insertRefsExpectingExistence newDpdnts depdncy cbu =
-  case M.insertLookupWithKey (\_ _ (c, dpdnts) -> (c, newDpdnts ++ dpdnts)) depdncy (undefined, []) cbu of
+  case M.insertLookupWithKey (\_ _ (c, dpdnts) -> (c, newDpdnts <> dpdnts)) depdncy (undefined, []) cbu of
     (Just _, cbu') -> cbu' -- If the chunk is already registered, we just updated its dependants, and everything is fine.
     (Nothing, _) -> -- But if no data was found, then we have a problem: the chunk we are inserting depends on a chunk that does not exist.
-      error $ "Chunk dependancy is missing for `" ++ show newDpdnts ++ "`. Missing: `" ++ show depdncy ++ "`."
+      error $ "Chunk dependancy is missing for `" <> show newDpdnts <> "`. Missing: `" <> show depdncy <> "`."
 
 -- | Internal function to insert a chunk into the 'ChunkDB'. This function
 -- assumes that the chunk is not already registered in the database, and quietly
@@ -154,7 +154,7 @@ insert0 cdb c = cdb'
 insert :: TypeableChunk a => a -> ChunkDB -> ChunkDB
 insert c cdb
   | S.member (c ^. uid) $ chunkRefs c =
-      error $ "Chunk `" ++ show (c ^. uid) ++ "` cannot reference itself as a dependancy."
+      error $ "Chunk `" <> show (c ^. uid) <> "` cannot reference itself as a dependancy."
   | typeOf c == typeRep (Proxy @ChunkDB) =
       error "Insertion of ChunkDBs in ChunkDBs is disallowed; please perform unions with them instead."
   | (Just x) <- findTypeOf (c ^. uid) cdb =
@@ -167,8 +167,8 @@ insert c cdb
           cdb' = cdb { chunkTable = cu', chunkTypeTable = ctr' }
           cdb'' = insert0 cdb' c
       in if typeOf c == x
-            then error ("ERROR! Attempting to insert duplicate chunk: `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb''
-            else error $ "ERROR! Attempting to overwrite a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`"
+            then error ("ERROR! Attempting to insert duplicate chunk: `" <> show (c ^. uid) <> "` :: " <> show x) cdb''
+            else error $ "ERROR! Attempting to overwrite a chunk (`" <> show (c ^. uid) <> "` :: `" <> show x <> "`) with a chunk of a different type: `" <> show (typeOf c) <> "`"
   | otherwise = insert0 cdb c
 
 -- | Insert a list of chunks into a 'ChunkDB'.
@@ -194,19 +194,19 @@ insertAllOutOfOrder13 ::
 insertAllOutOfOrder13 strtr as bs cs ds es fs gs hs is js ks ls ms =
   let
     -- Box all of our chunks
-    as' = map mkChunk as
-    bs' = map mkChunk bs
-    cs' = map mkChunk cs
-    ds' = map mkChunk ds
-    es' = map mkChunk es
-    fs' = map mkChunk fs
-    gs' = map mkChunk gs
-    hs' = map mkChunk hs
-    is' = map mkChunk is
-    js' = map mkChunk js
-    ks' = map mkChunk ks
-    ls' = map mkChunk ls
-    ms' = map mkChunk ms
+    as' = fmap mkChunk as
+    bs' = fmap mkChunk bs
+    cs' = fmap mkChunk cs
+    ds' = fmap mkChunk ds
+    es' = fmap mkChunk es
+    fs' = fmap mkChunk fs
+    gs' = fmap mkChunk gs
+    hs' = fmap mkChunk hs
+    is' = fmap mkChunk is
+    js' = fmap mkChunk js
+    ks' = fmap mkChunk ks
+    ls' = fmap mkChunk ls
+    ms' = fmap mkChunk ms
 
     -- Put all of our chunks in a list of lists, with each list carrying a
     -- unique type of chunk, filtering out empty lists
@@ -215,12 +215,12 @@ insertAllOutOfOrder13 strtr as bs cs ds es fs gs hs is js ks ls ms =
     calt = concat altogether
 
     -- Calculate what chunks are depended on (i.e., UID -> Dependants)
-    chDpdts = invert $ M.fromList $ map (\c -> (c ^. uid, S.toList $ chunkRefs c)) calt
+    chDpdts = invert $ M.fromList $ fmap (\c -> (c ^. uid, S.toList $ chunkRefs c)) calt
 
-    fmtIDnTy c = show (c ^. uid) ++ " :: " ++ show (chunkType c)
+    fmtIDnTy c = show (c ^. uid) <> " :: " <> show (chunkType c)
     dupeError c1 c2 = error $
-      "duplicate chunk found in mass insertion between `" ++
-      fmtIDnTy c1 ++ "` and `" ++ fmtIDnTy c2 ++ "`"
+      "duplicate chunk found in mass insertion between `" <>
+      fmtIDnTy c1 <> "` and `" <> fmtIDnTy c2 <> "`"
 
     -- Insert all incoming chunks with the existing chunk table, asserting that
     -- none of the inserted chunks were already inserted.
@@ -229,17 +229,17 @@ insertAllOutOfOrder13 strtr as bs cs ds es fs gs hs is js ks ls ms =
       (chunkTable strtr)
       (M.fromListWith
         (\(c1, _) (c2, _) -> error
-          $ "insertAllOutOfOrder error: UID `" ++ showUID c1 ++
-            "` is shared between two different chunks of types: `" ++
-            show (chunkType c1) ++ "` and `" ++ show (chunkType c2) ++ "`")
-        $ map (\c -> (c ^. uid, (c, []))) calt)
+          $ "insertAllOutOfOrder error: UID `" <> showUID c1 <>
+            "` is shared between two different chunks of types: `" <>
+            show (chunkType c1) <> "` and `" <> show (chunkType c2) <> "`")
+        $ fmap (\c -> (c ^. uid, (c, []))) calt)
 
     -- Merge the chunk-deps table with that existing chunks table
     chTabWDeps = M.foldlWithKey'
       (\acc k dpdts -> insertRefsExpectingExistence dpdts k acc) chTab chDpdts
 
     -- Create the list of new chunk types and add them to the previous list of chunk types
-    chTys = M.fromList (map (\chs -> (chunkType $ head chs, chs)) altogether)
+    chTys = M.fromList (fmap (\chs -> (chunkType $ head chs, chs)) altogether)
     chTT = M.unionWith (++) (chunkTypeTable strtr) chTys
   in
     -- Create the updated chunk database, adding the LCs and Rs, ignoring their dependencies.

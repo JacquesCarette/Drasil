@@ -76,7 +76,7 @@ runStrategy l strats rv av = maybe
   where resultState = maybe emptyStmt asgState av
         asgState v = maybe (strError l
           "Attempt to assign null return to a Value") (v &=) rv
-        strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
+        strError n s = error $ "Strategy '" <> n <> "': " <> s <> "."
 
 listSlice
   ::
@@ -238,7 +238,7 @@ stringListLists lsts sl = do
   l_i <- genLoopIndex
   let
     checkList (List String) = mapM (zoom lensMStoVS) lsts >>= listVals .
-      map (getCodeType . variableType)
+      fmap (getCodeType . variableType)
     checkList _ = error
       "Value passed to stringListLists must be a list of strings"
     listVals [] = loop
@@ -246,7 +246,7 @@ stringListLists lsts sl = do
     listVals _ = error
       "All values passed to stringListLists must have list types"
     loop = IC.forRange var_i (IC.litInt 0) (IC.listSize sl #/ numLists)
-      (IC.litInt 1) (bodyStatements $ appendLists (map IC.valueOf lsts) 0)
+      (IC.litInt 1) (bodyStatements $ appendLists (fmap IC.valueOf lsts) 0)
     appendLists [] _ = []
     appendLists (v:vs) n = IC.listAppend v (cast
       (IC.innerType $ onStateValue valueType v)

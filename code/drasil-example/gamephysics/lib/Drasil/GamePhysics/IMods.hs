@@ -54,7 +54,7 @@ transMotDesc = foldlSent [S "The above", phrase equation, S "expresses the total
   phrase acceleration, S "due to applied", phrase force, eS (apply1 forcej time) +:+.
   fromSource newtonSL, S "The resultant", plural output_ `S.are`
   S "then obtained from this", phrase equation, S "using",
-  foldlList Comma List (map refS [linDispDD, linVelDD, linAccDD])]
+  foldlList Comma List (fmap refS [linDispDD, linVelDD, linAccDD])]
 transMotOutputs = foldlSent [D.toSent (atStartNP (output_ `the_ofThe` inModel)),
  S "will be the functions" `S.of_` D.toSent (phraseNP (position `and_` velocity)),
  S "over time that satisfy the", short ode `S.for` D.toSent (phraseNP (the acceleration)) `sC`
@@ -75,7 +75,7 @@ transMotDerivStmts = [
   ]
 
 transMotDerivEqns :: [Sentence]
-transMotDerivEqns = map eS [transMotExprDeriv1, express transMotQD]
+transMotDerivEqns = fmap eS [transMotExprDeriv1, express transMotQD]
 
 {-- Rotational Motion --}
 
@@ -98,7 +98,7 @@ rotMotDesc = foldlSent [S "The above", phrase equation, S "for the total",
   D.toSent (phraseNP (angularAccel `ofThe` rigidBody)), P lJ `S.is`
   S "derived from", refS newtonSLR `sC` EmptyS `S.andThe` S "resultant",
   plural output_ `S.are` S "then obtained from this", phrase equation, S "using",
-  foldlList Comma List (map refS [angDispDD, angVelDD, angAccelDD])]
+  foldlList Comma List (fmap refS [angDispDD, angVelDD, angAccelDD])]
 
 rotMotDeriv :: Derivation
 rotMotDeriv = mkDerivName (phrase rotMot)
@@ -112,7 +112,7 @@ rotMotDerivStmts = [
   ]
 
 rotMotDerivEqns :: [Sentence]
-rotMotDerivEqns = map eS [rotMotExprDeriv1, express rotMotQD]
+rotMotDerivEqns = fmap eS [rotMotExprDeriv1, express rotMotQD]
 
 {-- 2D Collision --}
 
@@ -146,7 +146,7 @@ col2DOutputs = foldlSent [D.toSent (atStartNP (output_ `the_ofThe` inModel)),
   S "with the given initial", plural condition, S "for" +:+. vals, D.toSent (atStartNP (the motion)),
   S "is translational" `sC` S "so the", vals, S "functions are for the",
   phrase centreMass, fromSource ctrOfMassDD]
-    where vals = foldlList Comma List (map phrase [position, velocity,
+    where vals = foldlList Comma List (fmap phrase [position, velocity,
                                                    orientation, angularAccel])
 impulseNote = ch impulseS `S.is` definedIn'' impulseGD
 

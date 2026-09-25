@@ -54,7 +54,7 @@ velocityIXDerivSents = [velocityDerivSent1, velocityIXDerivSent2, velocityDerivS
                         velocityDerivSent4, velocityDerivSent5]
 
 velocityIXDerivEqns :: [Sentence]
-velocityIXDerivEqns = map eS D.velocityIXDerivEqns ++ [eS' velocityIXQD]
+velocityIXDerivEqns = fmap eS D.velocityIXDerivEqns <> [eS' velocityIXQD]
 
 velocityDerivSent1, velocityIXDerivSent2, velocityDerivSent3,
     velocityDerivSent4, velocityDerivSent5 :: Sentence
@@ -81,7 +81,7 @@ velocityIYDerivSents = [velocityDerivSent1, velocityIYDerivSent2, velocityDerivS
                         velocityDerivSent4, velocityDerivSent5]
 
 velocityIYDerivEqns :: [Sentence]
-velocityIYDerivEqns = map eS D.velocityIYDerivEqns ++ [eS' velocityIYQD]
+velocityIYDerivEqns = fmap eS D.velocityIYDerivEqns <> [eS' velocityIYQD]
 
 velocityIYDerivSent2 :: Sentence
 velocityIYDerivSent2 = S "We also know the" +:+ phrase verticalPos
@@ -105,7 +105,7 @@ accelerationIXDerivSents = [accelerationDerivSent1, accelerationIXDerivSent2, ac
 
 accelerationIXDerivEqns :: [Sentence]
 accelerationIXDerivEqns = eS D.accelerationIDerivEqn1 : eS' velocityIXQD :
-    map eS [D.accelerationIXDerivEqn3, D.accelerationIXDerivEqn4] ++ [eS' accelerationIXQD]
+    fmap eS [D.accelerationIXDerivEqn3, D.accelerationIXDerivEqn4] <> [eS' accelerationIXQD]
 
 accelerationDerivSent1, accelerationIXDerivSent2, accelerationDerivSent3,
      accelerationDerivSent4, accelerationDerivSent5 :: Sentence
@@ -134,7 +134,7 @@ accelerationIYDerivSents = [accelerationDerivSent1, accelerationIYDerivSent2, ac
 
 accelerationIYDerivEqns :: [Sentence]
 accelerationIYDerivEqns = eS D.accelerationIDerivEqn1 : eS' velocityIYQD :
-    map eS [D.accelerationIYDerivEqn3, D.accelerationIYDerivEqn4] ++ [eS' accelerationIYQD]
+    fmap eS [D.accelerationIYDerivEqn3, D.accelerationIYDerivEqn4] <> [eS' accelerationIYQD]
 
 accelerationIYDerivSent2 :: Sentence
 accelerationIYDerivSent2 = S "Earlier" `sC` S "we found the" +:+ phrase verticalVel +:+ S "to be"
@@ -184,7 +184,7 @@ angFrequencyQD = mkQuantDef' angularFrequency (angularFrequency `the_ofThe` pend
 
 angFrequencyDeriv :: Derivation
 angFrequencyDeriv = mkDerivName (D.toSent $ phraseNP (angularFrequency `the_ofThe` pendulum))
-  (weave angFrequencyDerivSents $ map eS D.angFrequencyDerivEqns)
+  (weave angFrequencyDerivSents $ fmap eS D.angFrequencyDerivEqns)
 
 angFrequencyDerivSents :: [Sentence]
 angFrequencyDerivSents = [angFrequencyDerivSent1, angFrequencyDerivSent2, angFrequencyDerivSent3,
@@ -224,7 +224,7 @@ periodPendQD = mkQuantDef' period (NP.the (period `ofThe` pendulum)) $ express E
 
 periodPendDeriv :: Derivation
 periodPendDeriv = mkDerivName (D.toSent $ phraseNP (NP.the (period `ofThe` pendulum)))
-  (weave periodPendDerivSents $ map eS D.periodPendDerivEqns)
+  (weave periodPendDerivSents $ fmap eS D.periodPendDerivEqns)
 
 periodPendDerivSents :: [Sentence]
 periodPendDerivSents = [periodPendDerivSent1, periodPendDerivSent2]

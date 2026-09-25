@@ -145,5 +145,5 @@ prependLabel DerivBlock{}   = prepend "Deriv"
 prependLabel Enumeration{}  = prepend "Lst"
 prependLabel Para{}         = prepend "Par" -- error "Shouldn't reference paragraphs"
 prependLabel Bib{}          = error $
-    "Bibliography list of references cannot be referenced. " ++
+    "Bibliography list of references cannot be referenced. " <>
     "You must reference the Section or an individual citation."

@@ -70,7 +70,7 @@ indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 call :: PrintingInformation -> UID -> [Expr] -> P.Expr
 call sm f ps = P.Row [
     symbol $ lookupC' sm f,
-    parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) ps
+    parens $ P.Row $ intersperse (P.MO P.Comma) $ fmap (`expr` sm) ps
   ]
 
 -- | Helper function for addition 'EOperator's.
@@ -115,9 +115,9 @@ expr (FCall f l)              sm = call sm f l
 expr (Case _ ps)              sm =
   if length ps < 2
     then error "Attempting to use multi-case expr incorrectly"
-    else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
-expr (Matrix a)               sm = P.Mtx $ map (map (`expr` sm)) a
-expr (Set _ a)                sm = P.Set $ map (`expr` sm) a
+    else P.Case (zip (fmap (flip expr sm . fst) ps) (fmap (flip expr sm . snd) ps))
+expr (Matrix a)               sm = P.Mtx $ fmap (fmap (`expr` sm)) a
+expr (Set _ a)                sm = P.Set $ fmap (`expr` sm) a
 expr (Variable _ l)           sm = expr l sm
 expr (UnaryOp Log u)          sm = mkCall sm P.Log u
 expr (UnaryOp Ln u)           sm = mkCall sm P.Ln u
@@ -163,11 +163,11 @@ expr (RealI c ri)             sm = renderRealInt sm (lookupC' sm c) ri
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
-assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
+assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ fmap (expr' sm prec) exprs
 
 -- | Helper for rendering printable expressions.
 addExpr :: [Expr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
-addExpr exprs o sm = addExprFilter (map (expr' sm (precA o)) exprs)
+addExpr exprs o sm = addExprFilter (fmap (expr' sm (precA o)) exprs)
 
 -- | Add add symbol only when the second Expr is not negation
 addExprFilter :: [P.Expr] -> [P.Expr]
@@ -179,10 +179,10 @@ addExprFilter (x:xs) = x : P.MO P.Add : addExprFilter xs
 -- | Helper for rendering printable expressions.
 mulExpr ::  [Expr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
-  (a, Lit (Int _))      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, Lit (ExactDbl _)) ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, Lit (Dbl _))      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, _)                ->  [expr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
+  (a, Lit (Int _))      ->  [expr' sm (precA o) a, P.MO P.Dot] <> mulExpr (hd2 : tl) o sm
+  (a, Lit (ExactDbl _)) ->  [expr' sm (precA o) a, P.MO P.Dot] <> mulExpr (hd2 : tl) o sm
+  (a, Lit (Dbl _))      ->  [expr' sm (precA o) a, P.MO P.Dot] <> mulExpr (hd2 : tl) o sm
+  (a, _)                ->  [expr' sm (precA o) a, P.MO P.Mul] <> mulExpr (hd2 : tl) o sm
 mulExpr [hd]         o sm = [expr' sm (precA o) hd]
 mulExpr []           o sm = [expr' sm (precA o) (int 1)]
 

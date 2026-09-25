@@ -135,7 +135,7 @@ resourcePath = "../../../../datafiles/dblpend/" -- FIXME: Change to your resourc
 
 figTemp :: LabelledContent
 figTemp = llccFig "dblpend" $ figWithWidth EmptyS
-  (resourcePath ++ "dblpend.png") 60
+  (resourcePath <> "dblpend.png") 60
 
 -- MOVE TO DATA.PEOPLE
 authorName :: Person

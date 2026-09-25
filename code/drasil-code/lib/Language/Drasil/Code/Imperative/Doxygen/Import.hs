@@ -47,7 +47,7 @@ defYes = defaultValSentence <> yes <> text "."
 --     * Sets the QUIET field according to the given Verbosity.
 makeDoxConfig :: ProjName -> SoftwareDossierState -> OptimizeChoice -> Verbosity -> Doc
 makeDoxConfig prog s opt v =
-  let fs = nub (s ^. headers ++ maybeToList (s ^. mainMod))
+  let fs = nub (s ^. headers <> maybeToList (s ^. mainMod))
   in vcat [
   text "# Doxyfile 1.8.15",
   blank,
@@ -83,7 +83,7 @@ makeDoxConfig prog s opt v =
   text "# title of most generated pages and in a few other places.",
   text "# The default value is: My Project.",
   blank,
-  text $ "PROJECT_NAME           = \"" ++ prog ++ "\"",
+  text $ "PROJECT_NAME           = \"" <> prog <> "\"",
   blank,
   text "# The PROJECT_NUMBER tag can be used to enter a project or revision number. This",
   text "# could be handy for archiving the generated documentation or if some version",
@@ -866,7 +866,7 @@ makeDoxConfig prog s opt v =
   text "# spaces. See also FILE_PATTERNS and EXTENSION_MAPPING",
   text "# Note: If this tag is empty the current directory is searched.",
   blank,
-  text "INPUT                  =" <+> hcat (map text $ intersperse " " fs),
+  text "INPUT                  =" <+> hcat (text <$> intersperse " " fs),
   blank,
   text "# This tag can be used to specify the character encoding of the source files",
   text "# that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses",

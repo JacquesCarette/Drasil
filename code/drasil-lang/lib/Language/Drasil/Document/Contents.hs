@@ -86,7 +86,7 @@ mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
 -- Used in 'mkEnumSimpleD'.
 mkEnumSimple :: (a -> ListTuple) -> [a] -> [Contents]
 mkEnumSimple _ [] = []
-mkEnumSimple f xs = [UlC $ ulcc $ Enumeration $ Simple $ map f xs]
+mkEnumSimple f xs = [UlC $ ulcc $ Enumeration $ Simple $ fmap f xs]
 
 -- | Helper function that creates a bullet point from a function and an item.
 -- Used in 'mkEnumSimpleD'.

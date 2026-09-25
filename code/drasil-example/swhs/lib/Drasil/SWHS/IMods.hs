@@ -55,7 +55,7 @@ eBalanceOnWtr = im (deModel' eBalanceOnWtrRC)
   [dRef koothoor2013] (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrDesc
 
 eBalanceOnWtrRC :: RelationConcept
-eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " ++
+eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " <>
   "water to find the temperature of the water") (tempW ^. defn) balWtrRel
   -- eBalanceOnWtrL
 
@@ -68,7 +68,7 @@ balWtrExpr = recip_ (sy tauW) $* ((sy tempC $- apply1 tempW time) $+
   (sy eta $* (apply1 tempPCM time $- apply1 tempW time)))
 
 balWtrDesc :: [Sentence]
-balWtrDesc = map foldlSent [
+balWtrDesc = fmap foldlSent [
   [eS' tempPCM `S.is` S "defined by", refS eBalanceOnPCM],
   [D.toSent (atStartNP (the input_)), phrase constraint, eS $ sy tempInit $<= sy tempC,
    S "comes from", refS assumpCTNOD],
@@ -89,7 +89,7 @@ balWtrDesc = map foldlSent [
 -- type Derivation = [Sentence]
 eBalanceOnWtrDeriv :: Derivation
 eBalanceOnWtrDeriv = mkDerivName (D.toSent (phraseNP (the energy)) +:+ S "balance on water")
-  (weave eBalanceOnWtrDerivSentences $ map eS eBalanceOnWtrDerivEqnsIM1)
+  (weave eBalanceOnWtrDerivSentences $ fmap eS eBalanceOnWtrDerivEqnsIM1)
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 htTransEnd overAreas extraAssumps assumpNIHGBWP,
@@ -181,7 +181,7 @@ balPCMExpr = completeCase [case1, case2, case3]
         case3 = (exactDbl 0, sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)))
 
 balPCMNotes :: [Sentence]
-balPCMNotes = map foldlSent [
+balPCMNotes = fmap foldlSent [
   [ch tempW `S.is` S "defined by", refS eBalanceOnWtr],
   [D.toSent (atStartNP (the input_)), phrase constraint, eS $ sy tempInit $<= sy tempMeltP,
    S "comes from", refS assumpPIS],
@@ -203,8 +203,8 @@ balPCMNotes = map foldlSent [
 eBalanceOnPCMDeriv :: Derivation
 eBalanceOnPCMDeriv = mkDerivName (D.toSent (phraseNP (the energy)) +:+
   S "balance" `S.onThe` S "PCM during sensible heating phase")
-  (weave eBalanceOnPCMDerivSentences (map eS eBalanceOnPCMDerivEqnsIM2)
-  ++ [eBalanceOnPCMDerivDesc5, eBalanceOnPCMDerivDesc6, eBalanceOnPCMDerivDesc7])
+  (weave eBalanceOnPCMDerivSentences (fmap eS eBalanceOnPCMDerivEqnsIM2)
+  <> [eBalanceOnPCMDerivDesc5, eBalanceOnPCMDerivDesc6, eBalanceOnPCMDerivDesc7])
 
 eBalanceOnPCMDerivSentences :: [Sentence]
 eBalanceOnPCMDerivSentences = [eBalanceOnPCMDerivDesc1, eBalanceOnPCMDerivDesc2,
@@ -288,7 +288,7 @@ htWtrExpr = sy htCapW $* sy wMass $*
   (apply1 tempW time $- sy tempInit)
 
 htWtrNotes :: [Sentence]
-htWtrNotes = map foldlSent [
+htWtrNotes = fmap foldlSent [
   [S "The above", phrase equation `S.is` S "derived using", refS sensHtE],
   [D.toSent (atStartNP (NP.the (change `in_`temp))) `S.isThe` S "difference between the",
    phrase temp, S "at", phrase time, ch time, unitInParen tInitMelt `sC`
@@ -325,7 +325,7 @@ htPCMRel = sy pcmE $= completeCase [case1, case2, case3]
           sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)))
 
 htPCMNotes :: [Sentence]
-htPCMNotes = map foldlSent [
+htPCMNotes = fmap foldlSent [
   [S "The above", phrase equation `S.is` S "derived using",
    refS sensHtE `S.and_` refS latentHtE],
   [ch pcmE, S "for the", phrase solid, short phsChgMtrl `S.is` S "found using",
@@ -358,8 +358,8 @@ htPCMNotes = map foldlSent [
 
 instModIntro :: Sentence
 instModIntro = foldlSent [D.toSent $ atStartNP' (the goal), foldlList Comma List
-  (map refS [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]) `S.are`
-  S "solved by" +:+. foldlList Comma List (map refS
+  (fmap refS [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]) `S.are`
+  S "solved by" +:+. foldlList Comma List (fmap refS
   [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]), D.toSent (atStartNP' (the solution))
   `S.for` refS eBalanceOnWtr `S.and_`
   refS eBalanceOnPCM `S.are` S "coupled since the", plural solution

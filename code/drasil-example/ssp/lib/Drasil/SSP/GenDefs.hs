@@ -75,9 +75,9 @@ mobShrGD     = gd (othModel' mobShr)     (getUnit mobShrI)       (Just mobShrDer
 effNormFGD   = gd (othModel' effNormF)   (getUnit nrmFSubWat)    (Just effNormFDeriv)
   [dRef chen2005]                      "effNormF"    [effNormFDesc]
 resShearWOGD = gd (othModel' resShearWO) (getUnit shearRNoIntsl) Nothing
-  (map dRef[chen2005, karchewski2012]) "resShearWO"  [resShearWODesc]
+  (fmap dRef[chen2005, karchewski2012]) "resShearWO"  [resShearWODesc]
 mobShearWOGD = gd (othModel' mobShearWO) (getUnit shearFNoIntsl) Nothing
-  (map dRef[chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
+  (fmap dRef[chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
 normShrRGD   = gd (equationalModel' normShrR)   (getUnit intShrForce)   Nothing
   [dRef chen2005]                      "normShrR"    [nmShrRDesc]
 momentEqlGD  = gd momentEqlModel        (Just newton)            (Just momEqlDeriv)
@@ -274,7 +274,7 @@ momEqlDeriv :: Derivation
 momEqlDeriv = mkDerivNoHeader (weave momEqlDerivSentences momEqlDerivEqns)
 
 momEqlDerivSentences :: [Sentence]
-momEqlDerivSentences = map foldlSentCol [momEqlDerivTorqueSentence,
+momEqlDerivSentences = fmap foldlSentCol [momEqlDerivTorqueSentence,
   momEqlDerivMomentSentence, momEqlDerivNormaliSentence,
   momEqlDerivNormaliM1Sentence, momEqlDerivWateriSentence,
   momEqlDerivWateriM1Sentence, momEqlDerivSheariSentence,
@@ -283,7 +283,7 @@ momEqlDerivSentences = map foldlSentCol [momEqlDerivTorqueSentence,
   momEqlDerivHydroSentence, momEqlDerivExtSentence, momEqlDerivFinalSentence]
 
 momEqlDerivEqns :: [Sentence]
-momEqlDerivEqns = map eS [momEqlDerivTorqueEqn, momEqlDerivMomentEqn,
+momEqlDerivEqns = fmap eS [momEqlDerivTorqueEqn, momEqlDerivMomentEqn,
   momEqlDerivNormaliEqn, momEqlDerivNormaliM1Eqn, momEqlDerivWateriEqn,
   momEqlDerivWateriM1Eqn, momEqlDerivSheariEqn,
   momEqlDerivSheariM1Eqn, momEqlDerivSeismicIntEqn,
@@ -489,13 +489,13 @@ sliceWghtDeriv :: Derivation
 sliceWghtDeriv = mkDerivNoHeader (weave sliceWghtDerivSentences sliceWghtDerivEqns)
 
 sliceWghtDerivEqns :: [Sentence]
-sliceWghtDerivEqns = map eS [sliceWghtDerivSatCaseWeightEqn,
+sliceWghtDerivEqns = fmap eS [sliceWghtDerivSatCaseWeightEqn,
   sliceWghtDerivSatCaseSliceEqn, sliceWghtDerivDryCaseWeightEqn,
   sliceWghtDerivDryCaseSliceEqn, sliceWghtDerivMixCaseWeightEqn,
   sliceWghtDerivMixCaseSliceEqn]
 
 sliceWghtDerivSentences :: [Sentence]
-sliceWghtDerivSentences = map foldlSentCol [sliceWghtDerivSatCaseIntroSentence,
+sliceWghtDerivSentences = fmap foldlSentCol [sliceWghtDerivSatCaseIntroSentence,
   sliceWghtDerivSatCase2DSentence, sliceWghtDerivDryCaseIntroSentence,
   sliceWghtDerivDryCase2DSentence, sliceWghtDerivMixCaseIntroSentence,
   sliceWghtDerivMixCase2DSentence]
@@ -609,15 +609,15 @@ bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   baseLngth `definedIn'''` lengthLb]
 
 bsWtrFDeriv :: Derivation
-bsWtrFDeriv = mkDerivNoHeader (weave bsWtrFDerivSentences bsWtrFDerivEqns ++
+bsWtrFDeriv = mkDerivNoHeader (weave bsWtrFDerivSentences bsWtrFDerivEqns <>
   bsWtrFDerivEndSentence)
 
 bsWtrFDerivEqns :: [Sentence]
-bsWtrFDerivEqns = map eS [bsWtrFDerivWeightEqn, bsWtrFDerivHeightEqn,
+bsWtrFDerivEqns = fmap eS [bsWtrFDerivWeightEqn, bsWtrFDerivHeightEqn,
   bsWtrFDerivSliceEqn]
 
 bsWtrFDerivSentences :: [Sentence]
-bsWtrFDerivSentences = map foldlSentCol [bsWtrFDerivIntroSentence,
+bsWtrFDerivSentences = fmap foldlSentCol [bsWtrFDerivIntroSentence,
   bsWtrFDerivHeightSentence, bsWtrFDeriv2DSentence]
 
 bsWtrFDerivIntroSentence, bsWtrFDerivHeightSentence, bsWtrFDeriv2DSentence,
@@ -692,15 +692,15 @@ srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   surfLngth `definedIn'''` lengthLs]
 
 srfWtrFDeriv :: Derivation
-srfWtrFDeriv = mkDerivNoHeader (weave srfWtrFDerivSentences srfWtrFDerivEqns ++
+srfWtrFDeriv = mkDerivNoHeader (weave srfWtrFDerivSentences srfWtrFDerivEqns <>
   srfWtrFDerivEndSentence)
 
 srfWtrFDerivEqns :: [Sentence]
-srfWtrFDerivEqns = map eS [srfWtrFDerivWeightEqn, srfWtrFDerivHeightEqn,
+srfWtrFDerivEqns = fmap eS [srfWtrFDerivWeightEqn, srfWtrFDerivHeightEqn,
   srfWtrFDerivSliceEqn]
 
 srfWtrFDerivSentences :: [Sentence]
-srfWtrFDerivSentences = map foldlSentCol [srfWtrFDerivIntroSentence,
+srfWtrFDerivSentences = fmap foldlSentCol [srfWtrFDerivIntroSentence,
   srfWtrFDerivHeightSentence, srfWtrFDeriv2DSentence]
 
 srfWtrFDerivIntroSentence, srfWtrFDerivHeightSentence, srfWtrFDeriv2DSentence,

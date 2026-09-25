@@ -66,9 +66,9 @@ mkSRS = [TableOfContents,
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) HideDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) HideDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
+        , GDs [] ([Label, Units] <> stdFields) HideDerivation
+        , DDs [] ([Label, Symbol, Units] <> stdFields) HideDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) HideDerivation
         , Constraints EmptyS inConstraints
         , CorrSolnPpties outConstraints corrSolnProps
         ]
@@ -163,7 +163,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+  fmap bulletFlat [sysCtxUsrResp, sysCtxSysResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -185,7 +185,7 @@ probDescIntro = foldlSent_
    S "star system under mutual gravitational interaction"]
 
 physSystParts :: [Sentence]
-physSystParts = map (!.)
+physSystParts = fmap (!.)
   [S "The" +:+ phrase starOne +:+ S "with" +:+ phrase mass +:+ ch mass_1,
    S "The" +:+ phrase starTwo +:+ S "with" +:+ phrase mass +:+ ch mass_2,
    S "The" +:+ phrase gravInteraction +:+ S "between the two stars"]
@@ -217,11 +217,11 @@ authorName = person "Xinlu" "Yan"
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName [] symbols ideaDicts [] conceptChunks
-  [] [] iMods [] tMods concIns citations (labelledContent ++ funcReqsTables)
+  [] [] iMods [] tMods concIns citations (labelledContent <> funcReqsTables)
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
-  ++ likelyChgs ++ unlikelyChgs
+concIns = assumptions <> goals <> funcReqs <> nonFuncReqs
+  <> likelyChgs <> unlikelyChgs
 
 ---------------------------------------------------------
 -- Properties of a Correct Solution

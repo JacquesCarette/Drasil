@@ -55,7 +55,7 @@ consThermERel = negVec (sy gradient) $. sy thFluxVect $+ sy volHtGen $=
   sy density $* sy heatCapSpec $* pderiv (sy temp) time
 
 consThermENotes :: [Sentence]
-consThermENotes = map foldlSent [
+consThermENotes = fmap foldlSent [
   [S "The above", phrase equation, S "gives the", phrase lawConsEnergy,
    S "for", phrase transient, phrase heatTrans, S "in a given material"],
   [S "For this", phrase equation, S "to apply" `sC` S "other forms" `S.of_`
@@ -80,7 +80,7 @@ sensHtETemplate pc desc = tm (equationalModel' qd)
 
 sensHtEQD :: PhaseChange -> ModelExpr -> Sentence -> ModelQDef
 sensHtEQD pc eqn desc = fromEqnSt'' "sensHeat" np desc (symbol sensHeat) (sensHeat ^. typ) eqn
-  where np = nounPhraseSP ("Sensible heat energy" ++ case pc of
+  where np = nounPhraseSP ("Sensible heat energy" <> case pc of
                                                        Liquid -> " (no state change)"
                                                        AllPhases -> "")
 
@@ -129,7 +129,7 @@ latentHtEExpr :: ModelExpr
 latentHtEExpr = defint (eqSymb tau) (exactDbl 0) (sy time) (deriv (apply1 latentHeat tau) tau)
 
 latentHtENotes :: [Sentence]
-latentHtENotes = map foldlSent [
+latentHtENotes = fmap foldlSent [
   [ch latentHeat `S.isThe` S "change" `S.in_` phrase thermalEnergy,
    sParen (phrase latentHeat +:+ phrase energy)],
   [eS' latentHtEFD `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt`
@@ -158,7 +158,7 @@ nwtnCoolingExpr :: ModelExpr
 nwtnCoolingExpr = sy htTransCoeff $* apply1 deltaT time
 
 nwtnCoolingNotes :: [Sentence]
-nwtnCoolingNotes = map foldlSent [
+nwtnCoolingNotes = fmap foldlSent [
   [atStart lawConvCooling +:+. S "describes convective cooling from a surface" +:
    (S "The law" `S.is` S "stated as"), S "the", phrase rate `S.of_` S "heat loss from a body" `S.is`
    S "proportional" `S.toThe` S "difference in", plural temp, S "between the body and its surroundings"],

@@ -43,7 +43,7 @@ instance ToFiles LessonPlan JupyterGenOptions where
 
       -- 1. Transform `LessonPlan` into SDL (Semantic Document language).
       nm = titleize notebook `titleComb` projTitleS (plan ^. projName)
-      as = foldlList Comma List $ map (S . fullName) $ plan ^. authors
+      as = foldlList Comma List $ fmap (S . fullName) $ plan ^. authors
       -- FIXME: These sections should be inserted into the ChunkDB but doing so
       -- (currently) creates a "duplicate chunk insertion" error /because/ the
       -- lesson plan is often initialized with `withCommonKnowledge` (from
@@ -63,7 +63,7 @@ instance ToFiles LessonPlan JupyterGenOptions where
 
 -- | Helper for creating the notebook sections.
 mkSections :: ChunkDB -> LsnDesc -> [Section]
-mkSections db dd = map doit dd
+mkSections db dd = fmap doit dd
   where
     bib = [UlC $ ulcc (Bib $ extractBib db dd)]
     doit :: LsnChapter -> Section

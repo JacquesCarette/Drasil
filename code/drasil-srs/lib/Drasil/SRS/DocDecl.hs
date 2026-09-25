@@ -112,15 +112,15 @@ data ReqsSub where
 
 -- | Creates the document description (translates 'SRSDecl' into a more usable form for generating documents).
 mkDocDesc :: SmithEtAlSRS -> SRSDecl -> DocDesc
-mkDocDesc sys = map sec where
+mkDocDesc sys = fmap sec where
   sec :: DocSection -> DL.DocSection
   sec TableOfContents = DL.TableOfContents
   sec (RefSec r) = DL.RefSec r
   sec (IntroSec i) = DL.IntroSec i
   sec (StkhldrSec s) = DL.StkhldrSec s
   sec (GSDSec g) = DL.GSDSec g
-  sec (SSDSec (SSDProg s)) = DL.SSDSec $ DL.SSDProg $ map ssdSec s
-  sec (ReqrmntSec (ReqsProg r)) = DL.ReqrmntSec $ DL.ReqsProg $ map reqSec r
+  sec (SSDSec (SSDProg s)) = DL.SSDSec $ DL.SSDProg $ fmap ssdSec s
+  sec (ReqrmntSec (ReqsProg r)) = DL.ReqrmntSec $ DL.ReqsProg $ fmap reqSec r
   sec LCsSec = DL.LCsSec $ DL.LCsProg $ fromConcInsDB likeChgDom
   sec UCsSec = DL.UCsSec $ DL.UCsProg $ fromConcInsDB unlikeChgDom
   sec (TraceabilitySec t) = DL.TraceabilitySec t
@@ -134,8 +134,8 @@ mkDocDesc sys = map sec where
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
 
   ssdSec :: SSDSub -> DL.SSDSub
-  ssdSec (SSDProblem (PDProg s ls p)) = DL.SSDProblem $ DL.PDProg s ls $ map pdSub p
-  ssdSec (SSDSolChSpec (SCSProg scs)) = DL.SSDSolChSpec $ DL.SCSProg $ map scsSub scs
+  ssdSec (SSDProblem (PDProg s ls p)) = DL.SSDProblem $ DL.PDProg s ls $ fmap pdSub p
+  ssdSec (SSDSolChSpec (SCSProg scs)) = DL.SSDSolChSpec $ DL.SCSProg $ fmap scsSub scs
 
   pdSub :: PDSub -> DL.PDSub
   pdSub (TermsAndDefs s c) = DL.TermsAndDefs s c

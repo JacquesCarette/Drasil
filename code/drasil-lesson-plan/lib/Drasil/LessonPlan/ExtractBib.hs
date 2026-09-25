@@ -11,7 +11,7 @@ import Language.Drasil.Development (lnames)
 
 findAllInConsSecs :: [Contents] -> [Section] -> S.Set UID
 findAllInConsSecs cs ss = S.unions $
-  extractChRefs cs : concatMap (map lnames . getSec) ss
+  extractChRefs cs : concatMap (fmap lnames . getSec) ss
 
 -- | Extracts citation reference 'UID's from a lesson chapter.
 lsnChapCites :: LsnChapter -> S.Set UID
@@ -30,4 +30,4 @@ lsnChapCites (Apndx cs) = extractChRefs cs
 extractBib :: ChunkDB -> LsnDesc -> BibRef
 extractBib db = resolveBibliography db . extractAllRefs
   where
-    extractAllRefs = S.unions . map lsnChapCites
+    extractAllRefs = S.unions . fmap lsnChapCites

@@ -199,7 +199,7 @@ ratioVarEqn = completeCase [case1, case2]
 --DD convertFunc1: first function for incorporating interslice forces into shear force
 
 convertFunc1 :: DataDefinition
-convertFunc1 = ddE convertFunc1QD (map dRef [chen2005, karchewski2012]) Nothing
+convertFunc1 = ddE convertFunc1QD (fmap dRef [chen2005, karchewski2012]) Nothing
   "convertFunc1" [convertFunc1Notes]
 
 convertFunc1QD :: SimpleQDef
@@ -217,7 +217,7 @@ convertFunc1Notes = foldlSent [scalFunc `definedIn'''` ratioVariation `S.and_` (
 --DD convertFunc2: second function for incorporating interslice forces into shear force
 
 convertFunc2 :: DataDefinition
-convertFunc2 = ddE convertFunc2QD (map dRef [chen2005, karchewski2012]) Nothing
+convertFunc2 = ddE convertFunc2QD (fmap dRef [chen2005, karchewski2012]) Nothing
   "convertFunc2" [convertFunc2Notes]
 
 convertFunc2QD :: SimpleQDef

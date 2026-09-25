@@ -4,6 +4,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (
 ) where
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import qualified Prelude as P ((<>))
 
 import Drasil.GProc (jlName, jlVersion)
 
@@ -46,4 +47,4 @@ jlRunnable = interpMM "julia"
 
 -- | Julia is not compatible with Doxygen, so raise an error if trying to compile Doxygen documentation.
 doxError :: String
-doxError = jlName ++ " is not compatible with Doxygen."
+doxError = jlName P.<> " is not compatible with Doxygen."

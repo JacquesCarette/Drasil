@@ -7,6 +7,7 @@ module Language.Drasil.Markdown.Citation (
 ) where
 
 import Prelude hiding ((<>))
+import qualified Prelude as P ((<>))
 import Data.List (sortBy)
 import Text.PrettyPrint (Doc, text, (<>), hsep)
 import Utils.Drasil (foldlList)
@@ -46,7 +47,7 @@ renderCite f (Cite e _ cfs)         = (text e, renderF cfs (useStyleArtcl f)) --
 
 -- | Render fields to be used in the document.
 renderF :: [CiteField] -> (StyleGuide -> (CiteField -> Doc)) -> Doc
-renderF fields styl = hsep $ map (styl bibStyleH) (sortBy compCiteField fields)
+renderF fields styl = hsep $ fmap (styl bibStyleH) (sortBy compCiteField fields)
 
 -- | Compares two cite fields.
 compCiteField :: CiteField -> CiteField -> Ordering
@@ -111,19 +112,19 @@ useStyleArtcl f Chicago = artclChicago f
 -- | Cite books in MLA format.
 bookMLA :: BibFormatter -> CiteField -> Doc
 bookMLA f (Address   s) = spec f s <> text ":"
-bookMLA _ (Edition   s) = comm $ text $ show s ++ sufxer s ++ " ed."
+bookMLA _ (Edition   s) = comm $ text $ show s P.<> sufxer s P.<> " ed."
 bookMLA f (Series    s) = dot $ emph f $ spec f s
 bookMLA f (Title     s) = dot $ emph f $ spec f s --If there is a series or collection, this should be in quotes, not italics
-bookMLA _ (Volume    s) = comm $ text $ "vol. " ++ show s
+bookMLA _ (Volume    s) = comm $ text $ "vol. " P.<> show s
 bookMLA f (Publisher s) = comm $ spec f s
 bookMLA f (Author    p) = dot $ spec f (rendPeople' p)
 bookMLA _ (Year      y) = dot $ text $ show y
 bookMLA f (BookTitle s) = dot $ emph f $ spec f s
 bookMLA f (Journal   s) = comm $ emph f $ spec f s
-bookMLA _ (Pages   [p]) = dot $ text $ "pg. " ++ show p
+bookMLA _ (Pages   [p]) = dot $ text $ "pg. " P.<> show p
 bookMLA _ (Pages     p) = dot $ text "pp. " <> foldPages p
 bookMLA f (Note      s) = spec f s
-bookMLA _ (Number    n) = comm $ text ("no. " ++ show n)
+bookMLA _ (Number    n) = comm $ text ("no. " P.<> show n)
 bookMLA f (School    s) = comm $ spec f s
 bookMLA f (HowPublished (Verb s))      = comm $ spec f s
 bookMLA f (HowPublished (URL l@(S s))) = dot  $ spec f $ Ref External s l
@@ -167,7 +168,7 @@ artclAPA f i           = bookAPA f i
 artclChicago :: BibFormatter -> CiteField -> Doc
 artclChicago f i@(Title    _) = artclMLA f i
 artclChicago _ (Volume     n) = comm $ text $ show n
-artclChicago _ (Number      n) = text $ "no. " ++ show n
+artclChicago _ (Number      n) = text $ "no. " P.<> show n
 artclChicago f i@(Year     _) = bookAPA f i
 artclChicago f i = bookChicago f i
 
@@ -175,12 +176,12 @@ artclChicago f i = bookChicago f i
 -- | Render a list of people (after applying a given function).
 rendPeople :: (Person -> String) -> People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
-rendPeople f people = S . foldlList $ map f people --foldlList is in drasil-utils
+rendPeople f people = S . foldlList $ fmap f people --foldlList is in drasil-utils
 
 -- | Render a list of people (of form FirstName LastName).
 rendPeople' :: People -> Spec
 rendPeople' []  = S "N.a." -- "No authors given"
-rendPeople' people = S . foldlList $ map rendPersLFM (init people) ++  [rendPersL (last people)]
+rendPeople' people = S . foldlList $ fmap rendPersLFM (init people) P.<>  [rendPersL (last people)]
 
 -- | Organize a list of pages.
 foldPages :: [Int] -> Doc
@@ -188,7 +189,7 @@ foldPages = text . foldlList . numList "&ndash;"
 
 -- | Organize a list of people.
 foldPeople :: People -> Doc
-foldPeople p = text . foldlList $ map fullName p
+foldPeople p = text . foldlList $ fmap fullName p
 
 -- | Renders a person's last name.
 rendPersL :: Person -> String
@@ -197,5 +198,5 @@ rendPersL =
 
 -- | adds an 's' if there is more than one person in a list.
 toPlural :: People -> String -> String
-toPlural (_:_) str = str ++ "s"
+toPlural (_:_) str = str P.<> "s"
 toPlural _     str = str

@@ -25,14 +25,14 @@ instance CanGenCode LD.Expr where
 -- | Render an algebraic expression into our code expression language.
 expr :: LD.Expr -> CodeExpr
 expr (LD.Lit l)                = Lit l
-expr (LD.AssocA ao es)         = AssocA ao $ map expr es
-expr (LD.AssocB bo es)         = AssocB bo $ map expr es
-expr (LD.AssocC bo es)         = AssocC bo $ map expr es
+expr (LD.AssocA ao es)         = AssocA ao $ fmap expr es
+expr (LD.AssocB bo es)         = AssocB bo $ fmap expr es
+expr (LD.AssocC bo es)         = AssocC bo $ fmap expr es
 expr (LD.C u)                  = C u
-expr (LD.FCall u es)           = FCall u (map expr es) []
-expr (LD.Case c es)            = Case c $ map (bimap expr expr) es
-expr (LD.Matrix es)            = Matrix $ map (map expr) es
-expr (LD.Set e es)             = Set e $ map expr es
+expr (LD.FCall u es)           = FCall u (fmap expr es) []
+expr (LD.Case c es)            = Case c $ fmap (bimap expr expr) es
+expr (LD.Matrix es)            = Matrix $ fmap (fmap expr) es
+expr (LD.Set e es)             = Set e $ fmap expr es
 expr (E.Variable s e)          = Variable s $ expr e
 expr (LD.UnaryOp uo e)         = UnaryOp uo (expr e)
 expr (LD.UnaryOpB uo e)        = UnaryOpB uo (expr e)

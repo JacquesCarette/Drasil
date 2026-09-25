@@ -56,7 +56,7 @@ inReqWTab mdesc qs = (ci, tbl)
   where
     tbl = mkInputPropsTable qs
     desc = foldlSent $ [atStart input_,  S "the", plural value, S "from"]
-      ++ maybe [refS tbl] (\d -> [refS tbl `sC` S "which define", d]) mdesc
+      <> maybe [refS tbl] (\d -> [refS tbl `sC` S "which define", d]) mdesc
     ci = cic "inputValues" desc "Input-Values" funcReqDom
 
 -- | Adds a generalized introduction for a Non-Fucntional Requirements section. Takes in the contents of that section.
@@ -156,7 +156,7 @@ mkValsSourceTable vals labl cap = llccTab labl $
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 
 mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(DefinedQuantityDict, Sentence)]
-mkQRTuple = map (\c -> (c ^. output, refS c))
+mkQRTuple = fmap (\c -> (c ^. output, refS c))
 
 mkQRTupleRef :: (Quantity i, MayHaveUnit i, Concept i, HasShortName r, Referable r) => [i] -> [r] -> [(DefinedQuantityDict, Sentence)]
 mkQRTupleRef = zipWith (curry (bimap dqdWr refS))

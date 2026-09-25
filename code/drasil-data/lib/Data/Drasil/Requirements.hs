@@ -11,5 +11,5 @@ import Drasil.Metadata.Documentation (nonFuncReqDom)
 portable :: ConceptInstance
 portable = cic "portable" (foldlSent [
   S "The code shall be portable to multiple environments, particularly",
-  foldlList Comma List $ map phrase defaultOSs
+  foldlList Comma List $ fmap phrase defaultOSs
   ]) "Portability" nonFuncReqDom

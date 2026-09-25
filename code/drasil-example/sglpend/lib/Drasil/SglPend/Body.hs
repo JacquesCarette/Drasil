@@ -63,9 +63,9 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , GDs [] ([Label, Units] <> stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) ShowDerivation
         , Constraints EmptyS inConstraints
         , CorrSolnPpties outConstraints []
        ]
@@ -92,22 +92,22 @@ purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pen
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  physicalcon ++ [angular, displacement, iPos, pendulum, motion,
-  gravitationalConst, gravity, rigidBody, weight, shm] ++ defs
+  physicalcon <> [angular, displacement, iPos, pendulum, motion,
+  gravitationalConst, gravity, rigidBody, weight, shm] <> defs
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName allRefs symbols ideaDicts []
   conceptChunks [] dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
-labelledContent' = labelledContent ++ funcReqsTables
+labelledContent' = labelledContent <> funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 concIns :: [ConceptInstance]
-concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
+concIns = assumpSingle <> goals <> funcReqs <> nonFuncReqs
 
 ------------------------------
 -- Section : INTRODUCTION --
@@ -165,7 +165,7 @@ concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 -- 4.1.2 Physical System Description --
 -----------------------------------
 physSystParts :: [Sentence]
-physSystParts = map ((!.) . D.toSent . atStartNP) [the rod, the mass]
+physSystParts = fmap ((!.) . D.toSent . atStartNP) [the rod, the mass]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -185,7 +185,7 @@ physSystParts = map ((!.) . D.toSent . atStartNP) [the rod, the mass]
 --------------------------------
 -- Theoretical Models defined in TMs
 tMods :: [TheoryModel]
-tMods = DPD.tMods ++ [newtonSLR]
+tMods = DPD.tMods <> [newtonSLR]
 
 ---------------------------------
 -- 4.2.3 : General Definitions --

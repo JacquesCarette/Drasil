@@ -7,7 +7,7 @@ import qualified Language.Drasil.Development as D
 import Drasil.SRS hiding (constants, genDefns)
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.SRS.Concepts as SRS
 import Theory.Drasil (TheoryModel)

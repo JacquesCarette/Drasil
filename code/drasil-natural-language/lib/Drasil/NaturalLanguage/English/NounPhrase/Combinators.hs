@@ -11,7 +11,7 @@
 --
 -- This module should be used as a qualified import (usually as @NP@),
 -- as many function names clash with those in Concepts.hs and Sentence.hs.
-module Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators (
+module Drasil.NaturalLanguage.English.NounPhrase.Combinators (
   -- * General Combinator Helper Functions
   insertString, prependString, insertStringOp, insertStringGen,
   -- * Prepositions
@@ -35,7 +35,7 @@ module Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators (
   npS, npP, (.+.)
 ) where
 
-import Language.Drasil.NaturalLanguage.English.NounPhrase
+import Drasil.NaturalLanguage.English.NounPhrase
     ( NPG,
       CapitalizationRuleG(CapWords, CapFirst, CapNothing),
       NounPhrase(phraseNP, pluralNP),

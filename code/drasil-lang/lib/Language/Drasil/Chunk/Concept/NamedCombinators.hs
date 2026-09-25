@@ -46,7 +46,7 @@ import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, CapitalizationRul
   CapFirst), NounPhrase(phraseNP, pluralNP), nounPhrase'', compoundPhrase,
   compoundPhrase'', compoundPhrase''', npS, (.+.), NPStruct)
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase as D (NounPhrase(pluralNP, phraseNP))
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP (
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP (
   insertString, insertStringOp, insertStringGen)
 
 -- not exported

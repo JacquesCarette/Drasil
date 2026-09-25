@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Unitals (module Drasil.GlassBR.Unitals) where --whole file is used
 
 import Language.Drasil
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators (parensNP)
+import Drasil.NaturalLanguage.English.NounPhrase.Combinators (parensNP)
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Drasil.Database(mkUid)

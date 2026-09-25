@@ -27,4 +27,5 @@ library:
   source-dirs: lib
   exposed-modules:
   - Drasil.NaturalLanguage.English.NounPhrase
+  - Drasil.NaturalLanguage.English.NounPhrase.Combinators
   - Drasil.NaturalLanguage.English.NounPhrase.Core

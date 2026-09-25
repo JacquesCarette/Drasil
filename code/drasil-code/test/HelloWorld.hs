@@ -2,7 +2,7 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (Class, SVariable, CS, MS, OOProg, BodySym(..),
+import Drasil.GOOL (Class, Variable, VS, CS, MS, OOProg, BodySym(..),
   bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..),
   MultiStatement(multi), AssignStatement(..), (&=), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), StringStatement(..), CommentStatement(..),
@@ -47,7 +47,7 @@ description = "Tests various GOOL functions. It should run without errors."
 descriptionProc = "Tests various GProc functions. It should run without errors."
 
 -- | Variable for a list of doubles
-myOtherList :: (TypeSym r typ, VariableSym r typ) => SVariable r
+myOtherList :: (TypeSym r typ, VariableSym r typ) => VS (r Variable)
 myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
@@ -169,7 +169,7 @@ mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
   mySlicedList10, mySlicedList11
   :: (TypeSym r typ, VariableSym r typ)
-  => SVariable r
+  => VS (r Variable)
 mySlicedList = var "mySlicedList" (listType double)
 mySlicedList2 = var "mySlicedList2" (listType double)
 mySlicedList3 = var "mySlicedList3" (listType double)

@@ -73,7 +73,7 @@ instance (LiftLogging u1 l1, LiftLogging u2 l2) => LiftLogging (u1, u2) (l1, l2)
   lowerLogging = bimap lowerLogging lowerLogging
 
 -- TODO [Brandon Bosman, 06/19/2026]: This should be passed down from drasil-code
-varLogFile :: (TypeSym r typ, VariableSym r typ) => SVariable r
+varLogFile :: (TypeSym r typ, VariableSym r typ) => VS (r Variable)
 varLogFile = var "outfile" outfile
 
 valLogFile :: (TypeSym r typ, VariableSym r typ, VariableValue r val) => VS (r val)
@@ -93,7 +93,7 @@ logVarUpdate
     , VariableElim r typ
     , Literal r typ val
     )
-  => SVariable (LoggingFor r) -> [MS (r stmt)]
+  => VS ((LoggingFor r) Variable) -> [MS (r stmt)]
 logVarUpdate x =
   [ openFileA varLogFile logName
   , do

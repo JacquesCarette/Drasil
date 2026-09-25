@@ -9,9 +9,9 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, Variable,
-  SVariable, Block, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  getTypeString, VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  Block, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, extFuncApp, libFuncApp, IndexTranslator(..),
   Reference(..), Array(..), List(..), ListStatement(..), Set(..),
@@ -655,7 +655,7 @@ jlCast t' v' = do
   mkVal t (jlCast' vTp tTp vDoc tDoc)
 
 jlAssign
-  :: SVariable JuliaCode
+  :: VS (JuliaCode Variable)
   -> VS (JuliaCode Value)
   -> MS (JuliaCode (Doc, Terminator))
 jlAssign vr' v' = do
@@ -665,7 +665,7 @@ jlAssign vr' v' = do
   mkStmtNoEnd $ jlGlobalDec scpData <+> R.assign vr v
 
 jlSubAssign
-  :: SVariable JuliaCode
+  :: VS (JuliaCode Variable)
   -> VS (JuliaCode Value)
   -> MS (JuliaCode (Doc, Terminator))
 jlSubAssign vr' v' = do
@@ -675,7 +675,7 @@ jlSubAssign vr' v' = do
   mkStmtNoEnd $ jlGlobalDec scpData <+> R.subAssign vr v
 
 jlIncrement
-  :: SVariable JuliaCode
+  :: VS (JuliaCode Variable)
   -> VS (JuliaCode Value)
   -> MS (JuliaCode (Doc, Terminator))
 jlIncrement vr' v'= do
@@ -691,7 +691,7 @@ jlGlobal :: Doc
 jlGlobal = text "global"
 
 jlConstDecDef
-  :: SVariable JuliaCode
+  :: VS (JuliaCode Variable)
   -> JuliaCode ScopeData
   -> VS (JuliaCode Value)
   -> MS (JuliaCode (Doc, Terminator))
@@ -733,7 +733,7 @@ jlIndexOf l v = do
 -- List slicing in Julia.  See HelloWorld.jl to see the full suite of
 -- possible outputs of this function.
 jlListSlice
-  :: SVariable JuliaCode
+  :: VS (JuliaCode Variable)
   -> VS (JuliaCode Value)
   -> Maybe (VS (JuliaCode Value))
   -> Maybe (VS (JuliaCode Value))
@@ -788,7 +788,7 @@ jlListSlice vn vo beg end step = do
     ]
 
 jlListSlice'
-  :: SVariable JuliaCode
+  :: VS (JuliaCode Variable)
   -> VS (JuliaCode Value)
   -> VS (JuliaCode Value)
   -> VS (JuliaCode Value)
@@ -1033,7 +1033,7 @@ jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getCodeType . valueType
 
 jlInput
   :: VS (JuliaCode Value)
-  -> SVariable JuliaCode
+  -> VS (JuliaCode Variable)
   -> MS (JuliaCode (Doc, Terminator))
 jlInput inSrc v = v &= (v >>= jlInput' . getCodeType . variableType)
   where jlInput' Integer = jlParse jlIntConc int inSrc

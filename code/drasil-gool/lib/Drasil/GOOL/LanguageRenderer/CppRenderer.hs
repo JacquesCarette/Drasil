@@ -9,7 +9,7 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
-  SVariable, Value, NamedArgs, BodySym(..), oneLiner, BlockSym(..), TypeSym(..),
+  Value, NamedArgs, BodySym(..), oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -2358,7 +2358,7 @@ isDtor _ = False
 
 getParam
   :: (ParameterSym r param, TypeElim r typ, VariableElim r typ)
-  => SVariable r -> MS (r param)
+  => VS (r Variable) -> MS (r param)
 getParam v = zoom lensMStoVS v >>= (\v' -> getParamFunc ((getCodeType .
   variableType) v') v)
   where getParamFunc (List _) = pointerParam
@@ -2414,7 +2414,7 @@ iterBegin v = v $. cppIterBeginFunc (innerType $ onStateValue valueType v)
 iterEnd :: VS (CppSrcCode Value) -> VS (CppSrcCode Value)
 iterEnd v = v $. cppIterEndFunc (innerType $ onStateValue valueType v)
 
-arrayDecBase :: SVariable CppSrcCode -> CppSrcCode ScopeData -> MS Doc
+arrayDecBase :: VS (CppSrcCode Variable) -> CppSrcCode ScopeData -> MS Doc
 arrayDecBase vr scp = do
   vr' <- zoom lensMStoVS vr
   modify $ useVarName $ variableName vr'
@@ -2601,7 +2601,7 @@ cppListDecDef
     , StatementElim r stmt
     )
   => ([r Value] -> Doc)
-  -> SVariable r
+  -> VS (r Variable)
   -> r scope
   -> [VS (r Value)]
   -> MS (r stmt)
@@ -2690,8 +2690,12 @@ cppListDecDoc n = parens (RC.value n)
 cppListDecDefDoc :: (ValueElim r val) => [r val] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
-cppFuncDecDef :: SVariable CppSrcCode -> CppSrcCode ScopeData ->
-  [SVariable CppSrcCode] -> MS (CppSrcCode Body) -> MS (CppSrcCode (Doc, Terminator))
+cppFuncDecDef
+  :: VS (CppSrcCode Variable)
+  -> CppSrcCode ScopeData
+  -> [VS (CppSrcCode Variable)]
+  -> MS (CppSrcCode Body)
+  -> MS (CppSrcCode (Doc, Terminator))
 cppFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -2736,7 +2740,7 @@ cppDiscardInput
 cppDiscardInput sep inFn = valStmt $ ignoreFunc sep inFn
 
 cppInput
-  :: SVariable CppSrcCode
+  :: VS (CppSrcCode Variable)
   -> VS (CppSrcCode Value)
   -> MS (CppSrcCode (Doc, Terminator))
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ do
@@ -2747,7 +2751,7 @@ cppInput vr i = addAlgorithmImport $ addLimitsImport $ do
 
 cppOpenFile
   ::  Label
-  -> SVariable CppSrcCode
+  -> VS (CppSrcCode Variable)
   -> VS (CppSrcCode Value)
   -> MS (CppSrcCode (Doc, Terminator))
 cppOpenFile mode f n = valStmt $ objMethodCall void (valueOf f) cppOpen [n,
@@ -2843,7 +2847,7 @@ cppsStateVarDef
   :: Doc
   -> CppSrcCode (Doc, VisibilityTag)
   -> CppSrcCode AttachmentData
-  -> SVariable CppSrcCode
+  -> VS (CppSrcCode Variable)
   -> VS (CppSrcCode Value)
   -> CSStateVar CppSrcCode StateVarData
 cppsStateVarDef cns s p vr' vl' = do
@@ -2860,7 +2864,7 @@ cppForEach
   -> Doc
   -> Doc
   -> Doc
-  -> SVariable CppSrcCode
+  -> VS (CppSrcCode Variable)
   -> VS (CppSrcCode Value)
   -> MS (CppSrcCode Body)
   -> MS (CppSrcCode (Doc, Terminator))
@@ -2885,7 +2889,7 @@ cppLitSet f t' es' = do
 cpphStateVarDef
   :: Doc
   -> CppHdrCode AttachmentData
-  -> SVariable CppHdrCode
+  -> VS (CppHdrCode Variable)
   -> VS (CppHdrCode Value) -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
   RC.statement) (zoom lensCStoMS $ stmt $ onAttachment (binding p)
@@ -2925,8 +2929,8 @@ cppInOutCall
   :: (Label -> VS (CppSrcCode TypeData) -> [VS (CppSrcCode Value)] -> VS (CppSrcCode Value))
   -> Label
   -> [VS (CppSrcCode Value)]
-  -> [SVariable CppSrcCode]
-  -> [SVariable CppSrcCode]
+  -> [VS (CppSrcCode Variable)]
+  -> [VS (CppSrcCode Variable)]
   -> MS (CppSrcCode (Doc, Terminator))
 cppInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
@@ -2937,9 +2941,9 @@ cppInOutCall f n ins outs both = valStmt $ f n void (map valueOf both ++ ins
 
 cppsInOut
   :: (VS (CppSrcCode TypeData) -> [MS (CppSrcCode ParamData)] -> MS (CppSrcCode Body) -> MS (CppSrcCode mthd))
-  -> [SVariable CppSrcCode]
-  -> [SVariable CppSrcCode]
-  -> [SVariable CppSrcCode]
+  -> [VS (CppSrcCode Variable)]
+  -> [VS (CppSrcCode Variable)]
+  -> [VS (CppSrcCode Variable)]
   -> MS (CppSrcCode Body)
   -> MS (CppSrcCode mthd)
 cppsInOut f ins [v] [] b = f (onStateValue variableType v)
@@ -2952,9 +2956,9 @@ cppsInOut f ins outs both b = f void (cppInOutParams ins outs both) b
 
 cpphInOut
   :: (VS (CppHdrCode TypeData) -> [MS (CppHdrCode ParamData)] -> MS (CppHdrCode Body) -> MS (CppHdrCode mthd))
-  -> [SVariable CppHdrCode]
-  -> [SVariable CppHdrCode]
-  -> [SVariable CppHdrCode]
+  -> [VS (CppHdrCode Variable)]
+  -> [VS (CppHdrCode Variable)]
+  -> [VS (CppHdrCode Variable)]
   -> MS (CppHdrCode Body)
   -> MS (CppHdrCode mthd)
 cpphInOut f ins [v] [] b = f (onStateValue variableType v)
@@ -2965,7 +2969,10 @@ cpphInOut f ins outs both b = f void (cppInOutParams ins outs both) b
 
 cppInOutParams
   :: (ParameterSym r param, TypeElim r typ, VariableElim r typ)
-  => [SVariable r] -> [SVariable r] -> [SVariable r] -> [MS (r param)]
+  => [VS (r Variable)]
+  -> [VS (r Variable)]
+  -> [VS (r Variable)]
+  -> [MS (r param)]
 cppInOutParams ins [_] [] = map getParam ins
 cppInOutParams ins [] [v] = map getParam $ v : ins
 cppInOutParams ins outs both = map pointerParam both ++ map getParam ins ++

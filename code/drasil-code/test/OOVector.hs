@@ -26,10 +26,10 @@ vectorClass = docClass "Vectors of doubles and common vector-related operations.
   where argV = var "v" (arrayType double)
         methods = [dimension, magnitude, norm, dot, add, scale, print_]
 
-vecVar :: (VariableSym r typ, OOTypeSym r typ) => String -> SVariable r
+vecVar :: (VariableSym r typ, OOTypeSym r typ) => String -> VS (r Variable)
 vecVar v = var v (obj "Vector")
 
-localV :: (TypeSym r typ, VariableSym r typ) => SVariable r
+localV :: (TypeSym r typ, VariableSym r typ) => VS (r Variable)
 localV = var "v" (arrayType double)
 
 thisV
@@ -40,7 +40,7 @@ thisV
     , SelfSym r
     , VariableValue r val
     )
-  => SVariable r
+  => VS (r Variable)
 thisV = instanceVarSelf localV
 
 dimension

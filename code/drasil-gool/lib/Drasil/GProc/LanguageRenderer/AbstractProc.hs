@@ -5,7 +5,7 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   listAdd, funcDecDef, function
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SVariable,
+import Drasil.Shared.InterfaceCommon (Label, Variable,
   VariableElim(variableName, variableType), TypeSym, VisibilitySym(..), funcApp,
   getCodeType, convType, ValueStatement(..), ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
@@ -106,7 +106,7 @@ arrayElem
     , IC.TypeElim r typ
     , RC.ValueElim r val
     )
-  => VS (r val) -> VS (r val) -> SVariable r
+  => VS (r val) -> VS (r val) -> VS (r Variable)
 arrayElem arr' i' = do
   i <- IC.intToIndex i'
   arr <- arr'
@@ -117,7 +117,11 @@ arrayElem arr' i' = do
 
 funcDecDef
   :: (RP.ProcRenderSym r vis ScopeData typ param val stmt mthd file mod bod block)
-  => SVariable r -> r ScopeData -> [SVariable r] -> MS (r bod) -> MS (r stmt)
+  => VS (r Variable)
+  -> r ScopeData
+  -> [VS (r Variable)]
+  -> MS (r bod)
+  -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr

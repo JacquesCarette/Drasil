@@ -8,7 +8,7 @@ module Drasil.GOOL.LanguageRenderer.JavaRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   Value, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
   getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -936,7 +936,7 @@ jCast = join .: on2StateValues
           (RC.value v))
 
 jConstDecDef
-  :: SVariable JavaCode
+  :: VS (JavaCode Variable)
   -> JavaCode ScopeData
   -> VS (JavaCode Value)
   -> MS (JavaCode (Doc, Terminator))
@@ -949,9 +949,9 @@ jConstDecDef v' scp def' = do
     RC.variable v <+> equals <+> RC.value def
 
 jFuncDecDef
-  :: SVariable JavaCode
+  :: VS (JavaCode Variable)
   -> JavaCode ScopeData
-  -> [SVariable JavaCode]
+  -> [VS (JavaCode Variable)]
   -> MS (JavaCode Body)
   -> MS (JavaCode (Doc, Terminator))
 jFuncDecDef v scp ps bod = do
@@ -1017,7 +1017,7 @@ jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getCodeType . valueType
 jDiscardInput :: VS (JavaCode Value) -> MS (JavaCode (Doc, Terminator))
 jDiscardInput inFn = valStmt $ inFn $. jNextFunc
 
-jInput :: SVariable JavaCode -> VS (JavaCode Value) -> VS (JavaCode Value)
+jInput :: VS (JavaCode Variable) -> VS (JavaCode Value) -> VS (JavaCode Value)
 jInput vr inFn = do
   v <- vr
   let jInput' Integer = jParseIntFunc $ inFn $. jNextLineFunc
@@ -1040,7 +1040,7 @@ jOpenFileWorA
 jOpenFileWorA n t wa = newObj t
   [newObj jFileWriterType [newObj jFileType [n], wa]]
 
-jStringSplit :: SVariable JavaCode -> VS (JavaCode Value) -> VS Doc
+jStringSplit :: VS (JavaCode Variable) -> VS (JavaCode Value) -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
   new' <+> renderType (variableType vnew) <> parens (RC.value s))
 
@@ -1054,10 +1054,11 @@ jMethod n es s p t ps b = vcat [
   indent $ RC.body b,
   rbrace]
 
-outputs :: SVariable JavaCode
+outputs :: VS (JavaCode Variable)
 outputs = var "outputs" jArrayType
 
-jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MS (JavaCode (Doc, Terminator))]
+jAssignFromArray
+  :: Integer -> [VS (JavaCode Variable)] -> [MS (JavaCode (Doc, Terminator))]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
   (valueOf $ arrayElem (valueOf outputs) (litInt c))) : jAssignFromArray (c+1) vs
@@ -1066,8 +1067,8 @@ jInOutCall
   :: (Label -> VS (JavaCode TypeData) -> [VS (JavaCode Value)] -> VS (JavaCode Value))
   -> Label
   -> [VS (JavaCode Value)]
-  -> [SVariable JavaCode]
-  -> [SVariable JavaCode]
+  -> [VS (JavaCode Variable)]
+  -> [VS (JavaCode Variable)]
   -> MS (JavaCode (Doc, Terminator))
 jInOutCall f n ins [] [] = valStmt $ f n void ins
 jInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
@@ -1084,9 +1085,9 @@ jInOutCall f n ins outs both = fCall rets
 
 jInOut
   :: (VS (JavaCode TypeData) -> [MS (JavaCode ParamData)] -> MS (JavaCode Body) -> MS (JavaCode mthd))
-  -> [SVariable JavaCode]
-  -> [SVariable JavaCode]
-  -> [SVariable JavaCode]
+  -> [VS (JavaCode Variable)]
+  -> [VS (JavaCode Variable)]
+  -> [VS (JavaCode Variable)]
   -> MS (JavaCode Body)
   -> MS (JavaCode mthd)
 jInOut f ins [] [] b = f void (map param ins) b
@@ -1118,11 +1119,11 @@ jInOut f ins outs both b = f (returnTp rets)
 
 jDocInOut
   :: (BlockCommentSym r, RenderMethod r mthd)
-  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r mthd))
+  => ([VS (r Variable)] -> [VS (r Variable)] -> [VS (r Variable)] -> MS (r Body) -> MS (r mthd))
   -> String
-  -> [(String, SVariable r)]
-  -> [(String, SVariable r)]
-  -> [(String, SVariable r)]
+  -> [(String, VS (r Variable))]
+  -> [(String, VS (r Variable))]
+  -> [(String, VS (r Variable))]
   -> MS (r Body)
   -> MS (r mthd)
 jDocInOut f desc is [] [] b = docFuncRepr functionDox desc (map fst is) []

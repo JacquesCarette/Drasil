@@ -6,7 +6,7 @@ module Drasil.Shared.LanguageRenderer.Constructors (
   binExpr, binExpr', binExprNumDbl', typeBinExpr
 ) where
 
-import Drasil.Shared.InterfaceCommon (SVariable, TypeSym(..), ValueSym(..),
+import Drasil.Shared.InterfaceCommon (Variable, TypeSym(..), ValueSym(..),
   getCodeType, TypeElim)
 import Drasil.Shared.RendererClassesCommon (VSUnOp, VSBinOp,
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..),
@@ -48,15 +48,17 @@ mkVal t = valFromData Nothing Nothing (toState t)
 -- | Constructs an instance-level variable in a stateful context
 mkStateVar
   :: (RenderVariable r typ)
-  => String -> VS (r typ) -> Doc -> SVariable r
+  => String -> VS (r typ) -> Doc -> VS (r Variable)
 mkStateVar = varFromData InstanceLevel
 
 -- | Constructs an instance-level variable in a non-stateful context
-mkVar :: (RenderVariable r typ) => String -> r typ -> Doc -> SVariable r
+mkVar :: (RenderVariable r typ) => String -> r typ -> Doc -> VS (r Variable)
 mkVar n t = varFromData InstanceLevel n (toState t)
 
 -- | Constructs a classLevel variable in a stateful context
-mkClassVar :: (RenderVariable r typ) => String -> VS (r typ) -> Doc -> SVariable r
+mkClassVar
+  :: (RenderVariable r typ)
+  => String -> VS (r typ) -> Doc -> VS (r Variable)
 mkClassVar = varFromData ClassLevel
 
 -- Types --

@@ -22,7 +22,7 @@ module Drasil.GOOL.InterfaceGOOL (
 
 import Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, SVariable, NamedArgs, MixedCtorCall, PosCall, PosCtorCall,
+  Label, Library, Variable, NamedArgs, MixedCtorCall, PosCall, PosCtorCall,
   InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   BodySym(body), BlockSym, TypeSym(..), MethodSym(..), VariableSym(var),
@@ -111,13 +111,13 @@ class ClassSym r mthd stvr | r -> mthd stvr where
 
   docClass :: String -> CS (r Class) -> CS (r Class)
 
-type Initializers r val = [(SVariable r, VS (r val))]
+type Initializers r val = [(VS (r Variable), VS (r val))]
 
 class OOMethodSym r vis typ param val mthd attch bod | r -> vis typ param val mthd attch bod where
   method      :: Label -> r vis -> r attch -> VS (r typ) ->
     [MS (r param)] -> MS (r bod) -> MS (r mthd)
-  getMethod   :: SVariable r -> MS (r mthd)
-  setMethod   :: SVariable r -> MS (r mthd)
+  getMethod   :: VS (r Variable) -> MS (r mthd)
+  setMethod   :: VS (r Variable) -> MS (r mthd)
   constructor :: [MS (r param)] -> Initializers r val -> MS (r bod) -> MS (r mthd)
 
   -- inOutMethod and docInOutMethod both need AttachmentSym
@@ -162,13 +162,13 @@ type CSStateVar r stvr = CS (r stvr)
 class StateVarSym r vis val stvr attch | r -> vis val stvr attch where
   -- | Given a visibility, attachment, and variable, represent the declaration
   -- of a state variable with no initial value.
-  stateVar :: r vis -> r attch -> SVariable r -> CSStateVar r stvr
+  stateVar :: r vis -> r attch -> VS (r Variable) -> CSStateVar r stvr
   -- | Given a visibility, attachment, variable, and initial value,
   -- represent the declaration of a state variable with the given initial value.
-  stateVarDef :: r vis -> r attch -> SVariable r -> VS (r val) -> CSStateVar r stvr
+  stateVarDef :: r vis -> r attch -> VS (r Variable) -> VS (r val) -> CSStateVar r stvr
   -- | Given a visibility, variable, and value, represent the declaration of
   -- a state constant with the given value.
-  constVar :: r vis ->  SVariable r -> VS (r val) -> CSStateVar r stvr
+  constVar :: r vis ->  VS (r Variable) -> VS (r val) -> CSStateVar r stvr
 
 privDVar
   ::
@@ -176,7 +176,7 @@ privDVar
     , VisibilitySym r vis
     , StateVarSym r vis val stvr attch
     )
-  => SVariable r -> CSStateVar r stvr
+  => VS (r Variable) -> CSStateVar r stvr
 privDVar = stateVar private instanceLevel
 
 pubDVar
@@ -185,7 +185,7 @@ pubDVar
     , VisibilitySym r vis
     , StateVarSym r vis val stvr attch
     )
-  => SVariable r -> CSStateVar r stvr
+  => VS (r Variable) -> CSStateVar r stvr
 pubDVar = stateVar public instanceLevel
 
 pubSVar
@@ -194,7 +194,7 @@ pubSVar
     , VisibilitySym r vis
     , StateVarSym r vis val stvr attch
     )
-  => SVariable r -> CSStateVar r stvr
+  => VS (r Variable) -> CSStateVar r stvr
 pubSVar = stateVar public classLevel
 
 -- | Used to differentiate whether a member is attached to the class or the instance
@@ -207,29 +207,31 @@ class OOTypeSym r typ | r -> typ where
 
 class OOVariableSym r typ val | r -> typ val where
   -- | A class-level variable, separate from its class (i.e. `v`, not `C.v`)
-  classVar          :: Label -> VS (r typ) -> SVariable r
+  classVar          :: Label -> VS (r typ) -> VS (r Variable)
   -- | A class-level constant, separate from its class (i.e. `v`, not `C.v`)
-  classConst        :: Label -> VS (r typ) -> SVariable r
+  classConst        :: Label -> VS (r typ) -> VS (r Variable)
   -- | Given a class `C` and a class-level variable `v`, creates `C.v`
-  classVarAccess    :: VS (r typ) -> SVariable r -> SVariable r
+  classVarAccess    :: VS (r typ) -> VS (r Variable) -> VS (r Variable)
   -- | Given a class `C` from an external module and a class-level variable `v`,
   -- performs any necessary imports and creates `C.v`
-  extClassVarAccess :: VS (r typ) -> SVariable r -> SVariable r
+  extClassVarAccess :: VS (r typ) -> VS (r Variable) -> VS (r Variable)
   -- | Given an instance `i` and an instance-level variable `v`, creates `i.v`
-  instanceVarAccess :: VS (r val) -> SVariable r -> SVariable r
+  instanceVarAccess :: VS (r val) -> VS (r Variable) -> VS (r Variable)
 
-($->) :: (OOVariableSym r typ val) => VS (r val) -> SVariable r -> SVariable r
+($->)
+  :: (OOVariableSym r typ val)
+  => VS (r val) -> VS (r Variable) -> VS (r Variable)
 infixl 9 $->
 ($->) = instanceVarAccess
 
 class SelfSym r where
   -- | `self` keyword
-  self              :: SVariable r
+  self              :: VS (r Variable)
 
 -- | Given a variable `v`, creates `self.v`
 instanceVarSelf
   :: (OOVariableSym r typ val, SelfSym r, VariableValue r val)
-  => SVariable r -> SVariable r
+  => VS (r Variable) -> VS (r Variable)
 instanceVarSelf = instanceVarAccess (valueOf self)
 
 -- for values that can include expressions
@@ -326,21 +328,23 @@ classMethodCallNoParams
 classMethodCallNoParams t c f = classMethodCall t c f []
 
 class OODeclStatement r scope val stmt | r -> scope val stmt where
-  objDecDef    :: SVariable r -> r scope -> VS (r val) -> MS (r stmt)
+  objDecDef    :: VS (r Variable) -> r scope -> VS (r val) -> MS (r stmt)
   -- Parameters: variable to store the object, scope of the variable,
   --             constructor arguments.  Object type is not needed,
   --             as it is inferred from the variable's type.
-  objDecNew    :: SVariable r -> r scope -> [VS (r val)] -> MS (r stmt)
-  extObjDecNew :: Library -> SVariable r -> r scope -> [VS (r val)]
+  objDecNew    :: VS (r Variable) -> r scope -> [VS (r val)] -> MS (r stmt)
+  extObjDecNew :: Library -> VS (r Variable) -> r scope -> [VS (r val)]
     -> MS (r stmt)
 
-objDecNewNoParams :: (OODeclStatement r scope val stmt) => SVariable r -> r scope
+objDecNewNoParams
+  :: (OODeclStatement r scope val stmt)
+  => VS (r Variable) -> r scope
   -> MS (r stmt)
 objDecNewNoParams v tp = objDecNew v tp []
 
 extObjDecNewNoParams
   :: (OODeclStatement r scope val stmt)
-  => Library -> SVariable r -> r scope -> MS (r stmt)
+  => Library -> VS (r Variable) -> r scope -> MS (r stmt)
 extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 
 class OOFuncAppStatement r val stmt | r -> val stmt where
@@ -373,7 +377,7 @@ addObserver o = listAdd obsList lastelem o
 
 class StrategyPattern r val bod block | r -> val bod block where
   runStrategy
-    :: Label -> [(Label, MS (r bod))] -> Maybe (VS (r val)) -> Maybe (SVariable r) -> MS (r block)
+    :: Label -> [(Label, MS (r bod))] -> Maybe (VS (r val)) -> Maybe (VS (r Variable)) -> MS (r block)
 
 class OOFunctionSym r typ val | r -> typ val where
   func :: Label -> VS (r typ) -> [VS (r val)] -> VS (r FuncData)
@@ -389,8 +393,8 @@ selfAccess
 selfAccess = objAccess (valueOf self)
 
 class GetSet r val | r -> val where
-  get :: VS (r val) -> SVariable r -> VS (r val)
-  set :: VS (r val) -> SVariable r -> VS (r val) -> VS (r val)
+  get :: VS (r val) -> VS (r Variable) -> VS (r val)
+  set :: VS (r val) -> VS (r Variable) -> VS (r val) -> VS (r val)
 
 convTypeOO :: (TypeSym r typ, OOTypeSym r typ) => CodeType -> VS (r typ)
 convTypeOO (Object n) = obj n

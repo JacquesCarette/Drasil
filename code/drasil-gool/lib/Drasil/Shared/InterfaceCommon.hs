@@ -3,9 +3,8 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, Body, Block, VSBinder, Variable, SVariable, Value, NamedArgs,
-  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
-  DocInOutFunc,
+  Label, Library, Body, Block, VSBinder, Variable, Value, NamedArgs, MixedCall,
+  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), getTypeString, VariableSym(..), ScopeSym(..), convScope,
@@ -105,18 +104,17 @@ class ScopeSym r scope | r -> scope where
   local  :: r scope -- Definite local scope
 
 type Variable = VarData
-type SVariable a = VS (a Variable)
 
 -- | Class for representing variables.
 class VariableSym r typ | r -> typ where
   -- | An instance- or function-level variable, separate from its instance (i.e. `v`, not `o.v`)
-  var       :: Label -> VS (r typ) -> SVariable r
+  var       :: Label -> VS (r typ) -> VS (r Variable)
   -- | An instance- or function-level constant, separate from its instance (i.e. `v`, not `o.v`)
-  constant  :: Label -> VS (r typ) -> SVariable r
+  constant  :: Label -> VS (r typ) -> VS (r Variable)
   -- | An instance- or module-level variable from an external library.
   -- Given library `Lib`, variable name `v`, and variable type `t`,
   -- it performs the necessary imports and creates `Lib.v`
-  extVar    :: Library -> Label -> VS (r typ) -> SVariable r
+  extVar    :: Library -> Label -> VS (r typ) -> VS (r Variable)
 
 class VariableElim r typ | r -> typ where
   variableName :: r Variable -> String
@@ -124,12 +122,12 @@ class VariableElim r typ | r -> typ where
 
 listVar
   :: (TypeSym r typ, VariableSym r typ)
-  => Label -> VS (r typ) -> SVariable r
+  => Label -> VS (r typ) -> VS (r Variable)
 listVar n t = var n (listType t)
 
 listOf
   :: (TypeSym r typ, VariableSym r typ)
-  => Label -> VS (r typ) -> SVariable r
+  => Label -> VS (r typ) -> VS (r Variable)
 listOf = listVar
 
 type Value = ValData
@@ -169,7 +167,7 @@ class MathConstant r val | r -> val where
   pi :: VS (r val)
 
 class VariableValue r val | r -> val where
-  valueOf       :: SVariable r -> VS (r val)
+  valueOf       :: VS (r Variable) -> VS (r val)
 
 class CommandLineArgs r val | r -> val where
   arg          :: Integer -> VS (r val)
@@ -233,7 +231,7 @@ class Comparison r val | r -> val where
   (?!=) :: VS (r val) -> VS (r val) -> VS (r val)
   infixl 3 ?!=
 
-type NamedArgs r val = [(SVariable r, VS (r val))]
+type NamedArgs r val = [(VS (r Variable), VS (r val))]
 -- Function call with both positional and named arguments
 type MixedCall r typ val = Label -> VS (r typ) -> [VS (r val)] -> NamedArgs r val -> VS (r val)
 -- Constructor call with both positional and named arguments
@@ -310,7 +308,7 @@ class Reference r val | r -> val where
 class Array r val | r -> val where
   -- TODO [Brandon Bosman, 05/19/2026]: Change return type to VS val
   -- | Given array `a` and index `i`, creates `a[i]`
-  arrayElem :: VS (r val) -> VS (r val) -> SVariable r
+  arrayElem :: VS (r val) -> VS (r val) -> VS (r Variable)
   -- TODO [Brandon Bosman, 06/03/2026]: Consider switching to a polymorphic `length`
   -- for Array, List, and Set
   -- | Given an array, return its length
@@ -389,7 +387,7 @@ class NativeVector r typ val | r -> typ val where
 
 class InternalList r val block | r -> val block where
   listSlice'      :: Maybe (VS (r val)) -> Maybe (VS (r val)) -> Maybe (VS (r val))
-    -> SVariable r -> VS (r val) -> MS (r block)
+    -> VS (r Variable) -> VS (r val) -> MS (r block)
 
 -- | Creates a slice of a list and assigns it to a variable.
 --   Arguments are:
@@ -402,7 +400,7 @@ class InternalList r val block | r -> val block where
 --   (optional) Step (if Nothing, then defaults to 1)
 listSlice
   :: (InternalList r val block)
-  => SVariable r
+  => VS (r Variable)
   -> VS (r val)
   -> Maybe (VS (r val))
   -> Maybe (VS (r val))
@@ -431,41 +429,41 @@ class ValueStatement r val stmt | r -> val stmt where
   valStmt :: VS (r val) -> MS (r stmt)
 
 class AssignStatement r val stmt | r -> val stmt where
-  (&-=)  :: SVariable r -> VS (r val) -> MS (r stmt)
+  (&-=)  :: VS (r Variable) -> VS (r val) -> MS (r stmt)
   infixl 1 &-=
-  (&+=)  :: SVariable r -> VS (r val) -> MS (r stmt)
+  (&+=)  :: VS (r Variable) -> VS (r val) -> MS (r stmt)
   infixl 1 &+=
-  (&++)  :: SVariable r -> MS (r stmt)
+  (&++)  :: VS (r Variable) -> MS (r stmt)
   infixl 8 &++
-  (&--)  :: SVariable r -> MS (r stmt)
+  (&--)  :: VS (r Variable) -> MS (r stmt)
   infixl 8 &--
 
-  assign :: SVariable r -> VS (r val) -> MS (r stmt)
+  assign :: VS (r Variable) -> VS (r val) -> MS (r stmt)
 
-(&=) :: (AssignStatement r val stmt) => SVariable r -> VS (r val) -> MS (r stmt)
+(&=) :: (AssignStatement r val stmt) => VS (r Variable) -> VS (r val) -> MS (r stmt)
 infixr 1 &=
 (&=) = assign
 
 class DeclStatement r scope val stmt bod | r -> scope val stmt bod where
   -- | Declare a variable without giving it a value.
   -- Not for use with arrays; use `arrayDec` instead.
-  varDec       :: SVariable r -> r scope -> MS (r stmt)
+  varDec       :: VS (r Variable) -> r scope -> MS (r stmt)
   -- | Declare a variable and give it a value.
   -- Not for use with arrays; use `arrayDecDef` instead.
-  varDecDef    :: SVariable r -> r scope -> VS (r val) -> MS (r stmt)
+  varDecDef    :: VS (r Variable) -> r scope -> VS (r val) -> MS (r stmt)
   -- | Given the size of the list, the variable to store the list in,
   -- and the scope of the variable, declare a list of the given size.
-  listDec      :: Integer -> SVariable r -> r scope -> MS (r stmt)
-  listDecDef   :: SVariable r -> r scope -> [VS (r val)] -> MS (r stmt)
-  setDec       :: SVariable r -> r scope -> MS (r stmt)
-  setDecDef    :: SVariable r -> r scope -> VS (r val) -> MS (r stmt)
+  listDec      :: Integer -> VS (r Variable) -> r scope -> MS (r stmt)
+  listDecDef   :: VS (r Variable) -> r scope -> [VS (r val)] -> MS (r stmt)
+  setDec       :: VS (r Variable) -> r scope -> MS (r stmt)
+  setDecDef    :: VS (r Variable) -> r scope -> VS (r val) -> MS (r stmt)
   -- | Given the size of the aray, the default value to fill the array with,
   -- the variable to store the array in, and the scope of the variable,
   -- declare an array of the given size.
-  arrayDec     :: Integer -> VS (r val) -> SVariable r -> r scope -> MS (r stmt)
-  arrayDecDef  :: SVariable r -> r scope -> [VS (r val)] -> MS (r stmt)
-  constDecDef  :: SVariable r -> r scope -> VS (r val) -> MS (r stmt)
-  funcDecDef   :: SVariable r -> r scope -> [SVariable r] -> MS (r bod)
+  arrayDec     :: Integer -> VS (r val) -> VS (r Variable) -> r scope -> MS (r stmt)
+  arrayDecDef  :: VS (r Variable) -> r scope -> [VS (r val)] -> MS (r stmt)
+  constDecDef  :: VS (r Variable) -> r scope -> VS (r val) -> MS (r stmt)
+  funcDecDef   :: VS (r Variable) -> r scope -> [VS (r Variable)] -> MS (r bod)
     -> MS (r stmt)
 
 class PrintConsole r val stmt | r -> val stmt where
@@ -476,13 +474,13 @@ class PrintConsole r val stmt | r -> val stmt where
   printStrLn :: String -> MS (r stmt)
 
 class ReadConsole r stmt | r -> stmt where
-  getInput         :: SVariable r -> MS (r stmt)
+  getInput         :: VS (r Variable) -> MS (r stmt)
   discardInput     :: MS (r stmt)
 
 class FileHandling r val stmt | r -> val stmt where
-  openFileR :: SVariable r -> VS (r val) -> MS (r stmt)
-  openFileW :: SVariable r -> VS (r val) -> MS (r stmt)
-  openFileA :: SVariable r -> VS (r val) -> MS (r stmt)
+  openFileR :: VS (r Variable) -> VS (r val) -> MS (r stmt)
+  openFileW :: VS (r Variable) -> VS (r val) -> MS (r stmt)
+  openFileA :: VS (r Variable) -> VS (r val) -> MS (r stmt)
   closeFile :: VS (r val) -> MS (r stmt)
 
 class PrintFile r val stmt | r -> val stmt where
@@ -493,28 +491,28 @@ class PrintFile r val stmt | r -> val stmt where
   printFileStrLn :: VS (r val) -> String -> MS (r stmt)
 
 class ReadFile r val stmt | r -> val stmt where
-  getFileInput     :: VS (r val) -> SVariable r -> MS (r stmt)
+  getFileInput     :: VS (r val) -> VS (r Variable) -> MS (r stmt)
   discardFileInput :: VS (r val) -> MS (r stmt)
-  getFileInputLine :: VS (r val) -> SVariable r -> MS (r stmt)
+  getFileInputLine :: VS (r val) -> VS (r Variable) -> MS (r stmt)
   discardFileLine  :: VS (r val) -> MS (r stmt)
-  getFileInputAll  :: VS (r val) -> SVariable r -> MS (r stmt)
+  getFileInputAll  :: VS (r val) -> VS (r Variable) -> MS (r stmt)
 
 class StringStatement r val stmt | r -> val stmt where
   -- | Given a char to split on, variable to store result in, and string to split,
   -- generates a statement splitting the string into a list of strings
   -- delimited by the char.
-  stringSplit :: Char -> SVariable r -> VS (r val) -> MS (r stmt)
-  stringListVals  :: [SVariable r] -> VS (r val) -> MS (r stmt)
+  stringSplit :: Char -> VS (r Variable) -> VS (r val) -> MS (r stmt)
+  stringListVals  :: [VS (r Variable)] -> VS (r val) -> MS (r stmt)
   -- | Given a list of variables and a value containing a list of strings,
   -- assign the ith element of the list of strings into the ith variable
-  stringListLists :: [SVariable r] -> VS (r val) -> MS (r stmt)
+  stringListLists :: [VS (r Variable)] -> VS (r val) -> MS (r stmt)
 
 -- The three lists are inputs, outputs, and both, respectively
 type InOutCall r val stmt =
      Label
   -> [VS (r val)]
-  -> [SVariable r]
-  -> [SVariable r]
+  -> [VS (r Variable)]
+  -> [VS (r Variable)]
   -> MS (r stmt)
 
 class FuncAppStatement r val stmt | r -> val stmt where
@@ -543,9 +541,9 @@ class ControlStatement r val stmt bod | r -> val stmt bod where
   for      :: MS (r stmt) -> VS (r val) -> MS (r stmt) -> MS (r bod) ->
     MS (r stmt)
   -- Iterator variable, start value, end value, step value, loop body
-  forRange :: SVariable r -> VS (r val) -> VS (r val) -> VS (r val) -> MS (r bod) ->
+  forRange :: VS (r Variable) -> VS (r val) -> VS (r val) -> VS (r val) -> MS (r bod) ->
     MS (r stmt)
-  forEach  :: SVariable r -> VS (r val) -> MS (r bod) -> MS (r stmt)
+  forEach  :: VS (r Variable) -> VS (r val) -> MS (r bod) -> MS (r stmt)
   while    :: VS (r val) -> MS (r bod) -> MS (r stmt)
 
   tryCatch :: MS (r bod) -> MS (r bod) -> MS (r stmt)
@@ -571,20 +569,20 @@ class VisibilitySym r vis | r -> vis where
 
 -- | A class for representing function/method parameters.
 class ParameterSym r param | r -> param where
-  param :: SVariable r -> MS (r param)
+  param :: VS (r Variable) -> MS (r param)
   -- | A parameter that is an "alias" type, e.g. a C++ reference.
   -- This is a minor hack, to get around us not having/wanting
   -- "alias types" in GOOL.
-  pointerParam :: SVariable r -> MS (r param)
+  pointerParam :: VS (r Variable) -> MS (r param)
 
 -- The three lists are inputs, outputs, and both, respectively
-type InOutFunc r mthd bod = [SVariable r] -> [SVariable r] -> [SVariable r] ->
+type InOutFunc r mthd bod = [VS (r Variable)] -> [VS (r Variable)] -> [VS (r Variable)] ->
   MS (r bod) -> MS (r mthd)
 -- Parameters are: brief description of function, input descriptions and
 -- variables, output descriptions and variables, descriptions and variables
 -- for parameters that are both input and output, function body
-type DocInOutFunc r mthd bod = String -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> [(String, SVariable r)] -> MS (r bod) -> MS (r mthd)
+type DocInOutFunc r mthd bod = String -> [(String, VS (r Variable))] ->
+  [(String, VS (r Variable))] -> [(String, VS (r Variable))] -> MS (r bod) -> MS (r mthd)
 
 -- | A class for representing functions/methods.
 -- Usually 'MethodData' is used for the representation.

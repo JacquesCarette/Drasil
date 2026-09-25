@@ -128,7 +128,7 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOProg CSharpCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
+instance OOProg CSharpCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym CSharpCode ProgData FileData where
   prog n st files = do
@@ -136,8 +136,8 @@ instance ProgramSym CSharpCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym CSharpCode Doc TypeData ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CSharpCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
+instance CommonRenderSym CSharpCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym CSharpCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
@@ -258,12 +258,12 @@ instance OpElim CSharpCode where
   uOpPrec = opPrec . unCSC
   bOpPrec = opPrec . unCSC
 
-instance ScopeSym CSharpCode where
+instance ScopeSym CSharpCode ScopeData where
   global = CP.global
   mainFn = local
   local = G.local
 
-instance ScopeElim CSharpCode where
+instance ScopeElim CSharpCode ScopeData where
   scopeData = unCSC
 
 instance VariableSym CSharpCode TypeData where
@@ -506,7 +506,7 @@ instance AssignStatement CSharpCode Value (Doc, Terminator) where
   (&++) = C.increment1
   (&--) = C.decrement1
 
-instance DeclStatement CSharpCode Value (Doc, Terminator) Body where
+instance DeclStatement CSharpCode ScopeData Value (Doc, Terminator) Body where
   varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $
     C.varDec classLevel instanceLevel empty v scp)
   varDecDef = C.varDecDef Semi
@@ -520,7 +520,7 @@ instance DeclStatement CSharpCode Value (Doc, Terminator) Body where
   constDecDef = CG.constDecDef
   funcDecDef = csFuncDecDef
 
-instance OODeclStatement CSharpCode Value (Doc, Terminator) where
+instance OODeclStatement CSharpCode ScopeData Value (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -956,9 +956,9 @@ csPrint
     , VariableSym r typ
     , VariableValue r val
     , List r val
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , AssignStatement r val stmt
     , ControlStatement r val stmt bod
     , PrintConsole r val stmt

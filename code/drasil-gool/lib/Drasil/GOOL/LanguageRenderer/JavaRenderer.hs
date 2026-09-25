@@ -129,15 +129,15 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOProg JavaCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
+instance OOProg JavaCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym JavaCode ProgData FileData where
   prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n
     endStatement)))
 
-instance CommonRenderSym JavaCode Doc TypeData ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym JavaCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
+instance CommonRenderSym JavaCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym JavaCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
@@ -254,12 +254,12 @@ instance OpElim JavaCode where
   uOpPrec = opPrec . unJC
   bOpPrec = opPrec . unJC
 
-instance ScopeSym JavaCode where
+instance ScopeSym JavaCode ScopeData where
   global = CP.global
   mainFn = local
   local = G.local
 
-instance ScopeElim JavaCode where
+instance ScopeElim JavaCode ScopeData where
   scopeData = unJC
 
 instance VariableSym JavaCode TypeData where
@@ -530,7 +530,7 @@ instance AssignStatement JavaCode Value (Doc, Terminator) where
   (&++) = C.increment1
   (&--) = C.decrement1
 
-instance DeclStatement JavaCode Value (Doc, Terminator) Body where
+instance DeclStatement JavaCode ScopeData Value (Doc, Terminator) Body where
   varDec = C.varDec classLevel instanceLevel empty
   varDecDef = C.varDecDef Semi
   setDec = varDec
@@ -543,7 +543,7 @@ instance DeclStatement JavaCode Value (Doc, Terminator) Body where
   constDecDef = jConstDecDef
   funcDecDef = jFuncDecDef
 
-instance OODeclStatement JavaCode Value (Doc, Terminator) where
+instance OODeclStatement JavaCode ScopeData Value (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -995,9 +995,9 @@ jOut
     , VariableSym r typ
     , VariableValue r val
     , List r val
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , AssignStatement r val stmt
     , ControlStatement r val stmt bod
     , PrintConsole r val stmt

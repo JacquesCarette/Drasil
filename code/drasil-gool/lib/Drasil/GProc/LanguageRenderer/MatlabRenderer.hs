@@ -91,7 +91,7 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance ProcProg MatlabCode Doc TypeData ParamData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
+instance ProcProg MatlabCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
 
 instance ProgramSym MatlabCode ProgData FileData where
   prog n st files = do
@@ -99,8 +99,8 @@ instance ProgramSym MatlabCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym MatlabCode Doc TypeData ParamData Value (Doc, Terminator) MethodData Body Block
-instance ProcRenderSym MatlabCode Doc TypeData ParamData Value (Doc, Terminator) MethodData FileData ModData Body Block
+instance CommonRenderSym MatlabCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance ProcRenderSym MatlabCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData FileData ModData Body Block
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
@@ -202,12 +202,12 @@ instance OpElim MatlabCode where
   uOpPrec = opPrec . unMLC
   bOpPrec = opPrec . unMLC
 
-instance ScopeSym MatlabCode where
+instance ScopeSym MatlabCode ScopeData where
   global = undefined
   mainFn = undefined
   local = undefined
 
-instance ScopeElim MatlabCode where
+instance ScopeElim MatlabCode ScopeData where
   scopeData = unMLC
 
 instance VariableSym MatlabCode TypeData where
@@ -427,7 +427,7 @@ instance AssignStatement MatlabCode Value (Doc, Terminator) where
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement MatlabCode Value (Doc, Terminator) Body where
+instance DeclStatement MatlabCode ScopeData Value (Doc, Terminator) Body where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
@@ -806,7 +806,7 @@ mlEnd = text "end"
 mlElseIf = text "elseif"
 
 mlForEach
-  :: (CommonRenderSym r vis typ param val stmt mthd bod block)
+  :: (CommonRenderSym r vis scope typ param val stmt mthd bod block)
   => r Variable -> r val -> r bod -> Doc
 mlForEach i lstVar b = vcat [
   text "for" <+> RC.variable i <+> equals <+> RC.value lstVar,
@@ -814,7 +814,7 @@ mlForEach i lstVar b = vcat [
   mlEnd]
 
 mlRange
-  :: (CommonRenderSym r vis typ param val stmt mthd bod block)
+  :: (CommonRenderSym r vis scope typ param val stmt mthd bod block)
   => VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
 mlRange initv finalv stepv = do
   ini <- initv
@@ -824,7 +824,7 @@ mlRange initv finalv stepv = do
   mkVal d (RC.value ini <> text ":" <> RC.value stp <> text ":" <> RC.value fin)
 
 mlTryCatch
-  :: (CommonRenderSym r vis typ param val stmt mthd bod block)
+  :: (CommonRenderSym r vis scope typ param val stmt mthd bod block)
   => r bod -> r bod -> Doc
 mlTryCatch tryB catchB = vcat [
   text "try",

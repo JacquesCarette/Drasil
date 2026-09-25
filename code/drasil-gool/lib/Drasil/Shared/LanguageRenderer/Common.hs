@@ -80,7 +80,7 @@ varDecDef
   ::
     ( EmptyStatement r stmt
     , AssignStatement r val stmt
-    , ScopeElim r
+    , ScopeElim r ScopeData
     , VariableElim r typ
     )
   => SVariable r -> r ScopeData -> Maybe (VS (r val)) -> MS (r stmt)

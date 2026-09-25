@@ -21,7 +21,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, MethodTypeSym(..),
   RenderMethod(..))
 
-class (CommonRenderSym r vis typ param val stmt mthd bod block,
+class (CommonRenderSym r vis scope typ param val stmt mthd bod block,
   ParameterSym r param, MethodSym r vis typ param mthd bod,
   IG.OOMethodSym r vis typ param val mthd attch bod, VisibilitySym r vis,
   IG.AttachmentSym r attch, IG.StateVarSym r vis val stvr attch,
@@ -35,7 +35,7 @@ class (CommonRenderSym r vis typ param val stmt mthd bod block,
   RenderMethod r mthd, OORenderMethod r vis typ param mthd attch bod,
   RenderMod r mod, ModuleElim r mod, StateVarElim r stvr,
   PermElim r attch
-  ) => OORenderSym r vis typ param val stmt mthd stvr attch file mod bod block
+  ) => OORenderSym r vis scope typ param val stmt mthd stvr attch file mod bod block
 
 -- OO-Only Typeclasses --
 

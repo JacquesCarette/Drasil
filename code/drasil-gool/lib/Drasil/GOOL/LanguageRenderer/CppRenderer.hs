@@ -135,7 +135,7 @@ unCPPC (CPPC (CPPSC a) _) = a
 hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
 
-instance (Pair p) => OOProg (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) TypeData ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData ProgData FileData ModData Body Block
+instance (Pair p) => OOProg (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) ScopeData TypeData ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData ProgData FileData ModData Body Block
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) ProgData FileData where
   prog n st mods = do
@@ -146,7 +146,7 @@ instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) ProgData FileData wher
     modify revFiles
     pure $ pair p1 (toCode emptyProg)
 
-instance (Pair p) => CommonRenderSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance (Pair p) => CommonRenderSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) ScopeData TypeData ParamData Value (Doc, Terminator) MethodData Body Block
 
 instance (Pair p) => UnRepr (p CppSrcCode CppHdrCode) contents where
   unRepr c = unCPPSC $ pfst c
@@ -261,12 +261,12 @@ instance (Pair p) => OpElim (p CppSrcCode CppHdrCode) where
   uOpPrec o = uOpPrec $ pfst o
   bOpPrec o = bOpPrec $ pfst o
 
-instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
+instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) ScopeData where
   global = pair global global
   mainFn = pair mainFn mainFn
   local = pair local local
 
-instance (Pair p) => ScopeElim (p CppSrcCode CppHdrCode) where
+instance (Pair p) => ScopeElim (p CppSrcCode CppHdrCode) ScopeData where
   scopeData = unCPPSC . pfst
 
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) TypeData where
@@ -523,7 +523,7 @@ instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) Value (Doc, Termi
   (&++) vl = pair1 (&++) (&++) (zoom lensMStoVS vl)
   (&--) vl = pair1 (&--) (&--) (zoom lensMStoVS vl)
 
-instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) Value (Doc, Terminator) Body where
+instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) ScopeData Value (Doc, Terminator) Body where
   varDec vr scp = pair1 (`varDec` pfst scp) (`varDec` psnd scp)
     (zoom lensMStoVS vr)
   varDecDef vr scp vl = pair2 (`varDecDef` pfst scp) (`varDecDef` psnd scp)
@@ -545,7 +545,7 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) Value (Doc, Termina
   funcDecDef v scp ps = pairValListVal (`funcDecDef` pfst scp)
     (`funcDecDef` psnd scp) (zoom lensMStoVS v) (map (zoom lensMStoVS) ps)
 
-instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
+instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) ScopeData Value (Doc, Terminator) where
   objDecDef o scp v = pair2 (`objDecDef` pfst scp) (`objDecDef` psnd scp)
     (zoom lensMStoVS o) (zoom lensMStoVS v)
   objDecNew vr scp vs = pair1Val1List (`objDecNew` pfst scp)
@@ -1018,8 +1018,8 @@ instance Monad CppSrcCode where
 instance ProgramSym CppSrcCode ProgData FileData where
   prog n st = onStateList (onCodeList (progD n st)) . map (zoom lensGStoFS)
 
-instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) TypeData ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CppSrcCode (Doc, VisibilityTag) TypeData ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body Block
+instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body Block
 
 instance UnRepr CppSrcCode contents where
   unRepr = unCPPSC
@@ -1152,12 +1152,12 @@ instance OpElim CppSrcCode where
   uOpPrec = opPrec . unCPPSC
   bOpPrec = opPrec . unCPPSC
 
-instance ScopeSym CppSrcCode where
+instance ScopeSym CppSrcCode ScopeData where
   global = CP.global
   mainFn = local
   local = G.local
 
-instance ScopeElim CppSrcCode where
+instance ScopeElim CppSrcCode ScopeData where
   scopeData = unCPPSC
 
 instance VariableSym CppSrcCode TypeData where
@@ -1445,7 +1445,7 @@ instance AssignStatement CppSrcCode Value (Doc, Terminator) where
   (&++) = C.increment1
   (&--) = C.decrement1
 
-instance DeclStatement CppSrcCode Value (Doc, Terminator) Body where
+instance DeclStatement CppSrcCode ScopeData Value (Doc, Terminator) Body where
   -- TODO [Brandon Bosman, 05/29/2026]: consider re-enabling `varDec` for arrays
   varDec vr scp = do
     vr' <- zoom lensMStoVS vr
@@ -1470,7 +1470,7 @@ instance DeclStatement CppSrcCode Value (Doc, Terminator) Body where
   constDecDef = CG.constDecDef
   funcDecDef = cppFuncDecDef
 
-instance OODeclStatement CppSrcCode Value (Doc, Terminator) where
+instance OODeclStatement CppSrcCode ScopeData Value (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -1736,8 +1736,8 @@ instance Applicative CppHdrCode where
 instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
-instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) TypeData ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CppHdrCode (Doc, VisibilityTag) TypeData ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body Block
+instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body Block
 
 instance UnRepr CppHdrCode contents where
   unRepr = unCPPHC
@@ -1866,12 +1866,12 @@ instance OpElim CppHdrCode where
   uOpPrec = opPrec . unCPPHC
   bOpPrec = opPrec . unCPPHC
 
-instance ScopeSym CppHdrCode where
+instance ScopeSym CppHdrCode ScopeData where
   global = CP.global
   mainFn = local
   local = G.local
 
-instance ScopeElim CppHdrCode where
+instance ScopeElim CppHdrCode ScopeData where
   scopeData = unCPPHC
 
 instance VariableSym CppHdrCode TypeData where
@@ -2110,7 +2110,7 @@ instance AssignStatement CppHdrCode Value (Doc, Terminator) where
   (&++) _ = emptyStmt
   (&--) _ = emptyStmt
 
-instance DeclStatement CppHdrCode Value (Doc, Terminator) Body where
+instance DeclStatement CppHdrCode ScopeData Value (Doc, Terminator) Body where
   varDec vr scp = do
     vr' <- zoom lensMStoVS vr
     let tp = (cType . unCPPHC . variableType) vr'
@@ -2127,7 +2127,7 @@ instance DeclStatement CppHdrCode Value (Doc, Terminator) Body where
   constDecDef = CG.constDecDef
   funcDecDef _ _ _ _ = emptyStmt
 
-instance OODeclStatement CppHdrCode Value (Doc, Terminator) where
+instance OODeclStatement CppHdrCode ScopeData Value (Doc, Terminator) where
   objDecDef _ _ _ = emptyStmt
   objDecNew _ _ _ = emptyStmt
   extObjDecNew _ _ _ _ = emptyStmt
@@ -2596,13 +2596,13 @@ cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef
   ::
-    ( DeclStatement r val stmt bod
+    ( DeclStatement r scope val stmt bod
     , RenderStatement r stmt
     , StatementElim r stmt
     )
   => ([r Value] -> Doc)
   -> SVariable r
-  -> r ScopeData
+  -> r scope
   -> [VS (r Value)]
   -> MS (r stmt)
 cppListDecDef f v scp vls = do

@@ -51,7 +51,7 @@ import Language.Drasil.Printers (showHasSymbImpl)
 import Drasil.GOOL (Label, SVariable, Class, CSStateVar, NamedArgs, Initializers,
   OOProg, CS, FS, MS, VS, AttachmentSym(..), bodyStatements, BlockSym(..),
   TypeSym(..), OOTypeSym(..), VariableSym(..), VariableElim(..),
-  VariableValue(..), ScopeSym(..), ScopeData, OOVariableSym(..), SelfSym(..),
+  VariableValue(..), ScopeSym(..), OOVariableSym(..), SelfSym(..),
   instanceVarSelf, VariableElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
@@ -305,7 +305,7 @@ mkParam p = do
 
 -- | Generates a public function.
 publicFunc
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> VS (r typ)
   -> Description
@@ -319,7 +319,7 @@ publicFunc n t desc ps r b = do
 
 -- | Generates a public method.
 publicMethod
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> VS (r typ)
   -> Description
@@ -332,7 +332,7 @@ publicMethod n t = do
 
 -- | Generates a private method.
 privateMethod
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> VS (r typ)
   -> Description
@@ -345,7 +345,7 @@ privateMethod n t = do
 
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFunc
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> Description
   -> [CodeVarChunk]
@@ -356,7 +356,7 @@ publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 
 -- | Generates a private method, defined by its inputs and outputs.
 privateInOutMethod
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> Description
   -> [CodeVarChunk]
@@ -368,7 +368,7 @@ privateInOutMethod n = genInOutFunc (inOutMethod n private instanceLevel)
 
 -- | Generates a constructor.
 genConstructor
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> Description
   -> [ParameterChunk]
@@ -379,7 +379,7 @@ genConstructor n desc p = do
 
 -- | Generates a constructor that includes initialization of variables.
 genInitConstructor
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> Description
   -> [ParameterChunk]
@@ -393,7 +393,7 @@ genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
 genMethod
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => ([MS (r param)] -> MS (r bod) -> MS (r mthd))
   -> Label
   -> Description
@@ -424,9 +424,9 @@ genInOutFunc
     , OOVariableSym r typ val
     , VariableValue r val
     , SelfSym r
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , FileHandling r val stmt
     , PrintFile r val stmt
     , BlockSym r block stmt
@@ -729,7 +729,7 @@ elementSetBoolBfunc SContains = OO.contains
 
 -- | Converts a 'Mod' to GOOL.
 genModDef
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> GenState (FS (r file))
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
@@ -739,20 +739,20 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
 
 -- | Converts a 'Mod'\'s functions to GOOL.
 genModFuncs
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> [GenState (MS (r mthd))]
 genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
 genModClasses
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> [GenState (CS (r Class))]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
 genClass
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => (Name -> Maybe Name -> Description -> [CSStateVar r stvr] -> GenState [MS (r mthd)] -> GenState [MS (r mthd)] -> GenState (CS (r Class)))
   -> M.Class
   -> GenState (CS (r Class))
@@ -771,7 +771,7 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
 genFunc
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => (Name -> VS (r typ) -> Description -> [ParameterChunk] -> Maybe Description -> [MS (r block)] -> GenState (MS (r mthd)))
   -> [StateVariable]
   -> Func
@@ -825,12 +825,12 @@ convStmt
     , ListStatement r val stmt
     , Reference r val
     , OO.Set r val
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
     , ValueStatement r val stmt
     , AssignStatement r val stmt
     , ControlStatement r val stmt bod
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -933,7 +933,7 @@ convStmt (FAppend a b) = do
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
 genDataFunc
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => Name -> Description -> DataDesc -> GenState (MS (r mthd))
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
@@ -967,9 +967,9 @@ readData
     , ListStatement r val stmt
     , Reference r val
     , OO.Set r val
-    , ScopeSym r
-    , DeclStatement r val stmt bod
-    , OODeclStatement r val stmt
+    , ScopeSym r scope
+    , DeclStatement r scope val stmt bod
+    , OODeclStatement r scope val stmt
     , ControlStatement r val stmt bod
     , StringStatement r val stmt
     , FileHandling r val stmt
@@ -1002,15 +1002,15 @@ readData ddef = do
             , VariableValue r val
             , List r val
             , ListStatement r val stmt
-            , ScopeSym r
-            , DeclStatement r val stmt bod
-            , OODeclStatement r val stmt
+            , ScopeSym r scope
+            , DeclStatement r scope val stmt bod
+            , OODeclStatement r scope val stmt
             , ControlStatement r val stmt bod
             , StringStatement r val stmt
             , ReadFile r val stmt
             , VariableElim r typ
             )
-          => Data -> r ScopeData -> GenState [MS (r stmt)]
+          => Data -> r scope -> GenState [MS (r stmt)]
         inData (Singleton v) _ = do
             vv <- mkVar v
             pure [getFileInput v_infile vv]
@@ -1038,17 +1038,17 @@ readData ddef = do
             ( SelfSym r
             , TypeSym r typ
             , OOTypeSym r typ
-            , ScopeSym r
+            , ScopeSym r scope
             , VariableSym r typ
             , OOVariableSym r typ val
             , VariableValue r val
             , ListStatement r val stmt
-            , DeclStatement r val stmt bod
-            , OODeclStatement r val stmt
+            , DeclStatement r scope val stmt bod
+            , OODeclStatement r scope val stmt
             , StringStatement r val stmt
             , VariableElim r typ
             )
-          => Maybe String -> LinePattern -> r ScopeData -> GenState [MS (r stmt)]
+          => Maybe String -> LinePattern -> r scope -> GenState [MS (r stmt)]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVars s p
           pure [stringListVals vs v_linetokens]
@@ -1061,12 +1061,12 @@ readData ddef = do
           ::
             ( TypeSym r typ
             , OOTypeSym r typ
-            , ScopeSym r
+            , ScopeSym r scope
             , VariableSym r typ
-            , DeclStatement r val stmt bod
-            , OODeclStatement r val stmt
+            , DeclStatement r scope val stmt bod
+            , OODeclStatement r scope val stmt
             )
-          => Maybe String -> [DataItem] -> r ScopeData -> [GenState (MS (r stmt))]
+          => Maybe String -> [DataItem] -> r scope -> [GenState (MS (r stmt))]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
@@ -1074,12 +1074,12 @@ readData ddef = do
           ::
             ( TypeSym r typ
             , OOTypeSym r typ
-            , ScopeSym r
+            , ScopeSym r scope
             , VariableSym r typ
-            , DeclStatement r val stmt bod
-            , OODeclStatement r val stmt
+            , DeclStatement r scope val stmt bod
+            , OODeclStatement r scope val stmt
             )
-          => String -> DataItem -> r ScopeData -> GenState (MS (r stmt))
+          => String -> DataItem -> r scope -> GenState (MS (r stmt))
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
           (innerType $ convTypeOO t)) scp []) (codeType v)
         ---------------
@@ -1261,7 +1261,7 @@ genModDefProc
     , NumericExpression r val
     , ValueExpression r typ val
     , VariableValue r val
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , AssignStatement r val stmt
     , ControlStatement r val stmt bod
     , StringStatement r val stmt
@@ -1273,7 +1273,7 @@ genModDefProc
     , List r val
     , Reference r val
     , OO.Set r val
-    , ProcProg r vis typ param val stmt mthd prg file mod bod block
+    , ProcProg r vis scope typ param val stmt mthd prg file mod bod block
     , TypeElim r typ
     )
   => Mod -> GenState (FS (r file))
@@ -1301,9 +1301,9 @@ publicFuncProc
     , VariableValue r val
     , ParameterSym r param
     , VisibilitySym r vis
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , FileHandling r val stmt
     , PrintFile r val stmt
     , BlockSym r block stmt
@@ -1331,9 +1331,9 @@ privateFuncProc
     , VariableValue r val
     , ParameterSym r param
     , VisibilitySym r vis
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , FileHandling r val stmt
     , PrintFile r val stmt
     , BlockSym r block stmt
@@ -1362,9 +1362,9 @@ genMethodProc
     , VariableSym r typ
     , VariableValue r val
     , ParameterSym r param
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , FileHandling r val stmt
     , PrintFile r val stmt
     , BlockSym r block stmt
@@ -1411,10 +1411,10 @@ genFuncProc
     , VariableValue r val
     , ParameterSym r param
     , VisibilitySym r vis
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
     , ValueStatement r val stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , AssignStatement r val stmt
     , ControlStatement r val stmt bod
     , StringStatement r val stmt
@@ -1464,10 +1464,10 @@ genModFuncsProc
     , VariableValue r val
     , ParameterSym r param
     , VisibilitySym r vis
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
     , ValueStatement r val stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , AssignStatement r val stmt
     , ControlStatement r val stmt bod
     , StringStatement r val stmt
@@ -1504,8 +1504,8 @@ readDataProc
     , ValueExpression r typ val
     , VariableSym r typ
     , VariableValue r val
-    , ScopeSym r
-    , DeclStatement r val stmt bod
+    , ScopeSym r scope
+    , DeclStatement r scope val stmt bod
     , ControlStatement r val stmt bod
     , StringStatement r val stmt
     , FileHandling r val stmt
@@ -1537,16 +1537,16 @@ readDataProc ddef = do
             , OO.Literal r typ val
             , VariableSym r typ
             , VariableValue r val
-            , ScopeSym r
+            , ScopeSym r scope
             , NativeVector r typ val
             , List r val
             , ListStatement r val stmt
-            , DeclStatement r val stmt bod
+            , DeclStatement r scope val stmt bod
             , ControlStatement r val stmt bod
             , StringStatement r val stmt
             , ReadFile r val stmt
             )
-          => Data -> r ScopeData -> GenState [MS (r stmt)]
+          => Data -> r scope -> GenState [MS (r stmt)]
         inData (Singleton v) _ = do
             vv <- mkVarProc v
             pure [getFileInput v_infile vv]
@@ -1575,12 +1575,12 @@ readDataProc ddef = do
             , VariableSym r typ
             , VariableValue r val
             , NativeVector r typ val
-            , ScopeSym r
+            , ScopeSym r scope
             , ListStatement r val stmt
-            , DeclStatement r val stmt bod
+            , DeclStatement r scope val stmt bod
             , StringStatement r val stmt
             )
-          => Maybe String -> LinePattern -> r ScopeData -> GenState [MS (r stmt)]
+          => Maybe String -> LinePattern -> r scope -> GenState [MS (r stmt)]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVarsProc s p
           pure [stringListVals vs v_linetokens]
@@ -1593,10 +1593,10 @@ readDataProc ddef = do
           ::
             ( TypeSym r typ
             , VariableSym r typ
-            , ScopeSym r
-            , DeclStatement r val stmt bod
+            , ScopeSym r scope
+            , DeclStatement r scope val stmt bod
             )
-          => Maybe String -> [DataItem] -> r ScopeData -> [GenState (MS (r stmt))]
+          => Maybe String -> [DataItem] -> r scope -> [GenState (MS (r stmt))]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
@@ -1604,10 +1604,10 @@ readDataProc ddef = do
           ::
             ( TypeSym r typ
             , VariableSym r typ
-            , ScopeSym r
-            , DeclStatement r val stmt bod
+            , ScopeSym r scope
+            , DeclStatement r scope val stmt bod
             )
-          => String -> DataItem -> r ScopeData -> GenState (MS (r stmt))
+          => String -> DataItem -> r scope -> GenState (MS (r stmt))
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
           (innerType $ convType t)) scp []) (codeType v)
         ---------------
@@ -1792,7 +1792,7 @@ convStmtProc
     , ValueSym r typ val
     , OO.Literal r typ val
     , MathConstant r val
-    , ScopeSym r
+    , ScopeSym r scope
     , VariableSym r typ
     , VariableValue r val
     , BooleanExpression r val
@@ -1808,7 +1808,7 @@ convStmtProc
     , OO.Set r val
     , MultiStatement r stmt
     , ValueStatement r val stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , AssignStatement r val stmt
     , ControlStatement r val stmt bod
     , TypeElim r typ
@@ -1926,12 +1926,12 @@ genDataFuncProc
     , Comparison r val
     , NumericExpression r val
     , ValueExpression r typ val
-    , ScopeSym r
+    , ScopeSym r scope
     , VariableSym r typ
     , VariableValue r val
     , ParameterSym r param
     , VisibilitySym r vis
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , ControlStatement r val stmt bod
     , StringStatement r val stmt
     , FileHandling r val stmt
@@ -1964,9 +1964,9 @@ publicInOutFuncProc
     , VariableSym r typ
     , VariableValue r val
     , VisibilitySym r vis
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , FileHandling r val stmt
     , PrintFile r val stmt
     , MethodSym r vis typ param mthd bod
@@ -1990,9 +1990,9 @@ privateInOutFuncProc
     , VariableSym r typ
     , VariableValue r val
     , VisibilitySym r vis
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , FileHandling r val stmt
     , PrintFile r val stmt
     , MethodSym r vis typ param mthd bod
@@ -2016,9 +2016,9 @@ genInOutFuncProc
     , OO.Literal r typ val
     , VariableSym r typ
     , VariableValue r val
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , FileHandling r val stmt
     , PrintFile r val stmt
     , BlockSym r block stmt

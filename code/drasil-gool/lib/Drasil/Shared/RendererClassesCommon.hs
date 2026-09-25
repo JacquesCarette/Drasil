@@ -21,15 +21,15 @@ import Drasil.Shared.InterfaceCommon (Label, Library, Variable, SVariable,
   DeclStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ParameterSym(..), BinderElim(..),
   UnRepr(..), BodySym, BlockSym)
-import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
-  OpData, BinderD, FuncData)
+import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, OpData,
+  BinderD, FuncData)
 import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 class (BodySym r bod block, BlockSym r block stmt, AssignStatement r val stmt,
-  ScopeSym r, DeclStatement r val stmt bod, StringStatement r val stmt,
+  ScopeSym r scope, DeclStatement r scope val stmt bod, StringStatement r val stmt,
   FuncAppStatement r val stmt, CommentStatement r stmt,
   ControlStatement r val stmt bod, Argument r val, Literal r typ val,
   MathConstant r val, ValueSym r typ val, VariableSym r typ, VariableValue r val,
@@ -45,8 +45,8 @@ class (BodySym r bod block, BlockSym r block stmt, AssignStatement r val stmt,
   InternalVarElim r, InternalBinderElim r, ImportSym r, UnaryOpSym r,
   BinaryOpSym r, BlockCommentSym r, BlockCommentElim r,
   ValueExpression r typ val, TypeSym r typ, MethodTypeSym r typ,
-  RenderMethod r mthd, MethodElim r mthd, ParameterSym r param, ScopeElim r
-  ) => CommonRenderSym r vis typ param val stmt mthd bod block
+  RenderMethod r mthd, MethodElim r mthd, ParameterSym r param, ScopeElim r scope
+  ) => CommonRenderSym r vis scope typ param val stmt mthd bod block
 
 -- Common Typeclasses --
 
@@ -117,8 +117,8 @@ class OpElim r where
   uOpPrec :: r OpData -> Int
   bOpPrec :: r OpData -> Int
 
-class ScopeElim r where
-  scopeData :: r ScopeData -> ScopeData
+class ScopeElim r scope | r -> scope where
+  scopeData :: r scope -> scope
 
 class RenderVariable r typ | r -> typ where
   varFromData :: AttachmentTag -> String -> VS (r typ) -> Doc -> SVariable r

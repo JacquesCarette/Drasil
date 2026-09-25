@@ -83,8 +83,8 @@ listSlice
     ( BodySym r bod block
     , IC.BlockSym r block stmt
     , EmptyStatement r stmt
-    , IC.ScopeSym r
-    , IC.DeclStatement r val stmt bod
+    , IC.ScopeSym r ScopeData
+    , IC.DeclStatement r ScopeData val stmt bod
     , AssignStatement r val stmt
     , IC.ControlStatement r val stmt bod
     , IC.TypeSym r typ
@@ -172,7 +172,7 @@ makeSetterVal
   ::
     ( EmptyStatement r stmt
     , VariableSym r typ
-    , IC.DeclStatement r val stmt bod
+    , IC.DeclStatement r scope val stmt bod
     , IC.TypeSym r typ
     , Comparison r val
     , IC.IndexTranslator r val
@@ -186,7 +186,7 @@ makeSetterVal
   -> Maybe (VS (r val))
   -> VS (r val)
   -> VS (r val)
-  -> r ScopeData
+  -> r scope
   -> (MS (r stmt), VS (r val))
 makeSetterVal _     _    _      (Just v) _  _  _   = (emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb _   = (emptyStmt, if s > 0 then lb else rb)
@@ -259,8 +259,8 @@ stringListLists lsts sl = do
 
 forRange
   ::
-    ( IC.ScopeSym r
-    , IC.DeclStatement r val stmt bod
+    ( IC.ScopeSym r scope
+    , IC.DeclStatement r scope val stmt bod
     , AssignStatement r val stmt
     , IC.ControlStatement r val stmt bod
     , Comparison r val
@@ -313,8 +313,8 @@ notifyObservers
     , Comparison r val
     , List r val
     , ValueStatement r val stmt
-    , IC.ScopeSym r
-    , DeclStatement r val stmt bod
+    , IC.ScopeSym r scope
+    , DeclStatement r scope val stmt bod
     , AssignStatement r val stmt
     , ControlStatement r val stmt bod
     , OOFunctionSym r typ val
@@ -347,7 +347,7 @@ arrayDecAsList
     ( BodySym r bod block
     , IC.BlockSym r block stmt
     , MultiStatement r stmt
-    , IC.DeclStatement r val stmt bod
+    , IC.DeclStatement r scope val stmt bod
     , IC.ControlStatement r val stmt bod
     , IC.TypeSym r typ
     , IC.Literal r typ val
@@ -356,7 +356,7 @@ arrayDecAsList
     , IC.ListStatement r val stmt
     , VariableElim r typ
     )
-  => Integer -> VS (r val) -> SVariable r -> r ScopeData -> MS (r stmt)
+  => Integer -> VS (r val) -> SVariable r -> r scope -> MS (r stmt)
 arrayDecAsList len dflt vr scp = do
   vr' <- zoom lensMStoVS vr
   let innerTp = IC.innerType $ pure $ variableType vr'

@@ -23,7 +23,7 @@ import Control.Monad.State (modify)
 constDecDef
   :: ( InternalVarElim r
      , RenderStatement r stmt
-     , ScopeElim r
+     , ScopeElim r ScopeData
      , UnRepr r TypeData
      , ValueElim r val
      , VariableElim r TypeData

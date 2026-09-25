@@ -116,7 +116,7 @@ arrayElem arr' i' = do
   mkStateVar vName vType vRender
 
 funcDecDef
-  :: (RP.ProcRenderSym r vis typ param val stmt mthd file mod bod block)
+  :: (RP.ProcRenderSym r vis ScopeData typ param val stmt mthd file mod bod block)
   => SVariable r -> r ScopeData -> [SVariable r] -> MS (r bod) -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v

@@ -38,7 +38,7 @@ import Drasil.Shared.InterfaceCommon (
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
-import Drasil.Shared.AST (ScopeData, FuncData, ProgData)
+import Drasil.Shared.AST (FuncData, ProgData)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -51,19 +51,19 @@ class (UnRepr r typ, Argument r val, BodySym r bod block, BlockSym r block stmt,
   NumericExpression r val, ValueSym r typ val, InternalValueExp r typ val,
   ValueExpression r typ val, OOValueExpression r typ val, IndexTranslator r val,
   Array r val, List r val, ListStatement r val stmt, Reference r val, Set r val,
-  OOFunctionSym r typ val, ParameterSym r param, ScopeSym r, BinderSym r typ,
-  InternalList r val block, MethodSym r vis typ param mthd bod,
+  OOFunctionSym r typ val, ParameterSym r param, ScopeSym r scope,
+  BinderSym r typ, InternalList r val block, MethodSym r vis typ param mthd bod,
   OOMethodSym r vis typ param val mthd attch bod, AttachmentSym r attch,
   VisibilitySym r vis, StateVarSym r vis val stvr attch, ClassSym r mthd stvr,
   TypeElim r typ, VariableElim r typ, EmptyStatement r stmt,
   MultiStatement r stmt, ValueStatement r val stmt, CommentStatement r stmt,
-  DeclStatement r val stmt bod, OODeclStatement r val stmt,
+  DeclStatement r scope val stmt bod, OODeclStatement r scope val stmt,
   AssignStatement r val stmt, FuncAppStatement r val stmt,
   OOFuncAppStatement r val stmt, ControlStatement r val stmt bod,
   StringStatement r val stmt, PrintConsole r val stmt, ReadConsole r stmt,
   FileHandling r val stmt, PrintFile r val stmt, ReadFile r val stmt,
   ModuleSym r mod mthd, FileSym r file mod, ProgramSym r prg file
-  ) => OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block
+  ) => OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)
@@ -325,22 +325,22 @@ classMethodCallNoParams
   => VS (r typ) -> VS (r typ) -> Label -> VS (r val)
 classMethodCallNoParams t c f = classMethodCall t c f []
 
-class OODeclStatement r val stmt | r -> val stmt where
-  objDecDef    :: SVariable r -> r ScopeData -> VS (r val) -> MS (r stmt)
+class OODeclStatement r scope val stmt | r -> scope val stmt where
+  objDecDef    :: SVariable r -> r scope -> VS (r val) -> MS (r stmt)
   -- Parameters: variable to store the object, scope of the variable,
   --             constructor arguments.  Object type is not needed,
   --             as it is inferred from the variable's type.
-  objDecNew    :: SVariable r -> r ScopeData -> [VS (r val)] -> MS (r stmt)
-  extObjDecNew :: Library -> SVariable r -> r ScopeData -> [VS (r val)]
+  objDecNew    :: SVariable r -> r scope -> [VS (r val)] -> MS (r stmt)
+  extObjDecNew :: Library -> SVariable r -> r scope -> [VS (r val)]
     -> MS (r stmt)
 
-objDecNewNoParams :: (OODeclStatement r val stmt) => SVariable r -> r ScopeData
+objDecNewNoParams :: (OODeclStatement r scope val stmt) => SVariable r -> r scope
   -> MS (r stmt)
 objDecNewNoParams v tp = objDecNew v tp []
 
 extObjDecNewNoParams
-  :: (OODeclStatement r val stmt)
-  => Library -> SVariable r -> r ScopeData -> MS (r stmt)
+  :: (OODeclStatement r scope val stmt)
+  => Library -> SVariable r -> r scope -> MS (r stmt)
 extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 
 class OOFuncAppStatement r val stmt | r -> val stmt where
@@ -353,8 +353,8 @@ observerListName :: Label
 observerListName = "observerList"
 
 initObserverList
-  :: (TypeSym r typ, VariableSym r typ, DeclStatement r val stmt bod)
-  => VS (r typ) -> [VS (r val)] -> r ScopeData -> MS (r stmt)
+  :: (TypeSym r typ, VariableSym r typ, DeclStatement r scope val stmt bod)
+  => VS (r typ) -> [VS (r val)] -> r scope -> MS (r stmt)
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
 addObserver

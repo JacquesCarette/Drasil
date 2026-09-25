@@ -18,7 +18,7 @@ printNum = "printNum"
 
 -- | Creates the observer class.
 observer
-  :: (OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
   => FS (r file)
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])

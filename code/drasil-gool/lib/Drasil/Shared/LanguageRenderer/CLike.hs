@@ -169,7 +169,7 @@ varDec
   :: ( InternalVarElim r
      , RO.PermElim r attch
      , RC.RenderStatement r stmt
-     , ScopeElim r
+     , ScopeElim r ScopeData
      , UnRepr r TypeData
      , TypeElim r TypeData
      , VariableElim r TypeData
@@ -189,12 +189,12 @@ varDec s d pdoc v' scp = do
         ptrdoc _ = empty
 
 varDecDef
-  :: ( IC.DeclStatement r val stmt bod
+  :: ( IC.DeclStatement r scope val stmt bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
      , ValueElim r val
      )
-  => Terminator -> SVariable r -> r ScopeData -> VS (r val) -> MS (r stmt)
+  => Terminator -> SVariable r -> r scope -> VS (r val) -> MS (r stmt)
 varDecDef t vr scp vl' = do
   vd <- IC.varDec vr scp
   vl <- zoom lensMStoVS vl'
@@ -203,12 +203,12 @@ varDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 setDecDef
-  :: ( IC.DeclStatement r val stmt bod
+  :: ( IC.DeclStatement r scope val stmt bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
      , ValueElim r val
      )
-  => Terminator -> SVariable r -> r ScopeData -> VS (r val) -> MS (r stmt)
+  => Terminator -> SVariable r -> r scope -> VS (r val) -> MS (r stmt)
 setDecDef t vr scp vl' = do
   vd <- IC.setDec vr scp
   vl <- zoom lensMStoVS vl'
@@ -218,11 +218,11 @@ setDecDef t vr scp vl' = do
 
 listDec
   ::
-    ( IC.DeclStatement r val stmt bod
+    ( IC.DeclStatement r scope val stmt bod
     , RC.RenderStatement r stmt
     , RC.StatementElim r stmt
     )
-  => (r val -> Doc) -> VS (r val) -> SVariable r -> r ScopeData -> MS (r stmt)
+  => (r val -> Doc) -> VS (r val) -> SVariable r -> r scope -> MS (r stmt)
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
@@ -230,11 +230,11 @@ listDec f vl v scp = do
 
 extObjDecNew
   ::
-    ( IC.DeclStatement r val stmt bod
+    ( IC.DeclStatement r scope val stmt bod
     , IG.OOValueExpression r typ val
     , VariableElim r typ
     )
-  => Library -> SVariable r -> r ScopeData -> [VS (r val)] -> MS (r stmt)
+  => Library -> SVariable r -> r scope -> [VS (r val)] -> MS (r stmt)
 extObjDecNew l v scp vs = IC.varDecDef v scp
   (extNewObj l (onStateValue variableType v) vs)
 

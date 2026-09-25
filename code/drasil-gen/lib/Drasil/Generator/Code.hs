@@ -48,7 +48,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
 
     genCall
       ::
-        ( OOProg progRepr vis stmt mthd stvr attch prg file mod bod block
+        ( OOProg progRepr vis typ val stmt mthd stvr attch prg file mod bod block
         , SoftwareDossierSym packRepr
         , Monad packRepr
         )
@@ -65,8 +65,8 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
 
     genCallProc
       ::
-        ( ProcProg progRepr vis stmt mthd prg file mod bod block
-        , NativeVector progRepr
+        ( ProcProg progRepr vis typ val stmt mthd prg file mod bod block
+        , NativeVector progRepr typ val
         , SoftwareDossierSym packRepr
         , Monad packRepr
         )
@@ -92,7 +92,7 @@ genCodeZoo :: SmithEtAlSRS -> [Choices] -> IO [FileLayout]
 genCodeZoo syst = mapM $ \chcs -> do
     let dir = codedDirName syst chcs
     layout <- genCode syst chcs
-    return $ directory [ps|{dir}|] [layout]
+    pure $ directory [ps|{dir}|] [layout]
 
 -- | Human-readable name for coded variants (e.g. "Projectile_U_P_NoL_U_WI_V_D").
 codedHRName :: (HasProjectName sys) => sys -> Choices -> String

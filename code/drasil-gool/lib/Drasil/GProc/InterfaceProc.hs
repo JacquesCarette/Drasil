@@ -15,27 +15,29 @@ import Drasil.Shared.InterfaceCommon (Label, VisibilitySym, MethodSym(..),
   CommentStatement, Comparison, ControlStatement, FuncAppStatement, PrintConsole,
   ReadConsole, FileHandling, PrintFile, ReadFile, List, ListStatement, Literal,
   MathConstant, NumericExpression, ParameterSym, Reference, Set, StringStatement,
-  ValueExpression, ValueSym, VariableSym, VariableValue, UnRepr, FunctionSym,
-  ScopeSym, BinderSym, InternalList, TypeElim, VariableElim, BodySym, BlockSym)
+  ValueExpression, ValueSym, VariableSym, VariableValue, UnRepr, ScopeSym,
+  BinderSym, InternalList, TypeSym, TypeElim, VariableElim, BodySym, BlockSym)
 import Drasil.Shared.State (GS, FS, MS)
 import Drasil.Shared.AST (ProgData, TypeData)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating a procedural program.
 class (UnRepr r TypeData, BodySym r bod block, BlockSym r block stmt,
-  FunctionSym r, ValueSym r, VariableSym r, VariableValue r, ScopeSym r,
-  BinderSym r, InternalList r block, VisibilitySym r vis,
-  MethodSym r vis mthd bod, TypeElim r, VariableElim r, IndexTranslator r,
-  Array r, EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt,
-  AssignStatement r stmt, Argument r, BooleanExpression r, CommandLineArgs r,
-  CommentStatement r stmt, Comparison r, ControlStatement r stmt bod,
-  DeclStatement r stmt bod, FuncAppStatement r stmt, PrintConsole r stmt,
-  ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
-  List r, ListStatement r stmt, Literal r, MathConstant r, NumericExpression r,
-  ParameterSym r, Reference r, Set r, StringStatement r stmt, ValueExpression r,
-  VariableValue r, ModuleSym r mod mthd, FileSym r file mod,
-  ProgramSym r prg file)
-  => ProcProg r vis stmt mthd prg file mod bod block
+  ValueSym r typ val, VariableSym r typ, VariableValue r val, ScopeSym r,
+  BinderSym r typ, InternalList r val block, VisibilitySym r vis,
+  MethodSym r vis typ mthd bod, TypeSym r typ, TypeElim r typ,
+  VariableElim r typ, IndexTranslator r val, Array r val, EmptyStatement r stmt,
+  MultiStatement r stmt, ValueStatement r val stmt, AssignStatement r val stmt,
+  Argument r val, BooleanExpression r val, CommandLineArgs r val,
+  CommentStatement r stmt, Comparison r val, ControlStatement r val stmt bod,
+  DeclStatement r val stmt bod, FuncAppStatement r val stmt,
+  PrintConsole r val stmt, ReadConsole r stmt, FileHandling r val stmt,
+  PrintFile r val stmt, ReadFile r val stmt, List r val,
+  ListStatement r val stmt, Literal r typ val, MathConstant r val,
+  NumericExpression r val, ParameterSym r, Reference r val, Set r val,
+  StringStatement r val stmt, ValueExpression r typ val, VariableValue r val,
+  ModuleSym r mod mthd, FileSym r file mod, ProgramSym r prg file)
+  => ProcProg r vis typ val stmt mthd prg file mod bod block
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)

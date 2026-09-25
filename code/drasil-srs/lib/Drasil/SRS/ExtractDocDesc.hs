@@ -9,11 +9,11 @@ module Drasil.SRS.ExtractDocDesc (
 import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
+import Data.List (nub, partition)
 import Data.Maybe (maybeToList, mapMaybe)
 
 import Drasil.Database (ChunkDB, HasUID (..), findOrErr)
-import Language.Drasil (Sentence, Definition(..), ModelExpr, HasAdditionalNotes(..),
-  Express(express), DefinedQuantityDict, UnitDefn, Quantity, MayHaveUnit(..), IsUnit(..))
+import Language.Drasil
 import Language.Drasil.Document (HasContents, Section(Section),
   sentToExp, extractSents, extractSents', extractMExprs, getSec)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
@@ -149,7 +149,27 @@ extractUnits dd cdb = collectUnitDeps cdb $ resolveAllVars (getDocDesc dd) (eget
 -- | For a given list of 'Quantity's, collects the 'UnitDefn's dependencies of
 -- their units (i.e., what units their units are defined with).
 collectUnitDeps :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-collectUnitDeps db = map (`findOrErr` db) . concatMap getUnits . mapMaybe (getUnitLup db)
+collectUnitDeps db = go . mapMaybe (getUnitLup db)
+  where
+    go [] = []
+    go us = let (showEm, dontShowEm) = partition shouldShow us
+             in showEm ++ go (map (`findOrErr` db) $ nub $ concatMap getUnits dontShowEm)
+
+    -- Rules:
+    -- 1. Fundamental and derived SI units have their own symbols and are shown
+    --    in the Table of Units.
+    -- 2. Defined (compound) units are broken down into their constituent units.
+    --
+    -- Scaled units (e.g. millimetre in GlassBR) are currently constructed via
+    -- `derUC` as `DerivedSI` with `UScale`. We treat them as `dontShow` so they
+    -- are not added as redundant prefixed entries in the Table of Units (which
+    -- already contains their base unit, e.g. metre).
+    shouldShow ud =
+      case unitSymbol ud of
+        BaseSI{}               -> True
+        DerivedSI _ _ UScale{} -> False -- FIXME: Hack to avoid 'millimetre' being displayed in SRS.
+        DerivedSI{}            -> True
+        Defined{}              -> False
 
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)

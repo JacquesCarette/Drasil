@@ -9,7 +9,7 @@ import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
-  Variable, SVariable, Value, SValue, MixedCtorCall, BodySym(..), BlockSym(..),
+  Variable, SVariable, Value, MixedCtorCall, BodySym(..), BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -18,9 +18,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
   ListStatement(..), Set(..), InternalList(..), EmptyStatement(..),
   MultiStatement(..), ValueStatement(..), AssignStatement(..), (&=),
   DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
-  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
-  ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
+  PrintFile(..), ReadFile(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   StateVarSym(..), AttachmentSym(..), InternalValueExp(..), extNewObj,
@@ -118,7 +118,7 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body Block
+instance OOProg PythonCode Doc TypeData Value (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body Block
 
 instance ProgramSym PythonCode ProgData FileData where
   prog n st files = do
@@ -126,8 +126,8 @@ instance ProgramSym PythonCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym PythonCode Doc (Doc, Terminator) MethodData Body Block
-instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body Block
+instance CommonRenderSym PythonCode Doc TypeData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym PythonCode Doc TypeData Value (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body Block
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
@@ -179,7 +179,7 @@ instance RenderBlock PythonCode Block where
 instance BlockElim PythonCode Block where
   block = unPC
 
-instance TypeSym PythonCode where
+instance TypeSym PythonCode TypeData where
   bool = typeFromData Boolean "" empty
   int = CP.int
   float = error pyFloatError
@@ -196,13 +196,13 @@ instance TypeSym PythonCode where
   funcType = CS.funcType
   void = typeFromData Void pyVoid (text pyVoid)
 
-instance TypeElim PythonCode where
+instance TypeElim PythonCode TypeData where
   getCodeType = cType . unPC
 
-instance OOTypeSym PythonCode where
+instance OOTypeSym PythonCode TypeData where
   obj = G.obj
 
-instance RenderType PythonCode where
+instance RenderType PythonCode TypeData where
   multiType _ = typeFromData Void "" empty
 
 instance UnaryOpSym PythonCode where
@@ -252,12 +252,12 @@ instance ScopeSym PythonCode where
 instance ScopeElim PythonCode where
   scopeData = unPC
 
-instance VariableSym PythonCode where
+instance VariableSym PythonCode TypeData where
   var          = G.var
   constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
 
-instance OOVariableSym PythonCode where
+instance OOVariableSym PythonCode TypeData Value where
   classVar = G.classVar
   classConst n t = mkClassVar n t (R.var (toConstName n))
   classVarAccess = CP.classVarAccess R.classVarAccess
@@ -269,7 +269,7 @@ instance OOVariableSym PythonCode where
 instance SelfSym PythonCode where
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
 
-instance VariableElim PythonCode where
+instance VariableElim PythonCode TypeData where
   variableName = varName . unPC
   variableType = onCodeValue varType
 
@@ -277,18 +277,18 @@ instance InternalVarElim PythonCode where
   variableBind = varBind . unPC
   variable = varDoc . unPC
 
-instance RenderVariable PythonCode where
+instance RenderVariable PythonCode TypeData where
   varFromData b n t' d = do
     t <- t'
     toState $ on2CodeValues (vard b n) t (toCode d)
 
-instance ValueSym PythonCode where
+instance ValueSym PythonCode TypeData Value where
   valueType = onCodeValue valType
 
-instance Argument PythonCode where
+instance Argument PythonCode Value where
   pointerArg = id
 
-instance Literal PythonCode where
+instance Literal PythonCode TypeData Value where
   litTrue = mkStateVal bool pyTrue
   litFalse = mkStateVal bool pyFalse
   litChar = G.litChar quotes
@@ -300,20 +300,20 @@ instance Literal PythonCode where
   litSet = CP.litArray braces
   litList = litArray
 
-instance MathConstant PythonCode where
+instance MathConstant PythonCode Value where
   pi = addmathImport $ mkStateVal double pyPi
 
-instance VariableValue PythonCode where
+instance VariableValue PythonCode Value where
   valueOf = G.valueOf
 
-instance CommandLineArgs PythonCode where
+instance CommandLineArgs PythonCode Value where
   arg n = G.arg (litInt $ n+1) argsList
   argsList = do
     modify (addLangImportVS pySys)
     G.argsList $ pySys `access` argv
   argExists = CP.argExists
 
-instance NumericExpression PythonCode where
+instance NumericExpression PythonCode Value where
   (#~) = unExpr' negateOp
   (#/^) = unExpr sqrtOp
   (#|) = unExpr absOp
@@ -345,12 +345,12 @@ instance NumericExpression PythonCode where
   floor = unExpr floorOp
   ceil = unExpr ceilOp
 
-instance BooleanExpression PythonCode where
+instance BooleanExpression PythonCode Value where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
 
-instance Comparison PythonCode where
+instance Comparison PythonCode Value where
   (?<) = typeBinExpr lessOp bool
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool
@@ -358,7 +358,7 @@ instance Comparison PythonCode where
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
 
-instance ValueExpression PythonCode where
+instance ValueExpression PythonCode TypeData Value where
   inlineIf = pyInlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
@@ -373,7 +373,7 @@ instance ValueExpression PythonCode where
 
   notNull = CP.notNull pyNull
 
-instance OOValueExpression PythonCode where
+instance OOValueExpression PythonCode TypeData Value where
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l tp ps ns = do
     modify (addModuleImportVS l)
@@ -382,7 +382,7 @@ instance OOValueExpression PythonCode where
     modify (addLibImportVS l)
     pyExtNewObjMixedArgs l tp ps ns
 
-instance RenderValue PythonCode where
+instance RenderValue PythonCode TypeData Value where
   inputFunc = mkStateVal string pyInputFunc
   printFunc = mkStateVal void pyPrintFunc
   printLnFunc = mkStateVal void empty
@@ -398,91 +398,89 @@ instance RenderValue PythonCode where
     t <- t'
     toState $ on2CodeValues (vd p i) t (toCode d)
 
-instance ValueElim PythonCode where
+instance ValueElim PythonCode Value where
   valuePrec = valPrec . unPC
   valueInt = valInt . unPC
   value = val . unPC
 
-instance InternalValueExp PythonCode where
+instance InternalValueExp PythonCode TypeData Value where
   objMethodCallMixedArgs' = G.objMethodCall
   classMethodCallMixedArgs' = CG.classMethodCall
 
-instance FunctionSym PythonCode where
-
-instance OOFunctionSym PythonCode where
+instance OOFunctionSym PythonCode TypeData Value where
   func = G.func
   objAccess = G.objAccess
 
-instance GetSet PythonCode where
+instance GetSet PythonCode Value where
   get = G.get
   set = G.set
 
-instance IndexTranslator PythonCode where
+instance IndexTranslator PythonCode Value where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
 
-instance Reference PythonCode where
+instance Reference PythonCode Value where
   makeRef = id
   maybeDeref = id
 
-instance Array PythonCode where
+instance Array PythonCode Value where
   arrayElem = G.arrayElem
   arrayLength = listSize
   arrayCopy arr = let
     arrTp = onStateValue valueType arr
     in objMethodCall arrTp arr "copy" []
 
-instance List PythonCode where
+instance List PythonCode Value where
   listSize = CS.listSize pyListSize
   listAccess = G.listAccess
   indexOf = CP.indexOf pyIndex
 
-instance ListStatement PythonCode (Doc, Terminator) where
+instance ListStatement PythonCode Value (Doc, Terminator) where
   listAdd = CG.listAdd pyInsert
   listAppend = CG.listAppend pyAppendFunc
   listSet = CP.listSet
 
-instance Set PythonCode where
+instance Set PythonCode Value where
   contains a b = typeBinExpr (inPrec pyIn) bool b a
   setAdd = CP.setMethodCall pyAdd
   setRemove = CP.setMethodCall pyRemove
   setUnion = CP.setMethodCall pyUnion
 
-instance InternalList PythonCode Block where
+instance InternalList PythonCode Value Block where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 
-instance InternalGetSet PythonCode where
+instance InternalGetSet PythonCode TypeData Value where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
-instance InternalListFunc PythonCode where
+instance InternalListFunc PythonCode TypeData Value where
   listAccessFunc = CS.listAccessFunc
 
-instance BinderSym PythonCode where
+instance BinderSym PythonCode TypeData where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
-instance BinderElim PythonCode where
+instance BinderElim PythonCode TypeData where
   binderName = bindName . unPC
   binderType = onCodeValue bindType
 
 instance InternalBinderElim PythonCode where
   binderElim = text . bindName . unPC
 
-instance RenderFunction PythonCode where
+instance RenderFunction PythonCode TypeData where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance FunctionElim PythonCode where
+instance FunctionElim PythonCode TypeData where
   functionType = onCodeValue fType
   function = funcDoc . unPC
 
-instance InternalAssignStmt PythonCode (Doc, Terminator) where
+instance InternalAssignStmt PythonCode Value (Doc, Terminator) where
   multiAssign = CP.multiAssign id
 
-instance InternalIOStmt PythonCode (Doc, Terminator) where
+instance InternalIOStmt PythonCode Value (Doc, Terminator) where
   printSt = pyPrint
 
-instance InternalControlStmt PythonCode (Doc, Terminator) where
+instance InternalControlStmt PythonCode Value (Doc, Terminator) where
   multiReturn = CP.multiReturn id
 
 instance RenderStatement PythonCode (Doc, Terminator) where
@@ -500,17 +498,17 @@ instance EmptyStatement PythonCode (Doc, Terminator) where
 instance MultiStatement PythonCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
 
-instance ValueStatement PythonCode (Doc, Terminator) where
+instance ValueStatement PythonCode Value (Doc, Terminator) where
   valStmt = G.valStmt Empty
 
-instance AssignStatement PythonCode (Doc, Terminator) where
+instance AssignStatement PythonCode Value (Doc, Terminator) where
   assign = G.assign Empty
   (&-=) = G.subAssign Empty
   (&+=) = CS.increment
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement PythonCode (Doc, Terminator) Body where
+instance DeclStatement PythonCode Value (Doc, Terminator) Body where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
@@ -529,14 +527,14 @@ instance DeclStatement PythonCode (Doc, Terminator) Body where
       else error "Cannot safely capitalize constant."
   funcDecDef = CP.funcDecDef
 
-instance OODeclStatement PythonCode (Doc, Terminator) where
+instance OODeclStatement PythonCode Value (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v scp vs = do
     modify (addModuleImport lib)
     varDecDef v scp (extNewObj lib (onStateValue variableType v) vs)
 
-instance PrintConsole PythonCode (Doc, Terminator) where
+instance PrintConsole PythonCode Value (Doc, Terminator) where
   print      = pyOut False Nothing printFunc
   printLn    = pyOut True  Nothing printFunc
   printStr   = print   . litString
@@ -546,42 +544,42 @@ instance ReadConsole PythonCode (Doc, Terminator) where
   getInput = pyInput inputFunc
   discardInput = valStmt inputFunc
 
-instance FileHandling PythonCode (Doc, Terminator) where
+instance FileHandling PythonCode Value (Doc, Terminator) where
   openFileR f n = f &= CP.openFileR' n
   openFileW f n = f &= CP.openFileW' n
   openFileA f n = f &= CP.openFileA' n
   closeFile = G.closeFile pyClose
 
-instance ReadFile PythonCode (Doc, Terminator) where
+instance ReadFile PythonCode Value (Doc, Terminator) where
   getFileInput f = pyInput (readline f)
   discardFileInput f = valStmt (readline f)
   getFileInputLine = getFileInput
   discardFileLine = CP.discardFileLine pyReadline
   getFileInputAll f v = v &= readlines f
 
-instance PrintFile PythonCode (Doc, Terminator) where
+instance PrintFile PythonCode Value (Doc, Terminator) where
   printFile f      = pyOut False (Just f) printFunc
   printFileLn f    = pyOut True  (Just f) printFunc
   printFileStr f   = printFile f   . litString
   printFileStrLn f = printFileLn f . litString
 
-instance StringStatement PythonCode (Doc, Terminator) where
+instance StringStatement PythonCode Value (Doc, Terminator) where
   stringSplit d vnew s = assign vnew (objAccess s (splitFunc d))
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
 
-instance FuncAppStatement PythonCode (Doc, Terminator) where
+instance FuncAppStatement PythonCode Value (Doc, Terminator) where
   inOutCall = CP.inOutCall funcApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
 
-instance OOFuncAppStatement PythonCode (Doc, Terminator) where
+instance OOFuncAppStatement PythonCode Value (Doc, Terminator) where
   selfInOutCall = CP.inOutCall selfMethodCall
 
 instance CommentStatement PythonCode (Doc, Terminator) where
   comment = G.comment pyCommentStart
 
-instance ControlStatement PythonCode (Doc, Terminator) Body where
+instance ControlStatement PythonCode Value (Doc, Terminator) Body where
   break = mkStmtNoEnd R.break
   continue = mkStmtNoEnd R.continue
 
@@ -609,10 +607,10 @@ instance ControlStatement PythonCode (Doc, Terminator) Body where
       errMsg <- zoom lensMStoVS errorMessage
       mkStmtNoEnd (pyAssert cond errMsg)
 
-instance ObserverPattern PythonCode (Doc, Terminator) where
+instance ObserverPattern PythonCode TypeData (Doc, Terminator) where
   notifyObservers = M.notifyObservers'
 
-instance StrategyPattern PythonCode Body Block where
+instance StrategyPattern PythonCode Value Body Block where
   runStrategy = M.runStrategy
 
 instance VisibilitySym PythonCode Doc where
@@ -625,10 +623,10 @@ instance RenderVisibility PythonCode Doc where
 instance VisibilityElim PythonCode Doc where
   visibility = unPC
 
-instance MethodTypeSym PythonCode where
+instance MethodTypeSym PythonCode TypeData where
   mType = zoom lensMStoVS
 
-instance OOMethodTypeSym PythonCode where
+instance OOMethodTypeSym PythonCode TypeData where
   construct = G.construct
 
 instance ParameterSym PythonCode where
@@ -640,12 +638,12 @@ instance RenderParam PythonCode where
     v <- zoom lensMStoVS v'
     toState $ on2CodeValues pd v (toCode d)
 
-instance ParamElim PythonCode where
+instance ParamElim PythonCode TypeData where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unPC
 
-instance MethodSym PythonCode Doc MethodData Body where
+instance MethodSym PythonCode Doc TypeData MethodData Body where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
@@ -654,7 +652,7 @@ instance MethodSym PythonCode Doc MethodData Body where
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
 
-instance OOMethodSym PythonCode Doc MethodData AttachmentData Body where
+instance OOMethodSym PythonCode Doc TypeData Value MethodData AttachmentData Body where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -669,7 +667,7 @@ instance RenderMethod PythonCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance OORenderMethod PythonCode Doc MethodData AttachmentData Body where
+instance OORenderMethod PythonCode Doc TypeData MethodData AttachmentData Body where
   intMethod m n _ a _ ps b = do
     modify (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
@@ -685,7 +683,7 @@ instance OORenderMethod PythonCode Doc MethodData AttachmentData Body where
 instance MethodElim PythonCode MethodData where
   method = mthdDoc . unPC
 
-instance StateVarSym PythonCode Doc Doc AttachmentData where
+instance StateVarSym PythonCode Doc Value Doc AttachmentData where
   stateVar _ _ _ = toState (toCode empty)
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm
@@ -877,29 +875,39 @@ addmathImport = (>>) $ modify (addLangImportVS pyMath)
 mathFunc :: (Monad r) => String -> VSOp r
 mathFunc = addmathImport . unOpPrec . access pyMath
 
-splitFunc :: (Literal r, OOFunctionSym r) => Char -> VS (r FuncData)
+splitFunc
+  :: (TypeSym r typ, Literal r typ val, OOFunctionSym r typ val)
+  => Char -> VS (r FuncData)
 splitFunc d = func pySplit (listType string) [litString [d]]
 
-readline, readlines :: (TypeSym r, InternalValueExp r) => SValue r -> SValue r
+readline, readlines
+  :: (TypeSym r typ, InternalValueExp r typ val)
+  => VS (r val) -> VS (r val)
 readline f = objMethodCall string f pyReadline []
 readlines f = objMethodCall (listType string) f pyReadlines []
 
-readInt, readDouble :: (TypeSym r, ValueExpression r) => SValue r -> SValue r
+readInt, readDouble
+  :: (TypeSym r typ, ValueExpression r typ val)
+  => VS (r val) -> VS (r val)
 readInt inSrc = funcApp pyInt int [inSrc]
 readDouble inSrc = funcApp pyDouble double [inSrc]
 
-readString :: (TypeSym r, InternalValueExp r) => SValue r -> SValue r
+readString
+  :: (TypeSym r typ, InternalValueExp r typ val)
+  => VS (r val) -> VS (r val)
 readString inSrc = objMethodCall string inSrc pyRstrip []
 
-range :: (TypeSym r, ValueExpression r) => SValue r -> SValue r -> SValue r -> SValue r
+range
+  :: (TypeSym r typ, ValueExpression r typ val)
+  => VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
 range initv finalv stepv = funcApp pyRange (listType int) [initv, finalv, stepv]
 
 pyClassVarAccess :: Doc -> Doc -> Doc
 pyClassVarAccess c v = c <> dot <> c <> dot <> v
 
 pyInlineIf
-  :: (RenderValue r, ValueElim r, ValueSym r)
-  => SValue r -> SValue r -> SValue r -> SValue r
+  :: (RenderValue r typ val, ValueElim r val, ValueSym r typ val)
+  => VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
 pyInlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
@@ -908,26 +916,30 @@ pyInlineIf c' v1' v2' = do
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
 pyLambda
-  :: (InternalBinderElim r, ValueElim r)
-  => [r BinderD] -> r Value -> Doc
+  :: (InternalBinderElim r, ValueElim r val)
+  => [r BinderD] -> r val -> Doc
 pyLambda ps ex = pyLambdaDec <+> binderList ps <> colon <+> RC.value ex
 
 pyStringType :: (Monad r) => VS (r TypeData)
 pyStringType = typeFromData String pyString (text pyString)
 
 pyExtNewObjMixedArgs
-  :: (RenderValue r, UnRepr r TypeData)
-  => Library -> MixedCtorCall r
+  :: (RenderValue r TypeData val, UnRepr r TypeData)
+  => Library -> MixedCtorCall r TypeData val
 pyExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing
   (getTypeString t) (pure t) vs ns)
 
-pyPrint :: Bool -> Maybe (SValue PythonCode) -> SValue PythonCode ->
-  SValue PythonCode -> MS (PythonCode (Doc, Terminator))
+pyPrint
+  :: Bool
+  -> Maybe (VS (PythonCode Value))
+  -> VS (PythonCode Value)
+  -> VS (PythonCode Value)
+  -> MS (PythonCode (Doc, Terminator))
 pyPrint newLn f' p' v' = do
     f <- zoom lensMStoVS $ fromMaybe (mkStateVal void empty) f'
     prf <- zoom lensMStoVS p'
     v <- zoom lensMStoVS v'
-    s <- zoom lensMStoVS (litString "" :: SValue PythonCode)
+    s <- zoom lensMStoVS (litString "" :: VS (PythonCode Value))
     let nl = if newLn then empty else listSep' <> text "end" <> equals <>
                RC.value s
         fl = emptyIfEmpty (RC.value f) $ listSep' <> text "file" <> equals
@@ -938,28 +950,33 @@ pyOut
   ::
     ( BodySym r bod block
     , BlockSym r block stmt
-    , Literal r
-    , NumericExpression r
-    , Comparison r
-    , VariableSym r
-    , VariableValue r
-    , List r
+    , TypeSym r typ
+    , ValueSym r typ val
+    , Literal r typ val
+    , NumericExpression r val
+    , Comparison r val
+    , VariableSym r typ
+    , VariableValue r val
+    , List r val
     , ScopeSym r
     , MultiStatement r stmt
-    , DeclStatement r stmt bod
-    , AssignStatement r stmt
-    , ControlStatement r stmt bod
-    , PrintConsole r stmt
-    , PrintFile r stmt
-    , InternalIOStmt r stmt
-    , TypeElim r
+    , DeclStatement r val stmt bod
+    , AssignStatement r val stmt
+    , ControlStatement r val stmt bod
+    , PrintConsole r val stmt
+    , PrintFile r val stmt
+    , InternalIOStmt r val stmt
+    , TypeElim r typ
     )
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
+  => Bool -> Maybe (VS (r val)) -> VS (r val) -> VS (r val) -> MS (r stmt)
 pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getCodeType . valueType
   where pyOut' (List _) = printSt newLn f printFn v
         pyOut' _ = G.print newLn f printFn v
 
-pyInput :: SValue PythonCode -> SVariable PythonCode -> MS (PythonCode (Doc, Terminator))
+pyInput
+  :: VS (PythonCode Value)
+  -> SVariable PythonCode
+  -> MS (PythonCode (Doc, Terminator))
 pyInput inSrc v = v &= (v >>= pyInput' . getCodeType . variableType)
   where pyInput' Integer = readInt inSrc
         pyInput' Float = readDouble inSrc
@@ -969,17 +986,17 @@ pyInput inSrc v = v &= (v >>= pyInput' . getCodeType . variableType)
         pyInput' Char = inSrc
         pyInput' _ = error "Attempt to read a value of unreadable type"
 
-pyThrow :: (ValueElim r) => r Value -> Doc
+pyThrow :: (ValueElim r val) => r val -> Doc
 pyThrow errMsg = pyRaise <+> exceptionObj' <> parens (RC.value errMsg)
 
 pyForEach
-  :: (BodyElim r bod, InternalVarElim r, ValueElim r)
-  => r Variable -> r Value -> r bod -> Doc
+  :: (BodyElim r bod, InternalVarElim r, ValueElim r val)
+  => r Variable -> r val -> r bod -> Doc
 pyForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <> colon,
   indent $ RC.body b]
 
-pyWhile :: (BodyElim r bod, ValueElim r) => r Value -> r bod -> Doc
+pyWhile :: (BodyElim r bod, ValueElim r val) => r val -> r bod -> Doc
 pyWhile v b = vcat [
   whileLabel <+> RC.value v <> colon,
   indent $ RC.body b]
@@ -991,11 +1008,17 @@ pyTryCatch tryB catchB = vcat [
   pyExcept <+> exceptionObj' <> colon,
   indent $ RC.body catchB]
 
-pyAssert :: (ValueElim r) => r Value -> r Value -> Doc
+pyAssert :: (ValueElim r val) => r val -> r val -> Doc
 pyAssert condition message = text "assert" <+> RC.value condition <> comma <+> RC.value message
 
-pyListSlice :: (InternalVarElim r, Monad r, ValueElim r) => SVariable r ->
-  SValue r -> SValue r -> SValue r -> SValue r -> MS (r Doc)
+pyListSlice
+  :: (InternalVarElim r, Monad r, ValueElim r val)
+  => SVariable r
+  -> VS (r val)
+  -> VS (r val)
+  -> VS (r val)
+  -> VS (r val)
+  -> MS (r Doc)
 pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   vnew <- vn
   vold <- vo
@@ -1028,7 +1051,7 @@ pyMethod n attch slf ps b = let
        indent bodyD]
 
 pyFunction
-  :: (BodyElim r bod, ParamElim r) => Label -> [r ParamData] -> r bod -> Doc
+  :: (BodyElim r bod, ParamElim r typ) => Label -> [r ParamData] -> r bod -> Doc
 pyFunction n ps b = vcat [
   pyDef <+> text n <> parens (parameterList ps) <> colon,
   indent bodyD]

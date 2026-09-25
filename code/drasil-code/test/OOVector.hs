@@ -3,11 +3,15 @@ module OOVector (ooVector) where
 import Drasil.GOOL
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-ooVector :: OOProg r vis stmt mthd stvr attch prg file mod bod block => GSProgram r prg
+ooVector
+  :: OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+  => GSProgram r prg
 ooVector = prog "OOVector" "" [fileDoc (buildModule "OOVector" []
   [main] [vectorClass])]
 
-vectorClass :: OOProg r vis stmt mthd stvr attch prg file mod bod block => CS (r Class)
+vectorClass
+  :: OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+  => CS (r Class)
 vectorClass = docClass "Vectors of doubles and common vector-related operations." $
   extraClass "Vector" Nothing [stateVar private instanceLevel localV]
   [docFunc "Construct a vector from an array of doubles." ["The doubles."] Nothing $
@@ -22,30 +26,42 @@ vectorClass = docClass "Vectors of doubles and common vector-related operations.
   where argV = var "v" (arrayType double)
         methods = [dimension, magnitude, norm, dot, add, scale, print_]
 
-vecVar :: (VariableSym r, OOTypeSym r) => String -> SVariable r
+vecVar :: (VariableSym r typ, OOTypeSym r typ) => String -> SVariable r
 vecVar v = var v (obj "Vector")
 
-localV :: VariableSym r => SVariable r
+localV :: (TypeSym r typ, VariableSym r typ) => SVariable r
 localV = var "v" (arrayType double)
 
 thisV
-  :: (VariableSym r, OOVariableSym r, SelfSym r, VariableValue r)
+  ::
+    ( TypeSym r typ
+    , VariableSym r typ
+    , OOVariableSym r typ val
+    , SelfSym r
+    , VariableValue r val
+    )
   => SVariable r
 thisV = instanceVarSelf localV
 
-dimension :: OOProg r vis stmt mthd stvr attch prg file mod bod block => MS (r mthd)
+dimension
+  :: OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+  => MS (r mthd)
 dimension = docFunc "Returns the dimension of this vector." [] (Just "The dimension of the vector.") $
   method "dimension" public instanceLevel int [] $ bodyStatements [
     returnStmt $ arrayLength (valueOf thisV)
   ]
 
-magnitude :: OOProg r vis stmt mthd stvr attch prg file mod bod block => MS (r mthd)
+magnitude
+  :: OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+  => MS (r mthd)
 magnitude = docFunc "Calculate the Euclidean norm (magnitude) of this vector."
   [] (Just "The magnitude.") $
   pubMethod "magnitude" double [] $ oneLiner $
     returnStmt (classMethodCall double (obj "Vector") "dot" [maybeDeref $ valueOf self, maybeDeref $ valueOf self] #/^)
 
-norm :: OOProg r vis stmt mthd stvr attch prg file mod bod block => MS (r mthd)
+norm
+  :: OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+  => MS (r mthd)
 norm = docFunc "Calculate unit vector of this vector."
   [] (Just "A new unit vector.") $
   method "norm" public classLevel (obj "Vector") [param v] $ bodyStatements [
@@ -56,7 +72,9 @@ norm = docFunc "Calculate unit vector of this vector."
   where v = vecVar "v"
         mag = var "mag" double
 
-dot :: OOProg r vis stmt mthd stvr attch prg file mod bod block => MS (r mthd)
+dot
+  :: OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+  => MS (r mthd)
 dot = docFunc "Calculate the dot product of two vectors."
   ["First vector.", "Second vector."] (Just "The dot product.") $
   method "dot" public classLevel double [param v1, param v2] $ bodyStatements [
@@ -75,7 +93,9 @@ dot = docFunc "Calculate the dot product of two vectors."
         res = var "res" double
         i = var "i" int
 
-add :: OOProg r vis stmt mthd stvr attch prg file mod bod block => MS (r mthd)
+add
+  :: OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+  => MS (r mthd)
 add = docFunc "Calculate the resultant vector of two vectors."
   ["First vector.", "Second vector."] (Just "The resultant vector.") $
   method "add" public classLevel (obj "Vector") [param v1, param v2] $ bodyStatements [
@@ -93,7 +113,9 @@ add = docFunc "Calculate the resultant vector of two vectors."
         res = var "res" (arrayType double)
         i = var "i" int
 
-scale :: OOProg r vis stmt mthd stvr attch prg file mod bod block => MS (r mthd)
+scale
+  :: OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+  => MS (r mthd)
 scale = docFunc "Scale this vector by a factor."
   ["Scalar factor."] (Just "A new scaled vector.") $
   method "scale" public classLevel (obj "Vector") [param v, param s] $ bodyStatements [
@@ -108,11 +130,15 @@ scale = docFunc "Scale this vector by a factor."
         res = var "res" (arrayType double)
         i = var "i" int
 
-print_ :: OOProg r vis stmt mthd stvr attch prg file mod bod block => MS (r mthd)
+print_
+  :: OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+  => MS (r mthd)
 print_ = docFunc "Prints the vector elements to console." [] Nothing $
   pubMethod "printSelf" void [] $ oneLiner $ printLn $ valueOf thisV
 
-main :: OOProg r vis stmt mthd stvr attch prg file mod bod block => MS (r mthd)
+main
+  :: OOProg r vis typ val stmt mthd stvr attch prg file mod bod block
+  => MS (r mthd)
 main = mainFunction $ body [
     block [
       arrayDecDef ds1 mainFn [litDouble 1.0, litDouble 2.0, litDouble 3.0],

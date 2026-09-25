@@ -133,7 +133,7 @@ genExternalLibraryCall el elc = execState (genExtLibCall el elc) initELS
 -- statements to the 'ExtLibState'.
 genExtLibCall :: ExternalLibrary -> ExternalLibraryCall ->
   State ExtLibState ()
-genExtLibCall [] [] = return ()
+genExtLibCall [] [] = pure ()
 genExtLibCall (sg:el) (SGF n sgf:elc) = let s = sg!!n in
   if length s /= length sgf then error stepNumberMismatch else do
     fs <- zipWithM genStep s sgf
@@ -147,8 +147,8 @@ genStep (Call fi) (CallF fif) = genFI fi fif
 genStep (Loop fis f ss) (LoopF fifs ccList sfs) = do
   es <- zipWithM genFIVal (toList fis) (toList fifs)
   fs <- zipWithM genStep (toList ss) (toList sfs)
-  return $ FWhile (foldl1 ($&&) es $&& f ccList) fs
-genStep (Statement f) (StatementF ccList exList) = return $ f ccList exList
+  pure $ FWhile (foldl1 ($&&) es $&& f ccList) fs
+genStep (Statement f) (StatementF ccList exList) = pure $ f ccList exList
 genStep _ _ = error stepTypeMismatch
 
 -- | Interprets a 'FunctionInterface' and 'FunctionIntFill', resulting in a 'CodeExpr'
@@ -161,7 +161,7 @@ genFIVal (FI (r:|rs) ft f as _) (FIF afs) = do
   let isNamed = isJust . fst
       (nas, ars) = partition isNamed args
   modify (addImports rs . addModExport (codeName f, r))
-  return $ getCallFunc ft f (map snd ars) (map (\(n, e) ->
+  pure $ getCallFunc ft f (map snd ars) (map (\(n, e) ->
     maybe (error "defective isNamed") (,e) n) nas)
   where getCallFunc Function = applyWithNamedArgs
         getCallFunc (Method o) = msgWithNamedArgs o
@@ -172,7 +172,7 @@ genFIVal (FI (r:|rs) ft f as _) (FIF afs) = do
 genFI :: FunctionInterface -> FunctionIntFill -> State ExtLibState FuncStmt
 genFI fi@(FI _ _ _ _ r) fif = do
   fiEx <- genFIVal fi fif
-  return $ maybeGenAssg r fiEx
+  pure $ maybeGenAssg r fiEx
 
 -- | Interprets a list of 'Argument' and list of 'ArgumentFill', returning the 'CodeExpr'
 -- for each argument and the 'NamedArgument' chunk for arguments that are named.
@@ -200,7 +200,7 @@ genArguments (Arg n (Record (rq:|rqs) rn r fs):as) (RecordF es:afs) =
     modify (addFieldAsgs r fs es . addDef (new rn []) r .
       addModExport (codeName rn, rq) . addImports rqs)
     fmap ((n, sy r):) (genArguments as afs)
-genArguments [] [] = return []
+genArguments [] [] = pure []
 genArguments _ _ = error argumentMismatch
 
 -- | Interprets a 'ClassInfo' and 'ClassInfoFill'. These are required when a
@@ -222,7 +222,7 @@ genClassInfo o c n desc svs ci cif = let
       cs <- zipWithM (genMethodInfo o c) ctrIs ctrIFs
       ms <- zipWithM (genMethodInfo o c) mthIs mthIFs
       modify (if any isConstructor mis then id else addDef (new c []) o)
-      return (f desc svs (map fst cs) (map fst ms), concatMap snd ms)
+      pure (f desc svs (map fst cs) (map fst ms), concatMap snd ms)
   where genCI (Regular mis') (RegularF mifs') = (mis', mifs', classDef n)
         genCI (Implements intn mis') (ImplementsF mifs') = (mis', mifs',
           classImplements n intn)
@@ -238,12 +238,12 @@ genMethodInfo o c (CI desc ps ss) (CIF pfs is sfs) = do
   let prms = genParameters ps pfs
   (fs, newS) <- withLocalState $ zipWithM genStep ss sfs
   modify (addDef (new c (map sy prms)) o)
-  return (ctorDef (codeName c) desc prms is (newS ^. defs ++ fs),
+  pure (ctorDef (codeName c) desc prms is (newS ^. defs ++ fs),
     newS ^. imports)
 genMethodInfo _ _ (MI m desc ps rDesc ss) (MIF pfs sfs) = do
   let prms = genParameters ps pfs
   (fs, newS) <- withLocalState (zipWithM genStep (toList ss) (toList sfs))
-  return (funcDefParams (codeName m) desc prms (m ^. typ) rDesc (
+  pure (funcDefParams (codeName m) desc prms (m ^. typ) rDesc (
     newS ^. defs ++ fs), newS ^. imports)
 genMethodInfo _ _ _ _ = error methodInfoMismatch
 
@@ -276,7 +276,7 @@ withLocalState st = do
   st' <- st
   newS <- get
   modify (returnLocal s)
-  return (st', newS)
+  pure (st', newS)
 
 -- Error messages
 -- | Various error messages.

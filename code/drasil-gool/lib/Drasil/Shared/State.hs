@@ -284,20 +284,20 @@ initialVS = VS {
 modifyReturn :: (s -> s) -> a -> State s a
 modifyReturn sf v = do
   modify sf
-  return v
+  pure v
 
 modifyReturnFunc :: (b -> s -> s) -> (b -> a) -> State s b -> State s a
 modifyReturnFunc sf vf st = do
   v <- st
   modify $ sf v
-  return $ vf v
+  pure $ vf v
 
 modifyReturnList :: [State s b] -> (s -> s) ->
   ([b] -> a) -> State s a
 modifyReturnList l sf vf = do
   v <- sequence l
   modify sf
-  return $ vf v
+  pure $ vf v
 
 -------------------------------
 ------- State Modifiers -------
@@ -566,12 +566,12 @@ genLoopIndex = genVarName ["i", "j", "k"] "i"
 genVarNameIf :: Bool -> String -> MS String
 genVarNameIf True n = genVarName [] n
 genVarNameIf False _ = do
-  return ""
+  pure ""
 
 varNameAvailable :: String -> MS Bool
 varNameAvailable n = do
   used <- gets (^. varNames)
-  return $ isNothing $ Map.lookup n used
+  pure $ isNothing $ Map.lookup n used
 
 -- Helpers
 
@@ -587,7 +587,7 @@ bumpVarName (n,c) = do
   count <- gets (^. (varNames . at n))
   let suffix = maybe count (flip fmap count . max) c
   modify $ set (varNames . at n) $ Just $ maybe 0 (+1) suffix
-  return $ maybe n ((n ++) . show) count
+  pure $ maybe n ((n ++) . show) count
 
 setVarScope :: String -> ScopeData -> MethodState -> MethodState
 setVarScope n s = over varScopes (Map.insert n s)
@@ -595,6 +595,6 @@ setVarScope n s = over varScopes (Map.insert n s)
 getVarScope :: String -> MS ScopeData
 getVarScope n = do
   sMap <- gets (^. varScopes)
-  return $ case Map.lookup n sMap of
+  pure $ case Map.lookup n sMap of
     Nothing -> error $ "Variable with no declared scope: " ++ n
     (Just scp) -> scp

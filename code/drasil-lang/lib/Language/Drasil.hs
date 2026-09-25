@@ -88,12 +88,12 @@ module Language.Drasil (
   , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
   -- Language.Drasil.Chunk.UnitDefn
   , UnitDefn(..)
-  , fromUDefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$), (^$), newUnit
-  , scale, shift
-  , derUC, derUC', derUC''
-  , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , getCu, MayHaveUnit(getUnit), unitSymbol, UnitSymbol(..), UDefn(UScale)
+  , fromUDefn, unitCon
+  , (^:), (/:), (*:), (*$), (/$), (^$)
+  , shift
+  , derUC
+  , baseUnit, derivedUnit, compoundUnit, compoundUnit', scaledUnit, compUnitDefn
+  , getCu, MayHaveUnit(getUnit), unitSymbol, UnitSymbol(..)
 
   -- *** Constrained and Uncertain Values
   -- Language.Drasil.Constraint
@@ -234,14 +234,14 @@ import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, fullName, nameStr, rendPersLFM,
   rendPersLFM', rendPersLFM'', comparePeople)
 
-import Language.Drasil.UnitLang (USymb(US), UnitSymbol(..), UDefn(UScale))
+import Language.Drasil.UnitLang (USymb(US), UnitSymbol(..))
 import Language.Drasil.Uncertainty
 
 import Language.Drasil.Development.Sentence -- are these really development?
 import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
-  , fromUDefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
-  , scale, shift
-  , derUC, derUC', derUC''
-  , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
+  , fromUDefn, unitCon
+  , (^:), (/:), (*:), (*$), (/$),(^$)
+  , shift
+  , derUC
+  , baseUnit, derivedUnit, compoundUnit, compoundUnit', scaledUnit, compUnitDefn
   , getCu, MayHaveUnit(getUnit), unitSymbol)

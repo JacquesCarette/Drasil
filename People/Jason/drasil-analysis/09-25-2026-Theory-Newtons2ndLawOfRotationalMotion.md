@@ -1,4 +1,4 @@
-## Current Capture
+## Current Capture (As of 69b96d)
 
 In this section, we will dissect all chunk-like types associated with the following code:
 

@@ -27,7 +27,48 @@ More precisely, we will focus on discussing things exposed through classy lenses
 
 ### Visualized
 
-TODO.
+Note:
+
+1. Subgraphs (boxes) indicate that all nodes contained within share the same `UID`.
+2. Edge labels of dashed arrows describe their meaning. Meaningless without.
+3. Plain arrows mean "contains."
+
+```mermaid
+flowchart TD
+    subgraph UID_SLR ["UID: 'newtonSLR'"]
+        TM["TheoryModel: newtonSLR"]
+        MK["ModelKind"]
+        TM --> MK
+    end
+
+    subgraph UID_Torque ["UID: 'torque'"]
+        subgraph In_Theory ["Theory (Unregistered)"]
+            MKs["ModelKinds: EquationalModel"]
+            QD["QDefinition: newtonSLRQD"]
+            DQD1["DQD 1 (Internal)<br/>term: 'Newton's second law...'"]
+            MKs --> QD --> DQD1
+        end
+
+        subgraph In_Data ["drasil-data (Registered)"]
+            CP["ConceptChunk: CP.torque"]
+            DQD2["DQD 2: QP.torque<br/>term: 'torque'"]
+            CP --> DQD2
+        end
+    end
+
+    MK --> MKs
+    QD -.->|inherits UID| DQD2
+
+    CDB[("ChunkDB")]
+    TM -.->|registered| CDB
+    DQD2 -.->|registered| CDB
+    
+    Call["phrase newtonSLRQD"] -.->|Carries ref. to 'torque' UID| QD
+    Call -.->|refers to|QD
+    CDB -.->|resolves 'torque' to|DQD2
+```
+
+    <!--DQD2 --> Out["'torque' (incorrect)"]-->
 
 ### 1. A `TheoryModel`
 

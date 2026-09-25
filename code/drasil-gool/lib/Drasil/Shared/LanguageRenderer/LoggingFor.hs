@@ -138,7 +138,7 @@ instance (ListStatement r val stmt) => ListStatement (LoggingFor r) val stmt whe
 
 instance
   ( MultiStatement r stmt
-  , DeclStatement r val stmt bod
+  , DeclStatement r scope val stmt bod
   , FileHandling r val stmt
   , PrintFile r val stmt
   , TypeSym r typ
@@ -146,7 +146,7 @@ instance
   , VariableValue r val
   , VariableElim r typ
   , Literal r typ val
-  ) => DeclStatement (LoggingFor r) val stmt bod where
+  ) => DeclStatement (LoggingFor r) scope val stmt bod where
   varDec = liftLogging varDec
   varDecDef vr scp vl = liftLogging $ multi $
     varDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vl)
@@ -333,7 +333,7 @@ instance (ControlStatement r val stmt bod) => ControlStatement (LoggingFor r) va
   tryCatch = liftLogging tryCatch
   assert = liftLogging assert
 
-instance (ScopeSym r) => ScopeSym (LoggingFor r) where
+instance (ScopeSym r scope) => ScopeSym (LoggingFor r) scope where
   global = liftLogging global
   mainFn = liftLogging mainFn
   local = liftLogging local
@@ -441,7 +441,7 @@ instance (NativeVector lang typ val) => NativeVector (LoggingFor lang) typ val w
 
 -- GProc
 
-instance (P.ProcProg r vis typ param val stmt mthd prg file mod bod block) => P.ProcProg (LoggingFor r) vis typ param val stmt mthd prg file mod bod block
+instance (P.ProcProg r vis scope typ param val stmt mthd prg file mod bod block) => P.ProcProg (LoggingFor r) vis scope typ param val stmt mthd prg file mod bod block
 
 instance (P.ModuleSym r mod mthd) => P.ModuleSym (LoggingFor r) mod mthd where
   buildModule = liftLogging P.buildModule
@@ -455,7 +455,7 @@ instance (P.ProgramSym r prg file) => P.ProgramSym (LoggingFor r) prg file where
 
 -- GOOL
 
-instance (G.OOProg r vis typ param val stmt mthd stvr attch prg file mod bod block) => G.OOProg (LoggingFor r) vis typ param val stmt mthd stvr attch prg file mod bod block
+instance (G.OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block) => G.OOProg (LoggingFor r) vis scope typ param val stmt mthd stvr attch prg file mod bod block
 
 instance (G.GetSet r val) => G.GetSet (LoggingFor r) val where
   get = liftLogging G.get
@@ -475,8 +475,8 @@ instance (G.OOVariableSym r typ val) => G.OOVariableSym (LoggingFor r) typ val w
   extClassVarAccess = liftLogging G.extClassVarAccess
   instanceVarAccess = liftLogging G.instanceVarAccess
 
-instance (DeclStatement (LoggingFor r) val stmt bod, G.OODeclStatement r val stmt) =>
-    G.OODeclStatement (LoggingFor r) val stmt where
+instance (DeclStatement (LoggingFor r) scope val stmt bod, G.OODeclStatement r scope val stmt) =>
+    G.OODeclStatement (LoggingFor r) scope val stmt where
   objDecDef = liftLogging G.objDecDef
   objDecNew = liftLogging G.objDecNew
   extObjDecNew = liftLogging G.extObjDecNew

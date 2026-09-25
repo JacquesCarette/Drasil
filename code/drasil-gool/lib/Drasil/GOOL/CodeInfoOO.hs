@@ -20,7 +20,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   InternalValueExp(..), OOFunctionSym(..), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (qualName, td, ScopeData, ScopeTag(..), sd, bindFormD)
+import Drasil.Shared.AST (qualName, td, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, MS, VS, lensGStoFS, lensFStoCS,
@@ -50,7 +50,7 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance OOProg CodeInfoOO () () () () () () () () GOOLState () () () ()
+instance OOProg CodeInfoOO () () () () () () () () () GOOLState () () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
@@ -110,10 +110,10 @@ instance OOTypeSym CodeInfoOO () where
 instance TypeElim CodeInfoOO () where
   getCodeType _ = Void
 
-instance ScopeSym CodeInfoOO where
-  global = noInfoScope
-  mainFn = noInfoScope
-  local = noInfoScope
+instance ScopeSym CodeInfoOO () where
+  global = pure ()
+  mainFn = pure ()
+  local = pure ()
 
 instance VariableSym CodeInfoOO () where
   var       _ _ = pure $ pure $ error "[var] The return value of this isn't used, and the thunk shouldn't fire."
@@ -305,7 +305,7 @@ instance AssignStatement CodeInfoOO () () where
   (&++)  _ = noInfo
   (&--)  _ = noInfo
 
-instance DeclStatement CodeInfoOO () () () where
+instance DeclStatement CodeInfoOO () () () () where
   varDec               _ _ = noInfo
   varDecDef            _ _ = zoom lensMStoVS . execute1
   setDec               _ _ = noInfo
@@ -319,7 +319,7 @@ instance DeclStatement CodeInfoOO () () () where
     _ <- bod
     pure $ pure $ error "[funcDecDef] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance OODeclStatement CodeInfoOO () () where
+instance OODeclStatement CodeInfoOO () () () where
   objDecDef            _ _ = zoom lensMStoVS . execute1
   objDecNew            _ _ = zoom lensMStoVS . executeListErr
   extObjDecNew       _ _ _ = zoom lensMStoVS . executeListErr
@@ -505,9 +505,6 @@ instance ModuleSym CodeInfoOO () () where
 
 noInfo :: State s (CodeInfoOO ())
 noInfo = toState $ toCode ()
-
-noInfoScope :: CodeInfoOO ScopeData
-noInfoScope = pure $ sd Global -- Hack
 
 noInfoBinder :: VSBinder CodeInfoOO
 noInfoBinder = pure $ pure $ bindFormD "" (td Void "" empty) -- Hack

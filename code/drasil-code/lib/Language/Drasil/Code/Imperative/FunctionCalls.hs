@@ -150,7 +150,7 @@ genCalcCall
     , OOTypeSym r typ
     , VariableSym r typ
     , OOVariableSym r typ val
-    , ScopeSym r
+    , ScopeSym r scope
     , VariableValue r val
     , BooleanExpression r val
     , Comparison r val
@@ -162,7 +162,7 @@ genCalcCall
     , List r val
     , Reference r val
     , Set r val
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , TypeElim r typ
     , VariableElim r typ
     )
@@ -395,9 +395,9 @@ genCalcCallProc
     , Comparison r val
     , NumericExpression r val
     , VariableSym r typ
-    , ScopeSym r
+    , ScopeSym r scope
     , ValueExpression r typ val
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , Argument r val
     , List r val
     , NativeVector r typ val

@@ -6,8 +6,8 @@ module Drasil.GProc (Label, GSProgram, Body, FS, MS, VS, SVariable, Value,
   DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
   PrintFile(..), ReadFile(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VariableSym(..), ScopeSym(..), ScopeData, VariableElim(..), listOf, listVar,
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  VariableSym(..), ScopeSym(..), VariableElim(..), listOf, listVar, ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
   libFuncApp, exists, Reference(..), Array(..), List(..), ListStatement(..),
@@ -40,8 +40,8 @@ import Drasil.Shared.InterfaceCommon (Label, Body, SVariable, Value, NamedArgs,
 import Drasil.GProc.InterfaceProc (GSProgram, ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
-import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
-  TypeData(..), VisibilityTag(..), ParamData)
+import Drasil.Shared.AST (FileData(..), ModData(..), ProgData(..), TypeData(..),
+  VisibilityTag(..), ParamData)
 
 import Drasil.Shared.CodeType (CodeType(..))
 

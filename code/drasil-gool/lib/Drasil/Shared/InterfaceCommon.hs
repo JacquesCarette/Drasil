@@ -99,10 +99,10 @@ getTypeString = typeString . unRepr
 -- | Class for representing the lexical scope of a variable.
 -- Currently only differentiates `global` and `local`,
 -- allowing individual renderers to define which of them the main function is.
-class ScopeSym r where
-  global :: r ScopeData -- Definite global scope
-  mainFn :: r ScopeData -- Main program - either main function or global scope
-  local  :: r ScopeData -- Definite local scope
+class ScopeSym r scope | r -> scope where
+  global :: r scope -- Definite global scope
+  mainFn :: r scope -- Main program - either main function or global scope
+  local  :: r scope -- Definite local scope
 
 type Variable = VarData
 type SVariable a = VS (a Variable)
@@ -446,26 +446,26 @@ class AssignStatement r val stmt | r -> val stmt where
 infixr 1 &=
 (&=) = assign
 
-class DeclStatement r val stmt bod | r -> val stmt bod where
+class DeclStatement r scope val stmt bod | r -> scope val stmt bod where
   -- | Declare a variable without giving it a value.
   -- Not for use with arrays; use `arrayDec` instead.
-  varDec       :: SVariable r -> r ScopeData -> MS (r stmt)
+  varDec       :: SVariable r -> r scope -> MS (r stmt)
   -- | Declare a variable and give it a value.
   -- Not for use with arrays; use `arrayDecDef` instead.
-  varDecDef    :: SVariable r -> r ScopeData -> VS (r val) -> MS (r stmt)
+  varDecDef    :: SVariable r -> r scope -> VS (r val) -> MS (r stmt)
   -- | Given the size of the list, the variable to store the list in,
   -- and the scope of the variable, declare a list of the given size.
-  listDec      :: Integer -> SVariable r -> r ScopeData -> MS (r stmt)
-  listDecDef   :: SVariable r -> r ScopeData -> [VS (r val)] -> MS (r stmt)
-  setDec       :: SVariable r -> r ScopeData -> MS (r stmt)
-  setDecDef    :: SVariable r -> r ScopeData -> VS (r val) -> MS (r stmt)
+  listDec      :: Integer -> SVariable r -> r scope -> MS (r stmt)
+  listDecDef   :: SVariable r -> r scope -> [VS (r val)] -> MS (r stmt)
+  setDec       :: SVariable r -> r scope -> MS (r stmt)
+  setDecDef    :: SVariable r -> r scope -> VS (r val) -> MS (r stmt)
   -- | Given the size of the aray, the default value to fill the array with,
   -- the variable to store the array in, and the scope of the variable,
   -- declare an array of the given size.
-  arrayDec     :: Integer -> VS (r val) -> SVariable r -> r ScopeData -> MS (r stmt)
-  arrayDecDef  :: SVariable r -> r ScopeData -> [VS (r val)] -> MS (r stmt)
-  constDecDef  :: SVariable r -> r ScopeData -> VS (r val) -> MS (r stmt)
-  funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MS (r bod)
+  arrayDec     :: Integer -> VS (r val) -> SVariable r -> r scope -> MS (r stmt)
+  arrayDecDef  :: SVariable r -> r scope -> [VS (r val)] -> MS (r stmt)
+  constDecDef  :: SVariable r -> r scope -> VS (r val) -> MS (r stmt)
+  funcDecDef   :: SVariable r -> r scope -> [SVariable r] -> MS (r bod)
     -> MS (r stmt)
 
 class PrintConsole r val stmt | r -> val stmt where
@@ -621,6 +621,6 @@ convType InFile = infile
 convType OutFile = outfile
 convType (Object _) = error "Objects not supported"
 
-convScope :: (ScopeSym r) => ScopeData -> r ScopeData
+convScope :: (ScopeSym r scope) => ScopeData -> r scope
 convScope (SD {scopeTag = Global}) = global
 convScope (SD {scopeTag = Local}) = local

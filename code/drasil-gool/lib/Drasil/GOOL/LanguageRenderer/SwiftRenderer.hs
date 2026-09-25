@@ -128,7 +128,7 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance OOProg SwiftCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
+instance OOProg SwiftCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym SwiftCode ProgData FileData where
   prog n st files = do
@@ -136,8 +136,8 @@ instance ProgramSym SwiftCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym SwiftCode Doc TypeData ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym SwiftCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
+instance CommonRenderSym SwiftCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym SwiftCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
@@ -257,12 +257,12 @@ instance OpElim SwiftCode where
   uOpPrec = opPrec . unSC
   bOpPrec = opPrec . unSC
 
-instance ScopeSym SwiftCode where
+instance ScopeSym SwiftCode ScopeData where
   global = CP.global
   mainFn = global
   local = G.local
 
-instance ScopeElim SwiftCode where
+instance ScopeElim SwiftCode ScopeData where
   scopeData = unSC
 
 instance VariableSym SwiftCode TypeData where
@@ -515,7 +515,7 @@ instance AssignStatement SwiftCode Value (Doc, Terminator) where
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement SwiftCode Value (Doc, Terminator) Body where
+instance DeclStatement SwiftCode ScopeData Value (Doc, Terminator) Body where
   varDec = swiftVarDec swiftVar
   varDecDef = C.varDecDef Empty
   setDecDef = C.setDecDef Empty
@@ -530,7 +530,7 @@ instance DeclStatement SwiftCode Value (Doc, Terminator) Body where
     mkStmtNoEnd $ RC.statement vdec <+> equals <+> RC.value vl
   funcDecDef = CP.funcDecDef
 
-instance OODeclStatement SwiftCode Value (Doc, Terminator) where
+instance OODeclStatement SwiftCode ScopeData Value (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew

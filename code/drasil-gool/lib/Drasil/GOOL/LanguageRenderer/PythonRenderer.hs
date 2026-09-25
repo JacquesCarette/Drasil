@@ -80,7 +80,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
   ParamData(..), pd, ProgData(..), progD, TypeData(..), ValData(..), vd,
   VarData(..), vard, BinderD(..), bindFormD, AttachmentTag(..),
-  AttachmentData(..), ad, FileData)
+  AttachmentData(..), ad, FileData, ScopeData)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -118,7 +118,7 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance OOProg PythonCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body Block
+instance OOProg PythonCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body Block
 
 instance ProgramSym PythonCode ProgData FileData where
   prog n st files = do
@@ -126,8 +126,8 @@ instance ProgramSym PythonCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym PythonCode Doc TypeData ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym PythonCode Doc TypeData ParamData Value (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body Block
+instance CommonRenderSym PythonCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym PythonCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body Block
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
@@ -244,12 +244,12 @@ instance OpElim PythonCode where
   uOpPrec = opPrec . unPC
   bOpPrec = opPrec . unPC
 
-instance ScopeSym PythonCode where
+instance ScopeSym PythonCode ScopeData where
   global = CP.global
   mainFn = global
   local = G.local
 
-instance ScopeElim PythonCode where
+instance ScopeElim PythonCode ScopeData where
   scopeData = unPC
 
 instance VariableSym PythonCode TypeData where
@@ -508,7 +508,7 @@ instance AssignStatement PythonCode Value (Doc, Terminator) where
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement PythonCode Value (Doc, Terminator) Body where
+instance DeclStatement PythonCode ScopeData Value (Doc, Terminator) Body where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
@@ -527,7 +527,7 @@ instance DeclStatement PythonCode Value (Doc, Terminator) Body where
       else error "Cannot safely capitalize constant."
   funcDecDef = CP.funcDecDef
 
-instance OODeclStatement PythonCode Value (Doc, Terminator) where
+instance OODeclStatement PythonCode ScopeData Value (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v scp vs = do
@@ -958,9 +958,9 @@ pyOut
     , VariableSym r typ
     , VariableValue r val
     , List r val
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , AssignStatement r val stmt
     , ControlStatement r val stmt bod
     , PrintConsole r val stmt

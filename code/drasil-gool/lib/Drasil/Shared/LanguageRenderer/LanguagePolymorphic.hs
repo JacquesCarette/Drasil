@@ -433,11 +433,11 @@ subAssign t vr' v' = do
 
 objDecNew
   ::
-    ( IC.DeclStatement r val stmt bod
+    ( IC.DeclStatement r scope val stmt bod
     , IG.OOValueExpression r typ val
     , VariableElim r typ
     )
-  => SVariable r -> r ScopeData -> [VS (r val)] -> MS (r stmt)
+  => SVariable r -> r scope -> [VS (r val)] -> MS (r stmt)
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
 printList
@@ -445,8 +445,8 @@ printList
     ( BlockSym r block stmt
     , BodySym r bod block
     , MultiStatement r stmt
-    , IC.ScopeSym r
-    , IC.DeclStatement r val stmt bod
+    , IC.ScopeSym r scope
+    , IC.DeclStatement r scope val stmt bod
     , AssignStatement r val stmt
     , IC.ControlStatement r val stmt bod
     , IC.TypeSym r typ
@@ -506,8 +506,8 @@ print
     , MultiStatement r stmt
     , PrintConsole r val stmt
     , PrintFile r val stmt
-    , IC.ScopeSym r
-    , IC.DeclStatement r val stmt bod
+    , IC.ScopeSym r scope
+    , IC.DeclStatement r scope val stmt bod
     , AssignStatement r val stmt
     , IC.ControlStatement r val stmt bod
     , ValueSym r typ val
@@ -639,14 +639,14 @@ method
 method n s p t = intMethod False n s p (mType t)
 
 getMethod
-  :: (OORenderSym r vis typ param val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis scope typ param val stmt mthd stvr attch file mod bod block)
   => SVariable r -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
 setMethod
-  :: (OORenderSym r vis typ param val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis scope typ param val stmt mthd stvr attch file mod bod block)
   => SVariable r -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)

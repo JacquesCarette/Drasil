@@ -24,9 +24,9 @@ logBody
     , Literal r typ val
     , VariableSym r typ
     , VariableValue r val
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , FileHandling r val stmt
     , PrintFile r val stmt
     , BlockSym r block stmt
@@ -49,9 +49,9 @@ loggedMethod
     , Literal r typ val
     , VariableSym r typ
     , VariableValue r val
-    , ScopeSym r
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , FileHandling r val stmt
     , PrintFile r val stmt
     , BlockSym r block stmt

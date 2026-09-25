@@ -107,7 +107,7 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance ProcProg JuliaCode Doc TypeData ParamData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
+instance ProcProg JuliaCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
 
 instance ProgramSym JuliaCode ProgData FileData where
   prog n st files = do
@@ -115,8 +115,8 @@ instance ProgramSym JuliaCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym JuliaCode Doc TypeData ParamData Value (Doc, Terminator) MethodData Body Block
-instance ProcRenderSym JuliaCode Doc TypeData ParamData Value (Doc, Terminator) MethodData FileData ModData Body Block
+instance CommonRenderSym JuliaCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData Body Block
+instance ProcRenderSym JuliaCode Doc ScopeData TypeData ParamData Value (Doc, Terminator) MethodData FileData ModData Body Block
 
 instance UnRepr JuliaCode inner where
   unRepr = unJLC
@@ -228,12 +228,12 @@ instance OpElim JuliaCode where
   uOpPrec = opPrec . unJLC
   bOpPrec = opPrec . unJLC
 
-instance ScopeSym JuliaCode where
+instance ScopeSym JuliaCode ScopeData where
   global = toCode $ sd Global
   mainFn = global
   local = G.local
 
-instance ScopeElim JuliaCode where
+instance ScopeElim JuliaCode ScopeData where
   scopeData = unJLC
 
 instance VariableSym JuliaCode TypeData where
@@ -462,7 +462,7 @@ instance AssignStatement JuliaCode Value (Doc, Terminator) where
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement JuliaCode Value (Doc, Terminator) Body where
+instance DeclStatement JuliaCode ScopeData Value (Doc, Terminator) Body where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
@@ -1013,12 +1013,12 @@ jlOut
     , Literal r typ val
     , NumericExpression r val
     , Comparison r val
-    , ScopeSym r
+    , ScopeSym r scope
     , VariableSym r typ
     , VariableValue r val
     , List r val
     , MultiStatement r stmt
-    , DeclStatement r val stmt bod
+    , DeclStatement r scope val stmt bod
     , AssignStatement r val stmt
     , ControlStatement r val stmt bod
     , PrintConsole r val stmt

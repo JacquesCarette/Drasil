@@ -58,6 +58,7 @@ import Drasil.Shared.State (MS, VS, FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   useVarName, setVarScope)
 
 import Prelude hiding (print,pi,(<>))
+import qualified Prelude as P ((<>))
 import Data.List (sort, intercalate)
 import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
@@ -173,8 +174,8 @@ intClass
   -> CS (r Doc)
 intClass f n s i svrs cstrs mths = do
   modify (setClassName n)
-  svs <- onStateList (R.stateVarList . map RG.stateVar) svrs
-  ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) (cstrs ++ mths))
+  svs <- onStateList (R.stateVarList . fmap RG.stateVar) svrs
+  ms <- onStateList (vibcat . fmap RC.method) (zoom lensCStoMS <$> (cstrs P.<> mths))
   pure $ onCodeValue (\p -> f n p (RC.visibility s) svs ms) i
 
 -- Python and C++ --
@@ -197,8 +198,8 @@ buildModule n imps topDoc bot fs cs = RG.modFromData n (do
   is <- imps
   tp <- topDoc
   bt <- bot
-  pure $ R.module' is (vibcat (tp : map RG.class' cls))
-    (vibcat (map RC.method fns ++ [bt])))
+  pure $ R.module' is (vibcat (tp : fmap RG.class' cls))
+    (vibcat (fmap RC.method fns P.<> [bt])))
 
 -- Java and C# --
 
@@ -208,7 +209,7 @@ arrayType
 arrayType t' = do
   t <- t'
   typeFromData (Array (getCodeType t))
-    (getTypeString t ++ array) (renderType t <> brackets empty)
+    (getTypeString t P.<> array) (renderType t <> brackets empty)
 
 pi :: (RC.RenderValue r typ val, TypeSym r typ) => VS (r val)
 pi = mkStateVal IC.double (text $ mathFunc "PI")
@@ -312,7 +313,7 @@ mainFunction
   => VS (r TypeData) -> Label -> MS (r bod) -> MS (r mthd)
 mainFunction s n = RG.intFunc True n public classLevel (mType IC.void)
   [IC.param (IC.var args (s >>= (\argT -> typeFromData (List String)
-  (render (renderType argT) ++ array) (renderType argT <> array'))))]
+  (render (renderType argT) P.<> array) (renderType argT <> array'))))]
 
 -- | Used by the language renderers to build the module.
 --   n is the module name
@@ -338,8 +339,8 @@ buildModule' n inc is ms cs = RG.modFromData n (do
   libis <- getLibImports
   mis <- getModuleImports
   pure $ vibcat [
-    vcat (map (RC.import' . inc) (lis ++ sort (is ++ libis) ++ mis)),
-    vibcat (map RG.class' cls)])
+    vcat (RC.import' . inc <$> (lis P.<> sort (is P.<> libis) P.<> mis)),
+    vibcat (RG.class' <$> cls)])
 
 -- Java and C++ --
 
@@ -351,7 +352,7 @@ call' l _ _ _ _ _ (_:_) = error $ namedArgError l
 call' _ l o n t ps ns = call empty l o n t ps ns
 
 namedArgError :: String -> String
-namedArgError l = "Named arguments not supported in " ++ l
+namedArgError l = "Named arguments not supported in " P.<> l
 
 listSizeFunc :: (TypeSym r typ, IG.OOFunctionSym r typ val) => VS (r FuncData)
 listSizeFunc = IG.func "size" IC.int []
@@ -378,17 +379,17 @@ docInOutFunc
   -> [(String, VS (r Variable))]
   -> MS (r bod)
   -> MS (r mthd)
-docInOutFunc f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)
-  [fst o] (f (map snd is) [snd o] [] b)
-docInOutFunc f desc is [] [both] b = docFuncRepr functionDox desc (map fst $
-  both : is) [fst both] (f (map snd is) [] [snd both] b)
-docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (map fst $ bs ++
-  is ++ os) [] (f (map snd is) (map snd os) (map snd bs) b)
+docInOutFunc f desc is [o] [] b = docFuncRepr functionDox desc (fst <$> is)
+  [fst o] (f (snd <$> is) [snd o] [] b)
+docInOutFunc f desc is [] [both] b = docFuncRepr functionDox desc (fst <$>
+  both : is) [fst both] (f (snd <$> is) [] [snd both] b)
+docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (fst <$> bs P.<>
+  is P.<> os) [] (f (snd <$> is) (snd <$> os) (snd <$> bs) b)
 
 -- Python, Java, C#, and Swift --
 
 bindingError :: String -> String
-bindingError l = "AttachmentTag unimplemented in " ++ l
+bindingError l = "AttachmentTag unimplemented in " P.<> l
 
 notNull
   ::
@@ -448,7 +449,7 @@ setMethodCall
 setMethodCall n a b = objMethodCall (innerType $ onStateValue valueType a) a n [b]
 
 destructorError :: String -> String
-destructorError l = "Destructors not allowed in " ++ l
+destructorError l = "Destructors not allowed in " P.<> l
 
 stateVarDef
   ::
@@ -546,7 +547,7 @@ multiAssign
 multiAssign _ [] _ = error "Attempt to write assign statement for no variables."
 multiAssign _ _ [] = error "Attempt to write assign statement with no values."
 multiAssign f vars vals = if length vals /= 1 && length vars /= length vals
-  then error $ "Attempted multiple assign statement with different number " ++
+  then error $ "Attempted multiple assign statement with different number " P.<>
     "of variables than values"
   else do
   vrs <- mapM (zoom lensMStoVS) vars
@@ -593,7 +594,7 @@ funcDecDef v scp ps b = do
   modify $ setVarScope (variableName vr) (scopeData scp)
   s <- get
   f <- function (variableName vr) private (pure $ variableType vr)
-    (map IC.param ps) b
+    (IC.param <$> ps) b
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RC.method f
 
@@ -611,12 +612,12 @@ inOutCall
   -> [VS (r Variable)]
   -> MS (r stmt)
 inOutCall f n ins [] [] = IC.valStmt $ f n IC.void ins
-inOutCall f n ins outs both = RC.multiAssign rets [f n IC.void (map IC.valueOf
-  both ++ ins)]
-  where rets = both ++ outs
+inOutCall f n ins outs both = RC.multiAssign rets [f n IC.void (fmap IC.valueOf
+  both P.<> ins)]
+  where rets = both P.<> outs
 
 forLoopError :: String -> String
-forLoopError l = "Classic for loops not available in " ++ l ++ ", use " ++
+forLoopError l = "Classic for loops not available in " P.<> l P.<> ", use " P.<>
   "forRange, forEach, or while instead"
 
 mainBody
@@ -647,13 +648,13 @@ inOutFunc
   -> [VS (r Variable)]
   -> MS (r bod)
   -> MS (r mthd)
-inOutFunc f ins [] [] b = f IC.void (map IC.param ins) b
+inOutFunc f ins [] [] b = f IC.void (IC.param <$> ins) b
 inOutFunc f ins outs both b = f
-  (multiType $ map (onStateValue variableType) rets)
-  (map IC.pointerParam both ++ map IC.param ins)
-  (multiBody [bodyStatements $ map (`IC.varDec` IC.local) outs, b,
-    oneLiner $ RC.multiReturn $ map IC.valueOf rets])
-  where rets = both ++ outs
+  (multiType $ onStateValue variableType <$> rets)
+  (fmap IC.pointerParam both P.<> fmap IC.param ins)
+  (multiBody [bodyStatements $ (`IC.varDec` IC.local) <$> outs, b,
+    oneLiner $ RC.multiReturn $ IC.valueOf <$> rets])
+  where rets = both P.<> outs
 
 docInOutFunc'
   :: (BlockCommentSym r, RenderMethod r mthd)
@@ -664,8 +665,8 @@ docInOutFunc'
   -> [(String, VS (r Variable))]
   -> [(String, VS (r Variable))]
   -> MS (r bod) -> MS (r mthd)
-docInOutFunc' dfr f desc is os bs b = docFuncRepr dfr desc (map fst $ bs ++ is)
-  (map fst $ bs ++ os) (f (map snd is) (map snd os) (map snd bs) b)
+docInOutFunc' dfr f desc is os bs b = docFuncRepr dfr desc (fst <$> bs P.<> is)
+  (fst <$> bs P.<> os) (f (snd <$> is) (snd <$> os) (snd <$> bs) b)
 
 -- Java and Swift --
 
@@ -693,23 +694,23 @@ implements is = toCode $ colon <+> text (intercalate listSep is)
 -- DocC, Julia, which uses Markdown, and any other language that doesn't have
 -- Support for a document generator.
 modDoc' :: ModuleDocRenderer
-modDoc' desc watermark as date m = m : [desc | not (null desc)] ++
-      [docField authorDoc (stringList as) | not (null as)] ++
-      [docField dateDoc date | not (null date)] ++
+modDoc' desc watermark as date m = m : [desc | not (null desc)] P.<>
+      [docField authorDoc (stringList as) | not (null as)] P.<>
+      [docField dateDoc date | not (null date)] P.<>
       [docField noteDoc watermark]
 
 -- | Creates an arbitrary Markdown/DocC style field for documentation.
 -- Takes two strings, one for the field type ('ty'), and another
 -- for the field documentation ('info')
 docField :: String -> String -> String
-docField ty info = docCommandInit ++ ty ++ docCommandSep ++ info
+docField ty info = docCommandInit P.<> ty P.<> docCommandSep P.<> info
 
 -- | Generates Markdown/DocC style function doc comment.
 functionDoc :: FuncDocRenderer
 functionDoc desc params returns = [desc | not (null desc)]
-  ++ map (\(v, vDesc) -> docCommandInit ++ paramDoc ++ " " ++
-    v ++ docCommandSep ++ vDesc) params
-  ++ map ((docCommandInit ++ returnDoc ++ docCommandSep) ++) returns
+  P.<> fmap (\(v, vDesc) -> docCommandInit P.<> paramDoc P.<> " " P.<>
+    v P.<> docCommandSep P.<> vDesc) params
+  P.<> fmap ((docCommandInit P.<> returnDoc P.<> docCommandSep) ++) returns
 
 docCommandInit, docCommandSep, authorDoc, dateDoc,
   noteDoc, paramDoc, returnDoc :: String

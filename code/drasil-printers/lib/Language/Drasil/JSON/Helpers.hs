@@ -11,6 +11,7 @@ module Language.Drasil.JSON.Helpers (
 ) where
 
 import Prelude hiding ((<>))
+import qualified Prelude as P ((<>))
 import qualified Prelude
 import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, render)
 import Data.Text (Text)
@@ -61,12 +62,12 @@ wrapGen' sepf _ s _ [] = \x ->
   let tb = angbrac . text
   in sepf [tb s, x, tb $ '/':s]
 wrapGen' sepf Class s _ ts = \x ->
-  let tb c = text $ "<" ++ c ++ " class=\\\"" ++ foldr1 (++) (intersperse " " ts) ++ "\\\">"
-  in let te c = text $ "</" ++ c ++ ">"
+  let tb c = text $ "<" P.<> c P.<> " class=\\\"" P.<> foldr1 (++) (intersperse " " ts) P.<> "\\\">"
+  in let te c = text $ "</" P.<> c P.<> ">"
   in sepf [tb s, x, te s]
 wrapGen' sepf Id s ti _ = \x ->
-  let tb c = text ("<" ++ c ++ " id=\\\"") <> ti <> text "\\\">"
-      te c = text $ "</" ++ c ++ ">"
+  let tb c = text ("<" P.<> c P.<> " id=\\\"") <> ti <> text "\\\">"
+      te c = text $ "</" P.<> c P.<> ">"
   in  sepf [tb s, x, te s]
 
 refwrap :: Doc -> Doc -> Doc
@@ -77,15 +78,15 @@ refID i = text "<a id=\"" <> i <> text "\"></a>"
 
 -- | Helper for setting up links to references
 reflink :: String -> Doc -> Doc
-reflink ref txt = text "[" <> txt <> text ("](#" ++ ref ++ ")")
+reflink ref txt = text "[" <> txt <> text ("](#" P.<> ref P.<> ")")
 
 -- | Helper for setting up links to references with additional information.
 reflinkInfo :: String -> Doc -> Doc -> Doc
-reflinkInfo rf txt info = text ("<a href=\"#" ++ rf ++ "\">") <> txt <> text "</a>" <+> info
+reflinkInfo rf txt info = text ("<a href=\"#" P.<> rf P.<> "\">") <> txt <> text "</a>" <+> info
 
 -- | Helper for setting up links to external URIs
 reflinkURI :: String -> Doc -> Doc
-reflinkURI ref txt = text ("<a href=\\\"" ++ ref ++ "\\\">") <> txt <> text "</a>"
+reflinkURI ref txt = text ("<a href=\\\"" P.<> ref P.<> "\\\">") <> txt <> text "</a>"
 
 -- | Helper for wrapping attributes in a tag.
 --
@@ -93,8 +94,8 @@ reflinkURI ref txt = text ("<a href=\\\"" ++ ref ++ "\\\">") <> txt <> text "</a
 --     * The 'String' in the pair is the attribute name,
 --     * The 'Doc' is the value for different attributes.
 wrapInside :: String -> [(String, Doc)] -> Doc
-wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text ">"
-  where foldStr (attr, val) = text (attr ++ "=\"") <> val <> text "\" "
+wrapInside t p = text ("<" P.<> t P.<> " ") <> foldl1 (<>) (foldStr <$> p) <> text ">"
+  where foldStr (attr, val) = text (attr P.<> "=\"") <> val <> text "\" "
 
 -- | Image tag wrapper.
 img :: [(String, Doc)] -> Doc
@@ -104,22 +105,22 @@ img = wrapInside "img"
 image :: Doc -> Maybe Doc -> MaxWidthPercent -> Doc
 image f Nothing wp =
   figure $ vcat [
-  img $ [("src", f), ("alt", text "")] ++ [("width", text $ show wp ++ "%") | wp /= 100]]
+  img $ [("src", f), ("alt", text "")] P.<> [("width", text $ show wp P.<> "%") | wp /= 100]]
 image f (Just c) wp =
   figure $ vcat [
-  img $ [("src", f), ("alt", c)] ++ [("width", text $ show wp ++ "%") | wp /= 100]]
+  img $ [("src", f), ("alt", c)] P.<> [("width", text $ show wp P.<> "%") | wp /= 100]]
 
 h :: Int -> Doc
 h n | n < 1 = error "Illegal header (too small)"
     | n > 6 = error "Illegal header (too large)"
-    | otherwise = text (replicate n '#' ++ " ")
+    | otherwise = text (replicate n '#' P.<> " ")
 
 mkDiv :: String -> Doc -> Doc -> Doc
 mkDiv s a0 a1 = (bslash <> text s) <> brace a0 <> brace a1
 
 -- Maybe use "lines" instead (Data.List @lines :: String -> [String])
 stripnewLine :: String -> Doc
-stripnewLine s = hcat (map text (splitOn "\n" s))
+stripnewLine s = hcat (text <$> splitOn "\n" s)
 
 -- | Construct a Jupyter markdown cell with the given content.
 markdownCell :: Doc -> JSON
@@ -149,7 +150,7 @@ formatSource d =
     d' = render d
     t = T.pack d'
     t' = T.lines t
-  in JArray $ map (JString . (Prelude.<> "\n")) t'
+  in JArray $ JString . (Prelude.<> "\n") <$> t'
 
 -- | Generate the metadata necessary for a notebook document.
 makeMetadata :: [(Text, JSON)]

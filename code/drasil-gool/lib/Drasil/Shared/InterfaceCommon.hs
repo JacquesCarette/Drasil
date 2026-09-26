@@ -558,7 +558,7 @@ ifNoElse bs = ifCond bs $ body []
 switchAsIf
   :: (ControlStatement r val stmt bod, Comparison r val)
   => VS (r val) -> [(VS (r val), MS (r bod))] -> MS (r bod) -> MS (r stmt)
-switchAsIf v = ifCond . map (first (v ?==))
+switchAsIf v = ifCond . fmap (first (v ?==))
 
 -- TODO [Brandon Bosman, 07/22/2026]: move this to InterfaceGOOL
 -- | A class for representing "Visibility", of a class member,
@@ -613,7 +613,7 @@ convType (Reference t) = referenceType (convType t)
 convType (List t) = listType (convType t)
 convType (Set t) = setType (convType t)
 convType (Array t) = arrayType (convType t)
-convType (Func ps r) = funcType (map convType ps) (convType r)
+convType (Func ps r) = funcType (convType <$> ps) (convType r)
 convType Void = void
 convType InFile = infile
 convType OutFile = outfile

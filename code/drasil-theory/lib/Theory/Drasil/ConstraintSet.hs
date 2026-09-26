@@ -39,7 +39,7 @@ instance Express e => Express (ConstraintSet e) where
   mexpress = mexpress . (^. invs)
 -- | Exposes all relations and an expectation of the type of a relation (Bool)
 instance RequiresChecking (ConstraintSet Expr) Expr Space where
-  requiredChecks cs = map (,Boolean) $ NE.toList (cs ^. invs)
+  requiredChecks cs = (,Boolean) <$> NE.toList (cs ^. invs)
 
 -- | Smart constructor for building ConstraintSets
 mkConstraintSet :: ConceptChunk -> NE.NonEmpty e -> ConstraintSet e

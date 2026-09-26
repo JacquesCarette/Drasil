@@ -14,7 +14,7 @@ import Language.Drasil.Stages (Stage(Equational,Implementation))
 
 -- | Helper for creating smart constructors for 'Symbol's.
 neSymb :: (String -> Symbol) -> String -> String -> Symbol
-neSymb _  s [] = error $ s ++ " names must be non-empty"
+neSymb _  s [] = error $ s <> " names must be non-empty"
 neSymb sy _ s  = sy s
 
 -- | Label smart constructor, requires non-empty labels
@@ -84,8 +84,8 @@ unicodeConv (Variable st) = Variable $ unicodeString st
 unicodeConv (Label    st) = Label    $ unicodeString st
 unicodeConv (Atop    d s) = Atop d   $ unicodeConv s
 unicodeConv (Corners a b c d s) =
-  Corners (map unicodeConv a) (map unicodeConv b) (map unicodeConv c) (map unicodeConv d) (unicodeConv s)
-unicodeConv (Concat ss) = Concat $ map unicodeConv ss
+  Corners (unicodeConv <$> a) (unicodeConv <$> b) (unicodeConv <$> c) (unicodeConv <$> d) (unicodeConv s)
+unicodeConv (Concat ss) = Concat $ unicodeConv <$> ss
 unicodeConv x = x
 
 -- | Helper for 'unicodeConv' that converts each Unicode character to text equivalent.
@@ -95,7 +95,7 @@ unicodeConv x = x
 unicodeString :: String -> String
 unicodeString = concatMap (\x -> if isLatin1 x then [x] else getName $ nameList x)
   where
-    nameList = splitOn " " . map toLower . getCharacterName
+    nameList = splitOn " " . fmap toLower . getCharacterName
     getName ("greek":_:_:name) = unwords name
     getName _ = error "unicodeString not fully implemented"
 

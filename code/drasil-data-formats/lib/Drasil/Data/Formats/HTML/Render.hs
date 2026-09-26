@@ -65,11 +65,11 @@ renderHTML opt htmlTree =
 
 -- | Internal: Render the 'head' section
 renderHeadSec :: HTMLRenderOptions -> [HTMLHead] -> Doc ann
-renderHeadSec opt heads = wrapBlock opt "head" [] (map (renderHead opt) heads)
+renderHeadSec opt heads = wrapBlock opt "head" [] (renderHead opt <$> heads)
 
 -- | Internal: Render the 'body' section
 renderBodySec :: HTMLRenderOptions -> [HTMLBody] -> Doc ann
-renderBodySec opt bodies = wrapBlock opt "body" [] (map (renderBody opt) bodies)
+renderBodySec opt bodies = wrapBlock opt "body" [] (renderBody opt <$> bodies)
 
 -- | Internal: Render 'head' elements
 renderHead :: HTMLRenderOptions -> HTMLHead -> Doc ann
@@ -83,20 +83,20 @@ renderHead opt (Script attrs txt) = wrapBlock opt "script" attrs [pretty txt | n
 renderBody :: HTMLRenderOptions -> HTMLBody -> Doc ann
 renderBody opt (Div attrs ch) = renderBlock opt "div" attrs ch
 renderBody opt (Paragraph attrs ch) = renderBlockInline opt "p" attrs ch
-renderBody opt (List Unordered attrs items) = wrapBlock opt "ul" attrs (map renderIList items)
+renderBody opt (List Unordered attrs items) = wrapBlock opt "ul" attrs (renderIList <$> items)
   where
     renderIList (LItem iAttrs ch) = renderLine opt "li" iAttrs ch
-renderBody opt (List Ordered attrs items) = wrapBlock opt "ol" attrs (map renderIList items)
+renderBody opt (List Ordered attrs items) = wrapBlock opt "ol" attrs (renderIList <$> items)
   where
     renderIList (LItem iAttrs ch) = renderBlockInline opt "li" iAttrs ch
 renderBody opt (Section attrs ch) = renderBlock opt "section" attrs ch
-renderBody opt (DescriptionList attrs items) = wrapBlock opt "dl" attrs (map renderDItem items)
+renderBody opt (DescriptionList attrs items) = wrapBlock opt "dl" attrs (renderDItem <$> items)
   where
     renderDItem (DTerm iAttrs ch) = renderLine opt "dt" iAttrs ch
     renderDItem (DDetails iAttrs ch) = renderBlockInline opt "dd" iAttrs ch
-renderBody opt (Table attrs rows) = wrapBlock opt "table" attrs (map renderRow rows)
+renderBody opt (Table attrs rows) = wrapBlock opt "table" attrs (renderRow <$> rows)
   where
-    renderRow (Row rAttrs cells) = wrapBlock opt "tr" rAttrs (map renderCell cells)
+    renderRow (Row rAttrs cells) = wrapBlock opt "tr" rAttrs (renderCell <$> cells)
     renderCell (THeader cAttrs ch) = renderLine opt "th" cAttrs ch
     renderCell (TData cAttrs ch) = renderLine opt "td" cAttrs ch
 renderBody opt (Figure attrs ch) = renderBlock opt "figure" attrs ch
@@ -130,16 +130,16 @@ headTag H6 = "h6"
 
 -- | Internal: Render the element and its children in the same line
 renderLine :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
-renderLine opt tag attrs ch = wrapLine tag attrs $ map (renderBody opt) ch
+renderLine opt tag attrs ch = wrapLine tag attrs $ renderBody opt <$> ch
 
 -- | Internal: Render the children breaking lines
 renderBlock :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
-renderBlock opt tag attrs ch = wrapBlock opt tag attrs $ map (renderBody opt) ch
+renderBlock opt tag attrs ch = wrapBlock opt tag attrs $ renderBody opt <$> ch
 
 -- | Internal: Render the element as a block, but keep all children on a single indented line
 renderBlockInline :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
 renderBlockInline _ tag attrs [] = wrapLine tag attrs []
-renderBlockInline opt tag attrs ch = wrapBlockInline opt tag attrs (map (renderBody opt) ch)
+renderBlockInline opt tag attrs ch = wrapBlockInline opt tag attrs (renderBody opt <$> ch)
 
 -- | Internal: Wrap an element with tag and its children breaking lines
 wrapBlock :: HTMLRenderOptions -> Text -> [Attr] -> [Doc ann] -> Doc ann
@@ -166,7 +166,7 @@ wrapBlockWith catDocs opt tag attrs docs =
 -- | Internal: Render attribute in the format 'key="value"'
 renderAttrs :: [Attr] -> Doc ann
 renderAttrs [] = mempty
-renderAttrs attrs = space <> hsep (map rAttr attrs)
+renderAttrs attrs = space <> hsep (rAttr <$> attrs)
   where
     rAttr (Attr k v) = pretty k <> rValue v
     rValue value =
@@ -199,16 +199,16 @@ normalizeBody (x : xs) = normalizeNode x : normalizeBody xs
 normalizeNode :: HTMLBody -> HTMLBody
 normalizeNode (Div attrs ch) = Div attrs (normalizeBody ch)
 normalizeNode (Paragraph attrs ch) = Paragraph attrs (normalizeBody ch)
-normalizeNode (List t attrs items) = List t attrs (map normItem items)
+normalizeNode (List t attrs items) = List t attrs (normItem <$> items)
   where
     normItem (LItem a ch) = LItem a (normalizeBody ch)
-normalizeNode (DescriptionList attrs items) = DescriptionList attrs (map normDItem items)
+normalizeNode (DescriptionList attrs items) = DescriptionList attrs (normDItem <$> items)
   where
     normDItem (DTerm a ch) = DTerm a (normalizeBody ch)
     normDItem (DDetails a ch) = DDetails a (normalizeBody ch)
-normalizeNode (Table attrs rows) = Table attrs (map normRow rows)
+normalizeNode (Table attrs rows) = Table attrs (normRow <$> rows)
   where
-    normRow (Row a cells) = Row a (map normCell cells)
+    normRow (Row a cells) = Row a (normCell <$> cells)
     normCell (THeader a ch) = THeader a (normalizeBody ch)
     normCell (TData a ch) = TData a (normalizeBody ch)
 normalizeNode (Figure attrs ch) = Figure attrs (normalizeBody ch)

@@ -70,9 +70,9 @@ mkSRS
             SCSProg
               [Assumptions, TMs [] (Label : stdFields),
                GDs [] (Label : stdFields) HideDerivation,
-               DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
+               DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation,
                IMs []
-                 ([Label, Input, Output, InConstraints, OutConstraints] ++
+                 ([Label, Input, Output, InConstraints, OutConstraints] <>
                     stdFields)
                  ShowDerivation,
                Constraints EmptyS inputsUC]],
@@ -100,7 +100,7 @@ motivation = foldlSent_ [S "The gains of a controller in an application" +:+
 background :: Sentence
 background = foldlSent_ [
   S "Automatic process control with a controller (" :+:
-  foldOpts (map short [proportionalCI, piCI, pdControllerCI, pidCI]) :+:
+  foldOpts (short <$> [proportionalCI, piCI, pdControllerCI, pidCI]) :+:
   S ") is used in a variety of applications such as thermostats, automobile",
   S "cruise-control, etc"]
 
@@ -111,10 +111,10 @@ orgSecEnd = foldlSent [
   ]
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = physicalcon ++ [linear, angular] ++ termDefs
+conceptChunks = physicalcon <> [linear, angular] <> termDefs
 
 allSymbols :: [DefinedQuantityDict]
-allSymbols = physicscon ++ symbols ++
+allSymbols = physicscon <> symbols <>
   [mass, posInf, negInf]
 
 symbMap :: ChunkDB
@@ -123,14 +123,14 @@ symbMap = withCommonKnowledge projName allRefs allSymbols [] acronyms
   conceptInstances citations labelledContent'
 
 labelledContent' :: [LabelledContent]
-labelledContent' = labelledContent ++ funcReqsTables
+labelledContent' = labelledContent <> funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 conceptInstances :: [ConceptInstance]
-conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs
+conceptInstances = assumptions <> goals <> funcReqs <> nonfuncReqs <> likelyChgs
 
 stdFields :: Fields
 stdFields

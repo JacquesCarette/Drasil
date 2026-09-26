@@ -47,7 +47,7 @@ findMass = findMassConstruct inputValues (phrase mass) [eBalanceOnWtr]
 
 --
 oIDQVals :: [Sentence]
-oIDQVals = map foldlSent_ [
+oIDQVals = foldlSent_ <$> [
   [D.toSent (pluralNP (the value)), fromSource inputValues],
   [D.toSent (phraseNP (the mass)), fromSource findMass],
   [ch (balanceDecayRate ^. defLhs), fromSource balanceDecayRate]

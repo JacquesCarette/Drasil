@@ -65,7 +65,7 @@ instance Referable          GenDefn where
 -- | Smart constructor for general definitions.
 gd :: ModelKind ModelExpr -> Maybe UnitDefn ->
   Maybe Derivation -> [DecRef] -> String -> [Sentence] -> GenDefn
-gd mkind _   _     []   _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
+gd mkind _   _     []   _  = error $ "Source field of " <> showUID mkind <> " is empty"
 gd mkind u derivs refs sn_ =
   GD mkind u derivs refs (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
@@ -77,4 +77,4 @@ gdNoRefs mkind u derivs sn_ =
 
 -- | Grab all related 'QDefinitions' from a list of general definitions.
 getEqModQdsFromGd :: [GenDefn] -> [ModelQDef]
-getEqModQdsFromGd = getEqModQds . map _mk
+getEqModQdsFromGd = getEqModQds . fmap _mk

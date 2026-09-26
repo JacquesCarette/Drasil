@@ -90,6 +90,7 @@ import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles
   getClassMap, getMainDoc, varNameAvailable)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import qualified Prelude as P ((<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
@@ -724,13 +725,13 @@ instance ModuleSym PythonCode ModData MethodData where
     libis <- getLibImports
     mis <- getModuleImports
     pure $ vibcat [
-      vcat (map (RC.import' .
-        (langImport :: Label -> PythonCode Doc)) lis),
-      vcat (map (RC.import' .
-        (langImport :: Label -> PythonCode Doc)) (sort $ is ++
+      vcat (RC.import' .
+        (langImport :: Label -> PythonCode Doc) <$> lis),
+      vcat (RC.import' .
+        (langImport :: Label -> PythonCode Doc) <$> sort (is P.<>
         libis)),
-      vcat (map (RC.import' .
-        (modImport :: Label -> PythonCode Doc)) mis)])
+      vcat (RC.import' .
+        (modImport :: Label -> PythonCode Doc) <$> mis)])
     (pure empty) getMainDoc
 
 instance RenderMod PythonCode ModData where
@@ -1071,11 +1072,11 @@ pyMultCstrsError :: String
 pyMultCstrsError = "Python classes cannot have multiple constructors"
 
 pyBlockComment :: [String] -> Doc -> Doc
-pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
+pyBlockComment lns cmt = vcat $ (<+>) cmt . text <$> lns
 
 pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty
-pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid .
+pyDocComment (l:lns) start mid = vcat $ start <+> text l : fmap ((<+>) mid .
   text) lns
 
 toConstName :: String -> String

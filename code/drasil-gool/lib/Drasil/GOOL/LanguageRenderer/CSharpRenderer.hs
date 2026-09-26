@@ -103,6 +103,7 @@ import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn,
   setCurrMain, useVarName, setVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import qualified Prelude as P ((<>))
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (modify)
@@ -374,7 +375,7 @@ instance ValueExpression CSharpCode TypeData Value where
   notNull = CP.notNull nullLabel
 
 instance OOValueExpression CSharpCode TypeData Value where
-  newObjMixedArgs = G.newObjMixedArgs (new ++ " ")
+  newObjMixedArgs = G.newObjMixedArgs (new P.<> " ")
   extNewObjMixedArgs _ = newObjMixedArgs
   libNewObjMixedArgs = C.libNewObjMixedArgs
 
@@ -724,7 +725,7 @@ csName = "C#"
 csVersion = "6.0"
 
 csImport :: Label -> Doc
-csImport n = text ("using " ++ n) <> endStatement
+csImport n = text ("using " P.<> n) <> endStatement
 
 csBoolType :: (Monad r) => VS (r TypeData)
 csBoolType = typeFromData Boolean csBool (text csBool)
@@ -733,9 +734,9 @@ csFuncType :: [VS (CSharpCode TypeData)] -> VS (CSharpCode TypeData) -> VS (CSha
 csFuncType ps r = do
   pts <- sequence ps
   rt <- r
-  typeFromData (Func (map getCodeType pts) (getCodeType rt))
-    (csFunc `containing` intercalate listSep (map getTypeString $ pts ++ [rt]))
-    (text csFunc <> angles (hicat listSep' $ map renderType $ pts ++ [rt]))
+  typeFromData (Func (getCodeType <$> pts) (getCodeType rt))
+    (csFunc `containing` intercalate listSep (getTypeString <$> pts P.<> [rt]))
+    (text csFunc <> angles (hicat listSep' $ renderType <$> pts P.<> [rt]))
 
 csForEach, csNamedArgSep, csLambdaSep :: Doc
 csForEach = text "foreach"
@@ -851,7 +852,7 @@ csFuncDecDef v scp ps bod = do
   modify $ useVarName $ variableName vr
   modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
-  t <- zoom lensMStoVS $ funcType (map (pure . variableType) pms)
+  t <- zoom lensMStoVS $ funcType (pure . variableType <$> pms)
     (pure $ variableType vr)
   b <- bod
   modify (addLangImport csSystem)
@@ -925,8 +926,8 @@ csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
 csInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)
   (valueOf out : ins)
-csInOutCall f n ins outs both = valStmt $ f n void (map (onStateValue
-  (onCodeValue (updateValDoc csRef)) . valueOf) both ++ ins ++ map
+csInOutCall f n ins outs both = valStmt $ f n void (fmap (onStateValue
+  (onCodeValue (updateValDoc csRef)) . valueOf) both P.<> ins P.<> fmap
   (onStateValue (onCodeValue (updateValDoc csOut)) . valueOf) outs)
 
 csVarDec :: AttachmentTag -> MS (CSharpCode stmt) -> MS (CSharpCode stmt)
@@ -940,14 +941,14 @@ csInOut
   -> [VS (CSharpCode Variable)]
   -> MS (CSharpCode Body)
   -> MS (CSharpCode mthd)
-csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
+csInOut f ins [v] [] b = f (onStateValue variableType v) (param <$> ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
   valueOf v))
 csInOut f ins [] [v] b = f (onStateValue variableType v)
-  (map param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b
+  (param <$> v : ins) (on2StateValues (on2CodeValues appendToBody) b
   (returnStmt $ valueOf v))
-csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
-  (updateParam csRef)) . param) both ++ map param ins ++ map (onStateValue
+csInOut f ins outs both b = f void (fmap (onStateValue (onCodeValue
+  (updateParam csRef)) . param) both P.<> fmap param ins P.<> fmap (onStateValue
   (onCodeValue (updateParam csOut)) . param) outs) b
 
 csPrint

@@ -6,6 +6,7 @@ module Language.Drasil.Markdown.Helpers (
 ) where
 
 import Prelude hiding ((<>), lookup)
+import qualified Prelude as P ((<>))
 import Data.List (intersperse)
 import Data.Map (lookup)
 import System.FilePath (takeFileName)
@@ -31,7 +32,7 @@ wrap' a = wrapGen' hcat Class a empty
 -- The fourth argument provides class names for the CSS.
 wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
 wrapGen' sepf _ s _ [] = \x ->
-  sepf [text $ "<" ++ s ++ ">", indent x, tagR s]
+  sepf [text $ "<" P.<> s P.<> ">", indent x, tagR s]
 wrapGen' sepf Class s _ ts = \x ->
   let val = text $ foldr1 (++) (intersperse " " ts)
   in sepf [tagL s Class val, indent x, tagR s]
@@ -41,11 +42,11 @@ wrapGen' sepf v s ti _ = \x ->
 
 -- | Helper for creating a left HTML tag with a single attribute.
 tagL :: String -> Variation -> Doc -> Doc
-tagL t a v = text ("<" ++ t ++ " " ++ show a ++ "=\"") <> v <> text "\">"
+tagL t a v = text ("<" P.<> t P.<> " " P.<> show a P.<> "=\"") <> v <> text "\">"
 
 -- | Helper for creating a right HTML closing tag.
 tagR :: String -> Doc
-tagR t = text $ "</" ++ t ++ ">"
+tagR t = text $ "</" P.<> t P.<> ">"
 
 -- | Helper for wrapping attributes in a tag.
 --
@@ -53,8 +54,8 @@ tagR t = text $ "</" ++ t ++ ">"
 --     * The 'String' in the pair is the attribute name,
 --     * The 'Doc' is the value for different attributes.
 wrapInside :: String -> [(String, Doc)] -> Doc
-wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text ">"
-  where foldStr (attr, val) = text (attr ++ "=\"") <> val <> text "\" "
+wrapInside t p = text ("<" P.<> t P.<> " ") <> foldl1 (<>) (foldStr <$> p) <> text ">"
+  where foldStr (attr, val) = text (attr P.<> "=\"") <> val <> text "\" "
 
 -- | Indent the Document by 2 positions.
 indent :: Doc -> Doc
@@ -93,8 +94,8 @@ reflink :: RefMap -> String -> Doc -> Doc
 reflink rm ref txt = brak txt <> paren rp
   where
     fn = maybe empty fp (lookup ref rm)
-    fp s = text $ "./" ++ s ++ ".md"
-    rp = fn <> text ("#" ++ ref)
+    fp s = text $ "./" P.<> s P.<> ".md"
+    rp = fn <> text ("#" P.<> ref)
 
 -- | Helper for setting up links to references with additional information.
 reflinkInfo :: RefMap -> String -> Doc -> Doc -> Doc
@@ -109,8 +110,8 @@ reflinkURI ref txt
 
 -- | Helper for setting up figures
 image :: Doc -> Maybe Doc -> Doc
-image f Nothing = text "!" <> reflinkURI (text $ "./assets/" ++ takeFileName (show f)) (text "")
-image f (Just c) = text "!" <> reflinkURI (text $ "./assets/" ++ takeFileName (show f)) c $^$ bold (text "Figure: " <> c)
+image f Nothing = text "!" <> reflinkURI (text $ "./assets/" P.<> takeFileName (show f)) (text "")
+image f (Just c) = text "!" <> reflinkURI (text $ "./assets/" P.<> takeFileName (show f)) c $^$ bold (text "Figure: " <> c)
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc

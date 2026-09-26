@@ -42,6 +42,7 @@ import Drasil.Shared.State (VS)
 import Data.List (last, intercalate)
 import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,
   atan,floor,mod,(<>))
+import qualified Prelude as P ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, colon, comma)
 
@@ -119,26 +120,26 @@ pow = "pow"
 piLabel = "pi"
 
 access :: String -> String -> String
-access q n = q ++ "." ++ n
+access q n = q P.<> "." P.<> n
 
 containing :: String -> String -> String
-containing l e = l ++ "<" ++ e ++ ">"
+containing l e = l P.<> "<" P.<> e P.<> ">"
 
 tuple :: [String] -> String
-tuple ts = "(" ++ intercalate listSep ts ++ ")"
+tuple ts = "(" P.<> intercalate listSep ts P.<> ")"
 
 mathFunc :: String -> String
 mathFunc = access "Math"
 
 addExt :: String -> String -> String
-addExt ext nm = nm ++ "." ++ ext
+addExt ext nm = nm P.<> "." P.<> ext
 
 ----------------------------------
 -- Functions for rendering code --
 ----------------------------------
 
 package :: Label -> Doc -> FileData -> FileData
-package n end f = fileD (n ++ "/" ++ filePath f) (updateMod
+package n end f = fileD (n P.<> "/" P.<> filePath f) (updateMod
   (\d -> emptyIfEmpty d (vibcat [text "package" <+> text n <> end, d]))
   (fileMod f))
 
@@ -344,11 +345,11 @@ public = text "public"
 -- Comment Functions --
 
 blockCmt :: [String] -> Doc -> Doc -> Doc
-blockCmt lns start end = start <+> vcat (map text lns) <+> end
+blockCmt lns start end = start <+> vcat (text <$> lns) <+> end
 
 docCmt :: [String] -> Doc -> Doc -> Doc
 docCmt lns start end = emptyIfNull lns $
-  vcat $ start : map (indent . text) lns ++ [end]
+  vcat $ start : fmap (indent . text) lns P.<> [end]
 
 commentedItem :: Doc -> Doc -> Doc
 commentedItem cmt itm = emptyIfEmpty itm cmt $+$ itm
@@ -367,11 +368,11 @@ addComments c cStart b = vcat [
 
 commentDelimit :: Label -> Doc -> Doc
 commentDelimit c cStart =
-  let com = cStart <> text (" " ++ c ++ " ")
+  let com = cStart <> text (" " P.<> c P.<> " ")
   in com <> text (dashes (render com) commentLength)
 
 endCommentDelimit :: Label -> Doc -> Doc
-endCommentDelimit c = commentDelimit (endCommentLabel ++ " " ++ c)
+endCommentDelimit c = commentDelimit (endCommentLabel P.<> " " P.<> c)
 
 dashes :: String -> Int -> String
 dashes s l = replicate (l - length s) '-'
@@ -379,23 +380,23 @@ dashes s l = replicate (l - length s) '-'
 type FuncDocRenderer = String -> [(String, String)] -> [String] -> [String]
 
 functionDox :: FuncDocRenderer
-functionDox desc params returns = [doxBrief ++ desc | not (null desc)]
-  ++ map (\(v, vDesc) -> doxParam ++ v ++ " " ++ vDesc) params
-  ++ map (doxReturn ++) returns
+functionDox desc params returns = [doxBrief P.<> desc | not (null desc)]
+  P.<> fmap (\(v, vDesc) -> doxParam P.<> v P.<> " " P.<> vDesc) params
+  P.<> fmap (doxReturn ++) returns
 
 type ClassDocRenderer = String -> [String]
 
 classDox :: ClassDocRenderer
-classDox desc = [doxBrief ++ desc | not (null desc)]
+classDox desc = [doxBrief P.<> desc | not (null desc)]
 
 type ModuleDocRenderer = String -> String -> [String] -> String -> String -> [String]
 
 moduleDox :: ModuleDocRenderer
-moduleDox desc watermark as date m = (doxFile ++ m) :
-  [doxAuthor ++ stringList as | not (null as)] ++
-  [doxDate ++ date | not (null date)] ++
-  [doxBrief ++ desc | not (null desc)] ++
-  [doxNote ++ watermark]
+moduleDox desc watermark as date m = (doxFile P.<> m) :
+  [doxAuthor P.<> stringList as | not (null as)] P.<>
+  [doxDate P.<> date | not (null date)] P.<>
+  [doxBrief P.<> desc | not (null desc)] P.<>
+  [doxNote P.<> watermark]
 
 commentedMod :: FileData -> Doc -> FileData
 commentedMod m cmt = updateFileMod (updateMod (commentedItem $ cmt $+$ blank) (fileMod m)) m
@@ -403,21 +404,21 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem $ cmt $+$ blank) (f
 -- Helper Functions --
 
 valueList :: (ValueElim r val) => [r val] -> Doc
-valueList = hicat listSep' . map RC.value
+valueList = hicat listSep' . fmap RC.value
 
 variableList :: (InternalVarElim r) => [r Variable] -> Doc
-variableList = hicat listSep' . map RC.variable
+variableList = hicat listSep' . fmap RC.variable
 
 binderList :: (InternalBinderElim r) => [r BinderD] -> Doc
-binderList = hicat listSep' . map RC.binderElim
+binderList = hicat listSep' . fmap RC.binderElim
 
 parameterList :: (ParamElim r typ param) => [r param] -> Doc
-parameterList = hicat listSep' . map RC.parameter
+parameterList = hicat listSep' . fmap RC.parameter
 
 namedArgList
   :: (InternalVarElim r, ValueElim r val)
   => Doc -> [(r Variable, r val)] -> Doc
-namedArgList sep = hicat listSep' . map (\(vr,vl) -> RC.variable vr <> sep
+namedArgList sep = hicat listSep' . fmap (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
@@ -432,10 +433,10 @@ surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
 surroundBody p b a = prependToBody p (appendToBody b a)
 
 getterName :: String -> String
-getterName s = "get" ++ capitalize s
+getterName s = "get" P.<> capitalize s
 
 setterName :: String -> String
-setterName s = "set" ++ capitalize s
+setterName s = "set" P.<> capitalize s
 
 intValue :: (TypeElim r typ, ValueSym r typ val) => VS (r val) -> VS (r val)
 intValue i = i >>= intValue' . getCodeType . valueType
@@ -444,10 +445,10 @@ intValue i = i >>= intValue' . getCodeType . valueType
 
 doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate, doxNote :: String
 doxCommand = "\\"
-doxBrief = doxCommand ++ "brief "
-doxParam = doxCommand ++ "param "
-doxReturn = doxCommand ++ "return "
-doxFile = doxCommand  ++ "file "
-doxAuthor = doxCommand ++ "author "
-doxDate = doxCommand ++ "date "
-doxNote = doxCommand ++ "note "
+doxBrief = doxCommand P.<> "brief "
+doxParam = doxCommand P.<> "param "
+doxReturn = doxCommand P.<> "return "
+doxFile = doxCommand  P.<> "file "
+doxAuthor = doxCommand P.<> "author "
+doxDate = doxCommand P.<> "date "
+doxNote = doxCommand P.<> "note "

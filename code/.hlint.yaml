@@ -33,6 +33,8 @@
 
 - group: {name: teaching, enabled: true}
 - group: {name: future, enabled: true}
+- group: {name: generalise, enabled: true}
+- group: {name: generalise-for-conciseness, enabled: true}
 
 # Add custom hints for this project
 #
@@ -48,9 +50,6 @@
 #
 # Replace a $ b $ c with a . b $ c
 # - group: {name: dollar, enabled: true}
-#
-# Generalise map to fmap, ++ to <>
-# - group: {name: generalise, enabled: true}
 
 
 # Ignore some builtin hints

@@ -54,7 +54,7 @@ equilibrium = tm (equationalConstraints' equilibriumCS) [dRef fredlund1977]
 ------------------------------------
 
 equilibriumRels :: [ModelExpr]
-equilibriumRels = map (($= int 0) . sumAll (variable "i") . sy) [fx, fy, genericM]
+equilibriumRels = ($= int 0) . sumAll (variable "i") . sy <$> [fx, fy, genericM]
 
 -- FIXME: variable "i" is a hack. But we need to sum over something!
 equilibriumCS :: ConstraintSet ModelExpr

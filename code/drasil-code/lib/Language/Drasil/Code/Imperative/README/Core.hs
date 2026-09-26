@@ -76,7 +76,7 @@ makeReadMe ReadMeInfo {
     makeMd [introInfo name auths (fieldEmptySTR motiv)
       (fieldEmptySTR purp),
     whatInfo (fieldEmptySTR descr) (fieldEmptySTR sc),
-    makeInstr imptype (map relFileToStr configFPs) name inoutf,
+    makeInstr imptype (relFileToStr <$> configFPs) name inoutf,
     verInfo progLang progLangVers,
     unsupOS unsupportedOSs,
     extLibSec extLibns extLibfp,

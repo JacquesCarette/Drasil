@@ -43,7 +43,7 @@ genHTML rOpts fn (AST.Document t a c) = HTML heads bodies
       [ articleTitle (specToHTML t),
         author (specToHTML a)
       ]
-        ++ concatMap (loToHTML rOpts) c
+        <> concatMap (loToHTML rOpts) c
 
 -- | Internal: Creates the title block for the HTML document.
 articleTitle :: [HTMLBody] -> HTMLBody
@@ -58,8 +58,8 @@ loToHTML :: HTMLGenOptions -> AST.LayoutObj -> [HTMLBody]
 loToHTML _ (AST.EqnBlock contents) =
   [RawText $ blockEqn $ T.pack $ show $ TeX.printMath $ TeX.spec contents]
 loToHTML rOpts (AST.HDiv ts layoutObs l) =
-  let classAttr = [class_ (map T.pack ts) | not (null ts)]
-      attrs = specToIdAttr l ++ classAttr
+  let classAttr = [class_ (T.pack <$> ts) | not (null ts)]
+      attrs = specToIdAttr l <> classAttr
   in [Section attrs (concatMap (loToHTML rOpts) layoutObs)]
 loToHTML _ (AST.Paragraph contents) = [Paragraph [class_ ["paragraph"]] (specToHTML contents)]
 loToHTML _ (AST.Table ts rows r b t) = makeTableHTML ts rows r b t
@@ -73,7 +73,7 @@ loToHTML _ (AST.Figure r c f wp) =
   [Div [id_ (printSpec r)] [figureImage [] attrs (T.pack f) captionText ("Figure: " <> captionText)]]
   where
     attrs = [attr "width" (T.show wp <> "%") | wp /= 100]
-    captionText = maybe mempty printSpec c
+    captionText = foldMap printSpec c
 loToHTML _ (AST.Bib bib) = [printBib bib]
 loToHTML _ AST.Graph {} = []
 loToHTML _ AST.Cell {} = []
@@ -84,9 +84,9 @@ makeTableHTML :: [String] -> [[AST.Spec]] -> AST.Spec -> Bool -> AST.Spec -> [HT
 makeTableHTML _ [] _ _ _ = error "No table to print (see Language.Drasil.HTML.Render)"
 makeTableHTML ts (l : lls) r b t = [Div wrapperAttrs $ tableNode : [captionNode | b]]
   where
-    attrs = [class_ (map T.pack ts)]
-    headerRow = Row [] (map (THeader [] . specToHTML) l)
-    dataRows = map (Row [] . map (TData [] . specToHTML)) lls
+    attrs = [class_ (T.pack <$> ts)]
+    headerRow = Row [] (THeader [] . specToHTML <$> l)
+    dataRows = Row [] . fmap (TData [] . specToHTML) <$> lls
     tableNode = Table attrs (headerRow : dataRows)
     captionNode = Paragraph [class_ ["caption"]] (specToHTML t)
     wrapperAttrs = specToIdAttr r
@@ -95,25 +95,25 @@ makeTableHTML ts (l : lls) r b t = [Div wrapperAttrs $ tableNode : [captionNode 
 makeDefnHTML :: HTMLGenOptions -> [(String, [AST.LayoutObj])] -> AST.Spec -> [HTMLBody]
 makeDefnHTML _ [] _ = error "Empty definition"
 makeDefnHTML rOpts ps l =
-  let attrs = specToIdAttr l ++ [class_ ["defn-table"]]
+  let attrs = specToIdAttr l <> [class_ ["defn-table"]]
       refRow = Row [] [THeader [] ["Refname"], TData []
         [bold_ (specToHTML l)]]
-      dataRows = map ( \(f, d) -> Row [] [THeader [] [rawText' f],
-        TData [] (concatMap (loToHTML rOpts) d)]) ps
+      dataRows = ( \(f, d) -> Row [] [THeader [] [rawText' f],
+        TData [] (concatMap (loToHTML rOpts) d)]) <$> ps
    in [Table attrs (refRow : dataRows)]
 
 -- | Internal: Generates lists in HTML.
 buildListHtml :: AST.ListType -> HTMLBody
 buildListHtml (AST.Simple items) = Div [class_ ["list"]] $
-  map (\(b, e, l) -> Paragraph (mbIdAttr l)
-  (specToHTML b ++ [": "] ++ itemToHTML e)) items
+  (\(b, e, l) -> Paragraph (mbIdAttr l)
+  (specToHTML b <> [": "] <> itemToHTML e)) <$> items
 buildListHtml (AST.Desc items) = Div [class_ ["list"]] $
-  map (\(b, e, l) -> Paragraph (mbIdAttr l)
-  ([bold_ (specToHTML b), ": "] ++ itemToHTML e)) items
-buildListHtml (AST.Ordered items) = List Ordered [class_ ["list"]] $ map mkLItem items
-buildListHtml (AST.Unordered items) = List Unordered [class_ ["list"]] $ map mkLItem items
+  (\(b, e, l) -> Paragraph (mbIdAttr l)
+  ([bold_ (specToHTML b), ": "] <> itemToHTML e)) <$> items
+buildListHtml (AST.Ordered items) = List Ordered [class_ ["list"]] $ mkLItem <$> items
+buildListHtml (AST.Unordered items) = List Unordered [class_ ["list"]] $ mkLItem <$> items
 buildListHtml (AST.Definitions items) = List Unordered [class_ ["hide-list-style-no-indent"]] $
-  map (\(b, e, l) -> LItem (mbIdAttr l) (specToHTML b ++ [" is the "] ++ itemToHTML e)) items
+  (\(b, e, l) -> LItem (mbIdAttr l) (specToHTML b <> [" is the "] <> itemToHTML e)) <$> items
 
 -- | Internal: Helper to create list items.
 mkLItem :: (AST.ItemType, Maybe AST.Spec) -> LItem
@@ -126,9 +126,9 @@ specToIdAttr s          = [id_ (printSpec s)]
 
 -- | Internal: Convert @Maybe Spec@s into ID `Attr`s if the `Spec` exists.
 mbIdAttr :: Maybe AST.Spec -> [Attr]
-mbIdAttr = maybe [] specToIdAttr
+mbIdAttr = foldMap specToIdAttr
 
 -- | Internal: Generates list items.
 itemToHTML :: AST.ItemType -> [HTMLBody]
 itemToHTML (AST.Flat s)     = specToHTML s
-itemToHTML (AST.Nested s l) = specToHTML s ++ [buildListHtml l]
+itemToHTML (AST.Nested s l) = specToHTML s <> [buildListHtml l]

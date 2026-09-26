@@ -228,10 +228,10 @@ impulseVDesc = foldlSent [S "An", getTandS QP.impulseV, S "occurs when a",
   getTandS QP.force, S "acts over a body over an interval" `S.of_` phrase QP.time]
 
 impulseVDeriv :: Derivation
-impulseVDeriv = mkDerivName (phrase QP.impulseV) (weave impulseVDerivSentences $ map eS impulseVDerivEqns)
+impulseVDeriv = mkDerivName (phrase QP.impulseV) (weave impulseVDerivSentences $ eS <$> impulseVDerivEqns)
 
 impulseVDerivSentences :: [Sentence]
-impulseVDerivSentences = map foldlSentCol [impulseVDerivSentence1,
+impulseVDerivSentences = foldlSentCol <$> [impulseVDerivSentence1,
  impulseVDerivSentence2, impulseVDerivSentence3]
 
 impulseVDerivSentence1 :: [Sentence]

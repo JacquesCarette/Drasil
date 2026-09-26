@@ -29,7 +29,7 @@ tableAbbAccGen :: [TermAbbr] -> LabelledContent
 tableAbbAccGen [] = mkRawLC (Para [emptySectSentPlu [abbAcc]]) tableAbbAccRef
 tableAbbAccGen ls = let chunks = sortBy (compare `on` shortForm) ls in
   mkRawLC (Table
-  (map titleize [abbreviation, fullForm]) (mkTable
+  (titleize <$> [abbreviation, fullForm]) (mkTable
     [maybe EmptyS S . shortForm,
      toSent . titleizeNP . longForm]
   chunks)

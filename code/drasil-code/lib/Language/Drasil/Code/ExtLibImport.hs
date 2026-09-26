@@ -92,7 +92,7 @@ addFuncDef c ps b s = if n `elem` (s ^. defined) then s else over defs
 -- values, represented by the list of 'CodeExpr'.
 addFieldAsgs :: CodeVarChunk -> [CodeVarChunk] -> [CodeExpr] -> ExtLibState ->
   ExtLibState
-addFieldAsgs o cs es = over defs (++ zipWith FAsg (map (ccObjVar o) cs) es)
+addFieldAsgs o cs es = over defs (++ zipWith FAsg (ccObjVar o <$> cs) es)
 
 -- | Adds a name to the defined field of 'ExtLibState'.
 addDefined :: Name -> ExtLibState -> ExtLibState
@@ -100,7 +100,7 @@ addDefined n = over defined (n:)
 
 -- | Adds a list of imports to the 'ExtLibState'.
 addImports :: [String] -> ExtLibState -> ExtLibState
-addImports is = over imports (\l -> nub $ l ++ is)
+addImports is = over imports (\l -> nub $ l <> is)
 
 -- | Adds to the 'ExtLibState' an association between a library function/method and
 -- the library's module that exports it.
@@ -161,8 +161,8 @@ genFIVal (FI (r:|rs) ft f as _) (FIF afs) = do
   let isNamed = isJust . fst
       (nas, ars) = partition isNamed args
   modify (addImports rs . addModExport (codeName f, r))
-  pure $ getCallFunc ft f (map snd ars) (map (\(n, e) ->
-    maybe (error "defective isNamed") (,e) n) nas)
+  pure $ getCallFunc ft f (snd <$> ars) ((\(n, e) ->
+    maybe (error "defective isNamed") (,e) n) <$> nas)
   where getCallFunc Function = applyWithNamedArgs
         getCallFunc (Method o) = msgWithNamedArgs o
         getCallFunc Constructor = newWithNamedArgs
@@ -178,28 +178,28 @@ genFI fi@(FI _ _ _ _ r) fif = do
 -- for each argument and the 'NamedArgument' chunk for arguments that are named.
 genArguments :: [Argument] -> [ArgumentFill] ->
   State ExtLibState [(Maybe NamedArgument, CodeExpr)]
-genArguments (Arg n (LockedArg e):as) afs = fmap ((n,e):) (genArguments as afs)
-genArguments as (UserDefinedArgF n e:afs) = fmap ((n,e):) (genArguments as afs)
-genArguments (Arg n (Basic _ Nothing):as) (BasicF e:afs) = fmap ((n,e):)
-  (genArguments as afs)
+genArguments (Arg n (LockedArg e):as) afs = ((n,e):) <$> genArguments as afs
+genArguments as (UserDefinedArgF n e:afs) = ((n,e):) <$> genArguments as afs
+genArguments (Arg n (Basic _ Nothing):as) (BasicF e:afs) = ((n,e):)
+  <$> genArguments as afs
 genArguments (Arg n (Basic _ (Just v)):as) (BasicF e:afs) = do
   modify (addDef e v)
-  fmap ((n, sy v):) (genArguments as afs)
+  ((n, sy v):) <$> genArguments as afs
 genArguments (Arg n (Fn c ps s):as) (FnF pfs sf:afs) = do
   let prms = genParameters ps pfs
   st <- genStep s sf
   modify (addFuncDef c prms [st])
-  fmap ((n, sy c):) (genArguments as afs)
+  ((n, sy c):) <$> genArguments as afs
 genArguments (Arg n (Class rs desc o ctor ci):as) (ClassF svs cif:afs) = do
   (c, is) <- genClassInfo o ctor an desc svs ci cif
-  modify (addMod (packmodRequires an desc (rs ++ is) [c] []))
-  fmap ((n, sy o):) (genArguments as afs)
+  modify (addMod (packmodRequires an desc (rs <> is) [c] []))
+  ((n, sy o):) <$> genArguments as afs
   where an = getActorName (o ^. typ)
 genArguments (Arg n (Record (rq:|rqs) rn r fs):as) (RecordF es:afs) =
   if length fs /= length es then error recordFieldsMismatch else do
     modify (addFieldAsgs r fs es . addDef (new rn []) r .
       addModExport (codeName rn, rq) . addImports rqs)
-    fmap ((n, sy r):) (genArguments as afs)
+    ((n, sy r):) <$> genArguments as afs
 genArguments [] [] = pure []
 genArguments _ _ = error argumentMismatch
 
@@ -222,7 +222,7 @@ genClassInfo o c n desc svs ci cif = let
       cs <- zipWithM (genMethodInfo o c) ctrIs ctrIFs
       ms <- zipWithM (genMethodInfo o c) mthIs mthIFs
       modify (if any isConstructor mis then id else addDef (new c []) o)
-      pure (f desc svs (map fst cs) (map fst ms), concatMap snd ms)
+      pure (f desc svs (fst <$> cs) (fst <$> ms), concatMap snd ms)
   where genCI (Regular mis') (RegularF mifs') = (mis', mifs', classDef n)
         genCI (Implements intn mis') (ImplementsF mifs') = (mis', mifs',
           classImplements n intn)
@@ -237,14 +237,14 @@ genMethodInfo :: CodeVarChunk -> CodeFuncChunk -> MethodInfo ->
 genMethodInfo o c (CI desc ps ss) (CIF pfs is sfs) = do
   let prms = genParameters ps pfs
   (fs, newS) <- withLocalState $ zipWithM genStep ss sfs
-  modify (addDef (new c (map sy prms)) o)
-  pure (ctorDef (codeName c) desc prms is (newS ^. defs ++ fs),
+  modify (addDef (new c (sy <$> prms)) o)
+  pure (ctorDef (codeName c) desc prms is (newS ^. defs <> fs),
     newS ^. imports)
 genMethodInfo _ _ (MI m desc ps rDesc ss) (MIF pfs sfs) = do
   let prms = genParameters ps pfs
   (fs, newS) <- withLocalState (zipWithM genStep (toList ss) (toList sfs))
   pure (funcDefParams (codeName m) desc prms (m ^. typ) rDesc (
-    newS ^. defs ++ fs), newS ^. imports)
+    newS ^. defs <> fs), newS ^. imports)
 genMethodInfo _ _ _ _ = error methodInfoMismatch
 
 -- | Interprets a list of 'Parameter' and a list of 'ParameterFill', resulting in
@@ -284,12 +284,12 @@ elAndElc, stepNumberMismatch, stepTypeMismatch, argumentMismatch,
   paramMismatch, recordFieldsMismatch, ciAndCif, classInfoMismatch,
   methodInfoNumberMismatch, methodInfoMismatch :: String
 elAndElc = "ExternalLibrary and ExternalLibraryCall have different "
-stepNumberMismatch = elAndElc ++ "number of steps"
-stepTypeMismatch = elAndElc ++ "order of steps"
+stepNumberMismatch = elAndElc <> "number of steps"
+stepTypeMismatch = elAndElc <> "order of steps"
 argumentMismatch = "FunctionInterface and FunctionIntFill have different number or types of arguments"
 paramMismatch = "Parameters mismatched with ParameterFills"
 recordFieldsMismatch = "Different number of record fields than field values"
 ciAndCif = "ClassInfo and ClassInfoFill have different "
-classInfoMismatch = ciAndCif ++ "class types"
-methodInfoNumberMismatch = ciAndCif ++ "number of MethodInfos/MethodInfoFills"
+classInfoMismatch = ciAndCif <> "class types"
+methodInfoNumberMismatch = ciAndCif <> "number of MethodInfos/MethodInfoFills"
 methodInfoMismatch = "MethodInfo and MethodInfoFill have different method types"

@@ -33,11 +33,11 @@ colBwidth = 0.82
 hyperSettings :: String
 hyperSettings =
      "bookmarks=true,"     -- show bookmarks bar?
-  ++ "colorlinks=true,"    -- false: boxed links; true: colored links
-  ++ "linkcolor=red,"      -- color of internal links
-  ++ "citecolor=blue,"     -- color of links to bibliography
-  ++ "filecolor=magenta,"  -- color of file links
-  ++ "urlcolor=cyan"       -- color of external links
+  <> "colorlinks=true,"    -- false: boxed links; true: colored links
+  <> "linkcolor=red,"      -- color of internal links
+  <> "citecolor=blue,"     -- color of links to bibliography
+  <> "filecolor=magenta,"  -- color of file links
+  <> "urlcolor=cyan"       -- color of external links
 
 -- | The bibliography format.
 data StyleGuide = MLA | APA | Chicago

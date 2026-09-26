@@ -50,8 +50,8 @@ instance SoftwareDossierSym CSharpProject where
 -- | Create a build configuration for C# files. Takes in 'FilePath's and the type of implementation.
 csBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
 csBuildConfig fs it = buildAll (\i o -> [osClassDefault "CSC" "csc" "mcs"
-  : target it ++ [asFragment "-out:" P.<> o] ++ map (asFragment . ("-r:" ++)) fs
-  ++ i]) (outName it)
+  : target it P.<> [asFragment "-out:" P.<> o] P.<> fmap (asFragment . ("-r:" ++)) fs
+  P.<> i]) (outName it)
   where target Library = [asFragment "-t:library"]
         target Program = []
         outName Library = sharedLibrary

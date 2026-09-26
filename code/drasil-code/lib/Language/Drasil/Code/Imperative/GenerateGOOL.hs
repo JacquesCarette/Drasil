@@ -47,7 +47,7 @@ genModuleWithImports
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
   modify (\s -> s { currentModule = n })
-  let as = map fullName (g ^. authors)
+  let as = fullName <$> (g ^. authors)
   cs <- sequence maybeCs
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` g ^. commented                   = OO.docMod desc watermark as (g ^. date)
@@ -144,8 +144,8 @@ fCall
 fCall f vl ns = do
   g <- get
   let cm = currentModule g
-      args = map mkArg vl
-      nargs = map (second mkArg) ns
+      args = mkArg <$> vl
+      nargs = second mkArg <$> ns
   pure $ f cm args nargs
 
 -- | Function call generator.
@@ -230,7 +230,7 @@ genModuleWithImportsProc
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
   modify (\s -> s { currentModule = n })
-  let as = map fullName (g ^. authors)
+  let as = fullName <$> (g ^. authors)
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` g ^. commented                   = Proc.docMod desc watermark as (g ^. date)
               | CommentFunc `elem` g ^. commented && not (null ms) = Proc.docMod "" watermark [] ""

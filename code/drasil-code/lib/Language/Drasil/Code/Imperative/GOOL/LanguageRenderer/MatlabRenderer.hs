@@ -4,6 +4,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.MatlabRenderer (
 ) where
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import qualified Prelude as P ((<>))
 
 import Drasil.GProc (mlName, mlVersion)
 
@@ -45,4 +46,4 @@ mlRunnable :: Maybe Runnable
 mlRunnable = interpMM "octave"
 
 doxError :: String
-doxError = mlName ++ " is not compatible with Doxygen."
+doxError = mlName P.<> " is not compatible with Doxygen."

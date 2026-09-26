@@ -140,37 +140,37 @@ helperUnit a = case getSecondSymb a of
 u ^: i = UE (helperUnit u) (upow (usymb u))
 --u ^: i = UE ((helperUnit u) ^. uid) (upow (u ^. usymb))
   where
-    upow (US l) = US $ map (second (* i)) l
+    upow (US l) = US $ second (* i) <$> l
 
 -- | Combinator for dividing one unit by another.
 (/:) :: UnitDefn -> UnitDefn -> UnitEquation
 u1 /: u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (helperUnit u1 ++ helperUnit u2) (US $ l1 ++ map (second negate) l2)
+  UE (helperUnit u1 <> helperUnit u2) (US $ l1 <> fmap (second negate) l2)
 
 -- | Combinator for multiplying two units together.
 (*:) :: UnitDefn -> UnitDefn -> UnitEquation
 u1 *: u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (helperUnit u1 ++ helperUnit u2) (US $ l1 ++ l2)
+  UE (helperUnit u1 <> helperUnit u2) (US $ l1 <> l2)
 
 -- | Combinator for multiplying a unit and a symbol.
 (*$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 *$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (helperUnit u1 ++ getCu u2) (US $ l1 ++ l2)
+  UE (helperUnit u1 <> getCu u2) (US $ l1 <> l2)
 
 -- | Combinator for dividing a unit and a symbol.
 (/$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 /$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (helperUnit u1 ++ getCu u2) (US $ l1 ++ map (second negate) l2)
+  UE (helperUnit u1 <> getCu u2) (US $ l1 <> fmap (second negate) l2)
 
 -- | Combinator for mulitiplying two unit equations.
 (^$) :: UnitEquation -> UnitEquation -> UnitEquation
 u1 ^$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (getCu u1 ++ getCu u2) (US $ l1 ++ l2)
+  UE (getCu u1 <> getCu u2) (US $ l1 <> l2)
 
 -- | Combinator for scaling one unit by some number.
 scale :: IsUnit s => Double -> s -> UDefn

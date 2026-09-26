@@ -48,7 +48,7 @@ funcType
 funcType ps' r' =  do
   ps <- sequence ps'
   r <- r'
-  typeFromData (Func (map getCodeType ps) (getCodeType r)) "" empty
+  typeFromData (Func (getCodeType <$> ps) (getCodeType r)) "" empty
 
 -- Python, Java, C#, Swift, and Julia --
 extFuncAppMixedArgs :: (RenderValue r typ val) => Library -> MixedCall r typ val

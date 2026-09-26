@@ -4,6 +4,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (
 ) where
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import qualified Prelude as P ((<>))
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
@@ -44,8 +45,8 @@ instance SoftwareDossierSym SwiftProject where
 
 -- | Create a build configuration for Swift files. Takes in 'FilePath's and the type of implementation.
 swiftBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
-swiftBuildConfig fs it = buildAll (\i o -> [asFragment "swiftc" : i ++
-  [asFragment "-o", o] ++ concatMap (\f -> map asFragment ["-I", f]) fs ++
+swiftBuildConfig fs it = buildAll (\i o -> [asFragment "swiftc" : i P.<>
+  [asFragment "-o", o] P.<> concatMap (\f -> asFragment <$> ["-I", f]) fs P.<>
   asLib it]) (outName it)
   where asLib Library = [asFragment "-emit-library"]
         asLib Program = []
@@ -58,4 +59,4 @@ swiftRunnable = nativeBinary
 
 -- | Swift is not compatible with Doxygen, so raise an error if trying to compile Doxygen documentation.
 doxError :: String
-doxError = swiftName ++ " is not compatible with Doxygen."
+doxError = swiftName P.<> " is not compatible with Doxygen."

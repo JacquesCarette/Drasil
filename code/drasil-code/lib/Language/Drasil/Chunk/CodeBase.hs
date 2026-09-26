@@ -13,11 +13,11 @@ import Drasil.Code.CodeVar (CodeVarChunk, quantvar)
 
 -- | Get a list of 'CodeChunk's from an equation.
 codevars :: CodeExpr -> ChunkDB -> [CodeVarChunk]
-codevars e m = map (varResolve m) $ eDep e
+codevars e m = varResolve m <$> eDep e
 
 -- | Get a list of 'CodeChunk's from an equation (no functions).
 codevars' :: CodeExpr -> ChunkDB -> [CodeVarChunk]
-codevars' e m = map (varResolve m) $ eDep' e
+codevars' e m = varResolve m <$> eDep' e
 
 -- | Make a 'CodeVarChunk' from a 'UID' in the 'ChunkDB'.
 varResolve :: ChunkDB -> UID -> CodeVarChunk

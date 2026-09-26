@@ -42,7 +42,7 @@ makeProject sm (Document titleLb authorName _ sections) =
 
 -- | Helper function for creating sections as Files.
 createFiles :: PrintingInformation -> [Section] -> [T.File]
-createFiles sm secs = map (file sm) secs'
+createFiles sm secs = file sm <$> secs'
   where
     secs' = concatMap (extractSubS 0) secs
 
@@ -63,10 +63,10 @@ createRefMap fn (T.List t)           = pass t
     pass (P.Simple ls)      = process' ls
     pass (P.Desc ls)        = process' ls
     pass (P.Definitions ls) = process' ls
-    process  = concatMap (\(_, l)    -> maybe [] (createRef fn) l)
-    process' = concatMap (\(_, _, l) -> maybe [] (createRef fn) l)
+    process  = concatMap (\(_, l)    -> foldMap (createRef fn) l)
+    process' = concatMap (\(_, _, l) -> foldMap (createRef fn) l)
 createRefMap fn (T.Figure l _ _ _)   = createRef fn l
-createRefMap fn (T.Bib ls)           = map bibRefs ls
+createRefMap fn (T.Bib ls)           = bibRefs <$> ls
   where
     bibRefs (P.Cite l _ _) = (l, fn)
 createRefMap _ _                     = []
@@ -78,7 +78,7 @@ createRef _   _      = []
 
 -- | Helper function for creating sections as layout objects.
 createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]
-createLayout sm = map (sec sm 0)
+createLayout sm = fmap (sec sm 0)
 
 createLayout' :: PrintingInformation -> [Section] -> [T.LayoutObj]
 createLayout' sm = concatMap (cel sm 0)
@@ -98,22 +98,22 @@ file sm (d, x@(Section titleLb pcs ssc _)) =
     refr = refAdd x
     fn = filter (/= ':') refr
     los = T.Header d (spec sm titleLb) (P.S refr) :
-      map (lay sm) pcs ++ map (sec sm (d + 1)) ssc
+      fmap (lay sm) pcs <> fmap (sec sm (d + 1)) ssc
 
 -- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section titleLb pcs ssc _) = --FIXME: should ShortName be used somewhere?
   let refr = P.S (refAdd x) in
-  T.HDiv [concat (replicate depth "sub") ++ "section"]
+  T.HDiv [concat (replicate depth "sub") <> "section"]
   (T.Header depth (spec sm titleLb) refr :
-   map (lay sm) pcs ++ map (sec sm (depth + 1)) ssc) refr
+   fmap (lay sm) pcs <> fmap (sec sm (depth + 1)) ssc) refr
 
 cel :: PrintingInformation -> Int -> Section -> [T.LayoutObj]
 cel sm depth x@(Section titleLb pcs ssc _) =
   let refr = P.S (refAdd x) in
   T.Cell [T.Header depth (spec sm titleLb) refr] :
-   map (T.Cell . pure . lay sm) pcs ++
-   map (T.Cell . cel sm (depth + 1)) ssc
+   fmap (T.Cell . pure . lay sm) pcs <>
+   fmap (T.Cell . cel sm (depth + 1)) ssc
 
 -- | Helper that translates 'Contents' to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'layout'.
@@ -124,7 +124,7 @@ lay sm (UlC x) = layUnlabelled sm (x ^. accessContents)
 -- | Helper that translates 'LabelledContent's to a printable representation of 'T.LayoutObj'.
 layLabelled :: PrintingInformation -> LabelledContent -> T.LayoutObj
 layLabelled sm x@(LblC _ _ (Table hdr lls t b)) = T.Table ["table"]
-  (map (spec sm) hdr : map (map (spec sm)) lls)
+  (fmap (spec sm) hdr : fmap (fmap (spec sm)) lls)
   (P.S $ getAdd $ getRefAdd x)
   b (spec sm t)
 layLabelled sm x@(LblC _ _ (Figure c f wp hc))  = T.Figure
@@ -132,44 +132,44 @@ layLabelled sm x@(LblC _ _ (Figure c f wp hc))  = T.Figure
   (if hc == WithCaption then Just (spec sm c) else Nothing)
   f wp
 layLabelled sm x@(LblC _ _ (Graph ps w h t))    = T.Graph
-  (map (bimap (spec sm) (spec sm)) ps) w h (spec sm t)
+  (bimap (spec sm) (spec sm) <$> ps) w h (spec sm t)
   (P.S $ getAdd $ getRefAdd x)
 layLabelled sm x@(LblC _ _ (Defini pairs)) =
   T.Definition (layPairs pairs) (P.S $ getAdd $ getRefAdd x)
-  where layPairs = map (second (map (lay sm)))
+  where layPairs = fmap (second (fmap (lay sm)))
 layLabelled sm x@(LblC _ _ (DerivBlock h d))    = T.HDiv ["subsubsubsection"]
-  (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
-  where refr = P.S $ refAdd x ++ "Deriv"
+  (T.Header 3 (spec sm h) refr : fmap (layUnlabelled sm) d) refr
+  where refr = P.S $ refAdd x <> "Deriv"
 layLabelled sm (LblC _ _ rc)                    = layUnlabelled sm rc
 
 -- | Helper that translates 'RawContent's to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'lay'.
 layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
-  (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
+  (fmap (spec sm) hdr : fmap (fmap (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Para c)         = T.Paragraph (spec sm $ foldlSent_ c)
 layUnlabelled sm (EqnBlock c)     = T.EqnBlock (P.E (modelExpr c sm))
 layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
-  (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
+  (T.Header 3 (spec sm h) refr : fmap (layUnlabelled sm) d) refr
   where refr = P.S "nolabel1"
 layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp hc)  = T.Figure (P.S "nolabel2")
   (if hc == WithCaption then Just (spec sm c) else Nothing) f wp
-layUnlabelled sm (Graph ps w h t) = T.Graph (map (bimap (spec sm) (spec sm)) ps)
+layUnlabelled sm (Graph ps w h t) = T.Graph (bimap (spec sm) (spec sm) <$> ps)
                                w h (spec sm t) (P.S "nolabel6")
 layUnlabelled sm (Defini pairs)  = T.Definition (layPairs pairs) (P.S "nolabel7")
-  where layPairs = map (second (map temp))
+  where layPairs = fmap (second (fmap temp))
         temp  y   = layUnlabelled sm (y ^. accessContents)
-layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
+layUnlabelled  _ (Bib bib)              = T.Bib $ layCite <$> bib
 layUnlabelled sm (CodeBlock c)     = T.CodeBlock (P.E (codeExpr sm (expr c)))
 
 -- | Translates lists to be printable.
 makeL :: PrintingInformation -> ListType -> P.ListType
-makeL sm (Bullet bs)      = P.Unordered   $ map (bimap (item sm) (fmap P.S)) bs
-makeL sm (Numeric ns)     = P.Ordered     $ map (bimap (item sm) (fmap P.S)) ns
-makeL sm (Simple ps)      = P.Simple      $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
-makeL sm (Desc ps)        = P.Desc        $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
-makeL sm (Definitions ps) = P.Definitions $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
+makeL sm (Bullet bs)      = P.Unordered   $ bimap (item sm) (fmap P.S) <$> bs
+makeL sm (Numeric ns)     = P.Ordered     $ bimap (item sm) (fmap P.S) <$> ns
+makeL sm (Simple ps)      = P.Simple      $ (\(x,y,z) -> (spec sm x, item sm y, P.S <$> z)) <$> ps
+makeL sm (Desc ps)        = P.Desc        $ (\(x,y,z) -> (spec sm x, item sm y, P.S <$> z)) <$> ps
+makeL sm (Definitions ps) = P.Definitions $ (\(x,y,z) -> (spec sm x, item sm y, P.S <$> z)) <$> ps
 
 -- | Helper for translating list items to be printable.
 item :: PrintingInformation -> ItemType -> P.ItemType

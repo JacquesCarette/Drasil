@@ -62,7 +62,7 @@ mkProjectName u title abrv abrv2repoF
 mkCommonProjName :: UID -> NP -> String -> ProjectName
 mkCommonProjName u ttl ab = mkProjectName u ttl ab frmtr
   where
-    frmtr = map toLower . replaceAll (not . isAlphaNum) '-'
+    frmtr = fmap toLower . replaceAll (not . isAlphaNum) '-'
 
 -- | Get the title of a 'ProjectName' (as a 'Sentence').
 projTitleS :: ProjectName -> Sentence

@@ -37,7 +37,7 @@ logBody
 logBody n vars b = do
   g <- get
   pure $ body $
-    [loggedMethod (g ^. logName) n vars | LogFunc `elem` g ^. logKind] ++ b
+    [loggedMethod (g ^. logName) n vars | LogFunc `elem` g ^. logKind] <> b
 
 -- | Generates a block that logs, to the given 'FilePath', the name of a function,
 -- and the names and values of the passed list of variables. Intended to be
@@ -61,21 +61,21 @@ loggedMethod
 loggedMethod lName n vars = block [
       varDec varLogFile local,
       openFileA varLogFile (litString lName),
-      printFileStrLn valLogFile ("function " ++ n ++ " called with inputs: {"),
+      printFileStrLn valLogFile ("function " <> n <> " called with inputs: {"),
       multi $ printInputs vars,
       printFileStrLn valLogFile "  }",
       closeFile valLogFile]
   where
     printInputs [] = []
     printInputs [v] = [
-      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("  " ++
-        variableName v' ++ " = ")),
+      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("  " <>
+        variableName v' <> " = ")),
       printFileLn valLogFile (valueOf v)]
     printInputs (v:vs) = [
-      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("  " ++
-        variableName v' ++ " = ")),
+      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("  " <>
+        variableName v' <> " = ")),
       printFile valLogFile (valueOf v),
-      printFileStrLn valLogFile ", "] ++ printInputs vs
+      printFileStrLn valLogFile ", "] <> printInputs vs
 
 -- | The variable representing the log file in write mode.
 varLogFile :: (TypeSym r typ, VariableSym r typ) => VS (r Variable)

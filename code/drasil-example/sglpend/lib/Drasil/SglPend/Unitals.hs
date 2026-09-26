@@ -26,7 +26,7 @@ import Drasil.DblPend.Concepts (rod, horizontalForce, verticalForce)
 import Drasil.DblPend.Unitals (lRod)
 
 symbols:: [DefinedQuantityDict]
-symbols = unitalChunks ++ unitless ++ NE.toList inputs
+symbols = unitalChunks <> unitless <> NE.toList inputs
 
 inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = lenRod :| [QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
@@ -74,10 +74,10 @@ unitless = [QM.pi_]
 lenRodCons, pendDisplacementAngleOutCons, angAccelOutCons, initialPendAngleCons :: ConstrConcept
 
 inConstraints :: [UncertQ]
-inConstraints = map (`uq` defaultUncrt) [lenRodCons, initialPendAngleCons]
+inConstraints = (`uq` defaultUncrt) <$> [lenRodCons, initialPendAngleCons]
 
 outConstraints :: [UncertQ]
-outConstraints = map (`uq` defaultUncrt) [angAccelOutCons, pendDisplacementAngleOutCons]
+outConstraints = (`uq` defaultUncrt) <$> [angAccelOutCons, pendDisplacementAngleOutCons]
 
 lenRodCons                   = constrained' lenRod                [gtZeroConstr] (dbl 44.2)
 initialPendAngleCons         = constrained' initialPendAngle      [gtZeroConstr] (dbl 2.1)

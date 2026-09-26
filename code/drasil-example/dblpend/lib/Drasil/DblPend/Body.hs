@@ -78,9 +78,9 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , GDs [] ([Label, Units] <> stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) ShowDerivation
         , Constraints EmptyS inConstraints
         , CorrSolnPpties outConstraints []
         ]
@@ -116,15 +116,15 @@ background = foldlSent_ [D.toSent $ phraseNP (a_ pendulum), S "consists" `S.of_`
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
-  gravitationalConst, gravity] ++ defs
+  physicalcon <> [angAccel, angular, angVelo, pendulum, motion,
+  gravitationalConst, gravity] <> defs
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName allRefs symbols ideaDicts [] conceptChunks []
   dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
-labelledContent' = labelledContent ++ funcReqsTables
+labelledContent' = labelledContent <> funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -134,7 +134,7 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 concIns :: [ConceptInstance]
-concIns = assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs
+concIns = assumpDouble <> goals <> funcReqs <> nonFuncReqs
 -- ++ likelyChgs ++ unlikelyChgs
 
 ------------------------------
@@ -231,7 +231,7 @@ sysCtxResp projN = [titleize user +:+ S "Responsibilities",
 
 sysCtxList :: ProjectName -> Contents
 sysCtxList projN = UlC $ ulcc $ Enumeration $ bulletNested (sysCtxResp projN) $
-  map bulletFlat [sysCtxUsrResp projN, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp projN, sysCtxSysResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -267,8 +267,8 @@ terms = [gravity, cartesian]
 -- 4.1.2 Physical System Description --
 -----------------------------------
 physSystParts :: [Sentence]
-physSystParts = map (!.)
-  [D.toSent (atStartNP (the firstRod)) +:+ sParen (S "with" +:+ getTandS lenRod_1),
+physSystParts = (!.)
+  <$> [D.toSent (atStartNP (the firstRod)) +:+ sParen (S "with" +:+ getTandS lenRod_1),
    D.toSent (atStartNP (the secondRod)) +:+ sParen (S "with" +:+ getTandS lenRod_2),
    D.toSent $ atStartNP (the firstObject),
    D.toSent $ atStartNP (the secondObject)]

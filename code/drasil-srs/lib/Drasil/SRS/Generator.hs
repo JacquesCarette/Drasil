@@ -40,7 +40,7 @@ genSmithEtAlSrs syst srsDecl srsFileName =
     pinfo = piSys (syst' ^. systemdb) Equational Engineering
     srsLayout =
       directory [ps|SRS|] $
-        map
+        fmap
           ( \x ->
               let x' = show x
               in directory [ps|{x'}|] $
@@ -77,8 +77,8 @@ teXMakefile fn = file [ps|Makefile|] $ printMakefile $ mkMakefile [
   where
     lualatex = mkCheckedCommand $ makeS "lualatex" +:+ mkFreeVar "TEXFLAGS"    +:+ makeS fn
     bibtex   = mkCommand        $ makeS "bibtex"   +:+ mkFreeVar "BIBTEXFLAGS" +:+ makeS fn
-    pdfName  = makeS $ fn ++ ".pdf"
-    texFile  = makeS $ fn ++ ".tex"
+    pdfName  = makeS $ fn <> ".pdf"
+    texFile  = makeS $ fn <> ".tex"
 
 -- | Internal: Basic Makefile suitable for building mdBook projects.
 mdBookMakefile :: FileLayout

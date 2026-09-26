@@ -51,7 +51,7 @@ assumpADDesc = [S "The axes are defined using", phrase CM.rightHand]
 assumpCTDesc = [S "All", plural CP.rigidBody, plural CP.collision,
   S "are vertex-to-edge", plural CP.collision]
 
-assumpDIDesc = thereNo [phrase CP.damping] ++ implies (phrase CP.friction +:+ plural CP.force)
+assumpDIDesc = thereNo [phrase CP.damping] <> implies (phrase CP.friction +:+ plural CP.force)
 assumpCAJIDesc = thereNo [plural CM.constraint, plural CP.joint]
 
 {-assumptions_list = enumSimple 1 (short assumption) $ map (foldlSent)

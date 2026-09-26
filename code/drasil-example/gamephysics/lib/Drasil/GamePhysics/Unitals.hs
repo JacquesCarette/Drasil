@@ -40,7 +40,7 @@ import Data.Drasil.Constraints (gtZeroConstr)
 ----------------------
 
 symbols :: [DefinedQuantityDict]
-symbols = [QP.restitutionCoef, QM.normalVect, QM.perpVect] ++ unitless ++ unitalSymbols
+symbols = [QP.restitutionCoef, QM.normalVect, QM.perpVect] <> unitless <> unitalSymbols
 
 inputSymbols, outputSymbols :: NE.NonEmpty DefinedQuantityDict
 
@@ -59,7 +59,7 @@ unitalSymbols = [QM.surface, QP.acceleration, QP.angularAccel, QP.gravitationalA
   QP.linearAccel, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.height,
   QP.fOfGravity, QP.positionVec, QP.chgMomentum, QP.gravitationalConst,
   QP.momentOfInertia, QPP.len, QPP.mass, QP.position, QP.velocity, QP.torque,
-  QP.angularVelocity, QM.orientation] ++ unitalTerms
+  QP.angularVelocity, QM.orientation] <> unitalTerms
 
 unitalTerms :: [DefinedQuantityDict]
 unitalTerms = [iVect, jVect, normalVect, posCM, posj, massj, mTot, accj, angAccj, velj,
@@ -79,55 +79,55 @@ unitalTerms = [iVect, jVect, normalVect, posCM, posj, massj, mTot, accj, angAccj
 --FIXME: "A" is not being capitalized when it should be.
 forceParam, massParam, timeParam :: String -> String -> Symbol -> DefinedQuantityDict
 forceParam n w s = quant
- (mkUid $ "force" ++ n) (cn $ "force exerted by the " ++ w ++
+ (mkUid $ "force" <> n) (cn $ "force exerted by the " <> w <>
   " body (on another body)") (phrase QP.force)
   (sub (eqSymb QP.force) s) Real newton
 
 massParam n w s = quant
- (mkUid $ "mass" ++ n) (cn $ "mass of the " ++ w ++ " body")
+ (mkUid $ "mass" <> n) (cn $ "mass of the " <> w <> " body")
   (phrase QPP.mass) (sub (eqSymb QPP.mass) s) Real kilogram
 
 timeParam n w s = quant
- (mkUid $ "time" ++ n) (cn $ "time at a point in " ++ w ++ " body ")
+ (mkUid $ "time" <> n) (cn $ "time at a point in " <> w <> " body ")
   (phrase QP.time) (sub (eqSymb QP.time) s) Real second
 
 contParam :: String -> String -> Symbol -> Symbol -> DefinedQuantityDict
 contParam n m w s = quant
- (mkUid $ "r_" ++ n ++ m) contdispN (phrase QP.displacement)
+ (mkUid $ "r_" <> n <> m) contdispN (phrase QP.displacement)
   (sub (eqSymb QP.displacement) (w <> s)) Real metre
-  where contdispN = cn $ "displacement vector between the centre of mass of rigid body " ++
-                         n ++ " and contact point " ++ m
+  where contdispN = cn $ "displacement vector between the centre of mass of rigid body " <>
+                         n <> " and contact point " <> m
 
 angParam, momtParam, perpParam, rigidParam, velBodyParam, velParam :: String -> Symbol -> DefinedQuantityDict
 
 angParam n w = quant
- (mkUid $ "angular velocity" ++ n) (compoundPhrase'
-  (cn $ n ++ " body's") (QP.angularVelocity ^. term))
+ (mkUid $ "angular velocity" <> n) (compoundPhrase'
+  (cn $ n <> " body's") (QP.angularVelocity ^. term))
   (phrase QP.angularVelocity) (sub (eqSymb QP.angularVelocity) w) Real angVelU
 
 momtParam n w = quant
- (mkUid $ "momentOfInertia" ++ n) (compoundPhrase'
-  (QP.momentOfInertia ^. term) (cn $ "of rigid body " ++ n))
+ (mkUid $ "momentOfInertia" <> n) (compoundPhrase'
+  (QP.momentOfInertia ^. term) (cn $ "of rigid body " <> n))
   (phrase QP.momentOfInertia) (sub (eqSymb QP.momentOfInertia) w) Real momtInertU
 
 perpParam n w = quant
- (mkUid $ "|| r_A" ++ n ++ " x n ||")
+ (mkUid $ "|| r_A" <> n <> " x n ||")
   (compoundPhrase' (QPP.len `ofThe` QM.perpVect)
-  (cn $ "to the contact displacement vector of rigid body " ++ n))
+  (cn $ "to the contact displacement vector of rigid body " <> n))
   (phrase QM.perpVect) (Atop Magnitude $ Concat [w, label "*", --should be x for cross
   eqSymb QM.perpVect]) Real metre
 
 rigidParam n w = quant
- (mkUid $ "rig_mass" ++ n) (compoundPhrase' (QPP.mass ^. term)
-  (cn $ "of rigid body " ++ n)) (phrase QPP.mass) (sub (eqSymb QPP.mass) w) Real kilogram
+ (mkUid $ "rig_mass" <> n) (compoundPhrase' (QPP.mass ^. term)
+  (cn $ "of rigid body " <> n)) (phrase QPP.mass) (sub (eqSymb QPP.mass) w) Real kilogram
 
 velBodyParam n w = quant
- (mkUid $ "velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
-  (cn $ "of the  " ++ n ++ " body")) (phrase QP.velocity) (sub (eqSymb QP.velocity) w) Real velU
+ (mkUid $ "velocity" <> n) (compoundPhrase' (QP.velocity ^. term)
+  (cn $ "of the  " <> n <> " body")) (phrase QP.velocity) (sub (eqSymb QP.velocity) w) Real velU
 
 velParam n w = quant
- (mkUid $ "velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
-  (cn $ "at point " ++ n)) (phrase QP.velocity) (sub (eqSymb QP.velocity) w) Real velU
+ (mkUid $ "velocity" <> n) (compoundPhrase' (QP.velocity ^. term)
+  (cn $ "at point " <> n)) (phrase QP.velocity) (sub (eqSymb QP.velocity) w) Real velU
 
 -----------------------
 -- CHUNKS WITH UNITS --
@@ -316,13 +316,13 @@ lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   angVeloOutCons, orientOutCons, posOutCons :: ConstrConcept
 
 inputConstraints :: [UncertQ]
-inputConstraints = map (`uq` defaultUncrt)
-  [lengthCons, massCons, mmntOfInCons, gravAccelCons, orientCons,
+inputConstraints = (`uq` defaultUncrt)
+  <$> [lengthCons, massCons, mmntOfInCons, gravAccelCons, orientCons,
   veloCons, angVeloCons, forceCons, torqueCons, restCoefCons, posCons]
 
 outputConstraints :: [UncertQ]
-outputConstraints = map (`uq` defaultUncrt)
-  [posOutCons, veloOutCons, orientOutCons, angVeloOutCons]
+outputConstraints = (`uq` defaultUncrt)
+  <$> [posOutCons, veloOutCons, orientOutCons, angVeloOutCons]
 
 lengthCons     = constrained' QPP.len               [gtZeroConstr] (dbl 44.2)
 massCons       = constrained' QPP.mass              [gtZeroConstr] (dbl 56.2)

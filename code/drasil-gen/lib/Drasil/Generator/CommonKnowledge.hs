@@ -86,7 +86,7 @@ basisIdeaDicts =
   --  * compcon - Computing related IdeaDicts. Since all of the case studies are
   --              concerned with software, this is included in the basis as the
   --              computing chunks are relevant to all of them.
-  doccon ++ prodtcon ++ educon ++ compcon ++ [compScience, softEng, mathematics, progLanguage, civilEng, materialEng, documentc, knowledgemng]
+  doccon <> prodtcon <> educon <> compcon <> [compScience, softEng, mathematics, progLanguage, civilEng, materialEng, documentc, knowledgemng]
 
 basisCIs :: [CI]
 basisCIs =
@@ -111,7 +111,7 @@ basisConceptChunks =
   --  * mathcon - Math concepts. Math is widespread throughout all of the case studies
   --              and scientific computing software in general, so it is included
   --              in the basis.
-  [algorithm, errMsg, program] ++ srsDomains ++ mathcon
+  [algorithm, errMsg, program] <> srsDomains <> mathcon
 
 basisCitations :: [Citation]
 basisCitations = [cartesianWiki, lineSource, pointSource,

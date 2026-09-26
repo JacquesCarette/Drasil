@@ -43,4 +43,4 @@ readAsset filePath desc = liftCode $ do
       let a = mkAsset desc fc
       addDependentFile absPathStr
       examineCode [||a||]
-    else error $ "Asset file lookup failed. File does not exist: " ++ absPathStr
+    else error $ "Asset file lookup failed. File does not exist: " <> absPathStr

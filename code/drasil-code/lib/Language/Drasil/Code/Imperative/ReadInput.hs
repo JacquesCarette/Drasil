@@ -22,21 +22,21 @@ readWithDataDesc fp ddsc = do
   ins <- readFile fp
   let readDD :: DataDesc' -> String -> [Expr]
       readDD (DD ds dlm dd) s = let (dat,rest) = splitAtFirst s dlm in
-        readData ds dat ++ readDD dd rest
+        readData ds dat <> readDD dd rest
       readDD (End d) s = readData d s
       readData :: Data' -> String -> [Expr]
       readData Junk _ = []
       readData (Datum d) s = [readDataItem d s]
       readData (Data dis 0 d) s = zipWith readDataItem (toList dis) (splitOn d s)
-      readData (Data ((DI c [dlm1]):|_) 1 dlm2) s = map ((Matrix . (:[])) .
-        map (strAsExpr (getInnerSpace $ c ^. typ))) $ transpose $
-        map (splitOn dlm2) $ splitOn dlm1 s
-      readData (Data ((DI c [dlm1, dlm3]):|_) 1 dlm2) s = map (Matrix .
-        map (map (strAsExpr (getInnerSpace $ c ^. typ)))) $ transpose $
-        map (map (splitOn dlm3) . splitOn dlm2) $ splitOn dlm1 s
-      readData (Data ((DI c [dlm1, dlm2]):|_) 2 dlm3) s = map (Matrix .
-        map (map (strAsExpr (getInnerSpace $ c ^. typ))) . transpose) $
-        transpose $ map (map (splitOn dlm3) . splitOn dlm2) $ splitOn dlm1 s
+      readData (Data ((DI c [dlm1]):|_) 1 dlm2) s = fmap ((Matrix . (:[])) .
+        fmap (strAsExpr (getInnerSpace $ c ^. typ))) $ transpose $
+        splitOn dlm2 <$> splitOn dlm1 s
+      readData (Data ((DI c [dlm1, dlm3]):|_) 1 dlm2) s = fmap (Matrix .
+        fmap (fmap (strAsExpr (getInnerSpace $ c ^. typ)))) $ transpose $
+        fmap (splitOn dlm3) . splitOn dlm2 <$> splitOn dlm1 s
+      readData (Data ((DI c [dlm1, dlm2]):|_) 2 dlm3) s = fmap (Matrix .
+        fmap (fmap (strAsExpr (getInnerSpace $ c ^. typ))) . transpose) $
+        transpose $ fmap (splitOn dlm3) . splitOn dlm2 <$> splitOn dlm1 s
       readData _ _ = error "Invalid degree of intermixing in DataDesc or list with more than 2 dimensions (not yet supported)"
       -- Below match is an attempt at a generic match for Data, but it doesn't
       -- work because the following are needed:
@@ -49,7 +49,7 @@ readWithDataDesc fp ddsc = do
       readDataItem (DI c []) s = strAsExpr (c ^. typ) s
       readDataItem (DI c [dlm]) s = strListAsExpr (c ^. typ) (splitOn dlm s)
       readDataItem (DI c [dlm1, dlm2]) s = strList2DAsExpr (c ^. typ)
-        (map (splitOn dlm2) $ splitOn dlm1 s)
+        (splitOn dlm2 <$> splitOn dlm1 s)
       -- FIXME: Since the representation for vectors in Expr is Matrix, and that constructor accepts a 2-D list, building a 3-D or higher matrix is not straightforward. This would be easier if Expr had a constructor for 1-D vectors, which could be nested to achieve n-dimensional structures.
       readDataItem (DI _ _) _ = error "readWithDataDesc does not yet support lists with 3 or more dimensions"
   pure $ readDD ddsc ins
@@ -65,10 +65,10 @@ readWithDataDesc fp ddsc = do
 -- | Defines the DataDesc for the file containing a sample data set, which a
 -- user must supply if they want to generate a sample input file.
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
-sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
+sampleInputDD ds = dataDesc (junk : intersperse junk (toData <$> ds)) "\n"
   where toData d = toData' (d ^. typ) d
         toData' t@(Vect _) d = list d
-          (take (getDimension t) ([", ", "; "] ++ iterate (':':) ":"))
+          (take (getDimension t) ([", ", "; "] <> iterate (':':) ":"))
         toData' _ d = singleton' d
 
 -- helpers
@@ -93,7 +93,7 @@ splitAtFirst :: String -> Delimiter -> (String, String)
 splitAtFirst = splitAtFirst' []
   where splitAtFirst' acc [] _ = (acc, [])
         splitAtFirst' acc s@(h:t) d = if d `isPrefixOf` s then
-          (acc, dropDelim d s) else splitAtFirst' (acc++[h]) t d
+          (acc, dropDelim d s) else splitAtFirst' (acc<>[h]) t d
         dropDelim (d:ds) (s:ss) = if d == s then dropDelim ds ss
           else error "impossible"
         dropDelim [] s = s
@@ -101,10 +101,10 @@ splitAtFirst = splitAtFirst' []
 
 -- | Converts a list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strListAsExpr :: Space -> [String] -> Expr
-strListAsExpr (Vect t) ss = Matrix [map (strAsExpr t) ss]
+strListAsExpr (Vect t) ss = Matrix [strAsExpr t <$> ss]
 strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
 
 -- | Converts a 2D list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strList2DAsExpr :: Space -> [[String]] -> Expr
-strList2DAsExpr (Vect (Vect t)) sss = Matrix $ map (map (strAsExpr t)) sss
+strList2DAsExpr (Vect (Vect t)) sss = Matrix $ fmap (strAsExpr t) <$> sss
 strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"

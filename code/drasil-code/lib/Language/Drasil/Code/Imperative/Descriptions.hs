@@ -41,7 +41,7 @@ unmodularDesc = do
   let implTypeStr Program = "program"
       implTypeStr Library = "library"
   pure $ show $ oneLineSentenceDoc (printfo g) $ capSent $ foldlSent
-      ([S "a", S (implTypeStr (g ^. implType)), S "to"] ++ g ^. purpose)
+      ([S "a", S (implTypeStr (g ^. implType)), S "to"] <> g ^. purpose)
 
 -- | Returns description of what is contained in the Input Parameters module.
 -- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the
@@ -54,7 +54,7 @@ inputParametersDesc = do
   dvDesc <- derivedValuesDesc
   icDesc <- inputConstraintsDesc
   let st = g ^. inStruct
-      ipDesc = inDesc st ++ [ifDesc, dvDesc, icDesc]
+      ipDesc = inDesc st <> [ifDesc, dvDesc, icDesc]
       inDesc Bundled = ["the structure for holding input values"]
       inDesc Unbundled = [""]
   pure ipDesc
@@ -74,9 +74,9 @@ inputConstructorDesc = do
       idDesc False = ""
       idDesc True = "calculating derived values"
       icDesc False = ""
-      icDesc True = "checking " ++ pAndS ++ " on the input"
+      icDesc True = "checking " <> pAndS <> " on the input"
       ds = defSet g
-  pure $ "Initializes input object by " ++ stringList [
+  pure $ "Initializes input object by " <> stringList [
     ifDesc (giName `elem` ds),
     idDesc (dvName `elem` ds),
     icDesc (icName `elem` ds)]
@@ -109,7 +109,7 @@ inputConstraintsDesc = do
   icName <- genICName InputConstraintsFn
   pAndS <- physAndSfwrCons
   let icDesc False = ""
-      icDesc _ = "the function for checking the " ++ pAndS ++
+      icDesc _ = "the function for checking the " <> pAndS <>
         " on the input"
   pure $ icDesc $ icName `elem` defSet g
 
@@ -145,10 +145,10 @@ inputClassDesc = do
   let ipMap = Map.filter (cname ==) (clsMap g)
       inIPMap = filter ((`member` ipMap) . codeName)
       inClassD True = ""
-      inClassD _ = "Structure for holding the " ++ stringList [
+      inClassD _ = "Structure for holding the " <> stringList [
         inPs $ inIPMap $ g ^. extInputs,
-        dVs $ inIPMap $ map quantvar $ g ^. derivedInputs,
-        cVs $ inIPMap $ map quantvar $ g ^. constDefns]
+        dVs $ inIPMap $ quantvar <$> g ^. derivedInputs,
+        cVs $ inIPMap $ quantvar <$> g ^. constDefns]
       inPs [] = ""
       inPs _ = "input values"
       dVs [] = ""
@@ -187,7 +187,7 @@ inConsFuncDesc = do
   icName <- genICName InputConstraintsFn
   pAndS <- physAndSfwrCons
   let icDesc False = ""
-      icDesc _ = "Verifies that input values satisfy the " ++ pAndS
+      icDesc _ = "Verifies that input values satisfy the " <> pAndS
   pure $ icDesc $ icName `elem` defSet g
 
 -- | Returns a description for the generated function that calculates derived
@@ -198,7 +198,7 @@ dvFuncDesc = do
   dvName <- genICName DerivedValuesFn
   let dvDesc False = ""
       dvDesc _ = "Calculates values that can be immediately derived from the"
-        ++ " inputs"
+        <> " inputs"
   pure $ dvDesc $ dvName `elem` defSet g
 
 -- | Description of the generated Calculations module.

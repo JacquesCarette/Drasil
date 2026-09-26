@@ -32,8 +32,8 @@ import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
   supMax, supMin, torque, weight, positionVec, time)
 
 symbols :: [DefinedQuantityDict]
-symbols = dqdWr coords : NE.toList inputs ++ map dqdWr (NE.toList outputs)
-  ++ units ++ unitless
+symbols = dqdWr coords : NE.toList inputs <> fmap dqdWr (NE.toList outputs)
+  <> units <> unitless
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -71,7 +71,7 @@ wiif = "without the influence of interslice forces"
 --------------------------------
 
 constrained :: [ConstrConcept]
-constrained = coords : map cnstrw' (NE.toList inputsWUncrtn) ++ NE.toList outputs
+constrained = coords : fmap cnstrw' (NE.toList inputsWUncrtn) <> NE.toList outputs
 
 inputsWUncrtn :: NE.NonEmpty UncertQ
 inputsWUncrtn = slopeDist :| [slopeHght, waterDist, waterHght, xMaxExtSlip,
@@ -82,7 +82,7 @@ inputsNoUncrtn :: NE.NonEmpty DefinedQuantityDict
 inputsNoUncrtn = constF :| []
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = NE.map dqdWr inputsWUncrtn <> inputsNoUncrtn
+inputs = fmap dqdWr inputsWUncrtn <> inputsNoUncrtn
 
 outputs :: NE.NonEmpty ConstrConcept
 outputs = NE.singleton fs
@@ -148,7 +148,7 @@ effCohesion = uqc "c'" (cn "effective cohesion")
   (prime $ variable "c") pascal Real [gtZeroConstr] (exactDbl 10000) defaultUncrt
 
 fricAngle = uqc "varphi'" (cn "effective angle of friction")
-  ("the angle of inclination with respect to the horizontal axis of " ++
+  ("the angle of inclination with respect to the horizontal axis of " <>
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
   (prime vPhi) degree Real [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 90)]
   (exactDbl 25) defaultUncrt
@@ -170,7 +170,7 @@ waterWeight = uqc "gamma_w" (cn "unit weight of water")
 
 constF :: DefinedQuantityDict
 constF = quantNoUnit (mkUid "const_f") (nounPhraseSP "decision on f")
-  (S ("a Boolean decision on which form of f the user desires: constant if true," ++
+  (S ("a Boolean decision on which form of f the user desires: constant if true," <>
   " or half-sine if false")) (variable "const_f") Boolean
 
 {-Output Variables-} --FIXME: See if there should be typical values
@@ -275,12 +275,12 @@ shrResI = quant (mkUid "shrRes") (cn "resistive shear forces")
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
 
-shearFNoIntsl = quant (mkUid "T_i") (cn ("mobilized shear forces " ++ wiif))
+shearFNoIntsl = quant (mkUid "T_i") (cn ("mobilized shear forces " <> wiif))
   (D.toSent (pluralNP (the mobilizedShear)) +:+ S "per meter" +:+ S wiif `S.inThe`
    phrase zDir `S.for` S "each slice")
   (vec cT) (Vect Real) forcePerMeterU
 
-shearRNoIntsl = quant (mkUid "R_i") (cn ("resistive shear forces " ++ wiif))
+shearRNoIntsl = quant (mkUid "R_i") (cn ("resistive shear forces " <> wiif))
   (D.toSent (pluralNP (the resistiveShear)) +:+ S "per meter" +:+ S wiif `S.inThe`
    phrase zDir `S.for` S "each slice")
   (vec cR) (Vect Real) forcePerMeterU
@@ -368,12 +368,12 @@ sliceHghtW = quant (mkUid "h_z,w,i") (cn "heights of the water table")
   (sub (vec lH) lHeights) Real metre
 
 nrmShearNum = quant (mkUid "C_num,i") (cn "proportionality constant numerator")
-  (S $ "values for each slice that sum together to form the numerator of the " ++
+  (S $ "values for each slice that sum together to form the numerator of the " <>
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) lNum) (Vect Real) newton
 
 nrmShearDen = quant (mkUid "C_den,i") (cn "proportionality constant denominator")
-  (S $ "values for each slice that sum together to form the denominator of the " ++
+  (S $ "values for each slice that sum together to form the denominator of the " <>
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) lDen) (Vect Real) newton
 
@@ -412,13 +412,13 @@ tangStress = quant (mkUid "tau") (cn' "tangential stress")
   (S "the shear force per unit area") lTau Real pascal
 
 effectiveStress = quant (mkUid "sigma'") (cn' "effective stress")
-  (S $ "the stress in a soil mass that is effective in causing volume changes " ++
-   "and mobilizes the shear strength arising from friction; represents the " ++
+  (S $ "the stress in a soil mass that is effective in causing volume changes " <>
+   "and mobilizes the shear strength arising from friction; represents the " <>
    "average stress carried by the soil skeleton")
   (prime lSigma) Real pascal
 
 effNormStress = quant (mkUid "sigmaN'") (nounPhraseSP "effective normal stress")
-  (S $ "the normal stress in a soil mass that is effective in causing volume " ++
+  (S $ "the normal stress in a soil mass that is effective in causing volume " <>
    "changes; represents the average normal stress carried by the soil skeleton")
   (prime $ sub lSigma cN) Real pascal
 
@@ -449,7 +449,7 @@ earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict
 
 earthqkLoadFctr = quantNoUnit (mkUid "K_c") (nounPhraseSP "seismic coefficient")
-  (S ("the proportionality factor of force that weight pushes outwards; " ++
+  (S ("the proportionality factor of force that weight pushes outwards; " <>
    "caused by seismic earth movements"))
   (sub cK lCoeff) Real
 
@@ -475,13 +475,13 @@ minFunction = quantNoUnit (mkUid "Upsilon") (nounPhraseSP "minimization function
 
 mobShrC = quantNoUnit (mkUid "Psi")
   (nounPhraseSP "second function for incorporating interslice forces into shear force")
-  (S ("the function for converting mobile shear " ++ wiif ++
+  (S ("the function for converting mobile shear " <> wiif <>
    ", to a calculation considering the interslice forces"))
   (vec cPsi) (Vect Real)
 
 shrResC = quantNoUnit (mkUid "Phi")
   (nounPhraseSP "first function for incorporating interslice forces into shear force")
-  (S ("the function for converting resistive shear " ++ wiif ++
+  (S ("the function for converting resistive shear " <> wiif <>
    ", to a calculation considering the interslice forces"))
   (vec cPhi) (Vect Real)
 

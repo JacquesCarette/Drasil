@@ -66,9 +66,9 @@ import Drasil.SWHS.MetaConcepts (swhs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = concepts ++ map dqdWr constrained ++
-  [gradient, pi_, uNormalVect, surface] ++ symbolConcepts ++
-  map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr (NE.toList outputs)
+symbols = concepts <> fmap dqdWr constrained <>
+  [gradient, pi_, uNormalVect, surface] <> symbolConcepts <>
+  fmap dqdWr specParamValList <> fmap dqdWr [absTol, relTol] <> fmap dqdWr (NE.toList outputs)
 
 concepts :: [DefinedQuantityDict]
 concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
@@ -115,9 +115,9 @@ mkSRS = [TableOfContents,
     , SSDSolChSpec $ SCSProg
       [ Assumptions
       , TMs [] (Label : stdFields)
-      , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-      , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-      , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+      , GDs [] ([Label, Units] <> stdFields) ShowDerivation
+      , DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation
+      , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) ShowDerivation
       , Constraints dataContMid constrained
       , CorrSolnPpties dataConstListOut []
       ]
@@ -133,8 +133,8 @@ mkSRS = [TableOfContents,
   Bibliography]
 
 concIns :: [ConceptInstance]
-concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
- [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
+concIns = goals <> funcReqs <> nfRequirements <> assumptions <>
+ [likeChgTCVOD, likeChgTCVOL] <> likelyChgs <> [likeChgTLH] <> unlikelyChgs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -145,7 +145,7 @@ si = mkSmithEtAlICO
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs
-  (map cnstrw' constrained ++ [tempW, watE]) (piConst : specParamValList) symbols
+  (fmap cnstrw' constrained <> [tempW, watE]) (piConst : specParamValList) symbols
   symbMap
 
 purp :: Sentence
@@ -159,19 +159,19 @@ cis = [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  softwarecon ++ thermocon ++ con ++ physicalcon ++ [boilPt, latentHeat,
-  meltPt] ++ [CP.energy, CP.mechEnergy, CP.pressure]
+  softwarecon <> thermocon <> con <> physicalcon <> [boilPt, latentHeat,
+  meltPt] <> [CP.energy, CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
-labelledContent' = labelledContent ++ funcReqsTables
+labelledContent' = labelledContent <> funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef, externalLinkRef'] ++ uriReferences
+allRefs = [externalLinkRef, externalLinkRef'] <> uriReferences
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -257,7 +257,7 @@ terms :: [ConceptChunk]
 terms = [htFlux, heatCapSpec, thermalConduction, transient]
 
 physSystParts :: [Sentence]
-physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]
+physSystParts = foldlSent_ <$> [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
 goalInputs :: [Sentence]
 goalInputs = [D.toSent (phraseNP (temp `the_ofThe` coil)),

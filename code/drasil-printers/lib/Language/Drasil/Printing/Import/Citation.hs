@@ -10,7 +10,7 @@ import qualified Language.Drasil.Printing.Citation as P
 
 -- | For importing a bibliography.
 layCite :: Citation -> P.Citation
-layCite c = P.Cite (showUID c) (c ^. citeKind) (map layField (c ^. getFields))
+layCite c = P.Cite (showUID c) (c ^. citeKind) (layField <$> (c ^. getFields))
 
 -- | Helper for translating 'Citefield's into a printable representation of 'P.CiteField's
 layField :: CiteField -> P.CiteField

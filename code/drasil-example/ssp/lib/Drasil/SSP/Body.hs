@@ -81,22 +81,22 @@ mkSRS = [TableOfContents,
     --FIXME: issue #235
   GSDSec $ GSDProg
     [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]
-    , UsrChars [userCharIntro], SystCons [sysConstraints] []
+    , UsrChars [userCharIntro], systCons [sysConstraints]
     ],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg purp []
+      [ SSDProblem $ pdProg purp
         [ TermsAndDefs Nothing terms
         , PhySysDesc physSystParts figPhysSyst physSystContents
         , Goals goalsInputs]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , tms (Label : stdFields)
+        , gds ([Label, Units] ++ stdFields) ShowDerivation
+        , dds ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints EmptyS (NE.toList inputsWUncrtn) --FIXME: issue #295
-        , CorrSolnPpties (NE.toList outputs) []
+        , corrSolnPpties (NE.toList outputs)
         ]
       ],
   ReqrmntSec $ ReqsProg

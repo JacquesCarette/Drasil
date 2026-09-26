@@ -58,31 +58,31 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       , TAandA        -- Add table of abbreviation and acronym section
       ],
   IntroSec $
-    IntroProg (justification projName) []
+    introProg (justification projName)
       [IPurpose (StdPurp Verbose),
        IScope scope,
-       IChar [] charsOfReader [],
+       iChar charsOfReader,
        IOrgSec Nothing],
   GSDSec $
     GSDProg [
       SysCntxt [sysCtxIntro projName, LlC sysCtxFig1, sysCtxDesc, sysCtxList projName],
       UsrChars [userCharacteristicsIntro projName],
-      SystCons [] []],
+      systCons []],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg purp []                -- This adds a is used to define the problem your system will solve
+      [ SSDProblem $ pdProg purp                -- This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
-      , PhySysDesc physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
+      , phySysDesc physSystParts figMotion -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
       , Goals goalsInputs] -- This adds a goals section and goals input is defined for the preample of the goal.
       , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
         [ Assumptions
-        , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , tms (Label : stdFields)
+        , gds ([Label, Units] ++ stdFields) ShowDerivation
+        , dds ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , ims ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints EmptyS inConstraints
-        , CorrSolnPpties outConstraints []
+        , corrSolnPpties outConstraints
         ]
       ],
   ReqrmntSec $ ReqsProg

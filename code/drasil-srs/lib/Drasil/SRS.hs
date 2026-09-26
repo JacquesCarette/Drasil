@@ -11,14 +11,14 @@ module Drasil.SRS (
   -- Drasil.DocDecl
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
-  SolChSpec(..),
+  SolChSpec(..), pdProg, phySysDesc, tms, gds, dds, ims, corrSolnPpties,
   -- Drasil.DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), DocDesc, Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
   RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
-  PurposeDescription(..),
+  PurposeDescription(..), introProg, iChar, systCons,
   -- *** Functions
   -- * Subsection Functions
   -- ** Definitions and Models
@@ -53,13 +53,13 @@ module Drasil.SRS (
 
 import Drasil.SRS.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
-  SolChSpec(..))
+  SolChSpec(..), pdProg, phySysDesc, tms, gds, dds, ims, corrSolnPpties)
 import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
-  TSIntro(..), TUIntro(..), PurposeDescription(..))
+  TSIntro(..), TUIntro(..), PurposeDescription(..), introProg, iChar, systCons)
 import Drasil.SRS.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
 import Drasil.SRS.DocumentLanguage.TraceabilityGraph (mkGraphInfo, traceyGraphGetRefs)

@@ -25,18 +25,18 @@ siUnits = fundamentals <> derived <> common
 -- * Fundamental SI Units
 
 metre, kilogram, second, kelvin, mole, ampere, candela :: UnitDefn
-metre    = baseUnit "metre"    "length"               (label "m")
-kilogram = baseUnit "kilogram" "mass"                 (label "kg")
-second   = baseUnit "second"   "time"                 (label "s")
-kelvin   = baseUnit "kelvin"   "temperature"          (label "K")
-mole     = baseUnit "mole"     "amount of substance"  (label "mol")
-ampere   = baseUnit "ampere"   "electric current"     (label "A")
-candela  = baseUnit "candela"  "luminous intensity"   (label "cd")
+metre    = baseUnit "metre"    (cn' "metre")    "length"              (label "m")
+kilogram = baseUnit "kilogram" (cn' "kilogram") "mass"                (label "kg")
+second   = baseUnit "second"   (cn' "second")   "time"                (label "s")
+kelvin   = baseUnit "kelvin"   (cn' "kelvin")   "temperature"         (label "K")
+mole     = baseUnit "mole"     (cn' "mole")     "amount of substance" (label "mol")
+ampere   = baseUnit "ampere"   (cn' "ampere")   "electric current"    (label "A")
+candela  = baseUnit "candela"  (cn' "candela")  "luminous intensity"  (label "cd")
 
 -- * Commonly Defined Units
 
 degree :: UnitDefn --FIXME: define degree in terms of radians and pi
-degree = baseUnit "degree" "angle" (Special Circle)
+degree = baseUnit "degree" (cn' "degree") "angle" (Special Circle)
 
 -- Some of these units are easiest to define via others less common names,
 -- which we define first.

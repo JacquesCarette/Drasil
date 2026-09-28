@@ -91,10 +91,9 @@ compoundUnit cc ueq = UD cc (Defined (usymb ueq)(USynonym $ usymb ueq)) (getCu u
 -- | Create a derived unit (a combination of other units that has its own
 -- special symbol, e.g. N) from a 'UID' string, term, definition, its symbol,
 -- and the unit equation it is defined by.
--- FIXME: Shouldn't need to use the UID constructor here.
 derivedUnit :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
 derivedUnit idStr trm dsc sym ueq =
-  UD (cncpt''' (mkUid idStr) trm (S dsc))
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
      (DerivedSI (US [(sym,1)]) (usymb ueq) (USynonym $ usymb ueq))
      (getCu ueq)
 
@@ -106,17 +105,20 @@ derUC a b c s u = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (
 -- | Create a defined unit that is a scaled version of another unit
 -- (e.g. millimetre = 0.001 × metre) from a 'UID' string, term, definition,
 -- its symbol, the scaling factor, and the unit being scaled.
-scaledUnit :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
 scaledUnit idStr trm dsc sym factor base =
-  UD (cncpt''' (mkUid idStr) trm (S dsc))
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
      (Defined (US [(sym, 1)]) (UScale factor (usymb base)))
      [base ^. uid]
+
+-- | Build the 'UID' of a unit from its name, in the "unit" namespace.
+unitUid :: String -> UID
+unitUid = nsUid "unit" . mkUid
 
 --FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same 'String'
 -- for the identifier, term, and definition.
 unitCon :: String -> ConceptChunk
-unitCon s = cncpt''' (mkUid s) (cn' s) (S s)
+unitCon s = cncpt''' (unitUid s) (cn' s) (S s)
 ---------------------------------------------------------
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power.
@@ -164,10 +166,11 @@ shift a b = UShift a (usymb b)
 compoundUnit' :: String -> UnitEquation -> UnitDefn
 compoundUnit' nm = compoundUnit (unitCon nm)
 
--- | Create a base unit (one not defined in terms of any other unit, e.g. m, kg).
-baseUnit :: String -> String -> Symbol -> UnitDefn
-baseUnit nm quantityKind sy =
-  UD (cncpt''' (nsUid "unit" (mkUid nm)) (cn' nm) (S quantityKind)) (BaseSI $ US [(sy, 1)]) []
+-- | Create a base unit (one not defined in terms of any other unit, e.g. m, kg)
+-- from a 'UID' string, term, definition, and its symbol.
+baseUnit :: String -> NP -> String -> Symbol -> UnitDefn
+baseUnit idStr trm dsc sym =
+  UD (cncpt''' (unitUid idStr) trm (S dsc)) (BaseSI $ US [(sym, 1)]) []
 
 -- | We don't want an Ord on units, but this still allows us to compare them.
 compUnitDefn :: UnitDefn -> UnitDefn -> Ordering

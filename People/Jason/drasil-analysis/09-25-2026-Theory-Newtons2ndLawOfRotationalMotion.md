@@ -210,3 +210,40 @@ newtonSLRNotes = [foldlSent
    ch QP.momentOfInertia, S "denotes", phrase QP.momentOfInertia `S.the_ofThe`
    phrase rigidBody, S "as the", phrase constant `S.of_` S "proportionality"]]
 ```
+
+## Interpreting Current Capture
+
+Let's try to interpret the above chunks as theory definition modules and extensions.
+
+For starters, let us recall what they are as per Dr. Farmer's Simple Type Theory book.
+
+### Recall: Theories and Theory Extensions
+
+* A language, $L$, is a tuple $(\set{a_1, \dots, a_m}, \set{c_{1,\alpha_1}, \dots, c_{n,\alpha_n}})$ where $a_i$ are base types and $c_{i,\alpha_i}$ are constant symbols (the $i^\text{th}$ symbol is of type $\alpha_i$).
+* An axiomatic theory is a tuple, $T=(L,\Gamma{})$, where $L$ is a language and $\Gamma{}=\set{A_{1,\omicron},\dots,A_{n,\omicron}}$ is a set of formulas written in Alonzo.
+* A "theory definition module" presents a theory in a human-readable/digestible manner:
+```
+  Theory Definition X.Y.Z
+	  Name: NP
+	  Base Types: a_1, ..., a_m
+	  Constant Symbols: c_{1,_1}, ..., c_{n,b_n}
+	  Axioms:
+	    1. A_{1,B}  (NAME_1/DESCRIPTION_p)
+	    2. ...
+	    p. A_{p,B}  (NAME_p/DESCRIPTION_p)
+```
+* A theory ($T_2$) extends another ($T_1$) if it contains all the same base types, constant symbols, and formulas as the other ($T_1$), written $T_2 \ge T_1$.
+* Viewing a theory extension ($T_2 \ge T_1$) as an additive operation (i.e., adding components to $T_1$ to find $T_2$), a "theory extension module" presents the new base types, constant symbols, and formulas only appearing in $T_2$:
+```
+  Theory Extension X.Y.Z
+	  Name: NP_2
+	  Extends: NP_1
+	  New Base Types: a_1, ..., a_m
+	  New Constant Symbols: c_{1,_1}, ..., c_{n,b_n}
+	  New Axioms:
+	    1. A_{1,B}  (NAME_1/DESCRIPTION_1)
+	    2. ...
+	    p. A_{p,B}  (NAME_p/DESCRIPTION_p)
+```
+
+In Dr. Farmer's book, Alonzo was the language of the axioms that relates the constant symbols and base types.

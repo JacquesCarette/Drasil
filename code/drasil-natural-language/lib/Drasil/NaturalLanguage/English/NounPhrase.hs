@@ -36,18 +36,18 @@ class NounPhrase n a | n -> a where
   pluralNP :: n -> PluralFormG a
     --Could replace plural string with a function.
   -- | Retrieves the singular form and applies a captalization
-  -- rule (usually capitalizes the first word) to produce a 'NPStruct.
+  -- rule (usually capitalizes the first word) to produce a 'NPStructG'.
   -- Ex. "The quick brown fox".
   sentenceCase :: n -> (n -> NPStructG a) -> Capitalization a
     --Should this be replaced with a data type instead?
     --Data types should use functions to determine capitalization based
     -- on rules.
   -- | Retrieves the singular form and applies a captalization
-  -- rule (usually capitalizes all words) to produce a 'NPStruct.
+  -- rule (usually capitalizes all words) to produce a 'NPStructG'.
   -- Ex. "The Quick Brown Fox".
   titleCase :: n -> (n -> NPStructG a) -> Capitalization a
 
--- | Type synonym for 'NPStructG', parameterized over the `Symbol` type.
+-- | Type synonym for 'NPStructG', parameterized over the symbol type @a@.
 type Capitalization a = NPStructG a
 -- | Type synonym for 'String'.
 type PluralString   = String
@@ -131,7 +131,7 @@ cnIP n p = CommonNoun n p CapFirst
 cnIrr :: String -> PluralRule -> CapitalizationRuleG a -> NPG a
 cnIrr = CommonNoun
 
--- | Creates a 'NP' with a given singular and plural form (as 'String's) that capitalizes the first
+-- | Creates a 'NPG' with a given singular and plural form (as 'String's) that capitalizes the first
 -- letter of the first word for sentence case.
 nounPhrase :: String -> PluralString -> NPG a
 nounPhrase s p = Phrase (SC s) (SC p) CapFirst CapWords
@@ -140,7 +140,7 @@ nounPhrase s p = Phrase (SC s) (SC p) CapFirst CapWords
 nounPhrase' :: String -> PluralString -> CapitalizationRuleG a -> NPG a
 nounPhrase' s p c = Phrase (SC s) (SC p) c CapWords
 
--- | Custom noun phrase constructor that takes a singular form ('NPStruct), plural form ('NPStruct),
+-- | Custom noun phrase constructor that takes a singular form ('NPStructG'), plural form ('NPStructG'),
 -- sentence case capitalization rule, and title case capitalization rule.
 nounPhrase'' :: NPStructG a -> PluralFormG a -> CapitalizationRuleG a -> CapitalizationRuleG a -> NPG a
 nounPhrase'' = Phrase
@@ -150,7 +150,7 @@ nounPhrase'' = Phrase
 nounPhraseSP :: String -> NPG a
 nounPhraseSP s = Phrase (SC s) (SC s) CapFirst CapWords
 
--- | Similar to nounPhrase, except it only accepts one 'NPStruct.
+-- | Similar to nounPhrase, except it only accepts one 'NPStructG'.
 -- Plural case is just 'AddS'.
 nounPhraseSent :: NPStructG a -> NPG a
 nounPhraseSent s = Phrase s (sPlur s AddS) CapFirst CapWords
@@ -188,7 +188,7 @@ compoundPhrase''' f1 t1 t2 = Phrase
   (f1 t1 :+!: phraseNP t2) (f1 t1 :+!: pluralNP t2) CapFirst CapWords
 
 --For Data.Drasil.Documentation
--- | Similar to 'compoundPhrase', but pluralizes the first 'NP' for both singular and plural cases.
+-- | Similar to 'compoundPhrase', but pluralizes the first 'NPG' for both singular and plural cases.
 compoundPhraseP1 :: NPG a -> NPG a -> NPG a
 compoundPhraseP1 = compoundPhrase''' pluralNP
 
@@ -236,7 +236,7 @@ cap (s1 :-!: s2) CapWords = cap s1 CapWords :-!: capTail s2
 cap (s1 :-!: s2) CapFirst = cap s1 CapFirst :-!: s2
 cap (PC p) _ = PC p
 
--- | Helper for 'cap' and for capitalizing the end of a 'NPStruct (assumes 'CapWords').
+-- | Helper for 'cap' and for capitalizing the end of a 'NPStructG' (assumes 'CapWords').
 capTail :: NPStructG a -> NPStructG a
 capTail (SC s) = capString s capWords capWords
 capTail (PC symb :+!: b) = PC symb :+!: b

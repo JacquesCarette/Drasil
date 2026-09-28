@@ -92,13 +92,11 @@ compoundUnit cc ueq = UD cc (Defined (usymb ueq)(USynonym $ usymb ueq)) (getCu u
 -- special symbol, e.g. N) from a 'UID' string, term, definition, its symbol,
 -- and the unit equation it is defined by.
 -- FIXME: Shouldn't need to use the UID constructor here.
--- FIXME: Contributing units should be 'getCu ueq', not the unit itself.
 derivedUnit :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
 derivedUnit idStr trm dsc sym ueq =
-  UD (cncpt''' selfId trm (S dsc))
+  UD (cncpt''' (mkUid idStr) trm (S dsc))
      (DerivedSI (US [(sym,1)]) (usymb ueq) (USynonym $ usymb ueq))
-     [selfId]
-  where selfId = mkUid idStr
+     (getCu ueq)
 
 -- | Create a derived unit from a 'UID', term ('String'), definition, 'Symbol',
 -- and a relation to another unit ('UDefn', e.g. a shift). Uses self-plural term.
@@ -112,7 +110,7 @@ scaledUnit :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
 scaledUnit idStr trm dsc sym factor base =
   UD (cncpt''' (mkUid idStr) trm (S dsc))
      (Defined (US [(sym, 1)]) (UScale factor (usymb base)))
-     (helperUnit base)
+     [base ^. uid]
 
 --FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same 'String'
@@ -120,27 +118,10 @@ scaledUnit idStr trm dsc sym factor base =
 unitCon :: String -> ConceptChunk
 unitCon s = cncpt''' (mkUid s) (cn' s) (S s)
 ---------------------------------------------------------
-
--- | Helper to get derived units if they exist.
-getSecondSymb :: UnitDefn -> Maybe USymb
-getSecondSymb c = get_symb2 $ view cas c
-  where
-    get_symb2 :: UnitSymbol -> Maybe USymb
-    get_symb2 (BaseSI _) = Nothing
-    get_symb2 (DerivedSI _ v _) = Just v
-    get_symb2 (Defined _ _) = Nothing
-
--- | Helper to break down unit symbols into 'BaseSI' units.
-helperUnit :: UnitDefn -> [UID]
-helperUnit a = case getSecondSymb a of
-  Just _ -> [a ^. uid]
-  Nothing -> getUnits a
-
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power.
 (^:) :: UnitDefn -> Integer -> UnitEquation
-u ^: i = UE (helperUnit u) (upow (usymb u))
---u ^: i = UE ((helperUnit u) ^. uid) (upow (u ^. usymb))
+u ^: i = UE [u ^. uid] (upow (usymb u))
   where
     upow (US l) = US $ second (* i) <$> l
 
@@ -148,25 +129,25 @@ u ^: i = UE (helperUnit u) (upow (usymb u))
 (/:) :: UnitDefn -> UnitDefn -> UnitEquation
 u1 /: u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (helperUnit u1 <> helperUnit u2) (US $ l1 <> fmap (second negate) l2)
+  UE [u1 ^. uid, u2 ^. uid] (US $ l1 <> fmap (second negate) l2)
 
 -- | Combinator for multiplying two units together.
 (*:) :: UnitDefn -> UnitDefn -> UnitEquation
 u1 *: u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (helperUnit u1 <> helperUnit u2) (US $ l1 <> l2)
+  UE [u1 ^. uid, u2 ^. uid] (US $ l1 <> l2)
 
 -- | Combinator for multiplying a unit and a symbol.
 (*$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 *$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (helperUnit u1 <> getCu u2) (US $ l1 <> l2)
+  UE (u1 ^. uid : getCu u2) (US $ l1 <> l2)
 
 -- | Combinator for dividing a unit and a symbol.
 (/$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 /$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (helperUnit u1 <> getCu u2) (US $ l1 <> fmap (second negate) l2)
+  UE (u1 ^. uid : getCu u2) (US $ l1 <> fmap (second negate) l2)
 
 -- | Combinator for mulitiplying two unit equations.
 (^$) :: UnitEquation -> UnitEquation -> UnitEquation
@@ -184,12 +165,9 @@ compoundUnit' :: String -> UnitEquation -> UnitDefn
 compoundUnit' nm = compoundUnit (unitCon nm)
 
 -- | Create a base unit (one not defined in terms of any other unit, e.g. m, kg).
--- FIXME: Contributing units should be empty; it currently lists itself so the
--- Table of Units picks it up.
 baseUnit :: String -> String -> Symbol -> UnitDefn
 baseUnit nm quantityKind sy =
-  UD (cncpt''' baseId (cn' nm) (S quantityKind)) (BaseSI $ US [(sy, 1)]) [baseId]
-  where baseId = nsUid "unit" (mkUid nm)
+  UD (cncpt''' (nsUid "unit" (mkUid nm)) (cn' nm) (S quantityKind)) (BaseSI $ US [(sy, 1)]) []
 
 -- | We don't want an Ord on units, but this still allows us to compare them.
 compUnitDefn :: UnitDefn -> UnitDefn -> Ordering

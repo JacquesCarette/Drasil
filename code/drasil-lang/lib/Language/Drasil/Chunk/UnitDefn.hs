@@ -88,6 +88,11 @@ getCu = view contributingUnit
 compoundUnit :: ConceptChunk -> UnitEquation -> UnitDefn
 compoundUnit cc ueq = UD cc (Defined (usymb ueq)(USynonym $ usymb ueq)) (getCu ueq)
 
+-- | Variant of 'compoundUnit' that builds the concept from a single 'String'
+-- (used as the identifier, term, and definition).
+compoundUnit' :: String -> UnitEquation -> UnitDefn
+compoundUnit' nm = compoundUnit (unitCon nm)
+
 -- | Create a derived unit (a combination of other units that has its own
 -- special symbol, e.g. N) from a 'UID' string, term, definition, its symbol,
 -- and the unit equation it is defined by.
@@ -160,11 +165,6 @@ u1 ^$ u2 = let US l1 = usymb u1
 -- | Combinator for shifting one unit by some number.
 shift :: IsUnit s => Double -> s -> UDefn
 shift a b = UShift a (usymb b)
-
--- | Variant of 'compoundUnit' that builds the concept from a single 'String'
--- (used as the identifier, term, and definition).
-compoundUnit' :: String -> UnitEquation -> UnitDefn
-compoundUnit' nm = compoundUnit (unitCon nm)
 
 -- | Create a base unit (one not defined in terms of any other unit, e.g. m, kg)
 -- from a 'UID' string, term, definition, and its symbol.

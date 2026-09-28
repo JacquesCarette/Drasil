@@ -110,6 +110,7 @@ derUC a b c s u = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (
 -- | Create a defined unit that is a scaled version of another unit
 -- (e.g. millimetre = 0.001 × metre) from a 'UID' string, term, definition,
 -- its symbol, the scaling factor, and the unit being scaled.
+scaledUnit :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
 scaledUnit idStr trm dsc sym factor base =
   UD (cncpt''' (unitUid idStr) trm (S dsc))
      (Defined (US [(sym, 1)]) (UScale factor (usymb base)))

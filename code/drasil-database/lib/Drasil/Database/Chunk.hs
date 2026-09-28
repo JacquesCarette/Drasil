@@ -110,7 +110,7 @@ instance {-# OVERLAPPING #-} HasChunkRefs String where
   {-# INLINABLE chunkRefs #-}
 
 instance HasChunkRefs a => HasChunkRefs [a] where
-  chunkRefs = S.unions . map chunkRefs
+  chunkRefs = S.unions . fmap chunkRefs
   {-# INLINABLE chunkRefs #-}
 
 instance HasChunkRefs a => HasChunkRefs (Maybe a) where

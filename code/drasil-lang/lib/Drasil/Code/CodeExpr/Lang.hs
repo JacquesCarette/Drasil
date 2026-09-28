@@ -133,8 +133,8 @@ instance ExprC CodeExpr where
   ($+) l (Lit (Dbl 0)) = l
   ($+) l (Lit (ExactDbl 0)) = l
   ($+) (Lit (ExactDbl 0)) r = r
-  ($+) (AssocA Add l) (AssocA Add r) = AssocA Add (l ++ r)
-  ($+) (AssocA Add l) r = AssocA Add (l ++ [r])
+  ($+) (AssocA Add l) (AssocA Add r) = AssocA Add (l <> r)
+  ($+) (AssocA Add l) r = AssocA Add (l <> [r])
   ($+) l (AssocA Add r) = AssocA Add (l : r)
   ($+) l r = AssocA Add [l, r]
 
@@ -145,8 +145,8 @@ instance ExprC CodeExpr where
   ($*) l (Lit (Dbl 1.0)) = l
   ($*) l (Lit (ExactDbl 1)) = l
   ($*) (Lit (ExactDbl 1)) r = r
-  ($*) (AssocA Mul l) (AssocA Mul r) = AssocA Mul (l ++ r)
-  ($*) (AssocA Mul l) r = AssocA Mul (l ++ [r])
+  ($*) (AssocA Mul l) (AssocA Mul r) = AssocA Mul (l <> r)
+  ($*) (AssocA Mul l) r = AssocA Mul (l <> [r])
   ($*) l (AssocA Mul r) = AssocA Mul (l : r)
   ($*) l r = AssocA Mul [l,r]
 
@@ -240,7 +240,7 @@ instance ExprC CodeExpr where
   realInterval c = RealI (c ^. uid)
 
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 ($+) . map square
+  euclidean = sqrt . foldr1 ($+) . fmap square
 
   -- | Smart constructor to cross product two expressions.
   cross = VVVBinaryOp Cross

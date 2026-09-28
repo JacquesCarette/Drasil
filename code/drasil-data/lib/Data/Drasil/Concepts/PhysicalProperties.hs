@@ -25,7 +25,7 @@ dimension  = cncpt''' (mkUid "dimension")  (cn' "dimension"      ) (S "any of a 
 density    = cncpt''' (mkUid "density")    (cnIES "density"      ) (S "the mass per unit volume")
 specWeight = cncpt''' (mkUid "specWeight") (cn' "specific weight") (S "the weight per unit volume")
 flexure    = cncpt''' (mkUid "flexure")    (cn' "flexure"        ) (S "a bent or curved part")
-len        = cncpt''' (mkUid "length")     (cn' "length"         ) (S ("the straight-line distance between two points along an object, " ++
+len        = cncpt''' (mkUid "length")     (cn' "length"         ) (S ("the straight-line distance between two points along an object, " <>
                                                        "typically used to represent the size of an object from one end to the other"))
 mass       = cncpt''' (mkUid "mass")       (cn''' "mass"         ) (S "the quantity of matter in a body")
 vol        = cncpt''' (mkUid "volume")     (cn' "volume"         ) (S "the amount of space that a substance or object occupies")

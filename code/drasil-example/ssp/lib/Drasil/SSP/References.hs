@@ -29,7 +29,7 @@ fredlund1977 = cArticle [dgFredlund, jKrahn]
   "fredlund1977"
 
 li2010 = cArticle [yCLi, ymChen, tltZhan, ssLing, pjCleall]
-  ("An efficient approach for locating the critical slip surface in" ++
+  ("An efficient approach for locating the critical slip surface in" <>
   " slope stability analyses using a real-coded genetic algorithm")
   jnlCGJ 2010 [month Jun, pages [806..820], volume 47, number 7]
   "li2010"

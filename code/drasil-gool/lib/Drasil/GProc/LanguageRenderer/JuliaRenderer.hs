@@ -86,6 +86,7 @@ import Drasil.Shared.State (FS, MS, VS, lensGStoFS, revFiles, setFileType,
   addLibImportVS, useVarName, getMainDoc, genVarNameIf, setVarScope, getVarScope)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import qualified Prelude as P ((<>))
 import Data.Maybe (fromMaybe, isNothing)
 import Data.Functor ((<&>))
 import Control.Lens.Zoom (zoom)
@@ -139,7 +140,7 @@ instance ImportSym JuliaCode where
   langImport n = let modName = text n
     in toCode $ importLabel <+> modName
   modImport n = let modName = text n
-                    fileName = text $ n ++ '.' : jlExt
+                    fileName = text $ n P.<> ('.' : jlExt)
     in toCode $ vcat [includeLabel <> parens (doubleQuotes fileName),
                       importLabel <+> text "." <> modName]
 
@@ -186,7 +187,7 @@ instance TypeElim JuliaCode TypeData where
 instance RenderType JuliaCode TypeData where
   multiType ts = do
     typs <- sequence ts
-    let mt = jlTuple $ map getTypeString typs
+    let mt = jlTuple $ getTypeString <$> typs
     typeFromData Void mt (text mt)
 
 instance UnaryOpSym JuliaCode where
@@ -835,7 +836,7 @@ arrow = text "->"
 jlNamedArgSep = equals
 
 jlTuple :: [String] -> String
-jlTuple ts = "Tuple{" ++ intercalate listSep ts ++ "}"
+jlTuple ts = "Tuple{" P.<> intercalate listSep ts P.<> "}"
 
 -- Operators
 jlUnaryMath :: (Monad r) => String -> VSOp r
@@ -879,9 +880,9 @@ jlModContents n is = A.buildModule n (do
   libis <- getLibImports
   mis <- getModuleImports
   pure $ vibcat [
-    vcat (map (RC.import' . li) lis),
-    vcat (map (RC.import' . li) (sort $ is ++ libis)),
-    vcat (map (RC.import' . mi) mis)])
+    vcat (RC.import' . li <$> lis),
+    vcat (RC.import' . li <$> sort (is P.<> libis)),
+    vcat (RC.import' . mi <$> mis)])
   (do getMainDoc)
   where mi, li :: Label -> JuliaCode Doc
         mi = modImport
@@ -965,7 +966,7 @@ jlListType :: (Monad r, TypeElim r TypeData, UnRepr r TypeData) =>
   VS (r TypeData) -> VS (r TypeData)
 jlListType t' = do
   t <- t'
-  let typeName = jlListConc ++ "{" ++ getTypeString t ++ "}"
+  let typeName = jlListConc P.<> "{" P.<> getTypeString t P.<> "}"
   typeFromData (List $ getCodeType t) typeName (text typeName)
 
 jlSetType
@@ -973,7 +974,7 @@ jlSetType
   => VS (r TypeData) -> VS (r TypeData)
 jlSetType t' = do
   t <- t'
-  let typeName = jlSetConc ++ "{" ++ getTypeString t ++ "}"
+  let typeName = jlSetConc P.<> "{" P.<> getTypeString t P.<> "}"
   typeFromData (Set $ getCodeType t) typeName (text typeName)
 
 jlVoidType :: (Monad r) => VS (r TypeData)

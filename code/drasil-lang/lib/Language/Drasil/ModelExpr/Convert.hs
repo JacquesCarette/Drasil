@@ -14,14 +14,14 @@ assocBoolOper E.Or  = Or
 
 expr :: E.Expr -> ModelExpr
 expr (E.Lit a)               = Lit a
-expr (E.AssocA ao es)        = AssocA ao $ map expr es
-expr (E.AssocB bo es)        = AssocB (assocBoolOper bo) $ map expr es
-expr (E.AssocC ao es)        = AssocC ao $ map expr es
+expr (E.AssocA ao es)        = AssocA ao $ expr <$> es
+expr (E.AssocB bo es)        = AssocB (assocBoolOper bo) $ expr <$> es
+expr (E.AssocC ao es)        = AssocC ao $ expr <$> es
 expr (E.C u)                 = C u
-expr (E.FCall u es)          = FCall u (map expr es)
-expr (E.Case c ces)          = Case c (map (bimap expr expr) ces)
-expr (E.Matrix es)           = Matrix $ map (map expr) es
-expr (E.Set s e)             = Set s $ map expr e
+expr (E.FCall u es)          = FCall u (expr <$> es)
+expr (E.Case c ces)          = Case c (bimap expr expr <$> ces)
+expr (E.Matrix es)           = Matrix $ fmap expr <$> es
+expr (E.Set s e)             = Set s $ expr <$> e
 expr (E.Variable s e)        = Variable s $ expr e
 expr (E.UnaryOp u e)         = UnaryOp u (expr e)
 expr (E.UnaryOpB u e)        = UnaryOpB u (expr e)

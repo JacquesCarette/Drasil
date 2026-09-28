@@ -45,6 +45,6 @@ deriveGenerically clss ty = do
         (AppT (ConT cls) typeCon)
 
       -- Gather all classes we want to derive generically
-      clsDrvs = map drvCls clss
+      clsDrvs = drvCls <$> clss
 
   pure $ drvGeneric : clsDrvs

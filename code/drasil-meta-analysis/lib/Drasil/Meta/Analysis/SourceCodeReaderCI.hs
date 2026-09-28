@@ -26,7 +26,7 @@ extractEntryData :: DC.FileName -> FilePath -> IO EntryData
 extractEntryData fileName filePath = do
   setCurrentDirectory filePath
   scriptFile <- readFile' fileName
-  let rScriptFileLines = map stripWS $ lines scriptFile
+  let rScriptFileLines = stripWS <$> lines scriptFile
   -- removes comment lines
       scriptFileLines = rScriptFileLines \\ filter (isPrefixOf "--") rScriptFileLines
       dataTypes = filter (isPrefixOf "data ") scriptFileLines
@@ -39,13 +39,13 @@ extractEntryData fileName filePath = do
       gL num line
         | "=>" `isInfixOf` line && not ("=>" `isSuffixOf` line) = line
         | not ("=>" `isInfixOf` line) && not ("(" `isInfixOf` line) && "class" `isPrefixOf` line = line
-        | "=>" `isSuffixOf` line = "=> " ++ rScriptFileLines !! (num + 1)
+        | "=>" `isSuffixOf` line = "=> " <> rScriptFileLines !! (num + 1)
         | otherwise = gL (num + 1) (rScriptFileLines !! (num + 1))
 
-  let dataNames = map (takeWhile (/=' ') . (\\ "data ")) dataTypes
-      newtypeNames = map (takeWhile (/=' ') . (\\ "newtype ")) newtypeTypes
-      ordClassNames = map getClassName allClasslines
-      stripInstances = map getStripInstance definInstances
+  let dataNames = takeWhile (/=' ') . (\\ "data ") <$> dataTypes
+      newtypeNames = takeWhile (/=' ') . (\\ "newtype ") <$> newtypeTypes
+      ordClassNames = getClassName <$> allClasslines
+      stripInstances = getStripInstance <$> definInstances
 
   pure EntryData {dNs=dataNames,ntNs=newtypeNames,cNs=ordClassNames,cITs=stripInstances}
 

@@ -4,6 +4,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
 ) where
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
+import qualified Prelude as P ((<>))
 
 import Drasil.GOOL (cppName, cppVersion)
 
@@ -47,8 +48,8 @@ instance SoftwareDossierSym CppProject where
 -- helpers
 -- | Create a build configuration for C++ files. Takes in 'FilePath's and the type of implementation.
 cppBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
-cppBuildConfig fs it = buildAll (\i o -> [cppCompiler : i ++ map asFragment
-  ("--std=c++11" : target it ++ ["-o"]) ++ [o] ++ concatMap (\f -> map
+cppBuildConfig fs it = buildAll (\i o -> [cppCompiler : i P.<> fmap asFragment
+  ("--std=c++11" : target it P.<> ["-o"]) P.<> [o] P.<> concatMap (\f -> fmap
   asFragment ["-I", f]) fs]) (outName it)
   where target Library = ["-shared", "-fPIC"]
         target Program = []

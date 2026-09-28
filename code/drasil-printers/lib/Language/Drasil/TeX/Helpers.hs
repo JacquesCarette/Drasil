@@ -39,7 +39,7 @@ import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$))
 -- | Text-rendering helper for wrapping strings with brackets/braces.
 brak' :: String -> Doc
 -- | Curly braces.
-brak' t = text $ "{" ++ t ++ "}"
+brak' t = text $ "{" <> t <> "}"
 
 -----------------------------------------------------------------------------
 -- * LaTeX Commands
@@ -122,9 +122,9 @@ mkEnvArgBr nm args d =
 -- | Encapsulate environments with argument with brackets.
 mkEnvArgSq :: String -> String -> D -> D
 mkEnvArgSq nm args d =
-  pure (text ("\\begin" ++ brace nm ++ brak args)) $+$
+  pure (text ("\\begin" <> brace nm <> brak args)) $+$
   d $+$
-  pure (text ("\\end" ++ brace nm))
+  pure (text ("\\end" <> brace nm))
 
 -- | Makes minipage environment.
 mkMinipage :: D -> D
@@ -133,13 +133,13 @@ mkMinipage d = command0 "medskip" $+$
 
 -- | For defining (LaTeX) macros.
 comm :: String -> String -> Maybe String -> D
-comm b1 b2 s1 = command0 "newcommand" <> pure (brak' ("\\" ++ b1) TP.<>
+comm b1 b2 s1 = command0 "newcommand" <> pure (brak' ("\\" <> b1) TP.<>
   maybe TP.empty (brak . text) s1 TP.<> brak' b2)
 
 -- this one is special enough, let this sub-optimal implementation stand
 -- | Renews given command.
 renewcomm :: String -> String -> D
-renewcomm b1 = command2 "renewcommand" ("\\" ++ b1)
+renewcomm b1 = command2 "renewcommand" ("\\" <> b1)
 
 -- | Useful to have an empty case.
 empty :: D
@@ -158,8 +158,8 @@ genSec d
 -- | For references.
 ref, sref, hyperref, externalref, snref :: String -> D -> D
 sref            = if numberedSections then ref else hyperref
-ref         t x = pure (text $ t ++ "~") <> commandD "ref" x
-hyperref    t x = command1pD "hyperref" x (pure (text (t ++ "~")) <> x)
+ref         t x = pure (text $ t <> "~") <> commandD "ref" x
+hyperref    t x = command1pD "hyperref" x (pure (text (t <> "~")) <> x)
 externalref t x = command0 "hyperref" <> brace (pure $ text t) <> brace empty <>
   brace empty <> brace x
 snref       r   = command1pD "hyperref" (pure (text r))
@@ -188,8 +188,8 @@ usepackage = command "usepackage"
 -- | Include graphics with a given max width percentage.
 includegraphics :: MaxWidthPercent -> String -> D
 includegraphics n fp
-  | ".svg" `isSuffixOf` fp = command1p "includesvg" ("width=" ++ per n ++ "\\textwidth, inkscapelatex = false") fpNoSvg -- in order to use inkscape to render svgs, there can't be a file type appended
-  | otherwise = command1p "includegraphics" ("width=" ++ per n ++ "\\textwidth") fp -- still need a case for normal images
+  | ".svg" `isSuffixOf` fp = command1p "includesvg" ("width=" <> per n <> "\\textwidth, inkscapelatex = false") fpNoSvg -- in order to use inkscape to render svgs, there can't be a file type appended
+  | otherwise = command1p "includegraphics" ("width=" <> per n <> "\\textwidth") fp -- still need a case for normal images
   where
     fpNoSvg = take (length fp - 4) fp
     per 100 = ""

@@ -38,26 +38,26 @@ class CodeExprC r where
 instance CodeExprC CodeExpr where
   new c ps = New (c ^. uid) ps []
 
-  newWithNamedArgs c ps ns = New (c ^. uid) ps (zip (map ((^. uid) . fst) ns)
-    (map snd ns))
+  newWithNamedArgs c ps ns = New (c ^. uid) ps (zip ((^. uid) . fst <$> ns)
+    (snd <$> ns))
 
   msg o m ps = checkObj (o ^. typ)
     where checkObj (Actor _) = Message (o ^. uid) (m ^. uid) ps []
-          checkObj _ = error $ "Invalid actor message: Actor should have " ++
+          checkObj _ = error $ "Invalid actor message: Actor should have " <>
             "Actor space"
 
   msgWithNamedArgs o m ps as = checkObj (o ^. typ)
     where checkObj (Actor _) = Message (o ^. uid) (m ^. uid) ps
-            (zip (map ((^. uid) . fst) as) (map snd as))
-          checkObj _ = error $ "Invalid actor message: Actor should have " ++
+            (zip ((^. uid) . fst <$> as) (snd <$> as))
+          checkObj _ = error $ "Invalid actor message: Actor should have " <>
             "Actor space"
 
   field o f = checkObj (o ^. typ)
     where checkObj (Actor _) = Field (o ^. uid) (f ^. uid)
-          checkObj _ = error $ "Invalid actor field: Actor should have " ++
+          checkObj _ = error $ "Invalid actor field: Actor should have " <>
             "Actor space"
 
   -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
   applyWithNamedArgs f [] [] = sy f
-  applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns)
-    (map snd ns))
+  applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip ((^. uid) . fst <$> ns)
+    (snd <$> ns))

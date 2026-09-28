@@ -80,9 +80,9 @@ mkSRS = [TableOfContents,
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , GDs [] ([Label, Units] <> stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) ShowDerivation
         , Constraints EmptyS inConstraints
         , CorrSolnPpties outConstraints []
         ]
@@ -132,7 +132,7 @@ si = mkSmithEtAlICO projName
   symbMap
 
 labelledContent' :: [LabelledContent]
-labelledContent' = labelledContent ++ funcReqsTables ++ equations
+labelledContent' = labelledContent <> funcReqsTables <> equations
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]
@@ -151,7 +151,7 @@ tMods = [accelerationTM, velocityTM]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  [mass] ++ defs ++ [distance, motion, gravity, collision, rectilinear,
+  [mass] <> defs <> [distance, motion, gravity, collision, rectilinear,
   positionVec]
 
 symbMap :: ChunkDB
@@ -167,7 +167,7 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ funcReqs ++ goals ++ likelyChgs ++ nonfuncReqs
+concIns = assumptions <> funcReqs <> goals <> likelyChgs <> nonfuncReqs
 
 ----------------------------------------
 -- Characteristics of Intended Reader --
@@ -197,7 +197,7 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", D.toSent $ phraseNP (p
    `andThe` system)), S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = map foldlSent [[S "Provide initial", D.toSent $ pluralNP (condition `ofThePS`
+sysCtxUsrResp = foldlSent <$> [[S "Provide initial", D.toSent $ pluralNP (condition `ofThePS`
   physical), S "state" `S.ofThe` phrase motion `S.andThe` plural inDatum, S "related" `S.toThe`
   projTitleS projName `sC` S "ensuring no errors" `S.inThe` plural datum, S "entry"],
   [S "Ensure that consistent units" `S.are` S "used for",
@@ -207,19 +207,19 @@ sysCtxUsrResp = map foldlSent [[S "Provide initial", D.toSent $ pluralNP (condit
   phrase problem, phrase input_ `S.toThe` phrase software]]
 
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = map foldlSent [[S "Detect data type mismatch" `sC` S "such as a string of characters",
+sysCtxSysResp = foldlSent <$> [[S "Detect data type mismatch" `sC` S "such as a string of characters",
   phrase input_, S "instead of a floating point number"],
   [S "Determine if the", plural input_, S "satisfy the required",
   D.toSent $ pluralNP (physical `and_` softwareConstraint)],
   [S "Calculate the required", plural output_]]
 
 sysCtxResp :: [Sentence]
-sysCtxResp = map (\x -> x +:+ S "Responsibilities")
-  [titleize user, projAbrvS projName]
+sysCtxResp = (\x -> x +:+ S "Responsibilities")
+  <$> [titleize user, projAbrvS projName]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp, sysCtxSysResp]
 
 -------------------------
 --User Characteristics --
@@ -250,8 +250,8 @@ terms = [launcher, projectile, target, gravity, cartesian, rectilinear]
 ---------------------------------
 
 physSystParts :: [Sentence]
-physSystParts = map (!.)
-  [D.toSent $ atStartNP (the launcher),
+physSystParts = (!.)
+  <$> [D.toSent $ atStartNP (the launcher),
   D.toSent (atStartNP (the projectile)) +:+ sParen (S "with" +:+ getTandS iVel `S.and_` getTandS launAngle),
   D.toSent $ atStartNP (the target)]
 
@@ -259,7 +259,7 @@ physSystParts = map (!.)
 -- Various gathered data that should be automated --
 ----------------------------------------------------
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : unitalQuants ++ [dqdWr gravitationalAccelConst] ++
+symbols = pi_ : unitalQuants <> [dqdWr gravitationalAccelConst] <>
   [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
@@ -269,7 +269,7 @@ constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst]
 
 unitalQuants :: [DefinedQuantityDict]
-unitalQuants = map dqdWr constrained
+unitalQuants = dqdWr <$> constrained
 
 inConstraints :: [UncertQ]
 inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]

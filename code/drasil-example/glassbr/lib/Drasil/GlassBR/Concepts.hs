@@ -62,11 +62,11 @@ annealedGl  = cncpt'' (mkUid "annealedGl")
 
 aspectRatioCon = cncpt'' (mkUid "aR")
   (nounPhraseSP "aspect ratio")
-  (S $ "the ratio of the long dimension of the glass to the short dimension of " ++
-    "the glass. For glass supported on four sides, the aspect ratio is " ++
-    "always equal to or greater than 1.0. For glass supported on three " ++
-    "sides, the ratio of the length of one of the supported edges " ++
-    "perpendicular to the free edge, to the length of the free edge, is " ++
+  (S $ "the ratio of the long dimension of the glass to the short dimension of " <>
+    "the glass. For glass supported on four sides, the aspect ratio is " <>
+    "always equal to or greater than 1.0. For glass supported on three " <>
+    "sides, the ratio of the length of one of the supported edges " <>
+    "perpendicular to the free edge, to the length of the free edge, is " <>
     "equal to or greater than 0.5")
   "AR"
 
@@ -178,7 +178,7 @@ specDeLoad    = cncpt''' (mkUid "specDeLoad")    (nounPhraseSP "specified design
   (S "the magnitude in Pa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority")
 
 glassTypeAbbrs :: [Sentence]
-glassTypeAbbrs = map short [annealedGl, fTemperedGl, hStrengthGl]
+glassTypeAbbrs = short <$> [annealedGl, fTemperedGl, hStrengthGl]
 
 annealed, fullyT, heatS :: CI
 annealed      = commonIdea (mkUid "annealed")      (nounPhraseSP "annealed")                "AN"       [glass]

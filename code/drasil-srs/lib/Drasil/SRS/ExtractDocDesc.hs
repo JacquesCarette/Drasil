@@ -63,7 +63,7 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
   auxConsSec = Constant <$> \(AuxConsProg qdef) -> go qdef
   }) where
       go :: Express a => [a] -> [ModelExpr]
-      go = map express
+      go = fmap express
 
 -- | Helper that extracts a list of some type from the 'DLPlate' and 'DocDesc'.
 fmGetDocDesc :: DLPlate (Constant [a]) -> DocDesc -> [a]
@@ -75,33 +75,33 @@ egetDocDesc = fmGetDocDesc exprPlate
 
 -- | Extracts expressions from a 'Section'.
 egetSec :: Section -> [ModelExpr]
-egetSec (Section _ pcs ssc _) = concatMap extractMExprs pcs ++ concatMap egetSec ssc
+egetSec (Section _ pcs ssc _) = concatMap extractMExprs pcs <> concatMap egetSec ssc
 
 -- | Creates a 'Sentence' plate.
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
 sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap getSec) $
   preorderFold $ purePlate {
-    introSec = Constant . f <$> \(IntroProg s1 s2s s3) -> s1 : (s2s ++ concatMap getIntroSub s3),
+    introSec = Constant . f <$> \(IntroProg s1 s2s s3) -> s1 : (s2s <> concatMap getIntroSub s3),
     introSub = Constant . f <$> getIntroSub,
     stkSub = Constant . f <$> \case
       (Client s) -> [s]
       Cstmr -> [],
-    pdSec = Constant . f <$> \(PDProg s secs pds) -> s : concatMap getSec secs ++ concatMap getPDSub pds,
+    pdSec = Constant . f <$> \(PDProg s secs pds) -> s : concatMap getSec secs <> concatMap getPDSub pds,
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs
       (TermsAndDefs (Just s) cs) -> s : def cs
-      (PhySysDesc s lc cs) -> s ++ extractSents lc ++ extractSents' cs
-      (Goals s c) -> s ++ def c,
+      (PhySysDesc s lc cs) -> s <> extractSents lc <> extractSents' cs
+      (Goals s c) -> s <> def c,
     scsSub = Constant . f <$> \case
       (Assumptions c) -> def c
-      (TMs s _ t)   -> s ++ def t ++ notes t
-      (DDs s _ d _) -> s ++ der d ++ notes d
-      (GDs s _ d _) -> s ++ def d ++ der d ++ notes d
-      (IMs s _ d _) -> s ++ der d ++ notes d
+      (TMs s _ t)   -> s <> def t <> notes t
+      (DDs s _ d _) -> s <> der d <> notes d
+      (GDs s _ d _) -> s <> def d <> der d <> notes d
+      (IMs s _ d _) -> s <> der d <> notes d
       (Constraints s _) -> [s]
       (CorrSolnPpties _ cs) -> extractSents' cs,
     reqSub = Constant . f <$> \case
-      (FReqsSub c lcs) -> def c ++ extractSents' lcs
+      (FReqsSub c lcs) -> def c <> extractSents' lcs
       (NonFReqsSub c) -> def c,
     lcsSec = Constant . f <$> \(LCsProg c) -> def c,
     ucsSec = Constant . f <$> \(UCsProg c) -> def c,
@@ -110,13 +110,13 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     auxConsSec = Constant . f <$> \(AuxConsProg qdef) -> def qdef
   } where
     def :: Definition a => [a] -> [Sentence]
-    def = map (^. defn)
+    def = fmap (^. defn)
 
     getIntroSub :: IntroSub -> [Sentence]
     getIntroSub (IPurpose (CustomPurp ps)) = concat ps
     getIntroSub (IPurpose (StdPurp _)) = []
     getIntroSub (IScope s) = [s]
-    getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
+    getIntroSub (IChar s1 s2 s3) = s1 <> s2 <> s3
     getIntroSub (IOrgSec s1) = maybeToList s1
 
     der :: MayHaveDerivation a => [a] -> [Sentence]
@@ -130,9 +130,9 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     notes = concatMap (^. getNotes)
 
     getPDSub :: PDSub -> [Sentence]
-    getPDSub (TermsAndDefs ms c) = def c ++ maybe [] pure ms
-    getPDSub (PhySysDesc s lc cs) = s ++ extractSents lc ++ extractSents' cs
-    getPDSub (Goals s c) = s ++ def c
+    getPDSub (TermsAndDefs ms c) = def c <> foldMap pure ms
+    getPDSub (PhySysDesc s lc cs) = s <> extractSents lc <> extractSents' cs
+    getPDSub (Goals s c) = s <> def c
 
 -- | Extracts 'Sentence's from a document description.
 getDocDesc :: DocDesc -> [Sentence]
@@ -153,7 +153,7 @@ collectUnitDeps db = go . mapMaybe (getUnitLup db)
   where
     go [] = []
     go us = let (showEm, dontShowEm) = partition shouldShow us
-             in showEm ++ go (map (`findOrErr` db) $ nub $ concatMap getUnits dontShowEm)
+             in showEm <> go (fmap (`findOrErr` db) $ nub $ concatMap getUnits dontShowEm)
 
     -- Rules:
     -- 1. Fundamental and derived SI units have their own symbols and are shown

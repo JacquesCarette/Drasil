@@ -32,13 +32,13 @@ csvRenderOpts = CSVRO
 
 -- | Render a 'CSV' to a 'Doc' with the given options.
 renderCSV :: CSVRenderOptions -> CSV -> Doc ann
-renderCSV (CSVRO dqp) csv = vcat $ map renderRow allRs
+renderCSV (CSVRO dqp) csv = vcat $ renderRow <$> allRs
   where
     rs = rows csv
     allRs = maybe rs (: rs) $ header csv
 
     esc = escapeCellPolicy dqp
-    renderRow = hcat . intersperse comma . map esc
+    renderRow = hcat . intersperse comma . fmap esc
 
 -- | Internal: Escape a cell according to a 'DoubleQuotationPolicy'.
 escapeCellPolicy :: DoubleQuotationPolicy -> Text -> Doc ann
@@ -62,6 +62,6 @@ escapeHLs :: Text -> Doc ann
 escapeHLs =
   hcat
     . intersperse hardline
-    . map pretty
+    . fmap pretty
     . T.splitOn "\n"
     . T.replace "\r\n" "\n"

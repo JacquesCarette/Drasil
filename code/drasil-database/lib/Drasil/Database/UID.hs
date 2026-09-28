@@ -38,14 +38,14 @@ instance ToJSONKey UID where
   toJSONKey = toJSONKeyText (pack . show)
 
 instance Show UID where
-  show u = intercalate ":" $ u ^. namespace ++ [u ^. baseName]
+  show u = intercalate ":" $ u ^. namespace <> [u ^. baseName]
 
 -- | Smart constructor for 'UID's from raw 'String's.
 -- The raw string must not contain a colon (':'), as they are reserved
 -- for displaying namespaced 'UID's (see 'nsUid').
 mkUid :: String -> UID
 mkUid s = if ':' `elem` s
-  then error $ "Invalid uid '" ++ s ++ "'. UIDs must not have colons."
+  then error $ "Invalid uid '" <> s <> "'. UIDs must not have colons."
   else UID { _namespace = [], _baseName = s }
 
 -- | Nest a 'UID' under a namespace.
@@ -59,14 +59,14 @@ nsUid ns = over namespace (++ [ns])
 -- | Append a suffix to a 'UID'.
 (+++.) :: UID -> String -> UID
 a +++. suff
-  | null suff       = error $ "Suffix must be non-zero length for UID " ++ show a
+  | null suff       = error $ "Suffix must be non-zero length for UID " <> show a
   | otherwise       = over baseName (++ suff) a
 
 -- | Merge the 'UID's of two chunks through simple concatenation.
 (+++!) :: (HasUID a, HasUID b) => a -> b -> UID
 a +++! b
-  | s ^. namespace /= t ^. namespace = error $ show s ++ " and " ++ show t ++ " are not in the same namespace"
-  | null (s ^. baseName) || null (t ^. baseName) = error $ show s ++ " and " ++ show t ++ " UIDs must be non-zero length"
+  | s ^. namespace /= t ^. namespace = error $ show s <> " and " <> show t <> " are not in the same namespace"
+  | null (s ^. baseName) || null (t ^. baseName) = error $ show s <> " and " <> show t <> " UIDs must be non-zero length"
   | otherwise = s +++. (t ^. baseName)
   where
     s = a ^. uid

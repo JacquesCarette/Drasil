@@ -56,7 +56,7 @@ goldenTestingGroup buildPath goldenPath groupName mkTests =
     setup
     (const $ pure ())
     ( const $
-        testGroup groupName (map (\gt -> unGTC gt buildPath goldenPath) mkTests)
+        testGroup groupName ((\gt -> unGTC gt buildPath goldenPath) <$> mkTests)
     )
   where
     setup = do
@@ -89,7 +89,7 @@ instance IsTest GoldenTest where
         action goldenPath
         pure $
           testPassed $
-            "Accepted fresh artifacts as golden for: " ++ goldenTargetStr ++ "."
+            "Accepted fresh artifacts as golden for: " <> goldenTargetStr <> "."
       else do
         removePathForcibly buildTarget
         action buildPath
@@ -106,7 +106,7 @@ instance IsTest GoldenTest where
         case exitCode of
           ExitSuccess -> pure $ testPassed ""
           _ -> pure $ testFailed $
-            "Outputs differ:\n" ++ stdout ++ stderr ++
+            "Outputs differ:\n" <> stdout <> stderr <>
             "\nIf this is expected, you can accept the changes using `stack test --test-arguments=\"--accept\"`"
 
 -- | Create a golden test case for a given 'FileLayout'. Within the context of a

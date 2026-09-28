@@ -117,23 +117,23 @@ cn''' n = CommonNoun n AddES CapFirst
 -- | Constructs a common noun that pluralizes by dropping the last letter and adding an "ies"
 -- ending (ex. body -> bodies).
 cnIES :: String -> NPG a
-cnIES n = CommonNoun n (IrregPlur (\x -> init x ++ "ies")) CapFirst
+cnIES n = CommonNoun n (IrregPlur (\x -> init x <> "ies")) CapFirst
 
 --FIXME: Shouldn't this just be drop one and add "ces"?
 -- | Construct a common noun that pluralizes by dropping the last two letters and adding an
 -- "ices" ending (ex. matrix -> matrices).
 cnICES :: String -> NPG a
-cnICES n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "ices")) CapFirst
+cnICES n = CommonNoun n (IrregPlur (\x -> init (init x) <> "ices")) CapFirst
 
 -- | Constructs a common noun that pluralizes by dropping the last two letters and adding
 -- "es" (ex. analysis -> analyses).
 cnIS :: String -> NPG a
-cnIS n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "es")) CapFirst
+cnIS n = CommonNoun n (IrregPlur (\x -> init (init x) <> "es")) CapFirst
 
 -- | Constructs a common noun that pluralizes by dropping the last two letters and adding "a"
 -- (ex. datum -> data).
 cnUM :: String -> NPG a
-cnUM n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "a")) CapFirst
+cnUM n = CommonNoun n (IrregPlur (\x -> init (init x) <> "a")) CapFirst
 
 -- | Constructs a common noun that allows you to specify the pluralization rule
 -- (as in 'pnIrr').
@@ -225,8 +225,8 @@ titleizeNP' n = titleCase n pluralNP
 -- DO NOT EXPORT --
 -- | Pluralization helper function.
 sPlur :: NPStructG a -> PluralRule -> NPStructG a
-sPlur (SC s) AddS = SC (s ++ "s")
-sPlur (SC s) AddE = SC (s ++ "e")
+sPlur (SC s) AddS = SC (s <> "s")
+sPlur (SC s) AddE = SC (s <> "e")
 sPlur s@(SC _) AddES = sPlur (sPlur s AddE) AddS
 sPlur s@(SC _) SelfPlur = s
 sPlur (SC sts) (IrregPlur f) = SC $ f sts --Custom pluralization
@@ -264,7 +264,7 @@ capTail (PC p) = PC p
 capString :: String -> (String -> String) -> (String -> String) -> NPStructG a
 capString s f g = SC . findHyph g . unwords $ process (words s)
   where
-    process (x:xs) = f x : map g xs
+    process (x:xs) = f x : fmap g xs
     process []     = []
 
 -- | Finds hyphens in a 'String' and applies capitalization to words after a hyphen.
@@ -298,7 +298,7 @@ doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",
   "on", "to", "up", "and", "as", "but", "or", "nor"] --Ref http://grammar.yourdictionary.com
 
 surroundNPStruct :: String -> String -> NPStructG a -> NPStructG a
-surroundNPStruct l r (SC s)       = SC $ l ++ s ++ r
+surroundNPStruct l r (SC s)       = SC $ l <> s <> r
 surroundNPStruct l r (s1 :+!: s2) = surroundNPStruct l "" s1 :+!: surroundNPStruct "" r s2
 surroundNPStruct l r (s1 :-!: s2) = surroundNPStruct l "" s1 :-!: surroundNPStruct "" r s2
 surroundNPStruct l r (PC p)       = SC l :-!: PC p :-!: SC r

@@ -27,5 +27,5 @@ getTandS a = phrase a +:+ ch a
 checkValidStr :: String -> String -> Either String String
 checkValidStr s [] = Right s
 checkValidStr s (x:xs)
-  | x `elem` s = Left $ "Invalid character: \'" ++ [x] ++ "\' in string \"" ++ s ++ ['\"']
+  | x `elem` s = Left $ "Invalid character: \'" <> [x] <> "\' in string \"" <> s <> ['\"']
   | otherwise  = checkValidStr s xs

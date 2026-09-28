@@ -62,7 +62,7 @@ traceMReferrers f = f . nubOrd . concat . Map.elems . (^. refbyTable)
 
 -- | Helper that finds the header of a traceability matrix.
 traceMHeader :: (SmithEtAlSRS -> [UID]) -> SmithEtAlSRS -> [Sentence]
-traceMHeader f c = map (`helpToRefField` (c ^. systemdb)) $ f c
+traceMHeader f c = (`helpToRefField` (c ^. systemdb)) <$> f c
 
 -- | Helper that finds the headers of the traceability matrix columns.
 traceMColHeader :: ([UID] -> [UID]) -> SmithEtAlSRS -> [Sentence]
@@ -74,7 +74,7 @@ traceMRowHeader f = traceMHeader (traceMReferrers f)
 
 -- | Helper that makes the columns of a traceability matrix.
 traceMColumns :: ([UID] -> [UID]) -> ([UID] -> [UID]) -> SmithEtAlSRS -> [[UID]]
-traceMColumns fc fr c = map ((\u -> filter (`elem` u) $ fc u) . flip traceLookup c) $ traceMReferrers fr c
+traceMColumns fc fr c = (\u -> filter (`elem` u) $ fc u) . flip traceLookup c <$> traceMReferrers fr c
 
 -- | Helper that makes references of the form "@reference@ shows the dependencies of @something@".
 tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence
@@ -86,7 +86,7 @@ layoutUIDs a c e = concatMap (filter (`elem` (Map.keys $ c ^. traceTable)) . (\ 
 
 -- | Helper that filters a traceability matrix given a predicate and a 'ChunkDB' lens field.
 traceViewFilt :: HasUID a => (a -> Bool) -> (SmithEtAlSRS -> [a]) -> TraceViewCat
-traceViewFilt f table _ = map (^. uid) . filter f . table
+traceViewFilt f table _ = fmap (^. uid) . filter f . table
 
 -- | Helper that is similar to 'traceViewFilt', but the filter is always 'True'.
 traceView :: HasUID a => (SmithEtAlSRS -> [a]) -> TraceViewCat

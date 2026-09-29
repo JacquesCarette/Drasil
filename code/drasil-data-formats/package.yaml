@@ -33,6 +33,7 @@ library:
   - Drasil.Data.Formats.JSON
   - Drasil.Data.Formats.HTML
   - Drasil.Data.Formats.MD
+  - Drasil.Data.Formats.Markdown.CommonMark
 
 tests:
   drasil-data-formats-test:

@@ -14,7 +14,7 @@ import Drasil.PDController.Concepts
 introPara, introPurposeOfDoc, introscopeOfReq :: Sentence
 introPara = foldlSent [
   S "Automatic process control with a controller (" :+:
-  foldOpts (map short [proportionalCI, piCI, pdControllerCI, pidCI]) :+:
+  foldOpts (short <$> [proportionalCI, piCI, pdControllerCI, pidCI]) :+:
   S ") is used in a variety of applications such as thermostats, automobile",
   S "cruise-control, etc. The gains" `S.ofA` S "controller in an application" +:+.
   S "must be tuned before the controller is ready for production",
@@ -33,8 +33,8 @@ introscopeOfReq
   = foldlSent_
       [D.toSent (phraseNP (a_ pidCL)),
        S "with three subsystems, namely:" +:+.
-          foldlList Comma List (map (D.toSent . phraseNP . a_)
-           [pidC, summingPt, powerPlant]),
+          foldlList Comma List (D.toSent . phraseNP . a_
+           <$> [pidC, summingPt, powerPlant]),
        S "Only the Proportional and Derivative controllers" `S.are` S "used in this software;" +:+.
        (S "the Integral controller" `S.is` S "beyond the scope of this project"),
        S "Additionally, this software" `S.is` S "intended to aid with the manual",
@@ -43,8 +43,8 @@ introscopeOfReq
 scope :: Sentence
 scope = foldlSent_ [D.toSent (phraseNP (a_ pidCL)),
   S "with three subsystems, namely:" +:+
-  foldlList Comma List (map (D.toSent . phraseNP . a_)
-  [pidC, summingPt, powerPlant])]
+  foldlList Comma List (D.toSent . phraseNP . a_
+  <$> [pidC, summingPt, powerPlant])]
 
 introPurposeOfDoc
   = foldlSent

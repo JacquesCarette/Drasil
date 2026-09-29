@@ -25,7 +25,7 @@ relTolerance = cncpt''' (mkUid "relTolerance") (cn' "Relative tolerance")
 compcon :: [IdeaDict]
 compcon = [application, computer, structure, dataStruct, dataType,
   inDatum, outDatum, inParam, inVar, inValue, inQty, computerLiteracy,
-  computerApp] ++ defaultOSs
+  computerApp] <> defaultOSs
 
 application, computer, structure :: IdeaDict
 os :: CI

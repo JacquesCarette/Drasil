@@ -4,6 +4,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
 ) where
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import qualified Prelude as P ((<>))
 import Data.List (intercalate)
 
 import Drasil.GOOL (jName, jVersion)
@@ -56,12 +57,12 @@ instance SoftwareDossierSym JavaProject where
 
 -- | Create a build configuration for Java files. Takes in 'FilePath's and the type of implementation.
 jBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
-jBuildConfig fs Program = buildSingle (\i _ -> [asFragment "javac" : map
-  asFragment (classPath fs) ++ i]) (withExt (inCodePackage mainModule)
+jBuildConfig fs Program = buildSingle (\i _ -> [asFragment "javac" : fmap
+  asFragment (classPath fs) P.<> i]) (withExt (inCodePackage mainModule)
   ".class") $ inCodePackage mainModuleFile
 jBuildConfig fs Library = buildAllAdditionalName (\i o a ->
-  [asFragment "javac" : map asFragment (classPath fs) ++ i,
-    map asFragment ["jar", "-cvf"] ++ [o, a]])
+  [asFragment "javac" : fmap asFragment (classPath fs) P.<> i,
+    fmap asFragment ["jar", "-cvf"] P.<> [o, a]])
   (BWithExt BPackName $ OtherExt $ asFragment ".jar") BPackName
 
 -- | Default runnable information for Java files.
@@ -72,4 +73,4 @@ jRunnable fs = interp (flip withExt ".class" $ inCodePackage mainModule)
 -- | Helper for formating file paths for use in 'jBuildConfig'.
 classPath :: [FilePath] -> [String]
 classPath fs = if null fs then [] else
-  ["-cp", "\"" ++ intercalate ":" (fs ++ ["."]) ++ "\""]
+  ["-cp", "\"" P.<> intercalate ":" (fs P.<> ["."]) P.<> "\""]

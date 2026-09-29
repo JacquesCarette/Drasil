@@ -26,18 +26,18 @@ figures = [sysCtxFig, physSystFig,demandVsSDFig, dimlessloadVsARFig]
 sysCtxFig, physSystFig, demandVsSDFig, dimlessloadVsARFig :: LabelledContent
 
 sysCtxFig = llccFig "sysCtxDiag" $
-  fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
+  fig (titleize sysCont) (resourcePath <> "SystemContextFigure.png")
 
 physSystFig = llccFig "physSystImage" $ figWithWidth
-  (D.toSent $ atStartNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
+  (D.toSent $ atStartNP $ the physicalSystem) (resourcePath <> "physicalsystimage.png") 30
 
 demandVsSDFig = llccFig "demandVSsod" $ fig ((demandq ^. defn) +:+
   sParen (ch demand) `S.versus` atStart stdOffDist +:+ sParen (short stdOffDist)
   `S.versus` atStart charWeight +:+ sParen (ch charWeight))
-  (resourcePath ++ "ASTM_F2248-09.png")
+  (resourcePath <> "ASTM_F2248-09.png")
 
 dimlessloadVsARFig = llccFig "dimlessloadVSaspect" $ fig (S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
   `S.versus` titleize aspectRatio +:+ sParen (short aspectRatio)
   `S.versus` atStart stressDistFac +:+ sParen (ch stressDistFac))
-  (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png")
+  (resourcePath <> "ASTM_F2248-09_BeasonEtAl.png")

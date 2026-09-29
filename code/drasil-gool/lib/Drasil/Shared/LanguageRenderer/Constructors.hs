@@ -124,7 +124,7 @@ unExpr' u' v'= do
   u <- u'
   v <- v'
   (join .: on2StateValues (mkUnExpr
-    (if maybe False (< uOpPrec u) (valuePrec v)
+    (if any (< uOpPrec u) (valuePrec v)
        then unOpDocD
         else unOpDocD')))
     u' v'
@@ -284,14 +284,14 @@ binOpDocDRend b v1 v2 = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
 -- left-associative binary operator if the precedence of the expression is less
 -- than the precedence of the operator
 exprParensL :: (OpElim r, ValueElim r val) => r OpData -> r val -> Doc
-exprParensL o v = (if maybe False (< bOpPrec o) (valuePrec v) then parens else
+exprParensL o v = (if any (< bOpPrec o) (valuePrec v) then parens else
   id) $ RC.value v
 
 -- Adds parentheses around an expression passed as the right argument to a
 -- left-associative binary operator if the precedence of the expression is less
 -- than or equal to the precedence of the operator
 exprParensR :: (OpElim r, ValueElim r val) => r OpData -> r val -> Doc
-exprParensR o v = (if maybe False (<= bOpPrec o) (valuePrec v) then parens else
+exprParensR o v = (if any (<= bOpPrec o) (valuePrec v) then parens else
   id) $ RC.value v
 
 -- Renders binary expression, adding parentheses if needed

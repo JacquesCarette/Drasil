@@ -42,7 +42,7 @@ symbMap = withCommonKnowledge projName [] symbols ideaDicts [] conceptChunks [] 
   [] [] [] [] labelledContent
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = defs ++ [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,
+conceptChunks = defs <> [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,
   CCs.verticalMotion, CCs.gravity, CCs.position]
 
 symbols :: [DefinedQuantityDict]
@@ -52,4 +52,4 @@ symbols = [horiz_velo, Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAcce
   Qs.iPos, Qs.height]
 
 labelledContent :: [LabelledContent]
-labelledContent = equations ++ figures
+labelledContent = equations <> figures

@@ -11,6 +11,7 @@ module Language.Drasil.Plain.Print (
 ) where
 
 import Prelude hiding ((<>))
+import qualified Prelude as P ((<>))
 import Data.List (partition)
 import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), comma, double,
   empty, hcat, hsep, integer, punctuate, space, text,
@@ -58,8 +59,8 @@ pExprDoc _ (Int i) = integer i
 pExprDoc _ (Str s) = text s
 pExprDoc f (Case cs) = caseDoc f cs
 pExprDoc f (Mtx rs) = mtxDoc f rs
-pExprDoc f (Row es) = hcat $ map (pExprDoc f) es
-pExprDoc f (Set es) = hcat $ map (pExprDoc f) es
+pExprDoc f (Row es) = hcat $ pExprDoc f <$> es
+pExprDoc f (Set es) = hcat $ pExprDoc f <$> es
 pExprDoc _ (Ident s) = text s
 pExprDoc _ (Label s) = text s
 pExprDoc _ (Spec s) = specialDoc s
@@ -80,8 +81,8 @@ specDoc f (E e) = pExprDoc f e
 specDoc _ (S s) = text s
 specDoc f (Tooltip _ s) = specDoc f s
 specDoc _ (Sp s) = specialDoc s
-specDoc f (Ref (Cite2 n) r _) = specDoc f n <+> text ("Ref: " ++ r)
-specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r) --may need to change?
+specDoc f (Ref (Cite2 n) r _) = specDoc f n <+> text ("Ref: " P.<> r)
+specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " P.<> r) --may need to change?
 specDoc f (s1 :+: s2) = specDoc f s1 <> specDoc f s2
 specDoc _ EmptyS = empty
 specDoc f (Quote s) = dquote $ specDoc f s
@@ -93,28 +94,28 @@ unitDoc f (US us) = formatu t b
   (t,b) = partition ((> 0) . snd) us
   formatu :: [(Symbol,Integer)] -> [(Symbol,Integer)] -> Doc
   formatu [] l = line l
-  formatu l [] = hsep $ map pow l
-  formatu nu de = line nu <> text "/" <> line (map (\(s,i) -> (s,-i)) de)
+  formatu l [] = hsep $ pow <$> l
+  formatu nu de = line nu <> text "/" <> line ((\(s,i) -> (s,-i)) <$> de)
   line :: [(Symbol,Integer)] -> Doc
   line []  = empty
   line [x] = pow x
-  line l   = paren $ hsep $ map pow l
+  line l   = paren $ hsep $ pow <$> l
   pow :: (Symbol,Integer) -> Doc
   pow (x,1) = pExprDoc f $ symbol x
   pow (x,p) = pExprDoc f (symbol x) <> text "^" <> integer p
 
 -- | Helper for printing multicase expressions differently based on linearity (SingleLine).
 caseDoc :: SingleLine -> [(Expr, Expr)] -> Doc
-caseDoc OneLine cs = hsep $ punctuate comma $ map (\(e,c) -> pExprDoc OneLine c
-  <+> text "=>" <+> pExprDoc OneLine e) cs
-caseDoc MultiLine cs = vcat $ map (\(e,c) -> pExprDoc MultiLine e <> comma <+>
-  pExprDoc MultiLine c) cs
+caseDoc OneLine cs = hsep $ punctuate comma $ (\(e,c) -> pExprDoc OneLine c
+  <+> text "=>" <+> pExprDoc OneLine e) <$> cs
+caseDoc MultiLine cs = vcat $ (\(e,c) -> pExprDoc MultiLine e <> comma <+>
+  pExprDoc MultiLine c) <$> cs
 
 -- | Helper for printing matrices.
 mtxDoc :: SingleLine -> [[Expr]] -> Doc
-mtxDoc OneLine rs = brak $ hsep $ map (brak . hsep . map (pExprDoc
-  OneLine)) rs
-mtxDoc MultiLine rs = brak $ vcat $ map (hsep . map (pExprDoc MultiLine)) rs
+mtxDoc OneLine rs = brak $ hsep $ brak . hsep . fmap (pExprDoc
+  OneLine) <$> rs
+mtxDoc MultiLine rs = brak $ vcat $ hsep . fmap (pExprDoc MultiLine) <$> rs
 
 -- TODO: Double check that this is valid in all output languages
 -- | Helper for printing special characters (for degrees and partial derivatives).

@@ -62,7 +62,7 @@ mkSRS = [TableOfContents,
     IntroProg (startIntro software blstRskInvWGlassSlab) []
     [IPurpose (StdPurp Verbose),
      IScope scope,
-     IChar [] (undIR ++ appStanddIR) [],
+     IChar [] (undIR <> appStanddIR) [],
      IOrgSec (Just orgOfDocIntroEnd)],
   StkhldrSec $
     StkhldrProg
@@ -80,8 +80,8 @@ mkSRS = [TableOfContents,
         [ Assumptions
         , TMs [] (Label : stdFields)
         , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
+        , DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) HideDerivation
         , Constraints auxSpecSent dataConstraints
         , CorrSolnPpties [probBr, stressDistFac] []
         ]
@@ -108,27 +108,27 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  [lateralLoad, materialProprty] ++ con'
+  [lateralLoad, materialProprty] <> con'
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = distance : concepts ++ softwarecon ++ physicalcon
+conceptChunks = distance : concepts <> softwarecon <> physicalcon
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName allRefs symbolsWCodeSymbols ideaDicts cis'
   conceptChunks units GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]
-symbolsWCodeSymbols = implVars ++ symbols
+symbolsWCodeSymbols = implVars <> symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
+concIns = assumptions <> goals <> likelyChgs <> unlikelyChgs <> funcReqs <> nonfuncReqs
 
 labCon :: [LabelledContent]
-labCon = funcReqsTables ++ figures
+labCon = funcReqsTables <> figures
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -138,26 +138,26 @@ termsAndDescBullets :: Contents
 termsAndDescBullets = UlC $ ulcc $ Enumeration$
   Numeric $
     noRefs $
-      map tAndDOnly termsWithDefsOnly
-      ++ termsAndDescBulletsGlTySubSec
-      ++ termsAndDescBulletsLoadSubSec
-      ++ map tAndDWAcc termsWithAccDefn
-      ++ [tAndDWSym probBreak probBr]
+      fmap tAndDOnly termsWithDefsOnly
+      <> termsAndDescBulletsGlTySubSec
+      <> termsAndDescBulletsLoadSubSec
+      <> fmap tAndDWAcc termsWithAccDefn
+      <> [tAndDWSym probBreak probBr]
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 
 termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
 
 termsAndDescBulletsGlTySubSec = [Nested (EmptyS +: titleize glassTy) $
-  Bullet $ noRefs $ map tAndDWAcc glassTypes]
+  Bullet $ noRefs $ tAndDWAcc <$> glassTypes]
 
 termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` capSent (load ^. defn) !.) $
-  Bullet $ noRefs $ map tAndDWAcc (take 2 loadTypes)
-  ++
-  map tAndDOnly (drop 2 loadTypes)]
+  Bullet $ noRefs $ fmap tAndDWAcc (take 2 loadTypes)
+  <>
+  fmap tAndDOnly (drop 2 loadTypes)]
 
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [ConstQDef]
-auxiliaryConstants = assumptionConstants ++ specParamVals
+auxiliaryConstants = assumptionConstants <> specParamVals
 
 --------------------------------------------------------------------------------
 
@@ -185,7 +185,7 @@ undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
   phrase blastRisk, D.toSent $ pluralNP (computerApp `in_PS` Edu.civilEng)]
 appStanddIR = [S "applicable" +:+ plural standard +:+
   S "for constructions using glass from" +:+ foldlList Comma List
-  (map refS [astm2009, astm2012, astm2016]) `S.in_`
+  (refS <$> [astm2009, astm2012, astm2016]) `S.in_`
   namedRef (SRS.reference ([]::[Contents]) ([]::[Section])) (plural reference)]
 
 scope :: Sentence
@@ -251,13 +251,13 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp, sysCtxSysResp]
 
 {--User Characteristics--}
 
 userCharacteristicsIntro :: Contents
-userCharacteristicsIntro = enumBulletU $ map foldlSent
-  [[S "The end user of GlassBR is expected to have completed at least the",
+userCharacteristicsIntro = enumBulletU $ foldlSent
+  <$> [[S "The end user of GlassBR is expected to have completed at least the",
     S "equivalent of the second year of an undergraduate degree in civil engineering or structural engineering"],
   [S "The end user is expected to have an understanding of theory behind glass",
     S "breakage and blast risk"],

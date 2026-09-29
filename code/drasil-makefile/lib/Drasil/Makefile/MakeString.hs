@@ -43,13 +43,13 @@ a +:+ b = a <> Mr " " <> b
 -- | Renders a 'MakeString'. Variables have the form \"$(@var@)\".
 renderMS :: MakeString -> String
 renderMS (Mr s) = s
-renderMS (Mv v) = renderVar (\x -> "$(" ++ x ++ ")") v
-renderMS (Mc a b) = renderMS a ++ renderMS b
+renderMS (Mv v) = renderVar (\x -> "$(" <> x <> ")") v
+renderMS (Mc a b) = renderMS a <> renderMS b
 
 -- | Renders variables. Takes in a function for the variable, and the type of variable.
 renderVar :: (String -> String) -> MVar -> String
 renderVar f (Os nm _ _ _) = f nm
-renderVar f (Implicit nm) = "\"" ++ f nm ++ "\""
+renderVar f (Implicit nm) = "\"" <> f nm <> "\""
 renderVar f (Free nm) = f nm
 
 -- | Constructor for converting a 'String' into a 'MakeString'.

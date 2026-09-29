@@ -23,11 +23,11 @@ import Language.Drasil.Sentence (lnames, Sentence(..), eS, eS')
 
 -- | Extracts all referenced 'UID's from things that have 'RawContent's.
 extractChRefs :: HasContents a => [a] -> S.Set UID
-extractChRefs = S.unions . map lnames . extractSents'
+extractChRefs = S.unions . fmap lnames . extractSents'
 
 -- | Extracts all 'ModelExpr's mentioned in a 'Sentence'.
 sentToExp :: Sentence -> [ModelExpr]
-sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2
+sentToExp ((:+:) s1 s2) = sentToExp s1 <> sentToExp s2
 sentToExp (E e) = [e]
 sentToExp Ch{} = []
 sentToExp SyCh{} = []
@@ -50,7 +50,7 @@ extractSents = go . (^. accessContents)
   where
     -- | Extracts 'Sentence's from 'RawContent'.
     go :: RawContent -> [Sentence]
-    go (Table s1 s2 t _)   = t : s1 ++ concat s2
+    go (Table s1 s2 t _)   = t : s1 <> concat s2
     go (Para s)            = s
     go (EqnBlock e)        = [eS e]
     go (CodeBlock e)       = [eS' e]
@@ -59,7 +59,7 @@ extractSents = go . (^. accessContents)
     go (Figure l _ _ _)    = [l]
     go (Bib _)             = []
     go (Graph sss _ _ l)   = let (ls, rs) = unzip sss
-                              in l : ls ++ rs
+                              in l : ls <> rs
     go (Defini ics)        = concatMap (concatMap extractSents . snd) ics
 
     -- | Extracts 'Sentence's from lists.
@@ -85,7 +85,7 @@ extractSents' = concatMap extractSents
 
 -- | Extracts 'Sentence's from a 'Section'.
 getSec :: Section -> [Sentence]
-getSec (Section t pcs ssc _ ) = t : (concatMap extractSents pcs ++ concatMap getSec ssc)
+getSec (Section t pcs ssc _ ) = t : (concatMap extractSents pcs <> concatMap getSec ssc)
 
 -- | Extract bibliography entries from generated sections. This version extracts
 -- from fully expanded Sections, capturing citations that are only created
@@ -93,7 +93,7 @@ getSec (Section t pcs ssc _ ) = t : (concatMap extractSents pcs ++ concatMap get
 extractSectionsBib :: ChunkDB -> [Section] -> BibRef
 extractSectionsBib db = resolveBibliography db . extractAllSecRefs
   where
-    extractAllSecRefs = S.unions . map (S.unions . map lnames . getSec)
+    extractAllSecRefs = S.unions . fmap (S.unions . fmap lnames . getSec)
 
 -- | Given a 'ChunkDB' and a set of 'UID's, looks up the corresponding
 -- 'Citation's and returns them sorted by author, year, and title.

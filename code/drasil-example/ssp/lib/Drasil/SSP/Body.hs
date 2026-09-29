@@ -92,9 +92,9 @@ mkSRS = [TableOfContents,
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , GDs [] ([Label, Units] <> stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation
+        , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) ShowDerivation
         , Constraints EmptyS (NE.toList inputsWUncrtn) --FIXME: issue #295
         , CorrSolnPpties (NE.toList outputs) []
         ]
@@ -116,10 +116,10 @@ purp = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
   S "along the", phrase crtSlpSrf]
 
 concIns :: [ConceptInstance]
-concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
+concIns = goals <> assumptions <> funcReqs <> nonFuncReqs <> likelyChgs <> unlikelyChgs
 
 labCon :: [LabelledContent]
-labCon = [figPhysSyst, figIndexConv, figForceActing, sysCtxFig1] ++ funcReqTables
+labCon = [figPhysSyst, figIndexConv, figForceActing, sysCtxFig1] <> funcReqTables
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -130,7 +130,7 @@ ideaDicts =
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  defs' ++ softwarecon ++ solidcon ++ physicalcon ++
+  defs' <> softwarecon <> solidcon <> physicalcon <>
   [distance, friction, linear, velocity, gravity, stress, fbd, position]
 
 symbMap :: ChunkDB
@@ -219,7 +219,7 @@ sysCtxIntro = foldlSP
    S "Arrows are used to show the data flow between the" +:+ D.toSent (phraseNP (system `andIts` environment))]
 
 sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llccFig "sysCtxDiag" $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
+sysCtxFig1 = llccFig "sysCtxDiag" $ fig (titleize sysCont) (resourcePath <> "SystemContextFigure.png")
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
@@ -254,7 +254,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp, sysCtxSysResp]
 
 -- SECTION 3.2 --
 -- User Characteristics automatically generated with the
@@ -302,7 +302,7 @@ terms = [fsConcept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
 
 -- SECTION 4.1.2 --
 physSystParts :: [Sentence]
-physSystParts = map foldlSent [
+physSystParts = foldlSent <$> [
   [D.toSent (atStartNP (a_ slope)), S "comprised of one", phrase soilLyr],
   [D.toSent (atStartNP (a_ waterTable)) `sC` S "which may or may not exist"]]
 
@@ -310,7 +310,7 @@ figPhysSyst :: LabelledContent
 figPhysSyst = llccFig "PhysicalSystem" $
   fig (foldlSent_ [S "An example", D.toSent (phraseNP (slope `for` analysis)),
   S "by", projAbrvS projName `sC` S "where the dashed line represents the",
-  phrase waterTable]) (resourcePath ++ "PhysSyst.png")
+  phrase waterTable]) (resourcePath <> "PhysSyst.png")
 
 physSystContents :: [Contents]
 physSystContents = [physSysConv, LlC figIndexConv, physSysFbd, LlC figForceActing]
@@ -328,7 +328,7 @@ physSysConv = foldlSP [atStart morPrice, phrase analysis, refS morgenstern1965
 figIndexConv :: LabelledContent
 figIndexConv = llccFig "IndexConvention" $
   fig (foldlSent_ [S "Index convention for", D.toSent (phraseNP (slice `and_`
-  intrslce)), plural value]) (resourcePath ++ "IndexConvention.png")
+  intrslce)), plural value]) (resourcePath <> "IndexConvention.png")
 
 physSysFbd :: Contents
 physSysFbd = foldlSP [D.toSent (atStartNP' (NP.a_ (fbd `ofThe` force))), S "acting on a",
@@ -339,7 +339,7 @@ physSysFbd = foldlSP [D.toSent (atStartNP' (NP.a_ (fbd `ofThe` force))), S "acti
 figForceActing :: LabelledContent
 figForceActing = llccFig "ForceDiagram" $
   fig (D.toSent (atStartNP' (fbd `of_` force)) +:+ S "acting on a" +:+
-  phrase slice) (resourcePath ++ "ForceDiagram.png")
+  phrase slice) (resourcePath <> "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
 goalsInputs :: [Sentence]

@@ -58,7 +58,7 @@ fromReplace src c = S "From" +:+ refS src `sC` S "we can replace" +: ch c
 -- | Takes a list of 'Referable's and 'Symbol's and outputs as a Sentence "By substituting @symbols@, this can be written as:".
 substitute :: (Referable r, HasShortName r, DefinesQuantity r) => [r] -> Sentence
 substitute s = S "By substituting" +: (foldlList Comma List l `sC` S "this can be written as")
-  where l = map (\x -> ch (x ^. defLhs) +:+ fromSource x) s
+  where l = (\x -> ch (x ^. defLhs) +:+ fromSource x) <$> s
 
 -- | Takes a 'HasSymbol' that is also 'Referable' and outputs as a 'Sentence': "@symbol@ is defined in @reference@."
 definedIn :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence
@@ -83,7 +83,7 @@ definedIn''' q src = ch q `S.is` S "defined in" +:+ refS src
 --     * t - the title of the list ('Sentence'),
 --     * l - the list to be enumerated (['Sentence']).
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
-mkEnumAbbrevList s t l = zip [t :+: S (show x) | x <- [s..]] $ map Flat l
+mkEnumAbbrevList s t l = zip [t :+: S (show x) | x <- [s..]] $ Flat <$> l
 
 -- | Takes an amount as a 'Sentence' and appends a unit to it.
 fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
@@ -108,8 +108,8 @@ addPercent num = S (show num) :+: Percent
 -- [[S "Hi", S "Hello"], [S "Hey", S "World"], [S "Hi", S "Hello", S "World"]]
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
 zipSentList acc _ []           = acc
-zipSentList acc [] r           = acc ++ map (EmptyS:) r
-zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
+zipSentList acc [] r           = acc <> fmap (EmptyS:) r
+zipSentList acc (x:xs) (y:ys)  = zipSentList (acc <> [x:y]) xs ys
 
 -- | Makes a traceability matrix from a list of row titles, a list of rows
 --   of "checked" columns, and a list of columns.
@@ -122,7 +122,7 @@ makeTMatrix rowName rows cols = zipSentList [] rowName [zipFTable' x cols | x <-
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
 mkTableFromColumns l =
   let l' = filter (not . all isEmpty . snd) l in
-  (map fst l', transpose $ map (map replaceEmptyS . snd) l')
+  (fst <$> l', transpose $ fmap replaceEmptyS . snd <$> l')
   where
     isEmpty       EmptyS = True
     isEmpty       _      = False
@@ -136,7 +136,7 @@ makeListRef l = replicate (length l) . refS
 
 -- | Applies 'Bullet' and 'Flat' to a list.
 bulletFlat :: [Sentence] -> ListType
-bulletFlat = Bullet . noRefs . map Flat
+bulletFlat = Bullet . noRefs . fmap Flat
 
 -- | Applies 'Bullet's and headers to a 'Nested' 'ListType'.
 -- The first argument is the headers of the 'Nested' lists.
@@ -158,7 +158,7 @@ chWithUnit x = ch x +:+ unitInParen x
 -- | Converts lists of simple 'ItemType's into a list which may be used
 -- in 'Contents' but is not directly referable.
 noRefs :: [ItemType] -> [(ItemType, Maybe String)]
-noRefs = map (, Nothing)
+noRefs = fmap (, Nothing)
 
 --Doesn't use connection phrase so utils doesn't depend on data
 -- | Returns the 'Sentence' "@('titleize' aNamedIdea)@ Showing the Connections Between @contents@".
@@ -218,7 +218,7 @@ fromSource r = sParen (S "from" +:+ refS r)
 
 -- | Similar to `fromSource` but takes a list of references instead of one.
 fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
-fromSources rs = sParen (S "from" +:+ foldlList Comma List (map refS rs))
+fromSources rs = sParen (S "from" +:+ foldlList Comma List (refS <$> rs))
 
 -- | Output is of the form "@reference - sentence@".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

@@ -22,7 +22,7 @@ import Language.Drasil.Choices (Choices(..), CodeConcept(..),
 chooseConcept :: Choices -> State [Sentence] MatchedConceptMap
 chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch $ maps chs)
   where chooseConcept' :: UID -> [CodeConcept] -> State [Sentence] CodeConcept
-        chooseConcept' _ [] = error $ "Empty list of CodeConcepts in the " ++
+        chooseConcept' _ [] = error $ "Empty list of CodeConcepts in the " <>
           "ConceptMatchMap"
         chooseConcept' uid (c:_) = do
             modify (++ [S "Code Concept" +:+ S (show uid) +:+ S "selected as" +:+. showChs c])

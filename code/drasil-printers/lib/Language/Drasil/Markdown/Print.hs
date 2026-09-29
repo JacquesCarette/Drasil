@@ -46,16 +46,16 @@ genMDBook :: Project -> [FileLayout]
 genMDBook p@(Project t a rm fs) =
   [ file [ps|book.toml|] (makeBook rm t)
   , file [ps|.drasil-requirements.csv|] (makeRequirements p)
-  , directory [ps|src|] (map (\(fn, d) -> file [ps|{fn}.md|] d) fs'')
+  , directory [ps|src|] ((\(fn, d) -> file [ps|{fn}.md|] d) <$> fs'')
   ]
   where
     -- Create "title page" file
     titlePageFile = File t "title" 0 [Header 0 t EmptyS, Paragraph a]
     fs' = titlePageFile : fs
     -- Create "summary page" file
-    summary = ("SUMMARY", vcat $ map (summaryItem rm) fs')
+    summary = ("SUMMARY", vcat $ summaryItem rm <$> fs')
     -- Render all pages into Markdown
-    fs'' = summary : map (print' rm) fs'
+    fs'' = summary : fmap (print' rm) fs'
 
 -- | Helper for rendering a 'SUMMARY.md' item
 summaryItem :: RefMap -> File -> Doc
@@ -63,7 +63,7 @@ summaryItem rm (File t n d _) = bullet <+> lbl <> ref
   where
     bullet = text (replicate (d*2) ' ') <> text "-"
     lbl    = brak $ pSpec rm t
-    ref    = paren $ text $ "./" ++ n ++ ".md"
+    ref    = paren $ text $ "./" P.<> n P.<> ".md"
 
 -- | Prints the .toml config file for mdBook.
 makeBook :: RefMap -> Spec -> Doc
@@ -99,13 +99,13 @@ assetMat :: Project -> [[T.Text]]
 assetMat (Project _ _ _ files) =
   [[T.pack fp, "src/assets/" P.<> T.pack (takeFileName fp)] | fp <- S.toAscList extractedLOs]
   where
-    extractedLOs = S.unions $ map (\(File _ _ _ los) -> S.unions $ map figs los) files
-    unionsFigs = S.unions . map figs
+    extractedLOs = S.unions $ (\(File _ _ _ los) -> S.unions $ figs <$> los) <$> files
+    unionsFigs = S.unions . fmap figs
     figs :: LayoutObj -> S.Set String
     figs (Figure _ _ fp _)     = S.singleton fp
     figs (HDiv _ los _)        = unionsFigs los
     figs (Cell los)            = unionsFigs los
-    figs (Definition slos _)   = S.unions (map (unionsFigs . snd) slos)
+    figs (Definition slos _)   = S.unions (unionsFigs . snd <$> slos)
     figs Table{}               = S.empty
     figs Header{}              = S.empty
     figs Paragraph{}           = S.empty
@@ -123,7 +123,7 @@ print' rm (File _ n _ c) = (n, print rm c)
 -- | Uses 'printLO' to render the layout objects
 -- into a single Doc
 print :: RefMap -> [LayoutObj] -> Doc
-print rm = vsep . map (printLO rm)
+print rm = vsep . fmap (printLO rm)
 
 -----------------------------------------------------------------
 ------------------- LAYOUT OBJECT PRINTING ----------------------
@@ -142,7 +142,7 @@ printLO rm (EqnBlock contents)   = text "\\\\[" <> rndr contents <> text "\\\\]"
 printLO rm (Table _ rows r b t)  = makeTable rm rows (pSpec rm r) b (pSpec rm t)
 printLO rm (Definition ssPs l)   = makeDefn rm ssPs (pSpec rm l)
 printLO rm (List t)              = makeList rm t 0
-printLO rm (Figure r c f _)      = makeFigure (pSpec rm r) (fmap (pSpec rm) c) (text f)
+printLO rm (Figure r c f _)      = makeFigure (pSpec rm r) (pSpec rm <$> c) (text f)
 printLO rm (Bib bib)             = makeBib rm bib
 printLO _ Graph {}               = empty
 printLO _ CodeBlock {}           = empty
@@ -187,7 +187,7 @@ pExpr (Mtx a)        = printMath $ mkEnv "bmatrix" (P.<>) matrix
   where
     matrix = TeX.pMatrix a hpunctuate lnl pExpr'
 pExpr (Row [x])      = brace $ pExpr x
-pExpr (Row l)        = foldl1 (<>) (map pExpr l)
+pExpr (Row l)        = foldl1 (<>) (pExpr <$> l)
 pExpr (Label s)      = printMath $ TeX.pExpr (Label s')
   where s' = replace "*" "\\*" (replace "_" "\\_" s)
 pExpr (Sub e)        = bslash <> unders <> brace (pExpr e)
@@ -232,11 +232,11 @@ makeTable rm ls r b t  =
 
 -- | Helper for creating a Doc matrix
 mkDocMatrix :: RefMap -> [[Spec]] -> [[Doc]]
-mkDocMatrix rm = map $ map (pSpec rm)
+mkDocMatrix rm = fmap $ fmap (pSpec rm)
 
 -- | Helper for getting table column size
 columnSize :: [[Doc]] -> [Int]
-columnSize = map (maximum . map docLength) . transpose
+columnSize = fmap (maximum . fmap docLength) . transpose
 
 -- | Helper for creating table rows
 makeRows :: [[Doc]] -> [Int] -> Doc
@@ -247,7 +247,7 @@ makeRows lls sizes = foldr (($$) . (`makeColumns` sizes)) empty lls
 makeHeaderCols, makeColumns :: [Doc] -> [Int] -> Doc
 makeHeaderCols l sizes = header $$ seperators
   where header     = pipe <> hcat (punctuate pipe (zipWith makeCell l sizes)) <> pipe
-        seperators = pipe <> hcat (punctuate pipe (map makeDashCell sizes))   <> pipe
+        seperators = pipe <> hcat (punctuate pipe (makeDashCell <$> sizes))   <> pipe
 
 makeColumns ls sizes = pipe <> hcat (punctuate pipe (zipWith makeCell ls sizes)) <> pipe
 
@@ -279,7 +279,7 @@ makeDefn rm slos l =
 
 -- | Helper for convering definition to Doc matrix
 mkDocDefn :: RefMap -> [(String,[LayoutObj])] -> [[Doc]]
-mkDocDefn rm = map (\(f, d) -> [text f, makeLO rm (f,d)])
+mkDocDefn rm = fmap (\(f, d) -> [text f, makeLO rm (f,d)])
 
 -- | Renders the title/header of the definition table
 makeDHeaderText :: RefMap -> [(String, [LayoutObj])] -> Doc -> Doc
@@ -292,8 +292,8 @@ makeDHeaderText rm slos l = centeredDiv header
 -- | Converts the [LayoutObj] to a Doc
 makeLO :: RefMap -> (String, [LayoutObj]) -> Doc
 makeLO rm (f,d) =
-      if f=="Notes" then ul (hcat $ map (processDefnLO rm f) d)
-      else hcat $ map (processDefnLO rm f) d
+      if f=="Notes" then ul (hcat $ processDefnLO rm f <$> d)
+      else hcat $ processDefnLO rm f <$> d
 
 -- | Processes the LayoutObjs in the defn
 processDefnLO :: RefMap -> String -> LayoutObj -> Doc
@@ -306,14 +306,14 @@ processDefnLO rm _       lo              = printLO rm lo
 
 -- | Renders lists into Markdown
 makeList :: RefMap -> ListType -> Int -> Doc
-makeList rm (Simple      items) _  = vsep $ map (sItem rm) items
-makeList rm (Desc        items) _  = vsep $ map (descItem rm) items
+makeList rm (Simple      items) _  = vsep $ sItem rm <$> items
+makeList rm (Desc        items) _  = vsep $ descItem rm <$> items
 makeList rm (Ordered     items) bl = vcat $
   zipWith (\(i,_) n -> oItem rm i bl n) items [1..]
 makeList rm (Unordered   items) bl = vcat $
-  map (\(i,_) -> uItem rm i bl) items
+  (\(i,_) -> uItem rm i bl) <$> items
 makeList rm (Definitions items) _  = ul $ hcat $
-  map (\(b,e,_) -> li $ pSpec rm b <> text " is the" <+> item rm e) items
+  (\(b,e,_) -> li $ pSpec rm b <> text " is the" <+> item rm e) <$> items
 
 -- | Helper for setting up reference anchors
 mlref :: RefMap -> Maybe Label -> Doc -> Doc
@@ -378,4 +378,4 @@ makeRefList a l i = divTag l $^$ (i <> text ": " <> a)
 makeBib :: RefMap -> BibRef -> Doc
 makeBib rm = vsep .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [brak $ text $ show x | x <- [1..] :: [Int]] . map (renderCite (mdBibFormatter rm))
+  [brak $ text $ show x | x <- [1..] :: [Int]] . fmap (renderCite (mdBibFormatter rm))

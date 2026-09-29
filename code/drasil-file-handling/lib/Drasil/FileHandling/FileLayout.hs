@@ -78,7 +78,7 @@ directory fp = FileLayout fp . Directory . F.foldr' insert mempty
 insert :: FileLayout -> M.Map PathSegment FileTree -> M.Map PathSegment FileTree
 insert v =
   M.insertWithKey
-    (\dup _ -> error $ "duplicate path: " ++ fromMaybe "cannot decode" $([|decodeUtf $ toPath dup :: Maybe String|]))
+    (\dup _ -> error $ "duplicate path: " <> fromMaybe "cannot decode" $([|decodeUtf $ toPath dup :: Maybe String|]))
     (pathSeg v)
     (fileTree v)
 {-# INLINE insert #-}
@@ -99,7 +99,7 @@ writeFiles OverwriteAllowed basePath layout = writeFiles0 basePath layout
 writeFiles NeverOverwrite basePath layout = do
   exists <- doesPathExist targetPath
   if exists
-    then error $ "Path already exists: " ++ show targetPath
+    then error $ "Path already exists: " <> show targetPath
     else writeFiles0 basePath layout
   where
     targetPath = basePath </> pathSeg layout

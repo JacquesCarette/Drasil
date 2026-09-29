@@ -12,6 +12,7 @@ module Language.Drasil.Printing.Helpers (
 ) where
 
 import Prelude hiding ((<>))
+import qualified Prelude as P ((<>))
 import Text.PrettyPrint (text, Doc, (<>), ($$))
 
 import Language.Drasil.Printing.Citation (CiteField(HowPublished), HP (..))
@@ -82,7 +83,7 @@ sufx _ = "th"
 
 -- | Similar to 'sufx' but used on any sized 'Int'.
 sufxer :: Int -> String
-sufxer x = sufx r ++ "."
+sufxer x = sufx r P.<> "."
     where
         r = if mod x 100 `elem` [11, 12, 13] then 0 else mod x 10
 

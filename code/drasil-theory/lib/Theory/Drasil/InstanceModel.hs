@@ -43,7 +43,7 @@ makeLenses ''InstanceModel
 instance HasChunkRefs InstanceModel where
   chunkRefs imd = mconcat
     [ chunkRefs (imd ^. mk)
-    , chunkRefs (map fst (imd ^. imInputs))
+    , chunkRefs (fst <$> (imd ^. imInputs))
     , chunkRefs (imd ^. imOutput . _1)
     , chunkRefs (imd ^. rf)
     , chunkRefs (imd ^. deri)
@@ -98,14 +98,14 @@ instance RequiresChecking InstanceModel Expr Space where
 -- | Smart constructor for instance models with everything defined.
 im :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-im mkind _  _ _  [] _  _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
+im mkind _  _ _  [] _  _  = error $ "Source field of " <> showUID mkind <> " is empty"
 im mkind i o oc r der sn =
   IM mkind i (o, oc) r der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivation.
 imNoDeriv :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> [DecRef] -> String -> [Sentence] -> InstanceModel
-imNoDeriv mkind _ _ _  [] _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
+imNoDeriv mkind _ _ _  [] _  = error $ "Source field of " <> showUID mkind <> " is empty"
 imNoDeriv mkind i o oc r  sn =
   IM mkind i (o, oc) r Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 
@@ -131,4 +131,4 @@ qwC x y = (dqdWr x, Just y)
 
 -- | Grab all related 'QDefinition's from a list of instance models.
 getEqModQdsFromIm :: [InstanceModel] -> [SimpleQDef]
-getEqModQdsFromIm ims = getEqModQds (map _mk ims)
+getEqModQdsFromIm ims = getEqModQds (_mk <$> ims)

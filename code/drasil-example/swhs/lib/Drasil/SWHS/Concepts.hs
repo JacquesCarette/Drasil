@@ -38,16 +38,16 @@ discharging = cncpt''' (mkUid "discharging") (nounPhraseSP "discharging")
 transient = cncpt''' (mkUid "transient") (nounPhraseSP "transient") (S "changing with time")
 
 gaussDiv = cncpt''' (mkUid "gaussDiv") (nounPhraseSP "gauss's divergence theorem")
-  (S ("a result that relates the flow of a vector field through a surface" ++
+  (S ("a result that relates the flow of a vector field through a surface" <>
   "to the behavior of the vector field inside the surface"))
 --TODO: Physical property.
 
 perfectInsul = cncpt''' (mkUid "perfectInsul") (nounPhraseSP "perfectly insulated")
-  (S ("describes the property of a material not allowing" ++
+  (S ("describes the property of a material not allowing" <>
   "heat transfer through its boundaries"))
 
 phaseChangeMaterial = cncpt''' (mkUid "pcm") (phsChgMtrl ^. term)
-  (S ("a substance that uses phase changes (such as melting) to absorb or " ++
+  (S ("a substance that uses phase changes (such as melting) to absorb or " <>
   "release large amounts of heat at a constant temperature"))
 
 tankParam = cncpt''' (mkUid "tankParam") (compoundPhrase' (tank ^. term)

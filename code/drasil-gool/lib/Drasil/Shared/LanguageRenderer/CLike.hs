@@ -32,6 +32,7 @@ import Drasil.Shared.State (MS, VS, lensMStoVS, lensVStoMS, addLibImportVS,
   getClassName, useVarName, setVarScope)
 
 import Prelude hiding (break,(<>))
+import qualified Prelude as P ((<>))
 import Control.Applicative ((<|>))
 import Control.Monad.State (modify)
 import Control.Lens.Zoom (zoom)
@@ -302,10 +303,10 @@ while f bStart bEnd v' b'= do
 -- Error Messages --
 
 multiAssignError :: String -> String
-multiAssignError l = "No multiple assignment statements in " ++ l
+multiAssignError l = "No multiple assignment statements in " P.<> l
 
 multiReturnError :: String -> String
-multiReturnError l = "Cannot return multiple values in " ++ l
+multiReturnError l = "Cannot return multiple values in " P.<> l
 
 multiTypeError :: String -> String
-multiTypeError l = "Multi-types not supported in " ++ l
+multiTypeError l = "Multi-types not supported in " P.<> l

@@ -93,7 +93,7 @@ fsConcept = cncpt''' (mkUid "FS") factorOfSafety
 -- OLD DEFN: Stability metric. How likely a slip surface is to
 -- experience failure through slipping.
 
-waterTable = cncpt''' (mkUid "water table") (cn' "water table") (S ("The upper boundary of a" ++
+waterTable = cncpt''' (mkUid "water table") (cn' "water table") (S ("The upper boundary of a" <>
   " saturated zone in the ground"))
 
 --

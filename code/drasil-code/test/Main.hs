@@ -145,7 +145,7 @@ genCodeProcNoMake unRepr unRepr' p =
   let
     (p', gs') = runState p initialState
     (PackageData prog aux) = unRepr' $ package (unRepr p') []
-  in seq gs' $ toFileLayout (progMods prog) ++ aux
+  in seq gs' $ toFileLayout (progMods prog) <> aux
 
 genCodeGOOL
   ::
@@ -193,4 +193,4 @@ genCode' pd gs' unRepr' =
   let
     fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources) (gs' ^. mainMod)
     (PackageData prog aux) = unRepr' $ package pd [makefile [] Program [] fileInfoState pd]
-  in toFileLayout (progMods prog) ++ aux
+  in toFileLayout (progMods prog) <> aux

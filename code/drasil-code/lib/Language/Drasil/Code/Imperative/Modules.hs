@@ -42,7 +42,7 @@ import Drasil.GProc (ProcProg, NativeVector, ReadFile)
 import Drasil.Code.CodeExpr.Development
 import Drasil.Code.CodeVar (CodeIdea(codeName), CodeVarChunk, quantvar,
   DefiningCodeExpr(..))
-import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
+import Language.Drasil.Code.Imperative.Comments (renderTermAndUnit)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   constModDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc,
   inputConstructorDesc, inputParametersDesc, modDesc, outputFormatDesc,
@@ -885,8 +885,8 @@ genCalcFunc cdef = do
                      block stepStmts,
                      block [returnStmt $ valueOf v]])
                  (Map.lookup nm (extLibMap g))
-  calcDesc <- getCommentBrief cdef
-  desc <- getCommentBrief cdef
+  calcDesc <- renderTermAndUnit cdef
+  desc <- renderTermAndUnit cdef
   publicFunc
     nm
     (convTypeOO tp)
@@ -1291,8 +1291,8 @@ genCalcFuncProc cdef = do
                      block stepStmts,
                      block [returnStmt $ valueOf v]])
                  (Map.lookup nm (extLibMap g))
-  calcDesc <- getCommentBrief cdef
-  desc <- getCommentBrief cdef
+  calcDesc <- renderTermAndUnit cdef
+  desc <- renderTermAndUnit cdef
   publicFuncProc
     nm
     (convType tp)

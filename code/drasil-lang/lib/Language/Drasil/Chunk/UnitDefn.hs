@@ -116,6 +116,12 @@ scaledUnit idStr trm dsc sym factor base =
      (Defined (US [(sym, 1)]) (UScale factor (usymb base)))
      [base ^. uid]
 
+-- | Create a base unit (one not defined in terms of any other unit, e.g. m, kg)
+-- from a 'UID' string, term, definition, and its symbol.
+baseUnit :: String -> NP -> String -> Symbol -> UnitDefn
+baseUnit idStr trm dsc sym =
+  UD (cncpt''' (unitUid idStr) trm (S dsc)) (BaseSI $ US [(sym, 1)]) []
+
 -- | Build the 'UID' of a unit from its name, in the "unit" namespace.
 unitUid :: String -> UID
 unitUid = nsUid "unit" . mkUid
@@ -166,12 +172,6 @@ u1 ^$ u2 = let US l1 = usymb u1
 -- | Combinator for shifting one unit by some number.
 shift :: IsUnit s => Double -> s -> UDefn
 shift a b = UShift a (usymb b)
-
--- | Create a base unit (one not defined in terms of any other unit, e.g. m, kg)
--- from a 'UID' string, term, definition, and its symbol.
-baseUnit :: String -> NP -> String -> Symbol -> UnitDefn
-baseUnit idStr trm dsc sym =
-  UD (cncpt''' (unitUid idStr) trm (S dsc)) (BaseSI $ US [(sym, 1)]) []
 
 -- | We don't want an Ord on units, but this still allows us to compare them.
 compUnitDefn :: UnitDefn -> UnitDefn -> Ordering

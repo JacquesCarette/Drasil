@@ -483,6 +483,8 @@ data ClassType = Primary | Auxiliary
 
 This file also defines the above datatype for differentiating between a "primary module" from "auxiliary modules." I don't understand the difference between a primary and auxiliary module. From a very quick scan, it looks like what it really wants to establish is the difference between a file containing a program entry point or not.
 
+* [ ] ([The above is confirmed.](https://github.com/JacquesCarette/Drasil/pull/5237/changes#r3532820784)) Rename the `ClassType` and the variants to `SourceFileKind`, `EntryPoint`, and `SupportCode`, respectively.
+
 #### [`drasil-code/lib/Language/Drasil/Code/Imperative/Generator.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Generator.hs)
 
 The "top-level" generator file used to create a `DrasilState` generate that is then used to generate the final software artifacts.

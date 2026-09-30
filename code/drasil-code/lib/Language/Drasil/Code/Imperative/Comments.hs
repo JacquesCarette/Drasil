@@ -1,6 +1,6 @@
 -- | Contains functions for generating code comments that describe a chunk.
 module Language.Drasil.Code.Imperative.Comments (
-  getCommentBrief
+  renderTermAndUnit
 ) where
 
 import Control.Monad.State (get)
@@ -13,8 +13,8 @@ import Language.Drasil.Printers (oneLineSentenceDoc, oneLineUnitDoc)
 
 -- | For a named quantity, render its name and associated unit (when it exists)
 -- in plaintext in the form: <term> (<unit>)
-getCommentBrief :: (CodeIdea c) => c -> GenState String
-getCommentBrief l = do
+renderTermAndUnit :: (CodeIdea c) => c -> GenState String
+renderTermAndUnit l = do
   g <- get
   let quant = codeChunk l
       tm = oneLineSentenceDoc (printfo g) $ phrase quant

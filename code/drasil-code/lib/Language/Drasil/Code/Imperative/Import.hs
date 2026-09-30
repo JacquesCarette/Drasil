@@ -25,7 +25,7 @@ import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
 import Drasil.Database (UID, HasUID(..), IsChunk)
 import Language.Drasil (HasSymbol, HasSpace(..),
   Space (Rational, Real), RealInterval(..), Constraint(..), Inclusive (..))
-import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
+import Language.Drasil.Code.Imperative.Comments (renderTermAndUnit)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
   ctorCall, genModuleWithImports, genModuleWithImportsProc, primaryClass)
@@ -407,7 +407,7 @@ genMethod f n desc p r b = do
   ps <- mapM mkParam p
   bod <- logBody n vars b
   let fn = f ps bod
-  pComms <- mapM getCommentBrief p
+  pComms <- mapM renderTermAndUnit p
   pure $ if CommentFunc `elem` g ^. commented
     then docFunc desc pComms r fn else fn
 
@@ -451,9 +451,9 @@ genInOutFunc f docf n desc ins' outs' b = do
   outVs <- mapM mkVar outs
   bothVs <- mapM mkVar both
   bod <- logBody n (bothVs <> inVs) b
-  pComms <- mapM getCommentBrief ins
-  oComms <- mapM getCommentBrief outs
-  bComms <- mapM getCommentBrief both
+  pComms <- mapM renderTermAndUnit ins
+  oComms <- mapM renderTermAndUnit outs
+  bComms <- mapM renderTermAndUnit both
   pure $ if CommentFunc `elem` g ^. commented
     then docf desc (zip pComms inVs) (zip oComms outVs) (zip
     bComms bothVs) bod else f inVs outVs bothVs bod
@@ -1388,7 +1388,7 @@ genMethodProc f n desc p r b = do
   ps <- mapM mkParamProc p
   bod <- logBody n vars b
   let fn = f ps bod
-  pComms <- mapM getCommentBrief p
+  pComms <- mapM renderTermAndUnit p
   pure $ if CommentFunc `elem` (g ^. commented)
     then docFunc desc pComms r fn else fn
 
@@ -2046,9 +2046,9 @@ genInOutFuncProc f docf n desc ins' outs' b = do
   outVs <- mapM mkVarProc outs
   bothVs <- mapM mkVarProc both
   bod <- logBody n (bothVs <> inVs) b
-  pComms <- mapM getCommentBrief ins
-  oComms <- mapM getCommentBrief outs
-  bComms <- mapM getCommentBrief both
+  pComms <- mapM renderTermAndUnit ins
+  oComms <- mapM renderTermAndUnit outs
+  bComms <- mapM renderTermAndUnit both
   pure $ if CommentFunc `elem` g ^. commented
     then docf desc (zip pComms inVs) (zip oComms outVs) (zip
     bComms bothVs) bod else f inVs outVs bothVs bod

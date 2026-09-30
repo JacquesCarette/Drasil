@@ -4,10 +4,9 @@
 module Language.Drasil.Plain.Print (
   -- * Types
   SingleLine(..),
-  -- * Functions
-  showHasSymbImpl,
   -- * Renderers
-  oneLineSentenceDoc, oneLineExprDoc, oneLineCodeExprDoc, oneLineUnitDoc
+  oneLineCodeSymbolDoc, oneLineSentenceDoc, oneLineExprDoc, oneLineCodeExprDoc,
+  oneLineUnitDoc
 ) where
 
 import Prelude hiding ((<>))
@@ -33,9 +32,9 @@ import Drasil.Code.CodeExpr (CodeExpr)
 -- | Data is either linear or not.
 data SingleLine = OneLine | MultiLine
 
--- | Helper for printing a HasSymbol in Implementation Stage on one line.
-showHasSymbImpl :: L.HasSymbol x => x -> String
-showHasSymbImpl = render . pExprDoc OneLine . symbol . codeSymb
+-- | Render a symbol to a 'String' on one line.
+oneLineCodeSymbolDoc :: L.HasSymbol x => x -> String
+oneLineCodeSymbolDoc = render . pExprDoc OneLine . symbol . codeSymb
 
 -- | Creates a 'OneLine' 'Implementation'-stage 'sentenceDoc'.
 oneLineSentenceDoc :: PrintingInformation -> L.Sentence -> Doc

@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.Code (
 import Control.Lens ((^.), view)
 
 import Language.Drasil
-import Language.Drasil.Printers (showHasSymbImpl)
+import Language.Drasil.Printers (oneLineCodeSymbolDoc)
 
 import Drasil.Code.CodeVar (CodeChunk(..), CodeFuncChunk, CodeIdea(..),
   CodeVarChunk(..), VarOrFunc(..), ccf, ccv, qc)
@@ -19,7 +19,7 @@ import Drasil.Code.CodeVar (CodeChunk(..), CodeFuncChunk, CodeIdea(..),
 
 -- | Finds the code name of a 'CodeChunk'.
 instance CodeIdea    CodeChunk where
-  codeName = showHasSymbImpl . view qc
+  codeName = oneLineCodeSymbolDoc . view qc
   codeChunk = id
 
 -- | Finds the code name and 'CodeChunk' within a 'CodeVarChunk'.

@@ -4,27 +4,19 @@ module Language.Drasil.Code.Imperative.Comments (
 ) where
 
 import Control.Monad.State (get)
-import Text.PrettyPrint.HughesPJ (Doc, (<+>), empty, parens, render)
+import Text.PrettyPrint.HughesPJ ((<+>), parens, render)
 
 import Drasil.Code.CodeVar (CodeIdea(..))
-import Language.Drasil
+import Language.Drasil (phrase, MayHaveUnit(..), HasUnitSymbol(..))
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Printers (oneLineSentenceDoc, oneLineUnitDoc)
 
--- | Gets a plain renderering of the term for a chunk.
-getTermDoc :: (CodeIdea c) => c -> GenState Doc
-getTermDoc c = do
-  g <- get
-  pure $ oneLineSentenceDoc (printfo g) $ phrase $ codeChunk c
-
--- | Gets a plain rendering of the unit of a chunk in parentheses,
--- or empty if it has no unit.
-getUnitsDoc :: (CodeIdea c) => c -> Doc
-getUnitsDoc c = maybe empty (parens . oneLineUnitDoc . usymb)
-  (getUnit $ codeChunk c)
-
+-- | For a named quantity, render its name and associated unit (when it exists)
+-- in plaintext in the form: <term> (<unit>)
 getCommentBrief :: (CodeIdea c) => c -> GenState String
 getCommentBrief l = do
-  t <- getTermDoc l
-  let u = getUnitsDoc l
-  pure $ render $ t <+> u
+  g <- get
+  let quant = codeChunk l
+      tm = oneLineSentenceDoc (printfo g) $ phrase quant
+      unit = parens . oneLineUnitDoc . usymb <$> getUnit quant
+  pure $ render $ maybe tm (tm <+>) unit

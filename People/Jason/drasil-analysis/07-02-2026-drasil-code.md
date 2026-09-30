@@ -401,7 +401,7 @@ sampleInputName = "input.txt"
 readMeName = "README.md"
 ```
 
-There's a few things we can do here:
+There's a few things we can do here (not immediately clear which should be done):
 
 1. [ ] Move their content to chunks.
 2. [ ] Move their content to generation options of the software dossier (excluding `sampleInputName`).

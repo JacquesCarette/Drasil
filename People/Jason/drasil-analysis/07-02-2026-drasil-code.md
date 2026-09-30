@@ -350,6 +350,7 @@ An implementation of a "software dossier" custom to that specific language.
 
 * [ ] Are the monads used anywhere?
 * [ ] The typeclass usage for `SoftwareDossierSym` looks like over-engineering. We should reevaluate the design.
+* [ ] Investigate which parts of these files need to be moved to GOOL and which need to be deduplicated (e.g., the READMEs) and kept here.
 
 #### [`drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/LanguagePolymorphic.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/LanguagePolymorphic.hs)
 

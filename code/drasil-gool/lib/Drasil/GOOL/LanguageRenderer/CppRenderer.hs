@@ -136,7 +136,7 @@ unCPPC (CPPC (CPPSC a) _) = a
 hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
 
-instance (Pair p) => OOProg (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData ProgData FileData ModData Body Block
+instance (Pair p) => OOProg (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVarData AttachmentData ProgData FileData ModData Body Block
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) ProgData FileData where
   prog n st mods = do
@@ -772,7 +772,7 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) 
 instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) StateVarData where
   stateVar v = RC.stateVar $ pfst v
 
-instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) MethodData StateVarData where
+instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) Class MethodData StateVarData where
   buildClass p vs cs fs = do
     n <- zoom lensCStoFS getModuleName
     modify (setClassName n)
@@ -788,7 +788,7 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) MethodData StateVarData 
   docClass d = pair1 (docClass d) (docClass d)
 
 instance (Pair p) => RenderClass (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) MethodData StateVarData where
+    (Doc, VisibilityTag) Class MethodData StateVarData where
   intClass n s i vs cs fs = pair3Lists
     (intClass n (pfst s) (pfst i)) (intClass n (psnd s) (psnd i))
     vs (zoom lensCStoMS <$> cs) (zoom lensCStoMS <$> fs)
@@ -798,10 +798,10 @@ instance (Pair p) => RenderClass (p CppSrcCode CppHdrCode)
 
   commentedClass = pair2 commentedClass commentedClass
 
-instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
+instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) Class where
   class' c = RC.class' $ pfst c
 
-instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) ModData MethodData where
+instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) ModData Class MethodData where
   buildModule n is ms cs = do
     modify (setModuleName n)
     pair2Lists (buildModule n is) (buildModule n is)
@@ -1020,7 +1020,7 @@ instance ProgramSym CppSrcCode ProgData FileData where
   prog n st = onStateList (onCodeList (progD n st)) . fmap (zoom lensGStoFS)
 
 instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body Block
+instance OORenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVarData AttachmentData FileData ModData Body Block
 
 instance UnRepr CppSrcCode contents where
   unRepr = unCPPSC
@@ -1666,14 +1666,14 @@ instance StateVarSym CppSrcCode (Doc, VisibilityTag) Variable Value StateVarData
 instance StateVarElim CppSrcCode StateVarData where
   stateVar = stVar . unCPPSC
 
-instance ClassSym CppSrcCode MethodData StateVarData where
+instance ClassSym CppSrcCode Class MethodData StateVarData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
   docClass = CP.doxClass
 
-instance RenderClass CppSrcCode (Doc, VisibilityTag) MethodData StateVarData where
+instance RenderClass CppSrcCode (Doc, VisibilityTag) Class MethodData StateVarData where
   intClass n _ _ vs cs fs = do
     modify (setClassName n)
     on2StateLists cppsClass vs (zoom lensCStoMS <$> cs P.<> fs)
@@ -1684,10 +1684,10 @@ instance RenderClass CppSrcCode (Doc, VisibilityTag) MethodData StateVarData whe
 
   commentedClass _ cs = cs
 
-instance ClassElim CppSrcCode where
+instance ClassElim CppSrcCode Class where
   class' = unCPPSC
 
-instance ModuleSym CppSrcCode ModData MethodData where
+instance ModuleSym CppSrcCode ModData Class MethodData where
   buildModule n is ms cs = CP.buildModule n (do
     ds <- getDefines
     lis <- getLangImports
@@ -1738,7 +1738,7 @@ instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
 instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body Block
+instance OORenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVarData AttachmentData FileData ModData Body Block
 
 instance UnRepr CppHdrCode contents where
   unRepr = unCPPHC
@@ -2296,14 +2296,14 @@ instance StateVarSym CppHdrCode (Doc, VisibilityTag) Variable Value StateVarData
 instance StateVarElim CppHdrCode StateVarData where
   stateVar = stVar . unCPPHC
 
-instance ClassSym CppHdrCode MethodData StateVarData where
+instance ClassSym CppHdrCode Class MethodData StateVarData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
   docClass = CP.doxClass
 
-instance RenderClass CppHdrCode (Doc, VisibilityTag) MethodData StateVarData where
+instance RenderClass CppHdrCode (Doc, VisibilityTag) Class MethodData StateVarData where
   intClass n _ i vs cstrs mths = do
     modify (setClassName n)
     vars <- sequence vs
@@ -2317,10 +2317,10 @@ instance RenderClass CppHdrCode (Doc, VisibilityTag) MethodData StateVarData whe
 
   commentedClass = G.commentedClass
 
-instance ClassElim CppHdrCode where
+instance ClassElim CppHdrCode Class where
   class' = unCPPHC
 
-instance ModuleSym CppHdrCode ModData MethodData where
+instance ModuleSym CppHdrCode ModData Class MethodData where
   buildModule n is = CP.buildModule n (do
     ds <- getHeaderDefines
     lis <- getHeaderLangImports

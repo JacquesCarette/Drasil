@@ -2,10 +2,10 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (Class, VS, CS, MS, OOProg, BodySym(..), bodyStatements,
-  oneLiner, BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..),
-  MultiStatement(multi), AssignStatement(..), (&=), DeclStatement(..),
-  PrintConsole(..), ReadConsole(..), StringStatement(..), CommentStatement(..),
+import Drasil.GOOL (VS, CS, MS, OOProg, BodySym(..), bodyStatements, oneLiner,
+  BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..), MultiStatement(multi),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), StringStatement(..), CommentStatement(..),
   ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
   StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
   VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
@@ -26,7 +26,7 @@ import Helper (helperOO, helperProc)
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldOO
-  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
   => OO.GSProgram r prg
 helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
   ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
@@ -52,7 +52,7 @@ myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainOO
-  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
   => MS (r mthd)
 helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] <> listSliceTests
     <> [block [printLn $ litString "", ifCond [
@@ -147,7 +147,7 @@ helloInitVariables = block [comment "Initializing variables",
     (litString "Set s should contain 7")]
 
 objectTests
-  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
   => MS (r block)
 objectTests = block [comment "Object tests",
   varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
@@ -511,8 +511,8 @@ helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
 
 helloWorldClass
-  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
-  => CS (r Class)
+  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
+  => CS (r cls)
 helloWorldClass = extraClass "TestClass" Nothing
   [stateVar public instanceLevel (var "a" int)]
   [initializer [param $ var "a" int]

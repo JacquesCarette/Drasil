@@ -27,7 +27,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, NamedArgs,
   BinderElim(..), getCodeType, getTypeString, ValueExpression, VariableValue,
   BlockSym, BodySym)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (Class, Initializers, CSStateVar, newObj,
+import Drasil.GOOL.InterfaceGOOL (Initializers, CSStateVar, newObj,
   objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym, OOVariableSym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
@@ -649,14 +649,14 @@ method
 method n s p t = intMethod False n s p (mType t)
 
 getMethod
-  :: (OORenderSym r vis scope typ binder var param val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis scope typ binder var param val stmt cls mthd stvr attch file mod bod block)
   => VS (r var) -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
 setMethod
-  :: (OORenderSym r vis scope typ binder var param val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis scope typ binder var param val stmt cls mthd stvr attch file mod bod block)
   => VS (r var) -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
@@ -707,24 +707,34 @@ docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 -- Classes --
 
 buildClass
-  :: (RenderClass r vis mthd stvr, VisibilitySym r vis)
-  =>  Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
+  :: (RenderClass r vis cls mthd stvr, VisibilitySym r vis)
+  => Maybe Label
+  -> [CSStateVar r stvr]
+  -> [MS (r mthd)]
+  -> [MS (r mthd)]
+  -> CS (r cls)
 buildClass p stVars constructors methods = do
   n <- zoom lensCStoFS getModuleName
   RO.intClass n public (inherit p) stVars constructors methods
 
-implementingClass :: (RenderClass r vis mthd stvr, VisibilitySym r vis) => Label -> [Label] ->
-  [CSStateVar r stvr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
+implementingClass
+  :: (RenderClass r vis cls mthd stvr, VisibilitySym r vis)
+  => Label
+  -> [Label]
+  -> [CSStateVar r stvr]
+  -> [MS (r mthd)]
+  -> [MS (r mthd)]
+  -> CS (r cls)
 implementingClass n is = RO.intClass n public (implements is)
 
 docClass
-  :: (BlockCommentSym r, RenderClass r vis mthd stvr)
-  => ClassDocRenderer -> String -> CS (r Class) -> CS (r Class)
+  :: (BlockCommentSym r, RenderClass r vis cls mthd stvr)
+  => ClassDocRenderer -> String -> CS (r cls) -> CS (r cls)
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 
 commentedClass
-  :: (RC.BlockCommentElim r, RO.ClassElim r, Monad r)
-  => CS (r Doc) -> CS (r Class) -> CS (r Doc)
+  :: (RC.BlockCommentElim r, RO.ClassElim r cls, Monad r)
+  => CS (r Doc) -> CS (r cls) -> CS (r Doc)
 commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
   (RC.blockComment' cmt) (RO.class' cs))
 

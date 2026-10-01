@@ -1,6 +1,6 @@
 -- | re-export smart constructors for external code writing
 module Drasil.GOOL (Label, GSProgram, Body, CS, FS, MS, VS, Value, CSStateVar,
-  Class, NamedArgs, Initializers, OOProg, ProgramSym(..), FileSym(..),
+  NamedArgs, Initializers, OOProg, ProgramSym(..), FileSym(..),
   AttachmentSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   TypeSym(..), OOTypeSym(..), BinderSym(..), EmptyStatement(..),
   MultiStatement(..), ValueStatement(..), AssignStatement(..), (&=),
@@ -48,13 +48,13 @@ import Drasil.Shared.InterfaceCommon (Label, Body, Value, NamedArgs, BodySym(..)
   VisibilitySym(..), convType,
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
   TypeElim(..), getTypeString)
-import Drasil.GOOL.InterfaceGOOL (GSProgram, Class, CSStateVar, Initializers,
-  OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
-  OOMethodSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  instanceVarSelf, ($->), AttachmentSym(..), privMethod, pubMethod, initializer,
-  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
-  InternalValueExp, OOValueExpression(..), selfMethodCall, newObj, extNewObj,
-  libNewObj, OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
+import Drasil.GOOL.InterfaceGOOL (GSProgram, CSStateVar, Initializers, OOProg,
+  ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOMethodSym(..),
+  OOTypeSym(..), OOVariableSym(..), SelfSym(..), instanceVarSelf, ($->),
+  AttachmentSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
+  StateVarSym(..), privDVar, pubDVar, pubSVar, InternalValueExp,
+  OOValueExpression(..), selfMethodCall, newObj, extNewObj, libNewObj,
+  OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
   OOFuncAppStatement(..), GetSet(..), objMethodCall, objMethodCallNamedArgs,
   objMethodCallMixedArgs, objMethodCallNoParams, classMethodCall,
   classMethodCallNamedArgs, classMethodCallMixedArgs, classMethodCallNoParams,

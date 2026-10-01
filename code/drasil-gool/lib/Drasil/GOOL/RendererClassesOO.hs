@@ -9,8 +9,8 @@ module Drasil.GOOL.RendererClassesOO (
 
 import Drasil.Shared.InterfaceCommon (Label, Block, TypeSym, ParameterSym,
   MethodSym, ValueSym, VariableSym, VisibilitySym)
-import qualified Drasil.GOOL.InterfaceGOOL as IG (Class, CSStateVar,
-  OOTypeSym, OOVariableSym, SelfSym, OOValueExpression(..), InternalValueExp(..),
+import qualified Drasil.GOOL.InterfaceGOOL as IG (CSStateVar, OOTypeSym,
+  OOVariableSym, SelfSym, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), GetSet(..), ObserverPattern(..), StrategyPattern(..), ModuleSym,
   OOMethodSym, AttachmentSym, StateVarSym, ClassSym)
 import Drasil.Shared.AST (AttachmentTag, FuncData)
@@ -25,17 +25,17 @@ class (CommonRenderSym r vis scope typ binder var param val stmt mthd bod block,
   ParameterSym r var param, MethodSym r vis typ var param mthd bod,
   IG.OOMethodSym r vis typ var param val mthd attch bod, VisibilitySym r vis,
   IG.AttachmentSym r attch, IG.StateVarSym r vis var val stvr attch,
-  IG.ClassSym r mthd stvr, IG.ModuleSym r mod mthd, IG.FileSym r file mod,
+  IG.ClassSym r cls mthd stvr, IG.ModuleSym r mod cls mthd, IG.FileSym r file mod,
   ValueSym r typ val, IG.InternalValueExp r typ var val, IG.GetSet r var val,
   IG.ObserverPattern r typ stmt, IG.StrategyPattern r var val bod block,
   VariableSym r typ var, TypeSym r typ, IG.OOTypeSym r typ,
   IG.OOVariableSym r typ var val, IG.SelfSym r var,
-  IG.OOValueExpression r typ var val, RenderClass r vis mthd stvr, ClassElim r,
-  RenderFile r file mod, InternalGetSet r typ var val, MethodTypeSym r typ,
-  OOMethodTypeSym r typ, RenderMethod r mthd,
+  IG.OOValueExpression r typ var val, RenderClass r vis cls mthd stvr,
+  ClassElim r cls, RenderFile r file mod, InternalGetSet r typ var val,
+  MethodTypeSym r typ, OOMethodTypeSym r typ, RenderMethod r mthd,
   OORenderMethod r vis typ param mthd attch bod, RenderMod r mod,
   ModuleElim r mod, StateVarElim r stvr, PermElim r attch
-  ) => OORenderSym r vis scope typ binder var param val stmt mthd stvr attch file mod bod block
+  ) => OORenderSym r vis scope typ binder var param val stmt cls mthd stvr attch file mod bod block
 
 -- OO-Only Typeclasses --
 
@@ -78,18 +78,18 @@ class StateVarElim r stvr | r -> stvr where
 
 type ParentSpec = Doc
 
-class RenderClass r vis mthd stvr | r -> vis mthd stvr where
+class RenderClass r vis cls mthd stvr | r -> vis cls mthd stvr where
   -- class name, visibility, parent, state variables, constructor(s), methods
   intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r stvr]
-    -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r IG.Class)
+    -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r cls)
 
   inherit :: Maybe Label -> r ParentSpec
   implements :: [Label] -> r ParentSpec
 
-  commentedClass :: CS (r Doc) -> CS (r IG.Class) -> CS (r IG.Class)
+  commentedClass :: CS (r Doc) -> CS (r cls) -> CS (r cls)
 
-class ClassElim r where
-  class' :: r IG.Class -> Doc
+class ClassElim r cls where
+  class' :: r cls -> Doc
 
 class RenderMod r mod | r -> mod where
   modFromData :: String -> FS Doc -> FS (r mod)

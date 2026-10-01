@@ -99,7 +99,7 @@ value
     , NumericExpression r val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , Reference r val
@@ -243,7 +243,7 @@ mkVal
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , SelfSym r var
     , InternalValueExp r typ var val
     , OOValueExpression r typ var val
@@ -305,7 +305,7 @@ mkParam p = do
 
 -- | Generates a public function.
 publicFunc
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> VS (r typ)
   -> Description
@@ -319,7 +319,7 @@ publicFunc n t desc ps r b = do
 
 -- | Generates a public method.
 publicMethod
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> VS (r typ)
   -> Description
@@ -332,7 +332,7 @@ publicMethod n t = do
 
 -- | Generates a private method.
 privateMethod
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> VS (r typ)
   -> Description
@@ -345,7 +345,7 @@ privateMethod n t = do
 
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFunc
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> Description
   -> [CodeVarChunk]
@@ -356,7 +356,7 @@ publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 
 -- | Generates a private method, defined by its inputs and outputs.
 privateInOutMethod
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> Description
   -> [CodeVarChunk]
@@ -368,7 +368,7 @@ privateInOutMethod n = genInOutFunc (inOutMethod n private instanceLevel)
 
 -- | Generates a constructor.
 genConstructor
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> Description
   -> [ParameterChunk]
@@ -379,7 +379,7 @@ genConstructor n desc p = do
 
 -- | Generates a constructor that includes initialization of variables.
 genInitConstructor
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Label
   -> Description
   -> [ParameterChunk]
@@ -393,7 +393,7 @@ genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
 genMethod
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => ([MS (r param)] -> MS (r bod) -> MS (r mthd))
   -> Label
   -> Description
@@ -473,7 +473,7 @@ convExpr
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , SelfSym r var
     , InternalValueExp r typ var val
     , OOValueExpression r typ var val
@@ -586,7 +586,7 @@ convCall
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , SelfSym r var
     , InternalValueExp r typ var val
     , OOValueExpression r typ var val
@@ -729,7 +729,7 @@ elementSetBoolBfunc SContains = OO.contains
 
 -- | Converts a 'Mod' to GOOL.
 genModDef
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> GenState (FS (r file))
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (fmap
   Just . genFunc publicFunc [] <$> fs)
@@ -739,20 +739,20 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (fmap
 
 -- | Converts a 'Mod'\'s functions to GOOL.
 genModFuncs
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> [GenState (MS (r mthd))]
 genModFuncs (Mod _ _ _ _ fs) = genFunc publicFunc [] <$> fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
 genModClasses
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Mod -> [GenState (CS (r Class))]
 genModClasses (Mod _ _ _ cs _) = genClass auxClass <$> cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
 genClass
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => (Name -> Maybe Name -> Description -> [CSStateVar r stvr] -> GenState [MS (r mthd)] -> GenState [MS (r mthd)] -> GenState (CS (r Class)))
   -> M.Class
   -> GenState (CS (r Class))
@@ -771,7 +771,7 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
 genFunc
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => (Name -> VS (r typ) -> Description -> [ParameterChunk] -> Maybe Description -> [MS (r block)] -> GenState (MS (r mthd)))
   -> [StateVariable]
   -> Func
@@ -816,7 +816,7 @@ convStmt
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , SelfSym r var
     , InternalValueExp r typ var val
     , OOValueExpression r typ var val
@@ -933,7 +933,7 @@ convStmt (FAppend a b) = do
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
 genDataFunc
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Name -> Description -> DataDesc -> GenState (MS (r mthd))
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
@@ -961,7 +961,7 @@ readData
     , OOVariableSym r typ var val
     , VariableValue r var val
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , ListStatement r val stmt
@@ -1144,7 +1144,7 @@ valueProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , List r val
     , Reference r val
@@ -1230,7 +1230,7 @@ mkValProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , List r val
     , Reference r val
@@ -1262,7 +1262,7 @@ genModDefProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , VariableValue r var val
     , DeclStatement r scope var val stmt bod
     , AssignStatement r var val stmt
@@ -1276,7 +1276,7 @@ genModDefProc
     , List r val
     , Reference r val
     , OO.Set r val
-    , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
+    , ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
     , TypeElim r typ
     )
   => Mod -> GenState (FS (r file))
@@ -1409,7 +1409,7 @@ genFuncProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , VariableSym r typ var
     , VariableValue r var val
     , ParameterSym r var param
@@ -1462,7 +1462,7 @@ genModFuncsProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , VariableSym r typ var
     , VariableValue r var val
     , ParameterSym r var param
@@ -1504,7 +1504,7 @@ readDataProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , VariableSym r typ var
     , VariableValue r var val
     , ScopeSym r scope
@@ -1657,7 +1657,7 @@ convExprProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1756,7 +1756,7 @@ convCallProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , List r val
     , NativeVector r typ val
@@ -1800,7 +1800,7 @@ convStmtProc
     , VariableValue r var val
     , BooleanExpression r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Comparison r val
     , Argument r val
     , Array r var val
@@ -1928,7 +1928,7 @@ genDataFuncProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , ScopeSym r scope
     , VariableSym r typ var
     , VariableValue r var val

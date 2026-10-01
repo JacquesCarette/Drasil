@@ -136,7 +136,7 @@ unCPPC (CPPC (CPPSC a) _) = a
 hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
 
-instance (Pair p) => OOProg (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData ProgData FileData ModData Body Block
+instance (Pair p) => OOProg (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData ProgData FileData ModData Body Block
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) ProgData FileData where
   prog n st mods = do
@@ -147,7 +147,7 @@ instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) ProgData FileData wher
     modify revFiles
     pure $ pair p1 (toCode emptyProg)
 
-instance (Pair p) => CommonRenderSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData Body Block
+instance (Pair p) => CommonRenderSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
 
 instance (Pair p) => UnRepr (p CppSrcCode CppHdrCode) contents where
   unRepr c = unCPPSC $ pfst c
@@ -365,7 +365,7 @@ instance (Pair p) => Comparison (p CppSrcCode CppHdrCode) Value where
   (?==) = pair2 (?==) (?==)
   (?!=) = pair2 (?!=) (?!=)
 
-instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) TypeData Variable Value where
+instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) TypeData BinderD Variable Value where
   inlineIf = pair3 inlineIf inlineIf
 
   funcAppMixedArgs n = pair1Val3Lists (funcAppMixedArgs n) (funcAppMixedArgs n)
@@ -468,14 +468,14 @@ instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) TypeData Variable 
 instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) TypeData Value where
   listAccessFunc = pair2 listAccessFunc listAccessFunc
 
-instance Pair p => BinderSym (p CppSrcCode CppHdrCode) TypeData where
+instance Pair p => BinderSym (p CppSrcCode CppHdrCode) TypeData BinderD where
   binder nm = pair1 (binder nm) (binder nm)
 
-instance (Pair p) => BinderElim (p CppSrcCode CppHdrCode) TypeData where
+instance (Pair p) => BinderElim (p CppSrcCode CppHdrCode) TypeData BinderD where
   binderName b = bindName $ unCPPSC $ pfst b
   binderType b = pair (binderType $ pfst b) (binderType $ psnd b)
 
-instance (Pair p) => InternalBinderElim (p CppSrcCode CppHdrCode) where
+instance (Pair p) => InternalBinderElim (p CppSrcCode CppHdrCode) BinderD where
   binderElim b = binderElim $ pfst b
 
 instance (Pair p) => RenderFunction (p CppSrcCode CppHdrCode) TypeData where
@@ -1019,8 +1019,8 @@ instance Monad CppSrcCode where
 instance ProgramSym CppSrcCode ProgData FileData where
   prog n st = onStateList (onCodeList (progD n st)) . fmap (zoom lensGStoFS)
 
-instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body Block
+instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body Block
 
 instance UnRepr CppSrcCode contents where
   unRepr = unCPPSC
@@ -1283,7 +1283,7 @@ instance Comparison CppSrcCode Value where
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
 
-instance ValueExpression CppSrcCode TypeData Variable Value where
+instance ValueExpression CppSrcCode TypeData BinderD Variable Value where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
@@ -1397,14 +1397,14 @@ instance InternalGetSet CppSrcCode TypeData Variable Value where
 instance InternalListFunc CppSrcCode TypeData Value where
   listAccessFunc = CP.listAccessFunc' cppListAccess
 
-instance BinderSym CppSrcCode TypeData where
+instance BinderSym CppSrcCode TypeData BinderD where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
-instance BinderElim CppSrcCode TypeData where
+instance BinderElim CppSrcCode TypeData BinderD where
   binderName = bindName . unCPPSC
   binderType = onCodeValue bindType
 
-instance InternalBinderElim CppSrcCode where
+instance InternalBinderElim CppSrcCode BinderD where
   binderElim = text . bindName . unCPPSC
 
 instance RenderFunction CppSrcCode TypeData where
@@ -1737,8 +1737,8 @@ instance Applicative CppHdrCode where
 instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
-instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body Block
+instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body Block
 
 instance UnRepr CppHdrCode contents where
   unRepr = unCPPHC
@@ -1973,7 +1973,7 @@ instance Comparison CppHdrCode Value where
   (?==) _ _ = mkStateVal void empty
   (?!=) _ _ = mkStateVal void empty
 
-instance ValueExpression CppHdrCode TypeData Variable Value where
+instance ValueExpression CppHdrCode TypeData BinderD Variable Value where
   inlineIf _ _ _ = mkStateVal void empty
 
   funcAppMixedArgs _ _ _ _ = mkStateVal void empty
@@ -2060,14 +2060,14 @@ instance InternalGetSet CppHdrCode TypeData Variable Value where
 instance InternalListFunc CppHdrCode TypeData Value where
   listAccessFunc _ _ = funcFromData empty void
 
-instance BinderSym CppHdrCode TypeData where
+instance BinderSym CppHdrCode TypeData BinderD where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
-instance BinderElim CppHdrCode TypeData where
+instance BinderElim CppHdrCode TypeData BinderD where
   binderName = bindName . unCPPHC
   binderType = onCodeValue bindType
 
-instance InternalBinderElim CppHdrCode where
+instance InternalBinderElim CppHdrCode BinderD where
   binderElim = text . bindName . unCPPHC
 
 instance RenderFunction CppHdrCode TypeData where

@@ -37,7 +37,7 @@ import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImports
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Name
   -> Description
   -> [Import]
@@ -57,7 +57,7 @@ genModuleWithImports n desc is maybeMs maybeCs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModule
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => Name
   -> Description
   -> [GenState (Maybe (MS (r mthd)))]
@@ -164,7 +164,7 @@ fApp
     , VariableValue r var val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , TypeElim r typ
     )
   => Name
@@ -221,7 +221,7 @@ fAppInOut m n ins outs both = do
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImportsProc
-  :: (ProcProg r vis scope typ var param val stmt mthd prg file mod bod block)
+  :: (ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block)
   => Name
   -> Description
   -> [Import]
@@ -239,7 +239,7 @@ genModuleWithImportsProc n desc is maybeMs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModuleProc
-  :: (ProcProg r vis scope typ var param val stmt mthd prg file mod bod block)
+  :: (ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block)
   => Name
   -> Description
   -> [GenState (Maybe (MS (r mthd)))]
@@ -260,7 +260,7 @@ fAppProc
     ( ValueSym r typ val
     , Argument r val
     , TypeElim r typ
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     )
   => Name
   -> Name

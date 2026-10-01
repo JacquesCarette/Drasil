@@ -62,7 +62,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
   updateMod, MethodData, mthd, mthdName, updateMthd, ParamData, paramVar, paramDoc, pd,
   ProgData, TypeData, cType, vd, val, valPrec, valInt, valType, opDoc, opPrec,
   varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc,
-  FuncData(fType, funcDoc), fd, ScopeData, FileData, ModData)
+  FuncData(fType, funcDoc), fd, ScopeData, FileData, ModData, BinderD)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, multPrec, unExpr, unExpr', binExpr, binExpr', mkStateVal, mkVal,
@@ -92,7 +92,7 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance ProcProg MatlabCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
+instance ProcProg MatlabCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
 
 instance ProgramSym MatlabCode ProgData FileData where
   prog n st files = do
@@ -100,8 +100,8 @@ instance ProgramSym MatlabCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym MatlabCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance ProcRenderSym MatlabCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData FileData ModData Body Block
+instance CommonRenderSym MatlabCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
+instance ProcRenderSym MatlabCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData FileData ModData Body Block
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
@@ -297,7 +297,7 @@ instance Comparison MatlabCode Value where
   (?==) = mlEqOp False
   (?!=) = mlEqOp True
 
-instance ValueExpression MatlabCode TypeData Variable Value where
+instance ValueExpression MatlabCode TypeData BinderD Variable Value where
   inlineIf = mlInlineIf
   funcAppMixedArgs = G.funcAppMixedArgs
   extFuncAppMixedArgs _ = G.funcAppMixedArgs
@@ -377,14 +377,14 @@ mlCellWrap :: CodeType -> Doc -> Doc
 mlCellWrap String = braces
 mlCellWrap _      = parens
 
-instance BinderSym MatlabCode TypeData where
+instance BinderSym MatlabCode TypeData BinderD where
   binder = undefined
 
-instance BinderElim MatlabCode TypeData where
+instance BinderElim MatlabCode TypeData BinderD where
   binderName = undefined
   binderType = undefined
 
-instance InternalBinderElim MatlabCode where
+instance InternalBinderElim MatlabCode BinderD where
   binderElim = undefined
 
 instance RenderFunction MatlabCode TypeData where
@@ -807,7 +807,7 @@ mlEnd = text "end"
 mlElseIf = text "elseif"
 
 mlForEach
-  :: (CommonRenderSym r vis scope typ var param val stmt mthd bod block)
+  :: (CommonRenderSym r vis scope typ binder var param val stmt mthd bod block)
   => r var -> r val -> r bod -> Doc
 mlForEach i lstVar b = vcat [
   text "for" <+> RC.variable i <+> equals <+> RC.value lstVar,
@@ -815,7 +815,7 @@ mlForEach i lstVar b = vcat [
   mlEnd]
 
 mlRange
-  :: (CommonRenderSym r vis scope typ var param val stmt mthd bod block)
+  :: (CommonRenderSym r vis scope typ binder var param val stmt mthd bod block)
   => VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
 mlRange initv finalv stepv = do
   ini <- initv
@@ -825,7 +825,7 @@ mlRange initv finalv stepv = do
   mkVal d (RC.value ini <> text ":" <> RC.value stp <> text ":" <> RC.value fin)
 
 mlTryCatch
-  :: (CommonRenderSym r vis scope typ var param val stmt mthd bod block)
+  :: (CommonRenderSym r vis scope typ binder var param val stmt mthd bod block)
   => r bod -> r bod -> Doc
 mlTryCatch tryB catchB = vcat [
   text "try",

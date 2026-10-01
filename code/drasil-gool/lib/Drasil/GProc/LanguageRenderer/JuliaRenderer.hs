@@ -108,7 +108,7 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance ProcProg JuliaCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
+instance ProcProg JuliaCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData ProgData FileData ModData Body Block
 
 instance ProgramSym JuliaCode ProgData FileData where
   prog n st files = do
@@ -116,8 +116,8 @@ instance ProgramSym JuliaCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym JuliaCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance ProcRenderSym JuliaCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData FileData ModData Body Block
+instance CommonRenderSym JuliaCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
+instance ProcRenderSym JuliaCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData FileData ModData Body Block
 
 instance UnRepr JuliaCode inner where
   unRepr = unJLC
@@ -330,7 +330,7 @@ instance Comparison JuliaCode Value where
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
 
-instance ValueExpression JuliaCode TypeData Variable Value where
+instance ValueExpression JuliaCode TypeData BinderD Variable Value where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
@@ -412,14 +412,14 @@ instance InternalList JuliaCode Variable Value Block where
 instance InternalListFunc JuliaCode TypeData Value where
   listAccessFunc = CS.listAccessFunc
 
-instance BinderSym JuliaCode TypeData where
+instance BinderSym JuliaCode TypeData BinderD where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
-instance BinderElim JuliaCode TypeData where
+instance BinderElim JuliaCode TypeData BinderD where
   binderName = bindName . unJLC
   binderType = onCodeValue bindType
 
-instance InternalBinderElim JuliaCode where
+instance InternalBinderElim JuliaCode BinderD where
   binderElim = text . bindName . unJLC
 
 instance RenderFunction JuliaCode TypeData where
@@ -716,8 +716,8 @@ jlIndexOf
   ::
     ( ValueSym r typ val
     , IndexTranslator r val
-    , ValueExpression r typ var val
-    , BinderSym r typ
+    , ValueExpression r typ binder var val
+    , BinderSym r typ binder
     , VariableSym r typ var
     , VariableValue r var val
     , Comparison r val
@@ -900,8 +900,8 @@ jlIntFunc n pms bod = do
         jlEnd]
 
 jlLambda
-  :: (InternalBinderElim r, ValueElim r val)
-  => [r BinderD] -> r val -> Doc
+  :: (InternalBinderElim r binder, ValueElim r val)
+  => [r binder] -> r val -> Doc
 jlLambda ps ex = binderList ps <+> arrow <+> RC.value ex
 
 -- Exceptions
@@ -1046,7 +1046,7 @@ jlInput inSrc v = v &= (v >>= jlInput' . getCodeType . variableType)
         jlInput' _ = error "Attempt to read a value of unreadable type"
 
 readLine, readLines
-  :: (TypeSym r typ, ValueExpression r typ var val)
+  :: (TypeSym r typ, ValueExpression r typ binder var val)
   => VS (r val) -> VS (r val)
 readLine f = funcApp jlReadLineFunc string [f]
 readLines f = funcApp jlReadLinesFunc (listType string) [f]
@@ -1063,7 +1063,11 @@ jlArgs :: Label
 jlArgs = "ARGS"
 
 jlParse
-  :: (TypeSym r typ, RenderValue r typ var val, ValueExpression r typ var val)
+  ::
+    ( TypeSym r typ
+    , RenderValue r typ var val
+    , ValueExpression r typ binder var val
+    )
   => Label -> VS (r typ) -> VS (r val) -> VS (r val)
 jlParse tl tp v = let
   typeLabel = mkStateVal void (text tl)

@@ -130,15 +130,15 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOProg JavaCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
+instance OOProg JavaCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym JavaCode ProgData FileData where
   prog n st fs = modifyReturnList (zoom lensGStoFS <$> fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . fmap (R.package n
     endStatement)))
 
-instance CommonRenderSym JavaCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym JavaCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
+instance CommonRenderSym JavaCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym JavaCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
@@ -363,7 +363,7 @@ instance Comparison JavaCode Value where
   (?==) = jEquality
   (?!=) = typeBinExpr notEqualOp bool
 
-instance ValueExpression JavaCode TypeData Variable Value where
+instance ValueExpression JavaCode TypeData BinderD Variable Value where
   inlineIf = C.inlineIf
 
   -- Exceptions from function/method calls should already be in the exception
@@ -480,14 +480,14 @@ instance InternalGetSet JavaCode TypeData Variable Value where
 instance InternalListFunc JavaCode TypeData Value where
   listAccessFunc = CP.listAccessFunc' jListAccess
 
-instance BinderSym JavaCode TypeData where
+instance BinderSym JavaCode TypeData BinderD where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
-instance BinderElim JavaCode TypeData where
+instance BinderElim JavaCode TypeData BinderD where
   binderName = bindName . unJC
   binderType = onCodeValue bindType
 
-instance InternalBinderElim JavaCode where
+instance InternalBinderElim JavaCode BinderD where
   binderElim = text . bindName . unJC
 
 instance RenderFunction JavaCode TypeData where
@@ -992,7 +992,7 @@ jOut
     , Literal r typ val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , VariableSym r typ var
     , VariableValue r var val
     , List r val

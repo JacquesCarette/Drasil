@@ -289,7 +289,7 @@ instance (Array r var val) => Array (LoggingFor r) var val where
   arrayLength = liftLogging arrayLength
   arrayCopy = liftLogging arrayCopy
 
-instance (BinderSym r typ) => BinderSym (LoggingFor r) typ where
+instance (BinderSym r typ binder) => BinderSym (LoggingFor r) typ binder where
   binder = liftLogging binder
 
 instance (BooleanExpression r val) => BooleanExpression (LoggingFor r) val where
@@ -412,7 +412,7 @@ instance (Set r val) => Set (LoggingFor r) val where
 instance (UnRepr r contents) => UnRepr (LoggingFor r) contents where
   unRepr = unRepr . unLC
 
-instance (ValueExpression r typ var val) => ValueExpression (LoggingFor r) typ var val where
+instance (ValueExpression r typ binder var val) => ValueExpression (LoggingFor r) typ binder var val where
   inlineIf = liftLogging inlineIf
   funcAppMixedArgs = liftLogging funcAppMixedArgs
   extFuncAppMixedArgs = liftLogging extFuncAppMixedArgs
@@ -443,7 +443,7 @@ instance (NativeVector lang typ val) => NativeVector (LoggingFor lang) typ val w
 
 -- GProc
 
-instance (P.ProcProg r vis scope typ var param val stmt mthd prg file mod bod block) => P.ProcProg (LoggingFor r) vis scope typ var param val stmt mthd prg file mod bod block
+instance (P.ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block) => P.ProcProg (LoggingFor r) vis scope typ binder var param val stmt mthd prg file mod bod block
 
 instance (P.ModuleSym r mod mthd) => P.ModuleSym (LoggingFor r) mod mthd where
   buildModule = liftLogging P.buildModule
@@ -457,7 +457,7 @@ instance (P.ProgramSym r prg file) => P.ProgramSym (LoggingFor r) prg file where
 
 -- GOOL
 
-instance (G.OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block) => G.OOProg (LoggingFor r) vis scope typ var param val stmt mthd stvr attch prg file mod bod block
+instance (G.OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block) => G.OOProg (LoggingFor r) vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block
 
 instance (G.GetSet r var val) => G.GetSet (LoggingFor r) var val where
   get = liftLogging G.get

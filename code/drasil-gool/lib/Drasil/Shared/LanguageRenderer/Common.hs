@@ -116,6 +116,6 @@ increment vr' v'= do
 
 -- | Call to get the size of a list as a function call
 listSize
-  :: (TypeSym r typ, ValueExpression r typ var val)
+  :: (TypeSym r typ, ValueExpression r typ binder var val)
   => String -> VS (r val) -> VS (r val)
 listSize fnName list = funcApp fnName int [list]

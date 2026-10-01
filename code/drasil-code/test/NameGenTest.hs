@@ -11,13 +11,13 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
 nameGenTestOO
-  :: OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block
+  :: OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block
   => OO.GSProgram r prg
 nameGenTestOO = OO.prog "NameGenTest" "" [OO.fileDoc $ OO.buildModule
   "NameGenTest" [] [main, helper] []]
 
 nameGenTestProc
-  :: (ProcProg r vis scope typ var param val stmt mthd prg file mod bod block)
+  :: (ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block)
   => GProc.GSProgram r prg
 nameGenTestProc = GProc.prog "NameGenTest" "" [GProc.fileDoc $ GProc.buildModule
   "NameGenTest" [] [main, helper]]

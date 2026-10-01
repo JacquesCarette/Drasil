@@ -86,7 +86,7 @@ type ConstraintCE = Constraint CodeExpr
 
 -- | Generates a controller module.
 genMain
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => GenState (FS (r file))
 genMain = genModule "Control" "Controls the flow of the program"
   [genMainFunc] []
@@ -97,7 +97,7 @@ genMain = genModule "Control" "Controls the flow of the program"
 -- constraints, calculating outputs, and printing outputs.
 -- Returns Nothing if the user chose to generate a library.
 genMainFunc
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => GenState (Maybe (MS (r mthd)))
 genMainFunc = do
     g <- get
@@ -147,7 +147,7 @@ getInputDecl
     , NumericExpression r val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , Reference r val
@@ -210,7 +210,7 @@ initConsts
     , NumericExpression r val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , Reference r val
@@ -261,13 +261,13 @@ initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 
 -- | Generates a single module containing all input-related components.
 genInputMod
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => GenState [FS (r file)]
 genInputMod = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
   let genMod
-        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
         => Maybe (CS (r Class)) -> GenState (FS (r file))
       genMod Nothing = genModule cname ipDesc [genInputFormat Pub,
         genInputDerived Pub, genInputConstraints Pub] []
@@ -297,7 +297,7 @@ constVarFunc Const = constVar public
 -- variables. If the InputParameters constructor is also exported, then the
 -- generated class also contains the input-related functions as private methods.
 genInputClass
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => ClassType -> GenState (Maybe (CS (r Class)))
 genInputClass scp = do
   g <- get
@@ -308,20 +308,20 @@ genInputClass scp = do
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
       constructors
-        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
         => GenState [MS (r mthd)]
       constructors = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputConstructor]
         else pure []
       methods
-        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
         => GenState [MS (r mthd)]
       methods = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputFormat Priv,
         genInputDerived Priv, genInputConstraints Priv]
         else pure []
       genClass
-        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
         => [CodeVarChunk] -> [CodeDefinition] -> GenState (Maybe (CS (r Class)))
       genClass [] [] = pure Nothing
       genClass inps csts = do
@@ -343,7 +343,7 @@ genInputClass scp = do
 -- input-related functions. Returns 'Nothing' if no input-related functions are
 -- generated.
 genInputConstructor
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => GenState (Maybe (MS (r mthd)))
 genInputConstructor = do
   g <- get
@@ -365,7 +365,7 @@ genInputConstructor = do
 
 -- | Generates a function for calculating derived inputs.
 genInputDerived
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputDerived s = do
   g <- get
@@ -375,7 +375,7 @@ genInputDerived s = do
       getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
       genDerived
-        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
         => Bool -> GenState (Maybe (MS (r mthd)))
       genDerived False = pure Nothing
       genDerived _ = do
@@ -389,7 +389,7 @@ genInputDerived s = do
 
 -- | Generates function that checks constraints on the input.
 genInputConstraints
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputConstraints s = do
   g <- get
@@ -399,7 +399,7 @@ genInputConstraints s = do
       getFunc Pub = publicFunc
       getFunc Priv = privateMethod
       genConstraints
-        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
         => Bool -> GenState (Maybe (MS (r mthd)))
       genConstraints False = pure Nothing
       genConstraints _ = do
@@ -435,7 +435,7 @@ sfwrCBody
     , NumericExpression r val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , Reference r val
@@ -473,7 +473,7 @@ physCBody
     , NumericExpression r val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , Reference r val
@@ -510,7 +510,7 @@ chooseConstr
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , SelfSym r var
     , InternalValueExp r typ var val
     , OOValueExpression r typ var val
@@ -561,7 +561,7 @@ constrWarn
     , NumericExpression r val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , Reference r val
@@ -600,7 +600,7 @@ constrExc
     , NumericExpression r val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , Reference r val
@@ -635,7 +635,7 @@ constrVarDec
     , NumericExpression r val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , Reference r val
@@ -670,7 +670,7 @@ constraintViolatedMsg
     , NumericExpression r val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , Reference r val
@@ -706,7 +706,7 @@ printConstraint
     , NumericExpression r val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , Reference r val
@@ -735,7 +735,7 @@ printConstraint v c = do
           , NumericExpression r val
           , SelfSym r var
           , InternalValueExp r typ var val
-          , ValueExpression r typ var val
+          , ValueExpression r typ binder var val
           , OOValueExpression r typ var val
           , List r val
           , Reference r val
@@ -773,7 +773,7 @@ printExpr e     pinfo = [printStr $ " " <> render (parens (oneLineCodeExprDoc pi
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputFormat s = do
   g <- get
@@ -783,7 +783,7 @@ genInputFormat s = do
   let getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
       genInFormat
-        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
         => Bool -> GenState (Maybe (MS (r mthd)))
       genInFormat False = pure Nothing
       genInFormat _ = do
@@ -817,7 +817,7 @@ genSampleInput = do
 
 -- | Generates a module containing the class where constants are stored.
 genConstMod
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => GenState [FS (r file)]
 genConstMod = do
   cDesc <- modDesc $ liftS constModDesc
@@ -827,7 +827,7 @@ genConstMod = do
 -- | Generates a class to store constants, if constants are mapped to the
 -- Constants class in the class definition map, otherwise returns Nothing.
 genConstClass
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => ClassType -> GenState (Maybe (CS (r Class)))
 genConstClass scp = do
   g <- get
@@ -835,7 +835,7 @@ genConstClass scp = do
   cname <- genICName Constants
   let cs = g ^. constDefns
       genClass
-        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
         => [CodeDefinition] -> GenState (Maybe (CS (r Class)))
       genClass [] = pure Nothing
       genClass vs = do
@@ -856,7 +856,7 @@ genConstClass scp = do
 
 -- | Generates a module containing calculation functions.
 genCalcMod
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => GenState (FS (r file))
 genCalcMod = do
   g <- get
@@ -869,7 +869,7 @@ genCalcMod = do
 -- For solving ODEs, the 'ExtLibState' containing the information needed to
 -- generate code is found by looking it up in the external library map.
 genCalcFunc
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => CodeDefinition -> GenState (MS (r mthd))
 genCalcFunc cdef = do
   g <- get
@@ -922,7 +922,7 @@ genCalcBlock
     , NumericExpression r val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , Reference r val
@@ -961,7 +961,7 @@ genCaseBlock
     , NumericExpression r val
     , SelfSym r var
     , InternalValueExp r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , OOValueExpression r typ var val
     , List r val
     , Reference r val
@@ -993,7 +993,7 @@ genCaseBlock t v c cs = do
 
 -- | Generates a module containing the function for printing outputs.
 genOutputMod
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => GenState [FS (r file)]
 genOutputMod = do
   ofName <- genICName OutputFormat
@@ -1002,14 +1002,14 @@ genOutputMod = do
 
 -- | Generates a function for printing output values.
 genOutputFormat
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => GenState (Maybe (MS (r mthd)))
 genOutputFormat = do
   g <- get
   modify (\st -> st {currentScope = Local})
   woName <- genICName WriteOutput
   let genOutput
-        :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+        :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
         => Maybe String -> GenState (Maybe (MS (r mthd)))
       genOutput Nothing = pure Nothing
       genOutput (Just _) = do
@@ -1038,7 +1038,7 @@ genOutputFormat = do
 genMainProc
   ::
     ( NativeVector r typ val
-    , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
+    , ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
     )
   => GenState (FS (r file))
 genMainProc = genModuleProc "Control" "Controls the flow of the program"
@@ -1064,7 +1064,7 @@ genMainFuncProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , MultiStatement r stmt
     , ValueStatement r val stmt
     , DeclStatement r scope var val stmt bod
@@ -1121,7 +1121,7 @@ initConstsProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , DeclStatement r scope var val stmt bod
     , Argument r val
     , List r val
@@ -1167,7 +1167,7 @@ checkConstClass = do
 genInputModProc
   ::
     ( NativeVector r typ val
-    , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
+    , ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
     )
   => GenState [FS (r file)]
 genInputModProc = do
@@ -1176,7 +1176,7 @@ genInputModProc = do
   let genMod
         ::
           ( NativeVector r typ val
-          , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
+          , ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
           )
         => Bool -> GenState (FS (r file))
       genMod False = genModuleProc cname ipDesc [genInputFormatProc Pub,
@@ -1232,7 +1232,7 @@ getInputDeclProc = do
 genCalcModProc
   ::
     ( NativeVector r typ val
-    , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
+    , ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
     )
   => GenState (FS (r file))
 genCalcModProc = do
@@ -1260,7 +1260,7 @@ genCalcFuncProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , Array r var val
     , List r val
@@ -1327,7 +1327,7 @@ genCalcBlockProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , Array r var val
     , List r val
@@ -1367,7 +1367,7 @@ genCaseBlockProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , DeclStatement r scope var val stmt bod
     , AssignStatement r var val stmt
     , ControlStatement r var val stmt bod
@@ -1416,7 +1416,7 @@ genInputFormatProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , VisibilitySym r vis
     , MultiStatement r stmt
     , DeclStatement r scope var val stmt bod
@@ -1457,7 +1457,7 @@ genInputFormatProc s = do
           , BooleanExpression r val
           , Comparison r val
           , NumericExpression r val
-          , ValueExpression r typ var val
+          , ValueExpression r typ binder var val
           , VisibilitySym r vis
           , MultiStatement r stmt
           , DeclStatement r scope var val stmt bod
@@ -1502,7 +1502,7 @@ genInputDerivedProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , Array r var val
     , List r val
@@ -1544,7 +1544,7 @@ genInputDerivedProc s = do
           , BooleanExpression r val
           , Comparison r val
           , NumericExpression r val
-          , ValueExpression r typ var val
+          , ValueExpression r typ binder var val
           , Argument r val
           , Array r var val
           , List r val
@@ -1589,7 +1589,7 @@ genInputConstraintsProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1630,7 +1630,7 @@ genInputConstraintsProc s = do
           , BooleanExpression r val
           , Comparison r val
           , NumericExpression r val
-          , ValueExpression r typ var val
+          , ValueExpression r typ binder var val
           , Argument r val
           , NativeVector r typ val
           , Reference r val
@@ -1679,7 +1679,7 @@ sfwrCBodyProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1712,7 +1712,7 @@ physCBodyProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1746,7 +1746,7 @@ chooseConstrProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1786,7 +1786,7 @@ constrWarnProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1820,7 +1820,7 @@ constrExcProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1850,7 +1850,7 @@ constrVarDecProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1881,7 +1881,7 @@ constraintViolatedMsgProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1912,7 +1912,7 @@ printConstraintProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , NativeVector r typ val
     , Reference r val
@@ -1936,7 +1936,7 @@ printConstraintProc c = do
           , BooleanExpression r val
           , Comparison r val
           , NumericExpression r val
-          , ValueExpression r typ var val
+          , ValueExpression r typ binder var val
           , Argument r val
           , NativeVector r typ val
           , Reference r val
@@ -1967,7 +1967,7 @@ printConstraintProc c = do
 genOutputModProc
   ::
     ( NativeVector r typ val
-    , ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
+    , ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
     )
   => GenState [FS (r file)]
 genOutputModProc = do
@@ -1991,7 +1991,7 @@ genOutputFormatProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , List r val
     , Reference r val
@@ -2027,7 +2027,7 @@ genOutputFormatProc = do
           , BooleanExpression r val
           , Comparison r val
           , NumericExpression r val
-          , ValueExpression r typ var val
+          , ValueExpression r typ binder var val
           , Argument r val
           , List r val
           , Reference r val

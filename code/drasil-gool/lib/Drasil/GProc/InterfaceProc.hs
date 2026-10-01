@@ -24,7 +24,7 @@ import Drasil.Shared.AST (ProgData, TypeData)
 -- for generating a procedural program.
 class (UnRepr r TypeData, BodySym r bod block, BlockSym r block stmt,
   ValueSym r typ val, VariableSym r typ var, VariableValue r var val,
-  ScopeSym r scope, BinderSym r typ, InternalList r var val block,
+  ScopeSym r scope, BinderSym r typ binder, InternalList r var val block,
   VisibilitySym r vis, MethodSym r vis typ var param mthd bod, TypeSym r typ,
   TypeElim r typ, VariableElim r typ var, IndexTranslator r val, Array r var val,
   EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r val stmt,
@@ -36,10 +36,10 @@ class (UnRepr r TypeData, BodySym r bod block, BlockSym r block stmt,
   ReadFile r var val stmt, List r val, ListStatement r val stmt,
   Literal r typ val, MathConstant r val, NumericExpression r val,
   ParameterSym r var param, Reference r val, Set r val,
-  StringStatement r var val stmt, ValueExpression r typ var val,
+  StringStatement r var val stmt, ValueExpression r typ binder var val,
   VariableValue r var val, ModuleSym r mod mthd, FileSym r file mod,
   ProgramSym r prg file)
-  => ProcProg r vis scope typ var param val stmt mthd prg file mod bod block
+  => ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)

@@ -41,11 +41,11 @@ degree = baseUnit "degree" (cn' "degree") "angle" (Special Circle)
 -- Some of these units are easiest to define via others less common names,
 -- which we define first.
 s_2 :: UnitDefn
-s_2 = compoundUnit' "seconds squared" $ second ^: 2
+s_2 = compoundUnit "seconds squared" (cn' "seconds squared") "seconds squared" $ second ^: 2
 
 m_2, m_3 :: UnitDefn
-m_2 = compoundUnit' "square metres"   $ metre ^: 2
-m_3 = compoundUnit' "cubic metres"    $ metre ^: 3
+m_2 = compoundUnit "square metres" (cn' "square metres") "square metres" $ metre ^: 2
+m_3 = compoundUnit "cubic metres" (cn' "cubic metres") "cubic metres" $ metre ^: 3
 
 -- And now for the ones with 'common' names
 
@@ -141,12 +141,12 @@ weber = derivedUnit "weber"
   (cn' "weber") "magnetic flux" (label "Wb") (volt *: second)
 
 specificE :: UnitDefn
-specificE = compoundUnit (cncpt''' (mkUid "specificE") (cnIES "specific energy")
-  (S "energy per unit mass")) (joule /: kilogram)
+specificE = compoundUnit "specificE" (cnIES "specific energy")
+  "energy per unit mass" (joule /: kilogram)
 
 specificWeight :: UnitDefn
-specificWeight = compoundUnit (cncpt''' (mkUid "specificWeight") (cn' "specific weight")
-  (S "weight per unit volume")) (newton *$ (metre ^: (-3)))
+specificWeight = compoundUnit "specificWeight" (cn' "specific weight")
+  "weight per unit volume" (newton *$ (metre ^: (-3)))
 
 -- FIXME: Need to add pi
 --degrees = DUC

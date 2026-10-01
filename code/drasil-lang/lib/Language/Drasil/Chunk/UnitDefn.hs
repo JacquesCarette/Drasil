@@ -7,14 +7,14 @@ module Language.Drasil.Chunk.UnitDefn (
   -- * Chunk Type
   UnitDefn(..),
   -- * Constructors
-  baseUnit, derivedUnit, compoundUnit, compoundUnit', scaledUnit,
+  baseUnit, derivedUnit, compoundUnit, scaledUnit,
   derUC,
   -- * Unit Combinators ('UnitEquation's)
   (^:), (/:), (*:), (*$), (/$), (^$),
   -- * Unit Relation Functions
   shift,
   -- * Helpers
-  fromUDefn, unitCon, getCu, compUnitDefn, unitSymbol
+  fromUDefn, getCu, compUnitDefn, unitSymbol
 ) where
 
 import Control.Lens ((^.), makeLenses, view)
@@ -84,14 +84,13 @@ getCu :: UnitEquation -> [UID]
 getCu = view contributingUnit
 
 -- | Create a compound unit (a combination of other units without its own
--- special symbol, e.g. m/s) from a concept and a unit equation.
-compoundUnit :: ConceptChunk -> UnitEquation -> UnitDefn
-compoundUnit cc ueq = UD cc (Defined (usymb ueq)(USynonym $ usymb ueq)) (getCu ueq)
-
--- | Variant of 'compoundUnit' that builds the concept from a single 'String'
--- (used as the identifier, term, and definition).
-compoundUnit' :: String -> UnitEquation -> UnitDefn
-compoundUnit' nm = compoundUnit (unitCon nm)
+-- special symbol, e.g. m/s) from a 'UID' string, term, definition, and the
+-- unit equation it is defined by.
+compoundUnit :: String -> NP -> String -> UnitEquation -> UnitDefn
+compoundUnit idStr trm dsc ueq =
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
+     (Defined (usymb ueq) (USynonym $ usymb ueq))
+     (getCu ueq)
 
 -- | Create a derived unit (a combination of other units that has its own
 -- special symbol, e.g. N) from a 'UID' string, term, definition, its symbol,
@@ -126,11 +125,6 @@ baseUnit idStr trm dsc sym =
 unitUid :: String -> UID
 unitUid = nsUid "unit" . mkUid
 
---FIXME: Make this use a meaningful identifier.
--- | Helper for fundamental unit concept chunk creation. Uses the same 'String'
--- for the identifier, term, and definition.
-unitCon :: String -> ConceptChunk
-unitCon s = cncpt''' (unitUid s) (cn' s) (S s)
 ---------------------------------------------------------
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power.

@@ -88,11 +88,11 @@ module Language.Drasil (
   , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
   -- Language.Drasil.Chunk.UnitDefn
   , UnitDefn(..)
-  , fromUDefn, unitCon
+  , fromUDefn
   , (^:), (/:), (*:), (*$), (/$), (^$)
   , shift
   , derUC
-  , baseUnit, derivedUnit, compoundUnit, compoundUnit', scaledUnit, compUnitDefn
+  , baseUnit, derivedUnit, compoundUnit, scaledUnit, compUnitDefn
   , getCu, MayHaveUnit(getUnit), unitSymbol, UnitSymbol(..)
 
   -- *** Constrained and Uncertain Values
@@ -239,9 +239,9 @@ import Language.Drasil.Uncertainty
 
 import Language.Drasil.Development.Sentence -- are these really development?
 import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
-  , fromUDefn, unitCon
+  , fromUDefn
   , (^:), (/:), (*:), (*$), (/$),(^$)
   , shift
   , derUC
-  , baseUnit, derivedUnit, compoundUnit, compoundUnit', scaledUnit, compUnitDefn
+  , baseUnit, derivedUnit, compoundUnit, scaledUnit, compUnitDefn
   , getCu, MayHaveUnit(getUnit), unitSymbol)

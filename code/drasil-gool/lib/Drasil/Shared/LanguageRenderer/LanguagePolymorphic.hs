@@ -24,8 +24,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, NamedArgs,
   MultiStatement(multi), AssignStatement((&++)), (&=), TypeElim(..),
   PrintConsole(printStr, printStrLn),
   PrintFile(printFile, printFileStr, printFileStrLn), ifNoElse, convType,
-  VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression,
-  VariableValue, BlockSym, BodySym)
+  BinderElim(..), getCodeType, getTypeString, ValueExpression, VariableValue,
+  BlockSym, BodySym)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (Class, Initializers, CSStateVar, newObj,
   objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym, OOVariableSym)
@@ -320,7 +320,7 @@ lambda
     , ValueSym r typ val
     )
   => ([r BinderD] -> r val -> Doc)
-  -> [VSBinder r]
+  -> [VS (r BinderD)]
   -> VS (r val)
   -> VS (r val)
 lambda f ps' ex' = do

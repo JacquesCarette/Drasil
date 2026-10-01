@@ -3,7 +3,7 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, Body, Block, VSBinder, Variable, Value, NamedArgs, MixedCall,
+  Label, Library, Body, Block, Variable, Value, NamedArgs, MixedCall,
   MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
@@ -241,14 +241,12 @@ type PosCall r typ val = Label -> VS (r typ) -> [VS (r val)] -> VS (r val)
 -- Constructor call with only positional arguments
 type PosCtorCall r typ val = VS (r typ) -> [VS (r val)] -> VS (r val)
 
-type VSBinder a = VS (a BinderD)
-
 -- | A class for representing a binder, i.e. the binding of a variable name
 -- to a type, scope, etc.
 -- As of July 2026, integration of this typeclass is still WIP, blocked
 -- by issues with our variable map.
 class BinderSym r typ | r -> typ where
-  binder :: Label -> VS (r typ) -> VSBinder r
+  binder :: Label -> VS (r typ) -> VS (r BinderD)
 
 class BinderElim r typ | r -> typ where
   binderName :: r BinderD -> String
@@ -264,7 +262,7 @@ class ValueExpression r typ var val | r -> typ var val where
   extFuncAppMixedArgs  :: Library -> MixedCall r typ var val
   libFuncAppMixedArgs  :: Library -> MixedCall r typ var val
 
-  lambda :: [VSBinder r] -> VS (r val) -> VS (r val)
+  lambda :: [VS (r BinderD)] -> VS (r val) -> VS (r val)
 
   notNull :: VS (r val) -> VS (r val)
 

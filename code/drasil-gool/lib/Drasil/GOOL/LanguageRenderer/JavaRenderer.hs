@@ -130,7 +130,7 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOProg JavaCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
+instance OOProg JavaCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym JavaCode ProgData FileData where
   prog n st fs = modifyReturnList (zoom lensGStoFS <$> fs) (revFiles .
@@ -138,7 +138,7 @@ instance ProgramSym JavaCode ProgData FileData where
     endStatement)))
 
 instance CommonRenderSym JavaCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym JavaCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
+instance OORenderSym JavaCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
@@ -710,14 +710,14 @@ instance StateVarSym JavaCode Doc Variable Value Doc Doc where
 instance StateVarElim JavaCode StateVar where
   stateVar = unJC
 
-instance ClassSym JavaCode MethodData StateVar where
+instance ClassSym JavaCode Class MethodData StateVar where
   buildClass = G.buildClass
   extraClass = jExtraClass
   implementingClass = G.implementingClass
 
   docClass = CP.doxClass
 
-instance RenderClass JavaCode Doc MethodData StateVar where
+instance RenderClass JavaCode Doc Class MethodData StateVar where
   intClass = CP.intClass R.class'
 
   inherit n = toCode $ maybe empty ((jExtends <+>) . text) n
@@ -725,10 +725,10 @@ instance RenderClass JavaCode Doc MethodData StateVar where
 
   commentedClass = G.commentedClass
 
-instance ClassElim JavaCode where
+instance ClassElim JavaCode Class where
   class' = unJC
 
-instance ModuleSym JavaCode ModData MethodData where
+instance ModuleSym JavaCode ModData Class MethodData where
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod JavaCode ModData where
@@ -1139,8 +1139,13 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (fst <$> bs P.<> is)
           fmap fst os
 
 jExtraClass
-  :: (RenderClass r vis mthd stvr, RenderVisibility r vis)
-  => Label -> Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
+  :: (RenderClass r vis cls mthd stvr, RenderVisibility r vis)
+  => Label
+  -> Maybe Label
+  -> [CSStateVar r stvr]
+  -> [MS (r mthd)]
+  -> [MS (r mthd)]
+  -> CS (r cls)
 jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

@@ -11,7 +11,7 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
 nameGenTestOO
-  :: OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block
+  :: OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block
   => OO.GSProgram r prg
 nameGenTestOO = OO.prog "NameGenTest" "" [OO.fileDoc $ OO.buildModule
   "NameGenTest" [] [main, helper] []]

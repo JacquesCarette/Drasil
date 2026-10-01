@@ -457,7 +457,7 @@ instance (P.ProgramSym r prg file) => P.ProgramSym (LoggingFor r) prg file where
 
 -- GOOL
 
-instance (G.OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block) => G.OOProg (LoggingFor r) vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block
+instance (G.OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block) => G.OOProg (LoggingFor r) vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block
 
 instance (G.GetSet r var val) => G.GetSet (LoggingFor r) var val where
   get = liftLogging G.get
@@ -518,13 +518,13 @@ instance (G.StateVarSym r vis var val stvr attch) => G.StateVarSym (LoggingFor r
   stateVarDef = liftLogging G.stateVarDef
   constVar = liftLogging G.constVar
 
-instance (G.ClassSym r mthd stvr) => G.ClassSym (LoggingFor r) mthd stvr where
+instance (G.ClassSym r cls mthd stvr) => G.ClassSym (LoggingFor r) cls mthd stvr where
   buildClass = liftLogging G.buildClass
   extraClass = liftLogging G.extraClass
   implementingClass = liftLogging G.implementingClass
   docClass = liftLogging G.docClass
 
-instance (G.ModuleSym r mod mthd) => G.ModuleSym (LoggingFor r) mod mthd where
+instance (G.ModuleSym r mod cls mthd) => G.ModuleSym (LoggingFor r) mod cls mthd where
   buildModule = liftLogging G.buildModule
 
 instance (G.FileSym r file mod) => G.FileSym (LoggingFor r) file mod where

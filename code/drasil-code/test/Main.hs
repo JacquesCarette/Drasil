@@ -59,8 +59,8 @@ codeGenTestGroup =
 
 goolTestGroup
   :: String
-  -> ( forall r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block.
-       ( OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block
+  -> ( forall r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block.
+       ( OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block
        , GetSet r var val
        , StrategyPattern r var val bod block
        , ObserverPattern r typ stmt
@@ -149,7 +149,7 @@ genCodeProcNoMake unRepr unRepr' p =
 
 genCodeGOOL
   ::
-    ( OOProg r vis scope typ binder var param val stmt mthd stvr attch ProgData file mod bod block
+    ( OOProg r vis scope typ binder var param val stmt cls mthd stvr attch ProgData file mod bod block
     , GetSet r var val
     , StrategyPattern r var val bod block
     , ObserverPattern r typ stmt
@@ -158,8 +158,8 @@ genCodeGOOL
     )
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> ( forall s vis' scope' typ' binder' var' param' val' stmt' mthd' stvr' attch' prg' file' mod' bod' block'.
-       ( OOProg s vis' scope' typ' binder' var' param' val' stmt' mthd' stvr' attch' prg' file' mod' bod' block'
+  -> ( forall s vis' scope' typ' binder' var' param' val' stmt' cls' mthd' stvr' attch' prg' file' mod' bod' block'.
+       ( OOProg s vis' scope' typ' binder' var' param' val' stmt' cls' mthd' stvr' attch' prg' file' mod' bod' block'
        , GetSet s var' val'
        , StrategyPattern s var' val' bod' block'
        , ObserverPattern s typ' stmt'

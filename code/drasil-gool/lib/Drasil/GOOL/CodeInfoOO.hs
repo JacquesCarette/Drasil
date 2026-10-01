@@ -48,7 +48,7 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance OOProg CodeInfoOO () () () () () () () () () () () GOOLState () () () ()
+instance OOProg CodeInfoOO () () () () () () () () () () () () GOOLState () () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
@@ -472,7 +472,7 @@ instance StateVarSym CodeInfoOO () () () () () where
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO () () where
+instance ClassSym CodeInfoOO () () () where
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
     implementingClass n [] [] cs ms
@@ -492,7 +492,7 @@ instance ClassSym CodeInfoOO () () where
     _ <- c
     pure $ error "[docClass] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance ModuleSym CodeInfoOO () () where
+instance ModuleSym CodeInfoOO () () () where
   buildModule n _ funcs classes = do
     modify (setModuleName n)
     mapM_ (zoom lensFStoCS) classes

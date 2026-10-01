@@ -26,7 +26,7 @@ import Language.Drasil.Chunk.Concept (ConceptChunk, cncpt''')
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
-import Language.Drasil.NaturalLanguage.English.NounPhrase (cn,cn',NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (cn,NP)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift),
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))

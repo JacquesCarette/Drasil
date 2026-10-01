@@ -83,14 +83,11 @@ unitSymbol = (^. cas)
 getCu :: UnitEquation -> [UID]
 getCu = view contributingUnit
 
--- | Create a compound unit (a combination of other units without its own
--- special symbol, e.g. m/s) from a 'UID' string, term, definition, and the
--- unit equation it is defined by.
-compoundUnit :: String -> NP -> String -> UnitEquation -> UnitDefn
-compoundUnit idStr trm dsc ueq =
-  UD (cncpt''' (unitUid idStr) trm (S dsc))
-     (Defined (usymb ueq) (USynonym $ usymb ueq))
-     (getCu ueq)
+-- | Create a base unit (one not defined in terms of any other unit, e.g. m, kg)
+-- from a 'UID' string, term, definition, and its symbol.
+baseUnit :: String -> NP -> String -> Symbol -> UnitDefn
+baseUnit idStr trm dsc sym =
+  UD (cncpt''' (unitUid idStr) trm (S dsc)) (BaseSI $ US [(sym, 1)]) []
 
 -- | Create a derived unit (a combination of other units that has its own
 -- special symbol, e.g. N) from a 'UID' string, term, definition, its symbol,
@@ -101,10 +98,14 @@ derivedUnit idStr trm dsc sym ueq =
      (DerivedSI (US [(sym,1)]) (usymb ueq) (USynonym $ usymb ueq))
      (getCu ueq)
 
--- | Create a derived unit from a 'UID', term ('String'), definition, 'Symbol',
--- and a relation to another unit ('UDefn', e.g. a shift). Uses self-plural term.
-derUC :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
-derUC a b c s u = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
+-- | Create a compound unit (a combination of other units without its own
+-- special symbol, e.g. m/s) from a 'UID' string, term, definition, and the
+-- unit equation it is defined by.
+compoundUnit :: String -> NP -> String -> UnitEquation -> UnitDefn
+compoundUnit idStr trm dsc ueq =
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
+     (Defined (usymb ueq) (USynonym $ usymb ueq))
+     (getCu ueq)
 
 -- | Create a defined unit that is a scaled version of another unit
 -- (e.g. millimetre = 0.001 × metre) from a 'UID' string, term, definition,
@@ -115,11 +116,10 @@ scaledUnit idStr trm dsc sym factor base =
      (Defined (US [(sym, 1)]) (UScale factor (usymb base)))
      [base ^. uid]
 
--- | Create a base unit (one not defined in terms of any other unit, e.g. m, kg)
--- from a 'UID' string, term, definition, and its symbol.
-baseUnit :: String -> NP -> String -> Symbol -> UnitDefn
-baseUnit idStr trm dsc sym =
-  UD (cncpt''' (unitUid idStr) trm (S dsc)) (BaseSI $ US [(sym, 1)]) []
+-- | Create a derived unit from a 'UID', term ('String'), definition, 'Symbol',
+-- and a relation to another unit ('UDefn', e.g. a shift). Uses self-plural term.
+derUC :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
+derUC a b c s u = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
 
 -- | Build the 'UID' of a unit from its name, in the "unit" namespace.
 unitUid :: String -> UID

@@ -50,7 +50,7 @@ genAllInputCalls
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , SelfSym r var
     , InternalValueExp r typ var val
     , OOValueExpression r typ var val
@@ -121,7 +121,7 @@ genConstraintCall
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , SelfSym r var
     , InternalValueExp r typ var val
     , OOValueExpression r typ var val
@@ -155,7 +155,7 @@ genCalcCall
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , SelfSym r var
     , InternalValueExp r typ var val
     , OOValueExpression r typ var val
@@ -190,7 +190,7 @@ genOutputCall
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , SelfSym r var
     , InternalValueExp r typ var val
     , OOValueExpression r typ var val
@@ -223,7 +223,7 @@ genFuncCall
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , SelfSym r var
     , InternalValueExp r typ var val
     , OOValueExpression r typ var val
@@ -312,7 +312,7 @@ genAllInputCallsProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , NativeVector r typ val
     , FuncAppStatement r var val stmt
     , Argument r val
@@ -367,7 +367,7 @@ genConstraintCallProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , NativeVector r typ val
     , Argument r val
     , List r val
@@ -396,7 +396,7 @@ genCalcCallProc
     , NumericExpression r val
     , VariableSym r typ var
     , ScopeSym r scope
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , DeclStatement r scope var val stmt bod
     , Argument r val
     , List r val
@@ -426,7 +426,7 @@ genOutputCallProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , List r val
     , NativeVector r typ val
@@ -454,7 +454,7 @@ genFuncCallProc
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , Argument r val
     , List r val
     , NativeVector r typ val

@@ -34,7 +34,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   InternalVarElim(..), ValueElim(..), StatementElim(..),
   ParamElim(..), InternalBinderElim(..))
 import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod,
-  updateMod, TypeData(..), VarData(..), BinderD)
+  updateMod, TypeData(..), VarData(..))
 import Drasil.Shared.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 import Drasil.Shared.State (VS)
 
@@ -408,7 +408,7 @@ valueList = hicat listSep' . fmap RC.value
 variableList :: (InternalVarElim r var) => [r var] -> Doc
 variableList = hicat listSep' . fmap RC.variable
 
-binderList :: (InternalBinderElim r) => [r BinderD] -> Doc
+binderList :: (InternalBinderElim r binder) => [r binder] -> Doc
 binderList = hicat listSep' . fmap RC.binderElim
 
 parameterList :: (ParamElim r typ param) => [r param] -> Doc

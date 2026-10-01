@@ -119,7 +119,7 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance OOProg PythonCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body Block
+instance OOProg PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body Block
 
 instance ProgramSym PythonCode ProgData FileData where
   prog n st files = do
@@ -127,8 +127,8 @@ instance ProgramSym PythonCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym PythonCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym PythonCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body Block
+instance CommonRenderSym PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body Block
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
@@ -359,7 +359,7 @@ instance Comparison PythonCode Value where
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
 
-instance ValueExpression PythonCode TypeData Variable Value where
+instance ValueExpression PythonCode TypeData BinderD Variable Value where
   inlineIf = pyInlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
@@ -458,14 +458,14 @@ instance InternalGetSet PythonCode TypeData Variable Value where
 instance InternalListFunc PythonCode TypeData Value where
   listAccessFunc = CS.listAccessFunc
 
-instance BinderSym PythonCode TypeData where
+instance BinderSym PythonCode TypeData BinderD where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
-instance BinderElim PythonCode TypeData where
+instance BinderElim PythonCode TypeData BinderD where
   binderName = bindName . unPC
   binderType = onCodeValue bindType
 
-instance InternalBinderElim PythonCode where
+instance InternalBinderElim PythonCode BinderD where
   binderElim = text . bindName . unPC
 
 instance RenderFunction PythonCode TypeData where
@@ -888,7 +888,7 @@ readline f = objMethodCall string f pyReadline []
 readlines f = objMethodCall (listType string) f pyReadlines []
 
 readInt, readDouble
-  :: (TypeSym r typ, ValueExpression r typ var val)
+  :: (TypeSym r typ, ValueExpression r typ binder var val)
   => VS (r val) -> VS (r val)
 readInt inSrc = funcApp pyInt int [inSrc]
 readDouble inSrc = funcApp pyDouble double [inSrc]
@@ -899,7 +899,7 @@ readString
 readString inSrc = objMethodCall string inSrc pyRstrip []
 
 range
-  :: (TypeSym r typ, ValueExpression r typ var val)
+  :: (TypeSym r typ, ValueExpression r typ binder var val)
   => VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
 range initv finalv stepv = funcApp pyRange (listType int) [initv, finalv, stepv]
 
@@ -917,8 +917,8 @@ pyInlineIf c' v1' v2' = do
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
 pyLambda
-  :: (InternalBinderElim r, ValueElim r val)
-  => [r BinderD] -> r val -> Doc
+  :: (InternalBinderElim r binder, ValueElim r val)
+  => [r binder] -> r val -> Doc
 pyLambda ps ex = pyLambdaDec <+> binderList ps <> colon <+> RC.value ex
 
 pyStringType :: (Monad r) => VS (r TypeData)

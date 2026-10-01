@@ -32,7 +32,10 @@ import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)
 
 ifExists
-  :: (IC.ControlStatement r var val stmt bod, IC.ValueExpression r typ var val)
+  ::
+    ( IC.ControlStatement r var val stmt bod
+    , IC.ValueExpression r typ binder var val
+    )
   => VS (r val) -> MS (r bod) -> MS (r bod) -> MS (r stmt)
 ifExists v ifBody = IC.ifCond [(IC.notNull v, ifBody)]
 
@@ -96,7 +99,7 @@ listSlice
     , BooleanExpression r val
     , Comparison r val
     , NumericExpression r val
-    , IC.ValueExpression r typ var val
+    , IC.ValueExpression r typ binder var val
     , VariableSym r typ var
     , IC.VariableValue r var val
     , IC.IndexTranslator r val
@@ -181,7 +184,7 @@ makeSetterVal
     , Comparison r val
     , IC.IndexTranslator r val
     , IC.Literal r typ val
-    , IC.ValueExpression r typ var val
+    , IC.ValueExpression r typ binder var val
     , IC.VariableValue r var val
     )
   => Label

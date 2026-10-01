@@ -129,7 +129,7 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOProg CSharpCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
+instance OOProg CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym CSharpCode ProgData FileData where
   prog n st files = do
@@ -137,8 +137,8 @@ instance ProgramSym CSharpCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym CSharpCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CSharpCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
+instance CommonRenderSym CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
@@ -363,7 +363,7 @@ instance Comparison CSharpCode Value where
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
 
-instance ValueExpression CSharpCode TypeData Variable Value where
+instance ValueExpression CSharpCode TypeData BinderD Variable Value where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
@@ -456,14 +456,14 @@ instance InternalGetSet CSharpCode TypeData Variable Value where
 instance InternalListFunc CSharpCode TypeData Value where
   listAccessFunc = CS.listAccessFunc
 
-instance BinderSym CSharpCode TypeData where
+instance BinderSym CSharpCode TypeData BinderD where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
-instance BinderElim CSharpCode TypeData where
+instance BinderElim CSharpCode TypeData BinderD where
   binderName = bindName . unCSC
   binderType = onCodeValue bindType
 
-instance InternalBinderElim CSharpCode where
+instance InternalBinderElim CSharpCode BinderD where
   binderElim = text . bindName . unCSC
 
 instance RenderFunction CSharpCode TypeData where
@@ -959,7 +959,7 @@ csPrint
     , Comparison r val
     , Literal r typ val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , TypeSym r typ
     , VariableSym r typ var
     , VariableValue r var val

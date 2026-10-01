@@ -21,7 +21,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MixedCall, TypeSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   ParameterSym(..), BinderElim(..), UnRepr(..), BodySym, BlockSym)
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, OpData,
-  BinderD, FuncData)
+  FuncData)
 import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)
@@ -36,19 +36,19 @@ class (BodySym r bod block, BlockSym r block stmt,
   VariableValue r var val, CommandLineArgs r val, NumericExpression r val,
   BooleanExpression r val, Comparison r val, IndexTranslator r val, List r val,
   ListStatement r val stmt, InternalList r var val block, VariableElim r typ var,
-  BinderElim r typ, RenderBlock r block, BlockElim r block, RenderBody r bod,
+  BinderElim r typ binder, RenderBlock r block, BlockElim r block, RenderBody r bod,
   BodyElim r bod, InternalListFunc r typ val, RenderFunction r typ,
   FunctionElim r typ, OpElim r, RenderParam r var param, ParamElim r typ param,
   RenderVisibility r vis, VisibilityElim r vis,
   InternalAssignStmt r var val stmt, InternalIOStmt r val stmt,
   InternalControlStmt r val stmt, RenderStatement r stmt, StatementElim r stmt,
   RenderType r typ, RenderValue r typ var val, ValueElim r val,
-  RenderVariable r typ var, InternalVarElim r var, InternalBinderElim r,
+  RenderVariable r typ var, InternalVarElim r var, InternalBinderElim r binder,
   ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
-  BlockCommentElim r, ValueExpression r typ var val, TypeSym r typ,
+  BlockCommentElim r, ValueExpression r typ binder var val, TypeSym r typ,
   MethodTypeSym r typ, RenderMethod r mthd, MethodElim r mthd,
   ParameterSym r var param, ScopeElim r scope
-  ) => CommonRenderSym r vis scope typ var param val stmt mthd bod block
+  ) => CommonRenderSym r vis scope typ binder var param val stmt mthd bod block
 
 -- Common Typeclasses --
 
@@ -129,8 +129,8 @@ class InternalVarElim r var | r -> var where
   variableBind :: r var -> AttachmentTag
   variable  :: r var -> Doc
 
-class InternalBinderElim r where
-  binderElim  :: r BinderD -> Doc
+class InternalBinderElim r binder where
+  binderElim  :: r binder -> Doc
 
 class RenderValue r typ var val | r -> typ var val where
   inputFunc       :: VS (r val)

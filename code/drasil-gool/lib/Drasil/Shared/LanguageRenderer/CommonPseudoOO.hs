@@ -91,7 +91,7 @@ int :: (Monad r) => VS (r TypeData)
 int = typeFromData Integer intRender (text intRender)
 
 constructor
-  :: (OORenderSym r vis scope typ var param val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis scope typ binder var param val stmt mthd stvr attch file mod bod block)
   => Label
   -> [MS (r param)]
   -> Initializers r var val
@@ -302,7 +302,7 @@ mainDesc = "Controls the flow of the program"
 argsDesc = "List of command-line arguments"
 
 docMain
-  :: (OORenderSym r vis scope typ var param val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis scope typ binder var param val stmt mthd stvr attch file mod bod block)
   => MS (r bod) -> MS (r mthd)
 docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
@@ -331,7 +331,7 @@ mainFunction s n = RG.intFunc True n public classLevel (mType IC.void)
 --   cs is the classes
 buildModule'
   ::
-    ( OORenderSym r vis scope typ var param val stmt mthd stvr attch file mod bod block
+    ( OORenderSym r vis scope typ binder var param val stmt mthd stvr attch file mod bod block
     , UnRepr r Doc
     )
   => Label
@@ -461,7 +461,7 @@ destructorError l = "Destructors not allowed in " P.<> l
 
 stateVarDef
   ::
-    ( OORenderSym r vis scope typ var param val stmt mthd stvr attch file mod bod block
+    ( OORenderSym r vis scope typ binder var param val stmt mthd stvr attch file mod bod block
     , Monad r
     )
   => r vis -> r attch -> VS (r var) -> VS (r val) -> CS (r Doc)
@@ -470,7 +470,10 @@ stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.stmt $ IC.varDecDef vr IC.local vl)
 
 constVar
-  :: (CommonRenderSym r vis scope typ var param val stmt mthd bod block, Monad r)
+  ::
+    ( CommonRenderSym r vis scope typ binder var param val stmt mthd bod block
+    , Monad r
+    )
   => Doc -> r vis -> VS (r var) -> VS (r val) -> CS (r Doc)
 constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility s) p . RC.statement) (RC.stmt $ IC.constDecDef vr IC.local vl)
@@ -534,7 +537,7 @@ openFileW f vr vl = vr &= f vl outfile IC.litFalse
 stateVar
   ::
     ( Monad r
-    , OORenderSym r vis scope typ var param val stmt mthd stvr attch file mod bod block
+    , OORenderSym r vis scope typ binder var param val stmt mthd stvr attch file mod bod block
     )
   => r vis -> r attch -> VS (r var) -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
@@ -593,7 +596,7 @@ listDec
 listDec v scp = listDecDef v scp []
 
 funcDecDef
-  :: (OORenderSym r vis ScopeData typ var param val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis ScopeData typ binder var param val stmt mthd stvr attch file mod bod block)
   => VS (r var)
   -> r ScopeData
   -> [VS (r var)]
@@ -745,7 +748,11 @@ fileW = "w"
 fileA = "a"
 
 openFileR', openFileW', openFileA'
-  :: (TypeSym r typ, IC.Literal r typ val, IC.ValueExpression r typ var val)
+  ::
+    ( TypeSym r typ
+    , IC.Literal r typ val
+    , IC.ValueExpression r typ binder var val
+    )
   => VS (r val) -> VS (r val)
 openFileR' n = funcApp fileOpen infile [n, IC.litString fileR]
 openFileW' n = funcApp fileOpen infile [n, IC.litString fileW]

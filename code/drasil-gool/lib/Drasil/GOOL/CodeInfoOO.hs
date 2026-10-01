@@ -2,25 +2,24 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), VSBinder, var,
-  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..),
-  IndexTranslator(..), Reference(..), Array(..), List(..), ListStatement(..),
-  Set(..), InternalList(..), EmptyStatement(..), MultiStatement(..),
-  ValueStatement(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
-  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  VisibilitySym(..), BinderSym(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), var, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
+  Array(..), List(..), ListStatement(..), Set(..), InternalList(..),
+  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
+  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueExpression(..),
   InternalValueExp(..), OOFunctionSym(..), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (qualName, td, bindFormD)
+import Drasil.Shared.AST (qualName)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, MS, VS, lensGStoFS, lensFStoCS,
@@ -33,7 +32,6 @@ import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (fromMaybe)
-import Text.PrettyPrint.HughesPJ (empty)
 
 newtype CodeInfoOO a = CI {unCI :: a} deriving Eq
 
@@ -50,7 +48,7 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance OOProg CodeInfoOO () () () () () () () () () () GOOLState () () () ()
+instance OOProg CodeInfoOO () () () () () () () () () () () GOOLState () () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
@@ -202,7 +200,7 @@ instance Comparison CodeInfoOO () where
   (?==) = execute2
   (?!=) = execute2
 
-instance ValueExpression CodeInfoOO () () () where
+instance ValueExpression CodeInfoOO () () () () where
   inlineIf = execute3
   funcAppMixedArgs n _ = do
     _ <- currModCall n
@@ -286,8 +284,8 @@ instance InternalList CodeInfoOO () () () where
     _ <- vl
     pure $ pure $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance BinderSym CodeInfoOO () where
-  binder _ _ = noInfoBinder
+instance BinderSym CodeInfoOO () () where
+  binder _ _ = noInfo
 
 instance EmptyStatement CodeInfoOO () where
   emptyStmt = noInfo
@@ -505,9 +503,6 @@ instance ModuleSym CodeInfoOO () () where
 
 noInfo :: State s (CodeInfoOO ())
 noInfo = toState $ toCode ()
-
-noInfoBinder :: VSBinder CodeInfoOO
-noInfoBinder = pure $ pure $ bindFormD "" (td Void "" empty) -- Hack
 
 updateMEMandCM :: String -> MS (CodeInfoOO ()) -> MS (CodeInfoOO ())
 updateMEMandCM n b = do

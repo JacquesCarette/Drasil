@@ -26,7 +26,7 @@ import Helper (helperOO, helperProc)
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldOO
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => OO.GSProgram r prg
 helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
   ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
@@ -34,7 +34,7 @@ helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldProc
-  :: (ProcProg r vis scope typ var param val stmt mthd prg file mod bod block)
+  :: (ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block)
   => GProc.GSProgram r prg
 helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod descriptionProc
   watermark
@@ -52,7 +52,7 @@ myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainOO
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => MS (r mthd)
 helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] <> listSliceTests
     <> [block [printLn $ litString "", ifCond [
@@ -65,7 +65,7 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] <> lis
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainProc
-  :: (ProcProg r vis scope typ var param val stmt mthd prg file mod bod block)
+  :: (ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block)
   => MS (r mthd)
 helloWorldMainProc = mainFunction (body ([ helloInitVariables] <> listSliceTests
     <> [block [printLn $ litString "", ifCond [
@@ -147,7 +147,7 @@ helloInitVariables = block [comment "Initializing variables",
     (litString "Set s should contain 7")]
 
 objectTests
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => MS (r block)
 objectTests = block [comment "Object tests",
   varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
@@ -325,7 +325,7 @@ helloIfBody
     , VariableValue r var val
     , BooleanExpression r val
     , NumericExpression r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , MultiStatement r stmt
     , DeclStatement r scope var val stmt bod
     , AssignStatement r var val stmt
@@ -488,7 +488,7 @@ helloForEachLoop
     , Literal r typ val
     , VariableSym r typ var
     , VariableValue r var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     , ControlStatement r var val stmt bod
     , PrintConsole r val stmt
     )
@@ -511,7 +511,7 @@ helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
 
 helloWorldClass
-  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
   => CS (r Class)
 helloWorldClass = extraClass "TestClass" Nothing
   [stateVar public instanceLevel (var "a" int)]

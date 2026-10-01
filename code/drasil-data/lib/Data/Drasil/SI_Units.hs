@@ -4,7 +4,6 @@ module Data.Drasil.SI_Units where
 import Language.Drasil
 import Language.Drasil.Display (Symbol(Special))
 import Language.Drasil.ShortHands (cOmega)
-import Drasil.Database (mkUid)
 
 -- * Lists of Units
 

@@ -2,16 +2,9 @@
 
 ## [`drasil-code`](../../../code/drasil-code)
 
-Overall, I believe that before we make major architectural changes, we should:
+The shallow file analysis is done in service to the Generating Human-Readable Code paper, focused on getting more use out of `drasil-code` by being able to generate more kinds of artifacts.
 
-* [ ] Reorganize `-code`.
-* [ ] Break up `-code`.
-* [ ] Simplify `-code`.
-* [ ] Rename things in `-code`.
-
-In particular after breaking up `-code`, we should take many smaller refactoring passes at the new packages.
-
-Something that was very nice is how validating this analysis was to me in my previous analysis about the projectile variations and where choices are made. The problem is now how we pivot to that structure, which we will definitely need to make in many small steps.
+The early work should focus on reorganizing and simplifying `drasil-code` until a clearer picture of its design forms. Reorganizing may mean breaking `drasil-code` into multiple libraries. Afterwards, we redesign.
 
 ### [`drasil-code/lib/Language/Drasil/GOOL.hs`](../../../code/drasil-code/lib/Language/Drasil/GOOL.hs)
 
@@ -47,9 +40,30 @@ Regarding the instances, I wrote (in [#5217](https://github.com/JacquesCarette/D
 -- `drasil-lang`. i.e., a cycle!
 ```
 
-The dependency issue chain between `drasil-printers`, `drasil-code`, and `drasil-lang` occurs again.
+The dependency issue chain between `drasil-printers`, `drasil-code`, and `drasil-lang` occurs again. The code that lives in `drasil-printers` that `drasil-code` relies on is the plaintext printer for printing:
 
-It also contains `ccObjVar`, a constructor for `CodeVarChunk`, that relies on the orphaned instances mentioned earlier. This code belongs next to the definition of `CodeVarChunk`.
+* `Sentence`
+* `Implementation`-stage `Symbol`
+* `USymb`s (units)
+* `CodeExpr`
+
+The last one is what creates the cyclic dependency; if we move `CodeExpr` and related `Drasil.Code` files from `drasil-lang` to `drasil-code` (`-code` would rely on `-printers` for printing `CodeExpr` and `-printers` would rely on `-code` for the AST of `CodeExpr`).
+
+Some comments on this design more generally:
+
+1. It's not extensible. The printing expression language is good and easy to print to. We should expose tools for building printing-oriented expressions with ease (helping with managing precedence to avoid unnecessary parentheses, for example).
+2. The code generator relies on `-printers` for things that render to plaintext. Plaintext is not necessarily what we always need. We should be more intentional in which renderer we want. This makes things seem like Drasil just happens to work for our current examples, and if we deviate slightly, we may generate bad output.
+
+To avoid the cyclic dependency, addressing (1) using typeclasses that carry functions for rendering to the printing expression language is a straightforward way to:
+
+1. Moving the instances of `Sentence, etc. -> P.Expr` closer to the definitions of `Sentence, etc.`, thereby inverting the relationship `drasil-printers` has with everything else.
+2. Make `drasil-printers` a bit more extensible. Exposing both default printers and the AST for the printing expression language makes supporting rendering more types easier and emitting more kinds of document types (e.g., in external packages) easier as well.
+
+Instead of addressing (1) to resolve the cyclic dependency, we can also make a temporary hack: move the bare minimum rendering code from `drasil-printers` into `drasil-code`. This would merely indicate the same extensibility issue symptom and we would likely still look to fixing that as well. Starting with a typeclass that is easy to refactor later is a decent, educated, guess.
+
+Returning to the file, it also contains `ccObjVar`, a constructor for `CodeVarChunk`, that relies on the orphaned instances mentioned earlier. This code belongs next to the definition of `CodeVarChunk`. `ccObjVar` creates variable references of objects (e.g., $x.y$).
+
+* [ ] Investigate `ccObjVar`: Why is it necessary to produce a whole chunk?
 
 ### [`drasil-code/lib/Language/Drasil/Chunk/CodeBase.hs`](../../../code/drasil-code/lib/Language/Drasil/Chunk/CodeBase.hs)
 
@@ -97,7 +111,7 @@ makeLenses ''CodeDefinition
     chunkRefs cd = chunkRefs (cd ^. cchunk)
     {-# INLINABLE chunkRefs #-}
     ```
-2. [ ] The name means very little.
+2. [ ] The name means very little. Also, `DefinitionType` is evidence that ODEs haven't been erased properly yet.
 
 This type is really used for declaring which quantity will be defined by which formula or that it should be solved by an ODE solver. For ODEs, it does something bizarre; it is used to gather a list of input variables to be used in the ODE solver. This is very hacky. Said list should come from elsewhere (why do code-level variables leak into this when we don't have a concrete solver in scope yet?).
 
@@ -105,7 +119,7 @@ This type is used in `ICOSolutionSearch.hs`, which indicates that we are abusing
 
 ### [`drasil-code/lib/Language/Drasil/Chunk/ConstraintMap.hs`](../../../code/drasil-code/lib/Language/Drasil/Chunk/ConstraintMap.hs)
 
-Contains a map of `UID`s to constraints. Instead of attaching them here, it would be good for them to be attached to the variable definitions. One thing that's dubious is that it knows about physical- and software-imposed constraints. That information looks like it should be erased by now, or perhaps be renamed to "semantic" and "solution."
+Contains a map of `UID`s to constraints. Instead of attaching them here, it would be good for them to be attached to the variable definitions. One thing that's dubious is that it knows about physical- and software-imposed constraints. That information looks like it should be erased by now (i.e., mapped to a specified violation behaviour), or perhaps be renamed to "semantic" and "solution."
 
 ### [`drasil-code/lib/Language/Drasil/Chunk/NamedArgument.hs`](../../../code/drasil-code/lib/Language/Drasil/Chunk/NamedArgument.hs)
 
@@ -121,7 +135,7 @@ makeLenses ''NamedArgument
 `NamedArgument` inherits _everything_ from `DefinedQuantityDict`.
 
 1. [ ] Why would it not inherit from a `CodeVarChunk` instead? Or be a variant of one? Is it really necessary?
-2. [ ] It looks very sparingly used:
+2. [ ] It is used sparingly:
     ```console
     rg "narg\b" -ths
     
@@ -199,7 +213,7 @@ Contains code related to _writing_ a sample input file (knowledge held within Dr
 
 Contains code related to _reading_ a sample input file into Drasil.
 
-Together with `WriteInput.hs`, we appear to parse a sample input file with Drasil using a `DataDesc` and then write the same data out using the same `DataDesc` to our generated folders.
+Together with `WriteInput.hs`, we appear to parse a sample input file with Drasil using a `DataDesc'` and then write the same data out using the same `DataDesc` to our generated folders.
 
 #### [`drasil-code/lib/Language/Drasil/Code/Imperative/Import.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Import.hs) (The $.5$)
 
@@ -277,6 +291,8 @@ These files deserve more than a shallow file analysis. They are outside the scop
 
 #### [`drasil-code/lib/Language/Drasil/Code/ExternalLibrary.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/ExternalLibrary.hs)
 
+Contains an API for building function calls to external libraries.
+
 This code contains sensible documentation. I'm not going to think about this file too much right now but it looks not too bad. Low priority.
 
 #### [`drasil-code/lib/Language/Drasil/Code/ExternalLibraryCall.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/ExternalLibraryCall.hs)
@@ -289,13 +305,13 @@ Supports the previous two files.
 
 #### [`drasil-code/lib/Data/Drasil/ExternalLibraries/ODELibraries.hs`](../../../code/drasil-code/lib/Data/Drasil/ExternalLibraries/ODELibraries.hs)
 
-Defines and collects information about ODE solvers from concrete external libraries (SciPy for Python, Oslo for C#, Apache Commons for Java, and Odeint for C++).
+Defines and collects information about ODE solvers from concrete external libraries (SciPy for Python, Oslo for C#, Apache Commons for Java, and Odeint for C++). The vast majority of it is `DefinedQuantityDict` declarations.
 
 ### ODEs
 
 I'm going to ask a very silly question: why are ODEs ever related to code generation?!
 
-From the point of view of generating code, we should only see steps as more computations. Differentiating between ODEs and plain formulas means we haven't erased enough/rendered enough information yet.
+From the point of view of generating code, we should only see steps as more computations. Differentiating between ODEs and plain formulas means we haven't erased enough/rendered enough information yet. The code generator should not see "ODE," only "this calculation's body relies on an external library."
 
 Currently, to generate code, we make it _work_, but the way we make it work is questionable. This again goes back to the invisible programmer mentioned earlier.
 
@@ -303,12 +319,14 @@ This deserves more than a shallow file analysis.
 
 #### [`drasil-code/lib/Language/Drasil/Data/ODEInfo.hs`](../../../code/drasil-code/lib/Language/Drasil/Data/ODEInfo.hs)
 
-Contains basic information for how an ODE should be solved. This files deserve more than a shallow file analysis. At a surface level, it contains a record, a smart constructor, and a function:
+Contains basic information for how an ODE should be solved. This files deserve more than a shallow file analysis. At a surface level, it contains a record, a smart constructor, and a key function:
 
 ```haskell
 -- | Create well-formatted ODE equations which the ODE solvers can solve.
 createFinalExpr :: DifferentialModel -> [CodeExpr]
 ```
+
+I suspect our soon-to-have analysis on theories to be particularly enlightening on how ODE code should really be generated.
 
 #### [`drasil-code/lib/Language/Drasil/Data/ODELibPckg.hs`](../../../code/drasil-code/lib/Language/Drasil/Data/ODELibPckg.hs)
 
@@ -316,7 +334,7 @@ Contains an encoding of an "ODE library package" that is usable for solving some
 
 #### [`drasil-code/lib/Language/Drasil/Code/Imperative/GenODE.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GenODE.hs)
 
-Surprisingly carries very little about generating ODE-related code. Rather, it contains 1 function that is used to validate) that a language is supported by a specific ODE library and contains 2 functions that create messages (`Choice`s-related errors or design-logging, for `designLog.txt` files).
+Surprisingly carries very little about generating ODE-related code. Rather, it contains 1 function that is used to validate that a language is supported by a specific ODE library, and contains 2 functions that create messages (`Choice`s-related errors or design-logging, for `designLog.txt` files).
 
 ### Building and Rendering Comments
 
@@ -349,7 +367,7 @@ The same analysis applies to the following files:
 An implementation of a "software dossier" custom to that specific language.
 
 * [ ] Are the monads used anywhere?
-* [ ] The typeclass usage for `SoftwareDossierSym` looks like over-engineering. We should reevaluate the design.
+* [ ] The typeclass usage for `SoftwareDossierSym` looks like over-engineering. We should reevaluate the design or at least simplify it.
 * [ ] Investigate which parts of these files need to be moved to GOOL and which need to be deduplicated (e.g., the READMEs) and kept here.
 
 #### [`drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/LanguagePolymorphic.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/LanguagePolymorphic.hs)
@@ -384,6 +402,9 @@ class SoftwareDossierSym r where
   unReprDoc :: r Doc -> Doc
 ```
 
+* [ ] Investigate `optimizeDox` and `unReprDoc`. Both have unclear meaning.
+* [ ] `makefile` is very difficult to justify. We need to expose an intermediate term that contains information about how to build/run/test/etc. a software package without directly jumping to building a Makefile. That is a massive jump.
+
 #### [`drasil-code/lib/Language/Drasil/SoftwareDossier/FileNames.hs`](../../../code/drasil-code/lib/Language/Drasil/SoftwareDossier/FileNames.hs)
 
 Contains the following:
@@ -417,6 +438,7 @@ Contains an encoding of an idiomatic README file, containing things we would wan
 
 * [ ] Rename `ReadMeInfo` to `README` or `IdiomaticREADME`.
 * [ ] I know this data type is at least partially influenced by a few papers. We should note that here.
+* [ ] `folderNum` is the `../` depth needed to build a link to the website logo. We need a better way of handling this. `drasil-assets`?
 
 ##### [`drasil-code/lib/Language/Drasil/Code/Imperative/README/Render.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/README/Render.hs)
 
@@ -465,7 +487,7 @@ There's so many things that are implicitly assumed here!
 
 Aside: The bundling/unbundling feature is good and bad. One on hand, it is sensible for simple programs, but in larger projects, we often read from multiple input files, as is the case in `GlassBR`. We should handle this better, and generally refine our notion of an "input." For example, an input can be from stdin, a file, program arguments, a network connection, or just be called an input with a comment such as in the context of interactive notebooks.
 
-The rest of this file contains things related to `SoftwareDossier`-related 'choices'. This file deserves more than a shallow file analysis because it contains a mix of things that look over-engineered and under-engineered. We will need time to delicately disentangle what's going on here.
+The rest of this file contains things related to `SoftwareDossier`-related 'choices'. This file deserves more than a shallow file analysis because it contains a mix of things that look over-engineered and under-engineered. For example, it contains `ChoicesInfo`, which appears to be something made to future-proof retrofitting new choices on top of existing infrastructure, but all it appears to do is duplicate `Choices`. We will need time to delicately disentangle what's going on here.
 
 #### [`drasil-code/lib/Language/Drasil/Code/Imperative/FunctionCalls.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/FunctionCalls.hs)
 
@@ -515,8 +537,11 @@ convScope MainFn = mainFn
 Contains a mix of various things:
 
 * Smart constructors.
-* `CodeExpr -> GOOL` interpretation.
+* `CodeExpr -> GOOL` interpretation/generation.
 * Various code generators (`DataDesc`-related, functions, variables, etc.).
+
+* [ ] The file disables the `redundant-constraints` GHC check. Brandon might benefit from having that turned on.
+* [ ] `convExprProc` supports generating code that supports vector operations but not `convExpr`. We should figure out a plan for fixing this.
 
 #### [`drasil-code/lib/Language/Drasil/Code/Imperative/Logging.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Logging.hs)
 
@@ -524,7 +549,10 @@ Contains a code generator for building code that describes how other code is cal
 
 #### [`drasil-code/lib/Language/Drasil/Code/Imperative/Modules.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Modules.hs)
 
-This file deserves a delicate reading. It contains very little code related to generating modules and a lot of code related to generating the content of said modules. The code related to the contents of the modules should likely be moved elsewhere, purely on the basis that those code snippets can be used without a 'modular' `Choices` configuration option selected.
+This file deserves a delicate reading. It contains very little code related to generating modules and a lot of code related to generating the content of said modules. The code related to the contents of the modules should likely be moved elsewhere, purely on the basis that those code snippets can be used without a 'modular' `Choices` configuration option selected. Considerable code is duplicated for OO and Proc generation.
+
+* [ ] There are some hardcoded names that should be moved to variables at least (or "internal concept names"). For example, "output.txt".
+* [ ] `genCalcFunc`: `getCommentBrief` is used twice back to back on the same value. Value can be reused.
 
 #### [`drasil-code/lib/Language/Drasil/Code/Imperative/Parameters.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Parameters.hs)
 
@@ -562,7 +590,9 @@ package :: (Monad r) => ProgData -> [r FileLayout] -> r PackageData
 package p = onCodeList (PackageData p)
 ```
 
-* [ ] Is the pattern strictly necessary? I think we can simplify it (by removing it).
-* [ ] Investigate: Why `ProgData` and `packageAux`? What does this really capture?
+They capture the main program source files and the auxiliary files.
 
-One meta-comment about `drasil-code`: we use too many abbreviations that make the code hard to read.
+* [ ] Is the pattern strictly necessary? It appears to only be an alias. We can safely remove it without changing code much.
+* [ ] Why have this at all? Why not merge the two trees into just a `FileLayout`?
+
+One meta-comment about `drasil-code`: we use too many abbreviations that make the code hard to read. For example: `g`, `prn`, `ipName`, `pcc`, `qtd`, `cdch`, `cdm`, `lem`, `mcm`.

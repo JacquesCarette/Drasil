@@ -97,8 +97,8 @@ derivedUnit idStr trm dsc sym ueq =
      (getCu ueq)
 
 -- | Create a derived unit that is a scaled version of another unit
--- (e.g. ??? example if one exists) from a 'UID' string, term, definition,
--- its symbol, the scaling factor, and the unit being scaled.
+-- from a 'UID' string, term, definition, its symbol, the scaling factor,
+-- and the unit being scaled.
 derivedUnitScale :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
 derivedUnitScale idStr trm dsc sym factor base =
   UD (cncpt''' (unitUid idStr) trm (S dsc))

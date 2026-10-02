@@ -92,7 +92,7 @@ module Language.Drasil (
   , (^:), (/:), (*:), (*$), (/$), (^$)
   , baseUnit, derivedUnit, derivedUnitScale, derivedUnitShift
   , compoundUnit, compoundUnitScale, compoundUnitShift, compUnitDefn
-  , getCu, MayHaveUnit(getUnit), unitSymbol, UnitSymbol(..)
+  , MayHaveUnit(getUnit), unitSymbol, UnitSymbol(..)
 
   -- *** Constrained and Uncertain Values
   -- Language.Drasil.Constraint
@@ -242,4 +242,4 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , (^:), (/:), (*:), (*$), (/$),(^$)
   , baseUnit, derivedUnit, derivedUnitScale, derivedUnitShift
   , compoundUnit, compoundUnitScale, compoundUnitShift, compUnitDefn
-  , getCu, MayHaveUnit(getUnit), unitSymbol)
+  , MayHaveUnit(getUnit), unitSymbol)

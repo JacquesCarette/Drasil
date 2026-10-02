@@ -7,15 +7,12 @@ module Language.Drasil.Chunk.UnitDefn (
   -- * Chunk Type
   UnitDefn(..),
   -- * Constructors
-  makeDerU, newUnit,
-  derUC, derUC', derUC'',
-  fund, fund', derCUC, derCUC', derCUC'',
+  baseUnit, derivedUnit, derivedUnitScale, derivedUnitShift,
+  compoundUnit, compoundUnitScale, compoundUnitShift,
   -- * Unit Combinators ('UnitEquation's)
   (^:), (/:), (*:), (*$), (/$), (^$),
-  -- * Unit Relation Functions
-  scale, shift,
   -- * Helpers
-  fromUDefn, unitCon, getCu, compUnitDefn, unitSymbol
+  fromUDefn, getCu, compUnitDefn, unitSymbol
 ) where
 
 import Control.Lens ((^.), makeLenses, view)
@@ -27,8 +24,8 @@ import Language.Drasil.Chunk.Concept (ConceptChunk, cncpt''')
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
-import Language.Drasil.NaturalLanguage.English.NounPhrase (cn,cn',NP)
-import Language.Drasil.Symbol (Symbol(Label))
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
+import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift),
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))
 
@@ -84,61 +81,75 @@ unitSymbol = (^. cas)
 getCu :: UnitEquation -> [UID]
 getCu = view contributingUnit
 
--- | Create a derived unit chunk from a concept and a unit equation.
-makeDerU :: ConceptChunk -> UnitEquation -> UnitDefn
-makeDerU concept eqn = UD concept (Defined (usymb eqn) (USynonym $ usymb eqn)) (getCu eqn)
+-- | Create a base unit (one not defined in terms of any other unit, e.g. m, kg)
+-- from a 'UID' string, term, definition, and its symbol.
+baseUnit :: String -> NP -> String -> Symbol -> UnitDefn
+baseUnit idStr trm dsc sym =
+  UD (cncpt''' (unitUid idStr) trm (S dsc)) (BaseSI $ US [(sym, 1)]) []
 
--- FIXME: Shouldn't need to use the UID constructor here.
-derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
--- | Create a 'SI_Unit' with two 'Symbol' representations. The created 'NP' is self-plural.
-derCUC a b c s ue = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [mkUid a]
--- | Similar to 'derCUC', but the created 'NP' has the 'AddS' plural rule.
-derCUC' a b c s ue = UD (cncpt''' (mkUid a) (cn' b) (S c)) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [mkUid a]
+-- | Create a derived unit (a combination of other units that has its own
+-- special symbol, e.g. N) from a 'UID' string, term, definition, its symbol,
+-- and the unit equation it is defined by.
+derivedUnit :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
+derivedUnit idStr trm dsc sym ueq =
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
+     (DerivedSI (US [(sym,1)]) (usymb ueq) (USynonym $ usymb ueq))
+     (getCu ueq)
 
--- | Create a derived unit chunk from a 'UID', term ('String'), definition,
--- 'Symbol', and unit equation.
-derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
--- | Uses self-plural term.
-derUC  a b c s u = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
--- | Uses term that pluralizes by adding "s" to the end.
-derUC' a b c s u = UD (cncpt''' (mkUid a) (cn' b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
+-- | Create a derived unit that is a scaled version of another unit
+-- from a 'UID' string, term, definition, its symbol, the scaling factor,
+-- and the unit being scaled.
+derivedUnitScale :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
+derivedUnitScale idStr trm dsc sym factor base =
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
+     (DerivedSI (US [(sym, 1)]) (usymb base) (UScale factor (usymb base)))
+     [base ^. uid]
 
--- | Create a derived unit chunk from a 'UID', term ('NP'), definition,
--- 'Symbol', and unit equation.
-derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
-derCUC'' a b c s ue = UD (cncpt''' (mkUid a) b (S c)) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) (getCu ue)
--- | Create a derived unit chunk from a 'UID', term ('NP'), definition,
--- 'Symbol', and unit equation.
-derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
-derUC'' a b c s u = UD (cncpt''' (mkUid a) b (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
+-- | Create a derived unit that is a shifted version of another unit
+-- (e.g. centigrade = kelvin - 273.15) from a 'UID' string, term, definition,
+-- its symbol, the shift factor, and the unit being shifted.
+derivedUnitShift :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
+derivedUnitShift idStr trm dsc sym factor base =
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
+     (DerivedSI (US [(sym, 1)]) (usymb base) (UShift factor (usymb base)))
+     [base ^. uid]
 
---FIXME: Make this use a meaningful identifier.
--- | Helper for fundamental unit concept chunk creation. Uses the same 'String'
--- for the identifier, term, and definition.
-unitCon :: String -> ConceptChunk
-unitCon s = cncpt''' (mkUid s) (cn' s) (S s)
+-- | Create a compound unit (a combination of other units without its own
+-- special symbol, e.g. m/s) from a 'UID' string, term, definition, and the
+-- unit equation it is defined by.
+compoundUnit :: String -> NP -> String -> UnitEquation -> UnitDefn
+compoundUnit idStr trm dsc ueq =
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
+     (Defined (usymb ueq) (USynonym $ usymb ueq))
+     (getCu ueq)
+
+-- | Create a defined unit that is a scaled version of another unit
+-- (e.g. millimetre = 0.001 × metre) from a 'UID' string, term, definition,
+-- its symbol, the scaling factor, and the unit being scaled.
+compoundUnitScale :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
+compoundUnitScale idStr trm dsc sym factor base =
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
+     (Defined (US [(sym, 1)]) (UScale factor (usymb base)))
+     [base ^. uid]
+
+-- | Create a defined unit that is a shifted version of another unit
+-- from a 'UID' string, term, definition, its symbol, the shift factor,
+-- and the unit being shifted.
+compoundUnitShift :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
+compoundUnitShift idStr trm dsc sym factor base =
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
+     (Defined (US [(sym, 1)]) (UShift factor (usymb base)))
+     [base ^. uid]
+
+-- | Build the 'UID' of a unit from its name, in the "unit" namespace.
+unitUid :: String -> UID
+unitUid = nsUid "unit" . mkUid
+
 ---------------------------------------------------------
-
--- | Helper to get derived units if they exist.
-getSecondSymb :: UnitDefn -> Maybe USymb
-getSecondSymb c = get_symb2 $ view cas c
-  where
-    get_symb2 :: UnitSymbol -> Maybe USymb
-    get_symb2 (BaseSI _) = Nothing
-    get_symb2 (DerivedSI _ v _) = Just v
-    get_symb2 (Defined _ _) = Nothing
-
--- | Helper to break down unit symbols into 'BaseSI' units.
-helperUnit :: UnitDefn -> [UID]
-helperUnit a = case getSecondSymb a of
-  Just _ -> [a ^. uid]
-  Nothing -> getUnits a
-
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power.
 (^:) :: UnitDefn -> Integer -> UnitEquation
-u ^: i = UE (helperUnit u) (upow (usymb u))
---u ^: i = UE ((helperUnit u) ^. uid) (upow (u ^. usymb))
+u ^: i = UE [u ^. uid] (upow (usymb u))
   where
     upow (US l) = US $ second (* i) <$> l
 
@@ -146,53 +157,31 @@ u ^: i = UE (helperUnit u) (upow (usymb u))
 (/:) :: UnitDefn -> UnitDefn -> UnitEquation
 u1 /: u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (helperUnit u1 <> helperUnit u2) (US $ l1 <> fmap (second negate) l2)
+  UE [u1 ^. uid, u2 ^. uid] (US $ l1 <> fmap (second negate) l2)
 
 -- | Combinator for multiplying two units together.
 (*:) :: UnitDefn -> UnitDefn -> UnitEquation
 u1 *: u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (helperUnit u1 <> helperUnit u2) (US $ l1 <> l2)
+  UE [u1 ^. uid, u2 ^. uid] (US $ l1 <> l2)
 
 -- | Combinator for multiplying a unit and a symbol.
 (*$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 *$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (helperUnit u1 <> getCu u2) (US $ l1 <> l2)
+  UE (u1 ^. uid : getCu u2) (US $ l1 <> l2)
 
 -- | Combinator for dividing a unit and a symbol.
 (/$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 /$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (helperUnit u1 <> getCu u2) (US $ l1 <> fmap (second negate) l2)
+  UE (u1 ^. uid : getCu u2) (US $ l1 <> fmap (second negate) l2)
 
 -- | Combinator for mulitiplying two unit equations.
 (^$) :: UnitEquation -> UnitEquation -> UnitEquation
 u1 ^$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
   UE (getCu u1 <> getCu u2) (US $ l1 <> l2)
-
--- | Combinator for scaling one unit by some number.
-scale :: IsUnit s => Double -> s -> UDefn
-scale a b = UScale a (usymb b)
-
--- | Combinator for shifting one unit by some number.
-shift :: IsUnit s => Double -> s -> UDefn
-shift a b = UShift a (usymb b)
-
--- | Smart constructor for new derived units from existing units.
-newUnit :: String -> UnitEquation -> UnitDefn
-newUnit s = makeDerU (unitCon s)
-
--- | Smart constructor for a "fundamental" unit.
-fund :: String -> String -> String -> UnitDefn
-fund nam desc sym = UD (cncpt''' u (cn' nam) (S desc)) (BaseSI $ US [(Label sym, 1)]) [u]
-  where u = nsUid "unit" (mkUid nam)
-
--- | Variant of the 'fund', useful for degree.
-fund' :: String -> String -> Symbol -> UnitDefn
-fund' nam desc sym = UD (cncpt''' u (cn' nam) (S desc)) (BaseSI $ US [(sym, 1)]) [u]
-  where u = nsUid "unit" (mkUid nam)
 
 -- | We don't want an Ord on units, but this still allows us to compare them.
 compUnitDefn :: UnitDefn -> UnitDefn -> Ordering

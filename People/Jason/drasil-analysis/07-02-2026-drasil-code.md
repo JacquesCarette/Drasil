@@ -6,6 +6,72 @@ The shallow file analysis is done in service to the Generating Human-Readable Co
 
 The early work should focus on reorganizing and simplifying `drasil-code` until a clearer picture of its design forms. Reorganizing may mean breaking `drasil-code` into multiple libraries. Afterwards, we redesign.
 
+### Summary
+
+#### Notable Problems
+
+##### Too Many Responsibilities
+
+`drasil-code` has at least five jobs:
+
+1. **Code generation:** translating `CodeExpr`s and code chunks into GOOL. It also knows too much about the languages GOOL targets (e.g., `SpaceMatch` hardcodes that Python has no `Float`, and `Generator` special-cases Python's `__init__.py`).
+2. **The "invisible programmer":** turning an SRS (`SmithEtAlSRS`) into a `CodeSpec` and choosing an execution order for its Input-Calculate-Output (ICO) problem (`ICOSolutionSearch`). Realistically, this is a kind of `Choice`.
+3. **The software dossier:** the source-adjacent files in a repo (e.g., Makefile, README, Doxygen configuration).
+4. **Input and Output program files:** a language for input file layout descriptions (`DataDesc`), used to read sample inputs at generation time and to generate input file readers.
+5. **External libraries and ODEs:** a DSL for calling "external" libraries, plus concrete ODE-solver encodings.
+
+##### Areas where "Output Software Design" Decisions are Made
+
+The "ICO program" assumption is made explicit in one place, `SmithEtAlSRS`'s constructor: `ICO`. Everything else is implicit and the majority of other decisions are implicitly made about configuring `Choices`, letting the code generator handle the rest:
+
+* **Exclusively Automatically**. The ICO solution schematic/flow is determined very early and automatically by the code generator when constructing a `CodeSpec`. This is not configurable and up to the flow of a topological sort of IMs.
+* **Hard-coded**. The "Modular" program architecture is an off-the-shelf pre-made design of what a "modular" program might look like. It is internal to `drasil-code`.
+* **Too late**. ODEs reach the generator, but is used in confusing ways: the `ODE` type is only used to pull an external-library-call expression block from elsewhere.
+* **Too late**. Physical vs. software constraints also reach the code generator used in determining when constraints should be warnings or exceptions.
+
+##### Fragile Function due to Under-Documented Assumptions
+
+The codebase relies on many under-documented assumptions about interplay with other generated code and lacks checks to ensure things are as they expect (e.g., function definitions were rendered, variables exist, things correctly typed, variable names align correctly with haphazardly created variants symbols, etc.). The codebase generally appears fragile in this regard.
+
+##### Cyclic Dependency
+
+The code chunks live in `drasil-lang`, but their `CodeIdea` instances need `drasil-printers`, which depends on `drasil-lang`, so the instances are orphans in [`Chunk/Code.hs`](../../../code/drasil-code/lib/Language/Drasil/Chunk/Code.hs). Moving `CodeExpr` and the code chunks into `drasil-code` would create a dependency cycle between `-code` and `-printers` because `drasil-printers` prints `CodeExpr`s.
+
+##### Design Difficult to Rationalize; Overly Complex in Some Regards, Naive in Others
+
+In addition to examples mentioned earlier, for example:
+
+**Overly complex**:
+
+* `SoftwareDossierSym` has seven instances, each a `newtype`, three of which (Julia, MATLAB, Swift) implement one method as a runtime `error`.
+* `DataDesc`: the standard generated input reader uses only two of its four constructors (the others serve only GlassBR's hand-written `read_table`), and `DataDesc'`'s interleaved lists are never constructed, so three branches of `readWithDataDesc` are dead code.
+* `ChoicesInfo` copies the majority of its fields directly from `Choices`.
+* There is a lot of code that is split up into too many non-portable single-use functions or modules. This makes the codebase difficult to disentangle. Simplifying the codebase for readability would be tremendously helpful.
+
+**Naive**:
+
+The chunks ([`CodeVar.hs`](../../../code/drasil-lang/lib/Drasil/Code/CodeVar.hs), in `drasil-lang`) adds little over a `DefinedQuantityDict` (DQD), and are inconsistently handled:
+
+* `CodeChunk` wraps a DQD and adds a variable/function tag; the `Func` tag is how calculation functions get their `func_` prefix.
+* `CodeVarChunk` wraps a `CodeChunk` and adds an optional owning object (for `obj.field`); its tag is always `Var`.
+* `ParameterChunk` wraps a `CodeChunk` and adds pass-by-value/reference, whereas `NamedArgument` wraps a DQD directly and adds only an `IsArgumentName` instance.
+
+The code chunks are not very meaningful beyond what a `DefinedQuantityDict` already provides. A `DefinedQuantityDict` should not even be helpful to the code generator beyond a first-time pass at converting them all to code-specific variables and concepts.
+Code-level variables are never stored as such. The generator resolves _every_ `UID` back to a DQD and re-wraps it on each use, so variables that exist only in code (e.g., ODE solver arrays) are inserted into the `ChunkDB` as DQDs, and a `CodeVarChunk` must share its DQD's `UID` for lookups to work: a problem for [#4782](https://github.com/JacquesCarette/Drasil/issues/4782).
+
+`CodeFuncChunk` is used sparingly except for the external-library-related code despite the code generator supporting generating functions for the 'Calculation's modules.
+
+There is also massive duplication between the "Proc" and "OO" generators. This is a can of worms I don't want to open quite yet in this analysis.
+
+#### Solution Plan
+
+The general idea is to continuously simplify, split, and rebuild `drasil-code` until we have a rational, easy-to-understand codebase. Some notable concrete work tasks are:
+
+1. **Fix the package cycle** by rendering into the printing expression language via typeclasses, so the instances live beside their types. Fallback: copy the minimal plaintext rendering into `drasil-code`.
+2. **Move the invisible programmer to `drasil-gen`** (reasoning: already calls `mkCodeSpec`, not sure where to move this yet long-term): `CodeSpec` construction and `ICOSolutionSearch` (turned opt-in). Add a concrete framing of the mathematical problem, its calculable solution, and the software-based solution instead of implicitly knowing things via `SmithEtAlSRS` and `CodeSpec`.
+3. **Make design decisions before code generation:** program architecture, constraint violation behaviour, and ODE solving.
+4. **Build a true "software dossier" encoding**: improving our abstraction over a code repository.
+
 ### [`drasil-code/lib/Language/Drasil/GOOL.hs`](../../../code/drasil-code/lib/Language/Drasil/GOOL.hs)
 
 Reexport file (primarily of things in the `Language.Drasil.Code.Imperative.GOOL.LanguageRenderer` but also `SoftwareDossierSym` and `PackageData`). It does not export anything from `drasil-gool`.

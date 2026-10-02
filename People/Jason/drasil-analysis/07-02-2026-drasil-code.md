@@ -25,7 +25,7 @@ The early work should focus on reorganizing and simplifying `drasil-code` until 
 The "ICO program" assumption is made explicit in one place, `SmithEtAlSRS`'s constructor: `ICO`. Everything else is implicit and the majority of other decisions are implicitly made about configuring `Choices`, letting the code generator handle the rest:
 
 * **Exclusively Automatically**. The ICO solution schematic/flow is determined very early and automatically by the code generator when constructing a `CodeSpec`. This is not configurable and up to the flow of a topological sort of IMs.
-* **Hard-coded**. The "Modular" program architecture is an off-the-shelf pre-made design of what a "modular" program might look like. It is internal to `drasil-code`.
+* **Hard-coded**. The "Modular" program architecture is an off-the-shelf pre-made design of what a "modular" program might look like. It is internal to `drasil-code`. ["Our own software architecture choices are deeply embedded"](https://github.com/JacquesCarette/Drasil/pull/5237#discussion_r3532817442) in `drasil-code`.
 * **Too late**. ODEs reach the generator, but is used in confusing ways: the `ODE` type is only used to pull an external-library-call expression block from elsewhere.
 * **Too late**. Physical vs. software constraints also reach the code generator used in determining when constraints should be warnings or exceptions.
 

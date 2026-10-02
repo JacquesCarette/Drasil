@@ -90,9 +90,8 @@ module Language.Drasil (
   , UnitDefn(..)
   , fromUDefn
   , (^:), (/:), (*:), (*$), (/$), (^$)
-  , shift
-  , derUC
-  , baseUnit, derivedUnit, compoundUnit, scaledUnit, compUnitDefn
+  , baseUnit, derivedUnit, derivedUnitScale, derivedUnitShift
+  , compoundUnit, compoundUnitScale, compoundUnitShift, compUnitDefn
   , getCu, MayHaveUnit(getUnit), unitSymbol, UnitSymbol(..)
 
   -- *** Constrained and Uncertain Values
@@ -241,7 +240,6 @@ import Language.Drasil.Development.Sentence -- are these really development?
 import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , fromUDefn
   , (^:), (/:), (*:), (*$), (/$),(^$)
-  , shift
-  , derUC
-  , baseUnit, derivedUnit, compoundUnit, scaledUnit, compUnitDefn
+  , baseUnit, derivedUnit, derivedUnitScale, derivedUnitShift
+  , compoundUnit, compoundUnitScale, compoundUnitShift, compUnitDefn
   , getCu, MayHaveUnit(getUnit), unitSymbol)

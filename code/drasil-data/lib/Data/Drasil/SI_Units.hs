@@ -56,12 +56,12 @@ becquerel = derivedUnit "becquerel"
   (cn' "becquerel") "activity" (label "Bq") --of a Radionuclide
   (second ^: (-1))
 
-calorie = scaledUnit "calorie"
+calorie = compoundUnitScale "calorie"
   (cn' "calorie") "energy" (label "cal") 4.184 joule
 
-centigrade = derUC "centigrade"
-  "centigrade" "temperature" (Special Circle <> label "C")
-  (shift 273.15 kelvin)
+centigrade = derivedUnitShift "centigrade"
+  (cn' "centigrade") "temperature" (Special Circle <> label "C")
+  273.15 kelvin
 
 coulomb = derivedUnit "coulomb"
   (cn' "coulomb") "electric charge" (label "C") (ampere *: second)
@@ -85,14 +85,14 @@ joule = derivedUnit "joule"
 katal = derivedUnit "katal"
   (cn' "katal") "catalytic activity" (label "kat") (mole /: second)
 
-kilopascal = scaledUnit "kilopascal"
+kilopascal = compoundUnitScale "kilopascal"
   (cn' "kilopascal") "pressure"
   (label "k" <> label "Pa") 1000 pascal
 
-kilowatt = scaledUnit "kilowatt"
+kilowatt = compoundUnitScale "kilowatt"
   (cn' "kilowatt") "power" (label "k" <> label "W") 1000 watt
 
-litre = scaledUnit "litre"
+litre = compoundUnitScale "litre"
   (cn' "litre") "volume" (label "L") 0.001 m_3
 
 lumen = derivedUnit "lumen"
@@ -101,7 +101,7 @@ lumen = derivedUnit "lumen"
 lux = derivedUnit "lux"
   (cn "lux") "illuminance" (label "lx") (lumen /: m_2)
 
-millimetre = scaledUnit "millimetre"
+millimetre = compoundUnitScale "millimetre"
   (cn' "millimetre") "length" (label "mm") 0.001 metre
 
 newton = derivedUnit "newton"

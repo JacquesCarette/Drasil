@@ -7,12 +7,10 @@ module Language.Drasil.Chunk.UnitDefn (
   -- * Chunk Type
   UnitDefn(..),
   -- * Constructors
-  baseUnit, derivedUnit, compoundUnit, scaledUnit,
-  derUC,
+  baseUnit, derivedUnit, derivedUnitScale, derivedUnitShift,
+  compoundUnit, compoundUnitScale, compoundUnitShift,
   -- * Unit Combinators ('UnitEquation's)
   (^:), (/:), (*:), (*$), (/$), (^$),
-  -- * Unit Relation Functions
-  shift,
   -- * Helpers
   fromUDefn, getCu, compUnitDefn, unitSymbol
 ) where
@@ -26,7 +24,7 @@ import Language.Drasil.Chunk.Concept (ConceptChunk, cncpt''')
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
-import Language.Drasil.NaturalLanguage.English.NounPhrase (cn,NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift),
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))
@@ -98,6 +96,24 @@ derivedUnit idStr trm dsc sym ueq =
      (DerivedSI (US [(sym,1)]) (usymb ueq) (USynonym $ usymb ueq))
      (getCu ueq)
 
+-- | Create a derived unit that is a scaled version of another unit
+-- (e.g. ??? example if one exists) from a 'UID' string, term, definition,
+-- its symbol, the scaling factor, and the unit being scaled.
+derivedUnitScale :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
+derivedUnitScale idStr trm dsc sym factor base =
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
+     (DerivedSI (US [(sym, 1)]) (usymb base) (UScale factor (usymb base)))
+     [base ^. uid]
+
+-- | Create a derived unit that is a shifted version of another unit
+-- (e.g. centigrade = kelvin - 273.15) from a 'UID' string, term, definition,
+-- its symbol, the shift factor, and the unit being shifted.
+derivedUnitShift :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
+derivedUnitShift idStr trm dsc sym factor base =
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
+     (DerivedSI (US [(sym, 1)]) (usymb base) (UShift factor (usymb base)))
+     [base ^. uid]
+
 -- | Create a compound unit (a combination of other units without its own
 -- special symbol, e.g. m/s) from a 'UID' string, term, definition, and the
 -- unit equation it is defined by.
@@ -110,16 +126,20 @@ compoundUnit idStr trm dsc ueq =
 -- | Create a defined unit that is a scaled version of another unit
 -- (e.g. millimetre = 0.001 × metre) from a 'UID' string, term, definition,
 -- its symbol, the scaling factor, and the unit being scaled.
-scaledUnit :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
-scaledUnit idStr trm dsc sym factor base =
+compoundUnitScale :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
+compoundUnitScale idStr trm dsc sym factor base =
   UD (cncpt''' (unitUid idStr) trm (S dsc))
      (Defined (US [(sym, 1)]) (UScale factor (usymb base)))
      [base ^. uid]
 
--- | Create a derived unit from a 'UID', term ('String'), definition, 'Symbol',
--- and a relation to another unit ('UDefn', e.g. a shift). Uses self-plural term.
-derUC :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
-derUC a b c s u = UD (cncpt''' (mkUid a) (cn b) (S c)) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
+-- | Create a defined unit that is a shifted version of another unit
+-- from a 'UID' string, term, definition, its symbol, the shift factor,
+-- and the unit being shifted.
+compoundUnitShift :: String -> NP -> String -> Symbol -> Double -> UnitDefn -> UnitDefn
+compoundUnitShift idStr trm dsc sym factor base =
+  UD (cncpt''' (unitUid idStr) trm (S dsc))
+     (Defined (US [(sym, 1)]) (UShift factor (usymb base)))
+     [base ^. uid]
 
 -- | Build the 'UID' of a unit from its name, in the "unit" namespace.
 unitUid :: String -> UID
@@ -162,10 +182,6 @@ u1 /$ u2 = let US l1 = usymb u1
 u1 ^$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
   UE (getCu u1 <> getCu u2) (US $ l1 <> l2)
-
--- | Combinator for shifting one unit by some number.
-shift :: IsUnit s => Double -> s -> UDefn
-shift a b = UShift a (usymb b)
 
 -- | We don't want an Ord on units, but this still allows us to compare them.
 compUnitDefn :: UnitDefn -> UnitDefn -> Ordering

@@ -32,6 +32,7 @@ library:
   - drasil-database
   - drasil-file-handling
   - drasil-lang
+  - drasil-natural-language
   - drasil-printers
   - drasil-srs
   - drasil-system

@@ -2,6 +2,7 @@
 
 module Drasil.Data.Formats.HTML.Render
   ( renderHTML,
+    renderHTMLFragment,
     HTMLRenderOptions (..),
     defaultHTMLRO,
   )
@@ -62,6 +63,12 @@ renderHTML opt htmlTree =
     ]
   where
     HTML heads bodies = normalizeHTML htmlTree
+
+-- | Render body nodes without the doctype, @html@, @head@ or @body@ wrappers.
+-- Adjacent text nodes are normalized using the full-document renderer's rules.
+renderHTMLFragment :: HTMLRenderOptions -> [HTMLBody] -> Doc ann
+renderHTMLFragment opt bodies =
+  vcat (renderBody opt <$> normalizeBody bodies)
 
 -- | Internal: Render the 'head' section
 renderHeadSec :: HTMLRenderOptions -> [HTMLHead] -> Doc ann

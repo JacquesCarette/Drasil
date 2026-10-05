@@ -20,7 +20,7 @@ mathunitals :: [DefinedQuantityDict]
 mathunitals = [area, diameter, surface, surArea, orientation]
 
 gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect,
-  pi_, posInf, negInf :: DefinedQuantityDict
+  pi_, posInf, negInf, uNormalVect :: DefinedQuantityDict
 
 gradient    = dqdNoUnit CM.gradient lNabla         Real
 normalVect  = dqdNoUnit CM.normalV  (vec lN)       Real

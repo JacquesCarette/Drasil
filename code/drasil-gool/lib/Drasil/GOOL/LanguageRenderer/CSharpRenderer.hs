@@ -21,13 +21,13 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueExpression(..), selfMethodCall,
-  newObj, InternalValueExp(..), objMethodCall, objMethodCallNoParams,
-  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOProg, Class, StateVar, ProgramSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueExpression(..),
+  selfMethodCall, newObj, InternalValueExp(..), objMethodCall,
+  objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
+  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -129,7 +129,7 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOProg CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
+instance OOProg CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym CSharpCode ProgData FileData where
   prog n st files = do
@@ -138,7 +138,7 @@ instance ProgramSym CSharpCode ProgData FileData where
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
+instance OORenderSym CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
@@ -681,14 +681,14 @@ instance StateVarSym CSharpCode Doc Variable Value StateVar Doc where
 instance StateVarElim CSharpCode StateVar where
   stateVar = unCSC
 
-instance ClassSym CSharpCode MethodData StateVar where
+instance ClassSym CSharpCode Class MethodData StateVar where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
   docClass = CP.doxClass
 
-instance RenderClass CSharpCode Doc MethodData StateVar where
+instance RenderClass CSharpCode Doc Class MethodData StateVar where
   intClass = CP.intClass R.class'
 
   inherit = CP.inherit
@@ -696,10 +696,10 @@ instance RenderClass CSharpCode Doc MethodData StateVar where
 
   commentedClass = G.commentedClass
 
-instance ClassElim CSharpCode where
+instance ClassElim CSharpCode Class where
   class' = unCSC
 
-instance ModuleSym CSharpCode ModData MethodData where
+instance ModuleSym CSharpCode ModData Class MethodData where
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod CSharpCode ModData where

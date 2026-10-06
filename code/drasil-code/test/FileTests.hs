@@ -14,7 +14,7 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
 
 -- | Creates a program in GOOL to test reading and writing to files.
 fileTestsOO
-  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
   => OO.GSProgram r prg
 fileTestsOO = OO.prog "FileTests" "" [OO.fileDoc (OO.buildModule "FileTests" []
   [fileTestMethod] [])]

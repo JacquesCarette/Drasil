@@ -1,11 +1,11 @@
 -- | Part of the PatternTest GOOL tests. Defines an Observer class.
 module GOOL.Observer (observer, observerName, printNum, x) where
 
-import Drasil.GOOL (Class, OOProg, VS, CS, FS, MS, FileSym(..),
-  AttachmentSym(..), BodySym, BlockSym, oneLiner, TypeSym(..), PrintConsole(..),
-  VariableSym(..), OOVariableSym, SelfSym(..), instanceVarSelf, Literal(..),
-  VariableValue(..), VisibilitySym(..), OOMethodSym(..), initializer,
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+import Drasil.GOOL (OOProg, VS, CS, FS, MS, FileSym(..), AttachmentSym(..),
+  BodySym, BlockSym, oneLiner, TypeSym(..), PrintConsole(..), VariableSym(..),
+  OOVariableSym, SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..),
+  VisibilitySym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
+  ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observerName, observerDesc, printNum :: String
@@ -18,7 +18,7 @@ printNum = "printNum"
 
 -- | Creates the observer class.
 observer
-  :: (OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
   => FS (r file)
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
@@ -46,7 +46,7 @@ helperClass
     , AttachmentSym r attch
     , VisibilitySym r vis
     , StateVarSym r vis var val stvr attch
-    , ClassSym r mthd stvr
+    , ClassSym r cls mthd stvr
     , OOMethodSym r vis typ var param val mthd attch bod
     , PrintConsole r val stmt
     , TypeSym r typ
@@ -56,7 +56,7 @@ helperClass
     , SelfSym r var
     , VariableValue r var val
     )
-  => CS (r Class)
+  => CS (r cls)
 helperClass = buildClass Nothing [stateVar public instanceLevel x]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 

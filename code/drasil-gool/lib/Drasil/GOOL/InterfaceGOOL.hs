@@ -57,16 +57,16 @@ class (UnRepr r typ, Argument r val, BodySym r bod block, BlockSym r block stmt,
   MethodSym r vis typ var param mthd bod,
   OOMethodSym r vis typ var param val mthd attch bod, AttachmentSym r attch,
   VisibilitySym r vis, StateVarSym r vis var val stvr attch,
-  ClassSym r mthd stvr, TypeElim r typ, VariableElim r typ var,
+  ClassSym r cls mthd stvr, TypeElim r typ, VariableElim r typ var,
   EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r val stmt,
   CommentStatement r stmt, DeclStatement r scope var val stmt bod,
   OODeclStatement r scope var val stmt, AssignStatement r var val stmt,
   FuncAppStatement r var val stmt, OOFuncAppStatement r var val stmt,
   ControlStatement r var val stmt bod, StringStatement r var val stmt,
   PrintConsole r val stmt, ReadConsole r var stmt, FileHandling r var val stmt,
-  PrintFile r val stmt, ReadFile r var val stmt, ModuleSym r mod mthd,
+  PrintFile r val stmt, ReadFile r var val stmt, ModuleSym r mod cls mthd,
   FileSym r file mod, ProgramSym r prg file
-  ) => OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block
+  ) => OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)
@@ -90,29 +90,29 @@ class FileSym r file mod | r -> file mod where
   docMod :: String -> String -> [String] -> String -> FS (r file) -> FS (r file)
 
 -- | Class for representing a module.
-class ModuleSym r mod mthd | r -> mod mthd where
+class ModuleSym r mod cls mthd | r -> mod cls mthd where
   -- | Given module name, list of import names, list of module functions,
   -- and list of module classes, generates a representation of a module.
-  buildModule :: Label -> [Label] -> [MS (r mthd)] -> [CS (r Class)] -> FS (r mod)
+  buildModule :: Label -> [Label] -> [MS (r mthd)] -> [CS (r cls)] -> FS (r mod)
 
 type Class = Doc
 
 -- | Class for representing an OO class.
-class ClassSym r mthd stvr | r -> mthd stvr where
+class ClassSym r cls mthd stvr | r -> cls mthd stvr where
   -- | Main external method for creating a class.
   -- Inputs: parent class, variables, constructor(s), methods
   buildClass :: Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] ->
-    [MS (r mthd)] -> CS (r Class)
+    [MS (r mthd)] -> CS (r cls)
   -- | Creates an extra class, i.e. with a different name than the module name.
   -- Inputs: class name, the rest are the same as buildClass.
   extraClass :: Label -> Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] ->
-    [MS (r mthd)] -> CS (r Class)
+    [MS (r mthd)] -> CS (r cls)
   -- | Creates a class implementing a list of interfaces.
   -- Inputs: class name, interface names, variables, constructor(s), methods
   implementingClass :: Label -> [Label] -> [CSStateVar r stvr] -> [MS (r mthd)] ->
-    [MS (r mthd)] -> CS (r Class)
+    [MS (r mthd)] -> CS (r cls)
 
-  docClass :: String -> CS (r Class) -> CS (r Class)
+  docClass :: String -> CS (r cls) -> CS (r cls)
 
 type Initializers r var val = [(VS (r var), VS (r val))]
 

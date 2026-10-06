@@ -21,10 +21,10 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
   PrintFile(..), ReadFile(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), InternalValueExp(..), extNewObj,
-  objMethodCall, OOFunctionSym(..), GetSet(..), OOValueExpression(..),
+import Drasil.GOOL.InterfaceGOOL (OOProg, Class, StateVar, ProgramSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  SelfSym(..), StateVarSym(..), AttachmentSym(..), InternalValueExp(..),
+  extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..), OOValueExpression(..),
   selfMethodCall, OODeclStatement(..), OOFuncAppStatement(..),
   ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
@@ -119,7 +119,7 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance OOProg PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body Block
+instance OOProg PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVar AttachmentData ProgData FileData ModData Body Block
 
 instance ProgramSym PythonCode ProgData FileData where
   prog n st files = do
@@ -128,7 +128,7 @@ instance ProgramSym PythonCode ProgData FileData where
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body Block
+instance OORenderSym PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVar AttachmentData FileData ModData Body Block
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
@@ -693,7 +693,7 @@ instance StateVarSym PythonCode Doc Variable Value Doc AttachmentData where
 instance StateVarElim PythonCode StateVar where
   stateVar = unPC
 
-instance ClassSym PythonCode MethodData StateVar where
+instance ClassSym PythonCode Class MethodData StateVar where
   buildClass par sVars cstrs = if length cstrs <= 1
                                   then G.buildClass par sVars cstrs
                                   else error pyMultCstrsError
@@ -708,7 +708,7 @@ instance ClassSym PythonCode MethodData StateVar where
 
   docClass = CP.doxClass
 
-instance RenderClass PythonCode Doc MethodData StateVar where
+instance RenderClass PythonCode Doc Class MethodData StateVar where
   intClass = CP.intClass pyClass
 
   inherit n = toCode $ maybe empty (parens . text) n
@@ -716,10 +716,10 @@ instance RenderClass PythonCode Doc MethodData StateVar where
 
   commentedClass = G.commentedClass
 
-instance ClassElim PythonCode where
+instance ClassElim PythonCode Class where
   class' = unPC
 
-instance ModuleSym PythonCode ModData MethodData where
+instance ModuleSym PythonCode ModData Class MethodData where
   buildModule n is = CP.buildModule n (do
     lis <- getLangImports
     libis <- getLibImports

@@ -34,7 +34,7 @@ mathcon' = [de, leftSide, ode, pde, rightSide]
 
 amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint, diameter,
   direction, euclidN, euclidSpace, gradient, laplaceTransform, law, line, matrix, norm, normal, normalV,
-  number, orient, origin, perp, perpV, pi_, negInf, posInf, positive, negative, point, probability,
+  number, orient, origin, perp, perpV, positive, negative, point, probability,
   rOfChng, rate, rightHand, shape, surArea, surface, unitV, vector, xAxis, xCoord, xComp, xDir,
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
@@ -70,9 +70,6 @@ number       = cncpt''' (mkUid "number")       (cn' "number")            (D.S "a
 orient       = cncpt''' (mkUid "orientation")  (cn' "orientation")       (D.S "the relative physical position or direction of something")
 origin       = cncpt''' (mkUid "origin")       (cn' "origin")            (D.S "a fixed point of reference for the geometry of the surrounding space")
 perp         = cncpt''' (mkUid "perp")         (cn' "perpendicular")     (D.S "At right angles")
-pi_          = cncpt''' (mkUid "pi")           (cn' "ratio of circumference to diameter for any circle") (D.S "The ratio of a circle's circumference to its diameter")
-posInf       = cncpt''' (mkUid "PosInf")       (cn' "Positive Infinity") (D.S "the limit of a sequence or function that eventually exceeds any prescribed bound")
-negInf       = cncpt''' (mkUid "NegInf")       (cn' "Negative Infinity") (D.S "Opposite of positive infinity")
 positive     = cncpt''' (mkUid "positive")     (cn' "positive")          (D.S "greater than zero")
 negative     = cncpt''' (mkUid "negative")     (cn' "negative")          (D.S "less than zero")
 point        = cncpt''' (mkUid "point")     (pn' "point")                   $ D.S "An exact location, it has no size, only position" +:+

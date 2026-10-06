@@ -1,7 +1,7 @@
 -- | Part of the PatternTest GOOL tests. Defines an Observer class.
 module GOOL.Observer (observer, observerName, printNum, x) where
 
-import Drasil.GOOL (Variable, Class, OOProg, VS, CS, FS, MS, FileSym(..),
+import Drasil.GOOL (Class, OOProg, VS, CS, FS, MS, FileSym(..),
   AttachmentSym(..), BodySym, BlockSym, oneLiner, TypeSym(..), PrintConsole(..),
   VariableSym(..), OOVariableSym, SelfSym(..), instanceVarSelf, Literal(..),
   VariableValue(..), VisibilitySym(..), OOMethodSym(..), initializer,
@@ -18,24 +18,24 @@ printNum = "printNum"
 
 -- | Creates the observer class.
 observer
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block)
   => FS (r file)
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
 -- | Makes a variable @x@.
-x :: (TypeSym r typ, VariableSym r typ) => VS (r Variable)
+x :: (TypeSym r typ, VariableSym r typ var) => VS (r var)
 x = var "x" int
 
 -- | Acces the @x@ attribute of @self@.
 selfX ::
   ( TypeSym r typ
-  , VariableSym r typ
-  , OOVariableSym r typ val
-  , SelfSym r
-  , VariableValue r val
+  , VariableSym r typ var
+  , OOVariableSym r typ var val
+  , SelfSym r var
+  , VariableValue r var val
   )
-  => VS (r Variable)
+  => VS (r var)
 selfX = instanceVarSelf x
 
 -- | Helper function to create the class.
@@ -45,16 +45,16 @@ helperClass
     , BodySym r bod block
     , AttachmentSym r attch
     , VisibilitySym r vis
-    , StateVarSym r vis val stvr attch
+    , StateVarSym r vis var val stvr attch
     , ClassSym r mthd stvr
-    , OOMethodSym r vis typ param val mthd attch bod
+    , OOMethodSym r vis typ var param val mthd attch bod
     , PrintConsole r val stmt
     , TypeSym r typ
     , Literal r typ val
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , SelfSym r
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , SelfSym r var
+    , VariableValue r var val
     )
   => CS (r Class)
 helperClass = buildClass Nothing [stateVar public instanceLevel x]
@@ -65,8 +65,8 @@ observerConstructor
   ::
     ( BodySym r bod block
     , TypeSym r typ
-    , VariableSym r typ
-    , OOMethodSym r vis typ param val mthd attch bod
+    , VariableSym r typ var
+    , OOMethodSym r vis typ var param val mthd attch bod
     , Literal r typ val
     )
   => MS (r mthd)
@@ -78,14 +78,14 @@ printNumMethod
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , OOMethodSym r vis typ param val mthd attch bod
+    , OOMethodSym r vis typ var param val mthd attch bod
     , AttachmentSym r attch
     , VisibilitySym r vis
     , PrintConsole r val stmt
-    , VariableSym r typ
-    , OOVariableSym r typ val
-    , SelfSym r
-    , VariableValue r val
+    , VariableSym r typ var
+    , OOVariableSym r typ var val
+    , SelfSym r var
+    , VariableValue r var val
     )
   => MS (r mthd)
 printNumMethod = method printNum public instanceLevel void [] $

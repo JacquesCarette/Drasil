@@ -1,7 +1,7 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GProc (Label, GSProgram, Body, FS, MS, VS, Variable, Value,
-  NamedArgs, ProcProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements,
-  oneLiner, BlockSym(..), TypeSym(..), BinderSym(..), EmptyStatement(..),
+module Drasil.GProc (Label, GSProgram, Body, FS, MS, VS, Value, NamedArgs,
+  ProcProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
+  BlockSym(..), TypeSym(..), BinderSym(..), EmptyStatement(..),
   MultiStatement(..), ValueStatement(..), AssignStatement(..), (&=),
   DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
   PrintFile(..), ReadFile(..), StringStatement(..), FuncAppStatement(..),
@@ -21,9 +21,9 @@ module Drasil.GProc (Label, GSProgram, Body, FS, MS, VS, Variable, Value,
   TypeElim(..), getTypeString
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Body, Variable, Value, NamedArgs,
-  BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  BinderSym(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+import Drasil.Shared.InterfaceCommon (Label, Body, Value, NamedArgs, BodySym(..),
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), BinderSym(..),
+  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),

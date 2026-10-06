@@ -3,7 +3,7 @@ module Drasil.GProc.Renderers (
   renderType, renderParam, renderListDec, renderConstDecDef
 ) where
 
-import Drasil.Shared.InterfaceCommon (Variable, UnRepr(..), VariableElim(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), VariableElim(..))
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(..), ValueElim(..))
 import Drasil.Shared.LanguageRenderer (new', constDec')
 import Drasil.Shared.CodeType (CodeType(..))
@@ -18,23 +18,23 @@ renderType tp = case cType $ unRepr tp of
     _ -> typeDoc $ unRepr tp
 
 renderParam
-  :: (InternalVarElim r, UnRepr r TypeData, VariableElim r TypeData)
-  => r Variable -> Doc
+  :: (InternalVarElim r var, UnRepr r TypeData, VariableElim r TypeData var)
+  => r var -> Doc
 renderParam v = renderType (variableType v) <+> variable v
 
 renderListDec
-  :: (UnRepr r TypeData, ValueElim r val, VariableElim r TypeData)
-  => r Variable -> r val -> Doc
+  :: (UnRepr r TypeData, ValueElim r val, VariableElim r TypeData var)
+  => r var -> r val -> Doc
 renderListDec v n = space <> equals <+> new' <+> renderType (variableType v)
   <> parens (value n)
 
 renderConstDecDef
   ::
-    ( InternalVarElim r
+    ( InternalVarElim r var
     , UnRepr r TypeData
     , ValueElim r val
-    , VariableElim r TypeData
+    , VariableElim r TypeData var
     )
-  => r Variable -> r val -> Doc
+  => r var -> r val -> Doc
 renderConstDecDef v def = constDec' <+> renderType (variableType v) <+>
   variable v <+> equals <+> value def

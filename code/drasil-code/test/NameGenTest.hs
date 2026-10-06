@@ -11,13 +11,13 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
 nameGenTestOO
-  :: OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block
+  :: OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block
   => OO.GSProgram r prg
 nameGenTestOO = OO.prog "NameGenTest" "" [OO.fileDoc $ OO.buildModule
   "NameGenTest" [] [main, helper] []]
 
 nameGenTestProc
-  :: (ProcProg r vis scope typ param val stmt mthd prg file mod bod block)
+  :: (ProcProg r vis scope typ var param val stmt mthd prg file mod bod block)
   => GProc.GSProgram r prg
 nameGenTestProc = GProc.prog "NameGenTest" "" [GProc.fileDoc $ GProc.buildModule
   "NameGenTest" [] [main, helper]]
@@ -29,16 +29,16 @@ helper
     , TypeSym r typ
     , Literal r typ val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , Comparison r val
     , List r val
-    , InternalList r val block
-    , ParameterSym r param
+    , InternalList r var val block
+    , ParameterSym r var param
     , VisibilitySym r vis
-    , DeclStatement r scope val stmt bod
-    , ControlStatement r val stmt bod
-    , MethodSym r vis typ param mthd bod
+    , DeclStatement r scope var val stmt bod
+    , ControlStatement r var val stmt bod
+    , MethodSym r vis typ var param mthd bod
     )
   => MS (r mthd)
 helper = function "helper" private void [param temp] $ body
@@ -56,14 +56,14 @@ main
     , TypeSym r typ
     , Literal r typ val
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r typ var
+    , VariableValue r var val
     , Comparison r val
     , List r val
-    , InternalList r val block
-    , DeclStatement r scope val stmt bod
-    , ControlStatement r val stmt bod
-    , MethodSym r vis typ param mthd bod
+    , InternalList r var val block
+    , DeclStatement r scope var val stmt bod
+    , ControlStatement r var val stmt bod
+    , MethodSym r vis typ var param mthd bod
     )
   => MS (r mthd)
 main = mainFunction $ body

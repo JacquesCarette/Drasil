@@ -22,7 +22,7 @@ import Drasil.FileHandling (FileLayout)
 import Drasil.Database (HasUID(..))
 import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
   Space(..))
-import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
+import Language.Drasil.Printers (oneLineCodeSymbolDoc, PrintingInformation,
   oneLineCodeExprDoc)
 import Drasil.GOOL (Variable, VS, CS, FS, MS, CSStateVar, Class, OOProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), AttachmentSym(..),
@@ -644,7 +644,7 @@ constrVarDec
 constrVarDec v e = do
   lb <- convExpr e
   t <- codeType v
-  let mkValue = var ("set_" <> showHasSymbImpl v) (setType (convType t))
+  let mkValue = var ("set_" <> oneLineCodeSymbolDoc v) (setType (convType t))
   pure (setDecDef mkValue local lb)
 
 -- | Generates statements that print a message for when a constraint is violated.
@@ -677,7 +677,7 @@ constraintViolatedMsg
     )
   => CodeVarChunk -> String -> ConstraintCE -> GenState [MS (r stmt)]
 constraintViolatedMsg q s c = do
-  pc <- printConstraint (showHasSymbImpl q) c
+  pc <- printConstraint (oneLineCodeSymbolDoc q) c
   v <- mkVal (quantvar q)
   pure $ [printStr $ codeName q <> " has value ",
     print v,
@@ -1854,7 +1854,7 @@ constrVarDecProc
 constrVarDecProc v e = do
   lb <- convExprProc e
   t <- codeType v
-  let mkValue = var ("set_" <> showHasSymbImpl v) (setType (convType t))
+  let mkValue = var ("set_" <> oneLineCodeSymbolDoc v) (setType (convType t))
   pure (setDecDef mkValue local lb)
 
 -- | Generates statements that print a message for when a constraint is violated.

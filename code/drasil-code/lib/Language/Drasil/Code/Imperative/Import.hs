@@ -46,7 +46,7 @@ import Language.Drasil.Literal.Development
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
   Mod(..), Name, Description, StateVariable(..), fstdecl)
 import qualified Language.Drasil.Mod as M (Class(..))
-import Language.Drasil.Printers (showHasSymbImpl)
+import Language.Drasil.Printers (oneLineCodeSymbolDoc)
 
 import Drasil.GOOL (Label, Variable, Class, CSStateVar, NamedArgs, Initializers,
   OOProg, CS, FS, MS, VS, AttachmentSym(..), bodyStatements, BlockSym(..),
@@ -635,7 +635,7 @@ renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
 renderSet :: (IsChunk c, HasSymbol c) => c -> CodeExpr -> CodeExpr
-renderSet e s = in' (Variable ("set_" <> showHasSymbImpl e) s) (sy e)
+renderSet e s = in' (Variable ("set_" <> oneLineCodeSymbolDoc e) s) (sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop

@@ -46,3 +46,19 @@ tests:
     - filepath
     - tasty
     - tasty-hunit
+
+  # Compile the internal renderer from source without exposing it to clients.
+  drasil-commonmark-test:
+    source-dirs:
+    - test-internal
+    - lib
+    main: Main.hs
+    other-modules:
+    - Drasil.Data.Formats.HTML
+    - Drasil.Data.Formats.HTML.Core
+    - Drasil.Data.Formats.HTML.Render
+    - Drasil.Data.Formats.Markdown.CommonMark.Core
+    - Drasil.Data.Formats.Markdown.CommonMark.Render
+    dependencies:
+    - tasty
+    - tasty-hunit

@@ -20,10 +20,12 @@ module Drasil.Data.Formats.Markdown.CommonMark.Render
     separateRenderedBlocks,
     concatenateRenderedLines,
     renderedLinesToDoc,
+    renderCodeSpan,
+    renderCodeFence,
   )
 where
 
-import Data.List (intersperse)
+import Data.List (intercalate)
 import Data.Text (Text)
 import Data.Text qualified as T
 import Drasil.Data.Formats.HTML qualified as HTML
@@ -146,7 +148,7 @@ prefixBlockQuote (RenderedLines physicalLines) =
 -- | Separate nonempty block results by one blank line; skip absent blocks.
 separateRenderedBlocks :: [RenderedLines ann] -> RenderedLines ann
 separateRenderedBlocks =
-  RenderedLines . concat . intersperse [blankPhysicalLine]
+  RenderedLines . intercalate [blankPhysicalLine]
     . filter (not . null) . fmap renderedLines
 
 -- | Join line sequences without inserting separators.
@@ -162,3 +164,43 @@ renderedLinesToDoc (RenderedLines physicalLines) =
 
 physicalLineDoc :: PhysicalLine ann -> Doc ann
 physicalLineDoc (PhysicalLine _ contents) = contents
+
+htmlText :: Text -> Text
+htmlText t = renderStrict (layoutPretty defaultLayoutOptions
+  (HTML.renderHTMLFragment HTML.defaultHTMLRO [HTML.RawText t]))
+
+normalizeCodeSpan :: Text -> Text
+normalizeCodeSpan = T.replace "\n" " " . normalizeLineEndings
+
+-- | Delimit literal inline code, preserving spaces and embedded backticks.
+-- Line endings become spaces as in CommonMark; an empty span emits no text.
+renderCodeSpan :: Text -> Text
+renderCodeSpan input
+  | T.null contents = ""
+  | otherwise = marker <> padding <> contents <> padding <> marker
+  where
+    contents = normalizeCodeSpan input
+    marker = T.replicate (longestRun '`' contents + 1) "`"
+    padding
+      | "`" `T.isPrefixOf` contents || "`" `T.isSuffixOf` contents ||
+        (" " `T.isPrefixOf` contents && " " `T.isSuffixOf` contents &&
+          not (T.all (== ' ') contents)) = " "
+      | otherwise = ""
+
+-- | Render a fenced code fragment for the future block renderer.
+-- Normalize line endings, retain trailing blank lines and add a final content
+-- newline when needed. Collapse info-string whitespace to keep it on one line.
+-- Backticks in the info string select a tilde fence instead.
+renderCodeFence :: Maybe Text -> Text -> RenderedLines ann
+renderCodeFence info input = textToRenderedLines
+  (fence <> infoPrefix <> htmlText (T.replace "\\" "\\\\" infoText) <> "\n" <> contents <> finalBreak <> fence)
+  where
+    contents = normalizeLineEndings input
+    infoText = maybe "" (T.unwords . T.words . normalizeLineEndings) info
+    fenceChar = if T.any (== '`') infoText then '~' else '`'
+    infoPrefix = if T.singleton fenceChar `T.isPrefixOf` infoText then " " else ""
+    fence = T.replicate (max 3 (longestRun fenceChar contents + 1)) (T.singleton fenceChar)
+    finalBreak = if T.null contents || "\n" `T.isSuffixOf` contents then "" else "\n"
+
+longestRun :: Char -> Text -> Int
+longestRun marker = maximum . (0 :) . fmap T.length . T.split (/= marker)

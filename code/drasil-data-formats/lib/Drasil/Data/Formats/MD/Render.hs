@@ -29,55 +29,55 @@ data TableStyle = Pretty | Minified
 
 -- | Render 'Markdown' to a 'Doc'
 renderMarkdown :: MDRenderOptions -> [Markdown] -> PNew.Doc ann
-renderMarkdown rOpt element = vsep (map (renderMDElem rOpt) element)
+renderMarkdown rOpt element = vsep (fmap (renderMDElem rOpt) element)
 
 -- | Render a single 'Markdown' element
 renderMDElem :: MDRenderOptions -> Markdown -> PNew.Doc ann
 renderMDElem rOpt (Heading n idOpt ch)
   | n < 1 || n > 6 = error "Illegal header (header weight must be between 1 and 6)."
-  | otherwise      = pretty (replicate n '#') <+> hcat (map (renderMDElem rOpt) ch)
+  | otherwise      = pretty (replicate n '#') <+> hcat (fmap (renderMDElem rOpt) ch)
     <> maybeId idOpt rOpt
 renderMDElem rOpt (Div idOpt ch) =
   case mdFlavour rOpt of
     Pandoc -> vcat $ [":::" <> maybeId (Just idOpt) rOpt]
-      ++ map (renderMDElem rOpt) ch ++ [":::"]
-renderMDElem _ (Code langOpt code) = "```" <> maybe mempty pretty langOpt
+      <> fmap (renderMDElem rOpt) ch <> [":::"]
+renderMDElem _ (Code langOpt code) = "```" <> foldMap pretty langOpt
   <> line <> pretty code <> line <> "```"
-renderMDElem rOpt (Quote ch) = hcat (map (\c -> "> " <> renderMDElem rOpt c) ch)
+renderMDElem rOpt (Quote ch) = hcat (fmap (\c -> "> " <> renderMDElem rOpt c) ch)
 renderMDElem rOpt (Link url ch) = renderRef rOpt ch url
 renderMDElem rOpt (Image src ch idOpt) =
   "!" <> renderRef rOpt ch src <> maybeId idOpt rOpt
 renderMDElem rOpt (List tp items) = vsep (zipWith (renderListItem rOpt tp) [1..] items) <> line
 renderMDElem rOpt (Table headerRows dataRows captionOpt idOpt) =
-  line <> vsep (renderedHeaders ++ [separatorRow rOpt colWidths] ++ renderedData)
+  line <> vsep (renderedHeaders <> [separatorRow rOpt colWidths] <> renderedData)
   <> renderCaption captionOpt idOpt rOpt
   where
-    colWidths = map (max 3 . maximum) . transpose $ map (map cellWidth) (headerRows ++ dataRows)
+    colWidths = fmap (max 3 . maximum) . transpose $ fmap (fmap cellWidth) (headerRows <> dataRows)
     cellWidth c = length (show (renderMDElem rOpt c))
-    renderedHeaders = map (renderRow rOpt colWidths) headerRows
-    renderedData    = map (renderRow rOpt colWidths) dataRows
-renderMDElem rOpt (Paragraph ch) = line <> hcat (map (renderMDElem rOpt) ch) <> line
+    renderedHeaders = fmap (renderRow rOpt colWidths) headerRows
+    renderedData    = fmap (renderRow rOpt colWidths) dataRows
+renderMDElem rOpt (Paragraph ch) = line <> hcat (fmap (renderMDElem rOpt) ch) <> line
 renderMDElem rOpt (Bold ch) = pretty (replicate 2 (formatChar rOpt)) <>
-  hcat (map (renderMDElem rOpt) ch) <> pretty (replicate 2 (formatChar rOpt))
+  hcat (fmap (renderMDElem rOpt) ch) <> pretty (replicate 2 (formatChar rOpt))
 renderMDElem rOpt (Italic ch) =
-  pretty (formatChar rOpt) <> hcat (map (renderMDElem rOpt) ch) <> pretty (formatChar rOpt)
+  pretty (formatChar rOpt) <> hcat (fmap (renderMDElem rOpt) ch) <> pretty (formatChar rOpt)
 renderMDElem _ (RawText t) = pretty (escapeMDText t)
 renderMDElem _ Line = "----"
 
 renderListItem :: MDRenderOptions -> ListType -> Int -> [Markdown] -> PNew.Doc ann
 renderListItem opt Unordered _ itemContent =
-  "- " <> hcat (map (renderMDElem opt) itemContent)
+  "- " <> hcat (fmap (renderMDElem opt) itemContent)
 renderListItem opt Ordered index itemContent =
-  pretty index <> ". " <> hcat (map (renderMDElem opt) itemContent)
+  pretty index <> ". " <> hcat (fmap (renderMDElem opt) itemContent)
 
 renderRef :: MDRenderOptions -> [Markdown] -> Text -> PNew.Doc ann
-renderRef rOpt ch ref = brackets (hcat (map (renderMDElem rOpt) ch)) <> parens (pretty ref)
+renderRef rOpt ch ref = brackets (hcat (fmap (renderMDElem rOpt) ch)) <> parens (pretty ref)
 
 -- | Internal: Add ID if Pandoc-flavoured
 maybeId :: Maybe Text -> MDRenderOptions -> PNew.Doc ann
 maybeId idOpt opt =
   if mdFlavour opt == Pandoc
-    then maybe mempty (\idStr -> " {#" <> pretty idStr <> "}") idOpt
+    then foldMap (\idStr -> " {#" <> pretty idStr <> "}") idOpt
     else mempty
 
 renderRow :: MDRenderOptions -> [Int] -> [Markdown] -> PNew.Doc ann
@@ -95,7 +95,7 @@ separatorRow rOpt widths =
   where
     separator =
       case tableStyle rOpt of
-        Pretty -> map (\w -> ":" <> pretty (replicate (w + 1) '-')) widths
+        Pretty -> fmap (\w -> ":" <> pretty (replicate (w + 1) '-')) widths
         Minified -> replicate (length widths) ":---"
 
 renderCaption :: Maybe [Markdown] -> Maybe Text -> MDRenderOptions -> PNew.Doc ann
@@ -104,7 +104,7 @@ renderCaption capOpt idOpt opt =
   line <> line <> ":" <> renderedCap <> maybeId idOpt opt
   where
     renderedCap = case capOpt of
-      Just ch -> " " <> hcat (map (renderMDElem opt) ch)
+      Just ch -> " " <> hcat (fmap (renderMDElem opt) ch)
       Nothing -> mempty
 
 -- | Internal: Escape characters

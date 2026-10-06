@@ -24,8 +24,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, NamedArgs,
   MultiStatement(multi), AssignStatement((&++)), (&=), TypeElim(..),
   PrintConsole(printStr, printStrLn),
   PrintFile(printFile, printFileStr, printFileStrLn), ifNoElse, convType,
-  VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression,
-  VariableValue, BlockSym, BodySym)
+  BinderElim(..), getCodeType, getTypeString, ValueExpression, VariableValue,
+  BlockSym, BodySym)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (Class, Initializers, CSStateVar, newObj,
   objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym, OOVariableSym)
@@ -42,7 +42,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(commentedMod),
   RenderMod(updateModuleDoc))
 import qualified Drasil.GOOL.RendererClassesOO as RO
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource,
-  ScopeTag(Local), ScopeData, sd, TypeData(..), BinderD, FuncData)
+  ScopeTag(Local), ScopeData, sd, TypeData(..), FuncData)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getNestDegree,
   on2StateWrapped)
@@ -314,13 +314,13 @@ newObjMixedArgs s tp vs ns = do
 
 lambda
   ::
-    ( BinderElim r typ
+    ( BinderElim r typ binder
     , RenderValue r typ var val
     , IC.TypeSym r typ
     , ValueSym r typ val
     )
-  => ([r BinderD] -> r val -> Doc)
-  -> [VSBinder r]
+  => ([r binder] -> r val -> Doc)
+  -> [VS (r binder)]
   -> VS (r val)
   -> VS (r val)
 lambda f ps' ex' = do
@@ -349,7 +349,11 @@ objMethodCall f t ob vs ns = ob >>= (\o -> RC.call Nothing
 -- Functions --
 
 func
-  :: (RenderFunction r typ, ValueElim r val, ValueExpression r typ var val)
+  ::
+    ( RenderFunction r typ
+    , ValueElim r val
+    , ValueExpression r typ binder var val
+    )
   => Label -> VS (r typ) -> [VS (r val)] -> VS (r FuncData)
 func l t vs = funcApp l t vs >>= ((`funcFromData` t) . R.func . RC.value)
 
@@ -645,14 +649,14 @@ method
 method n s p t = intMethod False n s p (mType t)
 
 getMethod
-  :: (OORenderSym r vis scope typ var param val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis scope typ binder var param val stmt mthd stvr attch file mod bod block)
   => VS (r var) -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
 setMethod
-  :: (OORenderSym r vis scope typ var param val stmt mthd stvr attch file mod bod block)
+  :: (OORenderSym r vis scope typ binder var param val stmt mthd stvr attch file mod bod block)
   => VS (r var) -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)

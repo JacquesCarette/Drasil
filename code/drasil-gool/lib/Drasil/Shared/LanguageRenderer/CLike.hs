@@ -118,7 +118,7 @@ inlineIf c' v1' v2' = do
   where prec cd = valuePrec cd <|> Just 0
 
 libFuncAppMixedArgs
-  :: (IC.ValueExpression r typ var val)
+  :: (IC.ValueExpression r typ binder var val)
   => Library -> MixedCall r typ var val
 libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >>
   IC.funcAppMixedArgs n t vs ns

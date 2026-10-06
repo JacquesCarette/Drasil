@@ -81,7 +81,11 @@ innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
 listAppend
-  :: (TypeSym r typ, ValueStatement r val stmt, ValueExpression r typ var val)
+  ::
+    ( TypeSym r typ
+    , ValueStatement r val stmt
+    , ValueExpression r typ binder var val
+    )
   => String -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAppend fnName list val = valStmt $
   funcApp fnName IC.void [list, val]
@@ -92,7 +96,7 @@ listAdd
     ( TypeSym r typ
     , IndexTranslator r val
     , ValueStatement r val stmt
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     )
   => String -> VS (r val) -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAdd fnName list idx val = valStmt $
@@ -117,7 +121,7 @@ arrayElem arr' i' = do
   mkStateVar vName vType vRender
 
 funcDecDef
-  :: (RP.ProcRenderSym r vis ScopeData typ var param val stmt mthd file mod bod block)
+  :: (RP.ProcRenderSym r vis ScopeData typ binder var param val stmt mthd file mod bod block)
   => VS (r var)
   -> r ScopeData
   -> [VS (r var)]

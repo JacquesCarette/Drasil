@@ -129,7 +129,7 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance OOProg SwiftCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
+instance OOProg SwiftCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym SwiftCode ProgData FileData where
   prog n st files = do
@@ -137,8 +137,8 @@ instance ProgramSym SwiftCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym SwiftCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym SwiftCode Doc ScopeData TypeData Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
+instance CommonRenderSym SwiftCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
+instance OORenderSym SwiftCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
@@ -369,7 +369,7 @@ instance Comparison SwiftCode Value where
   (?==) = swiftNumBinExpr (typeBinExpr equalOp bool)
   (?!=) = swiftNumBinExpr (typeBinExpr notEqualOp bool)
 
-instance ValueExpression SwiftCode TypeData Variable Value where
+instance ValueExpression SwiftCode TypeData BinderD Variable Value where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
@@ -465,14 +465,14 @@ instance InternalGetSet SwiftCode TypeData Variable Value where
 instance InternalListFunc SwiftCode TypeData Value where
   listAccessFunc = CS.listAccessFunc
 
-instance BinderSym SwiftCode TypeData where
+instance BinderSym SwiftCode TypeData BinderD where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
-instance BinderElim SwiftCode TypeData where
+instance BinderElim SwiftCode TypeData BinderD where
   binderName = bindName . unSC
   binderType = onCodeValue bindType
 
-instance InternalBinderElim SwiftCode where
+instance InternalBinderElim SwiftCode BinderD where
   binderElim = text . bindName . unSC
 
 instance RenderFunction SwiftCode TypeData where
@@ -993,7 +993,7 @@ swiftStrideFunc
     ( TypeSym r typ
     , VariableSym r typ var
     , RenderValue r typ var val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     )
   => VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
 swiftStrideFunc beg end step = let t = listType int
@@ -1021,7 +1021,7 @@ swiftReadLineFunc
     , ValueSym r typ val
     , RenderValue r typ var val
     , ValueElim r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     )
   => VS (r val)
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
@@ -1033,7 +1033,7 @@ swiftReadFileFunc
     , ValueSym r typ val
     , RenderValue r typ var val
     , ValueElim r val
-    , ValueExpression r typ var val
+    , ValueExpression r typ binder var val
     )
   => VS (r val) -> VS (r val)
 swiftReadFileFunc v = swiftTryVal $

@@ -49,11 +49,11 @@ class (UnRepr r typ, Argument r val, BodySym r bod block, BlockSym r block stmt,
   VariableValue r var val, VariableSym r typ var, TypeSym r typ, OOTypeSym r typ,
   OOVariableSym r typ var val, SelfSym r var, BooleanExpression r val,
   Comparison r val, NumericExpression r val, ValueSym r typ val,
-  InternalValueExp r typ var val, ValueExpression r typ var val,
+  InternalValueExp r typ var val, ValueExpression r typ binder var val,
   OOValueExpression r typ var val, IndexTranslator r val, Array r var val,
   List r val, ListStatement r val stmt, Reference r val, Set r val,
   OOFunctionSym r typ val, ParameterSym r var param, ScopeSym r scope,
-  BinderSym r typ, InternalList r var val block,
+  BinderSym r typ binder, InternalList r var val block,
   MethodSym r vis typ var param mthd bod,
   OOMethodSym r vis typ var param val mthd attch bod, AttachmentSym r attch,
   VisibilitySym r vis, StateVarSym r vis var val stvr attch,
@@ -66,7 +66,7 @@ class (UnRepr r typ, Argument r val, BodySym r bod block, BlockSym r block stmt,
   PrintConsole r val stmt, ReadConsole r var stmt, FileHandling r var val stmt,
   PrintFile r val stmt, ReadFile r var val stmt, ModuleSym r mod mthd,
   FileSym r file mod, ProgramSym r prg file
-  ) => OOProg r vis scope typ var param val stmt mthd stvr attch prg file mod bod block
+  ) => OOProg r vis scope typ binder var param val stmt mthd stvr attch prg file mod bod block
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)

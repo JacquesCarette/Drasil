@@ -3,7 +3,7 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, Body, Block, VSBinder, Variable, Value, NamedArgs, MixedCall,
+  Label, Library, Body, Block, Variable, Value, NamedArgs, MixedCall,
   MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
@@ -25,8 +25,8 @@ module Drasil.Shared.InterfaceCommon (
 import Data.Bifunctor (first)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData(..), BinderD,
-  VarData, ValData)
+import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData(..), VarData,
+  ValData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.State (MS, VS)
 
@@ -241,21 +241,19 @@ type PosCall r typ val = Label -> VS (r typ) -> [VS (r val)] -> VS (r val)
 -- Constructor call with only positional arguments
 type PosCtorCall r typ val = VS (r typ) -> [VS (r val)] -> VS (r val)
 
-type VSBinder a = VS (a BinderD)
-
 -- | A class for representing a binder, i.e. the binding of a variable name
 -- to a type, scope, etc.
 -- As of July 2026, integration of this typeclass is still WIP, blocked
 -- by issues with our variable map.
-class BinderSym r typ | r -> typ where
-  binder :: Label -> VS (r typ) -> VSBinder r
+class BinderSym r typ binder | r -> typ binder where
+  binder :: Label -> VS (r typ) -> VS (r binder)
 
-class BinderElim r typ | r -> typ where
-  binderName :: r BinderD -> String
-  binderType :: r BinderD -> r typ
+class BinderElim r typ binder | r -> typ where
+  binderName :: r binder -> String
+  binderType :: r binder -> r typ
 
 -- | A class for representing values that can include expressions
-class ValueExpression r typ var val | r -> typ var val where
+class ValueExpression r typ binder var val | r -> typ binder var val where
   -- An inline if-statement, aka the ternary operator.  Inputs:
   -- Condition, True-value, False-value
   inlineIf     :: VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
@@ -264,25 +262,25 @@ class ValueExpression r typ var val | r -> typ var val where
   extFuncAppMixedArgs  :: Library -> MixedCall r typ var val
   libFuncAppMixedArgs  :: Library -> MixedCall r typ var val
 
-  lambda :: [VSBinder r] -> VS (r val) -> VS (r val)
+  lambda :: [VS (r binder)] -> VS (r val) -> VS (r val)
 
   notNull :: VS (r val) -> VS (r val)
 
-funcApp          :: (ValueExpression r typ var val) => PosCall r typ val
+funcApp          :: (ValueExpression r typ binder var val) => PosCall r typ val
 funcApp n t vs = funcAppMixedArgs n t vs []
 
 funcAppNamedArgs
-  :: (ValueExpression r typ var val)
+  :: (ValueExpression r typ binder var val)
   => Label -> VS (r typ) -> NamedArgs r var val -> VS (r val)
 funcAppNamedArgs n t = funcAppMixedArgs n t []
 
-extFuncApp :: (ValueExpression r typ var val) => Library -> PosCall r typ val
+extFuncApp :: (ValueExpression r typ binder var val) => Library -> PosCall r typ val
 extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
 
-libFuncApp :: (ValueExpression r typ var val) => Library -> PosCall r typ val
+libFuncApp :: (ValueExpression r typ binder var val) => Library -> PosCall r typ val
 libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
 
-exists :: (ValueExpression r typ var val) => VS (r val) -> VS (r val)
+exists :: (ValueExpression r typ binder var val) => VS (r val) -> VS (r val)
 exists = notNull
 
 -- | Helper class for representing the conversion between integers and array indices.

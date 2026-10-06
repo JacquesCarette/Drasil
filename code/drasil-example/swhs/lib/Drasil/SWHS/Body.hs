@@ -479,8 +479,8 @@ propsDeriv = [
   propCorSolDeriv4,
   propCorSolDeriv5 equation projName rightSide]
 
-propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> DefinedQuantityDict ->
-  ConceptChunk -> CI -> GenDefn -> GenDefn -> h -> ConceptChunk -> Contents
+propCorSolDeriv1 :: (NamedIdea b, Idea e, NamedIdea h) => ConceptChunk -> b -> DefinedQuantityDict ->
+  ConceptChunk -> e -> GenDefn -> GenDefn -> h -> ConceptChunk -> Contents
 propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht =
   foldlSPCol [D.toSent (atStartNP (a_ corSol)), S "must exhibit" +:+.
   D.toSent (phraseNP (the lce)), S "This means that", D.toSent (phraseNP (the ewat)),
@@ -501,7 +501,7 @@ propCorSolDeriv2 = unlbldExpr
   (sy pcmHTC $* sy pcmSA $* (apply1 tempW time $-
   apply1 tempPCM time)))
 
-propCorSolDeriv3 :: NamedIdea a => a -> DefinedQuantityDict -> CI -> ConceptChunk -> Contents
+propCorSolDeriv3 :: (NamedIdea a, Idea c) => a -> DefinedQuantityDict -> c -> ConceptChunk -> Contents
 propCorSolDeriv3 epcm en pcmat wa =
   foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
   phrase en, phrase input_ `S.toThe` short pcmat,
@@ -513,7 +513,7 @@ propCorSolDeriv4 = unlbldExpr
   (sy pcmHTC $* sy pcmSA $* (apply1 tempW time $-
   apply1 tempPCM time)))
 
-propCorSolDeriv5 :: ConceptChunk -> ProjectName -> CI -> Contents
+propCorSolDeriv5 :: Idea c => ConceptChunk -> ProjectName -> c -> Contents
 propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
   `S.and_` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
   S "checks to gain confidence in any", phrase solution,

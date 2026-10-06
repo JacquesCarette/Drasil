@@ -2,7 +2,7 @@ module Drasil.GamePhysics.Assumptions (
   assumptions, assumpCT, assumpDI, assumpCAJI, assumpOT, assumpOD, assumpAD
 ) where
 
-import Language.Drasil hiding (organization)
+import Language.Drasil
 import Language.Drasil.Document (ConceptInstance, cic)
 
 import Data.Drasil.Concepts.Documentation as Doc (simulation, assumpDom)
@@ -51,7 +51,7 @@ assumpADDesc = [S "The axes are defined using", phrase CM.rightHand]
 assumpCTDesc = [S "All", plural CP.rigidBody, plural CP.collision,
   S "are vertex-to-edge", plural CP.collision]
 
-assumpDIDesc = thereNo [phrase CP.damping] ++ implies (phrase CP.friction +:+ plural CP.force)
+assumpDIDesc = thereNo [phrase CP.damping] <> implies (phrase CP.friction +:+ plural CP.force)
 assumpCAJIDesc = thereNo [plural CM.constraint, plural CP.joint]
 
 {-assumptions_list = enumSimple 1 (short assumption) $ map (foldlSent)

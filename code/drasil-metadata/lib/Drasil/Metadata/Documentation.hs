@@ -39,7 +39,7 @@ import Control.Lens ((^.))
 import Drasil.Database (mkUid)
 import Language.Drasil (CI, NP, IdeaDict, cn, cn', cnIES, cnICES, cnUM,
   commonIdea, fterms, compoundPhrase, compoundPhraseP1, titleizeNP',
-  term, ConceptChunk, cncpt, cncpt', Sentence(EmptyS), idea', cncpt''', Sentence(..))
+  term, ConceptChunk, cncpt, Sentence(EmptyS), idea', cncpt''', Sentence(..), cncpt'')
 import Language.Drasil.Chunk.Concept.NamedCombinators
   (combineNINI, compoundNC, compoundNCPP, of_, of_PS, ofAPS, of_NINP, theGen
   , compoundNCPSPP, and_, and_TGen, and_PP)
@@ -218,14 +218,14 @@ srsDom = cncpt''' (mkUid "srsDom") (srs ^. term) (S "srs")
 
 assumpDom, chgProbDom, funcReqDom, goalStmtDom, likeChgDom,
   nonFuncReqDom, reqDom, unlikeChgDom :: ConceptChunk
-assumpDom     = cncpt  (mkUid "assumpDom")     (assumption ^. term)               EmptyS "A"   [srsDom]
-chgProbDom    = cncpt' (mkUid "chgProbDom")    (cn' "change")                     EmptyS       [srsDom]
-funcReqDom    = cncpt  (mkUid "funcReqDom")    (functionalRequirement ^. term)    EmptyS "FR"  [reqDom]
-goalStmtDom   = cncpt  (mkUid "goalStmtDom")   (goalStmt ^. term)                 EmptyS "GS"  [srsDom]
-likeChgDom    = cncpt  (mkUid "likeChgDom")    (likelyChg ^. term)                EmptyS "LC"  [chgProbDom]
-nonFuncReqDom = cncpt  (mkUid "nonFuncReqDom") (nonfunctionalRequirement ^. term) EmptyS "NFR" [reqDom]
-reqDom        = cncpt  (mkUid "reqDom")        (requirement ^. term)              EmptyS "R"   [srsDom]
-unlikeChgDom  = cncpt  (mkUid "unlikeChgDom")  (unlikelyChg ^. term)              EmptyS "UC"  [chgProbDom]
+assumpDom     = cncpt''  (mkUid "assumpDom")     (assumption ^. term)               EmptyS "A"
+chgProbDom    = cncpt''' (mkUid "chgProbDom")    (cn' "change")                     EmptyS
+goalStmtDom   = cncpt''  (mkUid "goalStmtDom")   (goalStmt ^. term)                 EmptyS "GS"
+reqDom        = cncpt''  (mkUid "reqDom")        (requirement ^. term)              EmptyS "R"
+funcReqDom    = cncpt    (mkUid "funcReqDom")    (functionalRequirement ^. term)    EmptyS "FR"  [reqDom]
+nonFuncReqDom = cncpt    (mkUid "nonFuncReqDom") (nonfunctionalRequirement ^. term) EmptyS "NFR" [reqDom]
+likeChgDom    = cncpt    (mkUid "likeChgDom")    (likelyChg ^. term)                EmptyS "LC"  [chgProbDom]
+unlikeChgDom  = cncpt    (mkUid "unlikeChgDom")  (unlikelyChg ^. term)              EmptyS "UC"  [chgProbDom]
 
 -- FIXME: Some of the below are duplicated knowledge of the above (above preferred). None should be CIs, too.
 

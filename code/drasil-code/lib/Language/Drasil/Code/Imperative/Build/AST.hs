@@ -111,7 +111,7 @@ sharedLibrary = BWithExt BPackName $ OtherExt $
 -- | Constructor for a runnable command that goes through an interpreter.
 interp :: BuildName -> NameOpts -> InterpreterCommand -> [InterpreterOption]
   -> Maybe Runnable
-interp b n c = Just . Runnable b n . Interpreter . map makeS . (c:)
+interp b n c = Just . Runnable b n . Interpreter . fmap makeS . (c:)
 
 -- | Constructs a runnable command that goes through an interpreter (for main module file).
 interpMM :: InterpreterCommand -> Maybe Runnable
@@ -144,4 +144,4 @@ cppCompiler = mkImplicitVar "CXX"
 -- | Helper for configuring doxygen documentation.
 doxygenDocConfig :: FilePath -> DocConfig
 doxygenDocConfig fp = DocConfig [makeS fp]
-  [mkCheckedCommand $ makeS $ "doxygen " ++ fp]
+  [mkCheckedCommand $ makeS $ "doxygen " <> fp]

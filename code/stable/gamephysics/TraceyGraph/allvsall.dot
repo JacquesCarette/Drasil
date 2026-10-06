@@ -19,7 +19,6 @@ digraph "allvsall" {
     "dataDefn:potEnergy" -> "instance:assumpOD";
     "dataDefn:potEnergy" -> "instance:assumpDI";
     "dataDefn:momentOfInertia" -> "instance:assumpOT";
-    "theory:newtonSLR" -> "instance:assumpOD";
     "theory:gravitationalAccel" -> "theory:fOfGravity";
     "theory:impulseS" -> "instance:assumpOT";
     "theory:impulseS" -> "instance:assumpOD";

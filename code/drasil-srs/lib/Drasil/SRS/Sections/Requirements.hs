@@ -8,7 +8,7 @@ module Drasil.SRS.Sections.Requirements (
   inReqWTab,
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- * Non-functional Requirements
-  nfReqF, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
+  nfReqF, mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR
   ) where
 
@@ -25,7 +25,6 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (HasOutput(output))
-import Utils.Drasil (stringList)
 import Data.List.Extras (mkTable)
 
 -- Vocabulary
@@ -57,7 +56,7 @@ inReqWTab mdesc qs = (ci, tbl)
   where
     tbl = mkInputPropsTable qs
     desc = foldlSent $ [atStart input_,  S "the", plural value, S "from"]
-      ++ maybe [refS tbl] (\d -> [refS tbl `sC` S "which define", d]) mdesc
+      <> maybe [refS tbl] (\d -> [refS tbl `sC` S "which define", d]) mdesc
     ci = cic "inputValues" desc "Input-Values" funcReqDom
 
 -- | Adds a generalized introduction for a Non-Fucntional Requirements section. Takes in the contents of that section.
@@ -105,15 +104,6 @@ mkMaintainableNFR refAddress percent lbl = cic refAddress (foldlSent [
   S "finished software, it will take at most", addPercent percent `S.ofThe`
   S "original development time,",
   S "assuming the same development resources are available"
-  ]) lbl nonFuncReqDom
-
--- | Common Non-Functional Requirement for Portability.
-mkPortableNFR :: String -> [String] -> String -> ConceptInstance
-mkPortableNFR _ [] _ = error "No operating systems specified; cannot create a requirement."
-mkPortableNFR refAddress [os] lbl = cic refAddress (S $ "The code shall be portable to " ++ os) lbl nonFuncReqDom
-mkPortableNFR refAddress osList lbl = cic refAddress (foldlSent [
-  S "The code shall be portable to multiple environments, particularly",
-  S $ stringList osList
   ]) lbl nonFuncReqDom
 
 -- | Common Non-Functional Requirement for Correctness.
@@ -166,7 +156,7 @@ mkValsSourceTable vals labl cap = llccTab labl $
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 
 mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(DefinedQuantityDict, Sentence)]
-mkQRTuple = map (\c -> (c ^. output, refS c))
+mkQRTuple = fmap (\c -> (c ^. output, refS c))
 
 mkQRTupleRef :: (Quantity i, MayHaveUnit i, Concept i, HasShortName r, Referable r) => [i] -> [r] -> [(DefinedQuantityDict, Sentence)]
 mkQRTupleRef = zipWith (curry (bimap dqdWr refS))

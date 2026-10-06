@@ -11,8 +11,8 @@ module Drasil.Makefile (
   , printMakefile
 ) where
 
-import Drasil.Makefile.Make.AST (Annotation, Command, Dependencies, mkCheckedCommand,
+import Drasil.Makefile.AST (Annotation, Command, Dependencies, mkCheckedCommand,
   mkCommand, mkFile, mkMakefile, mkRule, Makefile, Rule)
-import Drasil.Makefile.Make.MakeString ((+:+), makeS, MakeString, mkFreeVar,
+import Drasil.Makefile.MakeString ((+:+), makeS, MakeString, mkFreeVar,
   mkImplicitVar, mkWindowsVar, mkOSVar)
-import Drasil.Makefile.Make.Print (printMakefile)
+import Drasil.Makefile.Print (printMakefile)

@@ -10,26 +10,35 @@ import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
-nameGenTestOO :: OOProg r vis stmt mthd stvr attch prg => OO.GSProgram r prg
+nameGenTestOO
+  :: OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block
+  => OO.GSProgram r prg
 nameGenTestOO = OO.prog "NameGenTest" "" [OO.fileDoc $ OO.buildModule
   "NameGenTest" [] [main, helper] []]
 
 nameGenTestProc
-  :: (ProcProg r vis stmt mthd prg)
+  :: (ProcProg r vis scope typ param val stmt mthd prg file mod bod block)
   => GProc.GSProgram r prg
 nameGenTestProc = GProc.prog "NameGenTest" "" [GProc.fileDoc $ GProc.buildModule
   "NameGenTest" [] [main, helper]]
 
 helper
   ::
-    ( Literal r
-    , VariableValue r
-    , Comparison r
-    , List r
-    , InternalList r
-    , DeclStatement r stmt
-    , ControlStatement r stmt
-    , MethodSym r vis stmt mthd
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , TypeSym r typ
+    , Literal r typ val
+    , ScopeSym r scope
+    , VariableSym r typ
+    , VariableValue r val
+    , Comparison r val
+    , List r val
+    , InternalList r val block
+    , ParameterSym r param
+    , VisibilitySym r vis
+    , DeclStatement r scope val stmt bod
+    , ControlStatement r val stmt bod
+    , MethodSym r vis typ param mthd bod
     )
   => MS (r mthd)
 helper = function "helper" private void [param temp] $ body
@@ -42,14 +51,19 @@ helper = function "helper" private void [param temp] $ body
 
 main
   ::
-    ( Literal r
-    , VariableValue r
-    , Comparison r
-    , List r
-    , InternalList r
-    , DeclStatement r stmt
-    , ControlStatement r stmt
-    , MethodSym r vis stmt mthd
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , TypeSym r typ
+    , Literal r typ val
+    , ScopeSym r scope
+    , VariableSym r typ
+    , VariableValue r val
+    , Comparison r val
+    , List r val
+    , InternalList r val block
+    , DeclStatement r scope val stmt bod
+    , ControlStatement r val stmt bod
+    , MethodSym r vis typ param mthd bod
     )
   => MS (r mthd)
 main = mainFunction $ body

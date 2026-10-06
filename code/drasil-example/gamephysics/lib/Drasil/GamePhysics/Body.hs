@@ -9,6 +9,7 @@ import qualified Drasil.SRS.Concepts as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (projAbrvS)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
@@ -19,7 +20,6 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
-import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.People (alex, luthfi, olu)
 import Data.Drasil.Software.Products (openSource, videoGame)
 
@@ -37,7 +37,7 @@ import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.LabelledContent (labelledContent, sysCtxFig1)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
-import Drasil.GamePhysics.MetaConcepts (progName)
+import Drasil.GamePhysics.MetaConcepts (projName)
 import Drasil.GamePhysics.References (citations, uriReferences)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
@@ -48,11 +48,11 @@ import Drasil.GamePhysics.GenDefs (generalDefns)
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
-  IntroSec $ IntroProg para1_introduction_intro (short progName)
-  [IPurpose $ purpDoc progName Verbose,
+  IntroSec $ IntroProg para1_introduction_intro []
+  [IPurpose (StdPurp Verbose),
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
-   IOrgSec inModel (SRS.inModel [] []) Nothing],
+   IOrgSec Nothing],
    GSDSec $ GSDProg [
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
@@ -65,9 +65,9 @@ mkSRS = [TableOfContents,
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , GDs [] ([Label, Units] <> stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) ShowDerivation
         , Constraints EmptyS inputConstraints
         , CorrSolnPpties outputConstraints []
         ]
@@ -80,12 +80,12 @@ mkSRS = [TableOfContents,
     UCsSec,
     OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
     TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-    AuxConstntSec $ AuxConsProg progName [],
+    AuxConstntSec $ AuxConsProg [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName [alex, luthfi, olu]
+si = mkSmithEtAlICO projName [alex, luthfi, olu]
   [purp] [] [] []
   tMods generalDefns dataDefs iMods
   inputSymbols outputSymbols inputConstraints [] symbols
@@ -96,7 +96,7 @@ purp = foldlSent_ [S "simulate", short twoD, phrase CP.rigidBody,
   phrase Doc.physics, S "for use in", phrase game, S "development"]
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
+concIns = assumptions <> goals <> likelyChgs <> unlikelyChgs <> funcReqs <> nonfuncReqs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -106,21 +106,21 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 --FIXME: All named ideas, not just acronyms.
 
 cis :: [CI]
-cis = [progName, centreMass]
+cis = [centreMass]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  softwarecon ++ [CP.angular, CP.linear, CP.rigidBody, CP.collision,
+  softwarecon <> [CP.angular, CP.linear, CP.rigidBody, CP.collision,
   CP.damping, CP.friction, CP.joint, CP.energy, CP.motion, CP.space,
   CP.elasticity]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbols [] cis conceptChunks []
+symbMap = withCommonKnowledge projName allRefs symbols [] cis conceptChunks []
   dataDefs iMods generalDefns tMods concIns citations labelledContent
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
+allRefs = [externalLinkRef, pymunk] <> uriReferences <> offShelfSolRefs
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because
@@ -189,7 +189,7 @@ sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external" `S.toThe` phrase software
    `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short progName) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (projAbrvS projName) +:+. EmptyS,
    S "Arrows are used to show the data flow between the", D.toSent (phraseNP (system `andIts` environment))]
 
 sysCtxDesc :: Contents
@@ -223,11 +223,11 @@ sysCtxSysResp = [S "Determine if the" +:+ D.toSent (pluralNP (input_ `and_PS`
 
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short progName +:+ S "Responsibilities"]
+  projAbrvS projName +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp, sysCtxSysResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -235,7 +235,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharacteristicsIntro :: Contents
 userCharacteristicsIntro = foldlSP
-  [S "The", phrase endUser `S.of_` short progName,
+  [S "The", phrase endUser `S.of_` projAbrvS projName,
   S "should have an understanding of", phrase frstYr, S "programming",
   plural concept `S.and_` S "an understanding of", phrase highSchoolPhysics]
 
@@ -256,7 +256,7 @@ userCharacteristicsIntro = foldlSP
 
 probDescIntro :: Sentence
 probDescIntro = foldlSent_
-  [purp, S "in a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
+  [purp, S "in a", foldlList Comma List $ S <$> ["simple", "lightweight", "fast", "portable"],
   S "manner" `sC` S "which will allow" `S.for` S "the production of higher quality" +:+. plural product_,
   S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
   S "need", plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
@@ -314,7 +314,7 @@ general_definitions_GDefs = map (Definition . General) gDefs)
 -- Collision Diagram        --
 ------------------------------
 {-- should be paired with the last instance model for this example
-secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image",
+secCollisionDiagram = Para $ foldlSent [ S "This section presents an image",
   S "of a typical collision between two 2D rigid bodies labeled A and B,"
   S "showing the position of the two objects, the collision normal vector n and",
   S "the vectors from the approximate center of mass of each object to the point",

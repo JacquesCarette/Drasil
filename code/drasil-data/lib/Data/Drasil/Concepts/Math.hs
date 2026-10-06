@@ -6,10 +6,9 @@ module Data.Drasil.Concepts.Math (
 
 -- General Drasil
 import Drasil.Database (mkUid)
-import Language.Drasil hiding (number, norm, matrix, Sentence(P, S, (:+:)))
+import Language.Drasil hiding (norm, matrix, Sentence(P, S, (:+:)))
 import qualified Language.Drasil as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import Language.Drasil.Development (NPStruct(P, S, (:-:)))
 import Language.Drasil.Document (fromSource)
 import Language.Drasil.ShortHands (lX, lY, lZ)
 
@@ -50,20 +49,20 @@ cartesian   = cncpt''' (mkUid "cartesian") (pn' "Cartesian coordinate system") $
                                                                   fromSource cartesianWiki
 centre       = cncpt''' (mkUid "centre")        (cn' "centre")           (D.S "the middle point of an object")
 change       = cncpt''' (mkUid "change")        (cn' "change")           (D.S "Difference between relative start and end states of an object")
-component    = cncpt''' (mkUid "mathComponent") (nounPhrase "component" "components") (D.S ("The scalar quantity defining the contribution " ++
+component    = cncpt''' (mkUid "mathComponent") (nounPhrase "component" "components") (D.S ("The scalar quantity defining the contribution " <>
                                                                         "of a vector in one of the coordinate directions"))
 constraint   = cncpt''' (mkUid "mathConstraint") (cn' "constraint")      (D.S "A condition that the solution must satisfy")
-diameter     = cncpt''' (mkUid "diameter")       (cn' "diameter")        (D.S ("Any straight line segment that passes through the center of the circle" ++
+diameter     = cncpt''' (mkUid "diameter")       (cn' "diameter")        (D.S ("Any straight line segment that passes through the center of the circle" <>
                                                                          "and whose endpoints lie on the circle."))
 direction    = cncpt''' (mkUid "direction")      (cn' "direction")       (D.S "'which way' a vector points, extending from the tail to the tip")
-euclidSpace  = cncpt''' (mkUid "euclidSpace")    (cn' "Euclidean")       (D.S ("Denoting the system of geometry corresponding to the geometry of ordinary" ++
+euclidSpace  = cncpt''' (mkUid "euclidSpace")    (cn' "Euclidean")       (D.S ("Denoting the system of geometry corresponding to the geometry of ordinary" <>
                                                                          "experience"))
 gradient     = cncpt'''  (mkUid "gradient")      (cn' "gradient")        (D.S "degree of steepness of a graph at any point")
 laplaceTransform = cncpt''' (mkUid "laplaceTransform") (cn' "laplace transform") (D.S ("An integral transform that converts a function of a real variable t "
-                                                                         ++ "(often time) to a function of a complex variable s (complex frequency)"))
+                                                                         <> "(often time) to a function of a complex variable s (complex frequency)"))
 law          = cncpt''' (mkUid "law") (cn' "law")                        (D.S "a generalization based on a fact or event perceived to be recurrent")
 line         = cncpt''' (mkUid "line")          (pn' "line")                       $ D.S "An interval between two points" +:+ fromSource lineSource
-matrix       = cncpt''' (mkUid "matrix") (cnICES "matrix")               (D.S ("A rectangular array of quantities or expressions in rows and columns that" ++
+matrix       = cncpt''' (mkUid "matrix") (cnICES "matrix")               (D.S ("A rectangular array of quantities or expressions in rows and columns that" <>
                                                                          "is treated as a single entity and manipulated according to particular rules"))
 norm         = cncpt''' (mkUid "norm")         (cn' "norm")              (D.S "the positive length or size of a vector")
 normal       = cncpt''' (mkUid "normal")       (cn' "normal" )           (D.S "an object that is perpendicular to a given object")
@@ -85,21 +84,21 @@ shape        = cncpt''' (mkUid "shape")        (cn' "shape")             (D.S "T
 surface      = cncpt''' (mkUid "surface")      (cn' "surface")           (D.S "The outer or topmost boundary of an object")
 vector       = cncpt''' (mkUid "vector")       (cn' "vector")            (D.S "Object with magnitude and direction")
 
-xAxis = cncpt''' (mkUid "xAxis") (nounPhraseSent $ P lX :-: S "-axis")   (D.S "the primary axis of a system of coordinates")
-yAxis = cncpt''' (mkUid "yAxis") (nounPhraseSent $ P lY :-: S "-axis")   (D.S "the secondary axis of a system of coordinates")
-zAxis = cncpt''' (mkUid "zAxis") (nounPhraseSent $ P lZ :-: S "-axis")   (D.S "the tertiary axis of a system of coordinates")
+xAxis = cncpt''' (mkUid "xAxis") (nounPhraseSent $ npP lX .-. npS "-axis")   (D.S "the primary axis of a system of coordinates")
+yAxis = cncpt''' (mkUid "yAxis") (nounPhraseSent $ npP lY .-. npS "-axis")   (D.S "the secondary axis of a system of coordinates")
+zAxis = cncpt''' (mkUid "zAxis") (nounPhraseSent $ npP lZ .-. npS "-axis")   (D.S "the tertiary axis of a system of coordinates")
 
-xCoord = cncpt''' (mkUid "xCoord") (nounPhraseSent $ P lX :-: S "-coordinate") (D.S "the location of the point on the x-axis")
-yCoord = cncpt''' (mkUid "yCoord") (nounPhraseSent $ P lY :-: S "-coordinate") (D.S "the location of the point on the y-axis")
-zCoord = cncpt''' (mkUid "zCoord") (nounPhraseSent $ P lZ :-: S "-coordinate") (D.S "the location of the point on the z-axis")
+xCoord = cncpt''' (mkUid "xCoord") (nounPhraseSent $ npP lX .-. npS "-coordinate") (D.S "the location of the point on the x-axis")
+yCoord = cncpt''' (mkUid "yCoord") (nounPhraseSent $ npP lY .-. npS "-coordinate") (D.S "the location of the point on the y-axis")
+zCoord = cncpt''' (mkUid "zCoord") (nounPhraseSent $ npP lZ .-. npS "-coordinate") (D.S "the location of the point on the z-axis")
 
-xComp = cncpt''' (mkUid "xComp") (nounPhraseSent $ P lX :-: S "-component") (D.S "the component of a vector in the x-direction")
-yComp = cncpt''' (mkUid "yComp") (nounPhraseSent $ P lY :-: S "-component") (D.S "the component of a vector in the y-direction")
-zComp = cncpt''' (mkUid "zComp") (nounPhraseSent $ P lZ :-: S "-component") (D.S "the component of a vector in the z-direction")
+xComp = cncpt''' (mkUid "xComp") (nounPhraseSent $ npP lX .-. npS "-component") (D.S "the component of a vector in the x-direction")
+yComp = cncpt''' (mkUid "yComp") (nounPhraseSent $ npP lY .-. npS "-component") (D.S "the component of a vector in the y-direction")
+zComp = cncpt''' (mkUid "zComp") (nounPhraseSent $ npP lZ .-. npS "-component") (D.S "the component of a vector in the z-direction")
 
-xDir = cncpt''' (mkUid "xDir") (nounPhraseSent $ P lX :-: S "-direction") (D.S "the direction aligned with the x-axis")
-yDir = cncpt''' (mkUid "yDir") (nounPhraseSent $ P lY :-: S "-direction") (D.S "the direction aligned with the y-axis")
-zDir = cncpt''' (mkUid "zDir") (nounPhraseSent $ P lZ :-: S "-direction") (D.S "the direction aligned with the z-axis")
+xDir = cncpt''' (mkUid "xDir") (nounPhraseSent $ npP lX .-. npS "-direction") (D.S "the direction aligned with the x-axis")
+yDir = cncpt''' (mkUid "yDir") (nounPhraseSent $ npP lY .-. npS "-direction") (D.S "the direction aligned with the y-axis")
+zDir = cncpt''' (mkUid "zDir") (nounPhraseSent $ npP lZ .-. npS "-direction") (D.S "the direction aligned with the z-axis")
 iAngle = cncpt''' (mkUid "iAngle") (cn "initial angle")                   (D.S "The initial angle where the body is being displaced")
 
 de, leftSide, ode, pde, rightSide :: CI

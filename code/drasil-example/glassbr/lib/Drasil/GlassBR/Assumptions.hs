@@ -2,13 +2,14 @@ module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
   assumpGL, assumpBC, assumpRT, assumpLDFC, assumptionConstants,
   assumptions) where
 
-import Language.Drasil hiding (organization)
-import Language.Drasil.Document
+import Language.Drasil
+import Language.Drasil.Document hiding (organization)
 import qualified Language.Drasil.Development as D
 import qualified Drasil.SRS.Concepts as SRS (valsOfAuxCons)
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (projAbrvS)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,
   constant, practice, reference, scenario, system, value)
@@ -17,7 +18,7 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass,
   loadShareFac, plane, responseTy, explosion, lateral)
-import Drasil.GlassBR.MetaConcepts (progName)
+import Drasil.GlassBR.MetaConcepts (projName)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constantK, constantLoadDur, constantLoadSF,
   constantM, constantModElas, loadDF, loadDur)
@@ -42,13 +43,13 @@ assumpLDFC         = cic "assumpLDFC" ldfConstantDesc                   "ldfCons
 
 glassTypeDesc :: Sentence
 glassTypeDesc = foldlSent [S "The standard E1300-09a for",
-  phrase calculation, S "applies only to", foldlList Comma Options $ map S ["monolithic",
+  phrase calculation, S "applies only to", foldlList Comma Options $ S <$> ["monolithic",
   "laminated", "insulating"], S "glass constructions" `S.of_` S "rectangular", phrase shape,
   S "with continuous", phrase lateral, S "support along",
-  foldlList Comma Options (map S ["one", "two", "three", "four"]) +:+.
+  foldlList Comma Options (S <$> ["one", "two", "three", "four"]) +:+.
   plural edge, S "This", phrase practice +: S "assumes that",
-  foldlEnumList Numb Parens SemiCol List $ map foldlSent_
-  [[S "the supported glass", plural edge, S "for two, three" `S.and_`
+  foldlEnumList Numb Parens SemiCol List $ foldlSent_
+  <$> [[S "the supported glass", plural edge, S "for two, three" `S.and_`
   S "four-sided support", plural condition, S "are simply supported" `S.and_`
   S "free to slip in", phrase plane],
   [S "glass supported on two sides acts as a simply supported", phrase beam],
@@ -56,7 +57,7 @@ glassTypeDesc = foldlSent [S "The standard E1300-09a for",
 
 glassConditionDesc :: Sentence
 glassConditionDesc = foldlSent [S "Following", complexRef astm2009 (Page [1]) `sC`
-  S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
+  S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ S <$> ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], S "with",
   phrase surface `S.and_` S "edge treatments that alter the glass strength"]
 
@@ -68,12 +69,12 @@ standardValuesDesc :: Quantity q => q -> Sentence
 standardValuesDesc q = foldlSent [D.toSent $ atStartNP' (the value), S "provided in",
   refS $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase q,
   sParen (ch q) `sC` S "and the", plural materialProprty `S.of_`
-  foldlList Comma List (map ch (take 3 assumptionConstants))]
+  foldlList Comma List (ch <$> take 3 assumptionConstants)]
 
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [atStart glass, S "under consideration is assumed to be a single",
   S "lite; hence, the", phrase value `S.of_` short loadShareFac, S "is equal to 1 for all",
-  plural calculation `S.in_` short progName]
+  plural calculation `S.in_` projAbrvS projName]
 
 boundaryConditionsDesc :: Sentence
 boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
@@ -82,10 +83,10 @@ boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
 
 responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [D.toSent $ atStartNP (the responseTy), S "considered in",
-  short progName, S "is flexural"]
+  projAbrvS projName, S "is flexural"]
 
 ldfConstantDesc :: Sentence
 ldfConstantDesc = foldlSent [S "With", phrase reference, S "to",
   refS assumpSV `sC` D.toSent (phraseNP (NP.the (value `of_`
   loadDF))), sParen (ch loadDF) `S.is` D.toSent (phraseNP (a_ constant))
-  `S.in_` short progName]
+  `S.in_` projAbrvS projName]

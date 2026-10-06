@@ -33,10 +33,10 @@ vibcat :: [Doc] -> Doc
 vibcat = vicat blank
 
 vmap :: (a -> Doc) -> [a] -> Doc
-vmap f = vcat . map f
+vmap f = vcat . fmap f
 
 vimap :: Doc -> (a -> Doc) -> [a] -> Doc
-vimap c f = vicat c . map f
+vimap c f = vicat c . fmap f
 
 emptyIfEmpty :: Doc -> Doc -> Doc
 emptyIfEmpty ifDoc elseDoc = if isEmpty ifDoc then empty else elseDoc
@@ -45,10 +45,10 @@ emptyIfNull :: [a] -> Doc -> Doc
 emptyIfNull lst elseDoc = if null lst then empty else elseDoc
 
 toCode :: (Monad r) => a -> r a
-toCode = return
+toCode = pure
 
 toState :: a -> State s a
-toState = return
+toState = pure
 
 onCodeValue :: (Functor r) => (a -> b) -> r a -> r b
 onCodeValue = fmap

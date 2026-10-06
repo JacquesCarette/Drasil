@@ -6,10 +6,11 @@ import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS.Concepts (datCon)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.SRS (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
+import Drasil.SRS (mkMaintainableNFR, mkCorrectNFR,
   mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, inReqWTab)
 
 import Data.Drasil.Concepts.Computation (inValue)
+import Data.Drasil.Requirements (portable)
 import Data.Drasil.Concepts.Documentation (datumConstraint,
   funcReqDom, output_, value)
 import Data.Drasil.Concepts.Math (calculation)
@@ -49,7 +50,7 @@ calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
   ]]
 outputValuesDesc = atStart output_ +:+. outputs
   where
-    outputs = foldlList Comma List $ map foldlSent_ [
+    outputs = foldlList Comma List $ foldlSent_ <$> [
         [ch flightDur, fromSource timeIM],
         [ch offset, fromSource offsetIM]
       ]
@@ -73,6 +74,3 @@ reusable = mkReusableNFR "reusable" "Reusability"
 
 maintainable :: ConceptInstance
 maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"
-
-portable :: ConceptInstance
-portable = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portability"

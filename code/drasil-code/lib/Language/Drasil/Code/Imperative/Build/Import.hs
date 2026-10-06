@@ -29,26 +29,26 @@ buildMakefile d b r s m = printMakefile $ mkMakefile $ maybe [mkRule (openingCom
       addnm = maybe (asFragment "") (renderBuildName s m nameOpts) anm
   in [
   mkRule (openingComments m) buildTarget [outnm] [],
-  mkFile [] outnm (map (makeS . filePath) (progMods m)) $
-    map (mkCheckedCommand . foldr (+:+) mempty) $
+  mkFile [] outnm (makeS . filePath <$> progMods m) $
+    mkCheckedCommand . foldr (+:+) mempty <$>
       comp (getCompilerInput bt s m) outnm addnm
-  ]) b ++ maybe [] (\(Runnable nm no ty) -> [
+  ]) b <> foldMap (\(Runnable nm no ty) -> [
   mkRule [] (makeS "run") [buildTarget] [
     mkCheckedCommand $ buildRunTarget (renderBuildName s m no nm) ty +:+
     mkFreeVar "RUNARGS"
     ]
-  ]) r ++ maybe [] (\(DocConfig dps cmds) -> [
-    mkRule [] (makeS "doc") (dps ++ getCommentedFiles s) cmds
+  ]) r <> foldMap (\(DocConfig dps cmds) -> [
+    mkRule [] (makeS "doc") (dps <> getCommentedFiles s) cmds
   ]) d where
     buildTarget = makeS "build"
 
 openingComments :: ProgData -> Annotation
-openingComments m = [watermark, "Project Name: " ++ progName m, progPurpAdd m]
+openingComments m = [watermark, "Project Name: " <> progName m, progPurpAdd m]
 
 -- | Helper that renders project purpose into a string if there is one.
 progPurpAdd :: ProgData -> String
 progPurpAdd m
-  | not (null $ progPurp m) = "Project Purpose: " ++ capitalize (progPurp m)
+  | not (null $ progPurp m) = "Project Purpose: " <> capitalize (progPurp m)
   | otherwise = ""
 
 -- | Helper that renders information into a MakeString. Dependent on the 'BuildName' criteria.
@@ -70,15 +70,15 @@ renderExt (OtherExt e) _ = e
 
 -- | Helper that records the compiler input information.
 getCompilerInput :: BuildDependencies -> SoftwareDossierState -> ProgData -> [MakeString]
-getCompilerInput BcSource s _ = map makeS $ s ^. sources
+getCompilerInput BcSource s _ = makeS <$> s ^. sources
 getCompilerInput (BcSingle n) s p = [renderBuildName s p nameOpts n]
 
 -- | Helper that retrieves commented files.
 getCommentedFiles :: SoftwareDossierState -> [MakeString]
-getCommentedFiles s = map makeS (nubOrd (s ^. headers ++
-  maybeToList (s ^. mainMod)))
+getCommentedFiles s = makeS <$> nubOrd (s ^. headers <>
+  maybeToList (s ^. mainMod))
 
 -- | Helper that builds and runs a target.
 buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn
-buildRunTarget fn (Interpreter i) = foldr (+:+) mempty $ i ++ [fn]
+buildRunTarget fn (Interpreter i) = foldr (+:+) mempty $ i <> [fn]

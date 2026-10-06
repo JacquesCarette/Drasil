@@ -3,20 +3,16 @@ module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Language.Drasil.Document (fromSource)
 import Theory.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.GamePhysics.Assumptions (assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dVect, force_1, force_2,
   mass_1, mass_2, sqrDist, distMass)
 
-import Data.Drasil.Concepts.Documentation (constant)
-import Data.Drasil.Concepts.Physics (rigidBody, twoD)
+import Data.Drasil.Concepts.Physics (rigidBody)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.Physics (angularAccel,
-  force, fOfGravity, gravitationalConst, momentOfInertia, torque)
-import Data.Drasil.Theories.Physics (newtonSL)
+import Data.Drasil.Quantities.Physics (force, fOfGravity, gravitationalConst)
+import Data.Drasil.Theories.Physics (newtonSL, newtonSLR)
 
 ----- Theoretical Models -----
 
@@ -68,24 +64,3 @@ newtonLUGNotes = [foldlSent
    getTandS force, S "that is directly proportional" `S.toThe` S "product of their",
    plural mass `sC` ch mass_1 `S.and_` ch mass_2 `sC` EmptyS `S.and_`
    S "inversely proportional" `S.toThe` getTandS sqrDist, S "between them"]]
-
--- T4 : Newton's second law for rotational motion --
-
-newtonSLR :: TheoryModel
-newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
-  "NewtonSecLawRotMot" newtonSLRNotes
-
-newtonSLRQD :: ModelQDef
-newtonSLRQD = mkQuantDef' torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
-
-newtonSLRExpr :: PExpr
-newtonSLRExpr = sy momentOfInertia $* sy angularAccel
-
-newtonSLRNotes :: [Sentence]
-newtonSLRNotes = map foldlSent [
-  [S "The net", getTandS torque, S "on a", phrase rigidBody `S.is`
-   S "proportional to its", getTandS angularAccel `sC` S "where",
-   ch momentOfInertia, S "denotes", phrase momentOfInertia `S.the_ofThe`
-   phrase rigidBody, S "as the", phrase constant `S.of_` S "proportionality"],
-  [S "We also assume that all", plural rigidBody, S "involved" `S.are`
-   phrase twoD, fromSource assumpOD]]

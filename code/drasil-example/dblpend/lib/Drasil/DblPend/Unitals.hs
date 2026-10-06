@@ -33,7 +33,7 @@ import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject, 
   verticalPos, horizontalVel, verticalVel, horizontalAccel, verticalAccel, horizontalForce, verticalForce)
 
 symbols:: [DefinedQuantityDict]
-symbols = unitalChunks ++ [dqdWr pendDisAngle] ++ map dqdWr constants
+symbols = unitalChunks <> [dqdWr pendDisAngle] <> fmap dqdWr constants
 
 inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = lenRod_1 :| [lenRod_2, massObj_1, massObj_2]
@@ -191,7 +191,7 @@ massCon_1         = constrained' massObj_1 [gtZeroConstr] (dbl 0.5)
 massCon_2         = constrained' massObj_2 [gtZeroConstr] (dbl 0.5)
 
 inConstraints :: [UncertQ]
-inConstraints = map (`uq` defaultUncrt) [lenRodCon_1, lenRodCon_2, massCon_1, massCon_2]
+inConstraints = (`uq` defaultUncrt) <$> [lenRodCon_1, lenRodCon_2, massCon_1, massCon_2]
 
 outConstraints :: [UncertQ]
 outConstraints = [pendDisAngle `uq` defaultUncrt]

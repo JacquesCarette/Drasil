@@ -10,7 +10,6 @@ import Theory.Drasil (DataDefinition, GenDefn)
 
 import qualified Drasil.SRS.Concepts as SRS
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.Documentation (assumption, endUser, input_,
   interface, output_, physical, software, sysCont, softwareConstraint,
@@ -20,7 +19,7 @@ import Data.Drasil.Concepts.Physics (gravity, twoD, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Language.Drasil.Document
 
-import Drasil.BinaryStar.MetaConcepts (progName)
+import Drasil.BinaryStar.MetaConcepts (projName)
 import Drasil.BinaryStar.Concepts (ideaDicts, conceptChunks, starOne, starTwo,
   gravInteraction, ccsFortermsAndDefsTbl)
 import Drasil.BinaryStar.LabelledContent (labelledContent, figBSS, sysCtxFig1)
@@ -34,6 +33,7 @@ import Drasil.BinaryStar.Changes (likelyChgs, unlikelyChgs)
 import Drasil.BinaryStar.Expressions (energyExpr)
 import Drasil.BinaryStar.IMods (iMods)
 import Drasil.BinaryStar.TMods (tMods)
+import Drasil.System (projAbrvS)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -44,11 +44,11 @@ mkSRS = [TableOfContents,
     , TAandA
     ],
   IntroSec $
-  IntroProg introBlurb (phrase progName)
-    [ IPurpose $ purpDoc progName Verbose,
+  IntroProg introBlurb []
+    [ IPurpose (StdPurp Verbose),
       IScope scope,
       IChar [] charsOfReader [],
-      IOrgSec inModel (SRS.inModel [] []) Nothing
+      IOrgSec Nothing
     ],
   GSDSec $
     GSDProg
@@ -60,15 +60,15 @@ mkSRS = [TableOfContents,
     SSDProg
       [ SSDProblem $ PDProg probDescIntro []
       [ TermsAndDefs Nothing ccsFortermsAndDefsTbl
-      , PhySysDesc progName physSystParts figBSS []
+      , PhySysDesc physSystParts figBSS []
       , Goals goalsInputs
       ]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) HideDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) HideDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
+        , GDs [] ([Label, Units] <> stdFields) HideDerivation
+        , DDs [] ([Label, Symbol, Units] <> stdFields) HideDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) HideDerivation
         , Constraints EmptyS inConstraints
         , CorrSolnPpties outConstraints corrSolnProps
         ]
@@ -82,7 +82,7 @@ mkSRS = [TableOfContents,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName constants,
+     AuxConsProg constants,
   Bibliography]
 
 ------------------------------
@@ -124,7 +124,7 @@ sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external" `S.toThe` phrase software
    `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short progName) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (projAbrvS projName) +:+. EmptyS,
    S "Arrows" `S.are` S "used to show the data flow between the",
    D.toSent (phraseNP (system `andIts` environment))]
 
@@ -159,18 +159,18 @@ sysCtxSysResp =
 
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short progName +:+ S "Responsibilities"]
+  projAbrvS projName +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp, sysCtxSysResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
 --------------------------------
 usrCharsIntro :: Contents
 usrCharsIntro = foldlSP
-  [S "The", phrase endUser `S.of_` short progName,
+  [S "The", phrase endUser `S.of_` projAbrvS projName,
    S "should have an understanding of",
    S "undergraduate level 1 physics (Newtonian mechanics)" `sC`
    S "undergraduate level 1" +:+ phrase calculus `S.and_` plural ode]
@@ -185,8 +185,8 @@ probDescIntro = foldlSent_
    S "star system under mutual gravitational interaction"]
 
 physSystParts :: [Sentence]
-physSystParts = map (!.)
-  [S "The" +:+ phrase starOne +:+ S "with" +:+ phrase mass +:+ ch mass_1,
+physSystParts = (!.)
+  <$> [S "The" +:+ phrase starOne +:+ S "with" +:+ phrase mass +:+ ch mass_1,
    S "The" +:+ phrase starTwo +:+ S "with" +:+ phrase mass +:+ ch mass_2,
    S "The" +:+ phrase gravInteraction +:+ S "between the two stars"]
 
@@ -199,7 +199,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  progName [authorName]
+  projName [authorName]
   [probDescIntro] [background] [scope] [motivation]
   tMods ([] :: [GenDefn]) ([] :: [DataDefinition]) iMods
   inputs outputs inConstraints constants symbols
@@ -215,19 +215,13 @@ motivation = foldlSent_ [S "To simulate how a binary star system evolves over ti
 authorName :: Person
 authorName = person "Xinlu" "Yan"
 
-cis :: [CI]
-cis = [progName]
-
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge []
-  symbols ideaDicts cis conceptChunks
-  ([] :: [UnitDefn]) ([] :: [DataDefinition]) iMods
-  ([] :: [GenDefn]) tMods concIns
-  citations (labelledContent ++ funcReqsTables)
+symbMap = withCommonKnowledge projName [] symbols ideaDicts [] conceptChunks
+  [] [] iMods [] tMods concIns citations (labelledContent <> funcReqsTables)
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
-  ++ likelyChgs ++ unlikelyChgs
+concIns = assumptions <> goals <> funcReqs <> nonFuncReqs
+  <> likelyChgs <> unlikelyChgs
 
 ---------------------------------------------------------
 -- Properties of a Correct Solution

@@ -9,12 +9,12 @@ module Drasil.SRS.ExtractDocDesc (
 import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
+import Data.List (nub, partition)
 import Data.Maybe (maybeToList, mapMaybe)
 
 import Drasil.Database (ChunkDB, HasUID (..), findOrErr)
-import Language.Drasil (Sentence, Definition(..), ModelExpr, HasAdditionalNotes(..),
-  Express(express), DefinedQuantityDict, UnitDefn, Quantity, MayHaveUnit(..), IsUnit(..))
-import Language.Drasil.Document (HasContents, Section(Section), SecCons(..),
+import Language.Drasil
+import Language.Drasil.Document (HasContents, Section(Section),
   sentToExp, extractSents, extractSents', extractMExprs, getSec)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
@@ -28,7 +28,7 @@ secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
 secConPlate mCon mSec = preorderFold $ purePlate {
   refSec = Constant <$> \(RefProg c _) -> mCon [c],
   introSub = Constant <$> \case
-    (IOrgSec _ s _) -> mSec [s]
+    (IOrgSec _) -> mempty
     _ -> mempty,
   gsdSub = Constant <$> \case
     (SysCntxt c) -> mCon c
@@ -37,7 +37,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   pdSec = Constant <$> \(PDProg _ s _) -> mSec s,
   pdSub = Constant <$> \case
     (TermsAndDefs _ _) -> mempty
-    (PhySysDesc _ _ lc c) -> mCon [lc] `mappend` mCon c
+    (PhySysDesc _ lc c) -> mCon [lc] `mappend` mCon c
     (Goals _ _) -> mempty,
   scsSub = Constant <$> \case
     (Constraints _ c) -> mCon [inDataConstTbl c]
@@ -60,10 +60,10 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
     (GDs _ _ g _) -> go g
     (IMs _ _ i _) -> go i
     _ -> [],
-  auxConsSec = Constant <$> \(AuxConsProg _ qdef) -> go qdef
+  auxConsSec = Constant <$> \(AuxConsProg qdef) -> go qdef
   }) where
       go :: Express a => [a] -> [ModelExpr]
-      go = map express
+      go = fmap express
 
 -- | Helper that extracts a list of some type from the 'DLPlate' and 'DocDesc'.
 fmGetDocDesc :: DLPlate (Constant [a]) -> DocDesc -> [a]
@@ -75,57 +75,49 @@ egetDocDesc = fmGetDocDesc exprPlate
 
 -- | Extracts expressions from a 'Section'.
 egetSec :: Section -> [ModelExpr]
-egetSec (Section _ sc _ ) = concatMap egetSecCon sc
-
--- | Extracts expressions from section contents.
-egetSecCon :: SecCons -> [ModelExpr]
-egetSecCon (Sub s) = egetSec s
-egetSecCon (Con c) = extractMExprs c
+egetSec (Section _ pcs ssc _) = concatMap extractMExprs pcs <> concatMap egetSec ssc
 
 -- | Creates a 'Sentence' plate.
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
 sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap getSec) $
   preorderFold $ purePlate {
-    introSec = Constant . f <$> \(IntroProg s1 s2 s3) -> [s1, s2] ++ concatMap getIntroSub s3,
-    introSub = Constant . f <$> \case
-      (IPurpose s) -> s
-      (IScope s) -> [s]
-      (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec _ s1 s2) -> maybeToList s2 ++ getSec s1,
+    introSec = Constant . f <$> \(IntroProg s1 s2s s3) -> s1 : (s2s <> concatMap getIntroSub s3),
+    introSub = Constant . f <$> getIntroSub,
     stkSub = Constant . f <$> \case
-      (Client _ s) -> [s]
-      (Cstmr _) -> [],
-    pdSec = Constant . f <$> \(PDProg s secs pds) -> s : concatMap getSec secs ++ concatMap getPDSub pds,
+      (Client s) -> [s]
+      Cstmr -> [],
+    pdSec = Constant . f <$> \(PDProg s secs pds) -> s : concatMap getSec secs <> concatMap getPDSub pds,
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs
       (TermsAndDefs (Just s) cs) -> s : def cs
-      (PhySysDesc _ s lc cs) -> s ++ extractSents lc ++ extractSents' cs
-      (Goals s c) -> s ++ def c,
+      (PhySysDesc s lc cs) -> s <> extractSents lc <> extractSents' cs
+      (Goals s c) -> s <> def c,
     scsSub = Constant . f <$> \case
       (Assumptions c) -> def c
-      (TMs s _ t)   -> s ++ def t ++ notes t
-      (DDs s _ d _) -> s ++ der d ++ notes d
-      (GDs s _ d _) -> s ++ def d ++ der d ++ notes d
-      (IMs s _ d _) -> s ++ der d ++ notes d
+      (TMs s _ t)   -> s <> def t <> notes t
+      (DDs s _ d _) -> s <> der d <> notes d
+      (GDs s _ d _) -> s <> def d <> der d <> notes d
+      (IMs s _ d _) -> s <> der d <> notes d
       (Constraints s _) -> [s]
       (CorrSolnPpties _ cs) -> extractSents' cs,
     reqSub = Constant . f <$> \case
-      (FReqsSub c lcs) -> def c ++ extractSents' lcs
+      (FReqsSub c lcs) -> def c <> extractSents' lcs
       (NonFReqsSub c) -> def c,
     lcsSec = Constant . f <$> \(LCsProg c) -> def c,
     ucsSec = Constant . f <$> \(UCsProg c) -> def c,
     traceSec = Constant . f <$> \(TraceabilityProg progs) ->
       concatMap (\(TraceConfig _ ls s _ _) -> s : ls) progs,
-    auxConsSec = Constant . f <$> \(AuxConsProg _ qdef) -> def qdef
+    auxConsSec = Constant . f <$> \(AuxConsProg qdef) -> def qdef
   } where
     def :: Definition a => [a] -> [Sentence]
-    def = map (^. defn)
+    def = fmap (^. defn)
 
     getIntroSub :: IntroSub -> [Sentence]
-    getIntroSub (IPurpose ss) = ss
+    getIntroSub (IPurpose (CustomPurp ps)) = concat ps
+    getIntroSub (IPurpose (StdPurp _)) = []
     getIntroSub (IScope s) = [s]
-    getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
-    getIntroSub (IOrgSec _ s1 s2) = maybeToList s2 ++ getSec s1
+    getIntroSub (IChar s1 s2 s3) = s1 <> s2 <> s3
+    getIntroSub (IOrgSec s1) = maybeToList s1
 
     der :: MayHaveDerivation a => [a] -> [Sentence]
     der = concatMap (getDerivSent . (^. derivations))
@@ -138,9 +130,9 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     notes = concatMap (^. getNotes)
 
     getPDSub :: PDSub -> [Sentence]
-    getPDSub (TermsAndDefs ms c) = def c ++ maybe [] pure ms
-    getPDSub (PhySysDesc _ s lc cs) = s ++ extractSents lc ++ extractSents' cs
-    getPDSub (Goals s c) = s ++ def c
+    getPDSub (TermsAndDefs ms c) = def c <> foldMap pure ms
+    getPDSub (PhySysDesc s lc cs) = s <> extractSents lc <> extractSents' cs
+    getPDSub (Goals s c) = s <> def c
 
 -- | Extracts 'Sentence's from a document description.
 getDocDesc :: DocDesc -> [Sentence]
@@ -157,7 +149,27 @@ extractUnits dd cdb = collectUnitDeps cdb $ resolveAllVars (getDocDesc dd) (eget
 -- | For a given list of 'Quantity's, collects the 'UnitDefn's dependencies of
 -- their units (i.e., what units their units are defined with).
 collectUnitDeps :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-collectUnitDeps db = map (`findOrErr` db) . concatMap getUnits . mapMaybe (getUnitLup db)
+collectUnitDeps db = go . mapMaybe (getUnitLup db)
+  where
+    go [] = []
+    go us = let (showEm, dontShowEm) = partition shouldShow us
+             in showEm <> go (fmap (`findOrErr` db) $ nub $ concatMap getUnits dontShowEm)
+
+    -- Rules:
+    -- 1. Fundamental and derived SI units have their own symbols and are shown
+    --    in the Table of Units.
+    -- 2. Defined (compound) units are broken down into their constituent units.
+    --
+    -- Scaled units (e.g. millimetre in GlassBR) are currently constructed via
+    -- `derUC` as `DerivedSI` with `UScale`. We treat them as `dontShow` so they
+    -- are not added as redundant prefixed entries in the Table of Units (which
+    -- already contains their base unit, e.g. metre).
+    shouldShow ud =
+      case unitSymbol ud of
+        BaseSI{}               -> True
+        DerivedSI _ _ UScale{} -> False -- FIXME: Hack to avoid 'millimetre' being displayed in SRS.
+        DerivedSI{}            -> True
+        Defined{}              -> False
 
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)

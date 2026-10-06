@@ -349,7 +349,7 @@ This section simplifies the original problem and helps in developing the theoret
 
 \begin{description}[font=\normalfont]
 \item[objectTy:\phantomsection\label{assumpOT}]{All objects are rigid bodies. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:chaslesThm]{DD:chaslesThm}, \hyperref[DD:reVeInColl]{DD:reVeInColl}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:ctrOfMass]{DD:ctrOfMass}, \hyperref[DD:momentOfInertia]{DD:momentOfInertia}, \hyperref[DD:linVel]{DD:linVel}, \hyperref[DD:linDisp]{DD:linDisp}, \hyperref[DD:linAcc]{DD:linAcc}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[DD:impulseV]{DD:impulseV}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
-\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}, \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
+\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]{The library uses a Cartesian coordinate system.}
 \item[axesDefined:\phantomsection\label{assumpAD}]{The axes are defined using right-handed coordinate system. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, and \hyperref[IM:rotMot]{IM:rotMot}.)}
 \item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, and \hyperref[lcEC]{LC:Expanded-Collisions}.)}
@@ -484,10 +484,8 @@ Description & \begin{symbDescription}
 \\ \midrule
 Notes & The net torque $\symbf{τ}$ on a rigid body is proportional to its angular acceleration $α$, where $\symbf{I}$ denotes the moment of inertia of the rigid body as the constant of proportionality.
         
-        We also assume that all rigid bodies involved are two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
-        
 \\ \midrule
-Source & --
+Source & \cite{hibbeler2004}
          
 \\ \midrule
 RefBy & \hyperref[IM:rotMot]{IM:rotMot}
@@ -1632,7 +1630,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:UniversalGravLaw]{TM:UniversalGravLaw} &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} &  & X &  &  &  &  & 
+\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} &  &  &  &  &  &  & 
 \\
 \hyperref[GD:accelGravity]{GD:accelGravity} &  &  &  &  &  &  & 
 \\

@@ -39,8 +39,8 @@ main = do
   buildId <- lookupEnv "GITHUB_RUN_ID"
 
   -- get commit root and build path
-  let repoCommitRoot = "https://github.com/" ++ repoSlug ++ "/tree/" ++ tree ++ "/"
-      buildPath = "https://github.com/" ++ repoSlug ++ "/actions" ++ maybe "" ("/runs/" ++) buildId
+  let repoCommitRoot = "https://github.com/" <> repoSlug <> "/tree/" <> tree <> "/"
+      buildPath = "https://github.com/" <> repoSlug <> "/actions" <> maybe "" ("/runs/" ++) buildId
 
       -- organize all the possible folder locations to use in functions
       allFolders =
@@ -55,7 +55,7 @@ main = do
           , buildPth = buildPath
           , typeGraphFolder = typeGFolder
           , classInstFolder = classIFolder
-          , packages = words listOfPackages ++ ["example"]
+          , packages = words listOfPackages <> ["example"]
             -- manually add example because it's not actually a package anymore,
             -- but the analysis scripts work nonetheless, so we display it here.
           }

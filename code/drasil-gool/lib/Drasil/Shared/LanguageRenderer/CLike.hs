@@ -10,10 +10,9 @@ module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Library, Body, TypeElim(..),
-  SVariable, Value, SValue, MixedCall, MixedCtorCall, VariableSym(..),
-  VariableValue(..), VariableElim(..), ValueSym(valueType), getCodeType,
-  getTypeString)
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Library, TypeElim(..),
+  Variable, MixedCall, MixedCtorCall, VariableSym(..), VariableValue(..),
+  VariableElim(..), ValueSym(valueType), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (extNewObj, objMethodCallNoParams, ($->))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
@@ -33,6 +32,7 @@ import Drasil.Shared.State (MS, VS, lensMStoVS, lensVStoMS, addLibImportVS,
   getClassName, useVarName, setVarScope)
 
 import Prelude hiding (break,(<>))
+import qualified Prelude as P ((<>))
 import Control.Applicative ((<|>))
 import Control.Monad.State (modify)
 import Control.Lens.Zoom (zoom)
@@ -57,15 +57,17 @@ double = typeFromData Double doubleRender (text doubleRender)
 char :: (Monad r) => VS (r TypeData)
 char = typeFromData Char charRender (text charRender)
 
-listType :: (Monad r, TypeElim r, UnRepr r TypeData) => String ->
-  VS (r TypeData) -> VS (r TypeData)
+listType
+  :: (Monad r, TypeElim r TypeData, UnRepr r TypeData)
+  => String -> VS (r TypeData) -> VS (r TypeData)
 listType lst t' = do
   t <- t'
   typeFromData (List (getCodeType t)) (lst
     `containing` getTypeString t) $ text lst <> angles (renderType t)
 
-setType :: (Monad r, TypeElim r, UnRepr r TypeData) => String ->
-  VS (r TypeData) -> VS (r TypeData)
+setType
+  :: (Monad r, TypeElim r TypeData, UnRepr r TypeData)
+  => String -> VS (r TypeData) -> VS (r TypeData)
 setType lst t' = do
   t <- t'
   typeFromData (Set (getCodeType t)) (lst
@@ -88,25 +90,25 @@ orOp :: (Monad r) => VSOp r
 orOp = orPrec "||"
 -- Variables --
 
-self :: (IG.OOTypeSym r, RC.RenderVariable r) => SVariable r
+self :: (IG.OOTypeSym r typ, RC.RenderVariable r typ) => VS (r Variable)
 self = do
   l <- zoom lensVStoMS getClassName
   mkStateVar R.this (IG.obj l) R.this'
 
 -- Values --
 
-litTrue :: (RenderValue r, IC.TypeSym r) => SValue r
+litTrue :: (RenderValue r typ val, IC.TypeSym r typ) => VS (r val)
 litTrue = mkStateVal IC.bool (text "true")
 
-litFalse :: (RenderValue r, IC.TypeSym r) => SValue r
+litFalse :: (RenderValue r typ val, IC.TypeSym r typ) => VS (r val)
 litFalse = mkStateVal IC.bool (text "false")
 
-litFloat :: (RenderValue r, IC.TypeSym r) => Float -> SValue r
+litFloat :: (RenderValue r typ val, IC.TypeSym r typ) => Float -> VS (r val)
 litFloat f = mkStateVal IC.float (D.float f <> text "f")
 
 inlineIf
-  :: (RenderValue r, ValueElim r, ValueSym r)
-  => SValue r -> SValue r -> SValue r -> SValue r
+  :: (RenderValue r typ val, ValueElim r val, ValueSym r typ val)
+  => VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
 inlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
@@ -115,38 +117,55 @@ inlineIf c' v1' v2' = do
     (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2)
   where prec cd = valuePrec cd <|> Just 0
 
-libFuncAppMixedArgs :: (IC.ValueExpression r) => Library -> MixedCall r
+libFuncAppMixedArgs
+  :: (IC.ValueExpression r typ val)
+  => Library -> MixedCall r typ val
 libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >>
   IC.funcAppMixedArgs n t vs ns
 
-libNewObjMixedArgs :: (IG.OOValueExpression r) => Library -> MixedCtorCall r
+libNewObjMixedArgs
+  :: (IG.OOValueExpression r typ val)
+  => Library -> MixedCtorCall r typ val
 libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
   IG.newObjMixedArgs tp vs ns
 
 -- Functions --
 
-listSize :: (IG.InternalValueExp r) => String -> SValue r -> SValue r
+listSize
+  :: (IC.TypeSym r typ, IG.InternalValueExp r typ val)
+  => String -> VS (r val) -> VS (r val)
 listSize fnName list = objMethodCallNoParams IC.int list fnName
 
-listSize' :: (IG.OOVariableSym r, VariableValue r) => String -> SValue r -> SValue r
+listSize'
+  ::
+    ( IC.TypeSym r typ
+    , VariableSym r typ
+    , IG.OOVariableSym r typ val
+    , VariableValue r val
+    )
+  => String -> VS (r val) -> VS (r val)
 listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
 -- Statements --
 
 increment
-  :: (InternalVarElim r, RC.RenderStatement r stmt, ValueElim r)
-  => SVariable r -> SValue r -> MS (r stmt)
+  :: (InternalVarElim r, RC.RenderStatement r stmt, ValueElim r val)
+  => VS (r Variable) -> VS (r val) -> MS (r stmt)
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   mkStmt $ R.addAssign vr v
 
-increment1 :: (InternalVarElim r, RC.RenderStatement r stmt) => SVariable r -> MS (r stmt)
+increment1
+  :: (InternalVarElim r, RC.RenderStatement r stmt)
+  => VS (r Variable) -> MS (r stmt)
 increment1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.increment) vr
 
-decrement1 :: (InternalVarElim r, RC.RenderStatement r stmt) => SVariable r -> MS (r stmt)
+decrement1
+  :: (InternalVarElim r, RC.RenderStatement r stmt)
+  => VS (r Variable) -> MS (r stmt)
 decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
@@ -155,12 +174,12 @@ varDec
   :: ( InternalVarElim r
      , RO.PermElim r attch
      , RC.RenderStatement r stmt
-     , ScopeElim r
+     , ScopeElim r ScopeData
      , UnRepr r TypeData
-     , TypeElim r
-     , VariableElim r
+     , TypeElim r TypeData
+     , VariableElim r TypeData
      )
-  => r attch -> r attch -> Doc -> SVariable r -> r ScopeData -> MS (r stmt)
+  => r attch -> r attch -> Doc -> VS (r Variable) -> r ScopeData -> MS (r stmt)
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
@@ -175,12 +194,12 @@ varDec s d pdoc v' scp = do
         ptrdoc _ = empty
 
 varDecDef
-  :: ( IC.DeclStatement r stmt
+  :: ( IC.DeclStatement r scope val stmt bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
-     , ValueElim r
+     , ValueElim r val
      )
-  => Terminator -> SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
+  => Terminator -> VS (r Variable) -> r scope -> VS (r val) -> MS (r stmt)
 varDecDef t vr scp vl' = do
   vd <- IC.varDec vr scp
   vl <- zoom lensMStoVS vl'
@@ -189,12 +208,12 @@ varDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 setDecDef
-  :: ( IC.DeclStatement r stmt
+  :: ( IC.DeclStatement r scope val stmt bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
-     , ValueElim r
+     , ValueElim r val
      )
-  => Terminator -> SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
+  => Terminator -> VS (r Variable) -> r scope -> VS (r val) -> MS (r stmt)
 setDecDef t vr scp vl' = do
   vd <- IC.setDec vr scp
   vl <- zoom lensMStoVS vl'
@@ -203,32 +222,40 @@ setDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 listDec
-  :: (IC.DeclStatement r stmt, RC.RenderStatement r stmt, RC.StatementElim r stmt)
-  => (r Value -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r stmt)
+  ::
+    ( IC.DeclStatement r scope val stmt bod
+    , RC.RenderStatement r stmt
+    , RC.StatementElim r stmt
+    )
+  => (r val -> Doc) -> VS (r val) -> VS (r Variable) -> r scope -> MS (r stmt)
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
   mkStmt (RC.statement vd <> f sz)
 
 extObjDecNew
-  :: (IC.DeclStatement r stmt, IG.OOValueExpression r, VariableElim r)
-  => Library -> SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
+  ::
+    ( IC.DeclStatement r scope val stmt bod
+    , IG.OOValueExpression r typ val
+    , VariableElim r typ
+    )
+  => Library -> VS (r Variable) -> r scope -> [VS (r val)] -> MS (r stmt)
 extObjDecNew l v scp vs = IC.varDecDef v scp
   (extNewObj l (onStateValue variableType v) vs)
 
 -- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)
 -- 2nd parameter is a statement to end every case with
 switch
-  :: ( RC.BodyElim r
+  :: ( RC.BodyElim r bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
-     , ValueElim r
+     , ValueElim r val
      )
   => (Doc -> Doc)
   -> MS (r stmt)
-  -> SValue r
-  -> [(SValue r, MS (r Body))]
-  -> MS (r Body)
+  -> VS (r val)
+  -> [(VS (r val), MS (r bod))]
+  -> MS (r bod)
   -> MS (r stmt)
 switch f st v cs bod = do
   s <- RC.stmt st
@@ -239,17 +266,17 @@ switch f st v cs bod = do
   mkStmt $ R.switch f s val dflt (zip vals bods)
 
 for
-  :: ( RC.BodyElim r
+  :: ( RC.BodyElim r bod
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
-     , ValueElim r
+     , ValueElim r val
      )
   => Doc
   -> Doc
   -> MS (r stmt)
-  -> SValue r
+  -> VS (r val)
   -> MS (r stmt)
-  -> MS (r Body)
+  -> MS (r bod)
   -> MS (r stmt)
 for bStart bEnd sInit vGuard sUpdate b = do
   initl <- RC.loopStmt sInit
@@ -264,8 +291,8 @@ for bStart bEnd sInit vGuard sUpdate b = do
 
 -- Doc function parameter is applied to the render of the while-condition
 while
-  :: (RC.BodyElim r, RC.RenderStatement r stmt, ValueElim r)
-  => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MS (r Body) -> MS (r stmt)
+  :: (RC.BodyElim r bod, RC.RenderStatement r stmt, ValueElim r val)
+  => (Doc -> Doc) -> Doc -> Doc -> VS (r val) -> MS (r bod) -> MS (r stmt)
 while f bStart bEnd v' b'= do
   v <- zoom lensMStoVS v'
   b <- b'
@@ -276,10 +303,10 @@ while f bStart bEnd v' b'= do
 -- Error Messages --
 
 multiAssignError :: String -> String
-multiAssignError l = "No multiple assignment statements in " ++ l
+multiAssignError l = "No multiple assignment statements in " P.<> l
 
 multiReturnError :: String -> String
-multiReturnError l = "Cannot return multiple values in " ++ l
+multiReturnError l = "Cannot return multiple values in " P.<> l
 
 multiTypeError :: String -> String
-multiTypeError l = "Multi-types not supported in " ++ l
+multiTypeError l = "Multi-types not supported in " P.<> l

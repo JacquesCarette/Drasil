@@ -4,7 +4,8 @@ module Data.Drasil.Citations (
   , module Drasil.Metadata.Citations
   ) where
 
-import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
+import Language.Drasil
+import Language.Drasil.Document
 import Data.Drasil.People (dParnas, pcClements, mCampidelli, dmWiess, rodPierce,
   wikiAuthors, rcHibbeler, sRobertson, jRobertson)
 import Drasil.Metadata.Citations

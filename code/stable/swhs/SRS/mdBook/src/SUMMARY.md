@@ -1,4 +1,4 @@
-- [Software Requirements Specification for Solar Water Heating Systems Incorporating PCM](./title.md)
+- [Software Requirements Specification for Solar Water Heating Systems incorporating PCM](./title.md)
 - [Table of Contents](./SecToC.md)
 - [Reference Material](./SecRefMat.md)
   - [Table of Units](./SecToU.md)

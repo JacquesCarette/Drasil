@@ -1,5 +1,5 @@
 module Drasil.DblPend.DataDefs (
-  dataDefs, accelGQD, forceGQD,
+  dataDefs,
   positionXEqn_1, positionGDD, positionXDD_1, positionYDD_1,
   positionGQD, positionYQD_1, positionYQD_2, positionXQD_2, positionXDD_2,
   positionYDD_2, positionXEqn_2, positionYEqn_2
@@ -17,11 +17,10 @@ import Theory.Drasil (DataDefinition, ddENoRefs, ddMENoRefs)
 import Drasil.DblPend.LabelledContent (figMotion)
 import Drasil.DblPend.Unitals (pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2)
 import Drasil.DblPend.Concepts (horizontalPos, verticalPos)
-import Data.Drasil.Quantities.Physics (velocity, position, time, acceleration, force)
-import Data.Drasil.Quantities.PhysicalProperties (mass)
+import Data.Drasil.Quantities.Physics (velocity, position, time)
 
 dataDefs :: [DataDefinition]
-dataDefs = [positionGDD, positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, accelGDD, forceGDD]
+dataDefs = [positionGDD, positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2]
 
 ------------------------
 -- Position in General--
@@ -106,27 +105,3 @@ positionYFigRef_2 = ch yPos_2 `S.is` S "shown in" +:+. refS figMotion
 
 positionYRef_2 :: Sentence
 positionYRef_2 = ch yPos_2 `S.isThe` phrase verticalPos
-
----------------------------
--- Accleartion in General--
----------------------------
-accelGDD :: DataDefinition
-accelGDD = ddMENoRefs accelGQD Nothing "accelerationGDD" []
-
-accelGQD :: ModelQDef
-accelGQD = mkQuantDef acceleration accelGEqn
-
-accelGEqn :: ModelExpr
-accelGEqn = deriv (sy velocity) time
-
----------------------------
--- Force in General--
----------------------------
-forceGDD :: DataDefinition
-forceGDD = ddENoRefs forceGQD Nothing "forceGDD" []
-
-forceGQD :: SimpleQDef
-forceGQD = mkQuantDef force forceGEqn
-
-forceGEqn :: PExpr
-forceGEqn = vScale (sy mass) (sy acceleration)

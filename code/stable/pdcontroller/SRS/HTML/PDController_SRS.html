@@ -323,10 +323,10 @@
     <section id="Sec:Intro" class="section">
       <h1>Introduction</h1>
       <p class="paragraph">
-        Automatic process control with a controller (<span title="proportional">P</span>&#x2F;<span title="proportional integral">PI</span>&#x2F;<span title="proportional derivative">PD</span>&#x2F;<span title="proportional integral derivative">PID</span>) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore, a simulation of the PD Controller with a Second Order System is created in this project based on the original, manually created version of <a href="https://github.com/muralidn/CAS741-Fall20/tree/master">PD Controller</a> that can be used to tune the gain constants.
+        Automatic process control with a controller (<span title="proportional">P</span>/<span title="proportional integral">PI</span>/<span title="proportional derivative">PD</span>/<span title="proportional integral derivative">PID</span>) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore, a simulation of the PD Controller with a Second Order System is created in this project based on the original, manually created version of <a href="https://github.com/muralidn/CAS741-Fall20/tree/master">PD Controller</a> that can be used to tune the gain constants.
       </p>
       <p class="paragraph">
-        The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for PD Controller. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+        The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for <span title="PD Controller">PDController</span>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
       </p>
       <section id="Sec:DocPurpose" class="subsection">
         <h2>Purpose of Document</h2>
@@ -343,13 +343,13 @@
       <section id="Sec:ReaderChars" class="subsection">
         <h2>Characteristics of Intended Reader</h2>
         <p class="paragraph">
-          Reviewers of this documentation should have an understanding of control systems (control theory and controllers) at the fourth-year undergraduate level and engineering mathematics at a second-year undergraduate level. The users of <span title="PD Controller">PD Controller</span> can have a lower level of expertise, as explained in <a href="#Sec:UserChars">Sec:User Characteristics</a>.
+          Reviewers of this documentation should have an understanding of control systems (control theory and controllers) at the fourth-year undergraduate level and engineering mathematics at a second-year undergraduate level. The users of <span title="PD Controller">PDController</span> can have a lower level of expertise, as explained in <a href="#Sec:UserChars">Sec:User Characteristics</a>.
         </p>
       </section>
       <section id="Sec:DocOrg" class="subsection">
         <h2>Organization of Document</h2>
         <p class="paragraph">
-          The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href="#koothoor2013">koothoor2013</a>, <a href="#smithLai2005">smithLai2005</a>, <a href="#smithEtAl2007">smithEtAl2007</a>, and <a href="#smithKoothoor2016">smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href="#Sec:IMs">data definitions</a> and trace back to find any additional information they require.
+          The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href="#koothoor2013">koothoor2013</a>, <a href="#smithLai2005">smithLai2005</a>, <a href="#smithEtAl2007">smithEtAl2007</a>, and <a href="#smithKoothoor2016">smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href="#Sec:IMs">instance models</a> and trace back to find any additional information they require.
         </p>
         <p class="paragraph">
           The <a href="#Sec:GoalStmt">goal statements</a> are refined to the theoretical models and the <a href="#Sec:TMs">theoretical models</a> to the <a href="#Sec:IMs">instance models</a>. The instance model referred as <a href="#IM:pdEquationIM">IM:pdEquationIM</a> provides an Ordinary Differential Equation (<span title="ordinary differential equation">ODE</span>) that models the PD Controller.
@@ -444,7 +444,7 @@
         <section id="Sec:PhysSyst" class="subsubsection">
           <h3>Physical System Description</h3>
           <p class="paragraph">
-            The physical system of <span title="PD Controller">PD Controller</span>, as shown in <a href="#Figure:pidSysDiagram">Fig:pidSysDiagram</a>, includes the following elements:
+            The physical system of <span title="PD Controller">PDController</span>, as shown in <a href="#Figure:pidSysDiagram">Fig:pidSysDiagram</a>, includes the following elements:
           </p>
           <div class="list">
             <p>
@@ -479,7 +479,7 @@
       <section id="Sec:SolCharSpec" class="subsection">
         <h2>Solution Characteristics Specification</h2>
         <p class="paragraph">
-          The instance models that govern <span title="PD Controller">PD Controller</span> are presented in the <a href="#Sec:IMs">Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+          The instance models that govern <span title="PD Controller">PDController</span> are presented in the <a href="#Sec:IMs">Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
         </p>
         <section id="Sec:Assumps" class="subsubsection">
           <h3>Assumptions</h3>
@@ -525,7 +525,7 @@
         <section id="Sec:TMs" class="subsubsection">
           <h3>Theoretical Models</h3>
           <p class="paragraph">
-            This section focuses on the general equations and laws that <span title="PD Controller">PD Controller</span> is based on.
+            This section focuses on the general equations and laws that <span title="PD Controller">PDController</span> is based on.
           </p>
           <table id="TM:laplaceTransform" class="defn-table">
             <tr>
@@ -1129,7 +1129,7 @@
         </p>
         <div class="list">
           <p id="portable">
-            Portability: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.
+            Portability: The code shall be portable to multiple environments, particularly Linux, macOS, and Windows.
           </p>
           <p id="security">
             Security: The code shall be immune to common security problems such as memory leaks, divide by zero errors, and the square root of negative numbers.
@@ -1990,7 +1990,7 @@
       <dl class="reference-list">
         <dt id="abbasi2015">[<b>abbasi2015</b>]</dt>
         <dd>
-          Abbasi, Nasser M. <em>A differential equation view of closed loop control systems</em>. November, 2020. <a href="https://www.12000.org/my_notes/connecting_systems/report.htm">https:&#x2F;&#x2F;www.12000.org&#x2F;my_notes&#x2F;connecting_systems&#x2F;report.htm</a>. 
+          Abbasi, Nasser M. <em>A differential equation view of closed loop control systems</em>. November, 2020. <a href="https://www.12000.org/my_notes/connecting_systems/report.htm">https://www.12000.org/my_notes/connecting_systems/report.htm</a>. 
         </dd>
         <dt id="johnson2008">[<b>johnson2008</b>]</dt>
         <dd>
@@ -2002,7 +2002,7 @@
         </dd>
         <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
         <dd>
-          Smith, W. Spencer and Koothoor, Nirmitha. &quot;A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.&quot; <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http:&#x2F;&#x2F;www.sciencedirect.com&#x2F;science&#x2F;article&#x2F;pii&#x2F;S1738573315002582</a>. pp. 404–418. 
+          Smith, W. Spencer and Koothoor, Nirmitha. &quot;A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.&quot; <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404–418. 
         </dd>
         <dt id="smithLai2005">[<b>smithLai2005</b>]</dt>
         <dd>
@@ -2010,15 +2010,15 @@
         </dd>
         <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
         <dd>
-          Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. &quot;Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability.&quot; <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https:&#x2F;&#x2F;doi.org&#x2F;10.1007&#x2F;s11155-006-9020-7</a>. pp. 83–107. 
+          Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. &quot;Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability.&quot; <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83–107. 
         </dd>
         <dt id="laplaceWiki">[<b>laplaceWiki</b>]</dt>
         <dd>
-          Wikipedia Contributors. <em>Laplace transform</em>. November, 2020. <a href="https://en.wikipedia.org/wiki/Laplace_transform">https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Laplace_transform</a>. 
+          Wikipedia Contributors. <em>Laplace transform</em>. November, 2020. <a href="https://en.wikipedia.org/wiki/Laplace_transform">https://en.wikipedia.org/wiki/Laplace_transform</a>. 
         </dd>
         <dt id="pidWiki">[<b>pidWiki</b>]</dt>
         <dd>
-          Wikipedia Contributors. <em>PID controller</em>. October, 2020. <a href="https://en.wikipedia.org/wiki/PID_controller">https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;PID_controller</a>. 
+          Wikipedia Contributors. <em>PID controller</em>. October, 2020. <a href="https://en.wikipedia.org/wiki/PID_controller">https://en.wikipedia.org/wiki/PID_controller</a>. 
         </dd>
       </dl>
     </section>

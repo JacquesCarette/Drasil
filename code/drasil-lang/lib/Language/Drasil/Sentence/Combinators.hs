@@ -11,7 +11,7 @@ module Language.Drasil.Sentence.Combinators (
   fromThe, inThe, onThe, toThe, isThe, ofThe,
   the_ofThe, the_ofTheC, the_ofGiv, the_ofGivC, the_isExpctdToHvC,
   -- * \"For\" Combinators
-  forTPS, forTPP, for, forT, forGen,
+  forTPS, forTPP, for, forT, forT', forGen,
   -- * Other Combinators
   of_, ofA, or_, are, in_, is, defnAs, denotes, versus, wrt) where
 
@@ -69,7 +69,11 @@ defnAs  = sentHelper "defined as"
 
 -- | Similar to 'for', but both terms are 'titleize'd.
 forT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-forT t1 t2 = titleize t1 +:+ S "for" +:+ titleize t2
+forT t1 = forT' (titleize t1) . titleize
+
+forT' :: Sentence -> Sentence -> Sentence
+forT' t1 t2 = t1 +:+ S "for" +:+ t2
+
 -- | Similar to 'forTT', but takes two arguments (for capitalization or pluralization) to apply to the two terms respectively.
 forGen :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
 forGen f1 f2 t1 t2 = f1 t1 +:+ S "for" +:+ f2 t2
@@ -77,6 +81,7 @@ forGen f1 f2 t1 t2 = f1 t1 +:+ S "for" +:+ f2 t2
 -- | Similar to 'for', but used for titles and first 'NamedIdea' is pluralized.
 forTPS :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 forTPS = forGen titleize' titleize
+
 -- | Similar to 'forTTPS', but both 'NamedIdea's are pluralized.
 forTPP :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 forTPP = forGen titleize' titleize'

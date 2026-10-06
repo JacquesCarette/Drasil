@@ -9,10 +9,10 @@ import Control.Monad.State (get)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, HasChoices(..))
 import Language.Drasil.Choices (Logging(..))
 
-import Drasil.GOOL (Label, Body, Block, SVariable, SValue, MS, BodySym(..),
-  BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
-  VariableValue(..), MultiStatement(..), DeclStatement(..), FileHandling(..),
-  PrintFile(..), lensMStoVS, ScopeSym(..), VariableSym)
+import Drasil.GOOL (Label, block, Variable, VS, MS, BodySym(..), BlockSym(..),
+  TypeSym(..), var, VariableElim(..), Literal(..), VariableValue(..),
+  MultiStatement(..), DeclStatement(..), FileHandling(..), PrintFile(..),
+  lensMStoVS, ScopeSym(..), VariableSym)
 
 -- | Generates the body of a function with the given name, list of parameters,
 -- and blocks to include in the body. If the user chose to turn on logging of
@@ -20,20 +20,24 @@ import Drasil.GOOL (Label, Body, Block, SVariable, SValue, MS, BodySym(..),
 -- the beginning of the body.
 logBody
   ::
-    ( Literal r
-    , VariableValue r
+    ( TypeSym r typ
+    , Literal r typ val
+    , VariableSym r typ
+    , VariableValue r val
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r stmt
-    , FileHandling r stmt
-    , PrintFile r stmt
-    , BodySym r stmt
-    , VariableElim r
+    , DeclStatement r scope val stmt bod
+    , FileHandling r val stmt
+    , PrintFile r val stmt
+    , BlockSym r block stmt
+    , BodySym r bod block
+    , VariableElim r typ
     )
-  => Label -> [SVariable r] -> [MS (r Block)] -> GenState (MS (r Body))
+  => Label -> [VS (r Variable)] -> [MS (r block)] -> GenState (MS (r bod))
 logBody n vars b = do
   g <- get
-  return $ body $
-    [loggedMethod (g ^. logName) n vars | LogFunc `elem` g ^. logKind] ++ b
+  pure $ body $
+    [loggedMethod (g ^. logName) n vars | LogFunc `elem` g ^. logKind] <> b
 
 -- | Generates a block that logs, to the given 'FilePath', the name of a function,
 -- and the names and values of the passed list of variables. Intended to be
@@ -41,39 +45,44 @@ logBody n vars b = do
 -- inputs it was called with.
 loggedMethod
   ::
-    ( Literal r
-    , VariableValue r
+    ( TypeSym r typ
+    , Literal r typ val
+    , VariableSym r typ
+    , VariableValue r val
+    , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r stmt
-    , FileHandling r stmt
-    , PrintFile r stmt
-    , BlockSym r stmt
-    , VariableElim r
+    , DeclStatement r scope val stmt bod
+    , FileHandling r val stmt
+    , PrintFile r val stmt
+    , BlockSym r block stmt
+    , VariableElim r typ
     )
-  => FilePath -> Label -> [SVariable r] -> MS (r Block)
+  => FilePath -> Label -> [VS (r Variable)] -> MS (r block)
 loggedMethod lName n vars = block [
       varDec varLogFile local,
       openFileA varLogFile (litString lName),
-      printFileStrLn valLogFile ("function " ++ n ++ " called with inputs: {"),
+      printFileStrLn valLogFile ("function " <> n <> " called with inputs: {"),
       multi $ printInputs vars,
       printFileStrLn valLogFile "  }",
       closeFile valLogFile]
   where
     printInputs [] = []
     printInputs [v] = [
-      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("  " ++
-        variableName v' ++ " = ")),
+      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("  " <>
+        variableName v' <> " = ")),
       printFileLn valLogFile (valueOf v)]
     printInputs (v:vs) = [
-      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("  " ++
-        variableName v' ++ " = ")),
+      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("  " <>
+        variableName v' <> " = ")),
       printFile valLogFile (valueOf v),
-      printFileStrLn valLogFile ", "] ++ printInputs vs
+      printFileStrLn valLogFile ", "] <> printInputs vs
 
 -- | The variable representing the log file in write mode.
-varLogFile :: (VariableSym r) => SVariable r
+varLogFile :: (TypeSym r typ, VariableSym r typ) => VS (r Variable)
 varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.
-valLogFile :: (VariableValue r) => SValue r
+valLogFile
+  :: (TypeSym r typ, VariableSym r typ, VariableValue r val)
+  => VS (r val)
 valLogFile = valueOf varLogFile

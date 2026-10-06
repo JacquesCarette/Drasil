@@ -7,7 +7,7 @@ module Drasil.LessonPlan.Core (
 
 import Control.Lens (makeLenses)
 
-import Drasil.System (SystemMeta, HasSystemMeta(..))
+import Drasil.System (SystemMeta, HasSystemMeta(..), HasProjectName(..))
 
 -- | An abstract "lesson plan."
 --
@@ -20,6 +20,9 @@ makeLenses ''LessonPlan
 
 instance HasSystemMeta LessonPlan where
   systemMeta = sm
+
+instance HasProjectName LessonPlan where
+  projectName = systemMeta . projectName
 
 -- | Build a 'LessonPlan'.
 mkLessonPlan :: SystemMeta -> LessonPlan

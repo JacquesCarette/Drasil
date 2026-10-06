@@ -46,7 +46,7 @@ velYDerivEqn3_2 = sy yVel_2 $= neg (deriv positionYEqn_2 time)
 -- Acceleration X/Y First Object
 
 accelDerivEqn1, accelXDerivEqn3_1, accelXDerivEqn4_1 :: ModelExpr
-accelDerivEqn1    = sy acceleration $= accelGQD ^. defnExpr
+accelDerivEqn1    = sy acceleration $= deriv (sy velocity) time
 accelXDerivEqn3_1 = sy xAccel_1 $= deriv (sy angularVel_1 $* sy lenRod_1 $* cos (sy pendDisAngle_1)) time
 accelXDerivEqn4_1 = sy xAccel_1 $= deriv (sy angularVel_1) time $* sy lenRod_1 $* cos (sy pendDisAngle_1)
                     $- (sy angularVel_1 $* sy lenRod_1 $* sin (sy pendDisAngle_1) $* deriv (sy pendDisAngle_1) time)

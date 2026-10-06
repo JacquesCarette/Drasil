@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 
 import Drasil.Database (mkUid)
 import Language.Drasil
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Domains (materialEng)
@@ -38,16 +38,16 @@ discharging = cncpt''' (mkUid "discharging") (nounPhraseSP "discharging")
 transient = cncpt''' (mkUid "transient") (nounPhraseSP "transient") (S "changing with time")
 
 gaussDiv = cncpt''' (mkUid "gaussDiv") (nounPhraseSP "gauss's divergence theorem")
-  (S ("a result that relates the flow of a vector field through a surface" ++
+  (S ("a result that relates the flow of a vector field through a surface" <>
   "to the behavior of the vector field inside the surface"))
 --TODO: Physical property.
 
 perfectInsul = cncpt''' (mkUid "perfectInsul") (nounPhraseSP "perfectly insulated")
-  (S ("describes the property of a material not allowing" ++
+  (S ("describes the property of a material not allowing" <>
   "heat transfer through its boundaries"))
 
 phaseChangeMaterial = cncpt''' (mkUid "pcm") (phsChgMtrl ^. term)
-  (S ("a substance that uses phase changes (such as melting) to absorb or " ++
+  (S ("a substance that uses phase changes (such as melting) to absorb or " <>
   "release large amounts of heat at a constant temperature"))
 
 tankParam = cncpt''' (mkUid "tankParam") (compoundPhrase' (tank ^. term)
@@ -60,7 +60,7 @@ water = cncpt''' (mkUid "water") (cn' "water") (S "the liquid with which the tan
 
 -- TODO: extract 'PCM' from 'phsChgMtrl' again instead of hard-coding it
 tankPCM = cncpt''' (mkUid "tankPCM") (nounPhrase''
-  (phraseNP (sWHT ^. term) NP.:+: NP.S "incorporating PCM")
-  (phraseNP (sWHT ^. term) NP.:+: NP.S "incorporating PCM")
+  (phraseNP (sWHT ^. term) NP..+. NP.npS "incorporating PCM")
+  (phraseNP (sWHT ^. term) NP..+. NP.npS "incorporating PCM")
   CapFirst CapWords)
   (S "solar water heating tank incorporating phase change material")

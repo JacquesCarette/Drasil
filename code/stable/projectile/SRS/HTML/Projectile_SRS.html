@@ -391,7 +391,7 @@
         Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. Common examples of projectile motion include ballistics problems (missiles, bullets, etc.) and the flight of balls in various sports (baseball, golf, football, etc.). The document describes the program called Projectile , which is based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile">Projectile</a>.
       </p>
       <p class="paragraph">
-        The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for Projectile. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+        The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for <span title="Projectile">Projectile</span>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
       </p>
       <section id="Sec:DocPurpose" class="subsection">
         <h2>Purpose of Document</h2>
@@ -840,18 +840,18 @@
             <h4>Detailed derivation of velocity vector:</h4>
             <p class="paragraph">
               For a two-dimensional Cartesian coordinate system (<a href="#twoDMotion">A:twoDMotion</a> and <a href="#cartSyst">A:cartSyst</a>), we can represent the velocity vector as <em><b>v</b>(t) = \(\begin{bmatrix}
-                {v_{\text{x}}}\\
-                {v_{\text{y}}}
-                \end{bmatrix}\)</em> and the acceleration vector as <em><b>a</b>(t) = \(\begin{bmatrix}
-                {a_{\text{x}}}\\
-                {a_{\text{y}}}
-                \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href="#constAccel">A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
-                {{a_{\text{x}}}^{\text{c}}}\\
-                {{a_{\text{y}}}^{\text{c}}}
-                \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href="#timeStartZero">A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
-                {{v_{\text{x}}}^{\text{i}}}\\
-                {{v_{\text{y}}}^{\text{i}}}
-                \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href="#GD:rectVel">GD:rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:
+              {v_{\text{x}}}\\
+              {v_{\text{y}}}
+              \end{bmatrix}\)</em> and the acceleration vector as <em><b>a</b>(t) = \(\begin{bmatrix}
+              {a_{\text{x}}}\\
+              {a_{\text{y}}}
+              \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href="#constAccel">A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
+              {{a_{\text{x}}}^{\text{c}}}\\
+              {{a_{\text{y}}}^{\text{c}}}
+              \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href="#timeStartZero">A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
+              {{v_{\text{x}}}^{\text{i}}}\\
+              {{v_{\text{y}}}^{\text{i}}}
+              \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href="#GD:rectVel">GD:rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:
             </p>
             \[\symbf{v}\text{(}t\text{)}=\begin{bmatrix}
                                        {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}}\,t\\
@@ -912,21 +912,21 @@
             <h4>Detailed derivation of position vector:</h4>
             <p class="paragraph">
               For a two-dimensional Cartesian coordinate system (<a href="#twoDMotion">A:twoDMotion</a> and <a href="#cartSyst">A:cartSyst</a>), we can represent the position vector as <em><b>p</b>(t) = \(\begin{bmatrix}
-                {p_{\text{x}}}\\
-                {p_{\text{y}}}
-                \end{bmatrix}\)</em>, the velocity vector as <em><b>v</b>(t) = \(\begin{bmatrix}
-                {v_{\text{x}}}\\
-                {v_{\text{y}}}
-                \end{bmatrix}\)</em>, and the acceleration vector as <em><b>a</b>(t) = \(\begin{bmatrix}
-                {a_{\text{x}}}\\
-                {a_{\text{y}}}
-                \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href="#constAccel">A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
-                {{a_{\text{x}}}^{\text{c}}}\\
-                {{a_{\text{y}}}^{\text{c}}}
-                \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href="#timeStartZero">A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
-                {{v_{\text{x}}}^{\text{i}}}\\
-                {{v_{\text{y}}}^{\text{i}}}
-                \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href="#GD:rectPos">GD:rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
+              {p_{\text{x}}}\\
+              {p_{\text{y}}}
+              \end{bmatrix}\)</em>, the velocity vector as <em><b>v</b>(t) = \(\begin{bmatrix}
+              {v_{\text{x}}}\\
+              {v_{\text{y}}}
+              \end{bmatrix}\)</em>, and the acceleration vector as <em><b>a</b>(t) = \(\begin{bmatrix}
+              {a_{\text{x}}}\\
+              {a_{\text{y}}}
+              \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href="#constAccel">A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
+              {{a_{\text{x}}}^{\text{c}}}\\
+              {{a_{\text{y}}}^{\text{c}}}
+              \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href="#timeStartZero">A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
+              {{v_{\text{x}}}^{\text{i}}}\\
+              {{v_{\text{y}}}^{\text{i}}}
+              \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href="#GD:rectPos">GD:rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
             </p>
             \[\symbf{p}\text{(}t\text{)}=\begin{bmatrix}
                                        {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}}\,t+\frac{{{a_{\text{x}}}^{\text{c}}}\,t^{2}}{2}\\
@@ -1493,7 +1493,7 @@
             Maintainability: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
           </p>
           <p id="portable">
-            Portability: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.
+            Portability: The code shall be portable to multiple environments, particularly Linux, macOS, and Windows.
           </p>
         </div>
       </section>
@@ -2849,7 +2849,7 @@
         </dd>
         <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
         <dd>
-          Smith, W. Spencer and Koothoor, Nirmitha. &quot;A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.&quot; <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http:&#x2F;&#x2F;www.sciencedirect.com&#x2F;science&#x2F;article&#x2F;pii&#x2F;S1738573315002582</a>. pp. 404–418. 
+          Smith, W. Spencer and Koothoor, Nirmitha. &quot;A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.&quot; <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404–418. 
         </dd>
         <dt id="smithLai2005">[<b>smithLai2005</b>]</dt>
         <dd>
@@ -2857,19 +2857,19 @@
         </dd>
         <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
         <dd>
-          Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. &quot;Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability.&quot; <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https:&#x2F;&#x2F;doi.org&#x2F;10.1007&#x2F;s11155-006-9020-7</a>. pp. 83–107. 
+          Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. &quot;Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability.&quot; <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83–107. 
         </dd>
         <dt id="accelerationWiki">[<b>accelerationWiki</b>]</dt>
         <dd>
-          Wikipedia Contributors. <em>Acceleration</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Acceleration">https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Acceleration</a>. 
+          Wikipedia Contributors. <em>Acceleration</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Acceleration">https://en.wikipedia.org/wiki/Acceleration</a>. 
         </dd>
         <dt id="cartesianWiki">[<b>cartesianWiki</b>]</dt>
         <dd>
-          Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Cartesian_coordinate_system</a>. 
+          Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>. 
         </dd>
         <dt id="velocityWiki">[<b>velocityWiki</b>]</dt>
         <dd>
-          Wikipedia Contributors. <em>Velocity</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Velocity">https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Velocity</a>. 
+          Wikipedia Contributors. <em>Velocity</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Velocity">https://en.wikipedia.org/wiki/Velocity</a>. 
         </dd>
       </dl>
     </section>

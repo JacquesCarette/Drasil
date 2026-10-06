@@ -1,11 +1,11 @@
 -- | Part of the PatternTest GOOL tests. Defines an Observer class.
 module GOOL.Observer (observer, observerName, printNum, x) where
 
-import Drasil.GOOL (File, SVariable, Class, OOProg, CS, FS, MS, FileSym(..),
-  AttachmentSym(..), oneLiner, TypeSym(..), PrintConsole(..), VariableSym(..),
-  SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..), OOVariableValue,
-  VisibilitySym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
+import Drasil.GOOL (Variable, Class, OOProg, VS, CS, FS, MS, FileSym(..),
+  AttachmentSym(..), BodySym, BlockSym, oneLiner, TypeSym(..), PrintConsole(..),
+  VariableSym(..), OOVariableSym, SelfSym(..), instanceVarSelf, Literal(..),
+  VariableValue(..), VisibilitySym(..), OOMethodSym(..), initializer,
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observerName, observerDesc, printNum :: String
@@ -17,30 +17,76 @@ observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
 -- | Creates the observer class.
-observer :: (OOProg r vis stmt mthd stvr attch prg) => FS (r File)
+observer
+  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  => FS (r file)
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
 -- | Makes a variable @x@.
-x :: (VariableSym r) => SVariable r
+x :: (TypeSym r typ, VariableSym r typ) => VS (r Variable)
 x = var "x" int
 
 -- | Acces the @x@ attribute of @self@.
-selfX :: (SelfSym r, VariableValue r) => SVariable r
+selfX ::
+  ( TypeSym r typ
+  , VariableSym r typ
+  , OOVariableSym r typ val
+  , SelfSym r
+  , VariableValue r val
+  )
+  => VS (r Variable)
 selfX = instanceVarSelf x
 
 -- | Helper function to create the class.
-helperClass :: (ClassSym r vis stmt mthd stvr attch, PrintConsole r stmt, Literal r,
-  OOVariableValue r) => CS (r Class)
+helperClass
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , AttachmentSym r attch
+    , VisibilitySym r vis
+    , StateVarSym r vis val stvr attch
+    , ClassSym r mthd stvr
+    , OOMethodSym r vis typ param val mthd attch bod
+    , PrintConsole r val stmt
+    , TypeSym r typ
+    , Literal r typ val
+    , VariableSym r typ
+    , OOVariableSym r typ val
+    , SelfSym r
+    , VariableValue r val
+    )
+  => CS (r Class)
 helperClass = buildClass Nothing [stateVar public instanceLevel x]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 
 -- | Default value for observer class is 5.
-observerConstructor :: (OOMethodSym r vis stmt mthd attch, Literal r) => MS (r mthd)
+observerConstructor
+  ::
+    ( BodySym r bod block
+    , TypeSym r typ
+    , VariableSym r typ
+    , OOMethodSym r vis typ param val mthd attch bod
+    , Literal r typ val
+    )
+  => MS (r mthd)
 observerConstructor = initializer [] [(x, litInt 5)]
 
 -- | Create the @printNum@ method.
-printNumMethod :: (OOMethodSym r vis stmt mthd attch, PrintConsole r stmt,
-  OOVariableValue r) => MS (r mthd)
+printNumMethod
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , TypeSym r typ
+    , OOMethodSym r vis typ param val mthd attch bod
+    , AttachmentSym r attch
+    , VisibilitySym r vis
+    , PrintConsole r val stmt
+    , VariableSym r typ
+    , OOVariableSym r typ val
+    , SelfSym r
+    , VariableValue r val
+    )
+  => MS (r mthd)
 printNumMethod = method printNum public instanceLevel void [] $
   oneLiner $ printLn $ valueOf selfX

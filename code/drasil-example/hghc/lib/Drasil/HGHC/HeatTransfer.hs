@@ -11,7 +11,7 @@ import Theory.Drasil (DataDefinition, ddENoRefs)
 import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
 
 symbols :: [DefinedQuantityDict]
-symbols = NE.toList htOutputs ++ NE.toList htInputs
+symbols = NE.toList htOutputs <> NE.toList htInputs
 
 dataDefs :: [DataDefinition]
 dataDefs = [htTransCladFuelDD, htTransCladCoolDD]
@@ -24,7 +24,7 @@ htVars = cladThick :| [coolFilmCond, gapFilmCond, cladCond]
 
 htInputs, htOutputs :: NE.NonEmpty DefinedQuantityDict
 htInputs = htVars
-htOutputs = NE.map dqdWr qDefs
+htOutputs = dqdWr <$> qDefs
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: DefinedQuantityDict
 cladThick    = quantNoUnit (mkUid "cladThick")    (cn''' "clad thickness")

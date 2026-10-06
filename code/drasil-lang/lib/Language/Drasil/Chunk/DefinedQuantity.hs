@@ -24,7 +24,7 @@ import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage (Implementation, Equational))
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 import Language.Drasil.Sentence (Sentence(..))
 
 -- | DefinedQuantityDict is a representation of a future value with information about its type ('Space'),

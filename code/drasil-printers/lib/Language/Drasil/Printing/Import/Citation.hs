@@ -3,14 +3,14 @@ module Language.Drasil.Printing.Import.Citation (layCite) where
 import Control.Lens ((^.))
 
 import Drasil.Database (showUID)
-import Language.Drasil (Citation, CiteField(..), HP (..), citeKind, HasFields (..))
+import Language.Drasil.Document (Citation, CiteField(..), HP(..), citeKind, HasFields(..))
 
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 
 -- | For importing a bibliography.
 layCite :: Citation -> P.Citation
-layCite c = P.Cite (showUID c) (c ^. citeKind) (map layField (c ^. getFields))
+layCite c = P.Cite (showUID c) (c ^. citeKind) (layField <$> (c ^. getFields))
 
 -- | Helper for translating 'Citefield's into a printable representation of 'P.CiteField's
 layField :: CiteField -> P.CiteField

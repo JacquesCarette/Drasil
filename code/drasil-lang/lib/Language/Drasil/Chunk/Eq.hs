@@ -12,7 +12,7 @@ module Language.Drasil.Chunk.Eq (
   ConstQDef, SimpleQDef, ModelQDef
 ) where
 
-import Control.Lens ((^.), view, to, makeLenses)
+import Control.Lens ((^.), view, makeLenses)
 import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk, mkUid)
 import qualified Data.Set as Set
 
@@ -22,14 +22,14 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   DefiningExpr(defnExpr), Definition(defn), Quantity,
   Express(express), Concept)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs),
-  dqdWr, quant, quantNoUnit, quant', quantNoUnit', quantAU)
+  quant, quantNoUnit, quant', quantNoUnit', quantAU)
 import Language.Drasil.Expr.Lang (Expr)
 import qualified Language.Drasil.Expr.Lang as E (Expr(C))
 import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import qualified Language.Drasil.ModelExpr.Lang as M (ModelExpr(C))
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
@@ -61,7 +61,7 @@ instance HasChunkRefs (QDefinition e) where
 instance HasUID          (QDefinition e) where uid = uu
 instance NamedIdea       (QDefinition e) where term = qua . term
 instance Idea            (QDefinition e) where getA = getA . (^. qua)
-instance DefinesQuantity (QDefinition e) where defLhs = qua . to dqdWr
+instance DefinesQuantity (QDefinition e) where defLhs = qua
 instance HasSpace        (QDefinition e) where typ = qua . typ
 instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qua)
 instance Definition      (QDefinition e) where defn = qua . defn
@@ -73,7 +73,7 @@ instance Express e => Express (QDefinition e) where
     where
       f = case q ^. inputs of
         [] -> defines (sy q)
-        is -> defines $ apply q (map M.C is)
+        is -> defines $ apply q (M.C <$> is)
         -- FIXME: The fact that we have to manually use `C` here is because our
         -- UID references don't carry enough information. This feels hacky at
         -- the moment, and should eventually be fixed.
@@ -84,7 +84,7 @@ instance RequiresChecking (QDefinition Expr) Expr Space where
   -- "normal" way does not work for Functions because it leaves function input
   -- parameters left unchecked. It's probably preferred to be doing type
   -- checking at time of chunk creation rather than here, really.
-  requiredChecks q = pure (apply (q ^. qua) (map E.C (q ^. inputs)) $= (q ^. expr), Boolean)
+  requiredChecks q = pure (apply (q ^. qua) (E.C <$> (q ^. inputs)) $= (q ^. expr), Boolean)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.
@@ -150,7 +150,7 @@ mkFuncDef0 :: (IsChunk f, HasSymbol f, HasSpace f,
 mkFuncDef0 f n s u is = QD
   (f ^. uid)
   (quantAU (f ^. uid) n s Nothing (symbol f) (f ^. typ) u)
-  (map (^. uid) is)
+  ((^. uid) <$> is)
 
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs,
 -- resultant units, and a defining Expr

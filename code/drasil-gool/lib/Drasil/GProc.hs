@@ -1,17 +1,16 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GProc (Label, GSProgram, File, Body, Block, FS, MS, VS, SVariable,
-  SValue, Module, NamedArgs, ProcProg, ProgramSym(..), FileSym(..), BodySym(..),
-  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), BinderSym(..),
-  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
-  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
-  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ifNoElse, switchAsIf, VariableSym(..), ScopeSym(..),
-  ScopeData, VariableElim(..), listOf, listVar, ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
-  FunctionSym, Reference(..), Array(..), List(..), ListStatement(..),
+module Drasil.GProc (Label, GSProgram, Body, FS, MS, VS, Variable, Value,
+  NamedArgs, ProcProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements,
+  oneLiner, BlockSym(..), TypeSym(..), BinderSym(..), EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), (&=),
+  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
+  PrintFile(..), ReadFile(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
+  VariableSym(..), ScopeSym(..), VariableElim(..), listOf, listVar, ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
+  libFuncApp, exists, Reference(..), Array(..), List(..), ListStatement(..),
   InternalList, listSlice, listIndexExists, at, Set(..), NativeVector(..),
   VisibilitySym(..), ParameterSym(..), MethodSym(..), ModuleSym(..), convType,
   ProgData(..), FileData(..), ModData(..), TypeData(..), VisibilityTag(..),
@@ -22,12 +21,12 @@ module Drasil.GProc (Label, GSProgram, File, Body, Block, FS, MS, VS, SVariable,
   TypeElim(..), getTypeString
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Body, Block, SVariable, SValue,
-  NamedArgs, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
+import Drasil.Shared.InterfaceCommon (Label, Body, Variable, Value, NamedArgs,
+  BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   BinderSym(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, ifNoElse, VariableSym(..), extVar,
   VariableElim(..), listOf, listVar, ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
@@ -38,11 +37,11 @@ import Drasil.Shared.InterfaceCommon (Label, Body, Block, SVariable, SValue,
   MethodSym(..), VisibilitySym(..), convType,
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
   TypeElim(..), getTypeString)
-import Drasil.GProc.InterfaceProc (GSProgram, File, Module, ProcProg,
-  ProgramSym(..), FileSym(..), ModuleSym(..))
+import Drasil.GProc.InterfaceProc (GSProgram, ProcProg, ProgramSym(..),
+  FileSym(..), ModuleSym(..))
 
-import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
-  TypeData(..), VisibilityTag(..), ParamData)
+import Drasil.Shared.AST (FileData(..), ModData(..), ProgData(..), TypeData(..),
+  VisibilityTag(..), ParamData)
 
 import Drasil.Shared.CodeType (CodeType(..))
 

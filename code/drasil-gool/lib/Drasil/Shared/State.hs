@@ -42,7 +42,7 @@ import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2, both, at)
 import Control.Monad.State (State, modify, gets)
 import Data.Char (isDigit)
 import Data.List (nub)
-import Data.Maybe (isNothing, fromMaybe)
+import Data.Maybe (isNothing)
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Tuple (swap)
@@ -284,20 +284,20 @@ initialVS = VS {
 modifyReturn :: (s -> s) -> a -> State s a
 modifyReturn sf v = do
   modify sf
-  return v
+  pure v
 
 modifyReturnFunc :: (b -> s -> s) -> (b -> a) -> State s b -> State s a
 modifyReturnFunc sf vf st = do
   v <- st
   modify $ sf v
-  return $ vf v
+  pure $ vf v
 
 modifyReturnList :: [State s b] -> (s -> s) ->
   ([b] -> a) -> State s a
 modifyReturnList l sf vf = do
   v <- sequence l
   modify sf
-  return $ vf v
+  pure $ vf v
 
 -------------------------------
 ------- State Modifiers -------
@@ -313,19 +313,19 @@ addFile Header = addHeader
 
 addHeader :: FilePath -> GOOLState -> GOOLState
 addHeader fp = over headers (\h -> ifElemError fp h $
-  "Multiple files with same name encountered: " ++ fp)
+  "Multiple files with same name encountered: " <> fp)
 
 addSource :: FilePath -> GOOLState -> GOOLState
 addSource fp = over sources (\s -> ifElemError fp s $
-  "Multiple files with same name encountered: " ++ fp)
+  "Multiple files with same name encountered: " <> fp)
 
 addCombinedHeaderSource :: FilePath -> GOOLState -> GOOLState
 addCombinedHeaderSource fp = addSource fp . addHeader fp
 
 addProgNameToPaths :: String -> GOOLState -> GOOLState
-addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
-  over headers (map f)
-  where f = ((n++"/")++)
+addProgNameToPaths n = over mainMod (fmap f) . over sources (fmap f) .
+  over headers (fmap f)
+  where f = ((n<>"/")++)
 
 setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = over mainMod (\m -> if isNothing m then Just n else error
@@ -339,8 +339,8 @@ addLangImportVS i = over methodState (addLangImport i)
 
 addExceptionImports :: [Exception] -> MethodState -> MethodState
 addExceptionImports es = over (lensMStoFS . langImports)
-  (\is -> nubSort $ is ++ imps)
-  where imps = map printExc $ filter hasLoc es
+  (\is -> nubSort $ is <> imps)
+  where imps = printExc <$> filter hasLoc es
 
 getLangImports :: FS [String]
 getLangImports = gets (^. langImports)
@@ -448,7 +448,7 @@ getClasses = gets (^. currClasses)
 
 updateClassMap :: String -> FileState -> FileState
 updateClassMap n fs = over (goolState . classMap) (Map.union (Map.fromList $
-  map (n,) (fs ^. currClasses))) fs
+  (n,) <$> (fs ^. currClasses))) fs
 
 getClassMap :: VS (Map String String)
 getClassMap = gets (^. (lensVStoFS . goolState . classMap))
@@ -472,7 +472,7 @@ callMapTransClosure = over callMap tClosure
         traceCalls :: Map QualifiedName [QualifiedName] -> [QualifiedName] ->
           [QualifiedName]
         traceCalls _ [] = []
-        traceCalls cm (c:cs) = c : traceCalls cm (cs ++
+        traceCalls cm (c:cs) = c : traceCalls cm (cs <>
           Map.findWithDefault [] c cm)
 
 updateMEMWithCalls :: GOOLState -> GOOLState
@@ -481,12 +481,12 @@ updateMEMWithCalls s = over methodExceptionMap (\mem -> Map.mapWithKey
   where addCallExcs :: Map QualifiedName [ExceptionType] ->
           Map QualifiedName [QualifiedName] -> QualifiedName -> [ExceptionType]
           -> [ExceptionType]
-        addCallExcs mem cm f es = nub $ es ++ concatMap (\fn -> Map.findWithDefault
+        addCallExcs mem cm f es = nub $ es <> concatMap (\fn -> Map.findWithDefault
           [] fn mem) (Map.findWithDefault [] f cm)
 
 addParameter :: String -> MethodState -> MethodState
 addParameter p = over currParameters (\ps -> ifElemError p ps $
-  "Function has duplicate parameter: " ++ p)
+  "Function has duplicate parameter: " <> p)
 
 getParameters :: MS [String]
 getParameters = gets (reverse . (^. currParameters))
@@ -501,7 +501,7 @@ addException :: ExceptionType -> MethodState -> MethodState
 addException e = over exceptions (\es -> nub $ e : es)
 
 addExceptions :: [ExceptionType] -> ValueState -> ValueState
-addExceptions es = over (methodState . exceptions) (\exs -> nub $ es ++ exs)
+addExceptions es = over (methodState . exceptions) (\exs -> nub $ es <> exs)
 
 getExceptions :: MS [ExceptionType]
 getExceptions = gets (^. exceptions)
@@ -549,15 +549,15 @@ resetIndices :: MethodState -> MethodState
 resetIndices = set contentsIndices (0,0)
 
 useVarName :: String -> MethodState -> MethodState
-useVarName v = over (varNames . at prefix) (Just . max nextSuffix . fromMaybe 0)
+useVarName v = over (varNames . at prefix) (Just . max nextSuffix . sum)
   where (prefix, nextSuffix) = over _2 (maybe 0 (+1)) $ splitVarName v
 
 genVarName :: [String] -> String -> MS String
 genVarName candidates backup = do
   used <- gets (^. varNames)
   let
-    isAvailable (n,c) = maybe True (maybe (const False) (>=) c) $ Map.lookup n used
-    choice = foldr const (splitVarName backup) $ filter isAvailable $ map splitVarName candidates
+    isAvailable (n,c) = all (maybe (const False) (>=) c) $ Map.lookup n used
+    choice = foldr const (splitVarName backup) $ filter isAvailable $ splitVarName <$> candidates
   bumpVarName choice
 
 genLoopIndex :: MS String
@@ -566,12 +566,12 @@ genLoopIndex = genVarName ["i", "j", "k"] "i"
 genVarNameIf :: Bool -> String -> MS String
 genVarNameIf True n = genVarName [] n
 genVarNameIf False _ = do
-  return ""
+  pure ""
 
 varNameAvailable :: String -> MS Bool
 varNameAvailable n = do
   used <- gets (^. varNames)
-  return $ isNothing $ Map.lookup n used
+  pure $ isNothing $ Map.lookup n used
 
 -- Helpers
 
@@ -587,7 +587,7 @@ bumpVarName (n,c) = do
   count <- gets (^. (varNames . at n))
   let suffix = maybe count (flip fmap count . max) c
   modify $ set (varNames . at n) $ Just $ maybe 0 (+1) suffix
-  return $ maybe n ((n ++) . show) count
+  pure $ maybe n ((n ++) . show) count
 
 setVarScope :: String -> ScopeData -> MethodState -> MethodState
 setVarScope n s = over varScopes (Map.insert n s)
@@ -595,6 +595,6 @@ setVarScope n s = over varScopes (Map.insert n s)
 getVarScope :: String -> MS ScopeData
 getVarScope n = do
   sMap <- gets (^. varScopes)
-  return $ case Map.lookup n sMap of
-    Nothing -> error $ "Variable with no declared scope: " ++ n
+  pure $ case Map.lookup n sMap of
+    Nothing -> error $ "Variable with no declared scope: " <> n
     (Just scp) -> scp

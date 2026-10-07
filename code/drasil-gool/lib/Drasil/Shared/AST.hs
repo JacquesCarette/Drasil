@@ -8,7 +8,7 @@ module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   StateVarData(getStVarScp, stVar), svd, TypeData(cType,
   typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), vd,
   updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
-  BinderD(bindName, bindType), bindFormD
+  BinderD(bindName, bindType), bindFormD, Statement
   ) where
 
 import Drasil.Shared.CodeType (CodeType)
@@ -159,3 +159,6 @@ data BinderD = BindFormD {bindName :: String, bindType :: TypeData}
 
 bindFormD :: String -> TypeData -> BinderD
 bindFormD = BindFormD
+
+-- (Current) underlying type of Statement
+type Statement = (Doc, Terminator)

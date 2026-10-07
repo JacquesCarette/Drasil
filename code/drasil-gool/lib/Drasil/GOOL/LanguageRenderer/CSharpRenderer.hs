@@ -94,7 +94,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
   ParamData(..), pd, updateParam, ProgData(..), progD, TypeData(..), ValData(..),
   vd, updateValDoc, AttachmentTag(..), VarData(..), vard, ScopeData, BinderD(..),
-  bindFormD, FileData)
+  bindFormD, FileData, Statement)
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on2StateWrapped, onCodeList, onStateList)
@@ -129,7 +129,7 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOProg CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVar Doc ProgData FileData ModData Body Block
+instance OOProg CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value Statement Class MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym CSharpCode ProgData FileData where
   prog n st files = do
@@ -137,8 +137,8 @@ instance ProgramSym CSharpCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVar Doc FileData ModData Body Block
+instance CommonRenderSym CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value Statement MethodData Body Block
+instance OORenderSym CSharpCode Doc ScopeData TypeData BinderD Variable ParamData Value Statement Class MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
@@ -181,7 +181,7 @@ instance RenderBody CSharpCode Body where
 instance BodyElim CSharpCode Body where
   body = unCSC
 
-instance BlockSym CSharpCode Block (Doc, Terminator) where
+instance BlockSym CSharpCode Block Statement where
   block = G.block
 
 instance RenderBlock CSharpCode Block where
@@ -435,7 +435,7 @@ instance List CSharpCode Value where
   listAccess = G.listAccess
   indexOf = CP.indexOf csIndex
 
-instance ListStatement CSharpCode Value (Doc, Terminator) where
+instance ListStatement CSharpCode Value Statement where
   listAdd = CG.listAdd csListAdd
   listAppend = CG.listAppend csListAppend
   listSet = CP.listSet
@@ -473,41 +473,41 @@ instance FunctionElim CSharpCode TypeData where
   functionType = onCodeValue fType
   function = funcDoc . unCSC
 
-instance InternalAssignStmt CSharpCode Variable Value (Doc, Terminator) where
+instance InternalAssignStmt CSharpCode Variable Value Statement where
   multiAssign _ _ = error $ C.multiAssignError csName
 
-instance InternalIOStmt CSharpCode Value (Doc, Terminator) where
+instance InternalIOStmt CSharpCode Value Statement where
   printSt _ _ = CP.printSt
 
-instance InternalControlStmt CSharpCode Value (Doc, Terminator) where
+instance InternalControlStmt CSharpCode Value Statement where
   multiReturn _ = error $ C.multiReturnError csName
 
-instance RenderStatement CSharpCode (Doc, Terminator) where
+instance RenderStatement CSharpCode Statement where
   stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 
-instance StatementElim CSharpCode (Doc, Terminator) where
+instance StatementElim CSharpCode Statement where
   statement = fst . unCSC
   statementTerm = snd . unCSC
 
-instance EmptyStatement CSharpCode (Doc, Terminator) where
+instance EmptyStatement CSharpCode Statement where
   emptyStmt = G.emptyStmt
 
-instance MultiStatement CSharpCode (Doc, Terminator) where
+instance MultiStatement CSharpCode Statement where
   multi = onStateList (onCodeList R.multiStmt)
 
-instance ValueStatement CSharpCode Value (Doc, Terminator) where
+instance ValueStatement CSharpCode Value Statement where
   valStmt = G.valStmt Semi
 
-instance AssignStatement CSharpCode Variable Value (Doc, Terminator) where
+instance AssignStatement CSharpCode Variable Value Statement where
   assign = G.assign Semi
   (&-=) = G.subAssign Semi
   (&+=) = C.increment
   (&++) = C.increment1
   (&--) = C.decrement1
 
-instance DeclStatement CSharpCode ScopeData Variable Value (Doc, Terminator) Body where
+instance DeclStatement CSharpCode ScopeData Variable Value Statement Body where
   varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $
     C.varDec classLevel instanceLevel empty v scp)
   varDecDef = C.varDecDef Semi
@@ -521,34 +521,34 @@ instance DeclStatement CSharpCode ScopeData Variable Value (Doc, Terminator) Bod
   constDecDef = CG.constDecDef
   funcDecDef = csFuncDecDef
 
-instance OODeclStatement CSharpCode ScopeData Variable Value (Doc, Terminator) where
+instance OODeclStatement CSharpCode ScopeData Variable Value Statement where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
 
-instance PrintConsole CSharpCode Value (Doc, Terminator) where
+instance PrintConsole CSharpCode Value Statement where
   print      = csPrint False Nothing printFunc
   printLn    = csPrint True  Nothing printLnFunc
   printStr   = csPrint False Nothing printFunc   . litString
   printStrLn = csPrint True  Nothing printLnFunc . litString
 
-instance ReadConsole CSharpCode Variable (Doc, Terminator) where
+instance ReadConsole CSharpCode Variable Statement where
   getInput v = v &= csInput (onStateValue variableType v) inputFunc
   discardInput = csDiscardInput inputFunc
 
-instance FileHandling CSharpCode Variable Value (Doc, Terminator) where
+instance FileHandling CSharpCode Variable Value Statement where
   openFileR = CP.openFileR csOpenFileR
   openFileW = CP.openFileW csOpenFileWorA
   openFileA = CP.openFileA csOpenFileWorA
   closeFile = G.closeFile csClose
 
-instance PrintFile CSharpCode Value (Doc, Terminator) where
+instance PrintFile CSharpCode Value Statement where
   printFile f      = csPrint False (Just f) (printFileFunc f)
   printFileLn f    = csPrint True  (Just f) (printFileLnFunc f)
   printFileStr f   = csPrint False (Just f) (printFileFunc f)   . litString
   printFileStrLn f = csPrint True  (Just f) (printFileLnFunc f) . litString
 
-instance ReadFile CSharpCode Variable Value (Doc, Terminator) where
+instance ReadFile CSharpCode Variable Value Statement where
   getFileInput f v = v &= csInput (onStateValue variableType v) (csFileInput f)
   discardFileInput f = valStmt $ csFileInput f
   getFileInputLine = getFileInput
@@ -556,24 +556,24 @@ instance ReadFile CSharpCode Variable Value (Doc, Terminator) where
   getFileInputAll f v = while ((f $. funcFromData (dot <> text csEOS) bool) ?!)
     (oneLiner $ listAppend (valueOf v) (csFileInput f))
 
-instance StringStatement CSharpCode Variable Value (Doc, Terminator) where
+instance StringStatement CSharpCode Variable Value Statement where
   stringSplit d vnew s = assign vnew $ newObj (listType string)
     [s $. csSplitFunc d]
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
 
-instance FuncAppStatement CSharpCode Variable Value (Doc, Terminator) where
+instance FuncAppStatement CSharpCode Variable Value Statement where
   inOutCall = csInOutCall funcApp
   extInOutCall m = csInOutCall (extFuncApp m)
 
-instance OOFuncAppStatement CSharpCode Variable Value (Doc, Terminator) where
+instance OOFuncAppStatement CSharpCode Variable Value Statement where
   selfInOutCall = csInOutCall selfMethodCall
 
-instance CommentStatement CSharpCode (Doc, Terminator) where
+instance CommentStatement CSharpCode Statement where
   comment = G.comment commentStart
 
-instance ControlStatement CSharpCode Variable Value (Doc, Terminator) Body where
+instance ControlStatement CSharpCode Variable Value Statement Body where
   break =  mkStmt R.break
   continue =  mkStmt R.continue
 
@@ -601,7 +601,7 @@ instance ControlStatement CSharpCode Variable Value (Doc, Terminator) Body where
     errMsg <- zoom lensMStoVS errorMessage
     mkStmtNoEnd (csAssert cond errMsg)
 
-instance ObserverPattern CSharpCode TypeData (Doc, Terminator) where
+instance ObserverPattern CSharpCode TypeData Statement where
   notifyObservers = M.notifyObservers
 
 instance StrategyPattern CSharpCode Variable Value Body Block where
@@ -846,7 +846,7 @@ csFuncDecDef
   -> CSharpCode ScopeData
   -> [VS (CSharpCode Variable)]
   -> MS (CSharpCode Body)
-  -> MS (CSharpCode (Doc, Terminator))
+  -> MS (CSharpCode Statement)
 csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -878,7 +878,7 @@ csAssert condition errorMessage = vcat [
   text "Debug.Assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")" <> semi
   ]
 
-csDiscardInput :: VS (CSharpCode Value) -> MS (CSharpCode (Doc, Terminator))
+csDiscardInput :: VS (CSharpCode Value) -> MS (CSharpCode Statement)
 csDiscardInput = valStmt
 
 csFileInput
@@ -921,7 +921,7 @@ csInOutCall
   -> [VS (CSharpCode Value)]
   -> [VS (CSharpCode Variable)]
   -> [VS (CSharpCode Variable)]
-  -> MS (CSharpCode (Doc, Terminator))
+  -> MS (CSharpCode Statement)
 csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
 csInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)

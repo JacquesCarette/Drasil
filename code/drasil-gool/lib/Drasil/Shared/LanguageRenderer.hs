@@ -34,7 +34,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   InternalVarElim(..), ValueElim(..), StatementElim(..),
   ParamElim(..), InternalBinderElim(..))
 import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod,
-  updateMod, TypeData(..), VarData(..))
+  updateMod, TypeData(..), VarData(..), Statement)
 import Drasil.Shared.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 import Drasil.Shared.State (VS)
 
@@ -175,7 +175,7 @@ class' n p s vs fs = vcat [
 
 -- Groupings --
 
-multiStmt :: [(Doc, Terminator)] -> (Doc, Terminator)
+multiStmt :: [Statement] -> Statement
 multiStmt sts = (vcat (applyEnd statements), needsEnd statements)
   where applyEnd [] = []
         applyEnd [(s, _)] = [s]
@@ -264,7 +264,7 @@ return' vs = returnLabel <+> valueList vs
 comment :: Label -> Doc -> Doc
 comment cmt cStart = cStart <+> text cmt
 
-statement :: (Doc, Terminator) -> (Doc, Terminator)
+statement :: Statement -> Statement
 statement (s, t) = (s <> getTerm t, Empty)
 
 getTerm :: Terminator -> Doc
@@ -420,15 +420,15 @@ namedArgList
 namedArgList sep = hicat listSep' . fmap (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 
-prependToBody :: (Doc, Terminator) -> Doc -> Doc
+prependToBody :: Statement -> Doc -> Doc
 prependToBody s b = vcat [fst $ statement s, maybeBlank, b]
   where maybeBlank = emptyIfEmpty (fst s) (emptyIfEmpty b blank)
 
-appendToBody :: Doc -> (Doc, Terminator) -> Doc
+appendToBody :: Doc -> Statement -> Doc
 appendToBody b s = vcat [b, maybeBlank, fst $ statement s]
   where maybeBlank = emptyIfEmpty b (emptyIfEmpty (fst s) blank)
 
-surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
+surroundBody :: Statement -> Doc -> Statement -> Doc
 surroundBody p b a = prependToBody p (appendToBody b a)
 
 getterName :: String -> String

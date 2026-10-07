@@ -89,7 +89,8 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
   onAttachment, AttachmentData(..), ad, FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, OpData(..), ParamData(..), pd,
   ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..),
-  ValData(..), vd, VarData(..), vard, BinderD(..), bindFormD, ScopeData)
+  ValData(..), vd, VarData(..), vard, BinderD(..), bindFormD, ScopeData,
+  Statement)
 import Drasil.Shared.Classes (Pair(..))
 import Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vibcat,
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
@@ -136,7 +137,7 @@ unCPPC (CPPC (CPPSC a) _) = a
 hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
 
-instance (Pair p) => OOProg (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVarData AttachmentData ProgData FileData ModData Body Block
+instance (Pair p) => OOProg (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value Statement Class MethodData StateVarData AttachmentData ProgData FileData ModData Body Block
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) ProgData FileData where
   prog n st mods = do
@@ -147,7 +148,7 @@ instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) ProgData FileData wher
     modify revFiles
     pure $ pair p1 (toCode emptyProg)
 
-instance (Pair p) => CommonRenderSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
+instance (Pair p) => CommonRenderSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value Statement MethodData Body Block
 
 instance (Pair p) => UnRepr (p CppSrcCode CppHdrCode) contents where
   unRepr c = unCPPSC $ pfst c
@@ -188,7 +189,7 @@ instance (Pair p) => RenderBody (p CppSrcCode CppHdrCode) Body where
 instance (Pair p) => BodyElim (p CppSrcCode CppHdrCode) Body where
   body b = RC.body $ pfst b
 
-instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) Block (Doc, Terminator) where
+instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) Block Statement where
   block = pair1List block block
 
 instance (Pair p) => RenderBlock (p CppSrcCode CppHdrCode) Block where
@@ -442,7 +443,7 @@ instance (Pair p) => List (p CppSrcCode CppHdrCode) Value where
   listAccess = pair2 listAccess listAccess
   indexOf = pair2 indexOf indexOf
 
-instance (Pair p) => ListStatement (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
+instance (Pair p) => ListStatement (p CppSrcCode CppHdrCode) Value Statement where
   listAdd l i v = pair3 listAdd listAdd (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   listAppend l v = pair2 listAppend listAppend (zoom lensMStoVS l) (zoom lensMStoVS v)
   listSet l i v = pair3 listSet listSet (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
@@ -485,46 +486,46 @@ instance (Pair p) => FunctionElim (p CppSrcCode CppHdrCode) TypeData where
   functionType f = pair (functionType $ pfst f) (functionType $ psnd f)
   function f = RC.function $ pfst f
 
-instance (Pair p) => InternalAssignStmt (p CppSrcCode CppHdrCode) Variable Value (Doc, Terminator) where
+instance (Pair p) => InternalAssignStmt (p CppSrcCode CppHdrCode) Variable Value Statement where
   multiAssign vrs vls = pair2Lists multiAssign multiAssign
     (zoom lensMStoVS <$> vrs) (zoom lensMStoVS <$> vls)
 
-instance (Pair p) => InternalIOStmt (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
+instance (Pair p) => InternalIOStmt (p CppSrcCode CppHdrCode) Value Statement where
   -- Another Maybe/State combination
   printSt nl f p v = pair2
     (printSt nl (onStateValue pfst <$> f))
     (printSt nl (onStateValue psnd <$> f))
     (zoom lensMStoVS p) (zoom lensMStoVS v)
 
-instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
+instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) Value Statement where
   multiReturn = pair1List multiReturn multiReturn . fmap (zoom lensMStoVS)
 
-instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
+instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) Statement where
   stmt = pair1 stmt stmt
   loopStmt = pair1 loopStmt loopStmt
   stmtFromData d t = on2StateValues pair (stmtFromData d t) (stmtFromData d t)
 
-instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) (Doc, Terminator) where
+instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) Statement where
   statement s = RC.statement $ pfst s
   statementTerm s = statementTerm $ pfst s
 
-instance (Pair p) => EmptyStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
+instance (Pair p) => EmptyStatement (p CppSrcCode CppHdrCode) Statement where
   emptyStmt = on2StateValues pair emptyStmt emptyStmt
 
-instance (Pair p) => MultiStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
+instance (Pair p) => MultiStatement (p CppSrcCode CppHdrCode) Statement where
   multi = pair1List multi multi
 
-instance (Pair p) => ValueStatement (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
+instance (Pair p) => ValueStatement (p CppSrcCode CppHdrCode) Value Statement where
   valStmt = pair1 valStmt valStmt . zoom lensMStoVS
 
-instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) Variable Value (Doc, Terminator) where
+instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) Variable Value Statement where
   assign vr vl = pair2 assign assign (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&-=) vr vl = pair2 (&-=) (&-=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&+=) vr vl = pair2 (&+=) (&+=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&++) vl = pair1 (&++) (&++) (zoom lensMStoVS vl)
   (&--) vl = pair1 (&--) (&--) (zoom lensMStoVS vl)
 
-instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) ScopeData Variable Value (Doc, Terminator) Body where
+instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) ScopeData Variable Value Statement Body where
   varDec vr scp = pair1 (`varDec` pfst scp) (`varDec` psnd scp)
     (zoom lensMStoVS vr)
   varDecDef vr scp vl = pair2 (`varDecDef` pfst scp) (`varDecDef` psnd scp)
@@ -546,7 +547,7 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) ScopeData Variable 
   funcDecDef v scp ps = pairValListVal (`funcDecDef` pfst scp)
     (`funcDecDef` psnd scp) (zoom lensMStoVS v) (zoom lensMStoVS <$> ps)
 
-instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) ScopeData Variable Value (Doc, Terminator) where
+instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) ScopeData Variable Value Statement where
   objDecDef o scp v = pair2 (`objDecDef` pfst scp) (`objDecDef` psnd scp)
     (zoom lensMStoVS o) (zoom lensMStoVS v)
   objDecNew vr scp vs = pair1Val1List (`objDecNew` pfst scp)
@@ -556,17 +557,17 @@ instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) ScopeData Variabl
     (\vr' -> extObjDecNew lib vr' (psnd scp))
     (zoom lensMStoVS vr) (zoom lensMStoVS <$> vs)
 
-instance (Pair p) => PrintConsole (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
+instance (Pair p) => PrintConsole (p CppSrcCode CppHdrCode) Value Statement where
   print = pair1 print print . zoom lensMStoVS
   printLn = pair1 printLn printLn . zoom lensMStoVS
   printStr s = on2StateValues pair (printStr s) (printStr s)
   printStrLn s = on2StateValues pair (printStrLn s) (printStrLn s)
 
-instance (Pair p) => ReadConsole (p CppSrcCode CppHdrCode) Variable (Doc, Terminator) where
+instance (Pair p) => ReadConsole (p CppSrcCode CppHdrCode) Variable Statement where
   getInput = pair1 getInput getInput . zoom lensMStoVS
   discardInput = on2StateValues pair discardInput discardInput
 
-instance (Pair p) => FileHandling (p CppSrcCode CppHdrCode) Variable Value (Doc, Terminator) where
+instance (Pair p) => FileHandling (p CppSrcCode CppHdrCode) Variable Value Statement where
   openFileR f v = pair2 openFileR openFileR (zoom lensMStoVS f)
     (zoom lensMStoVS v)
   openFileW f v = pair2 openFileW openFileW (zoom lensMStoVS f)
@@ -575,7 +576,7 @@ instance (Pair p) => FileHandling (p CppSrcCode CppHdrCode) Variable Value (Doc,
     (zoom lensMStoVS v)
   closeFile = pair1 closeFile closeFile . zoom lensMStoVS
 
-instance (Pair p) => PrintFile (p CppSrcCode CppHdrCode) Value (Doc, Terminator) where
+instance (Pair p) => PrintFile (p CppSrcCode CppHdrCode) Value Statement where
   printFile f v = pair2 printFile printFile (zoom lensMStoVS f)
     (zoom lensMStoVS v)
   printFileLn f v = pair2 printFileLn printFileLn (zoom lensMStoVS f)
@@ -585,7 +586,7 @@ instance (Pair p) => PrintFile (p CppSrcCode CppHdrCode) Value (Doc, Terminator)
   printFileStrLn f s = pair1 (`printFileStrLn` s) (`printFileStrLn` s)
     (zoom lensMStoVS f)
 
-instance (Pair p) => ReadFile (p CppSrcCode CppHdrCode) Variable Value (Doc, Terminator) where
+instance (Pair p) => ReadFile (p CppSrcCode CppHdrCode) Variable Value Statement where
   getFileInput f v = pair2 getFileInput getFileInput (zoom lensMStoVS f)
     (zoom lensMStoVS v)
   discardFileInput = pair1 discardFileInput discardFileInput . zoom lensMStoVS
@@ -595,7 +596,7 @@ instance (Pair p) => ReadFile (p CppSrcCode CppHdrCode) Variable Value (Doc, Ter
   getFileInputAll f v = pair2 getFileInputAll getFileInputAll
     (zoom lensMStoVS f) (zoom lensMStoVS v)
 
-instance (Pair p) => StringStatement (p CppSrcCode CppHdrCode) Variable Value (Doc, Terminator) where
+instance (Pair p) => StringStatement (p CppSrcCode CppHdrCode) Variable Value Statement where
   stringSplit d vnew s = pair2 (stringSplit d) (stringSplit d)
     (zoom lensMStoVS vnew) (zoom lensMStoVS s)
 
@@ -604,7 +605,7 @@ instance (Pair p) => StringStatement (p CppSrcCode CppHdrCode) Variable Value (D
   stringListLists lsts sl = pair1List1Val stringListLists stringListLists
     (zoom lensMStoVS <$> lsts) (zoom lensMStoVS sl)
 
-instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) Variable Value (Doc, Terminator) where
+instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) Variable Value Statement where
   inOutCall n is os bs = pair3Lists (inOutCall n) (inOutCall n)
     (zoom lensMStoVS <$> is) (zoom lensMStoVS <$> os)
     (zoom lensMStoVS <$> bs)
@@ -612,15 +613,15 @@ instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) Variable Value (
     (zoom lensMStoVS <$> is) (zoom lensMStoVS <$> os)
     (zoom lensMStoVS <$> bs)
 
-instance (Pair p) => OOFuncAppStatement (p CppSrcCode CppHdrCode) Variable Value (Doc, Terminator) where
+instance (Pair p) => OOFuncAppStatement (p CppSrcCode CppHdrCode) Variable Value Statement where
   selfInOutCall n is os bs = pair3Lists (selfInOutCall n) (selfInOutCall n)
     (zoom lensMStoVS <$> is) (zoom lensMStoVS <$> os)
     (zoom lensMStoVS <$> bs)
 
-instance (Pair p) => CommentStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
+instance (Pair p) => CommentStatement (p CppSrcCode CppHdrCode) Statement where
   comment cmt = on2StateValues pair (comment cmt) (comment cmt)
 
-instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) Variable Value (Doc, Terminator) Body where
+instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) Variable Value Statement Body where
   break = on2StateValues pair break break
   continue = on2StateValues pair continue continue
 
@@ -651,7 +652,7 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) Variable Value (
 
   assert cond errMsg = pair2 assert assert (zoom lensMStoVS cond) (zoom lensMStoVS errMsg)
 
-instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) TypeData (Doc, Terminator) where
+instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) TypeData Statement where
   notifyObservers f t = pair2 notifyObservers notifyObservers
     (zoom lensMStoVS f) (zoom lensMStoVS t)
 
@@ -1019,8 +1020,8 @@ instance Monad CppSrcCode where
 instance ProgramSym CppSrcCode ProgData FileData where
   prog n st = onStateList (onCodeList (progD n st)) . fmap (zoom lensGStoFS)
 
-instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVarData AttachmentData FileData ModData Body Block
+instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value Statement MethodData Body Block
+instance OORenderSym CppSrcCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value Statement Class MethodData StateVarData AttachmentData FileData ModData Body Block
 
 instance UnRepr CppSrcCode contents where
   unRepr = unCPPSC
@@ -1065,7 +1066,7 @@ instance RenderBody CppSrcCode Body where
 instance BodyElim CppSrcCode Body where
   body = unCPPSC
 
-instance BlockSym CppSrcCode Block (Doc, Terminator) where
+instance BlockSym CppSrcCode Block Statement where
   block = G.block
 
 instance RenderBlock CppSrcCode Block where
@@ -1371,7 +1372,7 @@ instance List CppSrcCode Value where
   listAccess = G.listAccess
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
 
-instance ListStatement CppSrcCode Value (Doc, Terminator) where
+instance ListStatement CppSrcCode Value Statement where
   listAdd list idx vl = valStmt $
     objMethodCall void list cppListAdd [iterBegin list #+ idx, vl]
   listAppend = CG.listAppend cppListAppend
@@ -1414,39 +1415,39 @@ instance FunctionElim CppSrcCode TypeData where
   functionType = onCodeValue fType
   function = funcDoc . unCPPSC
 
-instance InternalAssignStmt CppSrcCode Variable Value (Doc, Terminator) where
+instance InternalAssignStmt CppSrcCode Variable Value Statement where
   multiAssign _ _ = error $ C.multiAssignError cppName
 
-instance InternalIOStmt CppSrcCode Value (Doc, Terminator) where
+instance InternalIOStmt CppSrcCode Value Statement where
   printSt nl _ = cppPrint nl
 
-instance InternalControlStmt CppSrcCode Value (Doc, Terminator) where
+instance InternalControlStmt CppSrcCode Value Statement where
   multiReturn _ = error $ C.multiReturnError cppName
 
-instance RenderStatement CppSrcCode (Doc, Terminator) where
+instance RenderStatement CppSrcCode Statement where
   stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 
-instance StatementElim CppSrcCode (Doc, Terminator) where
+instance StatementElim CppSrcCode Statement where
   statement = fst . unCPPSC
   statementTerm = snd . unCPPSC
 
-instance EmptyStatement CppSrcCode (Doc, Terminator) where
+instance EmptyStatement CppSrcCode Statement where
   emptyStmt = G.emptyStmt
-instance MultiStatement CppSrcCode (Doc, Terminator) where
+instance MultiStatement CppSrcCode Statement where
   multi = onStateList (onCodeList R.multiStmt)
-instance ValueStatement CppSrcCode Value (Doc, Terminator) where
+instance ValueStatement CppSrcCode Value Statement where
   valStmt = G.valStmt Semi
 
-instance AssignStatement CppSrcCode Variable Value (Doc, Terminator) where
+instance AssignStatement CppSrcCode Variable Value Statement where
   assign = G.assign Semi
   (&-=) = G.subAssign Semi
   (&+=) = C.increment
   (&++) = C.increment1
   (&--) = C.decrement1
 
-instance DeclStatement CppSrcCode ScopeData Variable Value (Doc, Terminator) Body where
+instance DeclStatement CppSrcCode ScopeData Variable Value Statement Body where
   -- TODO [Brandon Bosman, 05/29/2026]: consider re-enabling `varDec` for arrays
   varDec vr scp = do
     vr' <- zoom lensMStoVS vr
@@ -1471,35 +1472,35 @@ instance DeclStatement CppSrcCode ScopeData Variable Value (Doc, Terminator) Bod
   constDecDef = CG.constDecDef
   funcDecDef = cppFuncDecDef
 
-instance OODeclStatement CppSrcCode ScopeData Variable Value (Doc, Terminator) where
+instance OODeclStatement CppSrcCode ScopeData Variable Value Statement where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
 
-instance PrintConsole CppSrcCode Value (Doc, Terminator) where
+instance PrintConsole CppSrcCode Value Statement where
   print      = G.print False Nothing printFunc
   printLn    = G.print True  Nothing printLnFunc
   printStr   = G.print False Nothing printFunc   . litString
   printStrLn = G.print True  Nothing printLnFunc . litString
 
-instance ReadConsole CppSrcCode Variable (Doc, Terminator) where
+instance ReadConsole CppSrcCode Variable Statement where
   getInput v = cppInput v inputFunc
   discardInput = addAlgorithmImport $ addLimitsImport $ cppDiscardInput '\n'
     inputFunc
 
-instance FileHandling CppSrcCode Variable Value (Doc, Terminator) where
+instance FileHandling CppSrcCode Variable Value Statement where
   openFileR = cppOpenFile cppR
   openFileW = cppOpenFile cppW
   openFileA = cppOpenFile cppA
   closeFile = G.closeFile cppClose
 
-instance PrintFile CppSrcCode Value (Doc, Terminator) where
+instance PrintFile CppSrcCode Value Statement where
   printFile f      = G.print False (Just f) (printFileFunc f)
   printFileLn f    = G.print True  (Just f) (printFileLnFunc f)
   printFileStr f   = G.print False (Just f) (printFileFunc f)   . litString
   printFileStrLn f = G.print True  (Just f) (printFileLnFunc f) . litString
 
-instance ReadFile CppSrcCode Variable Value (Doc, Terminator) where
+instance ReadFile CppSrcCode Variable Value Statement where
   getFileInput f v = cppInput v f
   discardFileInput f = addAlgorithmImport $ addLimitsImport $
     cppDiscardInput ' ' f
@@ -1516,7 +1517,7 @@ instance ReadFile CppSrcCode Variable Value (Doc, Terminator) where
       while (getLineFunc f v_line)
         (oneLiner $ listAppend (valueOf v) v_line)]
 
-instance StringStatement CppSrcCode Variable Value (Doc, Terminator) where
+instance StringStatement CppSrcCode Variable Value Statement where
   stringSplit d vnew s = do
     vn <- zoom lensMStoVS vnew
     scpData <- getVarScope $ variableName vn
@@ -1539,17 +1540,17 @@ instance StringStatement CppSrcCode Variable Value (Doc, Terminator) where
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
 
-instance FuncAppStatement CppSrcCode Variable Value (Doc, Terminator) where
+instance FuncAppStatement CppSrcCode Variable Value Statement where
   inOutCall = cppInOutCall funcApp
   extInOutCall m = cppInOutCall (extFuncApp m)
 
-instance OOFuncAppStatement CppSrcCode Variable Value (Doc, Terminator) where
+instance OOFuncAppStatement CppSrcCode Variable Value Statement where
   selfInOutCall = cppInOutCall selfMethodCall
 
-instance CommentStatement CppSrcCode (Doc, Terminator) where
+instance CommentStatement CppSrcCode Statement where
   comment = G.comment commentStart
 
-instance ControlStatement CppSrcCode Variable Value (Doc, Terminator) Body where
+instance ControlStatement CppSrcCode Variable Value Statement Body where
   break = mkStmt R.break
   continue = mkStmt R.continue
 
@@ -1577,7 +1578,7 @@ instance ControlStatement CppSrcCode Variable Value (Doc, Terminator) Body where
       errMsg <- zoom lensMStoVS errorMessage
       mkStmtNoEnd (cppAssert cond errMsg)
 
-instance ObserverPattern CppSrcCode TypeData (Doc, Terminator) where
+instance ObserverPattern CppSrcCode TypeData Statement where
   notifyObservers = M.notifyObservers
 
 instance StrategyPattern CppSrcCode Variable Value Body Block where
@@ -1737,8 +1738,8 @@ instance Applicative CppHdrCode where
 instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
-instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVarData AttachmentData FileData ModData Body Block
+instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value Statement MethodData Body Block
+instance OORenderSym CppHdrCode (Doc, VisibilityTag) ScopeData TypeData BinderD Variable ParamData Value Statement Class MethodData StateVarData AttachmentData FileData ModData Body Block
 
 instance UnRepr CppHdrCode contents where
   unRepr = unCPPHC
@@ -1782,7 +1783,7 @@ instance RenderBody CppHdrCode Body where
 instance BodyElim CppHdrCode Body where
   body = unCPPHC
 
-instance BlockSym CppHdrCode Block (Doc, Terminator) where
+instance BlockSym CppHdrCode Block Statement where
   block _ = toState $ toCode empty
 
 instance RenderBlock CppHdrCode Block where
@@ -2039,7 +2040,7 @@ instance List CppHdrCode Value where
   listAccess _ _ = mkStateVal void empty
   indexOf _ _ = mkStateVal void empty
 
-instance ListStatement CppHdrCode Value (Doc, Terminator) where
+instance ListStatement CppHdrCode Value Statement where
   listAdd _ _ _ = mkStmt empty
   listAppend _ _ = mkStmt empty
   listSet _ _ _ = mkStmtNoEnd empty
@@ -2077,41 +2078,41 @@ instance FunctionElim CppHdrCode TypeData where
   functionType = onCodeValue fType
   function = funcDoc . unCPPHC
 
-instance InternalAssignStmt CppHdrCode Variable Value (Doc, Terminator) where
+instance InternalAssignStmt CppHdrCode Variable Value Statement where
   multiAssign _ _ = emptyStmt
 
-instance InternalIOStmt CppHdrCode Value (Doc, Terminator) where
+instance InternalIOStmt CppHdrCode Value Statement where
   printSt _ _ _ _ = emptyStmt
 
-instance InternalControlStmt CppHdrCode Value (Doc, Terminator) where
+instance InternalControlStmt CppHdrCode Value Statement where
   multiReturn _ = emptyStmt
 
-instance RenderStatement CppHdrCode (Doc, Terminator) where
+instance RenderStatement CppHdrCode Statement where
   stmt = G.stmt
   loopStmt _ = emptyStmt
   stmtFromData d t = toState $ toCode (d, t)
 
-instance StatementElim CppHdrCode (Doc, Terminator) where
+instance StatementElim CppHdrCode Statement where
   statement = fst . unCPPHC
   statementTerm = snd . unCPPHC
 
-instance EmptyStatement CppHdrCode (Doc, Terminator) where
+instance EmptyStatement CppHdrCode Statement where
   emptyStmt = G.emptyStmt
 
-instance MultiStatement CppHdrCode (Doc, Terminator) where
+instance MultiStatement CppHdrCode Statement where
   multi _ = emptyStmt
 
-instance ValueStatement CppHdrCode Value (Doc, Terminator) where
+instance ValueStatement CppHdrCode Value Statement where
   valStmt _ = emptyStmt
 
-instance AssignStatement CppHdrCode Variable Value (Doc, Terminator) where
+instance AssignStatement CppHdrCode Variable Value Statement where
   assign _ _ = emptyStmt
   (&-=) _ _ = emptyStmt
   (&+=) _ _ = emptyStmt
   (&++) _ = emptyStmt
   (&--) _ = emptyStmt
 
-instance DeclStatement CppHdrCode ScopeData Variable Value (Doc, Terminator) Body where
+instance DeclStatement CppHdrCode ScopeData Variable Value Statement Body where
   varDec vr scp = do
     vr' <- zoom lensMStoVS vr
     let tp = (cType . unCPPHC . variableType) vr'
@@ -2128,57 +2129,57 @@ instance DeclStatement CppHdrCode ScopeData Variable Value (Doc, Terminator) Bod
   constDecDef = CG.constDecDef
   funcDecDef _ _ _ _ = emptyStmt
 
-instance OODeclStatement CppHdrCode ScopeData Variable Value (Doc, Terminator) where
+instance OODeclStatement CppHdrCode ScopeData Variable Value Statement where
   objDecDef _ _ _ = emptyStmt
   objDecNew _ _ _ = emptyStmt
   extObjDecNew _ _ _ _ = emptyStmt
 
-instance PrintConsole CppHdrCode Value (Doc, Terminator) where
+instance PrintConsole CppHdrCode Value Statement where
   print _ = emptyStmt
   printLn _ = emptyStmt
   printStr _ = emptyStmt
   printStrLn _ = emptyStmt
 
-instance ReadConsole CppHdrCode Variable (Doc, Terminator) where
+instance ReadConsole CppHdrCode Variable Statement where
   getInput _ = emptyStmt
   discardInput = emptyStmt
 
-instance FileHandling CppHdrCode Variable Value (Doc, Terminator) where
+instance FileHandling CppHdrCode Variable Value Statement where
   openFileR _ _ = emptyStmt
   openFileW _ _ = emptyStmt
   openFileA _ _ = emptyStmt
   closeFile _ = emptyStmt
 
-instance PrintFile CppHdrCode Value (Doc, Terminator) where
+instance PrintFile CppHdrCode Value Statement where
   printFile _ _ = emptyStmt
   printFileLn _ _ = emptyStmt
   printFileStr _ _ = emptyStmt
   printFileStrLn _ _ = emptyStmt
 
-instance ReadFile CppHdrCode Variable Value (Doc, Terminator) where
+instance ReadFile CppHdrCode Variable Value Statement where
   getFileInput _ _ = emptyStmt
   discardFileInput _ = emptyStmt
   getFileInputLine _ _ = emptyStmt
   discardFileLine _ = emptyStmt
   getFileInputAll _ _ = emptyStmt
 
-instance StringStatement CppHdrCode Variable Value (Doc, Terminator) where
+instance StringStatement CppHdrCode Variable Value Statement where
   stringSplit _ _ _ = emptyStmt
 
   stringListVals _ _ = emptyStmt
   stringListLists _ _ = emptyStmt
 
-instance FuncAppStatement CppHdrCode Variable Value (Doc, Terminator) where
+instance FuncAppStatement CppHdrCode Variable Value Statement where
   inOutCall _ _ _ _ = emptyStmt
   extInOutCall _ _ _ _ _ = emptyStmt
 
-instance OOFuncAppStatement CppHdrCode Variable Value (Doc, Terminator) where
+instance OOFuncAppStatement CppHdrCode Variable Value Statement where
   selfInOutCall _ _ _ _ = emptyStmt
 
-instance CommentStatement CppHdrCode (Doc, Terminator) where
+instance CommentStatement CppHdrCode Statement where
   comment _ = emptyStmt
 
-instance ControlStatement CppHdrCode Variable Value (Doc, Terminator) Body where
+instance ControlStatement CppHdrCode Variable Value Statement Body where
   break = emptyStmt
   continue = emptyStmt
 
@@ -2200,7 +2201,7 @@ instance ControlStatement CppHdrCode Variable Value (Doc, Terminator) Body where
 
   assert _ _ = emptyStmt
 
-instance ObserverPattern CppHdrCode TypeData (Doc, Terminator) where
+instance ObserverPattern CppHdrCode TypeData Statement where
   notifyObservers _ _ = emptyStmt
 
 instance StrategyPattern CppHdrCode Variable Value Body Block where
@@ -2696,7 +2697,7 @@ cppFuncDecDef
   -> CppSrcCode ScopeData
   -> [VS (CppSrcCode Variable)]
   -> MS (CppSrcCode Body)
-  -> MS (CppSrcCode (Doc, Terminator))
+  -> MS (CppSrcCode Statement)
 cppFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -2737,13 +2738,13 @@ cppAssert condition errorMessage = vcat [
   ]
 
 cppDiscardInput
-  :: Char -> VS (CppSrcCode Value) -> MS (CppSrcCode (Doc, Terminator))
+  :: Char -> VS (CppSrcCode Value) -> MS (CppSrcCode Statement)
 cppDiscardInput sep inFn = valStmt $ ignoreFunc sep inFn
 
 cppInput
   :: VS (CppSrcCode Variable)
   -> VS (CppSrcCode Value)
-  -> MS (CppSrcCode (Doc, Terminator))
+  -> MS (CppSrcCode Statement)
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ do
   v <- zoom lensMStoVS vr
   inFn <- zoom lensMStoVS i
@@ -2754,7 +2755,7 @@ cppOpenFile
   ::  Label
   -> VS (CppSrcCode Variable)
   -> VS (CppSrcCode Value)
-  -> MS (CppSrcCode (Doc, Terminator))
+  -> MS (CppSrcCode Statement)
 cppOpenFile mode f n = valStmt $ objMethodCall void (valueOf f) cppOpen [n,
   mkStateVal void $ text mode]
 
@@ -2871,7 +2872,7 @@ cppForEach
   -> VS (CppSrcCode Variable)
   -> VS (CppSrcCode Value)
   -> MS (CppSrcCode Body)
-  -> MS (CppSrcCode (Doc, Terminator))
+  -> MS (CppSrcCode Statement)
 cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
@@ -2935,7 +2936,7 @@ cppInOutCall
   -> [VS (CppSrcCode Value)]
   -> [VS (CppSrcCode Variable)]
   -> [VS (CppSrcCode Variable)]
-  -> MS (CppSrcCode (Doc, Terminator))
+  -> MS (CppSrcCode Statement)
 cppInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
 cppInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)

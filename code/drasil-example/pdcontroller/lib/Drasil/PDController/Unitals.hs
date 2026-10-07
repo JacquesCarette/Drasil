@@ -87,17 +87,26 @@ ipSetPtUnc, ipPropGainUnc, ipDerGainUnc, ipStepTimeUnc, ipSimTimeUnc :: UncertQ
 ipPropGain
   = constrained' dqdPropGain [gtZeroConstr] (exactDbl 20)
 ipPropGainUnc = uq ipPropGain defaultUncrt
-dqdPropGain = dqdNoUnit propGain symKp Real
+dqdPropGain = quantNoUnit' (mkUid "propGain")
+  (nounPhraseSP "Proportional Gain")
+  (S "Gain constant of the proportional controller")
+  (const symKp) Real
 
 ipDerivGain
   = constrained' dqdDerivGain [physRange $ UpFrom (Inc, exactDbl 0)]
       (exactDbl 1)
 ipDerGainUnc = uq ipDerivGain defaultUncrt
-dqdDerivGain = dqdNoUnit derGain symKd Real
+dqdDerivGain = quantNoUnit' (mkUid "derGain")
+  (nounPhraseSP "Derivative Gain")
+  (S "Gain constant of the derivative controller")
+  (const symKd) Real
 
 ipSetPt = constrained' dqdSetPointTD [gtZeroConstr] (exactDbl 1)
 ipSetPtUnc = uq ipSetPt defaultUncrt
-dqdSetPointTD = dqdNoUnit setPoint symYrT Real
+dqdSetPointTD = quantNoUnit' (mkUid "setPoint")
+  (nounPhraseSP "Set-Point")
+  (S "The desired value that the control system must reach. This also knows as the reference variable")
+  (const symYrT) Real
 
 --FIXME: the original timeStep is 0.01, this will trigger an error in Java ODE solver
 --change it from 0.01 to 0.001 is a temporary fix to make ODE solver working
@@ -119,8 +128,14 @@ odeAbsTolConst, odeRelTolConst :: ConstQDef
 pidConstants :: [ConstQDef]
 pidConstants = [odeAbsTolConst, odeRelTolConst]
 
-dqdAbsTol = dqdNoUnit ccAbsTolerance symAbsTol Real
-dqdRelTol = dqdNoUnit ccRelTolerance symRelTol Real
+dqdAbsTol = quantNoUnit' (mkUid "absoluteTolerance")
+  (nounPhraseSP "Absolute Tolerance")
+  (S "Absolute tolerance for the integrator")
+  (const symAbsTol) Real
+dqdRelTol = quantNoUnit' (mkUid "relativeTolerance")
+  (nounPhraseSP "Relative Tolerance")
+  (S "Relative tolerance for the integrator")
+  (const symRelTol) Real
 
 odeAbsTolConst = mkQuantDef dqdAbsTol (dbl 1.0e-10)
 odeRelTolConst = mkQuantDef dqdRelTol (dbl 1.0e-10)
@@ -129,7 +144,10 @@ opProcessVariable
   = constrained' dqdProcessVariableTD
       [gtZeroConstr]
       (exactDbl 1)
-dqdProcessVariableTD = dqdNoUnit processVariable symYT (Vect Real)
+dqdProcessVariableTD = quantNoUnit' (mkUid "processVariable")
+  (nounPhraseSP "Process Variable")
+  (S "The output value from the power plant")
+  (const symYT) (Vect Real)
 
 dqdSetPointFD
   = quantNoUnit (mkUid "dqdSetPointFD") (setPoint `inThe` ccFrequencyDomain)

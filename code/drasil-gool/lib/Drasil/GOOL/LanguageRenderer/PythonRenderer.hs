@@ -80,7 +80,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
   ParamData(..), pd, ProgData(..), progD, TypeData(..), ValData(..), vd,
   VarData(..), vard, BinderD(..), bindFormD, AttachmentTag(..),
-  AttachmentData(..), ad, FileData, ScopeData)
+  AttachmentData(..), ad, FileData, ScopeData, Statement)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -119,7 +119,7 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance OOProg PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVar AttachmentData ProgData FileData ModData Body Block
+instance OOProg PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value Statement Class MethodData StateVar AttachmentData ProgData FileData ModData Body Block
 
 instance ProgramSym PythonCode ProgData FileData where
   prog n st files = do
@@ -127,8 +127,8 @@ instance ProgramSym PythonCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) MethodData Body Block
-instance OORenderSym PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value (Doc, Terminator) Class MethodData StateVar AttachmentData FileData ModData Body Block
+instance CommonRenderSym PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value Statement MethodData Body Block
+instance OORenderSym PythonCode Doc ScopeData TypeData BinderD Variable ParamData Value Statement Class MethodData StateVar AttachmentData FileData ModData Body Block
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
@@ -171,7 +171,7 @@ instance RenderBody PythonCode Body where
 instance BodyElim PythonCode Body where
   body = unPC
 
-instance BlockSym PythonCode Block (Doc, Terminator) where
+instance BlockSym PythonCode Block Statement where
   block = G.block
 
 instance RenderBlock PythonCode Block where
@@ -436,7 +436,7 @@ instance List PythonCode Value where
   listAccess = G.listAccess
   indexOf = CP.indexOf pyIndex
 
-instance ListStatement PythonCode Value (Doc, Terminator) where
+instance ListStatement PythonCode Value Statement where
   listAdd = CG.listAdd pyInsert
   listAppend = CG.listAppend pyAppendFunc
   listSet = CP.listSet
@@ -475,41 +475,41 @@ instance FunctionElim PythonCode TypeData where
   functionType = onCodeValue fType
   function = funcDoc . unPC
 
-instance InternalAssignStmt PythonCode Variable Value (Doc, Terminator) where
+instance InternalAssignStmt PythonCode Variable Value Statement where
   multiAssign = CP.multiAssign id
 
-instance InternalIOStmt PythonCode Value (Doc, Terminator) where
+instance InternalIOStmt PythonCode Value Statement where
   printSt = pyPrint
 
-instance InternalControlStmt PythonCode Value (Doc, Terminator) where
+instance InternalControlStmt PythonCode Value Statement where
   multiReturn = CP.multiReturn id
 
-instance RenderStatement PythonCode (Doc, Terminator) where
+instance RenderStatement PythonCode Statement where
   stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 
-instance StatementElim PythonCode (Doc, Terminator) where
+instance StatementElim PythonCode Statement where
   statement = fst . unPC
   statementTerm = snd . unPC
 
-instance EmptyStatement PythonCode (Doc, Terminator) where
+instance EmptyStatement PythonCode Statement where
   emptyStmt = G.emptyStmt
 
-instance MultiStatement PythonCode (Doc, Terminator) where
+instance MultiStatement PythonCode Statement where
   multi = onStateList (onCodeList R.multiStmt)
 
-instance ValueStatement PythonCode Value (Doc, Terminator) where
+instance ValueStatement PythonCode Value Statement where
   valStmt = G.valStmt Empty
 
-instance AssignStatement PythonCode Variable Value (Doc, Terminator) where
+instance AssignStatement PythonCode Variable Value Statement where
   assign = G.assign Empty
   (&-=) = G.subAssign Empty
   (&+=) = CS.increment
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement PythonCode ScopeData Variable Value (Doc, Terminator) Body where
+instance DeclStatement PythonCode ScopeData Variable Value Statement Body where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
@@ -528,59 +528,59 @@ instance DeclStatement PythonCode ScopeData Variable Value (Doc, Terminator) Bod
       else error "Cannot safely capitalize constant."
   funcDecDef = CP.funcDecDef
 
-instance OODeclStatement PythonCode ScopeData Variable Value (Doc, Terminator) where
+instance OODeclStatement PythonCode ScopeData Variable Value Statement where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v scp vs = do
     modify (addModuleImport lib)
     varDecDef v scp (extNewObj lib (onStateValue variableType v) vs)
 
-instance PrintConsole PythonCode Value (Doc, Terminator) where
+instance PrintConsole PythonCode Value Statement where
   print      = pyOut False Nothing printFunc
   printLn    = pyOut True  Nothing printFunc
   printStr   = print   . litString
   printStrLn = printLn . litString
 
-instance ReadConsole PythonCode Variable (Doc, Terminator) where
+instance ReadConsole PythonCode Variable Statement where
   getInput = pyInput inputFunc
   discardInput = valStmt inputFunc
 
-instance FileHandling PythonCode Variable Value (Doc, Terminator) where
+instance FileHandling PythonCode Variable Value Statement where
   openFileR f n = f &= CP.openFileR' n
   openFileW f n = f &= CP.openFileW' n
   openFileA f n = f &= CP.openFileA' n
   closeFile = G.closeFile pyClose
 
-instance ReadFile PythonCode Variable Value (Doc, Terminator) where
+instance ReadFile PythonCode Variable Value Statement where
   getFileInput f = pyInput (readline f)
   discardFileInput f = valStmt (readline f)
   getFileInputLine = getFileInput
   discardFileLine = CP.discardFileLine pyReadline
   getFileInputAll f v = v &= readlines f
 
-instance PrintFile PythonCode Value (Doc, Terminator) where
+instance PrintFile PythonCode Value Statement where
   printFile f      = pyOut False (Just f) printFunc
   printFileLn f    = pyOut True  (Just f) printFunc
   printFileStr f   = printFile f   . litString
   printFileStrLn f = printFileLn f . litString
 
-instance StringStatement PythonCode Variable Value (Doc, Terminator) where
+instance StringStatement PythonCode Variable Value Statement where
   stringSplit d vnew s = assign vnew (objAccess s (splitFunc d))
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
 
-instance FuncAppStatement PythonCode Variable Value (Doc, Terminator) where
+instance FuncAppStatement PythonCode Variable Value Statement where
   inOutCall = CP.inOutCall funcApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
 
-instance OOFuncAppStatement PythonCode Variable Value (Doc, Terminator) where
+instance OOFuncAppStatement PythonCode Variable Value Statement where
   selfInOutCall = CP.inOutCall selfMethodCall
 
-instance CommentStatement PythonCode (Doc, Terminator) where
+instance CommentStatement PythonCode Statement where
   comment = G.comment pyCommentStart
 
-instance ControlStatement PythonCode Variable Value (Doc, Terminator) Body where
+instance ControlStatement PythonCode Variable Value Statement Body where
   break = mkStmtNoEnd R.break
   continue = mkStmtNoEnd R.continue
 
@@ -608,7 +608,7 @@ instance ControlStatement PythonCode Variable Value (Doc, Terminator) Body where
       errMsg <- zoom lensMStoVS errorMessage
       mkStmtNoEnd (pyAssert cond errMsg)
 
-instance ObserverPattern PythonCode TypeData (Doc, Terminator) where
+instance ObserverPattern PythonCode TypeData Statement where
   notifyObservers = M.notifyObservers'
 
 instance StrategyPattern PythonCode Variable Value Body Block where
@@ -935,7 +935,7 @@ pyPrint
   -> Maybe (VS (PythonCode Value))
   -> VS (PythonCode Value)
   -> VS (PythonCode Value)
-  -> MS (PythonCode (Doc, Terminator))
+  -> MS (PythonCode Statement)
 pyPrint newLn f' p' v' = do
     f <- zoom lensMStoVS $ fromMaybe (mkStateVal void empty) f'
     prf <- zoom lensMStoVS p'
@@ -977,7 +977,7 @@ pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getCodeType . valueType
 pyInput
   :: VS (PythonCode Value)
   -> VS (PythonCode Variable)
-  -> MS (PythonCode (Doc, Terminator))
+  -> MS (PythonCode Statement)
 pyInput inSrc v = v &= (v >>= pyInput' . getCodeType . variableType)
   where pyInput' Integer = readInt inSrc
         pyInput' Float = readDouble inSrc

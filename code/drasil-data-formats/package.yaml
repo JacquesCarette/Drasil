@@ -32,6 +32,8 @@ library:
   - Drasil.Data.Formats.CSV
   - Drasil.Data.Formats.JSON
   - Drasil.Data.Formats.HTML
+  - Drasil.Data.Formats.MD
+  - Drasil.Data.Formats.Markdown.CommonMark
 
 tests:
   drasil-data-formats-test:
@@ -42,5 +44,21 @@ tests:
     - drasil-data-formats
     - drasil-testing-kit
     - filepath
+    - tasty
+    - tasty-hunit
+
+  # Compile the internal renderer from source without exposing it to clients.
+  drasil-commonmark-test:
+    source-dirs:
+    - test-internal
+    - lib
+    main: Main.hs
+    other-modules:
+    - Drasil.Data.Formats.HTML
+    - Drasil.Data.Formats.HTML.Core
+    - Drasil.Data.Formats.HTML.Render
+    - Drasil.Data.Formats.Markdown.CommonMark.Core
+    - Drasil.Data.Formats.Markdown.CommonMark.Render
+    dependencies:
     - tasty
     - tasty-hunit

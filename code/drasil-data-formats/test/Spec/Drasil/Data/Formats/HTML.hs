@@ -4,7 +4,7 @@ module Spec.Drasil.Data.Formats.HTML (htmlTests) where
 
 import Drasil.Data.Formats.HTML (
     HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), HLevel(..), CustomTag(..),
-    Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..), renderHTML,
+    Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..), renderHTML, renderHTMLFragment, defaultHTMLRO,
     bold, emphasis, subscript, superscript, figureImage, customTag,
     HTMLRenderOptions(..)
   )
@@ -13,13 +13,18 @@ import qualified Drasil.Data.Formats.HTML as HTML (span)
 import Drasil.TestingKit.Golden (file, goldenTest, goldenTestingGroup, ps)
 import System.OsPath (osp)
 import Test.Tasty (TestTree, testGroup)
+import Test.Tasty.HUnit (testCase, (@?=))
+import Data.Text (Text)
+import Prettyprinter (defaultLayoutOptions, layoutPretty)
+import Prettyprinter.Render.Text (renderStrict)
 import qualified Data.Map as M
 
 htmlTests :: TestTree
 htmlTests =
   testGroup
     "Drasil.Data.Formats.HTML"
-    [ renderHTMLTests
+    [ renderHTMLTests,
+      renderHTMLFragmentTests
     ]
 
 blockquoteTag, inputTag :: CustomTag
@@ -115,3 +120,31 @@ renderHTMLTests =
           file [ps|escaping.html|] $ renderHTML testRenderOptions  escapingHTMLTest
       ]
     ]
+
+-- | Body-only output must retain the existing HTML rendering rules.
+renderHTMLFragmentTests :: TestTree
+renderHTMLFragmentTests =
+  testGroup "renderHTMLFragment"
+    [ testCase "empty fragment" $
+        fragment [] @?= "",
+      testCase "paragraph without document wrappers" $
+        fragment [Paragraph [] [RawText "A & B < C"]]
+          @?= "<p>\n  A &amp; B &lt; C\n</p>",
+      testCase "escape raw text exactly once" $
+        fragment [RawText "< > & \" '"] @?= "&lt; &gt; &amp; &quot; &#39;",
+      testCase "merge adjacent text without an extra newline" $
+        fragment [RawText "Hello", RawText " world"] @?= "Hello world",
+      testCase "preserve block order and line boundaries" $
+        fragment [Paragraph [] [RawText "First"], Paragraph [] [RawText "Second"]]
+          @?= "<p>\n  First\n</p>\n<p>\n  Second\n</p>",
+      testCase "honour indentation in nested fragments" $
+        fragmentWith (defaultHTMLRO {indentationSize = 4})
+          [Div [] [Paragraph [] [RawText "Hello"]]]
+          @?= "<div>\n    <p>\n        Hello\n    </p>\n</div>",
+      testCase "inline HTML remains inline" $
+        fragment [emphasis [] "Hello"] @?= "<em>Hello</em>"
+    ]
+  where
+    fragment = fragmentWith defaultHTMLRO
+    fragmentWith :: HTMLRenderOptions -> [HTMLBody] -> Text
+    fragmentWith opt = renderStrict . layoutPretty defaultLayoutOptions . renderHTMLFragment opt

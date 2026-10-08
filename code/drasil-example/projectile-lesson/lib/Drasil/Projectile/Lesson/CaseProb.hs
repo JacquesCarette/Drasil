@@ -211,5 +211,5 @@ motionSent = S "This value can be substituted" `S.inThe` S "equations for" +:+ p
              S "given above (ref) to yield the following"
 
 foot, accelinftU :: UnitDefn
-foot = fund "foot" "length" "ft"
-accelinftU = newUnit "acceleration" $ foot /: s_2
+foot = baseUnit "foot" (cn' "foot") "length" (label "ft")
+accelinftU = compoundUnit "acceleration" (cn' "acceleration") "acceleration" $ foot /: s_2

@@ -91,7 +91,7 @@ int :: (Monad r) => VS (r TypeData)
 int = typeFromData Integer intRender (text intRender)
 
 constructor
-  :: (OORenderSym r vis scope typ binder var param val stmt cls mthd stvr attch file mod bod block)
+  :: (OORenderSym r file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => Label
   -> [MS (r param)]
   -> Initializers r var val
@@ -106,7 +106,7 @@ doxFunc
 doxFunc = docFunc functionDox
 
 doxClass
-  :: (BlockCommentSym r, RG.RenderClass r vis cls mthd stvr)
+  :: (BlockCommentSym r, RG.RenderClass r cls stvr mthd vis)
   => String -> CS (r cls) -> CS (r cls)
 doxClass = docClass classDox
 
@@ -126,9 +126,9 @@ doxMod = docMod moduleDox
 classVarAccess
   ::
     ( InternalVarElim r var
-    , RenderVariable r TypeData var
+    , RenderVariable r var TypeData
     , UnRepr r TypeData
-    , VariableElim r TypeData var
+    , VariableElim r var TypeData
     )
   => (Doc -> Doc -> Doc) -> VS (r TypeData) -> VS (r var) -> VS (r var)
 classVarAccess f c' v'= do
@@ -140,25 +140,25 @@ classVarAccess f c' v'= do
   toState $ classVarAccessCheck vr
 
 indexOf
-  :: (TypeSym r typ, IC.IndexTranslator r val, IG.OOFunctionSym r typ val)
+  :: (TypeSym r typ, IC.IndexTranslator r val, IG.OOFunctionSym r val typ)
   => Label -> VS (r val) -> VS (r val) -> VS (r val)
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])
 
 contains
-  :: (TypeSym r typ, IG.OOFunctionSym r typ val)
+  :: (TypeSym r typ, IG.OOFunctionSym r val typ)
   => Label -> VS (r val) -> VS (r val) -> VS (r val)
 contains f s v = IG.objAccess s (IG.func f IC.bool [v])
 
 containsInt
-  :: (TypeSym r typ, Comparison r val, IG.OOFunctionSym r typ val)
+  :: (TypeSym r typ, Comparison r val, IG.OOFunctionSym r val typ)
   => Label -> Label -> VS (r val) -> VS (r val) -> VS (r val)
 containsInt f fn s v = contains f s v ?!= IG.objAccess s (IG.func fn IC.bool [])
 
 discardFileLine
   ::
     ( TypeSym r typ
-    , IG.InternalValueExp r typ var val
-    , ValueStatement r val stmt
+    , IG.InternalValueExp r var val typ
+    , ValueStatement r stmt val
     )
   => Label -> VS (r val) -> MS (r stmt)
 discardFileLine n f = valStmt $ objMethodCallNoParams IC.string f n
@@ -215,7 +215,7 @@ arrayType t' = do
   typeFromData (Array (getCodeType t))
     (getTypeString t P.<> array) (renderType t <> brackets empty)
 
-pi :: (RC.RenderValue r typ var val, TypeSym r typ) => VS (r val)
+pi :: (RC.RenderValue r var val typ, TypeSym r typ) => VS (r val)
 pi = mkStateVal IC.double (text $ mathFunc "PI")
 
 printSt
@@ -233,7 +233,7 @@ arrayDec
      , InternalVarElim r var
      , RC.RenderStatement r stmt
      , RC.ValueElim r val
-     , VariableElim r TypeData var
+     , VariableElim r var TypeData
      )
   => VS (r val) -> VS (r var) -> r ScopeData -> MS (r stmt)
 arrayDec n vr scp = do
@@ -247,7 +247,7 @@ arrayDec n vr scp = do
     renderType innerTp <> brackets (RC.value sz)
 
 arrayDecDef
-  :: ( IC.DeclStatement r scope var val stmt bod
+  :: ( IC.DeclStatement r bod stmt var scope val
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
      , RC.ValueElim r val
@@ -260,9 +260,9 @@ arrayDecDef v' scp vals' = do
 
 openFileA
   ::
-    ( IC.AssignStatement r var val stmt
+    ( IC.AssignStatement r stmt var val
     , TypeSym r typ
-    , IC.Literal r typ val
+    , IC.Literal r val typ
     )
   => (VS (r val) -> VS (r typ) -> VS (r val) -> VS (r val))
   -> VS (r var)
@@ -277,7 +277,7 @@ forEach
     , RC.RenderStatement r stmt
     , UnRepr r TypeData
     , RC.ValueElim r val
-    , VariableElim r TypeData var
+    , VariableElim r var TypeData
     )
   => Doc
   -> Doc
@@ -302,7 +302,7 @@ mainDesc = "Controls the flow of the program"
 argsDesc = "List of command-line arguments"
 
 docMain
-  :: (OORenderSym r vis scope typ binder var param val stmt cls mthd stvr attch file mod bod block)
+  :: (OORenderSym r file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => MS (r bod) -> MS (r mthd)
 docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
@@ -310,10 +310,10 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
 mainFunction
   :: ( AttachmentSym r attch
      , TypeSym r TypeData
-     , IC.VariableSym r TypeData var
+     , IC.VariableSym r var TypeData
      , MethodTypeSym r TypeData
-     , OORenderMethod r vis TypeData param mthd attch bod
-     , IC.ParameterSym r var param
+     , OORenderMethod r mthd attch vis param bod TypeData
+     , IC.ParameterSym r param var
      , UnRepr r TypeData
      , Monad r
      , VisibilitySym r vis
@@ -331,7 +331,7 @@ mainFunction s n = RG.intFunc True n public classLevel (mType IC.void)
 --   cs is the classes
 buildModule'
   ::
-    ( OORenderSym r vis scope typ binder var param val stmt cls mthd stvr attch file mod bod block
+    ( OORenderSym r file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
     , UnRepr r Doc
     )
   => Label
@@ -354,19 +354,19 @@ buildModule' n inc is ms cs = RG.modFromData n (do
 
 -- | First parameter is language name, rest similar to call from RendererClassesCommon
 call'
-  :: (InternalVarElim r var, RC.RenderValue r typ var val, RC.ValueElim r val)
-  => String -> Maybe Library -> Maybe Doc -> MixedCall r typ var val
+  :: (InternalVarElim r var, RC.RenderValue r var val typ, RC.ValueElim r val)
+  => String -> Maybe Library -> Maybe Doc -> MixedCall r var val typ
 call' l _ _ _ _ _ (_:_) = error $ namedArgError l
 call' _ l o n t ps ns = call empty l o n t ps ns
 
 namedArgError :: String -> String
 namedArgError l = "Named arguments not supported in " P.<> l
 
-listSizeFunc :: (TypeSym r typ, IG.OOFunctionSym r typ val) => VS (r FuncData)
+listSizeFunc :: (TypeSym r typ, IG.OOFunctionSym r val typ) => VS (r FuncData)
 listSizeFunc = IG.func "size" IC.int []
 
 listAccessFunc'
-  :: (ValueSym r typ val, IG.OOFunctionSym r typ val, TypeElim r typ)
+  :: (ValueSym r val typ, IG.OOFunctionSym r val typ, TypeElim r typ)
   => Label -> VS (r typ) -> VS (r val) -> VS (r FuncData)
 listAccessFunc' f t i = IG.func f t [intValue i]
 
@@ -401,9 +401,9 @@ bindingError l = "AttachmentTag unimplemented in " P.<> l
 
 notNull
   ::
-    ( ValueSym r typ val
+    ( ValueSym r val typ
     , Comparison r val
-    , IC.VariableSym r typ var
+    , IC.VariableSym r var typ
     , IC.VariableValue r var val
     )
   => String -> VS (r val) -> VS (r val)
@@ -411,10 +411,10 @@ notNull nil v = v ?!= IC.valueOf (IC.var nil $ onStateValue valueType v)
 
 listDecDef
   ::
-    ( IC.DeclStatement r scope var val stmt bod
+    ( IC.DeclStatement r bod stmt var scope val
     , TypeSym r typ
-    , IC.Literal r typ val
-    , VariableElim r typ var
+    , IC.Literal r val typ
+    , VariableElim r var typ
     )
   => VS (r var) -> r scope -> [VS (r val)] -> MS (r stmt)
 listDecDef v scp vals = do
@@ -424,10 +424,10 @@ listDecDef v scp vals = do
 
 setDecDef
   ::
-    ( IC.DeclStatement r scope var val stmt bod
+    ( IC.DeclStatement r bod stmt var scope val
     , TypeSym r typ
-    , IC.Literal r typ val
-    , VariableElim r typ var
+    , IC.Literal r val typ
+    , VariableElim r var typ
     )
   => VS (r var) -> r scope -> [VS (r val)] -> MS (r stmt)
 setDecDef v scp vals = do
@@ -437,7 +437,7 @@ setDecDef v scp vals = do
 
 setDec
   ::
-    ( IC.DeclStatement r scope var val stmt bod
+    ( IC.DeclStatement r bod stmt var scope val
     , RC.RenderStatement r stmt
     , RC.StatementElim r stmt
     )
@@ -452,7 +452,7 @@ setDec f vl v scp = do
   mkStmt (RC.statement vd <> f sz)
 
 setMethodCall
-  :: (TypeSym r typ, ValueSym r typ val, IG.InternalValueExp r typ var val)
+  :: (TypeSym r typ, ValueSym r val typ, IG.InternalValueExp r var val typ)
   => Label -> VS (r val) ->  VS (r val) -> VS (r val)
 setMethodCall n a b = objMethodCall (innerType $ onStateValue valueType a) a n [b]
 
@@ -461,7 +461,7 @@ destructorError l = "Destructors not allowed in " P.<> l
 
 stateVarDef
   ::
-    ( OORenderSym r vis scope typ binder var param val stmt cls mthd stvr attch file mod bod block
+    ( OORenderSym r file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
     , Monad r
     )
   => r vis -> r attch -> VS (r var) -> VS (r val) -> CS (r Doc)
@@ -471,7 +471,7 @@ stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
 
 constVar
   ::
-    ( CommonRenderSym r vis scope typ binder var param val stmt mthd bod block
+    ( CommonRenderSym r mthd vis param bod block stmt var scope val binder typ
     , Monad r
     )
   => Doc -> r vis -> VS (r var) -> VS (r val) -> CS (r Doc)
@@ -481,19 +481,19 @@ constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
 -- Python, Java, C++, and Swift --
 
 litArray
-  :: (RC.RenderValue r typ var val, IC.TypeSym r typ, RC.ValueElim r val)
+  :: (RC.RenderValue r var val typ, IC.TypeSym r typ, RC.ValueElim r val)
   => (Doc -> Doc) -> VS (r typ) -> [VS (r val)] -> VS (r val)
 litArray f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
   (f $ valueList elems))
 
 litSet
-  :: (RC.RenderValue r typ var val, IC.TypeSym r typ, RC.ValueElim r val)
+  :: (RC.RenderValue r var val typ, IC.TypeSym r typ, RC.ValueElim r val)
   => (Doc -> Doc) -> (Doc -> Doc) -> VS (r typ) -> [VS (r val)] -> VS (r val)
 litSet f1 f2 t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
   (f1 $ f2 $ valueList elems))
 
 litSetFunc
-  :: (RC.RenderValue r typ var val, IC.TypeSym r typ, RC.ValueElim r val)
+  :: (RC.RenderValue r var val typ, IC.TypeSym r typ, RC.ValueElim r val)
   => String -> VS (r typ) -> [VS (r val)] -> VS (r val)
 litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
   (text s <> parens (valueList elems)))
@@ -501,7 +501,7 @@ litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
 -- Python, C#, C++, and Swift--
 
 extraClass
-  :: (RG.RenderClass r vis cls mthd stvr, VisibilitySym r vis)
+  :: (RG.RenderClass r cls stvr mthd vis, VisibilitySym r vis)
   =>  Label
   -> Maybe Label
   -> [CSStateVar r stvr]
@@ -519,7 +519,7 @@ double :: (Monad r) => VS (r TypeData)
 double = typeFromData Double doubleRender (text doubleRender)
 
 openFileR
-  :: (TypeSym r typ, IC.AssignStatement r var val stmt)
+  :: (TypeSym r typ, IC.AssignStatement r stmt var val)
   => (VS (r val) -> VS (r typ) -> VS (r val))
   -> VS (r var)
   -> VS (r val)
@@ -527,7 +527,7 @@ openFileR
 openFileR f vr vl = vr &= f vl infile
 
 openFileW
-  :: (IC.AssignStatement r var val stmt, TypeSym r typ, IC.Literal r typ val)
+  :: (IC.AssignStatement r stmt var val, TypeSym r typ, IC.Literal r val typ)
   => (VS (r val) -> VS (r typ) -> VS (r val) -> VS (r val))
   -> VS (r var)
   -> VS (r val)
@@ -537,7 +537,7 @@ openFileW f vr vl = vr &= f vl outfile IC.litFalse
 stateVar
   ::
     ( Monad r
-    , OORenderSym r vis scope typ binder var param val stmt cls mthd stvr attch file mod bod block
+    , OORenderSym r file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
     )
   => r vis -> r attch -> VS (r var) -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
@@ -545,16 +545,16 @@ stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
 
 -- Python and Swift --
 
-self :: (OOTypeSym r typ, RenderVariable r typ var) => VS (r var)
+self :: (OOTypeSym r typ, RenderVariable r var typ) => VS (r var)
 self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (obj l)
   R.self')
 
 multiAssign
   :: ( TypeSym r typ
-     , IC.AssignStatement r var val stmt
+     , IC.AssignStatement r stmt var val
      , InternalVarElim r var
-     , RC.RenderValue r typ var val
-     , RC.RenderVariable r typ var
+     , RC.RenderValue r var val typ
+     , RC.RenderVariable r var typ
      , RC.ValueElim r val
      )
   => (Doc -> Doc) -> [VS (r var)] -> [VS (r val)] -> MS (r stmt)
@@ -574,8 +574,8 @@ multiAssign f vars vals = if length vals /= 1 && length vars /= length vals
 multiReturn
   ::
     ( TypeSym r typ
-    , IC.ControlStatement r var val stmt bod
-    , RC.RenderValue r typ var val
+    , IC.ControlStatement r bod stmt var val
+    , RC.RenderValue r var val typ
     , RC.ValueElim r val
     )
   => (Doc -> Doc) -> [VS (r val)] -> MS (r stmt)
@@ -587,16 +587,16 @@ multiReturn f vs = do
 
 listDec
   ::
-    ( IC.DeclStatement r scope var val stmt bod
+    ( IC.DeclStatement r bod stmt var scope val
     , TypeSym r typ
-    , IC.Literal r typ val
-    , VariableElim r typ var
+    , IC.Literal r val typ
+    , VariableElim r var typ
     )
   => VS (r var) -> r scope -> MS (r stmt)
 listDec v scp = listDecDef v scp []
 
 funcDecDef
-  :: (OORenderSym r vis ScopeData typ binder var param val stmt cls mthd stvr attch file mod bod block)
+  :: (OORenderSym r file mod cls stvr mthd attch vis param bod block stmt var ScopeData val binder typ)
   => VS (r var)
   -> r ScopeData
   -> [VS (r var)]
@@ -615,8 +615,8 @@ funcDecDef v scp ps b = do
 inOutCall
   ::
     ( TypeSym r typ
-    , RC.InternalAssignStmt r var val stmt
-    , ValueStatement r val stmt
+    , RC.InternalAssignStmt r stmt var val
+    , ValueStatement r stmt val
     , IC.VariableValue r var val
     )
   => (Label -> VS (r typ) -> [VS (r val)] -> VS (r val))
@@ -645,16 +645,16 @@ mainBody b = do
 inOutFunc
   ::
     ( IC.VariableValue r var val
-    , IC.ParameterSym r var param
+    , IC.ParameterSym r param var
     , TypeSym r typ
     , IC.ScopeSym r scope
-    , IC.DeclStatement r scope var val stmt bod
+    , IC.DeclStatement r bod stmt var scope val
     , BlockSym r block stmt
     , IC.BodySym r bod block
-    , VariableElim r typ var
+    , VariableElim r var typ
     , RenderBody r bod
     , RenderType r typ
-    , RC.InternalControlStmt r val stmt
+    , RC.InternalControlStmt r stmt val
     )
   => (VS (r typ) -> [MS (r param)] -> MS (r bod) -> MS (r mthd))
   -> [VS (r var)]
@@ -750,8 +750,8 @@ fileA = "a"
 openFileR', openFileW', openFileA'
   ::
     ( TypeSym r typ
-    , IC.Literal r typ val
-    , IC.ValueExpression r typ binder var val
+    , IC.Literal r val typ
+    , IC.ValueExpression r var val binder typ
     )
   => VS (r val) -> VS (r val)
 openFileR' n = funcApp fileOpen infile [n, IC.litString fileR]
@@ -760,7 +760,7 @@ openFileA' n = funcApp fileOpen infile [n, IC.litString fileA]
 
 argExists
   ::
-    ( IC.Literal r typ val
+    ( IC.Literal r val typ
     , IC.CommandLineArgs r val
     , Comparison r val
     , IC.List r val
@@ -771,10 +771,10 @@ argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 -- Python, C#, Swift, and Julia
 
 listSet
-  :: ( IC.AssignStatement r var val stmt
-     , ValueSym r typ val
+  :: ( IC.AssignStatement r stmt var val
+     , ValueSym r val typ
      , IC.IndexTranslator r val
-     , RC.RenderVariable r typ var
+     , RC.RenderVariable r var typ
      , RC.ValueElim r val
      )
   => VS (r val) -> VS (r val) -> VS (r val) -> MS (r stmt)
@@ -792,9 +792,9 @@ listSet list idx val = do
 intToIndex'
   ::
     ( TypeSym r typ
-    , IC.Literal r typ val
+    , IC.Literal r val typ
     , IC.NumericExpression r val
-    , RC.RenderValue r typ var val
+    , RC.RenderValue r var val typ
     , RC.ValueElim r val
     )
   => VS (r val) -> VS (r val)
@@ -805,9 +805,9 @@ intToIndex' v = v `smartAdd` IC.litInt 1
 indexToInt'
   ::
     ( TypeSym r typ
-    , IC.Literal r typ val
+    , IC.Literal r val typ
     , IC.NumericExpression r val
-    , RC.RenderValue r typ var val
+    , RC.RenderValue r var val typ
     , RC.ValueElim r val
     )
   => VS (r val) -> VS (r val)

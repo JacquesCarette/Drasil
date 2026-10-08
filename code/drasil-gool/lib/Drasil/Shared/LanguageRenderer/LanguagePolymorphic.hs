@@ -95,8 +95,8 @@ negateOp = unOpPrec "-"
 
 csc
   ::
-    ( ValueSym r typ val
-    , IC.Literal r typ val
+    ( ValueSym r val typ
+    , IC.Literal r val typ
     , IC.NumericExpression r val
     , TypeElim r typ
     )
@@ -105,8 +105,8 @@ csc v = valOfOne (valueType <$> v) #/ sin v
 
 sec
   ::
-    ( ValueSym r typ val
-    , IC.Literal r typ val
+    ( ValueSym r val typ
+    , IC.Literal r val typ
     , IC.NumericExpression r val
     , TypeElim r typ
     )
@@ -115,15 +115,15 @@ sec v = valOfOne (valueType <$> v) #/ cos v
 
 cot
   ::
-    ( ValueSym r typ val
-    , IC.Literal r typ val
+    ( ValueSym r val typ
+    , IC.Literal r val typ
     , IC.NumericExpression r val
     , TypeElim r typ
     )
   => VS (r val) -> VS (r val)
 cot v = valOfOne (valueType <$> v) #/ tan v
 
-valOfOne :: (IC.Literal r typ val, TypeElim r typ) => VS (r typ) -> VS (r val)
+valOfOne :: (IC.Literal r val typ, TypeElim r typ) => VS (r typ) -> VS (r val)
 valOfOne t = t >>= (getVal . getCodeType)
   where getVal Float = IC.litFloat 1.0
         getVal _ = IC.litDouble 1.0
@@ -134,7 +134,7 @@ smartAdd
   ::
     ( IC.TypeSym r typ
     , NumericExpression r val
-    , RenderValue r typ var val
+    , RenderValue r var val typ
     , ValueElim r val
     )
   => VS (r val) -> VS (r val) -> VS (r val)
@@ -150,7 +150,7 @@ smartSub
   ::
     ( IC.TypeSym r typ
     , IC.NumericExpression r val
-    , RenderValue r typ var val
+    , RenderValue r var val typ
     , ValueElim r val
     )
   => VS (r val) -> VS (r val) -> VS (r val)
@@ -196,10 +196,10 @@ moduloOp = multPrec "%"
 
 -- Variables --
 
-var :: (RenderVariable r typ var) => Label -> VS (r typ) -> VS (r var)
+var :: (RenderVariable r var typ) => Label -> VS (r typ) -> VS (r var)
 var n t = mkStateVar n t (R.var n)
 
-classVar :: (RenderVariable r typ var) => Label -> VS (r typ) -> VS (r var)
+classVar :: (RenderVariable r var typ) => Label -> VS (r typ) -> VS (r var)
 classVar n t = mkClassVar n t (R.var n)
 
 -- | To be used in classVarAccess implementations. Throws an error if the variable is
@@ -213,9 +213,9 @@ classVarAccessCheck v = classVarCS (variableBind v)
 instanceVarAccess
   ::
     ( InternalVarElim r var
-    , RenderVariable r typ var
+    , RenderVariable r var typ
     , ValueElim r val
-    , VariableElim r typ var
+    , VariableElim r var typ
     )
   => VS (r val) -> VS (r var) -> VS (r var)
 instanceVarAccess o' v' = do
@@ -230,9 +230,9 @@ instanceVarAccess o' v' = do
 arrayElem
   ::
     ( IC.TypeSym r typ
-    , ValueSym r typ val
+    , ValueSym r val typ
     , IC.IndexTranslator r val
-    , RenderVariable r typ var
+    , RenderVariable r var typ
     , ValueElim r val
     )
   => VS (r val) -> VS (r val) -> VS (r var)
@@ -251,32 +251,32 @@ local = toCode $ sd Local
 -- Values --
 
 litChar
-  :: (RenderValue r typ var val, IC.TypeSym r typ)
+  :: (RenderValue r var val typ, IC.TypeSym r typ)
   => (Doc -> Doc) -> Char -> VS (r val)
 litChar f c = mkStateVal IC.char (f $ if c == '\n' then text "\\n" else D.char c)
 
 litDouble
-  :: (RenderValue r typ var val, IC.TypeSym r typ)
+  :: (RenderValue r var val typ, IC.TypeSym r typ)
   => Double -> VS (r val)
 litDouble d = mkStateVal IC.double (D.double d)
 
-litInt :: (RenderValue r typ var val, IC.TypeSym r typ) => Integer -> VS (r val)
+litInt :: (RenderValue r var val typ, IC.TypeSym r typ) => Integer -> VS (r val)
 litInt i = valFromData Nothing (Just i) IC.int (integer i)
 
 litString
-  :: (RenderValue r typ var val, IC.TypeSym r typ)
+  :: (RenderValue r var val typ, IC.TypeSym r typ)
   => String -> VS (r val)
 litString s = mkStateVal IC.string (doubleQuotedText s)
 
 valueOf
-  :: (InternalVarElim r var, RenderValue r typ var val, VariableElim r typ var)
+  :: (InternalVarElim r var, RenderValue r var val typ, VariableElim r var typ)
   => VS (r var) -> VS (r val)
 valueOf v' = do
   v <- v'
   mkVal (variableType v) (RC.variable v)
 
 arg
-  :: (RenderValue r typ var val, IC.TypeSym r typ, ValueElim r val)
+  :: (RenderValue r var val typ, IC.TypeSym r typ, ValueElim r val)
   => VS (r val) -> VS (r val) -> VS (r val)
 arg n' args' = do
   n <- n'
@@ -284,14 +284,14 @@ arg n' args' = do
   s <- IC.string
   mkVal s (R.arg n args)
 
-argsList :: (RenderValue r typ var val, IC.TypeSym r typ) => String -> VS (r val)
+argsList :: (RenderValue r var val typ, IC.TypeSym r typ) => String -> VS (r val)
 argsList l = mkStateVal (IC.arrayType IC.string) (text l)
 
 -- | First parameter is separator between name and value for named arguments,
 -- rest similar to call from RendererClasses
 call
-  :: (InternalVarElim r var, RenderValue r typ var val, ValueElim r val)
-  => Doc -> Maybe Library -> Maybe Doc -> MixedCall r typ var val
+  :: (InternalVarElim r var, RenderValue r var val typ, ValueElim r val)
+  => Doc -> Maybe Library -> Maybe Doc -> MixedCall r var val typ
 call sep lib o n t pas nas = do
   pargs <- sequence pas
   nms <- mapM fst nas
@@ -302,22 +302,22 @@ call sep lib o n t pas nas = do
     (if null pas || null nas then empty else comma) <+> namedArgList sep
     (zip nms nargs))
 
-funcAppMixedArgs :: (RenderValue r typ var val) => MixedCall r typ var val
+funcAppMixedArgs :: (RenderValue r var val typ) => MixedCall r var val typ
 funcAppMixedArgs = RC.call Nothing Nothing
 
 newObjMixedArgs
-  :: (RenderValue r TypeData var val, UnRepr r TypeData)
-  => String -> MixedCtorCall r TypeData var val
+  :: (RenderValue r var val TypeData, UnRepr r TypeData)
+  => String -> MixedCtorCall r var val TypeData
 newObjMixedArgs s tp vs ns = do
   t <- tp
   RC.call Nothing Nothing (s P.<> getTypeString t) (pure t) vs ns
 
 lambda
   ::
-    ( BinderElim r typ binder
-    , RenderValue r typ var val
+    ( BinderElim r binder typ
+    , RenderValue r var val typ
     , IC.TypeSym r typ
-    , ValueSym r typ val
+    , ValueSym r val typ
     )
   => ([r binder] -> r val -> Doc)
   -> [VS (r binder)]
@@ -330,13 +330,13 @@ lambda f ps' ex' = do
   valFromData (Just 0) Nothing ft (f ps ex)
 
 objAccess
-  :: (FunctionElim r typ, RenderValue r typ var val, ValueElim r val)
+  :: (FunctionElim r typ, RenderValue r var val typ, ValueElim r val)
   => VS (r val) -> VS (r FuncData) -> VS (r val)
 objAccess = on2StateWrapped (\v f-> mkVal (functionType f)
   (R.objAccess (RC.value v) (RC.function f)))
 
 objMethodCall
-  :: (RenderValue r typ var val, ValueElim r val)
+  :: (RenderValue r var val typ, ValueElim r val)
   => Label
   -> VS (r typ)
   -> VS (r val)
@@ -352,21 +352,21 @@ func
   ::
     ( RenderFunction r typ
     , ValueElim r val
-    , ValueExpression r typ binder var val
+    , ValueExpression r var val binder typ
     )
   => Label -> VS (r typ) -> [VS (r val)] -> VS (r FuncData)
 func l t vs = funcApp l t vs >>= ((`funcFromData` t) . R.func . RC.value)
 
 get
-  :: (RO.InternalGetSet r typ var val, IG.OOFunctionSym r typ val)
+  :: (RO.InternalGetSet r var val typ, IG.OOFunctionSym r val typ)
   => VS (r val) -> VS (r var) -> VS (r val)
 get v vToGet = v $. RO.getFunc vToGet
 
 set
   ::
-    ( ValueSym r typ val
-    , RO.InternalGetSet r typ var val
-    , IG.OOFunctionSym r typ val
+    ( ValueSym r val typ
+    , RO.InternalGetSet r var val typ
+    , IG.OOFunctionSym r val typ
     )
   => VS (r val) -> VS (r var) -> VS (r val) -> VS (r val)
 set v vToSet toVal = v $. RO.setFunc (onStateValue valueType v) vToSet toVal
@@ -374,12 +374,12 @@ set v vToSet toVal = v $. RO.setFunc (onStateValue valueType v) vToSet toVal
 -- TODO [Brandon Bosman, 06/10/2026]: Figure out what to do with this
 listAccess
   :: ( IC.TypeSym r typ
-     , ValueSym r typ val
+     , ValueSym r val typ
      , IC.IndexTranslator r val
-     , RC.InternalListFunc r typ val
+     , RC.InternalListFunc r val typ
      , FunctionElim r typ
      , RenderFunction r typ
-     , RenderValue r typ var val
+     , RenderValue r var val typ
      , TypeElim r typ
      , ValueElim r val
      )
@@ -397,13 +397,13 @@ listAccess v i = do
   mkVal (RC.functionType f) (RC.value v' <> RC.function f)
 
 getFunc
-  :: (IG.OOFunctionSym r typ val, VariableElim r typ var)
+  :: (IG.OOFunctionSym r val typ, VariableElim r var typ)
   => VS (r var) -> VS (r FuncData)
 getFunc v = v >>= (\vr -> IG.func (getterName $ variableName vr)
   (toState $ variableType vr) [])
 
 setFunc
-  :: (IG.OOFunctionSym r typ val, VariableElim r typ var)
+  :: (IG.OOFunctionSym r val typ, VariableElim r var typ)
   => VS (r typ) -> VS (r var) -> VS (r val) -> VS (r FuncData)
 setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
   [toVal])
@@ -443,9 +443,9 @@ subAssign t vr' v' = do
 
 objDecNew
   ::
-    ( IC.DeclStatement r scope var val stmt bod
-    , IG.OOValueExpression r typ var val
-    , VariableElim r typ var
+    ( IC.DeclStatement r bod stmt var scope val
+    , IG.OOValueExpression r var val typ
+    , VariableElim r var typ
     )
   => VS (r var) -> r scope -> [VS (r val)] -> MS (r stmt)
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
@@ -456,14 +456,14 @@ printList
     , BodySym r bod block
     , MultiStatement r stmt
     , IC.ScopeSym r scope
-    , IC.DeclStatement r scope var val stmt bod
-    , AssignStatement r var val stmt
-    , IC.ControlStatement r var val stmt bod
+    , IC.DeclStatement r bod stmt var scope val
+    , AssignStatement r stmt var val
+    , IC.ControlStatement r bod stmt var val
     , IC.TypeSym r typ
-    , IC.Literal r typ val
+    , IC.Literal r val typ
     , NumericExpression r val
     , Comparison r val
-    , IC.VariableSym r typ var
+    , IC.VariableSym r var typ
     , IC.VariableValue r var val
     , IC.List r val
     )
@@ -488,8 +488,8 @@ printSet
     ( BlockSym r block stmt
     , BodySym r bod block
     , MultiStatement r stmt
-    , IC.ControlStatement r var val stmt bod
-    , IC.VariableSym r typ var
+    , IC.ControlStatement r bod stmt var val
+    , IC.VariableSym r var typ
     , IC.VariableValue r var val
     )
   => Integer
@@ -514,22 +514,22 @@ print
     ( BlockSym r block stmt
     , BodySym r bod block
     , MultiStatement r stmt
-    , PrintConsole r val stmt
-    , PrintFile r val stmt
+    , PrintConsole r stmt val
+    , PrintFile r stmt val
     , IC.ScopeSym r scope
-    , IC.DeclStatement r scope var val stmt bod
-    , AssignStatement r var val stmt
-    , IC.ControlStatement r var val stmt bod
-    , ValueSym r typ val
-    , IC.Literal r typ val
+    , IC.DeclStatement r bod stmt var scope val
+    , AssignStatement r stmt var val
+    , IC.ControlStatement r bod stmt var val
+    , ValueSym r val typ
+    , IC.Literal r val typ
     , NumericExpression r val
     , Comparison r val
-    , IC.VariableSym r typ var
+    , IC.VariableSym r var typ
     , IC.VariableValue r var val
     , IC.List r val
     , IC.TypeSym r typ
     , TypeElim r typ
-    , RC.InternalIOStmt r val stmt
+    , RC.InternalIOStmt r stmt val
     )
   => Bool -> Maybe (VS (r val)) -> VS (r val) -> VS (r val) -> MS (r stmt)
 print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
@@ -545,8 +545,8 @@ print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
 closeFile
   ::
     ( IC.TypeSym r typ
-    , IG.InternalValueExp r typ var val
-    , IC.ValueStatement r val stmt
+    , IG.InternalValueExp r var val typ
+    , IC.ValueStatement r stmt val
     )
   => Label -> VS (r val) -> MS (r stmt)
 closeFile n f = IC.valStmt $ objMethodCallNoParams IC.void f n
@@ -569,7 +569,7 @@ comment :: (RenderStatement r stmt) => Doc -> Label -> MS (r stmt)
 comment cs c = mkStmtNoEnd (R.comment c cs)
 
 throw
-  :: (IC.Literal r typ val, RenderStatement r stmt)
+  :: (IC.Literal r val typ, RenderStatement r stmt)
   => (r val -> Doc) -> Terminator -> Label -> MS (r stmt)
 throw f t l = do
   msg <- zoom lensMStoVS (IC.litString l)
@@ -628,7 +628,7 @@ construct :: (Monad r) => Label -> MS (r TypeData)
 construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param
-  :: (RenderParam r var param, VariableElim r typ var)
+  :: (RenderParam r param var, VariableElim r var typ)
   => (r var -> Doc) -> VS (r var) -> MS (r param)
 param f v' = do
   v <- zoom lensMStoVS v'
@@ -638,7 +638,7 @@ param f v' = do
   paramFromData v' $ f v
 
 method
-  :: (MethodTypeSym r typ, OORenderMethod r vis typ param mthd attch bod)
+  :: (MethodTypeSym r typ, OORenderMethod r mthd attch vis param bod typ)
   => Label
   -> r vis
   -> r attch
@@ -649,14 +649,14 @@ method
 method n s p t = intMethod False n s p (mType t)
 
 getMethod
-  :: (OORenderSym r vis scope typ binder var param val stmt cls mthd stvr attch file mod bod block)
+  :: (OORenderSym r file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => VS (r var) -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
 setMethod
-  :: (OORenderSym r vis scope typ binder var param val stmt cls mthd stvr attch file mod bod block)
+  :: (OORenderSym r file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => VS (r var) -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
@@ -664,10 +664,10 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
 
 initStmts
   ::
-    ( OOVariableSym r typ var val
+    ( OOVariableSym r var val typ
     , VariableValue r var val
     , SelfSym r var
-    , AssignStatement r var val stmt
+    , AssignStatement r stmt var val
     , BlockSym r block stmt
     , BodySym r bod block
     )
@@ -678,7 +678,7 @@ function
   ::
     ( AttachmentSym r attch
     , MethodTypeSym r typ
-    , OORenderMethod r vis typ param mthd attch bod
+    , OORenderMethod r mthd attch vis param bod typ
     )
   => Label -> r vis -> VS (r typ) -> [MS (r param)] -> MS (r bod) -> MS (r mthd)
 function n s t = RO.intFunc False n s classLevel (mType t)
@@ -707,7 +707,7 @@ docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 -- Classes --
 
 buildClass
-  :: (RenderClass r vis cls mthd stvr, VisibilitySym r vis)
+  :: (RenderClass r cls stvr mthd vis, VisibilitySym r vis)
   => Maybe Label
   -> [CSStateVar r stvr]
   -> [MS (r mthd)]
@@ -718,7 +718,7 @@ buildClass p stVars constructors methods = do
   RO.intClass n public (inherit p) stVars constructors methods
 
 implementingClass
-  :: (RenderClass r vis cls mthd stvr, VisibilitySym r vis)
+  :: (RenderClass r cls stvr mthd vis, VisibilitySym r vis)
   => Label
   -> [Label]
   -> [CSStateVar r stvr]
@@ -728,7 +728,7 @@ implementingClass
 implementingClass n is = RO.intClass n public (implements is)
 
 docClass
-  :: (BlockCommentSym r, RenderClass r vis cls mthd stvr)
+  :: (BlockCommentSym r, RenderClass r cls stvr mthd vis)
   => ClassDocRenderer -> String -> CS (r cls) -> CS (r cls)
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 

@@ -411,7 +411,7 @@ variableList = hicat listSep' . fmap RC.variable
 binderList :: (InternalBinderElim r binder) => [r binder] -> Doc
 binderList = hicat listSep' . fmap RC.binderElim
 
-parameterList :: (ParamElim r typ param) => [r param] -> Doc
+parameterList :: (ParamElim r param typ) => [r param] -> Doc
 parameterList = hicat listSep' . fmap RC.parameter
 
 namedArgList
@@ -437,7 +437,7 @@ getterName s = "get" P.<> capitalize s
 setterName :: String -> String
 setterName s = "set" P.<> capitalize s
 
-intValue :: (TypeElim r typ, ValueSym r typ val) => VS (r val) -> VS (r val)
+intValue :: (TypeElim r typ, ValueSym r val typ) => VS (r val) -> VS (r val)
 intValue i = i >>= intValue' . getCodeType . valueType
   where intValue' Integer = i
         intValue' _ = error "Value passed to intValue must be Integer"

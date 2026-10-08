@@ -21,17 +21,17 @@ import Drasil.GOOL (Label, block, VS, MS, BodySym(..), BlockSym(..), TypeSym(..)
 logBody
   ::
     ( TypeSym r typ
-    , Literal r typ val
-    , VariableSym r typ var
+    , Literal r val typ
+    , VariableSym r var typ
     , VariableValue r var val
     , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r scope var val stmt bod
-    , FileHandling r var val stmt
-    , PrintFile r val stmt
+    , DeclStatement r bod stmt var scope val
+    , FileHandling r stmt var val
+    , PrintFile r stmt val
     , BlockSym r block stmt
     , BodySym r bod block
-    , VariableElim r typ var
+    , VariableElim r var typ
     )
   => Label -> [VS (r var)] -> [MS (r block)] -> GenState (MS (r bod))
 logBody n vars b = do
@@ -46,16 +46,16 @@ logBody n vars b = do
 loggedMethod
   ::
     ( TypeSym r typ
-    , Literal r typ val
-    , VariableSym r typ var
+    , Literal r val typ
+    , VariableSym r var typ
     , VariableValue r var val
     , ScopeSym r scope
     , MultiStatement r stmt
-    , DeclStatement r scope var val stmt bod
-    , FileHandling r var val stmt
-    , PrintFile r val stmt
+    , DeclStatement r bod stmt var scope val
+    , FileHandling r stmt var val
+    , PrintFile r stmt val
     , BlockSym r block stmt
-    , VariableElim r typ var
+    , VariableElim r var typ
     )
   => FilePath -> Label -> [VS (r var)] -> MS (r block)
 loggedMethod lName n vars = block [
@@ -78,11 +78,11 @@ loggedMethod lName n vars = block [
       printFileStrLn valLogFile ", "] <> printInputs vs
 
 -- | The variable representing the log file in write mode.
-varLogFile :: (TypeSym r typ, VariableSym r typ var) => VS (r var)
+varLogFile :: (TypeSym r typ, VariableSym r var typ) => VS (r var)
 varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.
 valLogFile
-  :: (TypeSym r typ, VariableSym r typ var, VariableValue r var val)
+  :: (TypeSym r typ, VariableSym r var typ, VariableValue r var val)
   => VS (r val)
 valLogFile = valueOf varLogFile

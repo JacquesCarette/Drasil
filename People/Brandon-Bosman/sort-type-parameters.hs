@@ -109,7 +109,7 @@ makeCommands dirOrFile = do
 makeSed :: String -> [Int] -> String
 makeSed className perm = let
   paramNum = length perm
-  captureGroups = concat $ replicate paramNum "( [a-zA-Z]+)"
+  captureGroups = concat $ replicate paramNum "( [a-zA-Z'\"'\"']+)"
   reOrders = concatMap (\num -> "$" ++ show (num + 2)) perm
 
   in "perl -pi -e 's/\\b(" ++ className ++ ")" ++ captureGroups ++ "/\\1" ++ reOrders ++ "/g'"

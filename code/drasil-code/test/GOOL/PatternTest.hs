@@ -26,23 +26,23 @@ observerType :: (OOTypeSym r typ) => VS (r typ)
 observerType = obj observerName
 
 -- | Variables used in the generated code.
-n :: (TypeSym r typ, VariableSym r typ var) => VS (r var)
+n :: (TypeSym r typ, VariableSym r var typ) => VS (r var)
 n = var nName int
-obs1, obs2 :: (OOTypeSym r typ, VariableSym r typ var) => VS (r var)
+obs1, obs2 :: (OOTypeSym r typ, VariableSym r var typ) => VS (r var)
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
 -- | New Observer object.
-newObserver :: (OOTypeSym r typ, OOValueExpression r typ var val) => VS (r val)
+newObserver :: (OOTypeSym r typ, OOValueExpression r var val typ) => VS (r val)
 newObserver = extNewObj observerName observerType []
 
 -- | Creates the pattern test program.
 patternTest
   ::
-    ( OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block
+    ( OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
     , GetSet r var val
-    , StrategyPattern r var val bod block
-    , ObserverPattern r typ stmt
+    , StrategyPattern r bod block var val
+    , ObserverPattern r stmt typ
   ) => GSProgram r prg
 patternTest = prog progName "" [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
@@ -50,10 +50,10 @@ patternTest = prog progName "" [fileDoc (buildModule progName []
 -- | Creates the main function for PatternTest.
 patternTestMainMethod
   ::
-    ( OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block
+    ( OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
     , GetSet r var val
-    , StrategyPattern r var val bod block
-    , ObserverPattern r typ stmt
+    , StrategyPattern r bod block var val
+    , ObserverPattern r stmt typ
   ) => MS (r mthd)
 patternTestMainMethod = mainFunction (body [block [
   varDec n mainFn],

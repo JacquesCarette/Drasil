@@ -59,11 +59,11 @@ codeGenTestGroup =
 
 goolTestGroup
   :: String
-  -> ( forall r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block.
-       ( OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block
+  -> ( forall r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ.
+       ( OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
        , GetSet r var val
-       , StrategyPattern r var val bod block
-       , ObserverPattern r typ stmt
+       , StrategyPattern r bod block var val
+       , ObserverPattern r stmt typ
        ) => OO.GSProgram r prg
      )
   -> TestTree
@@ -82,15 +82,14 @@ goolTestGroup n p =
 gProcTestGroup
   :: String
   ->
-    ( forall r vis scope typ binder var param val stmt mthd prg file mod bod block.
+    ( forall r prg file mod mthd vis param bod block stmt var scope val binder typ.
       -- TODO [Brandon Bosman, 09/21/2026]: Add Literal, Comparision, DeclStatement, ControlStatement to ProcProg
-      ( Literal r typ val
+      ( Literal r val typ
       , Comparison r val
-      , DeclStatement r scope var val stmt bod
-      , ControlStatement r var val stmt bod
-      , ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
-      )
-    => Proc.GSProgram r prg)
+      , DeclStatement r bod stmt var scope val
+      , ControlStatement r bod stmt var val
+      , ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
+      ) => Proc.GSProgram r prg)
   -> TestTree
 gProcTestGroup n p =
   goldenTestingGroup
@@ -104,14 +103,13 @@ gProcTestGroup n p =
 gProcVectorTestGroup
   :: String
   ->
-    ( forall r vis scope typ binder var param val stmt mthd prg file mod bod block.
+    ( forall r prg file mod mthd vis param bod block stmt var scope val binder typ.
       ( Comparison r val
-      , NativeVector r typ val
-      , DeclStatement r scope var val stmt bod
-      , ControlStatement r var val stmt bod
-      , ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
-      )
-    => Proc.GSProgram r prg
+      , NativeVector r val typ
+      , DeclStatement r bod stmt var scope val
+      , ControlStatement r bod stmt var val
+      , ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
+      ) => Proc.GSProgram r prg
     )
   -> TestTree
 gProcVectorTestGroup n p =
@@ -125,20 +123,19 @@ gProcVectorTestGroup n p =
 
 genCodeProcNoMake
   ::
-    ( NativeVector r typ val
-    , ProcProg r vis scope typ binder var param val stmt mthd ProgData file mod bod block
+    ( NativeVector r val typ
+    , ProcProg r ProgData file mod mthd vis param bod block stmt var scope val binder typ
     , Monad r'
     )
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
   ->
-    ( forall s vis' scope' typ' binder' var' param' val' stmt' mthd' prg' file' mod' bod' block'.
+    ( forall s prg' file' mod' mthd' vis' param' bod' block' stmt' var' scope' val' binder' typ'.
       ( Comparison s val'
-      , NativeVector s typ' val'
-      , DeclStatement s scope' var' val' stmt' bod'
-      , ProcProg s vis' scope' typ' binder' var' param' val' stmt' mthd' prg' file' mod' bod' block'
-      )
-    => Proc.GSProgram s prg'
+      , NativeVector s val' typ'
+      , DeclStatement s bod' stmt' var' scope' val'
+      , ProcProg s prg' file' mod' mthd' vis' param' bod' block' stmt' var' scope' val' binder' typ'
+      ) => Proc.GSProgram s prg'
     )
   -> [FileLayout]
 genCodeProcNoMake unRepr unRepr' p =
@@ -149,20 +146,20 @@ genCodeProcNoMake unRepr unRepr' p =
 
 genCodeGOOL
   ::
-    ( OOProg r vis scope typ binder var param val stmt cls mthd stvr attch ProgData file mod bod block
+    ( OOProg r ProgData file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
     , GetSet r var val
-    , StrategyPattern r var val bod block
-    , ObserverPattern r typ stmt
+    , StrategyPattern r bod block var val
+    , ObserverPattern r stmt typ
     , SoftwareDossierSym r'
     , Monad r'
     )
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> ( forall s vis' scope' typ' binder' var' param' val' stmt' cls' mthd' stvr' attch' prg' file' mod' bod' block'.
-       ( OOProg s vis' scope' typ' binder' var' param' val' stmt' cls' mthd' stvr' attch' prg' file' mod' bod' block'
+  -> ( forall s prg' file' mod' cls' stvr' mthd' attch' vis' param' bod' block' stmt' var' scope' val' binder' typ'.
+       ( OOProg s prg' file' mod' cls' stvr' mthd' attch' vis' param' bod' block' stmt' var' scope' val' binder' typ'
        , GetSet s var' val'
-       , StrategyPattern s var' val' bod' block'
-       , ObserverPattern s typ' stmt'
+       , StrategyPattern s bod' block' var' val'
+       , ObserverPattern s stmt' typ'
        ) => OO.GSProgram s prg'
      )
   -> [FileLayout]
@@ -174,13 +171,16 @@ genCodeGOOL unRepr unRepr' p =
 
 genCodeProc
   ::
-    ( ProcProg r vis scope typ binder var param val stmt mthd ProgData file mod bod block
+    ( ProcProg r ProgData file mod mthd vis param bod block stmt var scope val binder typ
     , SoftwareDossierSym r'
     , Monad r'
     )
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> (forall s vis' scope' typ' binder' var' param' val' stmt' mthd' prg' file' mod' bod' block'. (ProcProg s vis' typ' binder' var' scope' param' val' stmt' mthd' prg' file' mod' bod' block') => Proc.GSProgram s prg')
+  -> ( forall s prg' file' mod' mthd' vis' param' bod' block' stmt' scope' typ' val' var' binder'.
+       ( ProcProg s prg' file' mod' mthd' vis' param' bod' block' stmt' scope' typ' val' var' binder'
+       ) => Proc.GSProgram s prg'
+     )
   -> [FileLayout]
 genCodeProc unRepr unRepr' p =
   let

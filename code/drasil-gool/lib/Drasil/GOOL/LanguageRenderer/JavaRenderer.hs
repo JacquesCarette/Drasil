@@ -44,7 +44,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
-  ModuleElim)
+  ModuleElim, ParentSpec)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 import Drasil.Shared.LanguageRenderer (new, elseIfLabel, forLabel, tryLabel,
@@ -711,18 +711,14 @@ instance StateVarElim JavaCode StateVar where
   stateVar = unJC
 
 instance ClassSym JavaCode Class StateVar MethodData where
-  buildClass = G.buildClass
+  buildClass = G.buildClass jInheritFunc
   extraClass = jExtraClass
-  implementingClass = G.implementingClass
+  implementingClass = G.implementingClass jImplementsFunc
 
   docClass = CP.doxClass
 
 instance RenderClass JavaCode Class StateVar MethodData Doc where
   intClass = CP.intClass R.class'
-
-  inherit n = toCode $ maybe empty ((jExtends <+>) . text) n
-  implements is = toCode $ jImplements <+> text (intercalate listSep is)
-
   commentedClass = G.commentedClass
 
 instance ClassElim JavaCode Class where
@@ -1139,14 +1135,20 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (fst <$> bs P.<> is)
           fmap fst os
 
 jExtraClass
-  :: (RenderClass r cls stvr mthd vis, RenderVisibility r vis)
+  :: (RenderClass r cls stvr mthd vis, RenderVisibility r vis, Monad r)
   => Label
   -> Maybe Label
   -> [CSStateVar r stvr]
   -> [MS (r mthd)]
   -> [MS (r mthd)]
   -> CS (r cls)
-jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
+jExtraClass n = intClass n (visibilityFromData Priv empty) . jInheritFunc
+
+jInheritFunc :: (Monad r) => Maybe Label -> r ParentSpec
+jInheritFunc n = toCode $ maybe empty ((jExtends <+>) . text) n
+
+jImplementsFunc :: (Monad r) => [Label] -> r ParentSpec
+jImplementsFunc is = toCode $ jImplements <+> text (intercalate listSep is)
 
 addCallExcsCurrMod :: String -> VS ()
 addCallExcsCurrMod n = do

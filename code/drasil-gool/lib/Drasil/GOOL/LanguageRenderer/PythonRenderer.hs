@@ -43,7 +43,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
-  ModuleElim)
+  ModuleElim, ParentSpec)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
@@ -695,25 +695,21 @@ instance StateVarElim PythonCode StateVar where
 
 instance ClassSym PythonCode Class StateVar MethodData where
   buildClass par sVars cstrs = if length cstrs <= 1
-                                  then G.buildClass par sVars cstrs
+                                  then G.buildClass pyInherit par sVars cstrs
                                   else error pyMultCstrsError
   extraClass n par sVars cstrs = if
                                   length cstrs <= 1
-                                    then CP.extraClass n par sVars cstrs
+                                    then CP.extraClass pyInherit n par sVars cstrs
                                     else error pyMultCstrsError
   implementingClass n iNms sVars cstrs = if
                                   length cstrs <= 1
-                                    then G.implementingClass n iNms sVars cstrs
+                                    then G.implementingClass pyImplements n iNms sVars cstrs
                                     else error pyMultCstrsError
 
   docClass = CP.doxClass
 
 instance RenderClass PythonCode Class StateVar MethodData Doc where
   intClass = CP.intClass pyClass
-
-  inherit n = toCode $ maybe empty (parens . text) n
-  implements is = toCode $ parens (text $ intercalate listSep is)
-
   commentedClass = G.commentedClass
 
 instance ClassElim PythonCode Class where
@@ -1070,6 +1066,12 @@ pyClass n pn s vs fs = vcat [
 
 pyMultCstrsError :: String
 pyMultCstrsError = "Python classes cannot have multiple constructors"
+
+pyInherit :: (Monad r) => Maybe Label -> r ParentSpec
+pyInherit n = toCode $ maybe empty (parens . text) n
+
+pyImplements :: (Monad r) => [Label] -> r ParentSpec
+pyImplements is = toCode $ parens (text $ intercalate listSep is)
 
 pyBlockComment :: [String] -> Doc -> Doc
 pyBlockComment lns cmt = vcat $ (<+>) cmt . text <$> lns

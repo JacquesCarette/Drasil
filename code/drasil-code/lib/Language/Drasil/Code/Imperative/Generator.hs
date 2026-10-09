@@ -118,7 +118,8 @@ generator l dt sd chs cs = let
 
 data SomeProgGenerator where
   SomeProgGenerator
-    :: forall repr vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block. (OOProg repr vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
+    :: forall repr prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
+       . (OOProg repr prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
     => (repr prg -> ProgData) -> SomeProgGenerator
 
 -- | Generates a package with the given 'DrasilState'. The passed
@@ -176,7 +177,7 @@ insertFile (p, d) m =
 -- used by the language renderer.
 genPackage
   ::
-    ( OOProg progRepr vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block
+    ( OOProg progRepr prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
     , SoftwareDossierSym packRepr
     , Monad packRepr
     )
@@ -221,7 +222,7 @@ genPackage unRepr = do
 
 -- | Generates an SCS program based on the problem and the user's design choices.
 genProgram
-  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => GenState (OO.GSProgram r prg)
 genProgram = do
   g <- get
@@ -234,14 +235,14 @@ genProgram = do
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
 chooseModules
-  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => Modularity -> GenState [FS (r file)]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules Modular = genModules
 
 -- | Generates an entire SCS program as a single module.
 genUnmodular
-  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => GenState (FS (r file))
 genUnmodular = do
   g <- get
@@ -262,7 +263,7 @@ genUnmodular = do
 
 -- | Generates all modules for an SCS program.
 genModules
-  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => GenState [FS (r file)]
 genModules = do
   g <- get
@@ -281,8 +282,8 @@ genModules = do
 -- be generated in.
 generateCodeProc
   ::
-    ( NativeVector progRepr typ val
-    , ProcProg progRepr vis scope typ binder var param val stmt mthd prg file mod bod block
+    ( NativeVector progRepr val typ
+    , ProcProg progRepr prg file mod mthd vis param bod block stmt var scope val binder typ
     , SoftwareDossierSym packRepr
     , Monad packRepr
     )
@@ -312,8 +313,8 @@ generateCodeProc l unReprProg unReprPack g =
 -- used by the language renderer.
 genPackageProc
   ::
-    ( NativeVector progRepr typ val
-    , ProcProg progRepr vis scope typ binder var param val stmt mthd prg file mod bod block
+    ( NativeVector progRepr val typ
+    , ProcProg progRepr prg file mod mthd vis param bod block stmt var scope val binder typ
     , SoftwareDossierSym packRepr
     , Monad packRepr
     )
@@ -356,8 +357,8 @@ genPackageProc unRepr = do
 -- | Generates an SCS program based on the problem and the user's design choices.
 genProgramProc
   ::
-    ( NativeVector r typ val
-    , ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
+    ( NativeVector r val typ
+    , ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
     )
   => GenState (Proc.GSProgram r prg)
 genProgramProc = do
@@ -371,8 +372,8 @@ genProgramProc = do
 -- of modularity.
 chooseModulesProc
   ::
-    ( NativeVector r typ val
-    , ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
+    ( NativeVector r val typ
+    , ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
     )
   => Modularity -> GenState [FS (r file)]
 chooseModulesProc Unmodular = liftS genUnmodularProc
@@ -381,8 +382,8 @@ chooseModulesProc Modular = genModulesProc
 -- | Generates an entire SCS program as a single module.
 genUnmodularProc
   ::
-    ( NativeVector r typ val
-    , ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
+    ( NativeVector r val typ
+    , ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
     )
   => GenState (FS (r file))
 genUnmodularProc = do
@@ -404,8 +405,8 @@ genUnmodularProc = do
 -- | Generates all modules for an SCS program.
 genModulesProc
   ::
-    ( NativeVector r typ val
-    , ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
+    ( NativeVector r val typ
+    , ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
     )
   => GenState [FS (r file)]
 genModulesProc = do

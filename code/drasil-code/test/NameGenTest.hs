@@ -11,13 +11,13 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
 nameGenTestOO
-  :: OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block
+  :: OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
   => OO.GSProgram r prg
 nameGenTestOO = OO.prog "NameGenTest" "" [OO.fileDoc $ OO.buildModule
   "NameGenTest" [] [main, helper] []]
 
 nameGenTestProc
-  :: (ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block)
+  :: (ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ)
   => GProc.GSProgram r prg
 nameGenTestProc = GProc.prog "NameGenTest" "" [GProc.fileDoc $ GProc.buildModule
   "NameGenTest" [] [main, helper]]
@@ -27,18 +27,18 @@ helper
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , Literal r typ val
+    , Literal r val typ
     , ScopeSym r scope
-    , VariableSym r typ var
+    , VariableSym r var typ
     , VariableValue r var val
     , Comparison r val
     , List r val
-    , InternalList r var val block
-    , ParameterSym r var param
+    , InternalList r block var val
+    , ParameterSym r param var
     , VisibilitySym r vis
-    , DeclStatement r scope var val stmt bod
-    , ControlStatement r var val stmt bod
-    , MethodSym r vis typ var param mthd bod
+    , DeclStatement r bod stmt var scope val
+    , ControlStatement r bod stmt var val
+    , MethodSym r mthd vis param bod var typ
     )
   => MS (r mthd)
 helper = function "helper" private void [param temp] $ body
@@ -54,16 +54,16 @@ main
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , Literal r typ val
+    , Literal r val typ
     , ScopeSym r scope
-    , VariableSym r typ var
+    , VariableSym r var typ
     , VariableValue r var val
     , Comparison r val
     , List r val
-    , InternalList r var val block
-    , DeclStatement r scope var val stmt bod
-    , ControlStatement r var val stmt bod
-    , MethodSym r vis typ var param mthd bod
+    , InternalList r block var val
+    , DeclStatement r bod stmt var scope val
+    , ControlStatement r bod stmt var val
+    , MethodSym r mthd vis param bod var typ
     )
   => MS (r mthd)
 main = mainFunction $ body

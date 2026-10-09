@@ -48,7 +48,7 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance OOProg CodeInfoOO () () () () () () () () () () () () GOOLState () () () ()
+instance OOProg CodeInfoOO GOOLState () () () () () () () () () () () () () () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI

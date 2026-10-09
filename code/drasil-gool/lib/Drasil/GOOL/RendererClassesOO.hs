@@ -21,21 +21,21 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, MethodTypeSym(..),
   RenderMethod(..))
 
-class (CommonRenderSym r vis scope typ binder var param val stmt mthd bod block,
-  ParameterSym r var param, MethodSym r vis typ var param mthd bod,
-  IG.OOMethodSym r vis typ var param val mthd attch bod, VisibilitySym r vis,
-  IG.AttachmentSym r attch, IG.StateVarSym r vis var val stvr attch,
-  IG.ClassSym r cls mthd stvr, IG.ModuleSym r mod cls mthd, IG.FileSym r file mod,
-  ValueSym r typ val, IG.InternalValueExp r typ var val, IG.GetSet r var val,
-  IG.ObserverPattern r typ stmt, IG.StrategyPattern r var val bod block,
-  VariableSym r typ var, TypeSym r typ, IG.OOTypeSym r typ,
-  IG.OOVariableSym r typ var val, IG.SelfSym r var,
-  IG.OOValueExpression r typ var val, RenderClass r vis cls mthd stvr,
-  ClassElim r cls, RenderFile r file mod, InternalGetSet r typ var val,
+class (CommonRenderSym r mthd vis param bod block stmt var scope val binder typ,
+  ParameterSym r param var, MethodSym r mthd vis param bod var typ,
+  IG.OOMethodSym r mthd attch vis param bod var val typ, VisibilitySym r vis,
+  IG.AttachmentSym r attch, IG.StateVarSym r stvr attch vis var val,
+  IG.ClassSym r cls stvr mthd, IG.ModuleSym r mod cls mthd, IG.FileSym r file mod,
+  ValueSym r val typ, IG.InternalValueExp r var val typ, IG.GetSet r var val,
+  IG.ObserverPattern r stmt typ, IG.StrategyPattern r bod block var val,
+  VariableSym r var typ, TypeSym r typ, IG.OOTypeSym r typ,
+  IG.OOVariableSym r var val typ, IG.SelfSym r var,
+  IG.OOValueExpression r var val typ, RenderClass r cls stvr mthd vis,
+  ClassElim r cls, RenderFile r file mod, InternalGetSet r var val typ,
   MethodTypeSym r typ, OOMethodTypeSym r typ, RenderMethod r mthd,
-  OORenderMethod r vis typ param mthd attch bod, RenderMod r mod,
+  OORenderMethod r mthd attch vis param bod typ, RenderMod r mod,
   ModuleElim r mod, StateVarElim r stvr, PermElim r attch
-  ) => OORenderSym r vis scope typ binder var param val stmt cls mthd stvr attch file mod bod block
+  ) => OORenderSym r file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
 
 -- OO-Only Typeclasses --
 
@@ -54,14 +54,14 @@ class PermElim r attch where
   perm :: r attch -> Doc
   binding :: r attch -> AttachmentTag
 
-class InternalGetSet r typ var val | r -> typ var val where
+class InternalGetSet r var val typ | r -> var val typ where
   getFunc :: VS (r var) -> VS (r FuncData)
   setFunc :: VS (r typ) -> VS (r var) -> VS (r val) -> VS (r FuncData)
 
 class OOMethodTypeSym r typ | r -> typ where
   construct :: Label -> MS (r typ)
 
-class OORenderMethod r vis typ param mthd attch bod | r -> vis typ param mthd attch bod where
+class OORenderMethod r mthd attch vis param bod typ | r -> mthd attch vis param bod typ where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r attch ->
@@ -78,7 +78,7 @@ class StateVarElim r stvr | r -> stvr where
 
 type ParentSpec = Doc
 
-class RenderClass r vis cls mthd stvr | r -> vis cls mthd stvr where
+class RenderClass r cls stvr mthd vis | r -> cls stvr mthd vis where
   -- class name, visibility, parent, state variables, constructor(s), methods
   intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r stvr]
     -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r cls)

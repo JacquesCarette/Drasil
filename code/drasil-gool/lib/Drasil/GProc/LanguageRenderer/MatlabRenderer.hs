@@ -11,8 +11,8 @@ import Drasil.Shared.InterfaceCommon (Label, Value, Variable, getCodeType,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
-  ListStatement(..), Set(..), NativeVector(..), InternalList(..),
-  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  ListStatement(..), Set(..), NativeVectorType(..), NativeVector(..),
+  InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
   FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
@@ -351,8 +351,10 @@ instance Set MatlabCode Value where
   setRemove = undefined
   setUnion = undefined
 
-instance NativeVector MatlabCode Value TypeData where
+instance NativeVectorType MatlabCode TypeData where
   vecType = listType
+
+instance NativeVector MatlabCode Value TypeData where
   litVec = litList
   vecScale = binExpr multOp           -- s * v
   vecAdd   = binExpr plusOp           -- a + b

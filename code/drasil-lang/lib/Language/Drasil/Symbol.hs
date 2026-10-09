@@ -1,27 +1,41 @@
--- | Drasil uses symbols in expressions and sentences.
-module Language.Drasil.Symbol (
-  -- * Types
-  Decoration(..), Symbol(..),
-  -- * Classes
-  HasSymbol(..),
-  -- * Ordering Function
-  compsy
-) where
+{-# LANGUAGE TemplateHaskell #-}
 
-import Language.Drasil.Stages (Stage)
-import Language.Drasil.Unicode(Special)
+-- | Drasil uses symbols in expressions and sentences.
+module Language.Drasil.Symbol
+  ( -- * Types
+    Decoration (..),
+    Symbol (..),
+
+    -- * Classes
+    HasSymbol (..),
+
+    -- * Ordering Function
+    compsy,
+  )
+where
 
 import Data.Char (toLower)
+import Drasil.Database (Generically (..), HasChunkRefs (..), declareHasChunkRefs)
+import Language.Drasil.Stages (Stage)
+import Language.Drasil.Unicode (Special)
 
 -- | Decorations on symbols/characters such as hats or Vector representations
 -- (determines bolding, italics, etc).
-data Decoration =
-    Hat       -- ^ Places a @^@ on top of a symbol.
-  | Vector    -- ^ Makes a symbol bold.
-  | Prime     -- ^ Appends a @'@ to a symbol.
-  | Delta     -- ^ Prepends a @Δ@ to a symbol.
-  | Magnitude -- ^ Places @||@ before and after a symbol.
+data Decoration
+  = -- | Places a @^@ on top of a symbol.
+    Hat
+  | -- | Makes a symbol bold.
+    Vector
+  | -- | Appends a @'@ to a symbol.
+    Prime
+  | -- | Prepends a @Δ@ to a symbol.
+    Delta
+  | -- | Places @||@ before and after a symbol.
+    Magnitude
   deriving (Eq, Ord)
+
+instance HasChunkRefs Decoration where
+  chunkRefs _ = mempty
 
 -- | A 'Symbol' is actually going to be a graphical description of what gets
 -- rendered as a (unique) symbol.  This is actually NOT based on semantics at
@@ -35,21 +49,22 @@ data Decoration =
 --     * @Decorated@ symbols using 'Atop'
 --     * @Concatenations@ of symbols, including subscripts and superscripts
 --     * @'Empty'@! (this is to give this a monoid-like flavour)
-data Symbol =
-    Variable String -- ^ Basic variable name creation.
-  | Label    String
-    -- ^ For when symbols need more context, but we don't want to add a new variable name.
+data Symbol
+  = -- | Basic variable name creation.
+    Variable String
+  | -- | For when symbols need more context, but we don't want to add a new variable name.
     -- For example, @v_f@ may be encoded as @Concat [variable "v", label "f"]@.
-  | Integ    Int -- ^ For using numbers in Symbols.
-  | Special  Special
-    -- ^ For now, special characters are the degree and partial
+    Label String
+  | -- | For using numbers in Symbols.
+    Integ Int
+  | -- | For now, special characters are the degree and partial
     -- differentiation symbols. These should eventually move elsewhere
     -- and the 'Special' type removed.
-  | Atop     Decoration Symbol
-    -- ^ Used to decorate symbols. For things like vectors (which need to be bold),
+    Special Special
+  | -- | Used to decorate symbols. For things like vectors (which need to be bold),
     -- primes, magnitudes, etc. See 'Decoration' for more details.
-  | Corners  [Symbol] [Symbol] [Symbol] [Symbol] Symbol
-    -- ^ Order of Symbols: upleft   lowleft  upright  lowright base. Ex:
+    Atop Decoration Symbol
+  | -- | Order of Symbols: upleft   lowleft  upright  lowright base. Ex:
     --
     -- >Corners [1]   [2]   [3]   [4]   [5]
     -- @
@@ -59,19 +74,25 @@ data Symbol =
     --
     --             [2]   [4]
     -- @
-  | Concat   [Symbol] -- ^ Concatentation of two symbols: @[s1, s2] -> s1s2@
-  | Empty -- ^ Placeholder for when a symbol is not needed.
-  deriving Eq
+    Corners [Symbol] [Symbol] [Symbol] [Symbol] Symbol
+  | -- | Concatentation of two symbols: @[s1, s2] -> s1s2@
+    Concat [Symbol]
+  | -- | Placeholder for when a symbol is not needed.
+    Empty
+  deriving (Eq)
+
+declareHasChunkRefs ''Symbol
 
 -- TODO: Instead of having "Stage" as a parameter of "symbol", we can make it a typeclass parameter instead.. extensibility for cheap!
+
 -- | A HasSymbol is anything which has a 'Symbol'.
 class HasSymbol c where
   -- | Provides the 'Symbol' for a particular stage of generation.
-  symbol  :: c -> Stage -> Symbol
+  symbol :: c -> Stage -> Symbol
 
 -- | Symbols may be concatenated.
 instance Semigroup Symbol where
- a <> b = Concat [a , b]
+  a <> b = Concat [a, b]
 
 -- | Symbols can be empty or concatenated.
 instance Monoid Symbol where
@@ -80,8 +101,8 @@ instance Monoid Symbol where
 -- | Gives an 'Ordering' of two lists of 'Symbol's.
 complsy :: [Symbol] -> [Symbol] -> Ordering
 complsy [] [] = EQ
-complsy [] _  = LT
-complsy _  [] = GT
+complsy [] _ = LT
+complsy _ [] = GT
 complsy (x : xs) (y : ys) = compsy x y <> complsy xs ys
 
 -- | The default compare function that sorts all the lower case symbols after
@@ -111,7 +132,7 @@ compsy a (Atop Magnitude b) =
     EQ -> LT
     other -> other
 compsy (Atop Magnitude b) a =
- case compsy b a of
+  case compsy b a of
     EQ -> GT
     other -> other
 compsy a (Atop Delta b) =
@@ -119,7 +140,7 @@ compsy a (Atop Delta b) =
     EQ -> LT
     other -> other
 compsy (Atop Delta b) a =
- case compsy b a of
+  case compsy b a of
     EQ -> GT
     other -> other
 -- The next two cases are very specific (but common) patterns where a superscript is added
@@ -129,7 +150,7 @@ compsy (Atop Delta b) a =
 -- following `v_f` as it is logical to place it with its parent concept.
 compsy (Corners [] [] ur [] (Corners [] [] [] lr b)) a = compsy (Corners [] [] ur lr b) a
 compsy a (Corners [] [] ur [] (Corners [] [] [] lr b)) = compsy a (Corners [] [] ur lr b)
-compsy (Corners _ _ u l b) (Corners _ _ u' l' b')  =
+compsy (Corners _ _ u l b) (Corners _ _ u' l' b') =
   case compsy b b' of
     EQ -> case complsy l l' of
       EQ -> complsy u u'
@@ -148,7 +169,7 @@ compsy a (Atop _ b) =
     EQ -> LT
     other -> other
 compsy (Atop _ b) a =
- case compsy b a of
+  case compsy b a of
     EQ -> GT
     other -> other
 {-
@@ -174,24 +195,24 @@ compsy (Atop d a) b =
     _ -> case compsy a b of
                   EQ -> GT
                   other -> other-}
-compsy (Special a)  (Special b)  = compare a b
-compsy (Integ    x) (Integ    y) = compare x y
+compsy (Special a) (Special b) = compare a b
+compsy (Integ x) (Integ y) = compare x y
 compsy (Variable x) (Variable y) = compsyLower x y
-compsy (Variable x) (Label y)    = compsyLower x y
-compsy (Label x)    (Variable y) = compsyLower x y
-compsy (Label x)    (Label y)    = compsyLower x y
-compsy (Special _)  _ = LT
-compsy _ (Special _)  = GT
-compsy (Integ _) _    = LT
-compsy _ (Integ _)    = GT
+compsy (Variable x) (Label y) = compsyLower x y
+compsy (Label x) (Variable y) = compsyLower x y
+compsy (Label x) (Label y) = compsyLower x y
+compsy (Special _) _ = LT
+compsy _ (Special _) = GT
+compsy (Integ _) _ = LT
+compsy _ (Integ _) = GT
 compsy (Variable _) _ = LT
 compsy _ (Variable _) = GT
-compsy (Label _) _    = LT
-compsy _ (Label _)    = GT
-compsy Empty Empty    = EQ
+compsy (Label _) _ = LT
+compsy _ (Label _) = GT
+compsy Empty Empty = EQ
 
 -- | Helper for 'compsy' that compares lower case 'String's.
 compsyLower :: String -> String -> Ordering
 compsyLower x y = case compare (toLower <$> x) (toLower <$> y) of
-  EQ    -> compare x y
+  EQ -> compare x y
   other -> other

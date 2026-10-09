@@ -15,10 +15,10 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, Variable,
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, extFuncApp, libFuncApp, IndexTranslator(..),
   Reference(..), Array(..), List(..), ListStatement(..), Set(..),
-  NativeVector(..), InternalList(..), EmptyStatement(..), MultiStatement(..),
-  ValueStatement(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
-  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  NativeVectorType(..), NativeVector(..), InternalList(..), EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
   BinderSym(..), BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
@@ -397,8 +397,10 @@ instance Set JuliaCode Value where
   setRemove s e = funcApp "delete!" void [s, e]
   setUnion a b = funcApp "union!" void [a, b]
 
-instance NativeVector JuliaCode Value TypeData where
+instance NativeVectorType JuliaCode TypeData where
   vecType = listType
+
+instance NativeVector JuliaCode Value TypeData where
   litVec = litList
   vecScale = binExpr multOp
   vecAdd   = binExpr plusOp

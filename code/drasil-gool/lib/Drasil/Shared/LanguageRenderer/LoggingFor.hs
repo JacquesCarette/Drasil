@@ -431,8 +431,10 @@ instance (IndexTranslator r val) => IndexTranslator (LoggingFor r) val where
   intToIndex = liftLogging intToIndex
   indexToInt = liftLogging indexToInt
 
-instance (NativeVector lang val typ) => NativeVector (LoggingFor lang) val typ where
+instance (NativeVectorType lang typ) => NativeVectorType (LoggingFor lang) typ where
   vecType = liftLogging vecType
+
+instance (NativeVector lang val typ) => NativeVector (LoggingFor lang) val typ where
   litVec = liftLogging litVec
   vecScale = liftLogging vecScale
   vecAdd = liftLogging vecAdd

@@ -82,10 +82,6 @@ class RenderClass r cls stvr mthd vis | r -> cls stvr mthd vis where
   -- class name, visibility, parent, state variables, constructor(s), methods
   intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r stvr]
     -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r cls)
-
-  inherit :: Maybe Label -> r ParentSpec
-  implements :: [Label] -> r ParentSpec
-
   commentedClass :: CS (r Doc) -> CS (r cls) -> CS (r cls)
 
 class ClassElim r cls where

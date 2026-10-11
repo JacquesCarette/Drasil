@@ -38,8 +38,7 @@ import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderVariable)
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(commentedMod),
-  OORenderMethod(intMethod), RenderClass(inherit, implements),
-  RenderMod(updateModuleDoc))
+  OORenderMethod(intMethod), RenderClass, RenderMod(updateModuleDoc), ParentSpec)
 import qualified Drasil.GOOL.RendererClassesOO as RO
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource,
   ScopeTag(Local), ScopeData, sd, TypeData(..), FuncData)
@@ -708,27 +707,29 @@ docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 buildClass
   :: (RenderClass r cls stvr mthd vis, VisibilitySym r vis)
-  => Maybe Label
+  => (Maybe Label -> r ParentSpec)
+  -> Maybe Label
   -> [CSStateVar r stvr]
   -> [MS (r mthd)]
   -> [MS (r mthd)]
   -> CS (r cls)
-buildClass p stVars constructors methods = do
+buildClass inherit p stVars constructors methods = do
   n <- zoom lensCStoFS getModuleName
   RO.intClass n public (inherit p) stVars constructors methods
 
 implementingClass
   :: (RenderClass r cls stvr mthd vis, VisibilitySym r vis)
-  => Label
+  => ([Label] -> r ParentSpec)
+  -> Label
   -> [Label]
   -> [CSStateVar r stvr]
   -> [MS (r mthd)]
   -> [MS (r mthd)]
   -> CS (r cls)
-implementingClass n is = RO.intClass n public (implements is)
+implementingClass implements n is = RO.intClass n public (implements is)
 
 docClass
-  :: (BlockCommentSym r, RenderClass r cls stvr mthd vis)
+  :: (RenderClass r cls stvr mthd vis, BlockCommentSym r)
   => ClassDocRenderer -> String -> CS (r cls) -> CS (r cls)
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 

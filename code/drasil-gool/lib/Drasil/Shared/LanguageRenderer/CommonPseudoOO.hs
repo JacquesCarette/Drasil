@@ -502,13 +502,14 @@ litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
 
 extraClass
   :: (RG.RenderClass r cls stvr mthd vis, VisibilitySym r vis)
-  =>  Label
+  => (Maybe Label -> r ParentSpec)
+  -> Label
   -> Maybe Label
   -> [CSStateVar r stvr]
   -> [MS (r mthd)]
   -> [MS (r mthd)]
   -> CS (r cls)
-extraClass n = RG.intClass n public . RG.inherit
+extraClass inherit' n = RG.intClass n public . inherit'
 
 -- Java, C#, and Swift --
 

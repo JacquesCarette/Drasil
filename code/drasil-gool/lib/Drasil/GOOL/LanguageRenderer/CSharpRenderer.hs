@@ -682,18 +682,14 @@ instance StateVarElim CSharpCode StateVar where
   stateVar = unCSC
 
 instance ClassSym CSharpCode Class StateVar MethodData where
-  buildClass = G.buildClass
-  extraClass = CP.extraClass
-  implementingClass = G.implementingClass
+  buildClass = G.buildClass CP.inherit
+  extraClass = CP.extraClass CP.inherit
+  implementingClass = G.implementingClass CP.implements
 
   docClass = CP.doxClass
 
 instance RenderClass CSharpCode Class StateVar MethodData Doc where
   intClass = CP.intClass R.class'
-
-  inherit = CP.inherit
-  implements = CP.implements
-
   commentedClass = G.commentedClass
 
 instance ClassElim CSharpCode Class where

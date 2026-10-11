@@ -792,10 +792,6 @@ instance (Pair p) => RenderClass (p CppSrcCode CppHdrCode) Class StateVarData Me
   intClass n s i vs cs fs = pair3Lists
     (intClass n (pfst s) (pfst i)) (intClass n (psnd s) (psnd i))
     vs (zoom lensCStoMS <$> cs) (zoom lensCStoMS <$> fs)
-
-  inherit n = pair (inherit n) (inherit n)
-  implements is = pair (implements is) (implements is)
-
   commentedClass = pair2 commentedClass commentedClass
 
 instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) Class where
@@ -1667,9 +1663,9 @@ instance StateVarElim CppSrcCode StateVarData where
   stateVar = stVar . unCPPSC
 
 instance ClassSym CppSrcCode Class StateVarData MethodData where
-  buildClass = G.buildClass
-  extraClass = CP.extraClass
-  implementingClass = G.implementingClass
+  buildClass = G.buildClass cppInheritFunc
+  extraClass = CP.extraClass cppInheritFunc
+  implementingClass = G.implementingClass cppImplementsFunc
 
   docClass = CP.doxClass
 
@@ -1677,11 +1673,6 @@ instance RenderClass CppSrcCode Class StateVarData MethodData (Doc, VisibilityTa
   intClass n _ _ vs cs fs = do
     modify (setClassName n)
     on2StateLists cppsClass vs (zoom lensCStoMS <$> cs P.<> fs)
-
-  inherit n = onCodeValue (cppInherit n . fst) public
-  implements is = onCodeValue ((\p -> colon <+> hcat ((p <+>) . text <$> is))
-    . fst) public
-
   commentedClass _ cs = cs
 
 instance ClassElim CppSrcCode Class where
@@ -2297,9 +2288,9 @@ instance StateVarElim CppHdrCode StateVarData where
   stateVar = stVar . unCPPHC
 
 instance ClassSym CppHdrCode Class StateVarData MethodData where
-  buildClass = G.buildClass
-  extraClass = CP.extraClass
-  implementingClass = G.implementingClass
+  buildClass = G.buildClass cppInheritFunc
+  extraClass = CP.extraClass cppInheritFunc
+  implementingClass = G.implementingClass cppImplementsFunc
 
   docClass = CP.doxClass
 
@@ -2310,11 +2301,6 @@ instance RenderClass CppHdrCode Class StateVarData MethodData (Doc, VisibilityTa
     funcs <- sequence fs
     pure $ cpphClass n i vars funcs public private
     where fs = zoom lensCStoMS <$> cstrs P.<> mths
-
-  inherit n = onCodeValue (cppInherit n . fst) public
-  implements is = onCodeValue ((\p -> colon <+> hcat ((p <+>) . text <$> is))
-    . fst) public
-
   commentedClass = G.commentedClass
 
 instance ClassElim CppHdrCode Class where
@@ -2928,6 +2914,17 @@ cpphClass n ps vars funcs pub priv = let
     classDec <+> text n <+> p <+> bodyStart,
     indentList indLi,
     bodyEnd <> endStatement]) ps
+
+cppInheritFunc
+  :: (VisibilitySym r (Doc, VisibilityTag), Monad r)
+  => Maybe Label -> r ParentSpec
+cppInheritFunc n = onCodeValue (cppInherit n . fst) public
+
+cppImplementsFunc
+  :: (VisibilitySym r (Doc, VisibilityTag), Monad r)
+  => [Label] -> r ParentSpec
+cppImplementsFunc is = onCodeValue ((\p -> colon <+> hcat ((p <+>) . text <$> is))
+    . fst) public
 
 cppInOutCall
   :: (Label -> VS (CppSrcCode TypeData) -> [VS (CppSrcCode Value)] -> VS (CppSrcCode Value))

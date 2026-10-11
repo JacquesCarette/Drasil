@@ -723,18 +723,14 @@ instance StateVarElim SwiftCode StateVar where
   stateVar = unSC
 
 instance ClassSym SwiftCode Class StateVar MethodData where
-  buildClass = G.buildClass
-  extraClass = CP.extraClass
-  implementingClass = G.implementingClass
+  buildClass = G.buildClass CP.inherit
+  extraClass = CP.extraClass CP.inherit
+  implementingClass = G.implementingClass CP.implements
 
   docClass = G.docClass swiftClassDoc
 
 instance RenderClass SwiftCode Class StateVar MethodData Doc where
   intClass = CP.intClass R.class'
-
-  inherit = CP.inherit
-  implements = CP.implements
-
   commentedClass = G.commentedClass
 
 instance ClassElim SwiftCode Class where

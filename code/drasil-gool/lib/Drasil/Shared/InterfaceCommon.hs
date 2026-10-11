@@ -13,11 +13,11 @@ module Drasil.Shared.InterfaceCommon (
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
   IndexTranslator(..), Reference(..), Array(..), List(..), ListStatement(..),
-  Set(..), NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
-  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
-  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
-  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  Set(..), NativeVectorType(..), NativeVector(..), InternalList(..), listSlice,
+  listIndexExists, at, EmptyStatement(..), MultiStatement(..),
+  ValueStatement(..), AssignStatement(..), (&=), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
   ParameterSym(..), MethodSym(..), BinderSym(..), BinderElim(..), convType
   ) where
@@ -352,6 +352,12 @@ class Set r val | r -> val where
   -- Arguments are: Set, Set
   setUnion :: VS (r val) -> VS (r val) -> VS (r val) -- TODO [Brandon Bosman, 06/24/2026]: See if we should make this a Statement
 
+-- | Vector type for languages with native vector support
+class NativeVectorType r typ | r -> typ where
+  vecType :: VS (r typ) -> VS (r typ)
+  -- | A vector literal with the given element type and elements.
+  --   For most languages it will be 'litList'.
+
 -- | Vector operations for languages with native vector support (e.g. MATLAB,
 --   Julia). Expression-based: every operation takes and returns 'VS val's, so
 --   operations compose like math (e.g. @vecAdd (vecScale s a) b@).
@@ -360,9 +366,6 @@ class Set r val | r -> val where
 class NativeVector r val typ | r -> val typ where
   -- | The type of a vector with the given element type.
   --   For most languages it will be 'listType'
-  vecType :: VS (r typ) -> VS (r typ)
-  -- | A vector literal with the given element type and elements.
-  --   For most languages it will be 'litList'.
   litVec :: VS (r typ) -> [VS (r val)] -> VS (r val)
   -- | Scales a vector by a scalar.
   --   Arguments are: Scalar, Vector

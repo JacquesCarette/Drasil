@@ -5,8 +5,8 @@ module VectorTest (vectorTestProc) where
 
 import Drasil.GProc (ProcProg, MS, bodyStatements, TypeSym(..), VariableSym(..),
   Literal(..), VariableValue(..), DeclStatement(..), ScopeSym(..), MethodSym(..),
-  VisibilitySym(..), ParameterSym(..), ControlStatement(..), NativeVector(..),
-  List(..))
+  VisibilitySym(..), ParameterSym(..), ControlStatement(..),
+  NativeVectorType(..), NativeVector(..), List(..))
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.Metadata (watermark)
@@ -16,7 +16,8 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan)
 -- | A program with one function that applies each vector operation.
 vectorTestProc
   ::
-    ( NativeVector r val typ
+    ( NativeVectorType r typ
+    , NativeVector r val typ
     , ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
     )
   => GProc.GSProgram r prg
@@ -28,7 +29,8 @@ vectorTestProc = GProc.prog "VectorTest" ""
 -- their dot product.
 vectorOps
   ::
-    ( NativeVector r val typ
+    ( NativeVectorType r typ
+    , NativeVector r val typ
     , ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
     )
   => MS (r mthd)

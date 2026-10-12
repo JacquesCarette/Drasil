@@ -3,6 +3,7 @@
 module Drasil.Data.Formats.HTML.Render
   ( renderHTML,
     renderHTMLFragment,
+    escapeHTMLText,
     HTMLRenderOptions (..),
     defaultHTMLRO,
   )

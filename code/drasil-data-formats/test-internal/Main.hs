@@ -9,15 +9,16 @@ import Drasil.Data.Formats.Markdown.CommonMark.Render
     normalizeLineEndings, prefixBlockQuote, renderCodeFence, renderCodeSpan,
     renderedLinesToDoc, separateRenderedBlocks, singletonLine,
     textToRenderedLines, wrapRenderedLines )
+import Drasil.TestingKit (testMain)
 import Prettyprinter
   ( LayoutOptions (..), PageWidth (..), defaultLayoutOptions, group,
     hardline, layoutPretty )
 import Prettyprinter.Render.Text (renderStrict)
-import Test.Tasty (defaultMain, testGroup)
+import Test.Tasty (testGroup)
 import Test.Tasty.HUnit (testCase, (@?=))
 
 main :: IO ()
-main = defaultMain $ testGroup "CommonMark foundations and code syntax"
+main = testMain $ testGroup "CommonMark foundations and code syntax"
   [ testGroup "physical lines"
       [ testCase name (output actual @?= expected)
       | (name, actual, expected) <- lineCases ],

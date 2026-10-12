@@ -5,7 +5,8 @@ module Drasil.Data.Formats.Markdown.CommonMark.Core
     Block(..),
     ListItem(..),
     Inline(..),
-    HeadingLevel(..),
+    HeadingLevel,
+    HTML.HLevel(..),
     URL,
     Source,
   )
@@ -50,7 +51,7 @@ data Block
       [HTML.HTMLBody] -- ^ HTML body nodes in source order.
   deriving (Eq, Show)
 
--- | A list item containing one or more blocks.
+-- | A list item containing zero or more blocks.
 newtype ListItem
   = -- | Construct a list item from block contents.
     ListItem
@@ -89,14 +90,7 @@ data Inline
   deriving (Eq, Show)
 
 -- | A valid CommonMark heading level.
-data HeadingLevel
-  = H1 -- ^ Level-one heading.
-  | H2 -- ^ Level-two heading.
-  | H3 -- ^ Level-three heading.
-  | H4 -- ^ Level-four heading.
-  | H5 -- ^ Level-five heading.
-  | H6 -- ^ Level-six heading.
-  deriving (Eq, Show, Enum, Bounded)
+type HeadingLevel = HTML.HLevel
 
 -- | Destination of a link.
 type URL = Text

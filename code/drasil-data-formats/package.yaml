@@ -12,7 +12,8 @@ language: GHC2024
 default-extensions:
 - StrictData
 
-extra-source-files: []
+extra-source-files:
+- test/golden/markdown/commonmark/*.md
 
 dependencies:
 - base >= 4.7 && < 5
@@ -32,7 +33,6 @@ library:
   - Drasil.Data.Formats.CSV
   - Drasil.Data.Formats.JSON
   - Drasil.Data.Formats.HTML
-  - Drasil.Data.Formats.MD
   - Drasil.Data.Formats.Markdown.CommonMark
 
 tests:
@@ -60,5 +60,6 @@ tests:
     - Drasil.Data.Formats.Markdown.CommonMark.Core
     - Drasil.Data.Formats.Markdown.CommonMark.Render
     dependencies:
+    - drasil-testing-kit
     - tasty
     - tasty-hunit

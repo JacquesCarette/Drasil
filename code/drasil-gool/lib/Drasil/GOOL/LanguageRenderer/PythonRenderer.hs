@@ -434,7 +434,7 @@ instance Array PythonCode Variable Value where
 instance List PythonCode Value where
   listSize = CS.listSize pyListSize
   listAccess = G.listAccess
-  listAccessFromEnd v n = listAccess v ((G.smartAdd n (litInt 1)) #~)
+  listAccessFromEnd v n = listAccess v (G.smartAdd n (litInt 1) #~)
   indexOf = CP.indexOf pyIndex
 
 instance ListStatement PythonCode Statement Value where

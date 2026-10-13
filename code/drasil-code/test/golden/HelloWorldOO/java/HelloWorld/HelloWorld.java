@@ -50,6 +50,8 @@ public class HelloWorld {
         e = myOtherList.get(1);
         System.out.print("Last element of myOtherList: ");
         System.out.println(myOtherList.get(myOtherList.size() - 1));
+        System.out.print("Second-last element of myOtherList: ");
+        System.out.println(myOtherList.get(myOtherList.size() - 2));
         myOtherList.set(1, 17.4);
         ArrayList<String> myName = new ArrayList<String>(7);
         myName = new ArrayList<String>(Arrays.asList("Brooks Mac".split(" ")));

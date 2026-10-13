@@ -70,6 +70,8 @@ var e: Double
 e = myOtherList[1]
 print("Last element of myOtherList: ", terminator: "")
 print(myOtherList[myOtherList.count - 1])
+print("Second-last element of myOtherList: ", terminator: "")
+print(myOtherList[myOtherList.count - 2])
 myOtherList[1] = 17.4
 var myName: [String] = []
 myName = "Brooks Mac".components(separatedBy: " ")

@@ -61,6 +61,8 @@ myOtherList.append(2.5)
 e = myOtherList[1]
 print("Last element of myOtherList: ", end="")
 print(myOtherList[-1])
+print("Second-last element of myOtherList: ", end="")
+print(myOtherList[-2])
 myOtherList[1] = 17.4
 myName = []
 myName = "Brooks Mac".split(" ")

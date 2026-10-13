@@ -49,6 +49,8 @@ append!(myOtherList, 2.5)
 global e = myOtherList[2]
 print("Last element of myOtherList: ")
 println(myOtherList[end])
+print("Second-last element of myOtherList: ")
+println(myOtherList[end - 1])
 global myOtherList[2] = 17.4
 global myName = String[]
 global myName = split("Brooks Mac", " ")

@@ -387,7 +387,7 @@ instance List JuliaCode Value where
   listAccessFromEnd v n = do
     v' <- v
     n' <- n
-    let t = innerType $ return $ valueType v'
+    let t = innerType $ pure $ valueType v'
         idx = case RC.valueInt n' of
           Just 0  -> text "end"
           _       -> text "end" <+> text "-" <+> RC.value n'

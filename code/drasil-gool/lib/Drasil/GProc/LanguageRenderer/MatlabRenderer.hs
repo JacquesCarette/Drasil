@@ -342,7 +342,7 @@ instance List MatlabCode Value where
   listAccessFromEnd v n = do
     v' <- v
     n' <- n
-    let t = innerType $ return $ valueType v'
+    let t = innerType $ pure $ valueType v'
         innerCt = getInnerType $ cType $ unMLC $ valueType v'
         idx = case RC.valueInt n' of
           Just 0  -> text "end"

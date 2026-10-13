@@ -65,7 +65,7 @@ print("Second-last element of myOtherList: ", end="")
 print(myOtherList[-2])
 thirdLast = 2
 print("Third-last element of myOtherList (using a variable): ", end="")
-print(myOtherList[-1 - thirdLast])
+print(myOtherList[-(thirdLast + 1)])
 myOtherList[1] = 17.4
 myName = []
 myName = "Brooks Mac".split(" ")

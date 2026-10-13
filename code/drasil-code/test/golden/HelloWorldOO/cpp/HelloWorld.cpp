@@ -117,6 +117,9 @@ int main(int argc, const char *argv[]) {
     std::cout << myOtherList.at((int)(myOtherList.size()) - 1) << std::endl;
     std::cout << "Second-last element of myOtherList: ";
     std::cout << myOtherList.at((int)(myOtherList.size()) - 2) << std::endl;
+    int thirdLast = 2;
+    std::cout << "Third-last element of myOtherList (using a variable): ";
+    std::cout << myOtherList.at((int)(myOtherList.size()) - (1 + thirdLast)) << std::endl;
     myOtherList.at(1) = 17.4;
     vector<string> myName(7);
     myName.clear();

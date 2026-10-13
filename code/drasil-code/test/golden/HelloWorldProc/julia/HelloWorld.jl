@@ -59,7 +59,7 @@ println(boringList)
 global s = Set([4, 7, 5])
 @assert in(7, s) "Set s should contain 7"
 
-# Set operation and lambda tests
+# Set operation tests
 global s = push!(s, 10)
 global s = delete!(s, 7)
 global s = union!(s, Set([20, 30]))
@@ -70,6 +70,8 @@ for set_i1 in s
     print(" ")
 end
 println("}")
+
+# Lambda test
 global myLambda = x -> x * 2.0
 println("Lambda defined successfully")
 

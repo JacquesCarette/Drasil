@@ -67,7 +67,7 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] <> lis
 helloWorldMainProc
   :: (ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ)
   => MS (r mthd)
-helloWorldMainProc = mainFunction (body ([ helloInitVariables, helloProcTests] <> listSliceTests
+helloWorldMainProc = mainFunction (body ([ helloInitVariables, setTests, lambdaTests] <> listSliceTests
     <> [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (var "dummy" string) mainFn (litString "dummy")]),
@@ -146,36 +146,51 @@ helloInitVariables = block [comment "Initializing variables",
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
 
-helloProcTests
+setTests
+  ::
+    ( BlockSym r block stmt
+    , Literal r val typ
+    , VariableValue r var val
+    , Set r val
+    , TypeSym r typ
+    , VariableSym r var typ
+    , AssignStatement r stmt var val
+    , CommentStatement r stmt
+    , PrintConsole r stmt val
+    )
+  => MS (r block)
+setTests = block
+  [ comment "Set operation tests"
+  , var "s" (setType int) &= setAdd (valueOf (var "s" (setType int))) (litInt 10)
+  , var "s" (setType int) &= setRemove (valueOf (var "s" (setType int))) (litInt 7)
+  , var "s" (setType int) &= setUnion (valueOf (var "s" (setType int)))
+                                      (litSet int [litInt 20, litInt 30])
+  , printStr "Set after operations: "
+  , printLn (valueOf (var "s" (setType int)))
+  ]
+
+lambdaTests
   ::
     ( BlockSym r block stmt
     , Literal r val typ
     , VariableValue r var val
     , NumericExpression r val
-    , Set r val
     , ValueExpression r var val binder typ
     , TypeSym r typ
     , ScopeSym r scope
     , BinderSym r binder typ
     , VariableSym r var typ
     , DeclStatement r bod stmt var scope val
-    , AssignStatement r stmt var val
     , CommentStatement r stmt
     , PrintConsole r stmt val
     )
   => MS (r block)
-helloProcTests = block [
-  comment "Set operation and lambda tests",
-  var "s" (setType int) &= setAdd (valueOf (var "s" (setType int))) (litInt 10),
-  var "s" (setType int) &= setRemove (valueOf (var "s" (setType int))) (litInt 7),
-  var "s" (setType int) &= setUnion (valueOf (var "s" (setType int)))
-    (litSet int [litInt 20, litInt 30]),
-  printStr "Set after operations: ",
-  printLn (valueOf (var "s" (setType int))),
-  varDecDef (var "myLambda" double) mainFn
-    (lambda [binder "x" double]
-      (valueOf (var "x" double) #* litDouble 2.0)),
-  printLn $ litString "Lambda defined successfully"]
+lambdaTests = block
+  [ comment "Lambda test"
+  , varDecDef (var "myLambda" double) mainFn
+      (lambda [binder "x" double] (valueOf (var "x" double) #* litDouble 2.0))
+  , printLn $ litString "Lambda defined successfully"
+  ]
 
 objectTests
   :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)

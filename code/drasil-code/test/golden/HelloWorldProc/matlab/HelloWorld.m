@@ -116,7 +116,7 @@ function HelloWorld(varargin)
     s = [4, 7, 5];
     assert(ismember(7, s), "Set s should contain 7");
     
-    % Set operation and lambda tests
+    % Set operation tests
     s = union(s, [10]);
     s = setdiff(s, [7]);
     s = union(s, [20, 30]);
@@ -132,6 +132,8 @@ function HelloWorld(varargin)
         fprintf('%g', s(length(s) - 1 + 1));
     end
     fprintf('%s\n', "]");
+    
+    % Lambda test
     myLambda = @(x) x * 2.0;
     fprintf('%s\n', "Lambda defined successfully");
     

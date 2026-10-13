@@ -6,18 +6,19 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Value, Variable, getCodeType,
-  UnRepr(..), Body, Block, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  UnRepr(..), Body, Block, BodySym(..), BlockSym(..), TypeSym(..), getTypeString,
+  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
-  ListStatement(..), Set(..), NativeVectorType(..), NativeVector(..),
-  InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
-  AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
-  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
-  VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
-  BinderElim(..), MethodSym(..), funcApp, (&=), bodyStatements)
+  ValueExpression(..), extFuncApp, IndexTranslator(..), Reference(..),
+  Array(..), List(..), ListStatement(..), Set(..), NativeVectorType(..),
+  NativeVector(..), InternalList(..), EmptyStatement(..), MultiStatement(..),
+  ValueStatement(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, VisibilitySym(..), ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), funcApp, (&=),
+  bodyStatements)
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -64,7 +65,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
   ProgData, TypeData, cType, vd, val, valPrec, valInt, valType, opDoc, opPrec,
   varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc,
   FuncData(fType, funcDoc), fd, ScopeData, sd, ScopeTag(..),
-  BinderD, bindFormD, Statement, FileData, ModData)
+  BinderD(..), bindFormD, Statement, FileData, ModData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, multPrec, unExpr, unExpr', binExpr, binExpr', mkStateVal, mkVal,
@@ -167,7 +168,7 @@ instance TypeElim MatlabCode TypeData where
 instance RenderType MatlabCode TypeData where
   multiType ts = do
     typs <- sequence ts
-    let mt = intercalate ", " $ map getTypeString typs
+    let mt = intercalate ", " $ fmap getTypeString typs
     typeFromData Void mt (text mt)
 
 instance UnaryOpSym MatlabCode where
@@ -408,7 +409,7 @@ instance InternalAssignStmt MatlabCode Statement Variable Value where
 instance InternalIOStmt MatlabCode Statement Value where
   printSt = mlPrint
 
-instance InternalControlStmt MatlabCode StatementValue where
+instance InternalControlStmt MatlabCode Statement Value where
   multiReturn = CP.multiReturn id
 
 instance RenderStatement MatlabCode Statement where
@@ -884,6 +885,7 @@ mlListSet lst' idx' val' = do
                (RC.value lst <> wrap (RC.value idx))
   lvar &= val'
 
-mlLambda :: (InternalBinderElim r, ValueElim r) => [r BinderD] ->
-  r Value -> Doc
+mlLambda
+  :: (InternalBinderElim r binder, ValueElim r Value)
+  => [r binder] -> r Value -> Doc
 mlLambda ps ex = text "@" <> parens (binderList ps) <+> RC.value ex

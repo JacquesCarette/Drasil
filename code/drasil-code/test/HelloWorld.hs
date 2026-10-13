@@ -154,7 +154,10 @@ helloProcTests
     , NumericExpression r val
     , Set r val
     , ValueExpression r var val binder typ
+    , TypeSym r typ
+    , ScopeSym r scope
     , BinderSym r binder typ
+    , VariableSym r var typ
     , DeclStatement r bod stmt var scope val
     , AssignStatement r stmt var val
     , CommentStatement r stmt

@@ -23,7 +23,7 @@ analysisSec analysisPath typePath clsIPath graphPath pkgs =
     section drasilAnalysisTitle -- Section title
     [mkParagraph analysisIntro] -- Section introduction
     [dataTableSec analysisPath, tableOfGraphsSec typePath clsIPath pkgs,
-      graphSec graphPath $ map ("drasil-" ++) pkgs] -- Subsections
+      graphSec graphPath $ ("drasil-" ++) <$> pkgs] -- Subsections
     $ makeSecRef "Analysis" $ S "Analysis" -- Section Reference
 
 -- | Analysis section title.
@@ -41,11 +41,11 @@ analysisIntro = S "This section contains graphs and tables that may be used to a
 analysisRefs :: FilePath -> FilePath -> FilePath -> FilePath -> [String] -> [Reference]
 analysisRefs analysisPath typePath clsIPath graphPath pkgs =
   [dataTableHTMLRef analysisPath, dataTableCSVRef analysisPath]
-  ++ map (getGraphsInTableRef "datatype" "" typePath) pkgs
-  ++ map (getGraphsInTableRef "classInst" "" clsIPath) pkgs
-  ++ map (getGraphsInTableRef "datatype" "circo_" typePath) pkgs
-  ++ map (getGraphsInTableRef "classInst" "circo_" clsIPath) pkgs
-  ++ drasilDepGraphRefs graphPath (map ("drasil-" ++) pkgs)
+  <> fmap (getGraphsInTableRef "datatype" "" typePath) pkgs
+  <> fmap (getGraphsInTableRef "classInst" "" clsIPath) pkgs
+  <> fmap (getGraphsInTableRef "datatype" "circo_" typePath) pkgs
+  <> fmap (getGraphsInTableRef "classInst" "circo_" clsIPath) pkgs
+  <> drasilDepGraphRefs graphPath (("drasil-" ++) <$> pkgs)
 
 -- * Data Table Subsection (Intersections of Types and Classes)
 --
@@ -82,9 +82,9 @@ dataTableDesc path = S "This" +:+ namedRef (dataTableHTMLRef path) (S "Data Tabl
 -- | Data table references.
 dataTableHTMLRef, dataTableCSVRef :: FilePath -> Reference
 -- | HTML table.
-dataTableHTMLRef path = makeURI "dataTableHTML" (path ++ "ClassInstDep/DataTable.html") (shortname' $ S "dataTableHTML")
+dataTableHTMLRef path = makeURI "dataTableHTML" (path <> "ClassInstDep/DataTable.html") (shortname' $ S "dataTableHTML")
 -- | Downloadable .csv file.
-dataTableCSVRef path = makeURI "dataTableCSV" (path ++ "ClassInstDep/DataTable.csv") (shortname' $ S "dataTableCSV")
+dataTableCSVRef path = makeURI "dataTableCSV" (path <> "ClassInstDep/DataTable.csv") (shortname' $ S "dataTableCSV")
 
 -- * Table of Graphs Subsection
 --
@@ -108,7 +108,7 @@ tableOfGraphsTitle = S "Table of Graphs"
 -- | Helper to create a graph table based on the kind
 -- (either "datatype" or "classInst"), path, and packages.
 graphTable :: String -> FilePath -> String -> FilePath -> [String] -> [[Sentence]]
-graphTable knd1 path1 knd2 path2 = map (graphTableEntry knd1 path1 knd2 path2)
+graphTable knd1 path1 knd2 path2 = fmap (graphTableEntry knd1 path1 knd2 path2)
 
 -- | Helper to create a row in a graph table. Based on the kind of table we want,
 -- the file path to that graph, and the package name.
@@ -121,7 +121,7 @@ graphTableEntry knd1 path1 knd2 path2 pkg =
 -- (either "datatype" or "classInst"), prefix (either an empty string or "circo_"), file path
 -- to the graph folder, and package name.
 getGraphsInTableRef :: String -> String -> FilePath -> String -> Reference
-getGraphsInTableRef knd prfx path pkg = makeURI (knd ++ pkg ++ prfx ++ "graph") (path ++ prfx ++ pkg ++ ".svg") $ shortname' $ S $ pkg ++ prfx ++ "graph"
+getGraphsInTableRef knd prfx path pkg = makeURI (knd <> pkg <> prfx <> "graph") (path <> prfx <> pkg <> ".svg") $ shortname' $ S $ pkg <> prfx <> "graph"
 
 -- ** Table of Graphs
 
@@ -168,7 +168,7 @@ tableGraphRef = makeTabRef "TableOfGraphs"
 graphSec :: FilePath -> [String] -> Section
 graphSec path pkgs =
   section packDepGraphTitle -- Title
-  (mkParagraph (S graphSecIntro) : displayGraphs ++ listOfLinkedGraphs ++ mkParagraph (S graphSecBwPkgs) : displayPkgsDepGraph) -- Contents
+  (mkParagraph (S graphSecIntro) : displayGraphs <> listOfLinkedGraphs <> (mkParagraph (S graphSecBwPkgs) : displayPkgsDepGraph)) -- Contents
   [] $ makeSecRef "DependencyGraphs" $ S "Dependency Graphs" -- Section Reference
   where
     -- may want to display more graphs later, but for now we only display the "drasil-website"
@@ -202,15 +202,15 @@ dependencyGraphs path pkg = LlC $ dependencyGraph path pkg
 
 -- | Dependency graph figure.
 dependencyGraph :: FilePath -> String -> LabelledContent
-dependencyGraph path pkg = llccFig ("Figure" ++ pkg) $ fig (S $ "Package - " ++ pkg) (drasilDisplayDepGraphPath path pkg)
+dependencyGraph path pkg = llccFig ("Figure" <> pkg) $ fig (S $ "Package - " <> pkg) (drasilDisplayDepGraphPath path pkg)
 
 -- | Function to get the paths of graphs we want to display on the website.
 drasilDisplayDepGraphPath :: FilePath -> FilePath -> String
-drasilDisplayDepGraphPath path fldr = path ++ fldr ++ ".png" -- for some reason, svg doesn't show up on generated website, so use png for now
+drasilDisplayDepGraphPath path fldr = path <> fldr <> ".png" -- for some reason, svg doesn't show up on generated website, so use png for now
 
 -- | Gets all the paths to the PDF graphs from a given list of packages.
 drasilDepGraphPathsPDF :: FilePath -> [String] -> [String]
-drasilDepGraphPathsPDF path = map (\x -> path ++ x ++ ".pdf")
+drasilDepGraphPathsPDF path = fmap (\x -> path <> x <> ".pdf")
 
 -- | Create References to display as links for the dependency graph pdfs.
 drasilDepGraphRefs :: FilePath -> [String] -> [Reference]
@@ -218,8 +218,8 @@ drasilDepGraphRefs path pkgs = zipWith (\x y -> makeURI x y $ shortname' $ S x) 
 
 -- | Create the list of folders with the links to dependency graph pdfs.
 folderList :: FilePath -> [String] -> RawContent
-folderList path pkgs = Enumeration $ Bullet $ map (, Nothing) (folderListItems path pkgs)
+folderList path pkgs = Enumeration $ Bullet $ (, Nothing) <$> folderListItems path pkgs
 
 -- | Helper to create the list items for dependency graph pdfs.
 folderListItems :: FilePath -> [String] -> [ItemType]
-folderListItems path pkgs = map Flat $ zipWith namedRef (drasilDepGraphRefs path pkgs) $ map S pkgs
+folderListItems path pkgs = fmap Flat $ zipWith namedRef (drasilDepGraphRefs path pkgs) $ S <$> pkgs

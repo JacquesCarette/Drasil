@@ -17,8 +17,8 @@ resourcePath = "../../../../datafiles/sglpend/"
 
 figMotion :: LabelledContent
 figMotion = llccFig "sglpend" $ figWithWidth (D.toSent $ atStartNP (the physicalSystem))
-  (resourcePath ++ "sglpend.jpg") 70
+  (resourcePath <> "sglpend.jpg") 70
 
 sysCtxFig1 :: LabelledContent
 sysCtxFig1 = llccFig "sysCtxDiag" $ fig (titleize sysCont)
-  (resourcePath ++ "SystemContextFigure.png")
+  (resourcePath <> "SystemContextFigure.png")

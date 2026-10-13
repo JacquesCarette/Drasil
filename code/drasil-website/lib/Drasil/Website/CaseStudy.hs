@@ -2,17 +2,20 @@
 -- To be used in the Drasil website.
 module Drasil.Website.CaseStudy (caseStudySec, caseStudyTable) where
 
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (E)
 import Language.Drasil.Document
 import Language.Drasil.Code (Choices(..), Architecture(..), DataInfo(..),
   Maps(..), OptionalFeatures(..), Modularity(..), ImplementationType(..),
   Logging, LogConfig(logging), Structure(..), ConstantStructure(..),
   ConstantRepr(..))
-import Drasil.SRS (SmithEtAlSRS)
-import Drasil.Generator (codedDirName)
+import Drasil.Generator (codedHRName)
 import Drasil.GOOL (CodeType(..))
+import Drasil.SRS (SmithEtAlSRS)
+import Drasil.System (HasProjectName(..))
 
-import Drasil.Website.Example (examples, Example(..), exName)
+import Drasil.Website.Example (examples, Example(..))
 
 -- * Case Studies Section
 
@@ -64,13 +67,13 @@ data CaseStudy = CS {
 -- so we take the naming scheme from there.
 mkCaseStudy :: Example -> [CaseStudy]
 mkCaseStudy E{choicesE = []} = []
-mkCaseStudy ex@E{systemE = si, choicesE = [x]}
-  = [CS{systemCS = si, progName = S $ exName ex, choicesCS = x}]
+mkCaseStudy E{systemE = si, choicesE = [x]}
+  = [CS{systemCS = si, progName = S $ si ^. projAbrv, choicesCS = x}]
 mkCaseStudy ex@E{systemE = si, choicesE = xs}
-  = map (\x -> CS{
+  = (\x -> CS{
       systemCS = si,
-      progName = S $ codedDirName (exName ex) x, choicesCS = x
-    }) xs
+      progName = S $ codedHRName ex x, choicesCS = x
+    }) <$> xs
 
 -- * Display 'CaseStudy' Information as a Table
 --
@@ -82,11 +85,11 @@ mkCaseStudy ex@E{systemE = si, choicesE = xs}
 
 -- | Hardcoded header row for the Case studies table
 headerRow :: [Sentence]
-headerRow = map S [caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
+headerRow = S <$> [caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
 
 -- | Creates the case study table body.
 tableBody :: [CaseStudy] -> [[Sentence]]
-tableBody = map displayCS
+tableBody = fmap displayCS
 
 -- | Converts a case study into a table row for easy display.
 displayCS :: CaseStudy -> [Sentence]
@@ -118,11 +121,11 @@ data CSLegend = CSL {
 
 -- | Make the legend for the case study table as a list.
 caseStudyLegend :: RawContent
-caseStudyLegend = Enumeration $ Bullet $ map ((, Nothing) . mkLegendListFunc) legendEntries
+caseStudyLegend = Enumeration $ Bullet $ (, Nothing) . mkLegendListFunc <$> legendEntries
 
 -- | Helper to convert the Case Study legends into list items.
 mkLegendListFunc :: CSLegend -> ItemType
-mkLegendListFunc csleg = Nested (S $ ttle csleg) $ Bullet $ map ((, Nothing) . mkTandDSent) $ symbAndDefs csleg
+mkLegendListFunc csleg = Nested (S $ ttle csleg) $ Bullet $ (, Nothing) . mkTandDSent <$> symbAndDefs csleg
 
 -- | Should eventually take Sentences instead of Strings. Converts into the format of "symbol - definition".
 mkTandDSent :: (String, String) -> ItemType

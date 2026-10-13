@@ -84,7 +84,7 @@ module Language.Drasil (
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.DefinedQuantity
   , DefinedQuantityDict, quant, quant', quantAU, quantNoUnit, quantNoUnit'
-  , dqd, dqd', dqdNoUnit, dqdNoUnit', dqdWr
+  , dqd, dqd', dqdNoUnit, dqdWr
   , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
   -- Language.Drasil.Chunk.UnitDefn
   , UnitDefn(..)
@@ -93,7 +93,7 @@ module Language.Drasil (
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , getCu, MayHaveUnit(getUnit)
+  , getCu, MayHaveUnit(getUnit), unitSymbol, UnitSymbol(..), UDefn(UScale)
 
   -- *** Constrained and Uncertain Values
   -- Language.Drasil.Constraint
@@ -130,7 +130,8 @@ module Language.Drasil (
   -- Language.Drasil.NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
-  , CapitalizationRule(..), atStartNP, atStartNP'
+  , CapitalizationRuleG(..), CapitalizationRule, atStartNP, atStartNP'
+  , npS, npP, (.-.), (.+.)
   , PluralRule(..)
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
@@ -233,7 +234,7 @@ import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, fullName, nameStr, rendPersLFM,
   rendPersLFM', rendPersLFM'', comparePeople)
 
-import Language.Drasil.UnitLang (USymb(US))
+import Language.Drasil.UnitLang (USymb(US), UnitSymbol(..), UDefn(UScale))
 import Language.Drasil.Uncertainty
 
 import Language.Drasil.Development.Sentence -- are these really development?
@@ -243,4 +244,4 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , getCu, MayHaveUnit(getUnit))
+  , getCu, MayHaveUnit(getUnit), unitSymbol)

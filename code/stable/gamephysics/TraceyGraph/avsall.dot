@@ -19,7 +19,6 @@ digraph "avsall" {
     "dataDefn:potEnergy" -> "instance:assumpOD";
     "dataDefn:potEnergy" -> "instance:assumpDI";
     "dataDefn:momentOfInertia" -> "instance:assumpOT";
-    "theory:newtonSLR" -> "instance:assumpOD";
     "theory:impulseS" -> "instance:assumpOT";
     "theory:impulseS" -> "instance:assumpOD";
     "theory:impulseS" -> "instance:assumpAD";

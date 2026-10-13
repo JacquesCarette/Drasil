@@ -26,17 +26,17 @@ chooseSpace lng chs = \s -> selectType lng s (spaceMatch (maps chs) s)
         selectType _ s (t:_) = do
           modify (addLoggedSpace s t .
             addToDesignLog s t (successLog s t))
-          return t
-        selectType l s [] = error $ "Chosen CodeType matches for Space " ++
-          show s ++ " are not compatible with target language " ++ show l
+          pure t
+        selectType l s [] = error $ "Chosen CodeType matches for Space " <>
+          show s <> " are not compatible with target language " <> show l
 
 -- | Defines a design log message based on an incompatibility between the given
 -- 'Lang' and attempted 'Space'-'CodeType' match.
 incompatibleType :: Lang -> Space -> CodeType -> Doc
-incompatibleType l s t = text $ "Language " ++ show l ++ " does not support "
-  ++ "code type " ++ show t ++ ", chosen as the match for the " ++ show s ++
+incompatibleType l s t = text $ "Language " <> show l <> " does not support "
+  <> "code type " <> show t <> ", chosen as the match for the " <> show s <>
   " space. Trying next choice."
 
 -- | Defines a successful log message.
 successLog :: Space -> CodeType -> Doc
-successLog s t = text ("Successfully matched "++show s ++ " with "++ show t ++".")
+successLog s t = text ("Successfully matched "<>show s <> " with "<> show t <>".")

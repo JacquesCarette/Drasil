@@ -9,32 +9,37 @@ module Drasil.GProc.InterfaceProc (
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MethodSym(..), Array,
-  EmptyStatement, MultiStatement, ValueStatement, AssignStatement, Argument,
-  BooleanExpression, CommandLineArgs, DeclStatement, CommentStatement,
-  Comparison, ControlStatement, FuncAppStatement, PrintConsole, ReadConsole,
-  FileHandling, PrintFile, ReadFile, List, ListStatement, Literal, MathConstant,
-  NumericExpression, ParameterSym, Reference, Set, StringStatement,
-  ValueExpression, VariableValue, UnRepr, FunctionSym, ScopeSym, BinderSym,
-  InternalList, TypeElim, VariableElim, BodySym, BlockSym)
+import Drasil.Shared.InterfaceCommon (Label, VisibilitySym, MethodSym(..),
+  IndexTranslator, Array, EmptyStatement, MultiStatement, ValueStatement,
+  AssignStatement, Argument, BooleanExpression, CommandLineArgs, DeclStatement,
+  CommentStatement, Comparison, ControlStatement, FuncAppStatement, PrintConsole,
+  ReadConsole, FileHandling, PrintFile, ReadFile, List, ListStatement, Literal,
+  MathConstant, NumericExpression, ParameterSym, Reference, Set, StringStatement,
+  ValueExpression, ValueSym, VariableSym, VariableValue, UnRepr, ScopeSym,
+  BinderSym, InternalList, TypeSym, TypeElim, VariableElim, BodySym, BlockSym)
 import Drasil.Shared.State (GS, FS, MS)
 import Drasil.Shared.AST (ProgData, TypeData)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating a procedural program.
 class (UnRepr r TypeData, BodySym r bod block, BlockSym r block stmt,
-  FunctionSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r block,
-  MethodSym r vis mthd bod, TypeElim r, VariableElim r, Array r,
-  EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt,
-  AssignStatement r stmt, Argument r, BooleanExpression r, CommandLineArgs r,
-  CommentStatement r stmt, Comparison r, ControlStatement r stmt bod,
-  DeclStatement r stmt bod, FuncAppStatement r stmt, PrintConsole r stmt,
-  ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
-  List r, ListStatement r stmt, Literal r, MathConstant r, NumericExpression r,
-  ParameterSym r, Reference r, Set r, StringStatement r stmt, ValueExpression r,
-  VariableValue r, ModuleSym r mod mthd, FileSym r file mod,
+  ValueSym r val typ, VariableSym r var typ, VariableValue r var val,
+  ScopeSym r scope, BinderSym r binder typ, InternalList r block var val,
+  VisibilitySym r vis, MethodSym r mthd vis param bod var typ, TypeSym r typ,
+  TypeElim r typ, VariableElim r var typ, IndexTranslator r val, Array r var val,
+  EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt val,
+  AssignStatement r stmt var val, Argument r val, BooleanExpression r val,
+  CommandLineArgs r val, CommentStatement r stmt, Comparison r val,
+  ControlStatement r bod stmt var val, DeclStatement r bod stmt var scope val,
+  FuncAppStatement r stmt var val, PrintConsole r stmt val,
+  ReadConsole r stmt var, FileHandling r stmt var val, PrintFile r stmt val,
+  ReadFile r stmt var val, List r val, ListStatement r stmt val,
+  Literal r val typ, MathConstant r val, NumericExpression r val,
+  ParameterSym r param var, Reference r val, Set r val,
+  StringStatement r stmt var val, ValueExpression r var val binder typ,
+  VariableValue r var val, ModuleSym r mod mthd, FileSym r file mod,
   ProgramSym r prg file)
-  => ProcProg r vis stmt mthd prg file mod bod block
+  => ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)

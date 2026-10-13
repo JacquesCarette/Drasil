@@ -3,9 +3,9 @@ module Drasil.GOOL.LanguageRenderer.CommonGOOL (
   constDecDef, classMethodCall, listAppend, listAdd, innerType
 ) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), TypeElim(..), SVariable,
-  SValue, NamedArgs, VariableElim(..), TypeSym(void), IndexTranslator(..),
-  getCodeType, ValueStatement(valStmt))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), TypeElim(..), NamedArgs,
+  VariableElim(..), TypeSym(void), IndexTranslator(..), getCodeType,
+  ValueStatement(valStmt))
 import Drasil.GOOL.InterfaceGOOL (objMethodCall, convTypeOO, InternalValueExp,
   OOTypeSym)
 import Drasil.Shared.RendererClassesCommon (ScopeElim(..), RenderValue(..),
@@ -21,14 +21,14 @@ import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 
 constDecDef
-  :: ( InternalVarElim r
+  :: ( InternalVarElim r var
      , RenderStatement r stmt
-     , ScopeElim r
+     , ScopeElim r ScopeData
      , UnRepr r TypeData
-     , ValueElim r
-     , VariableElim r
+     , ValueElim r val
+     , VariableElim r var TypeData
      )
-  => SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
+  => VS (r var) -> r ScopeData -> VS (r val) -> MS (r stmt)
 constDecDef vr' scp v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -37,28 +37,33 @@ constDecDef vr' scp v'= do
   mkStmt (renderConstDecDef vr v)
 
 classMethodCall
-  :: (RenderValue r, UnRepr r TypeData)
+  :: (RenderValue r var val TypeData, UnRepr r TypeData)
   => String
   -> VS (r TypeData)
   -> VS (r TypeData)
-  -> [SValue r]
-  -> NamedArgs r
-  -> SValue r
+  -> [VS (r val)]
+  -> NamedArgs r var val
+  -> VS (r val)
 classMethodCall f t cls vs ns = do
   c <- cls
   call Nothing (Just $ renderType c <> dot) f t vs ns
 
 listAppend
-  :: (InternalValueExp r, ValueStatement r stmt)
-  => String -> SValue r -> SValue r -> MS (r stmt)
+  :: (TypeSym r typ, InternalValueExp r var val typ, ValueStatement r stmt val)
+  => String -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 
 listAdd
-  :: (IndexTranslator r, InternalValueExp r, ValueStatement r stmt)
-  => String -> SValue r -> SValue r -> SValue r -> MS (r stmt)
+  ::
+    ( TypeSym r typ
+    , IndexTranslator r val
+    , InternalValueExp r var val typ
+    , ValueStatement r stmt val
+    )
+  => String -> VS (r val) -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]
 
 innerType
-  :: (TypeElim r, OOTypeSym r)
-  => VS (r TypeData) -> VS (r TypeData)
+  :: (TypeElim r typ, TypeSym r typ, OOTypeSym r typ)
+  => VS (r typ) -> VS (r typ)
 innerType t = t >>= (convTypeOO . getInnerType . getCodeType)

@@ -13,14 +13,14 @@ import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom))
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 import Language.Drasil.Sentence (Sentence)
 
 -- | Check if something has one domain. Throws an error if there is more than one.
 sDom :: [UID] -> UID
 sDom [d] = d
-sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
-  show (length d) ++ " instead."
+sDom d = error $ "Expected ConceptDomain to have a single domain, found " <>
+  show (length d) <> " instead."
 
 -- | The 'ConceptChunk' datatype records a concept that contains a unique id ('UID'),
 -- a term ('NP'), a definition ('Sentence'), an optional abbreviation ('Maybe String'),

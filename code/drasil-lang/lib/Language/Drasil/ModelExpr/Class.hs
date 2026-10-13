@@ -15,7 +15,7 @@ import Language.Drasil.Symbol (Symbol, HasSymbol)
 -- | Helper for creating new smart constructors for Associative Binary
 -- operations that require at least 1 expression.
 assocCreate :: AssocBoolOper -> [ModelExpr] -> ModelExpr
-assocCreate abo [] = error $ "Need at least 1 expression to create " ++ show abo
+assocCreate abo [] = error $ "Need at least 1 expression to create " <> show abo
 assocCreate _ [x]  = x
 assocCreate b des  = AssocB b $ assocSanitize b des
 
@@ -23,7 +23,7 @@ assocCreate b des  = AssocB b $ assocSanitize b des
 assocSanitize :: AssocBoolOper -> [ModelExpr] -> [ModelExpr]
 assocSanitize _ [] = []
 assocSanitize b (it@(AssocB c des):r)
-  | b == c    = assocSanitize b des ++ assocSanitize b r
+  | b == c    = assocSanitize b des <> assocSanitize b r
   | otherwise = it : assocSanitize b r
 assocSanitize b (de:des) = de : assocSanitize b des
 
@@ -71,7 +71,7 @@ instance ModelExprC ModelExpr where
 
   equiv des
     | length des >= 2 = assocCreate Equivalence des
-    | otherwise       = error $ "Need at least 2 expressions to create " ++ show Equivalence
+    | otherwise       = error $ "Need at least 2 expressions to create " <> show Equivalence
 
   -- TODO: All of the below only allow for Reals! Will be easier to fix while we add typing.
   -- | Integrate over some expression (∫).

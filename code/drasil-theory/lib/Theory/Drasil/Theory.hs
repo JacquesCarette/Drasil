@@ -82,7 +82,7 @@ instance Referable TheoryModel where
 -- have the same type!
 -- | Constructor for theory models. Must have a source. Uses the shortname of the reference address.
 tm :: ModelKind ModelExpr -> [DecRef] -> String -> [Sentence] -> TheoryModel
-tm mkind [] _   = error $ "Source field of " ++ showUID mkind ++ " is empty"
+tm mkind [] _   = error $ "Source field of " <> showUID mkind <> " is empty"
 tm mkind r  lbe = TM mkind r (shortname' $ S lbe) (prependAbrv thModel lbe)
 
 -- | Constructor for theory models. Uses the shortname of the reference address.

@@ -1,12 +1,19 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Drasil.Data.Formats.HTML.Core
   ( -- * HTML
-    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), customTag,
+    -- ** AST
+    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), Attr(..),
     Format(..), HLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
-    Attr(..), bold, emphasis, subscript, superscript, span, figureImage
+    -- * Smart Constructors
+    attr, id_, class_, rawText, rawText', customTag,
+    bold, bold_, emphasis, emphasis_, subscript, subscript_, superscript, superscript_,
+    span, span_, toHLevel, figureImage, inlineScript, externalScript, stylesheet
   )
 where
 
 import Data.Char (isAsciiLower, isAsciiUpper, isDigit)
+import Data.String (IsString(..))
 import Data.Text (Text)
 import qualified Data.Text as T
 import Prelude hiding (span)
@@ -35,6 +42,7 @@ data HTMLBody
   | TextFormat Format [Attr] [HTMLBody]
   | Heading HLevel [Attr] [HTMLBody]
   | List ListType [Attr] [LItem]
+  | Section [Attr] [HTMLBody]
   | Table [Attr] [Row]
   | DescriptionList [Attr] [DItem]
   | Anchor URL [Attr] [HTMLBody]
@@ -45,6 +53,9 @@ data HTMLBody
   | Custom CustomTag [Attr] [HTMLBody]
   | Comment Text
   deriving (Show, Eq)
+
+instance IsString HTMLBody where
+  fromString = RawText . T.pack
 
 -- TODO: Support more tags
 -- https://www.w3schools.com/tags/default.asp
@@ -63,7 +74,18 @@ data Format = Bold | Emphasis | Subscript | Superscript | Span
 
 -- | Heading level
 data HLevel = H1 | H2 | H3 | H4 | H5 | H6
-  deriving (Show, Eq)
+  deriving (Show, Eq, Enum, Bounded)
+
+-- * Conversions
+
+-- | Converts a 0-indexed integer to a heading level (capped at H6).
+toHLevel :: Int -> HLevel
+toHLevel 0 = H1
+toHLevel 1 = H2
+toHLevel 2 = H3
+toHLevel 3 = H4
+toHLevel 4 = H5
+toHLevel _ = H6
 
 -- | List type
 data ListType = Ordered | Unordered
@@ -102,7 +124,7 @@ data TagType = Standard | Void
 customTag :: Text -> CustomTag
 customTag t
   | isSanitary t = CT t
-  | otherwise = error "Bad custom tag name"
+  | otherwise = error $ "Bad custom tag name: " <> T.unpack t
 
 isSanitary :: Text -> Bool
 isSanitary t = not (T.null t) && isAsciiLetter (T.head t) && T.all isAllowedChar t
@@ -111,24 +133,66 @@ isSanitary t = not (T.null t) && isAsciiLetter (T.head t) && T.all isAllowedChar
     isAsciiLetter c = isAsciiLower c || isAsciiUpper c
     isAllowedChar c = isAsciiLetter c || isDigit c || c == '-'
 
--- | Smart Constructors
-bold :: [Attr] -> Text -> HTMLBody
-bold attrs txt = TextFormat Bold attrs [RawText txt]
+-- * Smart Constructors
 
-emphasis :: [Attr] -> Text -> HTMLBody
-emphasis attrs txt = TextFormat Emphasis attrs [RawText txt]
+-- | Creates a generic HTML attribute from a key and value.
+attr :: Text -> Text -> Attr
+attr = Attr
 
-subscript :: [Attr] -> Text -> HTMLBody
-subscript attrs txt = TextFormat Subscript attrs [RawText txt]
+-- | Creates an id attribute.
+id_ :: Text -> Attr
+id_ = attr "id"
 
-superscript :: [Attr] -> Text -> HTMLBody
-superscript attrs txt = TextFormat Superscript attrs [RawText txt]
+-- | Creates a class attribute from a list of class names.
+class_ :: [Text] -> Attr
+class_ = attr "class" . T.unwords
 
-span :: [Attr] -> Text -> HTMLBody
-span attrs txt = TextFormat Span attrs [RawText txt]
+-- | Wraps 'Text' into a 'RawText' 'HTMLBody'.
+rawText :: Text -> HTMLBody
+rawText = RawText
 
--- | Creates a figure containing an image and a caption.
--- The provided attributes are applied to the Figure
-figureImage :: [Attr] -> File -> Text -> Text -> HTMLBody
-figureImage attrs src altText captionTxt =
-  Figure attrs [Img src altText [], FigCaption [] [RawText captionTxt]]
+-- | Wraps a 'String' into a 'RawText' 'HTMLBody'.
+rawText' :: String -> HTMLBody
+rawText' = fromString
+
+-- | Internal: Helper for formatting text.
+textFormat :: Format -> [Attr] -> Text -> HTMLBody
+textFormat fmt attrs txt = TextFormat fmt attrs [RawText txt]
+
+-- | Smart constructors for formatting text.
+bold, emphasis, subscript, superscript, span :: [Attr] -> Text -> HTMLBody
+bold = textFormat Bold
+emphasis = textFormat Emphasis
+subscript = textFormat Subscript
+superscript = textFormat Superscript
+span = textFormat Span
+
+-- | Smart constructors for formatting HTML elements.
+bold_, emphasis_, subscript_, superscript_ :: [HTMLBody] -> HTMLBody
+bold_ = TextFormat Bold []
+emphasis_ = TextFormat Emphasis []
+subscript_ = TextFormat Subscript []
+superscript_ = TextFormat Superscript []
+
+-- | Smart constructors for 'span' elements.
+span_ :: [Attr] -> [HTMLBody] -> HTMLBody
+span_ = TextFormat Span
+
+-- | Creates a figure containing an image and a caption. The first list of
+-- attributes is applied to the figure; the second is applied to the image.
+figureImage :: [Attr] -> [Attr] -> File -> Text -> Text -> HTMLBody
+figureImage attrsFig attrsImg src altText captionTxt =
+  Figure attrsFig [Img src altText attrsImg, FigCaption [] [RawText captionTxt]]
+
+-- | Creates an inline script. Does not allow any attributes.
+inlineScript :: Text -> HTMLHead
+inlineScript = Script []
+
+-- | Creates an external script. Requires a source file/URL and allows optional
+-- attributes.
+externalScript :: File -> [Attr] -> HTMLHead
+externalScript src attrs = Script (attr "src" src : attr "type" "text/javascript" : attrs) mempty
+
+-- | Create the link to the CSS file.
+stylesheet :: Text -> HTMLHead
+stylesheet css = Link "stylesheet" (css <> ".css") [attr "type" "text/css"]

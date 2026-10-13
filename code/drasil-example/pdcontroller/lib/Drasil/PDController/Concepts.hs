@@ -26,7 +26,7 @@ pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
       ccLaplaceTransform, controlVariable, stepTime, ccAbsTolerance,
       ccRelTolerance, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
 pidCL
-  = cncpt''' (mkUid "pdCtrlLoop") (nounPhraseSP "PD Control Loop") (S ("Closed-Loop control " ++
+  = cncpt''' (mkUid "pdCtrlLoop") (nounPhraseSP "PD Control Loop") (S ("Closed-Loop control " <>
         "system with PD Controller, Summing Point and Power Plant"))
 
 pidC
@@ -34,8 +34,8 @@ pidC
         (S "Proportional-Derivative Controller")
 
 summingPt
-  = cncpt''' (mkUid "summingPoint") (nounPhraseSP "Summing Point") (S ("Control block where " ++
-        "the difference between the Set-Point and the Process Variable " ++
+  = cncpt''' (mkUid "summingPoint") (nounPhraseSP "Summing Point") (S ("Control block where " <>
+        "the difference between the Set-Point and the Process Variable " <>
         "is computed"))
 
 powerPlant
@@ -45,12 +45,12 @@ powerPlant
 secondOrderSystem
   = cncpt''' (mkUid "secondOrderSystem") (nounPhraseSP "Second Order System")
       (S ("A system whose input-output relationship is denoted by a second-order "
-         ++ "differential equation"))
+         <> "differential equation"))
 
 processError
   = cncpt''' (mkUid "processError") (nounPhraseSP "Process Error")
       (S ("Input to the PID controller. Process Error is the difference between the "
-         ++ "Set-Point and the Process Variable"))
+         <> "Set-Point and the Process Variable"))
 
 stepTime = cncpt''' (mkUid "stepTime") (nounPhraseSP "Step Time") (S "Simulation step time")
 
@@ -69,7 +69,7 @@ controlVariable
 setPoint
   = cncpt''' (mkUid "setPoint") (nounPhraseSP "Set-Point")
       (S ("The desired value that the control system must reach. This also knows "
-         ++ "as the reference variable"))
+         <> "as the reference variable"))
 
 propGain
   = cncpt''' (mkUid "propGain") (nounPhraseSP "Proportional Gain")
@@ -81,12 +81,12 @@ derGain
 
 propControl
   = cncpt''' (mkUid "propControl") (nounPhraseSP "Proportional control")
-      (S ("A linear feedback control system where correction is applied to the controlled " ++
+      (S ("A linear feedback control system where correction is applied to the controlled " <>
       "variable which is proportional to the difference between desired and measured values"))
 
 derControl
   = cncpt''' (mkUid "derControl") (nounPhraseSP "Derivative control")
-      (S ("Monitors the rate of change of the error signal and contributes a component " ++
+      (S ("Monitors the rate of change of the error signal and contributes a component " <>
       "of the output signal (proportional to a derivative of the error signal)"))
 
 simulation
@@ -96,7 +96,7 @@ simulation
 ccFrequencyDomain
   = cncpt''' (mkUid "frequencyDomain") (nounPhraseSP "frequency domain")
       (S ("The analysis of mathematical functions in terms of frequency, instead "
-         ++ "of time"))
+         <> "of time"))
 
 ccTimeDomain
   = cncpt''' (mkUid "timeDomain") (nounPhraseSP "time domain")
@@ -104,7 +104,7 @@ ccTimeDomain
 
 ccLaplaceTransform
   = cncpt''' (mkUid "laplaceTransform") (cn' "Laplace transform")
-      (S ("An integral transform that converts a function of a real variable t " ++
+      (S ("An integral transform that converts a function of a real variable t " <>
          "(often time) to a function of a complex variable s (complex frequency)"))
 
 ccAbsTolerance
@@ -118,7 +118,7 @@ ccRelTolerance
 ccTransferFxn
   = cncpt''' (mkUid "transferFxn") (nounPhraseSP "Transfer Function")
       (S ("The Transfer Function of a system is the ratio of the output to the input"
-         ++ " functions in the frequency domain"))
+         <> " functions in the frequency domain"))
 
 ccDampingCoeff
   = cncpt''' (mkUid "dampingCoeff") (nounPhraseSP "Damping Coefficient")
@@ -130,7 +130,7 @@ ccStiffCoeff
 
 defs :: [ConceptChunk]
 defs
-  = termDefs ++ [simulationTime, processVariable, setPoint, propGain, derGain,
+  = termDefs <> [simulationTime, processVariable, setPoint, propGain, derGain,
      ccLaplaceTransform, stepTime,
      ccAbsTolerance, ccRelTolerance]
 

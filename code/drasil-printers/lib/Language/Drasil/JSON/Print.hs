@@ -6,32 +6,29 @@ module Language.Drasil.JSON.Print (
 ) where
 
 import Prelude hiding (print, (<>))
+import qualified Prelude as P ((<>))
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 import qualified Prettyprinter as PNew (Doc)
 
 import Drasil.Data.Formats.JSON (JSON(..), JSONRenderOptions, JSONStyle(..),
   jsonRenderOpts, renderJSON)
-import Language.Drasil (checkValidStr, RenderSpecial(..))
+import Language.Drasil (checkValidStr, Special(Circle))
 import Language.Drasil.Document (MaxWidthPercent)
 
-import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
-  ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
-  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
-  Fonts(Bold), OverSymb(Hat), Label, LinkType(Internal, Cite2, External))
+import Drasil.Printers.Common
+import Language.Drasil.Printing.AST (ItemType(..), ListType(..), Spec(..),
+  Expr(..), Label, Fonts(Bold), OverSymb(Hat), Fence(..), Ops(..), LinkType(..))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
-import Language.Drasil.Printing.Helpers (sqbrac, unders, hat)
+import Language.Drasil.Printing.Helpers (unders, hat)
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
-import Language.Drasil.HTML.Helpers (th, bold, reflinkInfo)
-import Language.Drasil.HTML.Print (renderCite, OpenClose(Open, Close), fence,
-  htmlBibFormatter)
-import Language.Drasil.HTML.Monad (unPH)
+import Language.Drasil.Markdown.Citation (BibFormatter(..), renderCite)
 
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine,
- tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv,
- markdownCell, codeCell)
+ tr, td, th, bold, em, image, li, pa, ba, table, refwrap, refID, reflink,
+ reflinkInfo, reflinkURI, mkDiv, markdownCell, codeCell)
 
 pretty :: JSONRenderOptions
 pretty = jsonRenderOpts (Pretty 2)
@@ -61,17 +58,17 @@ printMath = (`runPrint` Math)
 printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = text "" $$ h (n + 1) <> pSpec contents $$ refID (pSpec l)
 printLO (Cell _)                         = empty
-printLO (HDiv _ layoutObs _)             = vcat (map printLO layoutObs)
+printLO (HDiv _ layoutObs _)             = vcat (printLO <$> layoutObs)
 printLO (Paragraph contents)             = text "" $$ stripnewLine (show (pSpec contents))
 printLO (EqnBlock contents)              = mathEqn
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$"
+    mjDelimDisp = ddollars . stripnewLine . show
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 printLO (Table _ rows r _ _)            = text "" $$ makeTable rows (pSpec r)
 printLO (Definition ssPs l)             = text "<br>" $$ makeDefn ssPs (pSpec l)
 printLO (List t)                        = text "" $$ makeList t False
-printLO (Figure r c f wp)               = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
+printLO (Figure r c f wp)               = makeFigure (pSpec r) (pSpec <$> c) (text f) wp
 printLO (Bib bib)                       = makeBib bib
 printLO Graph{}                         = empty
 printLO CodeBlock {}                    = empty
@@ -85,12 +82,12 @@ printLO' (Paragraph contents)             = [markdownCell $ stripnewLine (show (
 printLO' (EqnBlock contents)              = [markdownCell mathEqn]
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$"
+    mjDelimDisp = ddollars . stripnewLine . show
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 printLO' (Table _ rows r _ _)             = [markdownCell $ makeTable rows (pSpec r)]
 printLO' Definition{}                     = []
 printLO' (List t)                         = [markdownCell $ makeList t False]
-printLO' (Figure r c f wp)                = [markdownCell $ makeFigure (pSpec r) (fmap pSpec c) (text f) wp]
+printLO' (Figure r c f wp)                = [markdownCell $ makeFigure (pSpec r) (pSpec <$> c) (text f) wp]
 printLO' (Bib bib)                        = [markdownCell $ makeBib bib]
 printLO' Graph{}                          = []
 printLO' (CodeBlock contents)             = [codeCell $ cSpec contents]
@@ -100,8 +97,10 @@ printLO' (CodeBlock contents)             = [codeCell $ cSpec contents]
 print :: [LayoutObj] -> Doc
 print = foldr (($$) . printLO) empty
 
+data ExprContext = NotebookMath | NotebookCode
+
 pSpec :: Spec -> Doc
-pSpec (E e)  = text "$" <> pExpr e <> text "$" -- symbols used
+pSpec (E e)  = dollar $ pMathExpr e
 pSpec (a :+: b) = pSpec a <> pSpec b
 pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
@@ -109,41 +108,58 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s 
     escapeChars '&' = "\\&"
     escapeChars c = [c]
 pSpec (Tooltip _ s) = pSpec s
-pSpec (Sp s)    = text $ unPH $ special s
-pSpec HARDNL    = empty
+pSpec (Sp Circle) = text "&deg;"
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
 pSpec (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec a -- no difference for citations?
 pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)
 pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
 pSpec EmptyS    = text "" -- Expected in the output
-pSpec (Quote q) = doubleQuotes $ pSpec q
+pSpec (Quote q) = dquote $ pSpec q
 
 cSpec :: Spec -> Doc
-cSpec (E e)  = pExpr e
+cSpec (E e)  = pExpr NotebookCode e
 cSpec _      = empty
 
+-- | Render math where the enclosing context already delimits the expression.
+pMathExpr :: Expr -> Doc
+pMathExpr (Row [e]) = pMathExpr e
+pMathExpr e = pExpr NotebookMath e
+
 -- | Renders expressions in JSON (called by multiple functions)
-pExpr :: Expr -> Doc
-pExpr (Dbl d)        = text $ showEFloat Nothing d ""
-pExpr (Int i)        = text $ show i
-pExpr (Str s)        = doubleQuotes $ text s
-pExpr (Div n d)      = mkDiv "frac" (pExpr n) (pExpr d)
-pExpr (Row l)        = hcat $ map pExpr l
-pExpr (Set l)        = hcat $ map pExpr l
-pExpr (Ident s)      = text s
-pExpr (Label s)      = text s
-pExpr (Spec s)       = text $ unPH $ special s
-pExpr (Sub e)        = unders <> pExpr e
-pExpr (Sup e)        = hat <> pExpr e
-pExpr (Over Hat s)   = pExpr s <> text "&#770;"
-pExpr (MO o)         = text $ pOps o
-pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)
-pExpr (Font Bold e)  = pExpr e
+pExpr :: ExprContext -> Expr -> Doc
+pExpr _ (Dbl d)        = text $ showEFloat Nothing d ""
+pExpr _ (Int i)        = text $ show i
+pExpr _ (Str s)        = dquote $ text s
+pExpr NotebookMath (Div n d) =
+  mkDiv "frac" (pMathExpr n) (pMathExpr d)
+pExpr ctx (Div n d)    = mkDiv "frac" (pExpr ctx n) (pExpr ctx d)
+pExpr NotebookMath (Row [x]) =
+  braces $ pExpr NotebookMath x
+pExpr ctx (Row l)      = hcat $ pExpr ctx <$> l
+pExpr ctx (Set l)      = hcat $ pExpr ctx <$> l
+pExpr _ (Ident s)      = text s
+pExpr NotebookMath (Label s) =
+  printMath $ toMath $ TeX.pExpr (Label s)
+pExpr NotebookCode (Label s) = text s
+pExpr _ (Spec Circle)  = text "&deg;"
+pExpr NotebookMath (Sub e) =
+  unders <> braces (pMathExpr e)
+pExpr NotebookCode (Sub e) =
+  unders <> pExpr NotebookCode e
+pExpr NotebookMath (Sup e) =
+  hat <> braces (pMathExpr e)
+pExpr NotebookCode (Sup e) =
+  hat <> pExpr NotebookCode e
+pExpr ctx (Over Hat s) = pExpr ctx s <> text "&#770;"
+pExpr _ (MO o)         = text $ pOps o
+pExpr ctx (Fenced l r e) =
+  text (fence Open l) <> pExpr ctx e <> text (fence Close r)
+pExpr ctx (Font Bold e) = pExpr ctx e
 --pExpr (Font Bold e)  = bold $ pExpr e -- used before
 --pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- HTML used
 --pExpr (Spc Thin)     = text "&#8239;" -- HTML used
 -- Uses TeX for Mathjax for all other exprs
-pExpr e              = printMath $ toMath $ TeX.pExpr e
+pExpr _ e              = printMath $ toMath $ TeX.pExpr e
 
 -- TODO: edit all operations in markdown format
 pOps :: Ops -> String
@@ -202,6 +218,18 @@ pOps SRemove    = " - "
 pOps SContains  = " in "
 pOps SUnion     = " and "
 
+-- | Referring to 'fence' (for parenthesis and brackets). Either opened or closed.
+data OpenClose = Open | Close
+
+-- | Allows for open/closed variants of parenthesis, curly brackets, absolute value symbols, and normal symbols.
+fence :: OpenClose -> Fence -> String
+fence Open  Paren = "("
+fence Close Paren = ")"
+fence Open  Curly = "{"
+fence Close Curly = "}"
+fence _     Abs   = "|"
+fence _     Norm  = "||"
+
 -- | Renders Markdown table, called by 'printLO'
 makeTable :: [[Spec]] -> Doc -> Doc
 makeTable [] _      = error "No table to print"
@@ -214,12 +242,12 @@ makeRows = foldr (($$) . makeColumns) empty
 -- | makeHeaderCols: Helper for creating table header row (each of the column header cells)
 -- | makeColumns: Helper for creating table columns
 makeHeaderCols, makeColumns :: [Spec] -> Doc
-makeHeaderCols l = text header $$ text (genMDtable ++ "|")
-  where header = show (text "|" <> hcat (punctuate (text "|") (map pSpec l)) <> text "|")
+makeHeaderCols l = text header $$ text (genMDtable P.<> "|")
+  where header = show (text "|" <> hcat (punctuate (text "|") (pSpec <$> l)) <> text "|")
         c = count '|' header
         genMDtable = concat (replicate (c-1) "|:--- ")
 
-makeColumns ls = text "|" <> hcat (punctuate (text "|") (map pSpec ls)) <> text "|"
+makeColumns ls = text "|" <> hcat (punctuate (text "|") (pSpec <$> ls)) <> text "|"
 
 count :: Char -> String -> Int
 count _ [] = 0
@@ -236,20 +264,18 @@ makeDefn ps l = refID l $$ table ["defn-table"]
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
-makeDRows [(f,d)]    = tr (th (text f) $$ td (vcat $ map printLO d))
-makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRows ps
+makeDRows [(f,d)]    = tr (th (text f) $$ td (vcat $ printLO <$> d))
+makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ printLO <$> d)) $$ makeDRows ps
 
 -- | Renders lists
 makeList :: ListType -> Bool -> Doc -- FIXME: ref id's should be folded into the li
 makeList (Simple items) _      = vcat $
-  map (\(b,e,l) -> mlref l $ pSpec b <> text ": " <> sItem e $$ text "") items
+  (\(b,e,l) -> mlref l $ pSpec b <> text ": " <> sItem e $$ text "") <$> items
 makeList (Desc items) bl       = vcat $
-  map (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b <> text ": " <> pItem e bl) items
-makeList (Ordered items) bl    = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
-makeList (Unordered items) bl  = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
---makeList (Definitions items) _ = ul ["hide-list-style-no-indent"] $ vcat $
-  --map (\(b,e,l) -> li $ mlref l $ quote(pSpec b <> text " is the" <+> sItem e)) items
-makeList (Definitions items) _ = vcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the" <+> sItem e) items
+  (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b <> text ": " <> pItem e bl) <$> items
+makeList (Ordered items) bl    = vcat $ (\(i,l) -> mlref l $ pItem i bl) <$> items
+makeList (Unordered items) bl  = vcat $ (\(i,l) -> mlref l $ pItem i bl) <$> items
+makeList (Definitions items) _ = vcat $ (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the" <+> sItem e) <$> items
 
 -- | Helper for setting up references
 mlref :: Maybe Label -> Doc -> Doc
@@ -259,8 +285,6 @@ mlref = maybe id $ refwrap . pSpec
 pItem :: ItemType ->  Bool -> Doc
 pItem (Flat s)     b = (if b then text " - " else text "- ") <> pSpec s
 pItem (Nested s l) _ = vcat [text "- " <> pSpec s, makeList l True]
-  --where listIndent = strBreak "\"" (show $ makeList l)
---indent <> text "\"- " <> pSpec s <> text "\\n\","
 
 sItem :: ItemType -> Doc
 sItem (Flat s)     = pSpec s
@@ -274,7 +298,18 @@ makeFigure r c f wp = refID r $$ image f c wp
 makeRefList :: Doc -> Doc -> Doc -> Doc
 makeRefList a l i = refID l $$ i <> text ": " <> a
 
+-- | JSON specific bib rendering functions
+jsonBibFormatter :: BibFormatter
+jsonBibFormatter = BibFormatter {
+  emph = em,
+  spec = pSpecBib
+}
+
+pSpecBib :: Spec -> Doc
+pSpecBib (Ref External r a) = text ("<a href=\"" P.<> r P.<> "\">") <> pSpecBib a <> text "</a>"
+pSpecBib s                  = pSpec s
+
 makeBib :: BibRef -> Doc
 makeBib = vcat .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite htmlBibFormatter)
+  [brak $ text $ show x | x <- [1..] :: [Int]] . fmap (renderCite jsonBibFormatter)

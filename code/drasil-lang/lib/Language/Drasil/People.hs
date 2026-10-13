@@ -85,9 +85,9 @@ class HasName p where
 instance HasName Person where
   nameStr (Person _ n _ Mono) =  dotInitial n
   nameStr (Person f l ms Western) = foldr nameSep "" (
-    [dotInitial f] ++ map dotInitial ms ++ [dotInitial l])
+    [dotInitial f] <> fmap dotInitial ms <> [dotInitial l])
   nameStr (Person g s ms Eastern) = foldr nameSep "" (
-    [dotInitial s] ++ map dotInitial ms ++ [dotInitial g])
+    [dotInitial s] <> fmap dotInitial ms <> [dotInitial g])
 
 -- | Gets the name of a 'Person'. Adds a dot after any initials.
 fullName :: (HasName n) => n -> String
@@ -114,7 +114,7 @@ rendPersLFM' Person {_given = f, _surname = l, _middle = ms} =
 rendPersLFM'' :: Person -> String
 rendPersLFM'' Person {_surname = n, _convention = Mono} = n
 rendPersLFM'' Person {_given = f, _surname = l, _middle = ms} =
-  dotInitial l `orderSep` foldr1 nameSep (dotInitial f : map initial ms)
+  dotInitial l `orderSep` foldr1 nameSep (dotInitial f : fmap initial ms)
 
 -- | Finds an initial and appends a period after it.
 initial :: String -> String
@@ -130,7 +130,7 @@ dotInitial nm  = nm
 joiner :: String -> String -> String -> String
 joiner _ a "" = a
 joiner _ "" b = b
-joiner j a b = a ++ j ++ b
+joiner j a b = a <> j <> b
 
 -- | Joins strings with a comma in between.
 orderSep :: String -> String -> String

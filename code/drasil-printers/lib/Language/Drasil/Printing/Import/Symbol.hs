@@ -16,7 +16,7 @@ symbol (Label    s) = P.Label s
 symbol (Integ    n) = P.Int (toInteger n)
 symbol (Special  s) = P.Spec s
 --symbol (Greek g)    = P.Gr g
-symbol (Concat  sl) = P.Row $ map symbol sl
+symbol (Concat  sl) = P.Row $ symbol <$> sl
 --
 -- Handle the special cases first, then general case
 symbol (Corners [] [] [x] [] s) = P.Row [P.Row [symbol s, P.Sup $ symbol x]]
@@ -42,12 +42,12 @@ pUnit (US ls) = formatu t b
     (t, b) = partition ((> 0) . snd) ls
     formatu :: [(Symbol, Integer)] -> [(Symbol, Integer)] -> P.Expr
     formatu [] l = line l
-    formatu l [] = P.Row $ map powu l
-    formatu nu de = P.Div (line nu) $ line $ map (second negate) de
+    formatu l [] = P.Row $ powu <$> l
+    formatu nu de = P.Div (line nu) $ line $ second negate <$> de
     line :: [(Symbol, Integer)] -> P.Expr
     line []  = P.Row [] -- should not happen ?
     line [n] = powu n
-    line l   = P.Row $ map powu l
+    line l   = P.Row $ powu <$> l
     powu :: (Symbol, Integer) -> P.Expr
     powu (n, 1) = symbol n
     powu (n, p) = P.Row [symbol n, P.Sup $ P.Int p]

@@ -23,7 +23,7 @@ import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.Expr.Class (sy)
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Uncertainty
 import Language.Drasil.ReasonableValue (ReasonableValue)

@@ -10,6 +10,7 @@ import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 
 import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalMagnitude)
+
 import Drasil.DblPend.DataDefs (positionXEqn_1)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
   xVel_1, yVel_1, xAccel_1, yAccel_1, angularAccel_1, angularAccel_2,

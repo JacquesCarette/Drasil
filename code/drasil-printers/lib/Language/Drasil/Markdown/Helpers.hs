@@ -1,24 +1,65 @@
 -- | Defines helper functions for creating Markdown files.
 module Language.Drasil.Markdown.Helpers (
-  ang, bold, em, li, ul, divTag, centeredDiv, centeredDivId,
+  bold, em, li, ul, divTag, centeredDiv, centeredDivId,
   reflink, reflinkInfo, reflinkURI, image, caption, heading, h, h',
   docLength
 ) where
 
 import Prelude hiding ((<>), lookup)
+import qualified Prelude as P ((<>))
+import Data.List (intersperse)
 import Data.Map (lookup)
 import System.FilePath (takeFileName)
-import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), hcat,
-  brackets, parens, braces)
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), hcat, nest)
 
-import Language.Drasil.HTML.Helpers (wrap', wrapGen', Variation(Id, Align),
-  wrapInside, tagR)
 import Language.Drasil.Printing.Helpers (ast, ($^$), vsep)
 import Language.Drasil.Printing.LayoutObj (RefMap)
+import Drasil.Printers.Common
 
--- | Angled brackets
-ang :: Doc -> Doc
-ang t = text "<" <> t <> text ">"
+-- | HTML attribute selector.
+data Variation = Class | Id | Align deriving Eq
+
+instance Show Variation where
+  show Class = "class"
+  show Id    = "id"
+  show Align = "align"
+
+-- | General wrapper function and formats the document space with 'hcat'.
+wrap' :: String -> [String] -> Doc -> Doc
+wrap' a = wrapGen' hcat Class a empty
+
+-- | Helper for wrapping HTML tags.
+-- The fourth argument provides class names for the CSS.
+wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
+wrapGen' sepf _ s _ [] = \x ->
+  sepf [text $ "<" P.<> s P.<> ">", indent x, tagR s]
+wrapGen' sepf Class s _ ts = \x ->
+  let val = text $ foldr1 (++) (intersperse " " ts)
+  in sepf [tagL s Class val, indent x, tagR s]
+wrapGen' sepf v s ti _ = \x ->
+  let con = if v == Align then x else indent x
+  in sepf [tagL s v ti, con, tagR s]
+
+-- | Helper for creating a left HTML tag with a single attribute.
+tagL :: String -> Variation -> Doc -> Doc
+tagL t a v = text ("<" P.<> t P.<> " " P.<> show a P.<> "=\"") <> v <> text "\">"
+
+-- | Helper for creating a right HTML closing tag.
+tagR :: String -> Doc
+tagR t = text $ "</" P.<> t P.<> ">"
+
+-- | Helper for wrapping attributes in a tag.
+--
+--     * The first argument is tag name.
+--     * The 'String' in the pair is the attribute name,
+--     * The 'Doc' is the value for different attributes.
+wrapInside :: String -> [(String, Doc)] -> Doc
+wrapInside t p = text ("<" P.<> t P.<> " ") <> foldl1 (<>) (foldStr <$> p) <> text ">"
+  where foldStr (attr, val) = text (attr P.<> "=\"") <> val <> text "\" "
+
+-- | Indent the Document by 2 positions.
+indent :: Doc -> Doc
+indent = nest 2
 
 -- | Bold text
 bold :: Doc -> Doc
@@ -50,11 +91,11 @@ centeredDivId l con = vsep [wrapInside "div" atrs, con, tagR "div"]
 
 -- | Helper for setting up links to references
 reflink :: RefMap -> String -> Doc -> Doc
-reflink rm ref txt = brackets txt <> parens rp
+reflink rm ref txt = brak txt <> paren rp
   where
     fn = maybe empty fp (lookup ref rm)
-    fp s = text $ "./" ++ s ++ ".md"
-    rp = fn <> text ("#" ++ ref)
+    fp s = text $ "./" P.<> s P.<> ".md"
+    rp = fn <> text ("#" P.<> ref)
 
 -- | Helper for setting up links to references with additional information.
 reflinkInfo :: RefMap -> String -> Doc -> Doc -> Doc
@@ -64,13 +105,13 @@ reflinkInfo rm rf txt info = reflink rm rf txt <+> info
 -- is the same as the link, it will return @<link>@ instead of @[text](link)@.
 reflinkURI :: Doc -> Doc -> Doc
 reflinkURI ref txt
-  | ref == txt = ang ref
-  | otherwise  = brackets txt <> parens ref
+  | ref == txt = angbrac ref
+  | otherwise  = brak txt <> paren ref
 
 -- | Helper for setting up figures
 image :: Doc -> Maybe Doc -> Doc
-image f Nothing = text "!" <> reflinkURI (text $ "./assets/" ++ takeFileName (show f)) (text "")
-image f (Just c) = text "!" <> reflinkURI (text $ "./assets/" ++ takeFileName (show f)) c $^$ bold (text "Figure: " <> c)
+image f Nothing = text "!" <> reflinkURI (text $ "./assets/" P.<> takeFileName (show f)) (text "")
+image f (Just c) = text "!" <> reflinkURI (text $ "./assets/" P.<> takeFileName (show f)) c $^$ bold (text "Figure: " <> c)
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc
@@ -79,7 +120,7 @@ caption = wrapGen' hcat Align "p" (text "center") [""]
 -- | Helper for setting up headings with an id attribute.
 -- id attribute will only work for mdBook.
 heading ::  Doc -> Doc -> Doc
-heading t l = t <+> braces (text "#" <> l)
+heading t l = t <+> brace (text "#" <> l)
 
 -- | Helper for setting up heading weights in mdBook.
 h :: Int -> Doc

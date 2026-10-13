@@ -20,8 +20,7 @@ import Drasil.Database (UID, findOrErr)
 import Language.Drasil (Space, Expr, DefinedQuantityDict)
 import Language.Drasil.Printers (PrintingInformation)
 import Drasil.GOOL (VisibilityTag(..), CodeType)
-import Drasil.System (systemdb, HasSystemMeta(..))
-import Drasil.SRS (HasSmithEtAlSRS(..))
+import Drasil.System (systemdb, HasSystemMeta(..), HasProjectName(..))
 
 import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
@@ -177,8 +176,8 @@ instance HasCodeSpec DrasilState where
 instance HasSystemMeta DrasilState where
   systemMeta = dsCodeSpec . systemMeta
 
-instance HasSmithEtAlSRS DrasilState where
-  smithEtAlSRS = dsCodeSpec . smithEtAlSRS
+instance HasProjectName DrasilState where
+  projectName = systemMeta . projectName
 
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.
@@ -197,23 +196,23 @@ modExportMap :: CodeSpec -> Choices -> [Mod] -> ModExportMap
 modExportMap cs chs@Choices {
     architecture = m
   } ms = fromList $ nubOrd $ concatMap mpair ms
-    ++ getExpInput prn chs ins
-    ++ getExpConstants prn chs cns
-    ++ getExpDerived prn chs ds
-    ++ getExpConstraints prn chs (getConstraints (cs ^. cMap) ins)
-    ++ getExpInputFormat prn chs extIns
-    ++ getExpCalcs prn chs (cs ^. execOrder)
-    ++ getExpOutput prn chs (cs ^. outputs)
-  where prn = cs ^. programName
+    <> getExpInput prn chs ins
+    <> getExpConstants prn chs cns
+    <> getExpDerived prn chs ds
+    <> getExpConstraints prn chs (getConstraints (cs ^. cMap) ins)
+    <> getExpInputFormat prn chs extIns
+    <> getExpCalcs prn chs (cs ^. execOrder)
+    <> getExpOutput prn chs (cs ^. outputs)
+  where prn = cs ^. projAbrv
         ins = cs ^. inputs
         extIns = cs ^. extInputs
         ds = cs ^. derivedInputs
         cns = cs ^. constDefns
-        mpair (Mod n _ _ cls fs) = map
+        mpair (Mod n _ _ cls fs) = fmap
           (, defModName (modularity m) n)
-          (map className cls
-            ++ concatMap (map (codeName . stVar) . filter ((== Pub) . svVisibility) . stateVars) cls
-            ++ map fname (fs ++ concatMap methods cls))
+          (fmap className cls
+            <> concatMap (fmap (codeName . stVar) . filter ((== Pub) . svVisibility) . stateVars) cls
+            <> fmap fname (fs <> concatMap methods cls))
         defModName Unmodular _ = prn
         defModName _ nm = nm
 
@@ -221,19 +220,19 @@ modExportMap cs chs@Choices {
 -- variable name to the name of the generated class where it is defined.
 clsDefMap :: CodeSpec -> Choices -> [Mod] -> ClassDefinitionMap
 clsDefMap cs chs ms = fromList $ nub $ concatMap modClasses ms
-    ++ getInputCls chs ins
-    ++ getConstantsCls chs cns
-    ++ getDerivedCls chs ds
-    ++ getConstraintsCls chs (getConstraints (cs ^. cMap) ins)
-    ++ getInputFormatCls chs extIns
+    <> getInputCls chs ins
+    <> getConstantsCls chs cns
+    <> getDerivedCls chs ds
+    <> getConstraintsCls chs (getConstraints (cs ^. cMap) ins)
+    <> getInputFormatCls chs extIns
     where ins = cs ^. inputs
           extIns = cs ^. extInputs
           ds = cs ^. derivedInputs
           cns = cs ^. constDefns
           modClasses (Mod _ _ _ cls _) = concatMap (\cl ->
             let cln = className cl in
-            (cln, cln) : map (\sv -> (codeName (stVar sv), cln)) (stateVars cl)
-              ++ map (\m -> (fname m, cln)) (methods cl)) cls
+            (cln, cln) : fmap (\sv -> (codeName (stVar sv), cln)) (stateVars cl)
+              <> fmap (\m -> (fname m, cln)) (methods cl)) cls
 
 -- | Module exports.
 type ModExp = (String, String)
@@ -253,7 +252,7 @@ getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure 
   where inExp _ Unbundled = []
         inExp Unmodular Bundled = (ipName, prn) : inVarDefs prn
         inExp Modular Bundled = (ipName , ipName) : inVarDefs ipName
-        inVarDefs n = map ((, n) . codeName) ins
+        inVarDefs n = (, n) . codeName <$> ins
         ipName = icNames chs InputParameters
 
 -- | Gets input variables for classes for InputParameters module.
@@ -265,7 +264,7 @@ getInputCls _ [] = []
 getInputCls chs ins = inCls (inputStructure $ dataInfo chs)
   where inCls Unbundled = []
         inCls Bundled = (ipName, ipName) : inVarDefs
-        inVarDefs = map ((, ipName) . codeName) ins
+        inVarDefs = (, ipName) . codeName <$> ins
         ipName = icNames chs InputParameters
 
 -- | Gets constants to be exported for InputParameters or Constants module.
@@ -283,7 +282,7 @@ getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure 
         cExp _ (Store Bundled) _ = zipCs $ repeat (icNames chs Constants)
         cExp _ WithInputs Bundled = zipCs $ repeat (icNames chs InputParameters)
         cExp _ _ _ = []
-        zipCs = zip (map codeName cs)
+        zipCs = zip (codeName <$> cs)
 
 -- | Gets state variables for constants in a class for InputParameters or Constants module.
 -- If there are no constants, state variables for the constants are not defined in any class.
@@ -296,7 +295,7 @@ getConstantsCls chs cs = cnCls (constStructure $ dataInfo chs) (inputStructure $
   where cnCls (Store Bundled) _ = zipCs Constants
         cnCls WithInputs Bundled = zipCs InputParameters
         cnCls _ _ = []
-        zipCs ic = map ((, icNames chs ic) . codeName) cs
+        zipCs ic = (, icNames chs ic) . codeName <$> cs
 
 -- | Get derived input functions (for @derived_values@).
 -- If there are no derived inputs, a derived inputs function is not generated.
@@ -362,7 +361,7 @@ getInputFormatCls chs _ = ifCls (inputStructure $ dataInfo chs)
 -- Functions are exported by module named after program if 'Unmodular'.
 -- Function is exported by Calculations module if program is 'Modular'.
 getExpCalcs :: Name -> Choices -> [Def] -> [ModExp]
-getExpCalcs n chs = map (\d -> (codeName d, calMod))
+getExpCalcs n chs = fmap (\d -> (codeName d, calMod))
   where calMod = cMod $ modularity $ architecture chs
         cMod Unmodular = n
         cMod _ = icNames chs Calculations
@@ -381,7 +380,7 @@ getExpOutput n chs _ = [(icNames chs WriteOutput, oMod $ modularity $ architectu
 genICName :: InternalConcept -> GenState Name
 genICName ic = do
   ds <- get
-  return $ (ds ^. dsICNames) ic
+  pure $ (ds ^. dsICNames) ic
 
 -- | Gets the 'DefinedQuantityDict' corresponding to a 'UID'.
 lookupC :: DrasilState -> UID -> DefinedQuantityDict

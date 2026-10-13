@@ -26,7 +26,7 @@ import Language.Drasil hiding (None)
 import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll, mkUid)
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.SRS as S
-import Drasil.System (HasSystemMeta(..))
+import Drasil.System (HasSystemMeta(..), systemdb, HasProjectName(..), SystemMeta)
 import Drasil.SRS (HasSmithEtAlSRS(..))
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Data.List.Extras (subsetOf)
@@ -53,7 +53,7 @@ type ConstantMap = Map.Map UID CodeDefinition
 
 -- | Code Specification. Holds system information and options.
 data CodeSpec = CS {
-  _srs :: S.SmithEtAlSRS,
+  _csSysMeta :: SystemMeta,
   -- | All inputs.
   _inputs :: [Input],
   -- | Explicit inputs (values to be supplied by a file).
@@ -79,15 +79,15 @@ data CodeSpec = CS {
 }
 makeClassy ''CodeSpec
 
-instance HasSmithEtAlSRS CodeSpec where
-  smithEtAlSRS = srs
-
 instance HasSystemMeta CodeSpec where
-  systemMeta = srs . systemMeta
+  systemMeta = csSysMeta
+
+instance HasProjectName CodeSpec where
+  projectName = systemMeta . projectName
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a
-assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
+assocToMap = Map.fromList . fmap (\x -> (x ^. uid, x))
 
 -- | Get ODE from ExtLib
 getODE :: [ExtLib] -> Maybe ODE
@@ -98,7 +98,7 @@ getODE (Math ode: _) = Just ode
 -- | Maps ODE to their respective 'CodeDefinition'.
 mapODE :: Maybe ODE -> [CodeDefinition]
 mapODE Nothing = []
-mapODE (Just ode) = map odeDef $ odeInfo ode
+mapODE (Just ode) = odeDef <$> odeInfo ode
 
 -- | Creates a 'CodeSpec' using the provided 'System', 'Choices', and 'Mod's.
 mkCodeSpec :: S.SmithEtAlSRS -> Choices -> CodeSpec
@@ -109,24 +109,27 @@ mkCodeSpec si@S.ICO{ S._inputs = ins
   let els = extLibs chs
       libReqs = concatMap odeLibReqs els
       infoReqs = concatMap odeInfoReqs els
-      db' = insertAll (libReqs ++ infoReqs) $ si ^. systemdb
-      sys = set systemdb db' si
-      ddefs = sys ^. dataDefns
-      db = sys ^. systemdb
-      inputs' = map quantvar $ NE.toList ins
-      const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
-        cnsts)
-      derived = map qtov $ getDerivedInputs ddefs inputs' const' db
-      rels = (map qtoc (getEqModQdsFromIm (sys ^. instModels) ++ mapMaybe qdEFromDD ddefs) \\ derived)
-        ++ mapODE (getODE $ extLibs chs)
-        ++ map qtoc (handWiredDefs chs)
+      db = insertAll (libReqs <> infoReqs) $ si ^. systemdb
+      sysMeta = set systemdb db $ si ^. systemMeta
+      ddefs = si ^. dataDefns
+      inputs' = quantvar <$> NE.toList ins
+      const' = qtov <$> filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
+        cnsts
+      derived = qtov <$> getDerivedInputs ddefs inputs' const' db
+      rels = (fmap qtoc (getEqModQdsFromIm (si ^. instModels) <> mapMaybe qdEFromDD ddefs) \\ derived)
+        <> mapODE (getODE $ extLibs chs)
+        <> fmap qtoc (handWiredDefs chs)
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.
-      outs' = map quantvar $ NE.toList outs
-      allInputs = inputs' ++ map quantvar derived
-      exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
+      outs' = quantvar <$> NE.toList outs
+      allInputs = inputs' <> fmap quantvar derived
+      exOrder = solveExecOrder rels (allInputs <> fmap quantvar cnsts) outs' db
   in CS {
-        _srs = sys,
+        _csSysMeta = sysMeta,
+        -- FIXME: This _should_ be different in at least one way. The SM from
+        -- the SRS _should_ reference "defining an SRS that ...". This SM should
+        -- reference said SRS, saying "building a software design satisfying
+        -- said SRS."
         _inputs = allInputs,
         _extInputs = inputs',
         _derivedInputs = derived,
@@ -157,9 +160,9 @@ funcUID f = asVC f ^. uid
 -- come from those. If there are none, then the 'QDefinition's are used instead.
 getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [SimpleQDef]
-getDerivedInputs ddefs ins cnsts sm =
-  filter ((`subsetOf` refSet) . flip codevars sm . expr . (^. defnExpr)) (mapMaybe qdEFromDD ddefs)
-  where refSet = ins ++ map quantvar cnsts
+getDerivedInputs ddefs ins cnsts db =
+  filter ((`subsetOf` refSet) . flip codevars db . expr . (^. defnExpr)) (mapMaybe qdEFromDD ddefs)
+  where refSet = ins <> fmap quantvar cnsts
 
 -- | Get a list of 'Constraint's for a list of 'CodeChunk's.
 getConstraints :: (HasUID c) => ConstraintCEMap -> [c] -> [ConstraintCE]
@@ -167,5 +170,5 @@ getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
 -- | Get a list of 'CodeVarChunk's from a constraint.
 constraintvars :: ConstraintCE -> ChunkDB -> [CodeVarChunk]
-constraintvars (Range _ ri) m = map (varResolve m) $ nub $ eNamesRI ri
-constraintvars (Elem _ ri)  m = map (varResolve m) $ eDep ri
+constraintvars (Range _ ri) m = fmap (varResolve m) $ nub $ eNamesRI ri
+constraintvars (Elem _ ri)  m = varResolve m <$> eDep ri

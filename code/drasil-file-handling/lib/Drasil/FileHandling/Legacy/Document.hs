@@ -26,4 +26,4 @@ indentList = indent . vcat
 --
 -- e.g., `listToDoc [a,b,c,...] ~= a, b, c, ...`
 listToDoc :: [String] -> Doc
-listToDoc = hsep . punctuate comma . map text
+listToDoc = hsep . punctuate comma . fmap text

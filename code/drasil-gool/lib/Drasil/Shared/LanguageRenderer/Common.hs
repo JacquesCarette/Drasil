@@ -10,10 +10,9 @@ import Control.Monad.State (modify)
 import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Body, Variable, SVariable, MixedCall,
-  Value, SValue, ValueSym, TypeSym(int), VariableElim(variableName), Label,
-  Library, funcApp, getCodeType, EmptyStatement, AssignStatement,
-  ValueExpression)
+import Drasil.Shared.InterfaceCommon (Body, MixedCall, ValueSym, TypeSym(int),
+  VariableElim(variableName), Label, Library, funcApp, getCodeType,
+  EmptyStatement, AssignStatement, ValueExpression)
 import Drasil.Shared.RendererClassesCommon (scopeData, call,
   RenderFunction(funcFromData), RenderVariable, RenderValue, ValueElim,
   RenderStatement, ScopeElim, InternalVarElim)
@@ -36,33 +35,48 @@ bool = typeFromData Boolean boolRender (text boolRender)
 
 -- Python, Java, C#, and Julia --
 
-extVar :: (RenderVariable r) => Label -> Label -> VS (r TypeData) -> SVariable r
+extVar
+  :: (RenderVariable r var typ)
+  => Label -> Label -> VS (r typ) -> VS (r var)
 extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
 -- Python, Java, and Julia --
 
-funcType :: (Monad r, IC.TypeElim r) => [VS (r TypeData)] ->
-  VS (r TypeData) -> VS (r TypeData)
+funcType
+  :: (Monad r, IC.TypeElim r TypeData)
+  => [VS (r TypeData)] -> VS (r TypeData) -> VS (r TypeData)
 funcType ps' r' =  do
   ps <- sequence ps'
   r <- r'
-  typeFromData (Func (map getCodeType ps) (getCodeType r)) "" empty
+  typeFromData (Func (getCodeType <$> ps) (getCodeType r)) "" empty
 
 -- Python, Java, C#, Swift, and Julia --
-extFuncAppMixedArgs :: (RenderValue r) => Library -> MixedCall r
+extFuncAppMixedArgs
+  :: (RenderValue r var val typ)
+  => Library -> MixedCall r var val typ
 extFuncAppMixedArgs l = call (Just l) Nothing
 
 -- Python, C#, Swift, and Julia --
 
 listAccessFunc
-  :: (RenderFunction r, IC.TypeElim r, ValueElim r, ValueSym r)
-  => VS (r TypeData) -> SValue r -> VS (r FuncData)
+  ::
+    ( RenderFunction r typ
+    , IC.TypeElim r typ
+    , ValueElim r val
+    , ValueSym r val typ
+    )
+  => VS (r typ) -> VS (r val) -> VS (r FuncData)
 listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Python, Swift, and Julia --
 
-forEach' :: (RenderStatement r stmt) => (r Variable -> r Value ->
-  r Body -> Doc) -> SVariable r -> SValue r -> MS (r Body) -> MS (r stmt)
+forEach'
+  :: (RenderStatement r stmt)
+  => (r var -> r val -> r Body -> Doc)
+  -> VS (r var)
+  -> VS (r val)
+  -> MS (r Body)
+  -> MS (r stmt)
 forEach' f i' v' b' = do
   i <- zoom lensMStoVS i'
   v <- zoom lensMStoVS v'
@@ -72,8 +86,13 @@ forEach' f i' v' b' = do
 -- Python and Julia --
 
 varDecDef
-  :: (EmptyStatement r stmt, AssignStatement r stmt, ScopeElim r, VariableElim r)
-  => SVariable r -> r ScopeData -> Maybe (SValue r) -> MS (r stmt)
+  ::
+    ( EmptyStatement r stmt
+    , AssignStatement r stmt var val
+    , ScopeElim r ScopeData
+    , VariableElim r var typ
+    )
+  => VS (r var) -> r ScopeData -> Maybe (VS (r val)) -> MS (r stmt)
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v
   modify $ useVarName (variableName v')
@@ -86,8 +105,8 @@ varDecDef v scp e = do
 -- Python and Swift --
 
 increment
-  :: (InternalVarElim r, RenderStatement r stmt, ValueElim r)
-  => SVariable r -> SValue r -> MS (r stmt)
+  :: (InternalVarElim r var, RenderStatement r stmt, ValueElim r val)
+  => VS (r var) -> VS (r val) -> MS (r stmt)
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -96,5 +115,7 @@ increment vr' v'= do
 -- Python, Julia, and MATLAB --
 
 -- | Call to get the size of a list as a function call
-listSize :: (ValueExpression r) => String -> SValue r -> SValue r
+listSize
+  :: (TypeSym r typ, ValueExpression r var val binder typ)
+  => String -> VS (r val) -> VS (r val)
 listSize fnName list = funcApp fnName int [list]

@@ -26,7 +26,7 @@ parnasClements1986 = cArticle [dParnas, pcClements]
   "parnasClements1986"
 
 smithEtAl2007 = cArticle [spencerSmith, lLai, rKhedri]
-  ("Requirements Analysis for Engineering Computation: A Systematic Approach for" ++
+  ("Requirements Analysis for Engineering Computation: A Systematic Approach for" <>
     " Improving Software Reliability")
   "Reliable Computing, Special Issue on Reliable Engineering Computation" 2007
   [month Feb, volume 13, number 1, pages [83..107], howPublishedU "https://doi.org/10.1007/s11155-006-9020-7"]
@@ -34,9 +34,9 @@ smithEtAl2007 = cArticle [spencerSmith, lLai, rKhedri]
 
 smithLai2005 = cInProceedings [spencerSmith, lLai]
   "A new requirements template for scientific computing"
-  ("Proceedings of the First International Workshop on " ++
-  "Situational Requirements Engineering Processes - Methods, " ++
-  "Techniques and Tools to Support Situation-Specific Requirements " ++
+  ("Proceedings of the First International Workshop on " <>
+  "Situational Requirements Engineering Processes - Methods, " <>
+  "Techniques and Tools to Support Situation-Specific Requirements " <>
   "Engineering Processes, SREP'05") 2005
   [ editor [pjAgerfalk, nKraiem, jRalyte], address "Paris, France"
   , pages [107..121],
@@ -44,7 +44,7 @@ smithLai2005 = cInProceedings [spencerSmith, lLai]
   "smithLai2005"
 
 smithKoothoor2016 = cArticle [spencerSmith, nKoothoor]
-  ("A Document-Driven Method for Certifying Scientific Computing Software for Use" ++
+  ("A Document-Driven Method for Certifying Scientific Computing Software for Use" <>
     " in Nuclear Safety Analysis")
   "Nuclear Engineering and Technology" 2016
   [month Apr, volume 48, number 2, pages[404..418],

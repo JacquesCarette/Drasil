@@ -4,11 +4,9 @@ module Drasil.Website.Body (
   gitHubRef, sections, websiteTitle,
 ) where
 
-import Control.Lens ((^.))
-
 import Drasil.Database (ChunkDB, mkUid, insertAll)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (HasSystemMeta(..), mkSystemMeta)
+import Drasil.System (mkSystemMeta, ProjectName, mkCommonProjName)
 import Drasil.Website.Core (DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
 import Language.Drasil.Document
@@ -16,12 +14,12 @@ import Language.Drasil.Document
 import Drasil.Website.Introduction (introSec)
 import Drasil.Website.About (aboutSec)
 import Drasil.Website.CaseStudy (caseStudySec, caseStudyTable)
-import Drasil.Website.Example (exampleSec, exampleRefs, allExampleSI)
+import Drasil.Website.Example (exampleSec, exampleRefs, allExampleProjNames)
 import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs, graphsTable, dependencyGraph)
 import Drasil.Website.GettingStarted (gettingStartedSec)
 import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody)
-import Drasil.GlassBR.Concepts (glaSlab, idglass, blast)
+import Drasil.GlassBR.Concepts (glaSlab, glass, blast)
 import Data.Drasil.Concepts.Thermodynamics (heatTrans)
 import Drasil.SWHS.Concepts (sWHT, water, phsChgMtrl)
 import Drasil.PDController.Concepts (pidC)
@@ -57,10 +55,18 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "drasilWebProjName") (nounPhraseSP "Drasil Website") "Website"
+
 webSys :: Document -> FolderLocation -> DrasilWebsite
 -- FIXME: Missing metadata!
-webSys d@(Document _ _ _ ss) fl = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] db') d
-  where db' = insertAll (allRefs fl) $ insertAll (websiteLCs fl) $ insertAll ss symbMap
+webSys d@(Document _ _ _ ss) fl = mkDrasilWebsite meta d
+  where
+    meta = mkSystemMeta projName [] [] [] [] [] db'
+    db' = insertAll allExampleProjNames
+        $ insertAll (allRefs fl)
+        $ insertAll (websiteLCs fl)
+        $ insertAll ss symbMap
 webSys Notebook{} _ = error "DrasilWebsite expects a `Document`"
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
@@ -73,26 +79,26 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 ideaDicts :: [IdeaDict]
-ideaDicts = [glaSlab, idglass, intrslce, slope, factor]
+ideaDicts = [glass, glaSlab, intrslce, slope, factor]
 
 cis :: [CI]
-cis = [webName, phsChgMtrl] ++ map (^. sysName) allExampleSI
+cis = [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = [pendulum, motion, rigidBody, blast, heatTrans, sWHT, water,
   pidC, target, projectile, crtSlpSrf, shearForce, normForce, slpSrf, fsConcept]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] [] ideaDicts cis conceptChunks [] [] [] [] [] [] [] []
+symbMap = withCommonKnowledge projName [] [] ideaDicts cis conceptChunks [] [] [] [] [] [] [] []
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
 allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, paperGOOL, papersWiki,
   quickStartWiki, newWorkspaceSetupWiki, contribGuideWiki, workflowWiki, createProjWiki, debuggingWiki,
   icsePositionPaper, danPoster, wellUnderstoodPaper]
-  ++ exampleRefs (repoRt fl) (exRt fl)
-  ++ docRefs (docsRt fl)
-  ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
+  <> exampleRefs (repoRt fl) (exRt fl)
+  <> docRefs (docsRt fl)
+  <> analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
 
 -- | List of all 'LabelledContent's necessary for the website.
 websiteLCs :: FolderLocation -> [LabelledContent]
@@ -103,10 +109,6 @@ websiteLCs fl = [
   , dependencyGraph (graphRt fl) "drasil-website"
   , dependencyGraph (graphRt fl) "drasil-all-pkgs-deps"
   ]
-
--- | Used for system name and kind inside of 'si'.
-webName :: CI
-webName = commonIdea (mkUid "websiteName") (cn websiteTitle) "website" [] -- FIXME: Improper use of a `CI`.
 
 -- * Header Section
 
@@ -125,45 +127,45 @@ imageContent = llccFig "Drasil" $ figNoCapWithWidth EmptyS imagePath 50
 gitHubRef :: Reference
 gitHubRef = makeURI "gitHubRepo" gitHubInfoURL (shortname' $ S "gitHubRepo")
 wikiRef :: Reference
-wikiRef = makeURI "gitHubWiki" (gitHubInfoURL ++ "/wiki") (shortname' $ S "gitHubWiki")
+wikiRef = makeURI "gitHubWiki" (gitHubInfoURL <> "/wiki") (shortname' $ S "gitHubWiki")
 infoEncodingWiki :: Reference
-infoEncodingWiki = makeURI "InfoEncodingWiki" (gitHubInfoURL ++ "/wiki/Information-Encoding") (shortname' $ S "InfoEncodingWiki")
+infoEncodingWiki = makeURI "InfoEncodingWiki" (gitHubInfoURL <> "/wiki/Information-Encoding") (shortname' $ S "InfoEncodingWiki")
 chunksWiki :: Reference
-chunksWiki = makeURI "chunksWiki" (gitHubInfoURL ++ "/wiki/Chunks") (shortname' $ S "chunksWiki")
+chunksWiki = makeURI "chunksWiki" (gitHubInfoURL <> "/wiki/Chunks") (shortname' $ S "chunksWiki")
 recipesWiki :: Reference
-recipesWiki = makeURI "recipesWiki" (gitHubInfoURL ++ "/wiki/Recipes") (shortname' $ S "recipesWiki")
+recipesWiki = makeURI "recipesWiki" (gitHubInfoURL <> "/wiki/Recipes") (shortname' $ S "recipesWiki")
 paperGOOL :: Reference
-paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL ++ "/blob/main/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
+paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL <> "/blob/main/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
 papersWiki :: Reference
-papersWiki = makeURI "papersWiki" (gitHubInfoURL ++ "/wiki/Drasil-Papers-and-Documents") (shortname' $ S "papersWiki")
+papersWiki = makeURI "papersWiki" (gitHubInfoURL <> "/wiki/Drasil-Papers-and-Documents") (shortname' $ S "papersWiki")
 icsePositionPaper :: Reference
 icsePositionPaper = makeURI "icsePositionPaper" (danContributionPath
-  ++ "/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf") (shortname' $ S "icsePositionPaper")
+  <> "/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf") (shortname' $ S "icsePositionPaper")
 danPoster :: Reference
 danPoster = makeURI "danPoster" (danContributionPath
-  ++ "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
+  <> "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
 wellUnderstoodPaper :: Reference
 wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL
-  ++ "/blob/main/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
+  <> "/blob/main/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
 quickStartWiki :: Reference
-quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL ++ "#quick-start") (shortname' $ S "quickStartWiki")
+quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL <> "#quick-start") (shortname' $ S "quickStartWiki")
 newWorkspaceSetupWiki :: Reference
-newWorkspaceSetupWiki = makeURI "newWorkspaceSetupWiki" (gitHubInfoURL ++ "/wiki/New-Workspace-Setup") (shortname' $ S "newWorkspaceSetupWiki")
+newWorkspaceSetupWiki = makeURI "newWorkspaceSetupWiki" (gitHubInfoURL <> "/wiki/New-Workspace-Setup") (shortname' $ S "newWorkspaceSetupWiki")
 contribGuideWiki :: Reference
-contribGuideWiki = makeURI "contribGuideWiki" (gitHubInfoURL ++ "/wiki/Contributor's-Guide") (shortname' $ S "contribGuideWiki")
+contribGuideWiki = makeURI "contribGuideWiki" (gitHubInfoURL <> "/wiki/Contributor's-Guide") (shortname' $ S "contribGuideWiki")
 workflowWiki :: Reference
-workflowWiki = makeURI "workflowWiki" (gitHubInfoURL ++ "/wiki/Workflow") (shortname' $ S "workflowWiki")
+workflowWiki = makeURI "workflowWiki" (gitHubInfoURL <> "/wiki/Workflow") (shortname' $ S "workflowWiki")
 createProjWiki :: Reference
-createProjWiki = makeURI "createProjWiki" (gitHubInfoURL ++ "/wiki/Creating-Your-Project-in-Drasil") (shortname' $ S "createProjWiki")
+createProjWiki = makeURI "createProjWiki" (gitHubInfoURL <> "/wiki/Creating-Your-Project-in-Drasil") (shortname' $ S "createProjWiki")
 debuggingWiki :: Reference
-debuggingWiki = makeURI "debuggingWiki" (gitHubInfoURL ++ "/wiki/Debugging-in-Drasil") (shortname' $ S "debuggingWiki")
+debuggingWiki = makeURI "debuggingWiki" (gitHubInfoURL <> "/wiki/Debugging-in-Drasil") (shortname' $ S "debuggingWiki")
 
 -- | Hardcoded info for the title, URL, and image path.
 websiteTitle :: String
 gitHubInfoURL, imagePath, danContributionPath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
-danContributionPath = gitHubInfoURL ++ "/blob/main/People/Dan"
+danContributionPath = gitHubInfoURL <> "/blob/main/People/Dan"
 imagePath = "./images/Icon.png"
 
 -- * Footer Section

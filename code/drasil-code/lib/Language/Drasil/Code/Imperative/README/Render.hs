@@ -7,6 +7,7 @@ module Language.Drasil.Code.Imperative.README.Render (
     where
 
 import Prelude hiding ((<>))
+import qualified Prelude as P ((<>))
 import Data.Char (toUpper)
 import Data.Maybe (catMaybes, mapMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, empty, vcat, text, (<+>),
@@ -36,7 +37,7 @@ whatInfo descr sc = pure $ regularSec (text "What") (maybeSub "Background" descr
 
 -- | Helper for creating optional Intro subsection as Doc
 maybeSub :: String -> Maybe String -> Doc
-maybeSub role = maybe empty (\content-> doubleSep <> text ("> " ++ role ++ ":")
+maybeSub role = maybe empty (\content-> doubleSep <> text ("> " P.<> role P.<> ":")
   <+> upcase content)
 
 -- | Capitalize first letter of string.
@@ -46,7 +47,7 @@ upcase (c:cs)  = text $ toUpper c:cs
 
 -- | Helper for giving instructions on the command line.
 commandLine :: Doc
-commandLine = text $ "In your terminal command line, enter the same directory as this " ++
+commandLine = text $ "In your terminal command line, enter the same directory as this " P.<>
     "README file. Then enter the following line:"
 
 -- | Helper for giving instructions on how to run the program.
@@ -74,7 +75,7 @@ inOutFile name (inFile, outFile) = doubleSep <>
 configSec :: [String] -> Doc
 configSec [] = empty
 configSec cfp = doubleSep <> regularSec (text "Configuration Files")
-  (text ("Configuration files are files that must be " ++
+  (text ("Configuration files are files that must be " P.<>
     "in the same directory as the executable in order to run or build successfully.")
     <> doubleSep <> bkQuote <> listToDoc cfp <> bkQuote)
 
@@ -85,7 +86,7 @@ verInfo pl plv = pure $ regularSec (text "Version") (bkQuote <> text pl <+> text
 -- | Invalid Operating Systems section, does not display unless atleast 1 invalid OS.
 unsupOS :: Maybe String -> Maybe Doc
 unsupOS = fmap (\uns-> regularSec (text "Unsupported Operating Systems")
-    (text $ "- " ++ uns))
+    (text $ "- " P.<> uns))
 
 -- | External Libraries section. The inputs are a list of name and version pairs
 -- and a list of the corresponding version numbers, these are first combined
@@ -151,10 +152,10 @@ buildPath num = filter (/= ' ') $ unwords $ replicate num "../"
 
 -- | Drasil Tree icon. Uses HTML directly to format image since normal markdown doesn't support it.
 drasilImage :: Int -> Doc
-drasilImage num = alignImage (buildPath num ++
+drasilImage num = alignImage (buildPath num P.<>
   "drasil-website/WebInfo/images/Icon.png")
 
 -- | Aligns an image to the center using HTML, since markdown doesn't support it.
 alignImage :: FilePath -> Doc
 alignImage img = text "<p align=\"center\">" <> contSep <> text ("<img src=\""
-  ++ img ++ "\" alt=\"Drasil Tree\" width=\"200\" />") <> contSep <> text "</p>"
+  P.<> img P.<> "\" alt=\"Drasil Tree\" width=\"200\" />") <> contSep <> text "</p>"

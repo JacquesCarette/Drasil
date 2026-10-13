@@ -251,8 +251,8 @@ instance ExprC Expr where
   ($+) l (Lit (Dbl 0)) = l
   ($+) l (Lit (ExactDbl 0)) = l
   ($+) (Lit (ExactDbl 0)) r = r
-  ($+) (AssocA Add l) (AssocA Add r) = AssocA Add (l ++ r)
-  ($+) (AssocA Add l) r = AssocA Add (l ++ [r])
+  ($+) (AssocA Add l) (AssocA Add r) = AssocA Add (l <> r)
+  ($+) (AssocA Add l) r = AssocA Add (l <> [r])
   ($+) l (AssocA Add r) = AssocA Add (l : r)
   ($+) l r = AssocA Add [l, r]
 
@@ -263,8 +263,8 @@ instance ExprC Expr where
   ($*) l (Lit (Dbl 1.0)) = l
   ($*) l (Lit (ExactDbl 1)) = l
   ($*) (Lit (ExactDbl 1)) r = r
-  ($*) (AssocA Mul l) (AssocA Mul r) = AssocA Mul (l ++ r)
-  ($*) (AssocA Mul l) r = AssocA Mul (l ++ [r])
+  ($*) (AssocA Mul l) (AssocA Mul r) = AssocA Mul (l <> r)
+  ($*) (AssocA Mul l) r = AssocA Mul (l <> [r])
   ($*) l (AssocA Mul r) = AssocA Mul (l : r)
   ($*) l r = AssocA Mul [l, r]
 
@@ -363,7 +363,7 @@ instance ExprC Expr where
 
   -- TODO: Move euclidean to smart constructor
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 ($+) . map square
+  euclidean = sqrt . foldr1 ($+) . fmap square
 
   -- | Smart constructor to cross product two expressions.
   cross = VVVBinaryOp Cross
@@ -416,8 +416,8 @@ instance ExprC M.ModelExpr where
   ($+) l (M.Lit (Dbl 0)) = l
   ($+) l (M.Lit (ExactDbl 0)) = l
   ($+) (M.Lit (ExactDbl 0)) r = r
-  ($+) (M.AssocA Add l) (M.AssocA Add r) = M.AssocA Add (l ++ r)
-  ($+) (M.AssocA Add l) r = M.AssocA Add (l ++ [r])
+  ($+) (M.AssocA Add l) (M.AssocA Add r) = M.AssocA Add (l <> r)
+  ($+) (M.AssocA Add l) r = M.AssocA Add (l <> [r])
   ($+) l (M.AssocA Add r) = M.AssocA Add (l : r)
   ($+) l r = M.AssocA Add [l, r]
 
@@ -428,8 +428,8 @@ instance ExprC M.ModelExpr where
   ($*) l (M.Lit (Dbl 1.0)) = l
   ($*) l (M.Lit (ExactDbl 1)) = l
   ($*) (M.Lit (ExactDbl 1)) r = r
-  ($*) (M.AssocA Mul l) (M.AssocA Mul r) = M.AssocA Mul (l ++ r)
-  ($*) (M.AssocA Mul l) r = M.AssocA Mul (l ++ [r])
+  ($*) (M.AssocA Mul l) (M.AssocA Mul r) = M.AssocA Mul (l <> r)
+  ($*) (M.AssocA Mul l) r = M.AssocA Mul (l <> [r])
   ($*) l (M.AssocA Mul r) = M.AssocA Mul (l : r)
   ($*) l r = M.AssocA Mul [l,r]
   -- | Smart constructor for subtracting two expressions.
@@ -524,7 +524,7 @@ instance ExprC M.ModelExpr where
   realInterval c = M.RealI (c ^. uid)
 
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 ($+) . map square
+  euclidean = sqrt . foldr1 ($+) . fmap square
 
   -- | Smart constructor to cross product two expressions.
   cross = M.VVVBinaryOp Cross

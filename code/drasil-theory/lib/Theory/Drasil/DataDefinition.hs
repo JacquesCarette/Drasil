@@ -106,7 +106,7 @@ ddUid = nsUid "dataDefn" . (^. uid)
 
 -- | Smart constructor for data definitions.
 ddE :: SimpleQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddE q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
+ddE q []   _   _  = error $ "Source field of " <> showUID q <> " is empty"
 ddE q refs der sn = DDE q . DDPkt (ddUid q) refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.
@@ -115,7 +115,7 @@ ddENoRefs q der sn = DDE q . DDPkt (ddUid q) [] der (shortname' $ S sn) (prepend
 
 -- | Smart constructor for data definitions.
 ddME :: ModelQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddME q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
+ddME q []   _   _  = error $ "Source field of " <> showUID q <> " is empty"
 ddME q refs der sn = DDME q . DDPkt (ddUid q) refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.

@@ -6,8 +6,8 @@ module Drasil.Shared.LanguageRenderer.Macros (
 ) where
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, SVariable, SValue, bodyStatements,
-  oneLiner, VariableElim(..), getCodeType, listOf, ValueSym(valueType),
+import Drasil.Shared.InterfaceCommon (Label, bodyStatements, oneLiner,
+  VariableSym, VariableElim(..), getCodeType, listOf, ValueSym(valueType),
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), List, at, EmptyStatement(emptyStmt),
   MultiStatement(multi), ValueStatement(valStmt),
@@ -24,7 +24,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
 import Drasil.Shared.Helpers (toCode, onStateValue, on2StateValues)
 import Drasil.Shared.State (MS, VS, MS, lensMStoVS, genVarName, genLoopIndex,
   genVarNameIf, getVarScope)
-import Drasil.Shared.AST (ScopeData, TypeData, FuncData)
+import Drasil.Shared.AST (ScopeData, FuncData)
 
 import Data.Maybe (fromMaybe, isNothing)
 import Data.Functor ((<&>))
@@ -32,23 +32,30 @@ import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)
 
 ifExists
-  :: (IC.ControlStatement r stmt bod, IC.ValueExpression r)
-  => SValue r -> MS (r bod) -> MS (r bod) -> MS (r stmt)
+  ::
+    ( IC.ControlStatement r bod stmt var val
+    , IC.ValueExpression r var val binder typ
+    )
+  => VS (r val) -> MS (r bod) -> MS (r bod) -> MS (r stmt)
 ifExists v ifBody = IC.ifCond [(IC.notNull v, ifBody)]
 
 decrement1
-  :: (IC.AssignStatement r stmt, IC.Literal r)
-  => SVariable r -> MS (r stmt)
+  :: (IC.AssignStatement r stmt var val, IC.Literal r val typ)
+  => VS (r var) -> MS (r stmt)
 decrement1 v = v &-= IC.litInt 1
 
 increment
-  :: (IC.AssignStatement r stmt, IC.NumericExpression r, IC.VariableValue r)
-  => SVariable r -> SValue r -> MS (r stmt)
+  ::
+    ( IC.AssignStatement r stmt var val
+    , IC.NumericExpression r val
+    , IC.VariableValue r var val
+    )
+  => VS (r var) -> VS (r val) -> MS (r stmt)
 increment vr vl = vr &= IC.valueOf vr #+ vl
 
 increment1
-  :: (IC.AssignStatement r stmt, IC.Literal r)
-  => SVariable r -> MS (r stmt)
+  :: (IC.AssignStatement r stmt var val, IC.Literal r val typ)
+  => VS (r var) -> MS (r stmt)
 increment1 vr = vr &+= IC.litInt 1
 
 strat
@@ -59,7 +66,7 @@ strat = on2StateValues (\result b -> toCode $ vcat [RC.body b,
 
 runStrategy
   :: ( EmptyStatement r stmt
-     , IC.AssignStatement r stmt
+     , IC.AssignStatement r stmt var val
      , RC.BodyElim r bod
      , Monad r
      , S.RenderStatement r stmt
@@ -67,8 +74,8 @@ runStrategy
      )
   => Label
   -> [(Label, MS (r bod))]
-  -> Maybe (SValue r)
-  -> Maybe (SVariable r)
+  -> Maybe (VS (r val))
+  -> Maybe (VS (r var))
   -> MS (r Doc)
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy")
@@ -76,32 +83,36 @@ runStrategy l strats rv av = maybe
   where resultState = maybe emptyStmt asgState av
         asgState v = maybe (strError l
           "Attempt to assign null return to a Value") (v &=) rv
-        strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
+        strError n s = error $ "Strategy '" <> n <> "': " <> s <> "."
 
 listSlice
   ::
     ( BodySym r bod block
     , IC.BlockSym r block stmt
     , EmptyStatement r stmt
-    , IC.DeclStatement r stmt bod
-    , AssignStatement r stmt
-    , IC.ControlStatement r stmt bod
-    , IC.Literal r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , IC.ValueExpression r
-    , IC.VariableValue r
-    , IC.List r
-    , IC.ListStatement r stmt
-    , ValueElim r
-    , VariableElim r
+    , IC.ScopeSym r ScopeData
+    , IC.DeclStatement r bod stmt var ScopeData val
+    , AssignStatement r stmt var val
+    , IC.ControlStatement r bod stmt var val
+    , IC.TypeSym r typ
+    , IC.Literal r val typ
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , IC.ValueExpression r var val binder typ
+    , VariableSym r var typ
+    , IC.VariableValue r var val
+    , IC.IndexTranslator r val
+    , IC.List r val
+    , IC.ListStatement r stmt val
+    , ValueElim r val
+    , VariableElim r var typ
     )
-  => Maybe (SValue r)
-  -> Maybe (SValue r)
-  -> Maybe (SValue r)
-  -> SVariable r
-  -> SValue r
+  => Maybe (VS (r val))
+  -> Maybe (VS (r val))
+  -> Maybe (VS (r val))
+  -> VS (r var)
+  -> VS (r val)
   -> MS (r block)
 listSlice beg end step vnew vold = do
 
@@ -157,31 +168,33 @@ listSlice beg end step vnew vold = do
 -- Java, C#, C++, and Swift --
 -- | Gets the expression and code for setting bounds in a list slice
 --   Input:
---   - String: Variable name for bound (to be created if necessary),
---   - SValue: step value
+--   - String: var name for bound (to be created if necessary),
+--   - VS val: step value
 --   - Maybe Integer: literal value of step, if exists
---   - Maybe SValue: given value of bound
---   - SValue: value of bound if bound not given and step is positive
---   - SValue: value of bound if bound not given and step is negative
---   Output: (SValue): (setter, value) of bound
+--   - Maybe VS val: given value of bound
+--   - VS val: value of bound if bound not given and step is positive
+--   - VS val: value of bound if bound not given and step is negative
+--   Output: (VS val): (setter, value) of bound
 makeSetterVal
   ::
     ( EmptyStatement r stmt
-    , IC.DeclStatement r stmt bod
-    , Comparison r
-    , IC.IndexTranslator r
-    , IC.Literal r
-    , IC.ValueExpression r
-    , IC.VariableValue r
+    , VariableSym r var typ
+    , IC.DeclStatement r bod stmt var scope val
+    , IC.TypeSym r typ
+    , Comparison r val
+    , IC.IndexTranslator r val
+    , IC.Literal r val typ
+    , IC.ValueExpression r var val binder typ
+    , IC.VariableValue r var val
     )
   => Label
-  -> SValue r
+  -> VS (r val)
   -> Maybe Integer
-  -> Maybe (SValue r)
-  -> SValue r
-  -> SValue r
-  -> r ScopeData
-  -> (MS (r stmt), SValue r)
+  -> Maybe (VS (r val))
+  -> VS (r val)
+  -> VS (r val)
+  -> r scope
+  -> (MS (r stmt), VS (r val))
 makeSetterVal _     _    _      (Just v) _  _  _   = (emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb _   = (emptyStmt, if s > 0 then lb else rb)
 makeSetterVal vName step _       _       lb rb  scp =
@@ -191,14 +204,15 @@ makeSetterVal vName step _       _       lb rb  scp =
 
 stringListVals
   :: ( MultiStatement r stmt
-     , IC.AssignStatement r stmt
-     , IC.List r
-     , IC.Literal r
-     , RenderValue r
-     , IC.TypeElim r
-     , VariableElim r
+     , IC.AssignStatement r stmt var val
+     , IC.List r val
+     , ValueSym r val typ
+     , IC.Literal r val typ
+     , RenderValue r var val typ
+     , IC.TypeElim r typ
+     , VariableElim r var typ
      )
-  => [SVariable r] -> SValue r -> MS (r stmt)
+  => [VS (r var)] -> VS (r val) -> MS (r stmt)
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
   (getCodeType $ valueType slst))
   where checkList (List String) = assignVals vars 0
@@ -212,23 +226,26 @@ stringListLists
   ::
     ( BodySym r bod block
     , IC.BlockSym r block stmt
-    , IC.ControlStatement r stmt bod
-    , IC.Literal r
-    , NumericExpression r
-    , IC.VariableValue r
-    , IC.List r
-    , IC.ListStatement r stmt
-    , IC.TypeElim r
-    , VariableElim r
-    , S.RenderValue r
+    , IC.ControlStatement r bod stmt var val
+    , IC.TypeSym r typ
+    , ValueSym r val typ
+    , IC.Literal r val typ
+    , NumericExpression r val
+    , VariableSym r var typ
+    , IC.VariableValue r var val
+    , IC.List r val
+    , IC.ListStatement r stmt val
+    , IC.TypeElim r typ
+    , VariableElim r var typ
+    , S.RenderValue r var val typ
     )
-  => [SVariable r] -> SValue r -> MS (r stmt)
+  => [VS (r var)] -> VS (r val) -> MS (r stmt)
 stringListLists lsts sl = do
   slst <- zoom lensMStoVS sl
   l_i <- genLoopIndex
   let
     checkList (List String) = mapM (zoom lensMStoVS) lsts >>= listVals .
-      map (getCodeType . variableType)
+      fmap (getCodeType . variableType)
     checkList _ = error
       "Value passed to stringListLists must be a list of strings"
     listVals [] = loop
@@ -236,7 +253,7 @@ stringListLists lsts sl = do
     listVals _ = error
       "All values passed to stringListLists must have list types"
     loop = IC.forRange var_i (IC.litInt 0) (IC.listSize sl #/ numLists)
-      (IC.litInt 1) (bodyStatements $ appendLists (map IC.valueOf lsts) 0)
+      (IC.litInt 1) (bodyStatements $ appendLists (IC.valueOf <$> lsts) 0)
     appendLists [] _ = []
     appendLists (v:vs) n = IC.listAppend v (cast
       (IC.innerType $ onStateValue valueType v)
@@ -249,57 +266,67 @@ stringListLists lsts sl = do
 
 forRange
   ::
-    ( IC.DeclStatement r stmt bod
-    , AssignStatement r stmt
-    , IC.ControlStatement r stmt bod
-    , Comparison r
-    , IC.VariableValue r
+    ( IC.ScopeSym r scope
+    , IC.DeclStatement r bod stmt var scope val
+    , AssignStatement r stmt var val
+    , IC.ControlStatement r bod stmt var val
+    , Comparison r val
+    , IC.VariableValue r var val
     )
-  => SVariable r
-  -> SValue r
-  -> SValue r
-  -> SValue r
+  => VS (r var)
+  -> VS (r val)
+  -> VS (r val)
+  -> VS (r val)
   -> MS (r bod)
   -> MS (r stmt)
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
   (IC.valueOf i ?< finalv) (i &+= stepv)
 
-observerIndex :: (IC.VariableSym r) => SVariable r
+observerIndex :: (IC.TypeSym r typ, VariableSym r var typ) => VS (r var)
 observerIndex = IC.var "observerIndex" IC.int
 
-observerIdxVal :: (IC.VariableValue r) => SValue r
+observerIdxVal
+  :: (IC.TypeSym r typ, VariableSym r var typ, IC.VariableValue r var val)
+  => VS (r val)
 observerIdxVal = IC.valueOf observerIndex
 
-obsList :: (IC.VariableValue r) => VS (r TypeData) -> SValue r
+obsList
+  :: (IC.TypeSym r typ, VariableSym r var typ, IC.VariableValue r var val)
+  => VS (r typ) -> VS (r val)
 obsList t = IC.valueOf $ listOf observerListName t
 
 notify
   ::
-    ( ValueStatement r stmt
-    , VariableValue r
-    , List r
-    , OOFunctionSym r
+    ( ValueStatement r stmt val
+    , IC.TypeSym r typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    , List r val
+    , OOFunctionSym r val typ
     , BodySym r bod block
     , IC.BlockSym r block stmt
     )
-  => VS (r TypeData) -> VS (r FuncData) -> MS (r bod)
+  => VS (r typ) -> VS (r FuncData) -> MS (r bod)
 notify t f = oneLiner $ valStmt $ at (obsList t) observerIdxVal $. f
 
 notifyObservers
   ::
     ( BodySym r bod block
     , IC.BlockSym r block stmt
-    , Literal r
-    , VariableValue r
-    , Comparison r
-    , List r
-    , ValueStatement r stmt
-    , DeclStatement r stmt bod
-    , AssignStatement r stmt
-    , ControlStatement r stmt bod
-    , OOFunctionSym r
+    , IC.TypeSym r typ
+    , Literal r val typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    , Comparison r val
+    , List r val
+    , ValueStatement r stmt val
+    , IC.ScopeSym r scope
+    , DeclStatement r bod stmt var scope val
+    , AssignStatement r stmt var val
+    , ControlStatement r bod stmt var val
+    , OOFunctionSym r val typ
     )
-  => VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
+  => VS (r FuncData) -> VS (r typ) -> MS (r stmt)
 notifyObservers f t = IC.for initv (observerIdxVal ?< IC.listSize (obsList t))
   (observerIndex &++) (notify t f)
   where initv = IC.varDecDef observerIndex IC.local $ IC.litInt 0
@@ -308,14 +335,16 @@ notifyObservers'
   ::
     ( BodySym r bod block
     , IC.BlockSym r block stmt
-    , ValueStatement r stmt
-    , Literal r
-    , VariableValue r
-    , List r
-    , ControlStatement r stmt bod
-    , OOFunctionSym r
+    , ValueStatement r stmt val
+    , IC.TypeSym r typ
+    , Literal r val typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    , List r val
+    , ControlStatement r bod stmt var val
+    , OOFunctionSym r val typ
     )
-  => VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
+  => VS (r FuncData) -> VS (r typ) -> MS (r stmt)
 notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t )
     (IC.litInt 1) (notify t f)
     where initv = IC.litInt 0
@@ -325,17 +354,19 @@ arrayDecAsList
     ( BodySym r bod block
     , IC.BlockSym r block stmt
     , MultiStatement r stmt
-    , IC.DeclStatement r stmt bod
-    , IC.ControlStatement r stmt bod
-    , IC.Literal r
-    , IC.VariableValue r
-    , IC.ListStatement r stmt
-    , VariableElim r
+    , IC.DeclStatement r bod stmt var scope val
+    , IC.ControlStatement r bod stmt var val
+    , IC.TypeSym r typ
+    , IC.Literal r val typ
+    , VariableSym r var typ
+    , IC.VariableValue r var val
+    , IC.ListStatement r stmt val
+    , VariableElim r var typ
     )
-  => Integer -> SValue r -> SVariable r -> r ScopeData -> MS (r stmt)
+  => Integer -> VS (r val) -> VS (r var) -> r scope -> MS (r stmt)
 arrayDecAsList len dflt vr scp = do
   vr' <- zoom lensMStoVS vr
-  let innerTp = IC.innerType $ return $ variableType vr'
+  let innerTp = IC.innerType $ pure $ variableType vr'
   i <- genVarName [] "i"
   multi [
     IC.varDecDef vr scp (IC.litList innerTp []),

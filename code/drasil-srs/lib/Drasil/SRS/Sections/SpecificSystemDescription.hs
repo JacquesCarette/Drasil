@@ -33,7 +33,7 @@ import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
 import Language.Drasil hiding (variable, sec)
 import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 
@@ -52,6 +52,7 @@ import Drasil.Metadata.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
 import Drasil.SRS.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.SRS.Concepts as SRS
 import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.System (ProjectName, projAbrvS)
 
 -- Takes the system and subsections.
 -- | Specific System Description section builder.
@@ -76,7 +77,7 @@ probDescF prob   = SRS.probDesc [mkParagraph $ foldlSent [D.toSent (atStartNP (a
 -- | Creates the Terms and Definitions section. Can take a ('Just' 'Sentence') if needed or 'Nothing' if not. Also takes 'Concept's that contain the definitions.
 termDefnF :: Concept c => Maybe Sentence -> [c] -> Section
 termDefnF _   []  = SRS.termAndDefn [introNoTermDefn] []
-termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ map termDef lst] []
+termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ termDef <$> lst] []
   where intro = foldlSP_ [
                   S "This subsection provides a list of terms that are used in the subsequent",
                   plural section_ `S.and_` S "their meaning, with the", phrase purpose `S.of_`
@@ -99,10 +100,10 @@ introNoTermDefn :: Contents
 introNoTermDefn = mkParagraph $ emptySectSentPlu [term_, definition]
 
 -- | General introduction for the Physical System Description section.
-physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
+physSystDesc :: ProjectName -> [Sentence] -> LabelledContent -> [Contents] -> Section
 physSystDesc _        []    _  _     = SRS.physSyst [mkParagraph $ emptySectSentPlu [physSyst]] []
 physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : other) []
-  where intro = mkParagraph $ foldlSentCol [D.toSent (atStartNP (the physicalSystem)) `S.of_` short progName `sC`
+  where intro = mkParagraph $ foldlSentCol [D.toSent (atStartNP (the physicalSystem)) `S.of_` projAbrvS progName `sC`
                 S "as shown in", refS fg `sC` S "includes the following", plural element]
         bullets = enumSimpleU 1 (short physSyst) parts
 
@@ -117,9 +118,9 @@ goalStmtF givenInputs otherContents amt = SRS.goalStmt (intro:otherContents) []
                                    else D.toSent (pluralNP (the goalStmt)) +: S "are"
 
 -- | General introduction for the Solution Characteristics Specification section. Takes the program name and a section of instance models.
-solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
+solutionCharSpecIntro :: ProjectName -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [D.toSent $ atStartNP' (the inModel),
-  S "that govern", short progName, S "are presented in the" +:+.
+  S "that govern", projAbrvS progName, S "are presented in the" +:+.
   namedRef instModelSection (titleize inModel +:+ titleize sec),
   D.toSent $ atStartNP (the information), S "to understand",
   S "meaning" `S.the_ofThe` plural inModel,
@@ -141,15 +142,15 @@ assumpIntro _  = mkParagraph $ foldlSent
                   S "by providing more detail"]
 
 -- | Wrapper for 'thModelIntro'. Takes the program name and other 'Contents'.
-thModF :: (Idea a) => a -> [Contents] -> Section
+thModF :: ProjectName -> [Contents] -> Section
 thModF _        []            = SRS.thModel [thModIntroNoContent] []
 thModF progName otherContents = SRS.thModel (thModIntro progName :
                                               otherContents) []
 
 -- | Creates a eneralized Theoretical Model introduction given the program name.
-thModIntro :: (Idea a) => a -> Contents
+thModIntro :: ProjectName -> Contents
 thModIntro progName = foldlSP [S "This", phrase section_, S "focuses on the",
-  phrase general, plural equation `S.and_` S "laws that", short progName, S "is based on"]
+  phrase general, plural equation `S.and_` S "laws that", projAbrvS progName, S "is based on"]
 
 thModIntroNoContent :: Contents
 thModIntroNoContent = mkParagraph $ emptySectSentPlu [thModel]
@@ -259,25 +260,25 @@ mkDataConstraintTable col rf lab = llccTab' rf $ uncurry Table
 -- If any quantity has a rationale, a Rationale column is included.
 inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =>
   [c] -> LabelledContent
-inDataConstTbl qlst = mkDataConstraintTable (baseCols ++ rationaleCols ++ uncertCols)
+inDataConstTbl qlst = mkDataConstraintTable (baseCols <> rationaleCols <> uncertCols)
             (inDatumConstraint ^. uid) $ titleize' inDatumConstraint
   where
     sorted = sortBySymbol qlst
-    getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ showUID c) (c ^. reasVal)
-    baseCols = [(S "Var", map ch sorted),
-                (titleize' physicalConstraint, map fmtPhys sorted),
-                (titleize' softwareConstraint, map fmtSfwr sorted),
-                (S "Reasonable Value", map (\q -> fmtU (eS $ express $ getRVal q ^. reasV) q) sorted)]
-    uncertCols = [(short typUnc, map (\q -> typUncr (uncVal q, uncPrec q)) sorted)]
+    getRVal c = fromMaybe (error $ "getRVal found no Expr for " <> showUID c) (c ^. reasVal)
+    baseCols = [(S "Var", ch <$> sorted),
+                (titleize' physicalConstraint, fmtPhys <$> sorted),
+                (titleize' softwareConstraint, fmtSfwr <$> sorted),
+                (S "Reasonable Value", (\q -> fmtU (eS $ express $ getRVal q ^. reasV) q) <$> sorted)]
+    uncertCols = [(short typUnc, (\q -> typUncr (uncVal q, uncPrec q)) <$> sorted)]
     hasAnyRationale = any (\q -> isJust (q ^. reasVal)) sorted
-    rationaleCols = [(S "Rationale", map (\q -> fromMaybe EmptyS (q ^. reasVal . _Just . rationale)) sorted) |
+    rationaleCols = [(S "Rationale", (\q -> fromMaybe EmptyS (q ^. reasVal . _Just . rationale)) <$> sorted) |
       hasAnyRationale]
 
 -- | Creates the output Data Constraints Table.
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
-outDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch qlst),
-            (titleize' physicalConstraint, map fmtPhys qlst),
-            (titleize' softwareConstraint, map fmtSfwr qlst)] (outDatumConstraint ^. uid) $
+outDataConstTbl qlst = mkDataConstraintTable [(S "Var", ch <$> qlst),
+            (titleize' physicalConstraint, fmtPhys <$> qlst),
+            (titleize' softwareConstraint, fmtSfwr <$> qlst)] (outDatumConstraint ^. uid) $
             titleize' outDatumConstraint
 
 --Not actually used here, for exporting references
@@ -297,7 +298,7 @@ fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 -- | Helper for formatting a list of constraints.
 foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
 foldConstraints _ [] = EmptyS
-foldConstraints c e  = E $ foldr1 ($&&) $ map constraintToExpr e
+foldConstraints c e  = E $ foldr1 ($&&) $ constraintToExpr <$> e
   where
     constraintToExpr (Range _ ri) = express $ realInterval c ri
     constraintToExpr (Elem _ set) = express set
@@ -310,7 +311,7 @@ foldConstraints c e  = E $ foldr1 ($&&) $ map constraintToExpr e
 -- section will be generated.
 propCorSolF :: (Quantity c, Constrained c) => [c] -> [Contents] -> Section
 propCorSolF c con
-  | any (\x -> not $ null (x ^. constraints)) c = SRS.propCorSol ([propsIntro, LlC $ outDataConstTbl c] ++ con) []
+  | any (\x -> not $ null (x ^. constraints)) c = SRS.propCorSol ([propsIntro, LlC $ outDataConstTbl c] <> con) []
   | null con = SRS.propCorSol [mkParagraph $ emptySectSentPlu [propOfCorSol]] []
   | otherwise = SRS.propCorSol con []
 

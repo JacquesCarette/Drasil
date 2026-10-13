@@ -11,10 +11,11 @@ import Data.List.Extras (weave)
 import Theory.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import Data.Drasil.Concepts.Math (xComp, yComp)
 import Data.Drasil.Quantities.Physics (velocity, acceleration, force)
 import Language.Drasil.Document (definedIn'')
+import Data.Drasil.Equations.Defining.Physics qualified as E
 
 -- local
 import Drasil.DblPend.DataDefs
@@ -25,7 +26,6 @@ import Drasil.DblPend.Unitals (lenRod_1, xVel_1, xVel_2,
     xForce_1, yForce_1, xForce_2, yForce_2)
 import Drasil.DblPend.Concepts (horizontalPos,
     verticalPos, horizontalVel, verticalVel, firstObject, secondObject)
-import Control.Lens ((^.))
 
 genDefns :: [GenDefn]
 genDefns = [velXGD_1, velYGD_1, velXGD_2, velYGD_2, accelXGD_1, accelYGD_1, accelXGD_2, accelYGD_2,
@@ -51,7 +51,7 @@ velXDerivSents_1 = [velDerivSent1,velXDerivSent2_1,velDerivSent3,velDerivSent4, 
 -- words used to explain the equation refinement
 
 velXDerivEqns_1 :: [Sentence]
-velXDerivEqns_1 = map eS [D.velDerivEqn1, D.velXDerivEqn2_1, D.velXDerivEqn3_1, D.velXDerivEqn4_1] ++ [eS' velXQD_1]
+velXDerivEqns_1 = fmap eS [D.velDerivEqn1, D.velXDerivEqn2_1, D.velXDerivEqn3_1, D.velXDerivEqn4_1] <> [eS' velXQD_1]
 -- refinement equation after explained words
 
 velDerivSent1, velXDerivSent2_1, velDerivSent3, velDerivSent4, velDerivSent5 :: Sentence
@@ -77,7 +77,7 @@ velYDerivSents_1 :: [Sentence]
 velYDerivSents_1 = [velDerivSent1, velYDerivSent2_1, velDerivSent3, velDerivSent4, velDerivSent5]
 
 velYDerivEqns_1 :: [Sentence]
-velYDerivEqns_1 = map eS [D.velDerivEqn1, D.velYDerivEqn2_1, D.velYDerivEqn3_1, D.velYDerivEqn4_1] ++ [eS' velYQD_1]
+velYDerivEqns_1 = fmap eS [D.velDerivEqn1, D.velYDerivEqn2_1, D.velYDerivEqn3_1, D.velYDerivEqn4_1] <> [eS' velYQD_1]
 
 velYDerivSent2_1 :: Sentence
 velYDerivSent2_1 = S "We also know the" +:+ phrase verticalPos +:+ S "that" `S.is` definedIn'' positionYDD_1
@@ -98,7 +98,7 @@ velXDerivSents_2 :: [Sentence]
 velXDerivSents_2 = [velDerivSent1, velXDerivSent2_2, velDerivSent3, velDerivSent4]
 
 velXDerivEqns_2 :: [Sentence]
-velXDerivEqns_2 = map eS [D.velDerivEqn1, D.velXDerivEqn2_2, D.velXDerivEqn3_2] ++ [eS' velXQD_2]
+velXDerivEqns_2 = fmap eS [D.velDerivEqn1, D.velXDerivEqn2_2, D.velXDerivEqn3_2] <> [eS' velXQD_2]
 
 velXDerivSent2_2 :: Sentence
 velXDerivSent2_2 = S "We also know the" +:+ phrase horizontalPos +:+ S "that" `S.is` definedIn'' positionXDD_2
@@ -119,7 +119,7 @@ velYDerivSents_2 :: [Sentence]
 velYDerivSents_2 = [velDerivSent1,velYDerivSent2_2,velDerivSent3,velDerivSent5]
 
 velYDerivEqns_2 :: [Sentence]
-velYDerivEqns_2 = map eS [D.velDerivEqn1, D.velYDerivEqn2_2, D.velYDerivEqn3_2] ++ [eS' velYQD_2]
+velYDerivEqns_2 = fmap eS [D.velDerivEqn1, D.velYDerivEqn2_2, D.velYDerivEqn3_2] <> [eS' velYQD_2]
 
 velYDerivSent2_2 :: Sentence
 velYDerivSent2_2 = S "We also know the" +:+ phrase verticalPos +:+ S "that" `S.is` definedIn'' positionYDD_2
@@ -140,7 +140,7 @@ accelXDerivSents_1:: [Sentence]
 accelXDerivSents_1 = [accelDerivSent1, accelXDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5]
 
 accelXDerivEqns_1 :: [Sentence]
-accelXDerivEqns_1 = eS D.accelDerivEqn1 : eS' velXQD_1 : map eS [D.accelXDerivEqn3_1, D.accelXDerivEqn4_1] ++ [eS' accelXQD_1]
+accelXDerivEqns_1 = eS D.accelDerivEqn1 : eS' velXQD_1 : fmap eS [D.accelXDerivEqn3_1, D.accelXDerivEqn4_1] <> [eS' accelXQD_1]
 
 accelDerivSent1, accelXDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5 :: Sentence
 
@@ -166,7 +166,7 @@ accelYDerivSents_1 :: [Sentence]
 accelYDerivSents_1 = [accelDerivSent1, accelYDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5]
 
 accelYDerivEqns_1 :: [Sentence]
-accelYDerivEqns_1 = eS D.accelDerivEqn1 : eS' velYQD_1 : map eS [D.accelYDerivEqn3_1, D.accelYDerivEqn4_1] ++ [eS' accelYQD_1]
+accelYDerivEqns_1 = eS D.accelDerivEqn1 : eS' velYQD_1 : fmap eS [D.accelYDerivEqn3_1, D.accelYDerivEqn4_1] <> [eS' accelYQD_1]
 
 accelYDerivSent2_1 :: Sentence
 accelYDerivSent2_1 = S "Earlier" `sC` S "we found the" +:+ phrase verticalVel +:+ S "to be"
@@ -224,7 +224,7 @@ xForceMD_1 :: MultiDefn ModelExpr
 xForceMD_1 = mkMultiDefnForQuant xForce_1 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass1"
-                      EmptyS $ express $ forceGQD ^. defnExpr,
+                      EmptyS E.newtonSLEqn,
                     mkDefiningExpr "xForceWithAngle1"
                       EmptyS E.xForceWithAngle_1]
 
@@ -242,7 +242,7 @@ yForceMD_1 :: MultiDefn ModelExpr
 yForceMD_1 = mkMultiDefnForQuant yForce_1 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass1"
-                      EmptyS $ express $ forceGQD ^. defnExpr,
+                      EmptyS E.newtonSLEqn,
                     mkDefiningExpr "yForceWithAngle1"
                       EmptyS E.yForceWithAngle_1]
 
@@ -260,7 +260,7 @@ xForceMD_2 :: MultiDefn ModelExpr
 xForceMD_2 = mkMultiDefnForQuant xForce_2 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass2"
-                      EmptyS $ express $ forceGQD ^. defnExpr,
+                      EmptyS E.newtonSLEqn,
                     mkDefiningExpr "xForceWithAngle2"
                       EmptyS E.xForceWithAngle_2]
 
@@ -278,7 +278,7 @@ yForceMD_2 :: MultiDefn ModelExpr
 yForceMD_2 = mkMultiDefnForQuant yForce_2 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass2"
-                      EmptyS $ express $ forceGQD ^. defnExpr,
+                      EmptyS E.newtonSLEqn,
                     mkDefiningExpr "yForceWithAngle2"
                       EmptyS E.yForceWithAngle_2]
 

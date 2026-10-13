@@ -13,7 +13,7 @@ import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import Theory.Drasil
 import Data.List.Extras (weave)
 
@@ -43,7 +43,7 @@ angularDisplacementFD = mkFuncDefByQ pendDisplacementAngle
   [time] angularDisplacementExpr
 
 angularDisplacementDeriv :: Derivation
-angularDisplacementDeriv = mkDerivName (phrase angularDisplacement) (weave angularDisplacementDerivSents $ map eS angularDisplacementDerivEqns)
+angularDisplacementDeriv = mkDerivName (phrase angularDisplacement) (weave angularDisplacementDerivSents $ eS <$> angularDisplacementDerivEqns)
 
 angularDisplacementDerivSents :: [Sentence]
 angularDisplacementDerivSents = [angularDisplacementDerivSent1, angularDisplacementDerivSent2, angularDisplacementDerivSent3,

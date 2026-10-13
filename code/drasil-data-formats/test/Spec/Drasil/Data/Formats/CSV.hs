@@ -22,7 +22,7 @@ csvTests =
 
 expectCSV :: Either String CSV -> CSV
 expectCSV (Right csv) = csv
-expectCSV (Left err) = error $ "Expected valid CSV, got error: " ++ err
+expectCSV (Left err) = error $ "Expected valid CSV, got error: " <> err
 
 simpleCSVHeader :: [Text]
 simpleCSVHeader =

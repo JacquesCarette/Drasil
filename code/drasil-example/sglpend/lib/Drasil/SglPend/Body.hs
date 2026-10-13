@@ -1,12 +1,10 @@
 module Drasil.SglPend.Body (mkSRS, si) where
 
-import Control.Lens ((^.))
-
 import Drasil.Database (ChunkDB)
 import Language.Drasil
 import Language.Drasil.Document hiding (organization)
 import qualified Language.Drasil.Development as D
-import Theory.Drasil (TheoryModel, output)
+import Theory.Drasil (TheoryModel)
 import Drasil.SRS hiding (genDefns)
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
@@ -30,7 +28,7 @@ import Drasil.SglPend.Goals (goals, goalsInputs)
 import Drasil.SglPend.DataDefs (dataDefs)
 import Drasil.SglPend.IMods (iMods)
 import Drasil.SglPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
-import Drasil.SglPend.MetaConcepts (progName)
+import Drasil.SglPend.MetaConcepts (projName)
 import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
 import Drasil.SglPend.Requirements (funcReqs, funcReqsTables)
@@ -45,29 +43,29 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       , TAandA          -- Add table of abbreviation and acronym section
       ],
   IntroSec $
-    IntroProg (justification progName) (phrase progName)
-      [IPurpose $ purpDoc progName Verbose,
+    IntroProg (justification projName) []
+      [IPurpose (StdPurp Verbose),
        IScope scope,
        IChar [] charsOfReader [],
        IOrgSec Nothing],
   GSDSec $
     GSDProg [
-      SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
-      UsrChars [userCharacteristicsIntro progName],
+      SysCntxt [sysCtxIntro projName, LlC sysCtxFig1, sysCtxDesc, sysCtxList projName],
+      UsrChars [userCharacteristicsIntro projName],
       SystCons [] []],
   SSDSec $
     SSDProg
       [ SSDProblem $ PDProg purp []                -- This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
-      , PhySysDesc progName physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
+      , PhySysDesc physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
       , Goals goalsInputs] -- This adds a goals section and goals input is defined for the preample of the goal.
       , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , GDs [] ([Label, Units] <> stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) ShowDerivation
         , Constraints EmptyS inConstraints
         , CorrSolnPpties outConstraints []
        ]
@@ -83,40 +81,33 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName [olu]
+si = mkSmithEtAlICO projName [olu]
   [purp] [] [] []
   tMods genDefns dataDefs iMods
-  inputs outputs inConstraints [] allSymbols
+  inputs outputs inConstraints [] symbols
   symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]
 
-cis :: [CI]
-cis = [progName]
-
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  physicalcon ++ [angular, displacement, iPos, pendulum, motion,
-  gravitationalConst, gravity, rigidBody, weight, shm] ++ defs
-
-allSymbols :: [DefinedQuantityDict]
-allSymbols = map (^. output) iMods ++ symbols
+  physicalcon <> [angular, displacement, iPos, pendulum, motion,
+  gravitationalConst, gravity, rigidBody, weight, shm] <> defs
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs allSymbols ideaDicts cis
-  conceptChunks [] dataDefs iMods genDefns tMods concIns citations
-  labelledContent'
+symbMap = withCommonKnowledge projName allRefs symbols ideaDicts []
+  conceptChunks [] dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
-labelledContent' = labelledContent ++ funcReqsTables
+labelledContent' = labelledContent <> funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 concIns :: [ConceptInstance]
-concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
+concIns = assumpSingle <> goals <> funcReqs <> nonFuncReqs
 
 ------------------------------
 -- Section : INTRODUCTION --
@@ -174,7 +165,7 @@ concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 -- 4.1.2 Physical System Description --
 -----------------------------------
 physSystParts :: [Sentence]
-physSystParts = map ((!.) . D.toSent . atStartNP) [the rod, the mass]
+physSystParts = (!.) . D.toSent . atStartNP <$> [the rod, the mass]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -194,7 +185,7 @@ physSystParts = map ((!.) . D.toSent . atStartNP) [the rod, the mass]
 --------------------------------
 -- Theoretical Models defined in TMs
 tMods :: [TheoryModel]
-tMods = DPD.tMods ++ [newtonSLR]
+tMods = DPD.tMods <> [newtonSLR]
 
 ---------------------------------
 -- 4.2.3 : General Definitions --

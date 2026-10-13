@@ -8,7 +8,7 @@ import Language.Drasil
 import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, HasOutput(output))
 
@@ -75,8 +75,8 @@ findMassConstruct :: (Referable r, HasShortName r, Referable s, HasShortName s,
   Referable t, HasShortName t) => r -> Sentence -> [s] -> [t] -> ConceptInstance
 findMassConstruct fr m ims ddefs = cic "findMass" (foldlSent [
   S "Use the", plural input_ `S.in_` refS fr, S "to find the",
-  m, S "needed for", foldlList Comma List (map refS ims) `sC`
-  S "using", foldlList Comma List (map refS ddefs)])
+  m, S "needed for", foldlList Comma List (refS <$> ims) `sC`
+  S "using", foldlList Comma List (refS <$> ddefs)])
   "Find-Mass" funcReqDom
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" (foldlSent [
@@ -93,7 +93,7 @@ oIDQConstruct x = cic "outputInputDerivVals" (foldlSentCol [
   foldlList Comma List x) "Output-Input-Derived-Values" funcReqDom
 
 oIDQVals :: [Sentence]
-oIDQVals = map foldlSent_ [
+oIDQVals = foldlSent_ <$> [
   [D.toSent (pluralNP (the value)), fromSource inputValues],
   [D.toSent (pluralNP (the mass)), fromSource findMass],
   [ch (balanceDecayRate ^. defLhs), fromSource balanceDecayRate],
@@ -131,7 +131,7 @@ outputValues l = cic "outputValues" (titleize output_ +:+. outputList l)
 
 outputList :: [InstanceModel] -> Sentence
 outputList l = foldlList Comma List $
-  map (\x -> ch (x ^. output) :+: sParen (ch time) +:+ fromSource x) l
+  (\x -> ch (x ^. output) :+: sParen (ch time) +:+ fromSource x) <$> l
 
 swhsOutputs :: [InstanceModel]
 swhsOutputs = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]

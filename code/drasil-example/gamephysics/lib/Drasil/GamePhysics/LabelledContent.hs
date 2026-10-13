@@ -15,4 +15,4 @@ labelledContent = [sysCtxFig1]
 
 sysCtxFig1 :: LabelledContent
 sysCtxFig1 = llccFig "sysCtxDiag" $ fig (titleize sysCont)
-  (resourcePath ++ "sysctx.png")
+  (resourcePath <> "sysctx.png")

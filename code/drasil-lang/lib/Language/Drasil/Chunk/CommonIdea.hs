@@ -18,7 +18,7 @@ import Drasil.Database (UID, HasUID(uid), declareHasChunkRefs, Generically(..))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, idea')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv))
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 
 -- | The common idea (with 'NounPhrase') data type. It must have a 'UID',
 -- 'NounPhrase' for its term, an abbreviation ('String'), and a domain (['UID']).
@@ -45,8 +45,8 @@ instance CommonIdea    CI where abrv = view ab
 -- Note: should be polymorphic in 'IdeaDict', but currently causes issues with
 -- ambiguous type variables, punting for now.
 commonIdea :: UID -> NP -> String -> [IdeaDict] -> CI
-commonIdea x y z = CI (idea' x y) z . map (^.uid)
+commonIdea x y z = CI (idea' x y) z . fmap (^.uid)
 
 -- | Prepends the abbreviation from a 'CommonIdea' to a 'String'.
 prependAbrv :: CommonIdea c => c -> String -> String
-prependAbrv c s = abrv c ++ ':' : s
+prependAbrv c s = abrv c <> (':' : s)

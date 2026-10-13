@@ -9,7 +9,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Classes (NamedIdea(..), Quantity)
 import Language.Drasil.Development.Sentence (phrase)
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 import Language.Drasil.Sentence (Sentence,(+:+), ch)
 
 -- | Apply a binary function to the terms of two named ideas, instead of to the named
@@ -27,5 +27,5 @@ getTandS a = phrase a +:+ ch a
 checkValidStr :: String -> String -> Either String String
 checkValidStr s [] = Right s
 checkValidStr s (x:xs)
-  | x `elem` s = Left $ "Invalid character: \'" ++ [x] ++ "\' in string \"" ++ s ++ ['\"']
+  | x `elem` s = Left $ "Invalid character: \'" <> [x] <> "\' in string \"" <> s <> ['\"']
   | otherwise  = checkValidStr s xs

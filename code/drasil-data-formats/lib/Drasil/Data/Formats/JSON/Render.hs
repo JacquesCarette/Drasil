@@ -45,7 +45,7 @@ renderJSON opts (JObject m) =
     sty = style opts
     sep Minified = colon
     sep (Pretty _) = colon <> space
-    contents = map (\(k, v) -> renderString k <> sep sty <> renderJSON opts v) m
+    contents = (\(k, v) -> renderString k <> sep sty <> renderJSON opts v) <$> m
     content = punctuate comma contents
 renderJSON _ (JArray []) = lbracket <> rbracket
 renderJSON opts (JArray a) =
@@ -53,7 +53,7 @@ renderJSON opts (JArray a) =
     Minified -> brackets (hcat content)
     Pretty i -> vcat [lbracket, indent (fromIntegral i) (vcat content), rbracket]
   where
-    contents = map (renderJSON opts) a
+    contents = renderJSON opts <$> a
     content = punctuate comma contents
 renderJSON _ (JString s) = renderString s
 renderJSON _ (JNumber n) =

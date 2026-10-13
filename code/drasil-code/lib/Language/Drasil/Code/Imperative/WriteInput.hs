@@ -22,7 +22,7 @@ makeInputFile db dd sampData = vcat (convDataDesc db dd sampData)
 -- | Writes a data file formatted according to the given 'DataDesc', where the data
 -- values come from the passed \['Expr'\].
 convDataDesc :: PrintingInformation -> DataDesc -> [Expr] -> [Doc]
-convDataDesc _ [] (_:_) = error $ "makeInputFile received more inputs" ++
+convDataDesc _ [] (_:_) = error $ "makeInputFile received more inputs" <>
           " than expected, should be impossible"
 convDataDesc _ ds [] = if all isJunk ds then replicate (length ds) blank
   else error "makeInputFile received fewer inputs than expected, should be impossible"
@@ -37,22 +37,22 @@ convDataDesc db (Line (Repeat dis) dl : ds) es = let
   (l,ls) = splitAt (length dis) es
   in dataLine db dl (concat $ orderVecs l)
   : convDataDesc db ds ls
-convDataDesc db (Lines (Straight _) Nothing dl : _) es = map (dataLine db dl)
-  (orderVecs es)
+convDataDesc db (Lines (Straight _) Nothing dl : _) es = dataLine db dl
+  <$> orderVecs es
 convDataDesc db (Lines (Straight dis) (Just n) dl : ds) es = let
   (l,ls) = splitAt (length dis) es
   vs = orderVecs l
-  in if toInteger (length vs) == n then map (dataLine db dl) vs
-  ++ convDataDesc db ds ls
+  in if toInteger (length vs) == n then fmap (dataLine db dl) vs
+  <> convDataDesc db ds ls
   else error "makeInputFile encountered wrong-sized vectors"
-convDataDesc db (Lines (Repeat _) Nothing dl : _) es = map
+convDataDesc db (Lines (Repeat _) Nothing dl : _) es = fmap
   (dataLine db dl . concat . transpose) (orderMtxs es)
 convDataDesc db (Lines (Repeat dis) (Just n) dl : ds) es = let
   (l,ls) = splitAt (length dis) es
   ms = orderMtxs l
-  in if toInteger (length ms) == n then map
+  in if toInteger (length ms) == n then fmap
   (dataLine db dl . concat . transpose) ms
-  ++ convDataDesc db ds ls
+  <> convDataDesc db ds ls
   else error "makeInputFile encountered wrong-sized matrices"
 convDataDesc db (JunkData : ds) es = blank : convDataDesc db ds es
 
@@ -60,19 +60,19 @@ convDataDesc db (JunkData : ds) es = blank : convDataDesc db ds es
 
 -- | Helper to create a data line with the given delimeter.
 dataLine :: PrintingInformation -> Delim -> [Expr] -> Doc
-dataLine db dl = hcat . intersperse (char dl) . map (oneLineExprDoc db)
+dataLine db dl = hcat . intersperse (char dl) . fmap (oneLineExprDoc db)
 
 -- | Helper to create document lines with a data description, delimiter, and expressions.
 docLine :: PrintingInformation -> DataDesc -> Delim -> [Expr] -> [Doc]
 docLine db ds dl es = let dis = getDataInputs (head ds)
   in text "#" <+> hcat (intersperse (char dl <> space)
-  (map (\di -> (oneLineSentenceDoc db . phrase) di <+>
-  maybe empty (parens . oneLineUnitDoc . usymb) (getUnit di)) dis))
+  ((\di -> (oneLineSentenceDoc db . phrase) di <+>
+  maybe empty (parens . oneLineUnitDoc . usymb) (getUnit di)) <$> dis))
   : convDataDesc db ds es
 
 -- | Order vectors.
 orderVecs :: [Expr] -> [[Expr]]
-orderVecs vs = transpose $ map getVecList vs
+orderVecs vs = transpose $ getVecList <$> vs
 
 -- | Helper to get a vector (singular 'Matrix') in list form.
 getVecList :: Expr -> [Expr]
@@ -81,7 +81,7 @@ getVecList _ = error "makeInputFile encountered unexpected type, expected vector
 
 -- | Order matricies.
 orderMtxs :: [Expr] -> [[[Expr]]]
-orderMtxs ms = transpose $ map getMtxLists ms
+orderMtxs ms = transpose $ getMtxLists <$> ms
 
 -- | Helper to get a 'Matrix' in a 2D list form.
 getMtxLists :: Expr -> [[Expr]]

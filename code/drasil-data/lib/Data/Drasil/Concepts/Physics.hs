@@ -88,7 +88,7 @@ elasticity = cncpt''' (mkUid "elasticity") (cnIES "elasticity")
 energy = cncpt''' (mkUid "energy") (cn "energy")
   (S "power derived from the utilization of physical or chemical resources")
 fbd = cncpt''' (mkUid "FBD") (cn' "free body diagram")
-  (S ("a graphical illustration used to visualize the applied forces, movements, and resulting " ++
+  (S ("a graphical illustration used to visualize the applied forces, movements, and resulting " <>
    "reactions on a body in a steady state condition"))
 force = cncpt''' (mkUid "force") (cn' "force")
   (S "an interaction that tends to produce change in the motion of an object")
@@ -157,8 +157,8 @@ scalarAccel = cncpt''' (mkUid "scalarAccel") (cn' "scalar acceleration")
   (S "magnitude" `S.the_ofThe` phrase acceleration +:+ S "vector")
 scalarPos = cncpt''' (mkUid "scalarPos") (cn' "scalar position")
   (S "magnitude" `S.the_ofThe` phrase position +:+ S "vector")
-shm = cncpt''' (mkUid "SHM") (nounPhraseSP "simple harmonic motion") (S ("Periodic motion through an equilibrium position. " ++
-                                                        "The motion is sinusoidal in time and demonstrates a" ++
+shm = cncpt''' (mkUid "SHM") (nounPhraseSP "simple harmonic motion") (S ("Periodic motion through an equilibrium position. " <>
+                                                        "The motion is sinusoidal in time and demonstrates a" <>
                                                         " single resonant frequency")) -- source: Wikipedia
 speed = cncpt''' (mkUid "speed") (cn' "speed")
   (S "magnitude" `S.the_ofThe` phrase velocity +:+ S "vector")

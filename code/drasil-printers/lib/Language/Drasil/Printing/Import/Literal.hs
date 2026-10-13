@@ -14,7 +14,7 @@ literal :: Literal -> PrintingInformation -> P.Expr
 literal (Dbl d)                  sm = case sm ^. notation of
   Engineering ->
      let (f, s) = processExpo $ snd $ floatToDigits 10 d in
-     P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
+     P.Row $ digitsProcess (fmap toInteger $ fst $ floatToDigits 10 d)
      f 0 (toInteger s)
   Scientific  ->  P.Dbl d
 literal (Int i)                   _ = P.Int i
@@ -28,11 +28,11 @@ literal (Perc a b)               sm = P.Row [literal (dbl val) sm, P.MO P.Perc]
 -- position, a counter, and exponent.
 digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
 digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
-digitsProcess ds pos _ (-3) = [P.Int 0, P.MO P.Point] ++ replicate (3 - pos) (P.Int 0) ++ map P.Int ds
+digitsProcess ds pos _ (-3) = [P.Int 0, P.MO P.Point] <> replicate (3 - pos) (P.Int 0) <> fmap P.Int ds
 digitsProcess (hd:tl) pos coun ex
   | pos /= coun = P.Int hd : digitsProcess tl pos (coun + 1) ex
-  | ex /= 0 = [P.MO P.Point, P.Int hd] ++ map P.Int tl ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
-  | otherwise = [P.MO P.Point, P.Int hd] ++ map P.Int tl
+  | ex /= 0 = [P.MO P.Point, P.Int hd] <> fmap P.Int tl <> [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+  | otherwise = [P.MO P.Point, P.Int hd] <> fmap P.Int tl
 digitsProcess [] pos coun ex
   | pos > coun = P.Int 0 : digitsProcess [] pos (coun+1) ex
   | ex /= 0 = [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]

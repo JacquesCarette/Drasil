@@ -70,7 +70,8 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
   closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
   param, method, getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
+  smartAdd)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
@@ -441,6 +442,7 @@ instance (Pair p) => Array (p CppSrcCode CppHdrCode) Variable Value where
 instance (Pair p) => List (p CppSrcCode CppHdrCode) Value where
   listSize = pair1 listSize listSize
   listAccess = pair2 listAccess listAccess
+  listAccessFromEnd = pair2 listAccessFromEnd listAccessFromEnd
   indexOf = pair2 indexOf indexOf
 
 instance (Pair p) => ListStatement (p CppSrcCode CppHdrCode) Statement Value where
@@ -1365,6 +1367,7 @@ instance List CppSrcCode Value where
   -- TODO [Brandon Bosman, 06/10/2026]: Check if the cast is really necessary
   listSize v = cast int (C.listSize "size" v)
   listAccess = G.listAccess
+  listAccessFromEnd v n = listAccess v (listSize v #- G.smartAdd (litInt 1) n)
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
 
 instance ListStatement CppSrcCode Statement Value where
@@ -2028,6 +2031,7 @@ instance Array CppHdrCode Variable Value where
 instance List CppHdrCode Value where
   listSize _ = mkStateVal void empty
   listAccess _ _ = mkStateVal void empty
+  listAccessFromEnd _ _ = mkStateVal void empty
   indexOf _ _ = mkStateVal void empty
 
 instance ListStatement CppHdrCode Statement Value where

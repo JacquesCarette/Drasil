@@ -97,7 +97,7 @@ module Language.Drasil (
   -- *** Constrained and Uncertain Values
   -- Language.Drasil.Constraint
   , ConstraintReason(..), Constraint(..), ConstraintE
-  , physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
+  , physRange, sfwrRange, physElem, sfwrElem, physEqn, isPhysC, isSfwrC
   -- Language.Drasil.Chunk.Constrained
   , ConstrConcept(..)
   , constrained', constrainedWithRationale, cuc', cuc'', cucNoUnit', constrainedNRV'
@@ -208,7 +208,7 @@ import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Concept.Core (sDom)
 import Language.Drasil.Chunk.Constrained
-import Language.Drasil.Constraint (physRange, sfwrRange, physElem, sfwrElem, isSfwrC, isPhysC,
+import Language.Drasil.Constraint (physRange, sfwrRange, physElem, sfwrElem, physEqn, isSfwrC, isPhysC,
   Constraint(..), ConstraintE, ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,

@@ -226,6 +226,7 @@ instanceVarAccess o' v' = do
         (variableType v) (R.instanceVarAccess (RC.value o) (RC.variable v))
   instanceVarAccess' (variableBind v)
 
+-- This seems a bit sketchy - unwrapping everything to Doc, mixing it up, then wrapping it back to Variable
 arrayElem
   ::
     ( IC.TypeSym r typ

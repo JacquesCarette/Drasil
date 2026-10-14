@@ -91,6 +91,8 @@ class TypeSym r typ | r -> typ where
 
 -- TODO [Brandon Bosman, 06/09/2026]: Think about separating GOOL and GProc implementations of this
 -- | A helper function for extracting the String representation from an `r typ`
+-- We've established that getTypeString is a bad thing
+-- getType might be required, but without global state should it be a class?
 getTypeString :: (UnRepr r TypeData) => r TypeData -> String
 getTypeString = typeString . unRepr
 
@@ -116,6 +118,7 @@ class VariableSym r var typ | r -> var typ where
   -- it performs the necessary imports and creates `Lib.v`
   extVar    :: Library -> Label -> VS (r typ) -> VS (r var)
 
+-- Similar here - shouldn't we be handling this on a per-language basis?
 class VariableElim r var typ | r -> var typ where
   variableName :: r var -> String
   variableType :: r var -> r typ
@@ -133,6 +136,7 @@ listOf = listVar
 type Value = ValData
 
 -- | Class for representing a value.
+-- Similar here - is this the best way to get the type of a value?
 class ValueSym r val typ | r -> val typ where
   valueType :: r val -> r typ
 
@@ -286,6 +290,8 @@ exists = notNull
 -- | Helper class for representing the conversion between integers and array indices.
 -- GOOL is 0-indexed, so languages like Julia that are not 0-indexed
 -- need to convert between integers and indices.
+-- These all return SValue, but shouldn't they return MSStatement?
+-- Also, they have the issue of not distinguishing Values and L-Values (See below)
 class IndexTranslator r val | r -> val where
   -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
   --   the target language's assumptions
@@ -338,6 +344,7 @@ class ListStatement r stmt val | r -> stmt val where
   --   Arguments are: List, Index, val
   listSet    :: VS (r val) -> VS (r val) -> VS (r val) -> MS (r stmt)
 
+-- Similar to List, shouldn't most of these be statements?
 class Set r val | r -> val where
   -- | Checks membership
   -- Arguments are: Set, val
@@ -447,6 +454,8 @@ class AssignStatement r stmt var val | r -> stmt var val where
 infixr 1 &=
 (&=) = assign
 
+-- As Reed mentioned, these have a lack of distinction between values/variables
+-- and L-Values
 class DeclStatement r bod stmt var scope val | r -> bod stmt var scope val where
   -- | Declare a variable without giving it a value.
   -- Not for use with arrays; use `arrayDec` instead.
@@ -468,6 +477,7 @@ class DeclStatement r bod stmt var scope val | r -> bod stmt var scope val where
   constDecDef  :: VS (r var) -> r scope -> VS (r val) -> MS (r stmt)
   funcDecDef   :: VS (r var) -> r scope -> [VS (r var)] -> MS (r bod) -> MS (r stmt)
 
+-- More places that could benefit from L-Values
 class PrintConsole r stmt val | r -> stmt val where
   print      :: VS (r val) -> MS (r stmt)
   printLn    :: VS (r val) -> MS (r stmt)

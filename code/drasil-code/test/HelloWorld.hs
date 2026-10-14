@@ -187,7 +187,7 @@ lambdaTests
   => MS (r block)
 lambdaTests = block
   [ comment "Lambda test"
-  , varDecDef (var "myLambda" double) mainFn
+  , varDecDef (var "myLambda" (funcType [double] double)) mainFn
       (lambda [binder "x" double] (valueOf (var "x" double) #* litDouble 2.0))
   , printLn $ litString "Lambda defined successfully"
   ]

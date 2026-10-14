@@ -210,7 +210,6 @@ class OOTypeSym r typ | r -> typ where
 
 class OOVariableSym r var val typ | r -> var val typ where
   -- | A class-level variable, separate from its class (i.e. `v`, not `C.v`)
-  -- Bool: False for variable, True for constant.  Required by the Python renderer.
   classVar          :: Label -> VS (r typ) -> VS (r var)
   -- | A class-level constant, separate from its class (i.e. `v`, not `C.v`)
   classConst        :: Label -> VS (r typ) -> VS (r var)

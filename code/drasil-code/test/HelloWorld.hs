@@ -161,13 +161,16 @@ setTests
   => MS (r block)
 setTests = block
   [ comment "Set operation tests"
-  , var "s" (setType int) &= setAdd (valueOf (var "s" (setType int))) (litInt 10)
-  , var "s" (setType int) &= setRemove (valueOf (var "s" (setType int))) (litInt 7)
-  , var "s" (setType int) &= setUnion (valueOf (var "s" (setType int)))
-                                      (litSet int [litInt 20, litInt 30])
+  , sVar &= setAdd sVal (litInt 10)
+  , sVar &= setRemove sVal (litInt 7)
+  , sVar &= setUnion sVal tVal
   , printStr "Set after operations: "
-  , printLn (valueOf (var "s" (setType int)))
+  , printLn sVal
   ]
+  where
+    sVar = var "s" (setType int)
+    sVal = valueOf sVar
+    tVal = litSet int [litInt 20, litInt 30]
 
 lambdaTests
   ::
@@ -187,10 +190,13 @@ lambdaTests
   => MS (r block)
 lambdaTests = block
   [ comment "Lambda test"
-  , varDecDef (var "myLambda" (funcType [double] double)) mainFn
-      (lambda [binder "x" double] (valueOf (var "x" double) #* litDouble 2.0))
+  , varDecDef myLambdaVar mainFn (lambda [xBinder] (xVal #* litDouble 2.0))
   , printLn $ litString "Lambda defined successfully"
   ]
+  where
+    myLambdaVar = var "myLambda" (funcType [double] double)
+    xBinder = binder "x" double
+    xVal = valueOf (var "x" double)
 
 objectTests
   :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)

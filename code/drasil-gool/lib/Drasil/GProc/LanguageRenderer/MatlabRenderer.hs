@@ -6,18 +6,19 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Value, Variable, getCodeType,
-  UnRepr(..), Body, Block, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  UnRepr(..), Body, Block, BodySym(..), BlockSym(..), TypeSym(..), getTypeString,
+  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
-  ListStatement(..), Set(..), NativeVectorType(..), NativeVector(..),
-  InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
-  AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
-  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
-  VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
-  BinderElim(..), MethodSym(..), funcApp, (&=), bodyStatements)
+  ValueExpression(..), extFuncApp, IndexTranslator(..), Reference(..),
+  Array(..), List(..), ListStatement(..), Set(..), NativeVectorType(..),
+  NativeVector(..), InternalList(..), EmptyStatement(..), MultiStatement(..),
+  ValueStatement(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, VisibilitySym(..), ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), funcApp, (&=),
+  bodyStatements)
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -48,32 +49,35 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   negateOp, plusOp, minusOp, multOp, divideOp, equalOp, greaterOp,
   greaterEqualOp, lessOp, lessEqualOp, csc, sec, cot, valueOf, litChar,
   litDouble, litInt, litString, valStmt, emptyStmt, assign,
-  funcAppMixedArgs, call, print, ifCond, tryCatch, listAccess, smartAdd)
+  funcAppMixedArgs, call, print, ifCond, tryCatch, listAccess, smartAdd, local,
+  lambda)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt',
-  listDecDef, litSet)
+  listDecDef, argExists, multiReturn, litSet)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue,
   litFalse, while)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
-  funcType, listSize, forEach')
+  extVar, funcType, listSize, forEach')
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   increment1, decrement1, listSlice, stringListVals, stringListLists)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
-  updateMod, MethodData, mthd, mthdName, updateMthd, ParamData, paramVar,
-  paramDoc, pd, ProgData, TypeData, cType, vd, val, valPrec, valInt, valType,
-  opDoc, opPrec, varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc,
-  FuncData(fType, funcDoc), fd, ScopeData, FileData, ModData, BinderD, Statement)
+  updateMod, MethodData, mthd, mthdName, updateMthd, ParamData, paramVar, paramDoc, pd,
+  ProgData, TypeData, cType, vd, val, valPrec, valInt, valType, opDoc, opPrec,
+  varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc,
+  FuncData(fType, funcDoc), fd, ScopeData, sd, ScopeTag(..),
+  BinderD(..), bindFormD, Statement, FileData, ModData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, multPrec, unExpr, unExpr', binExpr, binExpr', mkStateVal, mkVal,
   mkStateVar, mkStmtNoEnd, compEqualPrec, typeUnExpr, typeBinExpr)
-import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue)
+import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue, binderList)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty, vibcat)
 import Drasil.Shared.State (MS, VS, FS, lensGStoFS, lensFStoMS, lensMStoVS,
   revFiles, setFileType, setModuleName, getMainDoc)
 
+import Data.List (intercalate)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 
@@ -119,8 +123,8 @@ instance RenderFile MatlabCode FileData ModData where
   fileFromData = A.fileFromData (onCodeValue . fileD)
 
 instance ImportSym MatlabCode where
-  langImport = undefined
-  modImport = undefined
+  langImport _ = toCode empty
+  modImport _ = toCode empty
 
 instance BodySym MatlabCode Body Block where
   body = onStateList (onCodeList R.body)
@@ -162,7 +166,10 @@ instance TypeElim MatlabCode TypeData where
   getCodeType = cType . unMLC
 
 instance RenderType MatlabCode TypeData where
-  multiType = undefined
+  multiType ts = do
+    typs <- sequence ts
+    let mt = intercalate ", " $ fmap getTypeString typs
+    typeFromData Void mt (text mt)
 
 instance UnaryOpSym MatlabCode where
   notOp = unOpPrec "~"
@@ -204,9 +211,9 @@ instance OpElim MatlabCode where
   bOpPrec = opPrec . unMLC
 
 instance ScopeSym MatlabCode ScopeData where
-  global = undefined
-  mainFn = undefined
-  local = undefined
+  global = toCode $ sd Global
+  mainFn = global
+  local = G.local
 
 instance ScopeElim MatlabCode ScopeData where
   scopeData = unMLC
@@ -214,7 +221,7 @@ instance ScopeElim MatlabCode ScopeData where
 instance VariableSym MatlabCode Variable TypeData where
   var = G.var
   constant = var
-  extVar = undefined
+  extVar = CS.extVar
 
 instance VariableElim MatlabCode Variable TypeData where
   variableName = varName . unMLC
@@ -257,7 +264,7 @@ instance CommandLineArgs MatlabCode Value where
   -- Args come in through the entry function's varargin (1-based, cell-indexed).
   arg n = mlArg (litInt (n + 1))
   argsList = mkStateVal (arrayType string) (text "varargin")
-  argExists = undefined
+  argExists = CP.argExists
 
 instance NumericExpression MatlabCode Value where
   (#~) = unExpr' negateOp
@@ -302,7 +309,7 @@ instance ValueExpression MatlabCode Variable Value BinderD TypeData where
   funcAppMixedArgs = G.funcAppMixedArgs
   extFuncAppMixedArgs _ = G.funcAppMixedArgs
   libFuncAppMixedArgs _ = G.funcAppMixedArgs
-  lambda = undefined
+  lambda = G.lambda mlLambda
   notNull v = (?!) $ funcApp "isempty" bool [v]
 
 instance RenderValue MatlabCode Variable Value TypeData where
@@ -347,9 +354,9 @@ instance ListStatement MatlabCode Statement Value where
 
 instance Set MatlabCode Value where
   contains s e = funcApp "ismember" bool [e, s]
-  setAdd = undefined
-  setRemove = undefined
-  setUnion = undefined
+  setAdd s e = funcApp "union" void [s, litList int [e]]
+  setRemove s e = funcApp "setdiff" void [s, litList int [e]]
+  setUnion a b = funcApp "union" void [a, b]
 
 instance NativeVectorType MatlabCode TypeData where
   vecType = listType
@@ -380,14 +387,14 @@ mlCellWrap String = braces
 mlCellWrap _      = parens
 
 instance BinderSym MatlabCode BinderD TypeData where
-  binder = undefined
+  binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim MatlabCode BinderD TypeData where
-  binderName = undefined
-  binderType = undefined
+  binderName = bindName . unMLC
+  binderType = onCodeValue bindType
 
 instance InternalBinderElim MatlabCode BinderD where
-  binderElim = undefined
+  binderElim = text . bindName . unMLC
 
 instance RenderFunction MatlabCode TypeData where
   funcFromData d = onStateValue $ onCodeValue (`fd` d)
@@ -403,7 +410,7 @@ instance InternalIOStmt MatlabCode Statement Value where
   printSt = mlPrint
 
 instance InternalControlStmt MatlabCode Statement Value where
-  multiReturn = undefined
+  multiReturn = CP.multiReturn id
 
 instance RenderStatement MatlabCode Statement where
   stmt = G.stmt
@@ -478,7 +485,7 @@ instance StringStatement MatlabCode Statement Variable Value where
 
 instance FuncAppStatement MatlabCode Statement Variable Value where
   inOutCall = CP.inOutCall funcApp
-  extInOutCall = undefined
+  extInOutCall m = CP.inOutCall (extFuncApp m)
 
 instance CommentStatement MatlabCode Statement where
   comment = G.comment mlCmtStart
@@ -517,7 +524,7 @@ instance VisibilitySym MatlabCode Doc where
   public = toCode empty
 
 instance RenderVisibility MatlabCode Doc where
-  visibilityFromData = undefined
+  visibilityFromData _ = toCode
 
 instance VisibilityElim MatlabCode Doc where
   visibility = unMLC
@@ -877,3 +884,8 @@ mlListSet lst' idx' val' = do
                (A.innerType $ pure $ valueType lst)
                (RC.value lst <> wrap (RC.value idx))
   lvar &= val'
+
+mlLambda
+  :: (InternalBinderElim r binder, ValueElim r Value)
+  => [r binder] -> r Value -> Doc
+mlLambda ps ex = text "@" <> parens (binderList ps) <+> RC.value ex

@@ -1,52 +1,55 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 -- | Defines functions to print on plain files (for .txt, .log, etc.).
 module Language.Drasil.Plain.Print (
   -- * Types
   SingleLine(..),
-  -- * Functions
-  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc, showSymb,
-  showHasSymbImpl
+  -- * Renderers
+  oneLineCodeSymbolDoc, oneLineSentenceDoc, oneLineExprDoc, oneLineCodeExprDoc,
+  oneLineUnitDoc
 ) where
 
-import Database.Drasil (ChunkDB)
-import qualified Drasil.Code.CodeExpr.Development as C (CodeExpr)
-import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
-import qualified Language.Drasil as L (Expr, HasSymbol(..))
-import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
-  OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
-import Language.Drasil.Printing.Import (expr, codeExpr, spec, symbol)
-import Language.Drasil.Printing.PrintingInformation (PrintingConfiguration(..),
-  PrintingInformation(..), Notation(Scientific))
-
-import Utils.Drasil (toPlainName)
-
 import Prelude hiding ((<>))
+import qualified Prelude as P ((<>))
 import Data.List (partition)
-import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double, 
-  doubleQuotes, empty, hcat, hsep, integer, parens, punctuate, space, text, 
+import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), comma, double,
+  empty, hcat, hsep, integer, punctuate, space, text,
   vcat, render)
+
+import Language.Drasil (Special(..), Symbol, USymb(..), codeSymb)
+import qualified Language.Drasil as L (HasSymbol(..), Sentence, Expr)
+
+import Drasil.Printers.Common
+import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..),
+  OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Language.Drasil.Printing.Import.Expr (expr)
+import Language.Drasil.Printing.Import.Sentence (spec)
+import Language.Drasil.Printing.Import.Symbol (symbol)
+import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
+import Drasil.Code.CodeExpr (CodeExpr)
 
 -- | Data is either linear or not.
 data SingleLine = OneLine | MultiLine
 
--- | Simple printing configuration is scientific.
-plainConfiguration :: PrintingConfiguration
-plainConfiguration = PC Scientific
+-- | Render a symbol to a 'String' on one line.
+oneLineCodeSymbolDoc :: L.HasSymbol x => x -> String
+oneLineCodeSymbolDoc = render . pExprDoc OneLine . symbol . codeSymb
 
--- | Create expressions for a document in 'Doc' format.
-exprDoc :: ChunkDB -> Stage -> SingleLine -> L.Expr -> Doc
-exprDoc db st f e = pExprDoc f (expr e (PI db st plainConfiguration))
+-- | Creates a 'OneLine' 'Implementation'-stage 'sentenceDoc'.
+oneLineSentenceDoc :: PrintingInformation -> L.Sentence -> Doc
+oneLineSentenceDoc pinfo = specDoc OneLine . spec pinfo
 
--- | Create code expressions for a document in 'Doc' format.
-codeExprDoc :: ChunkDB -> Stage -> SingleLine -> C.CodeExpr -> Doc
-codeExprDoc db st f e = pExprDoc f (codeExpr e (PI db st plainConfiguration))
+-- | Creates a 'OneLine' 'Implementation'-stage 'exprDoc'.
+oneLineExprDoc :: PrintingInformation -> L.Expr -> Doc
+oneLineExprDoc pinfo e = pExprDoc OneLine (expr e pinfo)
 
--- | Create sentences for a document in 'Doc' format.
-sentenceDoc :: ChunkDB -> Stage -> SingleLine -> Sentence -> Doc
-sentenceDoc db st f s = specDoc f (spec (PI db st plainConfiguration) s)
+oneLineCodeExprDoc :: PrintingInformation -> CodeExpr -> Doc
+oneLineCodeExprDoc pinfo = pExprDoc OneLine . codeExpr pinfo
 
--- | Create symbols for a document in 'Doc' format.
-symbolDoc :: Symbol -> Doc
-symbolDoc s = pExprDoc OneLine (symbol s)
+-- | Creates a 'OneLine' 'unitDoc'.
+oneLineUnitDoc :: USymb -> Doc
+oneLineUnitDoc = unitDoc OneLine
 
 -- | Helper for printing expressions in 'Doc' format. Display format of an expression may change regarding the 'SingleLine'.
 pExprDoc :: SingleLine -> Expr -> Doc
@@ -55,20 +58,20 @@ pExprDoc _ (Int i) = integer i
 pExprDoc _ (Str s) = text s
 pExprDoc f (Case cs) = caseDoc f cs
 pExprDoc f (Mtx rs) = mtxDoc f rs
-pExprDoc f (Row es) = hcat $ map (pExprDoc f) es
-pExprDoc f (Set es) = hcat $ map (pExprDoc f) es
-pExprDoc _ (Ident s) = text $ toPlainName s
-pExprDoc _ (Label s) = text $ toPlainName s
+pExprDoc f (Row es) = hcat $ pExprDoc f <$> es
+pExprDoc f (Set es) = hcat $ pExprDoc f <$> es
+pExprDoc _ (Ident s) = text s
+pExprDoc _ (Label s) = text s
 pExprDoc _ (Spec s) = specialDoc s
 pExprDoc f (Sub e) = text "_" <> pExprDoc f e
-pExprDoc f (Sup e) = text "^" <> pExprDoc f e
+pExprDoc f (Sup e) = text "_" <> pExprDoc f e
 pExprDoc _ (MO o) = opsDoc o
 pExprDoc f (Over Hat e) = pExprDoc f e <> text "_hat"
-pExprDoc f (Fenced l r e) = fenceDocL l <> pExprDoc f e <> fenceDocR r 
+pExprDoc f (Fenced l r e) = fenceDocL l <> pExprDoc f e <> fenceDocR r
 pExprDoc f (Font Bold e) = pExprDoc f e <> text "_vect"
-pExprDoc f (Font Emph e) = text "_" <> pExprDoc f e <> text "_"
-pExprDoc f (Div n d) = parens (pExprDoc f n) <> text "/" <> parens (pExprDoc f d)
-pExprDoc f (Sqrt e) = text "sqrt" <> parens (pExprDoc f e)
+pExprDoc f (Font Emph e) = wrap "_" "_" $ pExprDoc f e
+pExprDoc f (Div n d) = paren (pExprDoc f n) <> text "/" <> paren (pExprDoc f d)
+pExprDoc f (Sqrt e) = text "sqrt" <> paren (pExprDoc f e)
 pExprDoc _ (Spc Thin) = space
 
 -- | Helper for printing sentences ('Spec's) in 'Doc' format.
@@ -77,13 +80,11 @@ specDoc f (E e) = pExprDoc f e
 specDoc _ (S s) = text s
 specDoc f (Tooltip _ s) = specDoc f s
 specDoc _ (Sp s) = specialDoc s
-specDoc f (Ref (Cite2 n) r _) = specDoc f n <+> text ("Ref: " ++ r)
-specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r) --may need to change?
+specDoc f (Ref (Cite2 n) r _) = specDoc f n <+> text ("Ref: " P.<> r)
+specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " P.<> r) --may need to change?
 specDoc f (s1 :+: s2) = specDoc f s1 <> specDoc f s2
 specDoc _ EmptyS = empty
-specDoc f (Quote s) = doubleQuotes $ specDoc f s
-specDoc MultiLine HARDNL = text "\n"
-specDoc OneLine HARDNL = error "HARDNL encountered in attempt to format linearly"
+specDoc f (Quote s) = dquote $ specDoc f s
 
 -- | Helper for printing units in 'Doc' format.
 unitDoc :: SingleLine -> USymb -> Doc
@@ -92,28 +93,28 @@ unitDoc f (US us) = formatu t b
   (t,b) = partition ((> 0) . snd) us
   formatu :: [(Symbol,Integer)] -> [(Symbol,Integer)] -> Doc
   formatu [] l = line l
-  formatu l [] = hsep $ map pow l
-  formatu nu de = line nu <> text "/" <> line (map (\(s,i) -> (s,-i)) de)
+  formatu l [] = hsep $ pow <$> l
+  formatu nu de = line nu <> text "/" <> line ((\(s,i) -> (s,-i)) <$> de)
   line :: [(Symbol,Integer)] -> Doc
   line []  = empty
   line [x] = pow x
-  line l   = parens $ hsep $ map pow l
+  line l   = paren $ hsep $ pow <$> l
   pow :: (Symbol,Integer) -> Doc
   pow (x,1) = pExprDoc f $ symbol x
   pow (x,p) = pExprDoc f (symbol x) <> text "^" <> integer p
 
 -- | Helper for printing multicase expressions differently based on linearity (SingleLine).
 caseDoc :: SingleLine -> [(Expr, Expr)] -> Doc
-caseDoc OneLine cs = hsep $ punctuate comma $ map (\(e,c) -> pExprDoc OneLine c
-  <+> text "=>" <+> pExprDoc OneLine e) cs
-caseDoc MultiLine cs = vcat $ map (\(e,c) -> pExprDoc MultiLine e <> comma <+> 
-  pExprDoc MultiLine c) cs
+caseDoc OneLine cs = hsep $ punctuate comma $ (\(e,c) -> pExprDoc OneLine c
+  <+> text "=>" <+> pExprDoc OneLine e) <$> cs
+caseDoc MultiLine cs = vcat $ (\(e,c) -> pExprDoc MultiLine e <> comma <+>
+  pExprDoc MultiLine c) <$> cs
 
 -- | Helper for printing matrices.
 mtxDoc :: SingleLine -> [[Expr]] -> Doc
-mtxDoc OneLine rs = brackets $ hsep $ map (brackets . hsep . map (pExprDoc 
-  OneLine)) rs
-mtxDoc MultiLine rs = brackets $ vcat $ map (hsep . map (pExprDoc MultiLine)) rs
+mtxDoc OneLine rs = brak $ hsep $ brak . hsep . fmap (pExprDoc
+  OneLine) <$> rs
+mtxDoc MultiLine rs = brak $ vcat $ hsep . fmap (pExprDoc MultiLine) <$> rs
 
 -- TODO: Double check that this is valid in all output languages
 -- | Helper for printing special characters (for degrees and partial derivatives).
@@ -190,11 +191,3 @@ fenceDocR Paren = text ")"
 fenceDocR Curly = text "}"
 fenceDocR Norm = text "\\|"
 fenceDocR Abs = text "|"
-
--- | Helper for printing Symbols
-showSymb :: Symbol -> String
-showSymb a = render $ symbolDoc a
-
--- | Helper for printing a HasSymbol in Implementation Stage
-showHasSymbImpl :: L.HasSymbol x => x -> String
-showHasSymbImpl x = showSymb (L.symbol x Implementation)

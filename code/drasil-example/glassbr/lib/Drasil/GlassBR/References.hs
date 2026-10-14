@@ -1,16 +1,18 @@
-module Drasil.GlassBR.References where
+module Drasil.GlassBR.References (
+  citations,
+  astm2009, astm2012, astm2016, beasonEtAl1998
+) where
 
 import Language.Drasil
+import Language.Drasil.Document
 
-import Data.Drasil.Citations (campidelli, koothoor2013, smithEtAl2007,
-  smithLai2005, smithKoothoor2016, parnasClements1986)
+import Data.Drasil.Citations (campidelli, parnasClements1986)
 import Data.Drasil.People (jmBracci, tlKohutek, wlBeason)
 
 astm2009, astm2016, astm2012, beasonEtAl1998 :: Citation
 
 citations :: BibRef
-citations = [campidelli, koothoor2013, smithEtAl2007, smithLai2005,
-             smithKoothoor2016, astm2009, astm2016, astm2012, beasonEtAl1998,
+citations = [campidelli, astm2009, astm2016, astm2012, beasonEtAl1998,
              parnasClements1986]
 
 astm2009 = cMisc [author [mononym "ASTM"],

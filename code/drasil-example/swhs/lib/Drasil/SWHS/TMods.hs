@@ -1,14 +1,13 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
-  nwtnCooling, sensHtE, sensHtETemplate, tMods, consThemESrc) where
+  nwtnCooling, sensHtE, sensHtETemplate, tMods) where
 
+import Control.Lens ((^.))
 import qualified Data.List.NonEmpty as NE
 
+import Drasil.Database (mkUid)
 import Language.Drasil
-import Control.Lens ((^.))
-import Theory.Drasil (ConstraintSet, mkConstraintSet,
-  TheoryModel, tm, equationalModel', equationalConstraints',
-  ModelKind, equationalModel)
+import Language.Drasil.Document
+import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -24,6 +23,10 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (boilPt, heatCapSpec,
   htFlux, latentHeat, meltPt, sensHeat, temp)
 
+import Theory.Drasil (ConstraintSet, mkConstraintSet,
+  TheoryModel, tm, equationalModel', equationalConstraints',
+  ModelKind, equationalModel)
+
 import Drasil.SWHS.Assumptions (assumpHTCC, assumpTEO)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (ddMeltFrac)
@@ -38,13 +41,12 @@ tMods = [consThermE, sensHtE, latentHtE, nwtnCooling]
 -- Theoretical Model 1 --
 -------------------------
 consThermE :: TheoryModel
-consThermE = tm (equationalConstraints' consThermECS)
-  ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
-  [] [express consThermERel] [] [dRef consThemESrc] "consThermE" consThermENotes
+consThermE = tm (equationalConstraints' consThermECS) [dRef consThemESrc]
+  "consThermE" consThermENotes
 
 consThermECS :: ConstraintSet ModelExpr
 consThermECS = mkConstraintSet consCC rels
-  where consCC = dccWDS "consThermECS"
+  where consCC = cncpt''' (mkUid "consThermECS")
           (nounPhraseSP "Conservation of thermal energy") (lawConsEnergy ^. defn)
         rels   = NE.fromList [consThermERel]
 
@@ -53,7 +55,7 @@ consThermERel = negVec (sy gradient) $. sy thFluxVect $+ sy volHtGen $=
   sy density $* sy heatCapSpec $* pderiv (sy temp) time
 
 consThermENotes :: [Sentence]
-consThermENotes = map foldlSent [
+consThermENotes = foldlSent <$> [
   [S "The above", phrase equation, S "gives the", phrase lawConsEnergy,
    S "for", phrase transient, phrase heatTrans, S "in a given material"],
   [S "For this", phrase equation, S "to apply" `sC` S "other forms" `S.of_`
@@ -71,16 +73,14 @@ data PhaseChange = AllPhases
 
 sensHtETemplate :: PhaseChange -> Sentence -> TheoryModel
 sensHtETemplate pc desc = tm (equationalModel' qd)
-  ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
-  [qd] [] [] [dRef sensHtESrc] "sensHtE" [desc]
+  [dRef sensHtESrc] "sensHtE" [desc]
     where
       qd = sensHtEQD pc eqn desc
       eqn = sensHtEEqn pc
 
-
 sensHtEQD :: PhaseChange -> ModelExpr -> Sentence -> ModelQDef
 sensHtEQD pc eqn desc = fromEqnSt'' "sensHeat" np desc (symbol sensHeat) (sensHeat ^. typ) eqn
-  where np = nounPhraseSP ("Sensible heat energy" ++ case pc of
+  where np = nounPhraseSP ("Sensible heat energy" <> case pc of
                                                        Liquid -> " (no state change)"
                                                        AllPhases -> "")
 
@@ -89,7 +89,7 @@ sensHtEEqn pChange = case pChange of
   Liquid -> liquidFormula
   AllPhases -> incompleteCase [(sy htCapS $* sy mass $* sy deltaT,
       sy temp $< sy meltPt), (liquidFormula, sy meltPt $< sy temp $<
-      sy boilPt), (sy htCapV $* sy mass $* 
+      sy boilPt), (sy htCapV $* sy mass $*
       sy deltaT, sy boilPt $< sy temp)]
   where
     liquidFormula = sy htCapL $* sy mass $* sy deltaT
@@ -101,7 +101,7 @@ sensHtEEqn pChange = case pChange of
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
   atStart sensHeat :+: S "ing occurs as long as the material does not reach a",
-  phrase temp, S "where a", phrase phaseChange, (S "occurs" !.), atStartNP (a_ phaseChange),
+  phrase temp, S "where a", phrase phaseChange, (S "occurs" !.), D.toSent (atStartNP (a_ phaseChange)),
   S "occurs if" +:+. (eS (sy temp $= sy boilPt) `S.or_` eS (sy temp $= sy meltPt)),
   S "If this" `S.is` S "the case" `sC` S "refer to", refS latentHtE]
 
@@ -116,9 +116,7 @@ sensHtEdesc = foldlSent [
 -- Theoretical Model 3 --
 -------------------------
 latentHtE :: TheoryModel
-latentHtE = tm latentHtEMK
-  ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
-  [] [express latentHtEFD] [] [dRef latHtESrc] "latentHtE" latentHtENotes
+latentHtE = tm latentHtEMK [dRef latHtESrc] "latentHtE" latentHtENotes
 
 latentHtEMK :: ModelKind ModelExpr
 latentHtEMK = equationalModel "latentHtETM"
@@ -131,10 +129,10 @@ latentHtEExpr :: ModelExpr
 latentHtEExpr = defint (eqSymb tau) (exactDbl 0) (sy time) (deriv (apply1 latentHeat tau) tau)
 
 latentHtENotes :: [Sentence]
-latentHtENotes = map foldlSent [
+latentHtENotes = foldlSent <$> [
   [ch latentHeat `S.isThe` S "change" `S.in_` phrase thermalEnergy,
    sParen (phrase latentHeat +:+ phrase energy)],
-  [eS' latentHtEFD `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt` 
+  [eS' latentHtEFD `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt`
    phrase time, ch tau],
   [ch time `S.isThe` phrase time, S "elapsed" `sC` S "as long as the",
    phrase phaseChange `S.is` S "not complete"],
@@ -146,9 +144,7 @@ latentHtENotes = map foldlSent [
 -- Theoretical Model 4 --
 -------------------------
 nwtnCooling :: TheoryModel
-nwtnCooling = tm nwtnCoolingMK
-  ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
-  [] [express nwtnCoolingFD] [] [dRefInfo incroperaEtAl2007 $ Page [8]]
+nwtnCooling = tm nwtnCoolingMK [dRefInfo incroperaEtAl2007 $ Page [8]]
   "nwtnCooling" nwtnCoolingNotes
 
 nwtnCoolingMK :: ModelKind ModelExpr
@@ -162,7 +158,7 @@ nwtnCoolingExpr :: ModelExpr
 nwtnCoolingExpr = sy htTransCoeff $* apply1 deltaT time
 
 nwtnCoolingNotes :: [Sentence]
-nwtnCoolingNotes = map foldlSent [
+nwtnCoolingNotes = foldlSent <$> [
   [atStart lawConvCooling +:+. S "describes convective cooling from a surface" +:
    (S "The law" `S.is` S "stated as"), S "the", phrase rate `S.of_` S "heat loss from a body" `S.is`
    S "proportional" `S.toThe` S "difference in", plural temp, S "between the body and its surroundings"],

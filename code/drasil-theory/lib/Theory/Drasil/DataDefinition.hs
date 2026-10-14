@@ -1,4 +1,4 @@
-{-# LANGUAGE RankNTypes, NoMonomorphismRestriction, GADTs, TemplateHaskell, MultiParamTypeClasses #-}
+{-# LANGUAGE NoMonomorphismRestriction, TemplateHaskell #-}
 -- | Defines types and functions for Data Definitions.
 module Theory.Drasil.DataDefinition (
   DataDefinition,
@@ -6,12 +6,15 @@ module Theory.Drasil.DataDefinition (
   qdFromDD, qdEFromDD
 ) where
 
-import Database.Drasil (HasChunkRefs(chunkRefs))
-
 import Control.Lens
+
+import Drasil.Database (UID, HasUID(..), showUID, nsUid,
+  declareHasChunkRefs, Generically(..))
 import Language.Drasil
-import Drasil.Metadata (dataDefn)
+import Language.Drasil.Document
+import Drasil.Metadata.TheoryConcepts (dataDefn)
 import Theory.Drasil.Classes (HasOutput(..))
+import Theory.Drasil.Components.Derivation (Derivation,MayHaveDerivation(derivations))
 
 -- * Types
 
@@ -25,7 +28,7 @@ data DDPkt = DDPkt {
 }
 makeLenses ''DDPkt
 
--- | A data definition is a 'QDefinition' that may have additional notes: 
+-- | A data definition is a 'QDefinition' that may have additional notes:
 -- the scope, any references (as 'DecRef's), maybe a derivation, a label ('ShortName'), a reference address, and other notes ('Sentence's).
 data DataDefinition where
   DDE  :: SimpleQDef -> DDPkt -> DataDefinition
@@ -39,15 +42,7 @@ ddQD lqde lqdme = lens g s
     s (DDE  qd pkt) u = DDE  (qd & lqde .~ u)  pkt
     s (DDME qd pkt) u = DDME (qd & lqdme .~ u) pkt
 
--- The type signature is really
---
---     ddQDGetter :: Getter SimpleQDef a -> Getter ModelQDef a -> Getter DataDefinition a
---
--- But we need this more general type signature to avoid GHC warning us of
--- "redundant constraints"
-ddQDGetter :: (Profunctor p, Contravariant f) => Getter SimpleQDef a
-  -> Getter ModelQDef a
-  -> Optic' p f DataDefinition a
+ddQDGetter :: Getter SimpleQDef a -> Getter ModelQDef a -> Getter DataDefinition a
 ddQDGetter gsqd gmqd = to g
   where
     g (DDE qd _) = qd ^. gsqd
@@ -61,8 +56,8 @@ ddPkt lpkt = lens g s
     s (DDE  qd pkt) a' = DDE  qd (pkt & lpkt .~ a')
     s (DDME qd pkt) a' = DDME qd (pkt & lpkt .~ a')
 
-instance HasChunkRefs DataDefinition where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+declareHasChunkRefs ''DDPkt
+declareHasChunkRefs ''DataDefinition
 
 -- | Finds the 'UID' of a 'DataDefinition where'.
 instance HasUID             DataDefinition where uid = ddPkt pktUID
@@ -93,8 +88,6 @@ instance HasAdditionalNotes DataDefinition where getNotes = ddPkt pktSS
 instance HasShortName       DataDefinition where shortname = (^. ddPkt pktSN)
 -- | Finds the reference address of a 'DataDefinition where'.
 instance HasRefAddress      DataDefinition where getRefAdd l = RP (prepend $ abrv l) (l ^. ddPkt pktS)
--- | Finds the domain of the 'QDefinition' used to make the 'DataDefinition where'.
-instance ConceptDomain      DataDefinition where cdom _ = cdom dataDefn
 -- | Finds the idea of a 'DataDefinition where' (abbreviation).
 instance CommonIdea         DataDefinition where abrv _ = abrv dataDefn
 -- | Finds the reference address of a 'DataDefinition where'.
@@ -113,7 +106,7 @@ ddUid = nsUid "dataDefn" . (^. uid)
 
 -- | Smart constructor for data definitions.
 ddE :: SimpleQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddE q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
+ddE q []   _   _  = error $ "Source field of " <> showUID q <> " is empty"
 ddE q refs der sn = DDE q . DDPkt (ddUid q) refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.
@@ -122,7 +115,7 @@ ddENoRefs q der sn = DDE q . DDPkt (ddUid q) [] der (shortname' $ S sn) (prepend
 
 -- | Smart constructor for data definitions.
 ddME :: ModelQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddME q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
+ddME q []   _   _  = error $ "Source field of " <> showUID q <> " is empty"
 ddME q refs der sn = DDME q . DDPkt (ddUid q) refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.

@@ -103,8 +103,6 @@ ${{p_{\text{y}}}^{\text{i}}}$ & $y$-component of initial position & ${\text{m}}$
 \\
 $\symbf{p}\text{(}t\text{)}$ & Position & ${\text{m}}$
 \\
-$s$ & Output message as a string & --
-\\
 $t$ & Time & ${\text{s}}$
 \\
 ${t_{\text{flight}}}$ & Flight duration & ${\text{s}}$
@@ -128,8 +126,6 @@ ${{v_{\text{y}}}^{\text{i}}}$ & $y$-component of initial velocity & $\frac{\text
 $\symbf{v}\text{(}t\text{)}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${\symbf{v}^{\text{i}}}$ & Initial velocity & $\frac{\text{m}}{\text{s}}$
-\\
-$ε$ & Hit tolerance & --
 \\
 $θ$ & Launch angle & ${\text{rad}}$
 \\
@@ -157,6 +153,8 @@ GS & Goal Statement
 \\
 IM & Instance Model
 \\
+LC & Likely Change
+\\
 PS & Physical System Description
 \\
 R & Requirement
@@ -176,7 +174,7 @@ Uncert. & Typical Uncertainty
 \label{Sec:Intro}
 Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. Common examples of projectile motion include ballistics problems (missiles, bullets, etc.) and the flight of balls in various sports (baseball, golf, football, etc.). The document describes the program called Projectile , which is based on the original, manually created version of \hyperref{https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile}{}{}{Projectile}.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the software requirements specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -294,11 +292,11 @@ This section simplifies the original problem and helps in developing the theoret
 \item[yAxisGravity:\phantomsection\label{yAxisGravity}]{The direction of the $y$-axis is directed opposite to gravity. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}, and \hyperref[accelYGravity]{A:accelYGravity}.)}
 \item[launchOrigin:\phantomsection\label{launchOrigin}]{The launcher is coincident with the origin. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[targetXAxis:\phantomsection\label{targetXAxis}]{The target lies on the $x$-axis (from \hyperref[neglectCurv]{A:neglectCurv}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
-\item[posXDirection:\phantomsection\label{posXDirection}]{The positive $x$-direction is from the launcher to the target. (RefBy: \hyperref[IM:messageIM]{IM:messageIM}, \hyperref[IM:offsetIM]{IM:offsetIM}, \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
+\item[posXDirection:\phantomsection\label{posXDirection}]{The positive $x$-direction is from the launcher to the target. (RefBy: \hyperref[IM:offsetIM]{IM:offsetIM}, \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[constAccel:\phantomsection\label{constAccel}]{The acceleration is constant (from \hyperref[accelXZero]{A:accelXZero}, \hyperref[accelYGravity]{A:accelYGravity}, \hyperref[neglectDrag]{A:neglectDrag}, and \hyperref[freeFlight]{A:freeFlight}). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
 \item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[constAccel]{A:constAccel}.)}
 \item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A:yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} and \hyperref[constAccel]{A:constAccel}.)}
-\item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected. (RefBy: \hyperref[constAccel]{A:constAccel}.)}
+\item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected. (RefBy: \hyperref[constAccel]{A:constAccel} and \hyperref[considerAirDrag]{LC:Consider-Air-Drag}.)}
 \item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD:rectVel} and \hyperref[GD:rectPos]{GD:rectPos}.)}
 \item[freeFlight:\phantomsection\label{freeFlight}]{The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A:constAccel}.)}
 \item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: \hyperref[targetXAxis]{A:targetXAxis} and \hyperref[cartSyst]{A:cartSyst}.)}
@@ -549,7 +547,7 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A:twoDM
 \phantomsection 
 \label{GD:posVec}
 \\ \midrule
-Label & Position vector as a function of time for 2D motion under constant acceleration
+Label & Position vector as a function of time for two-dimensional motion under constant acceleration
         
 \\ \midrule
 Units & ${\text{m}}$
@@ -938,65 +936,6 @@ Notes & ${p_{\text{land}}}$ is from \hyperref[IM:calOfLandingDist]{IM:calOfLandi
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:messageIM]{IM:messageIM}, \hyperref[outputValues]{FR:Output-Values}, and \hyperref[calcValues]{FR:Calculate-Values}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\medskip
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:messageIM}
-\phantomsection 
-\label{IM:messageIM}
-\\ \midrule
-Label & Output message
-        
-\\ \midrule
-Input & ${d_{\text{offset}}}$, ${p_{\text{target}}}$
-        
-\\ \midrule
-Output & $s$
-         
-\\ \midrule
-Input Constraints & \begin{displaymath}
-                    \resizeExpression{{d_{\text{offset}}}\gt{}-{p_{\text{target}}}}
-                    \end{displaymath}
-                    \begin{displaymath}
-                    \resizeExpression{{p_{\text{target}}}\gt{}0}
-                    \end{displaymath}
-\\ \midrule
-Output Constraints & 
-\\ \midrule
-Equation & \begin{displaymath}
-           \resizeExpression{s=\begin{cases}
-                               \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
-                               \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
-                               \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
-                               \end{cases}}
-           \end{displaymath}
-\\ \midrule
-Description & \begin{symbDescription}
-              \item{$s$ is the output message as a string (Unitless)}
-              \item{${d_{\text{offset}}}$ is the distance between the target position and the landing position (${\text{m}}$)}
-              \item{${p_{\text{target}}}$ is the target position (${\text{m}}$)}
-              \item{$ε$ is the hit tolerance (Unitless)}
-              \end{symbDescription}
-\\ \midrule
-Notes & ${d_{\text{offset}}}$ is from \hyperref[IM:offsetIM]{IM:offsetIM}.
-        
-        The constraint ${p_{\text{target}}}\gt{}0$ is from \hyperref[posXDirection]{A:posXDirection}.
-        
-        The constraint ${d_{\text{offset}}}\gt{}-{p_{\text{target}}}$ is from the fact that ${p_{\text{land}}}\gt{}0$, from \hyperref[posXDirection]{A:posXDirection}.
-        
-        $ε$ is defined in \hyperref[Sec:AuxConstants]{Sec:Values of Auxiliary Constants}.
-        
-\\ \midrule
-Source & --
-         
-\\ \midrule
 RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
@@ -1005,12 +944,12 @@ RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calcValues]{FR:C
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+The \hyperref[Table:InDataConstraints]{Input Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of reasonable values is intended to provide examples of values that are physically admissible.
 
 \begin{longtblr}
 [caption={Input Data Constraints}]
 {colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{Var} & \textbf{Physical Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Reasonable Value} & \textbf{Uncert.}
 \\
 ${p_{\text{target}}}$ & ${p_{\text{target}}}\gt{}0$ & $1000$ ${\text{m}}$ & 10$\%$
 \\
@@ -1021,7 +960,7 @@ $θ$ & $0\lt{}θ\lt{}\frac{π}{2}$ & $\frac{π}{4}$ ${\text{rad}}$ & 10$\%$
 \end{longtblr}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
-The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+The \hyperref[Table:OutDataConstraints]{Output Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 
 \begin{longtblr}
 [caption={Output Data Constraints}]
@@ -1046,8 +985,8 @@ This section provides the functional requirements, the tasks and behaviours that
 \begin{description}[font=\normalfont]
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInVals}]{Check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
-\item[Calculate-Values:\phantomsection\label{calcValues}]{Calculate the following values: ${t_{\text{flight}}}$ (from \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}), ${p_{\text{land}}}$ (from \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}), ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM:offsetIM}), and $s$ (from \hyperref[IM:messageIM]{IM:messageIM}).}
-\item[Output-Values:\phantomsection\label{outputValues}]{Output ${t_{\text{flight}}}$ (from \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}), $s$ (from \hyperref[IM:messageIM]{IM:messageIM}), and ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM:offsetIM}).}
+\item[Calculate-Values:\phantomsection\label{calcValues}]{Calculate the following values: ${t_{\text{flight}}}$ (from \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}), ${p_{\text{land}}}$ (from \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}), and ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM:offsetIM}).}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output ${t_{\text{flight}}}$ (from \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}) and ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM:offsetIM}).}
 \end{description}
 \begin{longtblr}
 [caption={Required Inputs}]
@@ -1071,7 +1010,14 @@ This section provides the non-functional requirements, the qualities that the so
 \item[Understandability:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
 \item[Reusability:\phantomsection\label{reusable}]{The code is modularized.}
 \item[Maintainability:\phantomsection\label{maintainable}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
-\item[Portability:\phantomsection\label{portable}]{The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.}
+\item[Portability:\phantomsection\label{portable}]{The code shall be portable to multiple environments, particularly Linux, macOS, and Windows.}
+\end{description}
+\section{Likely Changes}
+\label{Sec:LCs}
+This section lists the likely changes (LC) to be made to the software.
+
+\begin{description}[font=\normalfont]
+\item[Consider-Air-Drag:\phantomsection\label{considerAirDrag}]{\hyperref[neglectDrag]{A:neglectDrag} - The software may be changed to consider the effect of air drag on the projectile during its flight.}
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
@@ -1142,7 +1088,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:offsetIM]{IM:offsetIM} &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:messageIM]{IM:messageIM} &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifyInVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1156,108 +1108,100 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[verifyInVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[considerAirDrag]{LC:Consider-Air-Drag} &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
 \label{Table:TraceMatAvsAll}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
-{colspec={l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:vecMag]{DD:vecMag}} & \textbf{\hyperref[DD:speedIX]{DD:speedIX}} & \textbf{\hyperref[DD:speedIY]{DD:speedIY}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[GD:rectVel]{GD:rectVel}} & \textbf{\hyperref[GD:rectPos]{GD:rectPos}} & \textbf{\hyperref[GD:velVec]{GD:velVec}} & \textbf{\hyperref[GD:posVec]{GD:posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM:offsetIM}} & \textbf{\hyperref[IM:messageIM]{IM:messageIM}}
+{colspec={l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:vecMag]{DD:vecMag}} & \textbf{\hyperref[DD:speedIX]{DD:speedIX}} & \textbf{\hyperref[DD:speedIY]{DD:speedIY}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[GD:rectVel]{GD:rectVel}} & \textbf{\hyperref[GD:rectPos]{GD:rectPos}} & \textbf{\hyperref[GD:velVec]{GD:velVec}} & \textbf{\hyperref[GD:posVec]{GD:posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM:offsetIM}}
 \\
-\hyperref[DD:vecMag]{DD:vecMag} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:vecMag]{DD:vecMag} &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:speedIX]{DD:speedIX} & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:speedIX]{DD:speedIX} & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:speedIY]{DD:speedIY} & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:speedIY]{DD:speedIY} & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:rectVel]{GD:rectVel} &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[GD:rectVel]{GD:rectVel} &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:rectPos]{GD:rectPos} &  &  &  &  & X & X &  &  &  &  &  &  & 
+\hyperref[GD:rectPos]{GD:rectPos} &  &  &  &  & X & X &  &  &  &  &  & 
 \\
-\hyperref[GD:velVec]{GD:velVec} &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[GD:velVec]{GD:velVec} &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-\hyperref[GD:posVec]{GD:posVec} &  &  &  &  &  &  & X &  &  &  &  &  & 
+\hyperref[GD:posVec]{GD:posVec} &  &  &  &  &  &  & X &  &  &  &  & 
 \\
-\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} &  &  & X &  &  &  &  &  & X &  &  &  & 
+\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} &  &  & X &  &  &  &  &  & X &  &  & 
 \\
-\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} &  & X &  &  &  &  &  &  & X & X &  &  & 
+\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} &  & X &  &  &  &  &  &  & X & X &  & 
 \\
-\hyperref[IM:offsetIM]{IM:offsetIM} &  &  &  &  &  &  &  &  &  &  & X &  & 
-\\
-\hyperref[IM:messageIM]{IM:messageIM} &  &  &  &  &  &  &  &  &  &  &  & X & 
+\hyperref[IM:offsetIM]{IM:offsetIM} &  &  &  &  &  &  &  &  &  &  & X & 
 \label{Table:TraceMatRefvsRef}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
-{colspec={l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:vecMag]{DD:vecMag}} & \textbf{\hyperref[DD:speedIX]{DD:speedIX}} & \textbf{\hyperref[DD:speedIY]{DD:speedIY}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[GD:rectVel]{GD:rectVel}} & \textbf{\hyperref[GD:rectPos]{GD:rectPos}} & \textbf{\hyperref[GD:velVec]{GD:velVec}} & \textbf{\hyperref[GD:posVec]{GD:posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM:offsetIM}} & \textbf{\hyperref[IM:messageIM]{IM:messageIM}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[verifiable]{NFR:Verifiability}} & \textbf{\hyperref[understandable]{NFR:Understandability}} & \textbf{\hyperref[reusable]{NFR:Reusability}} & \textbf{\hyperref[maintainable]{NFR:Maintainability}} & \textbf{\hyperref[portable]{NFR:Portability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
+{colspec={l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:vecMag]{DD:vecMag}} & \textbf{\hyperref[DD:speedIX]{DD:speedIX}} & \textbf{\hyperref[DD:speedIY]{DD:speedIY}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[GD:rectVel]{GD:rectVel}} & \textbf{\hyperref[GD:rectPos]{GD:rectPos}} & \textbf{\hyperref[GD:velVec]{GD:velVec}} & \textbf{\hyperref[GD:posVec]{GD:posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM:offsetIM}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[verifiable]{NFR:Verifiability}} & \textbf{\hyperref[understandable]{NFR:Understandability}} & \textbf{\hyperref[reusable]{NFR:Reusability}} & \textbf{\hyperref[maintainable]{NFR:Maintainability}} & \textbf{\hyperref[portable]{NFR:Portability}}
 \\
-\hyperref[targetHit]{GS:targetHit} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[targetHit]{GS:targetHit} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  & X &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyInVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  & X &  & X & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/avsa}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/avsall}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/refvsref}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/allvsr}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/allvsall}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/allvsall}
 \caption{TraceGraphAllvsAll}
 \label{Figure:TraceGraphAllvsAll}
 \end{center}
@@ -1265,11 +1209,11 @@ The purpose of the traceability graphs is also to provide easy references on wha
 For convenience, the following graphs can be found at the links below:
 
 \begin{itemize}
-\item{\hyperref{../../../../traceygraphs/projectile/avsa.svg}{}{}{TraceGraphAvsA}}
-\item{\hyperref{../../../../traceygraphs/projectile/avsall.svg}{}{}{TraceGraphAvsAll}}
-\item{\hyperref{../../../../traceygraphs/projectile/refvsref.svg}{}{}{TraceGraphRefvsRef}}
-\item{\hyperref{../../../../traceygraphs/projectile/allvsr.svg}{}{}{TraceGraphAllvsR}}
-\item{\hyperref{../../../../traceygraphs/projectile/allvsall.svg}{}{}{TraceGraphAllvsAll}}
+\item{\hyperref{../../TraceyGraph/avsa.svg}{}{}{TraceGraphAvsA}}
+\item{\hyperref{../../TraceyGraph/avsall.svg}{}{}{TraceGraphAvsAll}}
+\item{\hyperref{../../TraceyGraph/refvsref.svg}{}{}{TraceGraphRefvsRef}}
+\item{\hyperref{../../TraceyGraph/allvsr.svg}{}{}{TraceGraphAllvsR}}
+\item{\hyperref{../../TraceyGraph/allvsall.svg}{}{}{TraceGraphAllvsAll}}
 \end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
@@ -1281,8 +1225,6 @@ This section contains the standard values that are used for calculations in Proj
 \textbf{Symbol} & \textbf{Description} & \textbf{Value} & \textbf{Unit}
 \\
 $g$ & magnitude of gravitational acceleration & $9.8$ & $\frac{\text{m}}{\text{s}^{2}}$
-\\
-$ε$ & hit tolerance & $2.0\%$ & --
 \\
 $π$ & ratio of circumference to diameter for any circle & $3.14159265$ & --
 \label{Table:TAuxConsts}

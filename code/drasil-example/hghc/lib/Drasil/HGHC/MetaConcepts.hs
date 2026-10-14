@@ -1,6 +1,8 @@
-module Drasil.HGHC.MetaConcepts (progName) where
-    
-import Language.Drasil
+module Drasil.HGHC.MetaConcepts (projName) where
 
-progName :: CI
-progName = commonIdea "hghc" (cn "HGHC") "HGHC" []
+import Drasil.Database (mkUid)
+import Language.Drasil
+import Drasil.System (ProjectName, mkCommonProjName)
+
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "hghcProjName") (nounPhraseSP "HGHC") "HGHC"

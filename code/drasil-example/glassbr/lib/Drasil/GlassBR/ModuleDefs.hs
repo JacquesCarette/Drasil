@@ -2,26 +2,27 @@
 -- when 'name' and 'nameCT' both appear, 'name' is the Haskell function and
 -- 'nameCT' is the "Code Template" that 'name' builds.
 
-module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
+module Drasil.GlassBR.ModuleDefs (readTableMod, allMods, implVars, interpY, interpZ) where
 
 import Drasil.Code.CodeExpr (CodeExpr, LiteralC(int))
+import Drasil.Database (IsChunk, mkUid)
 import Language.Drasil (Space(..), nounPhraseSP,
-  label, sub, HasSymbol(..), HasUID, Symbol, ExprC(..), DefinedQuantityDict, implVar)
-import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.ShortHands
-import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
-  asVC, funcDef, fDecDef, ffor, funcData, quantvar, 
+  label, sub, HasSymbol(..), Symbol, ExprC(..), DefinedQuantityDict, implVar)
+import Language.Drasil.Display (Symbol(Integ))
+import Language.Drasil.ShortHands (lX, lY, lZ, lV, lI, lJ, lK)
+import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod,
+  asVC, funcDef, fDecDef, ffor, funcData, quantvar,
   multiLine, packmod, repeated, singleLine)
-import qualified Drasil.GlassBR.Unitals as U
-import Language.Drasil.Printers
-
+import qualified Drasil.GlassBR.Unitals as U (interpY, interpZ)
+import Language.Drasil.Printers (oneLineCodeSymbolDoc)
 
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]
 
 -- It's a bit odd that this has to be explicitly built here...
 implVars :: [DefinedQuantityDict]
-implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
+implVars = fmap asVC [readTable, findCT, extractColumnCT, linInterpCT] <>
+  [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
   i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename,
   y_2, y_1, x_2, x_1, x]
 
@@ -35,7 +36,7 @@ readTable :: Func
 readTable = funcData "read_table"
   "Reads glass ASTM data from a file with the given file name"
   [ singleLine (repeated [quantvar zVector]) ',',
-    multiLine (repeated (map quantvar [xMatrix, yMatrix])) ','
+    multiLine (repeated (quantvar <$> [xMatrix, yMatrix])) ','
   ]
 
 -----
@@ -45,7 +46,7 @@ one = Integ 1
 two = Integ 2
 
 var :: String -> String -> String -> Symbol -> Space -> DefinedQuantityDict
-var nam np desc sym sp = implVar nam (nounPhraseSP np) desc sp sym
+var nam np desc sym sp = implVar (mkUid nam) (nounPhraseSP np) desc sp sym
 
 y_2, y_1, x_2, x_1, x :: DefinedQuantityDict
 y_1  = var "y1" "lower y-coordinate"
@@ -63,7 +64,7 @@ v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
   i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename :: DefinedQuantityDict
 i = var "i" "index" "the index" lI Natural
 j = var "j" "index" "the index" lJ Natural
-k = var "k" "index" "the index" (sub lK two) Natural     
+k = var "k" "index" "the index" (sub lK two) Natural
 v = var "v" "value whose index will be found"
   "the value whose index will be found" lV Real
 y = var "y" "y-coordinate to interpolate at"
@@ -71,18 +72,18 @@ y = var "y" "y-coordinate to interpolate at"
 z = var "z" "z-coordinate to interpolate at"
   "the z-coordinate to interpolate at" lZ Real
 
-zVector = var "zVector" "list of z values" 
-  "the list of z values" (sub lZ (label "vector")) (Vect Real)               
-yMatrix = var "yMatrix" "lists of y values at different z values" 
+zVector = var "zVector" "list of z values"
+  "the list of z values" (sub lZ (label "vector")) (Vect Real)
+yMatrix = var "yMatrix" "lists of y values at different z values"
   "the lists of y values at different z values" (sub lY (label "matrix")) (Vect $ Vect Real)
-xMatrix = var "xMatrix" "lists of x values at different z values" 
-  "the lists of x values at different z values" (sub lX (label "matrix")) (Vect $ Vect Real)        
+xMatrix = var "xMatrix" "lists of x values at different z values"
+  "the lists of x values at different z values" (sub lX (label "matrix")) (Vect $ Vect Real)
 arr     = var "arr" "array in which value should be found"
   "the array in which a value should be found" (label "arr") (Vect Real)  --FIXME: temporary variable for findCT?
 x_z_1   = var "x_z_1" "list of x values at a specific z value"
   "the list of x values at a specific z value" (sub lX (sub lZ one)) (Vect Real)
 y_z_1   = var "y_z_1" "list of y values at a specific z value"
-  "the list of y values at a specific z value" (sub lY (sub lZ one)) (Vect Real)   
+  "the list of y values at a specific z value" (sub lY (sub lZ one)) (Vect Real)
 x_z_2   = var "x_z_2" "list of x values at a specific z value"
   "the list of x values at a specific z value" (sub lX (sub lZ two)) (Vect Real)
 y_z_2   = var "y_z_2" "list of y values at a specific z value"
@@ -111,26 +112,26 @@ onLine p1@(x1, y1) p2 x_ = (m $* (x_ $- x1)) $+ y1
 ------------------------------------------------------------------------------------------
 -- Code Template helper functions
 
-vLook :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> CodeExpr -> CodeExpr
+vLook :: (HasSymbol a, HasSymbol i, IsChunk a, IsChunk i) => a -> i -> CodeExpr -> CodeExpr
 vLook a i_ p = idx (sy a) (sy i_ $+ p)
 
-aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, HasUID a, HasUID i, HasUID j) =>
+aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, IsChunk a, IsChunk i, IsChunk j) =>
   a -> i -> j -> CodeExpr
 aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 
-getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> CodeExpr -> CodeExpr
+getCol :: (HasSymbol a, HasSymbol i, IsChunk a, IsChunk i) => a -> i -> CodeExpr -> CodeExpr
 getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, sy i_ $+ p]
 
 call :: Func -> [DefinedQuantityDict] -> FuncStmt
-call f l = FVal $ apply (asVC f) $ map sy l
+call f l = FVal $ apply (asVC f) $ sy <$> l
 
-find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> CodeExpr
+find :: (IsChunk zv, IsChunk z, HasSymbol zv, HasSymbol z) => zv -> z -> CodeExpr
 find zv z_ = apply (asVC findCT) [sy zv, sy z_]
 
 linInterp :: [CodeExpr] -> CodeExpr
 linInterp = apply (asVC linInterpCT)
 
-interpOver :: (HasUID ptx, HasUID pty, HasUID ind, HasUID vv,
+interpOver :: (IsChunk ptx, IsChunk pty, IsChunk ind, IsChunk vv,
   HasSymbol ptx, HasSymbol pty, HasSymbol ind, HasSymbol vv) =>
   ptx -> pty -> ind -> vv -> [CodeExpr]
 interpOver ptx pty ind vv =
@@ -143,13 +144,13 @@ interpOver ptx pty ind vv =
 -- Note how this one uses a semantic function in its body
 -- But it is also 'wrong' in the sense that it assumes x_1 <= x <= x_2
 linInterpCT :: Func
-linInterpCT = funcDef "lin_interp" "Performs linear interpolation" 
+linInterpCT = funcDef "lin_interp" "Performs linear interpolation"
   [x_1, y_1, x_2, y_2, x] Real (Just "y value interpolated at given x value")
   [ FRet $ onLine (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
 
 findCT :: Func
-findCT = funcDef "find" 
-  "Finds the array index for a value closest to the given value" 
+findCT = funcDef "find"
+  "Finds the array index for a value closest to the given value"
   [arr, v] Natural (Just "index of given value in given array")
   [
     ffor i (dim (sy arr) $- int 1)
@@ -159,7 +160,7 @@ findCT = funcDef "find"
   ]
 
 extractColumnCT :: Func
-extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
+extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix"
   [mat, j] (Vect Real) (Just "column of the given matrix at the given index")
   [
     fDecDef col (matrix [[]]),
@@ -169,9 +170,12 @@ extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix"
     FRet (sy col)
   ]
 
+-- FIXME: interpY and interpZ should not share a `UID` with their `DQD`
+-- counterparts. Unfortunately, cannot change the `UID` here because it creates
+-- an error "call to non-existent function interpY"
 interpY :: Func
-interpY = funcDef (showHasSymbImpl U.interpY)
-  "Linearly interpolates a y value at given x and z values" 
+interpY = funcDef (oneLineCodeSymbolDoc U.interpY)
+  "Linearly interpolates a y value at given x and z values"
   [filename, x, z] Real (Just "y value interpolated at given x and z values")
   [
   -- hack
@@ -196,8 +200,8 @@ interpY = funcDef (showHasSymbImpl U.interpY)
   ]
 
 interpZ :: Func
-interpZ = funcDef (showHasSymbImpl U.interpZ)
-  "Linearly interpolates a z value at given x and y values" 
+interpZ = funcDef (oneLineCodeSymbolDoc U.interpZ)
+  "Linearly interpolates a z value at given x and y values"
   [filename, x, y] Real (Just "z value interpolated at given x and y values")
   [
     -- hack
@@ -227,6 +231,6 @@ interpZ = funcDef (showHasSymbImpl U.interpZ)
   ]
 
 interpMod :: Mod
-interpMod = packmod "Interpolation" 
+interpMod = packmod "Interpolation"
   "Provides functions for linear interpolation on three-dimensional data" []
   [linInterpCT, findCT, extractColumnCT, interpY, interpZ]

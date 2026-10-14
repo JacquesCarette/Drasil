@@ -2,16 +2,16 @@ module Language.Drasil.Code.Imperative.Doxygen.Import (
   makeDoxConfig, yes, no
 ) where
 
-import Utils.Drasil (blank)
-
-import Drasil.GOOL (GOOLState, headers, mainMod)
-
-import Language.Drasil.Choices (Verbosity(..))
-
+import Control.Lens ((^.))
 import Data.List (intersperse, nub)
 import Data.Maybe (maybeToList)
-import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
+
+import Drasil.FileHandling.Legacy (blank)
+
+import Language.Drasil.Choices (Verbosity(..))
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierState,
+  headers, mainMod)
 
 -- | A 'Doc' that holds optimized choices for configuring doxygen files.
 type OptimizeChoice = Doc
@@ -32,7 +32,7 @@ verbosityToDoc Quiet = yes
 
 -- | Renderings of comments regarding the default tag values for various Doxygen
 -- settings.
--- 
+--
 -- TODO: `makeDoxConfig` needs access to a `ChunkDB` so that we can re-write
 -- these `Doc`s as `Sentence`s and render them back into `Doc`s appropriately.
 defNo, defYes :: Doc
@@ -42,12 +42,12 @@ defYes = defaultValSentence <> yes <> text "."
 -- | Renders a Doxygen configuration file.
 --
 --     * Sets the PROJECT_NAME field according to the given name.
---     * Sets the INPUT field to the header files contained in the given GOOLState.
+--     * Sets the INPUT field to the header files contained in the given SoftwareDossierState.
 --     * Sets the OPTIMIZE_OUTPUT_JAVA field according to the OptimizeChoice parameter.
 --     * Sets the QUIET field according to the given Verbosity.
-makeDoxConfig :: ProjName -> GOOLState -> OptimizeChoice -> Verbosity -> Doc
+makeDoxConfig :: ProjName -> SoftwareDossierState -> OptimizeChoice -> Verbosity -> Doc
 makeDoxConfig prog s opt v =
-  let fs = nub (s ^. headers ++ maybeToList (s ^. mainMod))
+  let fs = nub (s ^. headers <> maybeToList (s ^. mainMod))
   in vcat [
   text "# Doxyfile 1.8.15",
   blank,
@@ -83,7 +83,7 @@ makeDoxConfig prog s opt v =
   text "# title of most generated pages and in a few other places.",
   text "# The default value is: My Project.",
   blank,
-  text $ "PROJECT_NAME           = \"" ++ prog ++ "\"",
+  text $ "PROJECT_NAME           = \"" <> prog <> "\"",
   blank,
   text "# The PROJECT_NUMBER tag can be used to enter a project or revision number. This",
   text "# could be handy for archiving the generated documentation or if some version",
@@ -199,7 +199,7 @@ makeDoxConfig prog s opt v =
   blank,
   text "# If the INLINE_INHERITED_MEMB tag is set to YES, doxygen will show all",
   text "# inherited members of a class in the documentation of that class as if those",
-  text "# members were ordinary class members. Constructors, destructors and assignment",
+  text "# members were ordinary class members. Constructors and assignment",
   text "# operators of the base classes will not be shown.",
   defNo,
   blank,
@@ -656,8 +656,8 @@ makeDoxConfig prog s opt v =
   text "SORT_BRIEF_DOCS        = NO",
   blank,
   text "# If the SORT_MEMBERS_CTORS_1ST tag is set to YES then doxygen will sort the",
-  text "# (brief and detailed) documentation of class members so that constructors and",
-  text "# destructors are listed first. If set to NO the constructors will appear in the",
+  text "# (brief and detailed) documentation of class members so that constructors",
+  text "# are listed first. If set to NO the constructors will appear in the",
   text "# respective orders defined by SORT_BRIEF_DOCS and SORT_MEMBER_DOCS.",
   text "# Note: If SORT_BRIEF_DOCS is set to NO this option is ignored for sorting brief",
   text "# member documentation.",
@@ -866,7 +866,7 @@ makeDoxConfig prog s opt v =
   text "# spaces. See also FILE_PATTERNS and EXTENSION_MAPPING",
   text "# Note: If this tag is empty the current directory is searched.",
   blank,
-  text "INPUT                  =" <+> hcat (map text $ intersperse " " fs),
+  text "INPUT                  =" <+> hcat (text <$> intersperse " " fs),
   blank,
   text "# This tag can be used to specify the character encoding of the source files",
   text "# that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses",

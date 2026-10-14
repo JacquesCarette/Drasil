@@ -1,26 +1,23 @@
-{-# LANGUAGE GADTs #-}
-
 -- | Defines functions for printing expressions.
 module Language.Drasil.Printing.Import.Expr (expr) where
 
-import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix, Set)
+import Data.List (intersperse)
+
+import Drasil.Database (UID)
+import Language.Drasil (Expr, Symbol, RealInterval(..), LiteralC(int),
+  DomainDesc(..), Inclusive(..), RTopology(..))
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
-  AssocBoolOper(..), BoolBinOp(..), EqBinOp(..), Expr(..),
+  AssocBoolOper(..), EqBinOp(..), Expr(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocConcatOper(..), eprec, precA, precB, precC)
 import Language.Drasil.Literal.Development (Literal(..))
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)
-
-import Control.Lens ((^.))
-import Data.List (intersperse)
-
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Language.Drasil.Printing.Import.ExprCommon (lookupC', parens)
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Symbol (symbol)
-import Language.Drasil.Printing.Import.Helpers (lookupC, parens)
-
 
 -- | Helper that creates an expression row given printing information, an operator, and an expression.
 mkCall :: PrintingInformation -> P.Ops -> Expr -> P.Expr
@@ -58,7 +55,7 @@ indx :: PrintingInformation -> Expr -> Expr -> P.Expr
 indx sm (C c) i = f s
   where
     i' = expr i sm
-    s = lookupC (sm ^. stg) (sm ^. ckdb) c
+    s = lookupC' sm c
     f (S.Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
@@ -72,8 +69,8 @@ indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 -- | For printing expressions that call something.
 call :: PrintingInformation -> UID -> [Expr] -> P.Expr
 call sm f ps = P.Row [
-    symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
-    parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) ps
+    symbol $ lookupC' sm f,
+    parens $ P.Row $ intersperse (P.MO P.Comma) $ (`expr` sm) <$> ps
   ]
 
 -- | Helper function for addition 'EOperator's.
@@ -98,12 +95,10 @@ eopMuls sm (AllDD _ Discrete) e = P.Row [P.MO P.Prod, P.Row [expr e sm]]
 eopMuls _ (AllDD _ Continuous) _ = error "Printing/Import.hs Product-Integral not implemented."
 eopMuls _ (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Integral not implemented."
 
-
 -- | Helper function for translating 'EOperator's.
 eop :: PrintingInformation -> AssocArithOper -> DomainDesc t Expr Expr -> Expr -> P.Expr
 eop sm Add = eopAdds sm
 eop sm Mul = eopMuls sm
-
 
 -- | Translate Exprs to printable layout AST.
 expr :: Expr -> PrintingInformation -> P.Expr
@@ -113,16 +108,16 @@ expr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
 expr (AssocA Add l)           sm = P.Row $ addExpr l Add sm
 expr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
 expr (AssocC SUnion l)        sm = assocExpr P.SUnion (precC SUnion) l sm
-expr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
+expr (C c)                    sm = symbol $ lookupC' sm c
 expr (FCall f [x])            sm =
-  P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ expr x sm]
+  P.Row [symbol $ lookupC' sm f, parens $ expr x sm]
 expr (FCall f l)              sm = call sm f l
 expr (Case _ ps)              sm =
   if length ps < 2
     then error "Attempting to use multi-case expr incorrectly"
-    else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
-expr (Matrix a)               sm = P.Mtx $ map (map (`expr` sm)) a
-expr (Set _ a)                sm = P.Set $ map (`expr` sm) a
+    else P.Case (zip (flip expr sm . fst <$> ps) (flip expr sm . snd <$> ps))
+expr (Matrix a)               sm = P.Mtx $ fmap (`expr` sm) <$> a
+expr (Set _ a)                sm = P.Set $ (`expr` sm) <$> a
 expr (Variable _ l)           sm = expr l sm
 expr (UnaryOp Log u)          sm = mkCall sm P.Log u
 expr (UnaryOp Ln u)           sm = mkCall sm P.Ln u
@@ -135,6 +130,7 @@ expr (UnaryOp Cot u)          sm = mkCall sm P.Cot u
 expr (UnaryOp Arcsin u)       sm = mkCall sm P.Arcsin u
 expr (UnaryOp Arccos u)       sm = mkCall sm P.Arccos u
 expr (UnaryOp Arctan u)       sm = mkCall sm P.Arctan u
+expr (UnaryOp MakeRef _)      _  = error "expr : UnaryOp MakeRef not implemented"
 expr (UnaryOp Exp u)          sm = P.Row [P.MO P.Exp, P.Sup $ expr u sm]
 expr (UnaryOp Abs u)          sm = P.Fenced P.Abs P.Abs $ expr u sm
 expr (UnaryOpB Not u)         sm = P.Row [P.MO P.Not, expr u sm]
@@ -146,8 +142,6 @@ expr (UnaryOpVV NegV u)       sm = neg sm u
 expr (ArithBinaryOp Frac a b) sm = P.Div (expr a sm) (expr b sm)
 expr (ArithBinaryOp Pow a b)  sm = pow sm a b
 expr (ArithBinaryOp Subt a b) sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
-expr (BoolBinaryOp Impl a b)  sm = mkBOp sm P.Impl a b
-expr (BoolBinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
 expr (EqBinaryOp Eq a b)      sm = mkBOp sm P.Eq a b
 expr (EqBinaryOp NEq a b)     sm = mkBOp sm P.NEq a b
 expr (LABinaryOp Index a b)   sm = indx sm a b
@@ -165,18 +159,17 @@ expr (ESSBinaryOp SAdd a b)   sm = mkBOp sm P.SAdd a b
 expr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
 expr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
 expr (Operator o d e)         sm = eop sm o d e
-expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
-  (sm ^. ckdb) c) ri
+expr (RealI c ri)             sm = renderRealInt sm (lookupC' sm c) ri
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
-assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
+assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ expr' sm prec <$> exprs
 
 -- | Helper for rendering printable expressions.
 addExpr :: [Expr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
-addExpr exprs o sm = addExprFilter (map (expr' sm (precA o)) exprs)
+addExpr exprs o sm = addExprFilter (expr' sm (precA o) <$> exprs)
 
--- | Add add symbol only when the second Expr is not negation 
+-- | Add add symbol only when the second Expr is not negation
 addExprFilter :: [P.Expr] -> [P.Expr]
 addExprFilter [] = []
 addExprFilter [x] = [x]
@@ -186,13 +179,12 @@ addExprFilter (x:xs) = x : P.MO P.Add : addExprFilter xs
 -- | Helper for rendering printable expressions.
 mulExpr ::  [Expr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
-  (a, Lit (Int _))      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, Lit (ExactDbl _)) ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, Lit (Dbl _))      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, _)                ->  [expr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
+  (a, Lit (Int _))      ->  [expr' sm (precA o) a, P.MO P.Dot] <> mulExpr (hd2 : tl) o sm
+  (a, Lit (ExactDbl _)) ->  [expr' sm (precA o) a, P.MO P.Dot] <> mulExpr (hd2 : tl) o sm
+  (a, Lit (Dbl _))      ->  [expr' sm (precA o) a, P.MO P.Dot] <> mulExpr (hd2 : tl) o sm
+  (a, _)                ->  [expr' sm (precA o) a, P.MO P.Mul] <> mulExpr (hd2 : tl) o sm
 mulExpr [hd]         o sm = [expr' sm (precA o) hd]
 mulExpr []           o sm = [expr' sm (precA o) (int 1)]
-
 
 -- | Helper that adds parenthesis to the first expression. The second expression
 -- is written as a superscript attached to the first.

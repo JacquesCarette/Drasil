@@ -26,7 +26,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({p\_{\text{y}}}\\)                |\\(y\\)-component of position                                |\\({\text{m}}\\)                   |
 |\\({{p\_{\text{y}}}^{\text{i}}}\\)   |\\(y\\)-component of initial position                        |\\({\text{m}}\\)                   |
 |\\(\boldsymbol{p}\text{(}t\text{)}\\)|Position                                                     |\\({\text{m}}\\)                   |
-|\\(s\\)                              |Output message as a string                                   |--                                 |
 |\\(t\\)                              |Time                                                         |\\({\text{s}}\\)                   |
 |\\({t\_{\text{flight}}}\\)           |Flight duration                                              |\\({\text{s}}\\)                   |
 |\\(v\\)                              |Speed                                                        |\\(\frac{\text{m}}{\text{s}}\\)    |
@@ -39,7 +38,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({{v\_{\text{y}}}^{\text{i}}}\\)   |\\(y\\)-component of initial velocity                        |\\(\frac{\text{m}}{\text{s}}\\)    |
 |\\(\boldsymbol{v}\text{(}t\text{)}\\)|Velocity                                                     |\\(\frac{\text{m}}{\text{s}}\\)    |
 |\\({\boldsymbol{v}^{\text{i}}}\\)    |Initial velocity                                             |\\(\frac{\text{m}}{\text{s}}\\)    |
-|\\(ε\\)                              |Hit tolerance                                                |--                                 |
 |\\(θ\\)                              |Launch angle                                                 |\\({\text{rad}}\\)                 |
 |\\(π\\)                              |Ratio of circumference to diameter for any circle            |--                                 |
 

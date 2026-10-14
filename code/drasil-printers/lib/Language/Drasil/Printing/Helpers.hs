@@ -1,18 +1,29 @@
 -- | General helper functions for printing Drasil documents.
-module Language.Drasil.Printing.Helpers where
+module Language.Drasil.Printing.Helpers (
+  -- * Separation
+  ($^$), vsep,
+  -- * Text Rendering
+  bslash, dbs, assign, eq, lt, gt, leq, geq, dlr, ast, pls, hat, slash, hyph,
+  unders, pipe, emptyline,
+  -- * Punctuation
+  dot, comm,
+  -- * Numeric Suffixes
+  sufx, sufxer, sufxPrint
+) where
 
 import Prelude hiding ((<>))
+import qualified Prelude as P ((<>))
 import Text.PrettyPrint (text, Doc, (<>), ($$))
-import Data.Char (toUpper, toLower)
-import Language.Drasil.Printing.Citation ( CiteField(HowPublished), HP (..) )
 
--- | Custom infix operator for concatenating 
+import Language.Drasil.Printing.Citation (CiteField(HowPublished), HP (..))
+
+-- | Custom infix operator for concatenating
 -- two 'Doc's vertically with an empty line in between.
 infixl 5 $^$
 ($^$) :: Doc -> Doc -> Doc
 ($^$) a b = a $$ emptyline $$ b
 
--- | Concatenate a list of 'Doc's vertically 
+-- | Concatenate a list of 'Doc's vertically
 -- with an empty line in between.
 vsep :: [Doc] -> Doc
 vsep = foldr1 ($^$)
@@ -54,45 +65,12 @@ pipe      = text "|"
 -- | Empty line.
 emptyline = text ""
 
--- | Text-rendering helper for wrapping strings with brackets/braces.
-sq,br :: String -> Doc
--- | Square brackets.
-sq t = text $ "[" ++ t ++ "]"
--- | Curly braces.
-br t = text $ "{" ++ t ++ "}"
-
 -- | Text-rendering helper for appending a period/decimal point (dot symbol) or a comma.
 dot, comm :: Doc -> Doc
 -- | Dot symbol (".")
 dot  = (<> text ".")
 -- | Comma (",")
 comm = (<> text ",")
-
--- | For wrapping $ on both sides of a 'Doc'.
-dollarDoc :: Doc -> Doc
-dollarDoc x = dlr <> x <> dlr
-
--- | Basic plaintext (String) wrapping.
-paren, brace, dollar, sqbrac, angbrac :: String -> String
--- | Wraps in parenthesis.
-paren   x = "(" ++ x ++ ")"
--- | Wraps in curly braces.
-brace   x = "{" ++ x ++ "}"
--- | Wraps in dollar signs.
-dollar  x = "$" ++ x ++ "$"
--- | Wraps in square brackets.
-sqbrac  x = "[" ++ x ++ "]"
--- | Wraps in angular brackets ("<>").
-angbrac x = "<" ++ x ++ ">"
-
--- | Format strings and convert to Doc.
-upcase, lowcase :: String -> Doc
--- | Capitalize first letter of string.
-upcase []      = text []
-upcase (c:cs)  = text $ toUpper c:cs
--- | Make first letter lowercase.
-lowcase []     = text []
-lowcase (c:cs) = text $ toLower c:cs
 
 --FIXME: move this. It is here for not since TeX and HTML
 --       use this for bibliography rendering
@@ -105,7 +83,7 @@ sufx _ = "th"
 
 -- | Similar to 'sufx' but used on any sized 'Int'.
 sufxer :: Int -> String
-sufxer x = sufx r ++ "."
+sufxer x = sufx r P.<> "."
     where
         r = if mod x 100 `elem` [11, 12, 13] then 0 else mod x 10
 

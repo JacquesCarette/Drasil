@@ -9,11 +9,12 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({a\_{\text{x}}}\\)                |\\(x\\)-component of acceleration                |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\({a\_{\text{y}}}\\)                |\\(y\\)-component of acceleration                |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{a}\text{(}t\text{)}\\)|Acceleration                                     |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
+|\\({F\_{x}}\\)                       |Horizontal force on the pendulum                 |\\({\text{N}}\\)                     |
+|\\({F\_{y}}\\)                       |Vertical force on the pendulum                   |\\({\text{N}}\\)                     |
 |\\(\boldsymbol{F}\\)                 |Force                                            |\\({\text{N}}\\)                     |
 |\\(f\\)                              |Frequency                                        |\\({\text{Hz}}\\)                    |
 |\\(\boldsymbol{g}\\)                 |Gravitational acceleration                       |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{I}\\)                 |Moment of inertia                                |\\(\text{kg}\text{m}^{2}\\)          |
-|\\(\boldsymbol{\hat{i}}\\)           |Unit vector                                      |--                                   |
 |\\({L\_{\text{rod}}}\\)              |Length of the rod                                |\\({\text{m}}\\)                     |
 |\\(m\\)                              |Mass                                             |\\({\text{kg}}\\)                    |
 |\\({p\_{\text{x}}}\\)                |\\(x\\)-component of position                    |\\({\text{m}}\\)                     |

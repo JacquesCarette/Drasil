@@ -3,11 +3,11 @@ module Language.Drasil.Data.ODEInfo (
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..)
 ) where
 
-import Drasil.Code.CodeExpr.Development
-import Language.Drasil.Chunk.Code (CodeVarChunk)
-import Language.Drasil(makeAODESolverFormat, formEquations,
+import Theory.Drasil (makeAODESolverFormat, formEquations,
   DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..))
-import Language.Drasil.Chunk.CodeBase (quantvar)
+
+import Drasil.Code.CodeExpr.Development
+import Drasil.Code.CodeVar (CodeVarChunk, quantvar)
 
 -- This may be temporary, but need a structure to hold ODE info for now.
 -- Goal will be for this info to be populated by the instance model for the ODE and the Choices structure.
@@ -43,7 +43,7 @@ odeInfo' ovs opt dm ivp = ODEInfo
   ovs
   (expr $ initTime ivp)
   (expr $ finalTime ivp)
-  (map expr $ initValues ivp)
+  (expr <$> initValues ivp)
   (createFinalExpr dm)
   opt
 
@@ -68,5 +68,5 @@ data ODEMethod = RK45 | BDF | Adams
 
 -- | Create well-formatted ODE equations which the ODE solvers can solve.
 createFinalExpr :: DifferentialModel -> [CodeExpr]
-createFinalExpr dm = map expr $ formEquations (coeffVects ode) (unknownVect ode) (constantVect ode) (_depVar dm)
+createFinalExpr dm = expr <$> formEquations (coeffVects ode) (unknownVect ode) (constantVect ode) (_depVar dm)
   where ode = makeAODESolverFormat dm

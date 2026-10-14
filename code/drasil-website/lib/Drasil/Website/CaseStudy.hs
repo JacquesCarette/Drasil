@@ -1,16 +1,21 @@
-{-# LANGUAGE TupleSections #-}
 -- | Case Studies table for the different choices available when generating code from Drasil.
 -- To be used in the Drasil website.
-module Drasil.Website.CaseStudy where
+module Drasil.Website.CaseStudy (caseStudySec, caseStudyTable) where
 
-import Language.Drasil hiding (E, Var)
-import Language.Drasil.Code hiding (CS)
-import Drasil.System
+import Control.Lens ((^.))
+
+import Language.Drasil hiding (E)
+import Language.Drasil.Document
+import Language.Drasil.Code (Choices(..), Architecture(..), DataInfo(..),
+  Maps(..), OptionalFeatures(..), Modularity(..), ImplementationType(..),
+  Logging, LogConfig(logging), Structure(..), ConstantStructure(..),
+  ConstantRepr(..))
+import Drasil.Generator (codedHRName)
 import Drasil.GOOL (CodeType(..))
+import Drasil.SRS (SmithEtAlSRS)
+import Drasil.System (HasProjectName(..))
 
 import Drasil.Website.Example (examples, Example(..))
-import qualified Drasil.Projectile.Choices as Projectile (codedDirName)
-
 
 -- * Case Studies Section
 
@@ -18,9 +23,12 @@ import qualified Drasil.Projectile.Choices as Projectile (codedDirName)
 caseStudySec :: Section
 caseStudySec =
   section (S caseStudiesTitle) -- Title
-  [mkParagraph $ S caseStudiesDesc, mkFig (makeTabRef "CaseStudy") mkCaseTable,
+  [mkParagraph $ S caseStudiesDesc, LlC caseStudyTable,
     mkParagraph $ S legendIntro, UlC $ ulcc caseStudyLegend] -- Contents
   [] $ makeSecRef "CaseStudy" $ S caseStudiesTitle -- Section Reference
+
+caseStudyTable :: LabelledContent
+caseStudyTable = mkRawLC mkCaseTable (makeTabRef "CaseStudy")
 
 caseStudiesTitle, caseStudiesDesc, legendIntro :: String
 -- | Section title.
@@ -47,20 +55,25 @@ mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ examples "" "
 -- | Holds individual case studies. System info may not be needed,
 -- but it is still nice to keep around for now.
 data CaseStudy = CS {
-  -- | Each case study needs a name, so use system information. 
-  systemCS :: System,
+  -- | Each case study needs a name, so use system information.
+  systemCS :: SmithEtAlSRS,
   -- | A case study may have different program names for the same example (ex. Projectile).
   progName :: Sentence,
   -- | Each case study has code that is generated from a set of choices.
   choicesCS :: Choices}
 
--- | Converts a list of examples into a list of CaseStudies. 
+-- | Converts a list of examples into a list of CaseStudies.
 -- Currently, projectile is the only one that has more than one set of choices,
 -- so we take the naming scheme from there.
 mkCaseStudy :: Example -> [CaseStudy]
 mkCaseStudy E{choicesE = []} = []
-mkCaseStudy E{systemE = si@SI{_sys = sys}, choicesE = [x]} = [CS{systemCS = si, progName = S $ programName sys, choicesCS = x}]
-mkCaseStudy E{systemE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{systemCS = si, progName = S $ Projectile.codedDirName (programName sys) x, choicesCS = x}) xs
+mkCaseStudy E{systemE = si, choicesE = [x]}
+  = [CS{systemCS = si, progName = S $ si ^. projAbrv, choicesCS = x}]
+mkCaseStudy ex@E{systemE = si, choicesE = xs}
+  = (\x -> CS{
+      systemCS = si,
+      progName = S $ codedHRName ex x, choicesCS = x
+    }) <$> xs
 
 -- * Display 'CaseStudy' Information as a Table
 --
@@ -72,11 +85,11 @@ mkCaseStudy E{systemE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{system
 
 -- | Hardcoded header row for the Case studies table
 headerRow :: [Sentence]
-headerRow = map S [caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
+headerRow = S <$> [caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
 
 -- | Creates the case study table body.
 tableBody :: [CaseStudy] -> [[Sentence]]
-tableBody = map displayCS
+tableBody = fmap displayCS
 
 -- | Converts a case study into a table row for easy display.
 displayCS :: CaseStudy -> [Sentence]
@@ -108,11 +121,11 @@ data CSLegend = CSL {
 
 -- | Make the legend for the case study table as a list.
 caseStudyLegend :: RawContent
-caseStudyLegend = Enumeration $ Bullet $ map ((, Nothing) . mkLegendListFunc) legendEntries
+caseStudyLegend = Enumeration $ Bullet $ (, Nothing) . mkLegendListFunc <$> legendEntries
 
 -- | Helper to convert the Case Study legends into list items.
 mkLegendListFunc :: CSLegend -> ItemType
-mkLegendListFunc csleg = Nested (S $ ttle csleg) $ Bullet $ map ((, Nothing) . mkTandDSent) $ symbAndDefs csleg
+mkLegendListFunc csleg = Nested (S $ ttle csleg) $ Bullet $ (, Nothing) . mkTandDSent <$> symbAndDefs csleg
 
 -- | Should eventually take Sentences instead of Strings. Converts into the format of "symbol - definition".
 mkTandDSent :: (String, String) -> ItemType

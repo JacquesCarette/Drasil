@@ -1,25 +1,26 @@
 module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
   rocTempSimp, rocTempSimpDeriv, rocTempSimpRC) where
 
-import Language.Drasil
-import Utils.Drasil (weave)
-import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel')
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
-
 import Data.Drasil.Citations (koothoor2013)
-
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)
-
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
 import Data.Drasil.Quantities.Physics as QP (time)
 import Data.Drasil.Quantities.Thermodynamics as QT (heatCapSpec, temp)
+import Language.Drasil
+import Language.Drasil.Document
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
+import qualified Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel', Derivation,
+  mkDerivName, RelationConcept, makeRC)
+import Data.List.Extras (weave)
 
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpLCCCW, assumpLCCWP,
   assumpTPCAV, assumpDWPCoV, assumpSHECoV, assumpTHCCoT)
 import Drasil.SWHS.Concepts (coil, gaussDiv, phaseChangeMaterial)
+import Drasil.SWHS.References (lightstone2012)
 import Drasil.SWHS.TMods (consThermE, nwtnCooling)
 import Drasil.SWHS.Unitals (coilHTC, htFluxC, htFluxIn, htFluxOut, htFluxP,
   inSA, outSA, pcmHTC, tempC, tempPCM, tempW, thFluxVect, volHtGen)
@@ -33,7 +34,7 @@ import Drasil.SWHS.Unitals (coilHTC, htFluxC, htFluxIn, htFluxOut, htFluxP,
 --stabilized yet (since RelationConcept isn't an instance of --
 --the Referable class.                                       --
 genDefs :: [GenDefn]
-genDefs = [rocTempSimp, htFluxWaterFromCoil, htFluxPCMFromWater] 
+genDefs = [rocTempSimp, htFluxWaterFromCoil, htFluxPCMFromWater]
 
 rocTempSimp :: GenDefn
 rocTempSimp = gdNoRefs (deModel' rocTempSimpRC) (Nothing :: Maybe UnitDefn)
@@ -42,11 +43,11 @@ rocTempSimp = gdNoRefs (deModel' rocTempSimpRC) (Nothing :: Maybe UnitDefn)
   "rocTempSimp" [{-Notes-}]
 
 rocTempSimpRC :: RelationConcept
-rocTempSimpRC = makeRC "rocTempSimpRC" (nounPhraseSP $ "Simplified rate " ++
+rocTempSimpRC = makeRC "rocTempSimpRC" (nounPhraseSP $ "Simplified rate " <>
   "of change of temperature") EmptyS rocTempSimpRel
 
 rocTempSimpRel :: ModelExpr
-rocTempSimpRel = sy QPP.mass $* sy QT.heatCapSpec $* 
+rocTempSimpRel = sy QPP.mass $* sy QT.heatCapSpec $*
   deriv (sy QT.temp) QP.time $= (sy htFluxIn $* sy inSA $-
   (sy htFluxOut $* sy outSA)) $+ (sy volHtGen $* sy QPP.vol)
 
@@ -68,7 +69,7 @@ htFluxWaterFromCoilExpr = sy coilHTC $* (sy tempC $- apply1 tempW time)
 
 htFluxPCMFromWater :: GenDefn
 htFluxPCMFromWater = gd (equationalModel' htFluxPCMFromWaterQD) (getUnit htFluxP) Nothing
-  [dRef koothoor2013] "htFluxPCMFromWater"
+  [dRef lightstone2012] "htFluxPCMFromWater"
   [newtonLawNote htFluxP assumpLCCWP phaseChangeMaterial]
 
 htFluxPCMFromWaterQD :: ModelQDef
@@ -77,22 +78,22 @@ htFluxPCMFromWaterQD = mkQuantDef htFluxP htFluxPCMFromWaterExpr
 htFluxPCMFromWaterExpr :: ModelExpr
 htFluxPCMFromWaterExpr = sy pcmHTC $* (apply1 tempW time $- apply1 tempPCM time)
 
-newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
+newtonLawNote :: Quantity q => q -> ConceptInstance -> ConceptChunk -> Sentence
 newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
   phrase lawConvCooling, S "applies" +:+. sParen (refS a), S "This law",
   sParen (S "defined" `S.in_` refS nwtnCooling) `S.is` S "used on",
-  phraseNP (surface `the_ofThe` c)]
+  D.toSent (phraseNP (surface `the_ofThe` c))]
 
 ------------------------------------
 -- General Definitions Derivation --
 ------------------------------------
 
 rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
-rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phraseNP (rOfChng `of_` temp))
-  (weave [rocTempSimpDerivSent s a, map eS rocTempSimpDerivEqns])
+rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ D.toSent (phraseNP (rOfChng `of_` temp)))
+  (weave (rocTempSimpDerivSent s a) $ eS <$> rocTempSimpDerivEqns)
 
 rocTempSimpDerivSent :: Sentence -> [ConceptInstance] -> [Sentence]
-rocTempSimpDerivSent s a = map foldlSentCol [rocTempDerivInteg, rocTempDerivGauss,
+rocTempSimpDerivSent s a = foldlSentCol <$> [rocTempDerivInteg, rocTempDerivGauss,
   rocTempDerivArbVol, rocTempDerivConsFlx s a, rocTempDerivDens]
 
 rocTempDerivInteg :: [Sentence]
@@ -108,15 +109,15 @@ rocTempDerivGauss = [S "Applying", titleize gaussDiv `S.toThe` S "first term ove
 
 rocTempDerivArbVol :: [Sentence]
 rocTempDerivArbVol = [S "We consider an arbitrary" +:+. phrase vol,
-  atStartNP (the volHtGen) `S.is` S "assumed constant. Then", eqN 1, S "can be written as"]
+  D.toSent (atStartNP (the volHtGen)) `S.is` S "assumed constant. Then", eqN 1, S "can be written as"]
 
 rocTempDerivConsFlx :: Sentence -> [ConceptInstance] -> [Sentence]
-rocTempDerivConsFlx s assumps = [S "Where", 
-  foldlList Comma List (map ch [htFluxIn, htFluxOut, inSA, outSA]),
-  S "are explained in" +:+. refS rocTempSimp, s, S "Assuming", 
-  foldlList Comma List (map ch [density, QT.heatCapSpec, QT.temp]),
+rocTempDerivConsFlx s assumps = [S "Where",
+  foldlList Comma List (ch <$> [htFluxIn, htFluxOut, inSA, outSA]),
+  S "are explained in" +:+. refS rocTempSimp, s, S "Assuming",
+  foldlList Comma List (ch <$> [density, QT.heatCapSpec, QT.temp]),
   S "are constant over the", phrase vol `sC` S "which is true in our case by",
-  foldlList Comma List (map refS assumps) `sC` S "we have"]
+  foldlList Comma List (refS <$> assumps) `sC` S "we have"]
 
 rocTempDerivConsFlxSWHS :: Sentence
 rocTempDerivConsFlxSWHS = foldlSent [S "The integral over the", phrase surface,
@@ -139,16 +140,16 @@ rocTempDerivIntegEq = neg (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) $
   $* sy QT.heatCapSpec $* pderiv (sy QT.temp) time)
 
 rocTempDerivGaussEq = neg (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) $+
-  intAll (eqSymb vol) (sy volHtGen) $= 
+  intAll (eqSymb vol) (sy volHtGen) $=
   intAll (eqSymb vol)
   (sy density $* sy QT.heatCapSpec $* pderiv (sy QT.temp) time)
 
-rocTempDerivArbVolEq = (sy htFluxIn $* sy inSA $- (sy htFluxOut $* 
-  sy outSA)) $+ (sy volHtGen $* sy vol) $= 
+rocTempDerivArbVolEq = (sy htFluxIn $* sy inSA $- (sy htFluxOut $*
+  sy outSA)) $+ (sy volHtGen $* sy vol) $=
   intAll (eqSymb vol) (sy density $* sy QT.heatCapSpec $* pderiv (sy QT.temp) time)
 
 rocTempDerivConsFlxEq = sy density $* sy QT.heatCapSpec $* sy vol $* deriv
-  (sy QT.temp) time $= (sy htFluxIn $* sy inSA $- (sy htFluxOut $* 
+  (sy QT.temp) time $= (sy htFluxIn $* sy inSA $- (sy htFluxOut $*
   sy outSA)) $+ (sy volHtGen $* sy vol)
 
 rocTempDerivDensEq = sy mass $* sy QT.heatCapSpec $* deriv (sy QT.temp)

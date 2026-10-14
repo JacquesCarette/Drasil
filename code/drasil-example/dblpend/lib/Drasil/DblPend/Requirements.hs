@@ -1,11 +1,15 @@
-module Drasil.DblPend.Requirements where
+module Drasil.DblPend.Requirements (
+  funcReqs, nonFuncReqs, funcReqsTables, verifyInptVals
+) where
 
 import Language.Drasil
-import Drasil.DocLang.SRS (datCon)
-import Drasil.DocLang (mkPortableNFR, mkCorrectNFR)
+import Language.Drasil.Document
+import Drasil.SRS.Concepts (datCon)
+import Drasil.SRS (mkCorrectNFR, inReqWTab)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (inValue)
+import Data.Drasil.Requirements (portable)
 import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
         output_, value)
 --  likelyChg, mg, mis, module_, nonFuncReqDom,
@@ -14,11 +18,18 @@ import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Drasil.DblPend.IMods (angleIM_1, angleIM_2)
-import Drasil.DblPend.Unitals (pendDisAngle_1, pendDisAngle_2)
+import Drasil.DblPend.Unitals (inputs, pendDisAngle_1, pendDisAngle_2)
 
 --Functional Requirements--
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInptVals, calcAng, outputValues]
+funcReqs = [inputValues, verifyInptVals, calcAng, outputValues]
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab Nothing inputs
+
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
 
 verifyInptVals, calcAng, outputValues :: ConceptInstance
 
@@ -47,6 +58,3 @@ nonFuncReqs = [correct, portable]
 
 correct :: ConceptInstance
 correct = mkCorrectNFR "correct" "Correctness"
-
-portable :: ConceptInstance
-portable = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portability"

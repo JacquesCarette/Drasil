@@ -24,7 +24,6 @@ class InputParameters {
         float theta;
         float p_target;
         float g = 9.8f;
-        float epsilon = 2.0e-2f;
         
         /** \brief Initializes input object by reading inputs and checking physical constraints on the input
             \param filename name of the input file
@@ -60,18 +59,10 @@ float func_p_land(InputParameters &inParams);
 */
 float func_d_offset(InputParameters &inParams, float p_land);
 
-/** \brief Calculates output message as a string
-    \param inParams structure holding the input values
-    \param d_offset distance between the target position and the landing position (m)
-    \return output message as a string
-*/
-string func_s(InputParameters &inParams, float d_offset);
-
 /** \brief Writes the output values to output.txt
-    \param s output message as a string
     \param d_offset distance between the target position and the landing position (m)
     \param t_flight flight duration (s)
 */
-void write_output(string s, float d_offset, float t_flight);
+void write_output(float d_offset, float t_flight);
 
 #endif

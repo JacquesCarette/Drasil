@@ -1,12 +1,12 @@
 module Drasil.GlassBR.Goals (goals, willBreakGS) where
 
 import Language.Drasil
+import Language.Drasil.Document (ConceptInstance, cic)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom, userInput)
 
-import Drasil.GlassBR.Concepts (glaSlab)
-import Drasil.GlassBR.Unitals (explosion)
+import Drasil.GlassBR.Concepts (glaSlab, explosion)
 import Data.Drasil.Concepts.Education (degree_)
 
 goals :: [ConceptInstance]

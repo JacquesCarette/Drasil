@@ -1,19 +1,23 @@
-{-# LANGUAGE PostfixOperators #-}
 -- | GOOL test program for various OO program functionality.
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SVariable,
-  SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
-  listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..),
-  ControlStatement(..), VariableSym(var, constant), ScopeSym(..), Literal(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), extFuncApp,
-  List(..), MethodSym(..), OODeclStatement(objDecDef), Set(..))
+import Drasil.GOOL (VS, CS, MS, OOProg, BodySym(..), bodyStatements, oneLiner,
+  BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..), MultiStatement(multi),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), StringStatement(..), CommentStatement(..),
+  ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
+  StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
+  VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), extFuncApp, newObj, Reference(..), Array(..), List(..),
+  ListStatement(..), InternalList, MethodSym(..), OOMethodSym(..), objMethodCall,
+  classMethodCall, initializer, OODeclStatement(objDecDef), Set(..),
+  ParameterSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
+import Drasil.Metadata (watermark)
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
@@ -21,29 +25,37 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Helper (helperOO, helperProc)
 
 -- | Creates the HelloWorld program and necessary files.
-helloWorldOO :: (OOProg r) => OO.GSProgram r
-helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description
+helloWorldOO
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
+  => OO.GSProgram r prg
+helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
   ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
-  [helloWorldMainOO] []), helperOO]
+  [helloWorldMainOO] [helloWorldClass]), helperOO]
 
 -- | Creates the HelloWorld program and necessary files.
-helloWorldProc :: (ProcProg r) => GProc.GSProgram r
-helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod description
-  ["Brooks MacLachlan"] "" $ GProc.fileDoc (GProc.buildModule "HelloWorld" []
+helloWorldProc
+  :: (ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ)
+  => GProc.GSProgram r prg
+helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod descriptionProc
+  watermark
+  ["Brooks MacLachlan", "Brandon Bosman", "Xinlu Yan"] "" $ GProc.fileDoc (GProc.buildModule "HelloWorld" []
   [helloWorldMainProc]), helperProc]
 
 -- | Description of program.
-description :: String
+description, descriptionProc :: String
 description = "Tests various GOOL functions. It should run without errors."
+descriptionProc = "Tests various GProc functions. It should run without errors."
 
 -- | Variable for a list of doubles
-myOtherList :: (SharedProg r) => SVariable r
+myOtherList :: (TypeSym r typ, VariableSym r var typ) => VS (r var)
 myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
-helloWorldMainOO :: (OOProg r) => SMethod r
-helloWorldMainOO = mainFunction (body ([ helloInitVariables] ++ listSliceTests
-    ++ [block [printLn $ litString "", ifCond [
+helloWorldMainOO
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
+  => MS (r mthd)
+helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] <> listSliceTests
+    <> [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (var "dummy" string) mainFn (litString "dummy"),
         objDecDef (var "myObj" char) mainFn (litChar 'o')]),
@@ -52,9 +64,11 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables] ++ listSliceTests
       helloForEachLoop, helloTryCatch]]))
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
-helloWorldMainProc :: (ProcProg r) => SMethod r
-helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
-    ++ [block [printLn $ litString "", ifCond [
+helloWorldMainProc
+  :: (ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ)
+  => MS (r mthd)
+helloWorldMainProc = mainFunction (body ([ helloInitVariables] <> listSliceTests
+    <> [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (var "dummy" string) mainFn (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody,
@@ -62,24 +76,63 @@ helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
       helloForEachLoop, helloTryCatch]]))
 
 -- | Initialize variables used in the generated program.
-helloInitVariables :: (SharedProg r) => MSBlock r
+helloInitVariables
+  ::
+    ( BlockSym r block stmt
+    , TypeSym r typ
+    , Literal r val typ
+    , ScopeSym r scope
+    , VariableSym r var typ
+    , VariableValue r var val
+    , Comparison r val
+    , Array r var val
+    , List r val
+    , ListStatement r stmt val
+    , Set r val
+    , DeclStatement r bod stmt var scope val
+    , AssignStatement r stmt var val
+    , ControlStatement r bod stmt var val
+    , StringStatement r stmt var val
+    , CommentStatement r stmt
+    , PrintConsole r stmt val
+    )
+  => MS (r block)
 helloInitVariables = block [comment "Initializing variables",
   varDec (var "a" int) mainFn,
   varDecDef (var "b" int) mainFn (litInt 5),
+  arrayDecDef (var "arr" (arrayType int)) mainFn (litInt <$> [1..3]),
+  printStr "Value of arr: ",
+  printLn $ valueOf (var "arr" (arrayType int)),
+  printStr "Length of arr: ",
+  printLn $ arrayLength (valueOf $ var "arr" (arrayType int)),
+  arrayDec 3 (litInt 0) (var "arr2" (arrayType int)) mainFn,
+  arrayElem (valueOf $ var "arr2" (arrayType int)) (litInt 0) &= litInt 4,
+  arrayElem (valueOf $ var "arr2" (arrayType int)) (litInt 1) &= litInt 5,
+  arrayElem (valueOf $ var "arr2" (arrayType int)) (litInt 2) &= litInt 6,
+  printStr "Value of arr2: ",
+  printLn $ valueOf (var "arr2" (arrayType int)),
+  printStr "Length of arr2: ",
+  printLn $ arrayLength (valueOf $ var "arr2" (arrayType int)),
   listDecDef myOtherList mainFn [litDouble 1.0,
     litDouble 1.5],
+  arrayDec 3 (litInt 0) (var "arr_copy" (arrayType int)) mainFn,
+  var "arr_copy" (arrayType int) &= arrayCopy (valueOf (var "arr" (arrayType int))),
+  printStr "Value of arr_copy: ",
+  printLn $ valueOf (var "arr_copy" (arrayType int)),
+  arrayElem (valueOf $ var "arr" (arrayType int)) (litInt 1) &= litInt 42,
+  printStr "Value of arr after modifying arr: ",
+  printLn $ valueOf (var "arr" (arrayType int)),
+  printStr "Value of arr_copy after modifying arr: ",
+  printLn $ valueOf (var "arr_copy" (arrayType int)),
   varDecDef (var "oneIndex" int) mainFn (indexOf (valueOf myOtherList) (litDouble 1.0)),
   printLn (valueOf $ var "oneIndex" int),
   var "a" int &= listSize (valueOf myOtherList),
   assert (valueOf (var "a" int) ?== litInt 2) (litString "List size should be 2"),
-  valStmt (listAdd (valueOf myOtherList)
-    (litInt 2) (litDouble 2.0)),
-  valStmt (listAppend (valueOf myOtherList)
-    (litDouble 2.5)),
+  listAdd (valueOf myOtherList) (litInt 2) (litDouble 2.0),
+  listAppend (valueOf myOtherList) (litDouble 2.5),
   varDec (var "e" double) mainFn,
   var "e" int &= listAccess (valueOf myOtherList) (litInt 1),
-  valStmt (listSet (valueOf myOtherList)
-    (litInt 1) (litDouble 17.4)),
+  listSet (valueOf myOtherList) (litInt 1) (litDouble 17.4),
   listDec 7 (var "myName" (listType string)) mainFn,
   stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),
   printLn (valueOf $ var "myName" (listType string)),
@@ -93,9 +146,32 @@ helloInitVariables = block [comment "Initializing variables",
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
 
+objectTests
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
+  => MS (r block)
+objectTests = block [comment "Object tests",
+  varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
+  varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4]),
+  varDecDef (var "t3" (obj "TestClass")) mainFn
+    (classMethodCall (obj "TestClass") (obj "TestClass") "add"
+      [valueOf $ var "t1" (obj "TestClass"), valueOf $ var "t2" (obj "TestClass")]),
+  printStr "Value of t3.a: ",
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t3" (obj "TestClass"))) (var "a" int),
+  varDecDef (var "t4" (obj "TestClass")) mainFn (objMethodCall (obj "TestClass")
+    (valueOf (var "t3" (obj "TestClass"))) "addToInstance" [valueOf $ var "t2" (obj "TestClass")]),
+  printStr "Value of t4.a: ",
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t4" (obj "TestClass"))) (var "a" int),
+  varDecDef (var "t5" (obj "TestClass")) mainFn (classMethodCall
+    (obj "TestClass") (obj "TestClass") "addWithReferences"
+    [makeRef $ valueOf $ var "t3" (obj "TestClass"), makeRef $ valueOf $ var "t4" (obj "TestClass")]),
+  printStr "Value of t5.a: ",
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t5" (obj "TestClass"))) (var "a" int)]
+
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
-  mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9, 
-  mySlicedList10, mySlicedList11 :: (SharedProg r) => SVariable r
+  mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
+  mySlicedList10, mySlicedList11
+  :: (TypeSym r typ, VariableSym r var typ)
+  => VS (r var)
 mySlicedList = var "mySlicedList" (listType double)
 mySlicedList2 = var "mySlicedList2" (listType double)
 mySlicedList3 = var "mySlicedList3" (listType double)
@@ -108,7 +184,20 @@ mySlicedList9 = var "mySlicedList9" (listType double)
 mySlicedList10 = var "mySlicedList10" (listType double)
 mySlicedList11 = var "mySlicedList11" (listType double)
 
-listSliceTests :: (SharedProg r) => [MSBlock r]
+listSliceTests
+  ::
+    ( TypeSym r typ
+    , Literal r val typ
+    , ScopeSym r scope
+    , VariableSym r var typ
+    , VariableValue r var val
+    , InternalList r block var val
+    , DeclStatement r bod stmt var scope val
+    , CommentStatement r stmt
+    , PrintConsole r stmt val
+    , BlockSym r block stmt
+    )
+  => [MS (r block)]
 listSliceTests = [
 
   -- | Declare variables for list slices
@@ -227,7 +316,25 @@ listSliceTests = [
 
 -- | Create an If statement.
 {-# ANN module "HLint: ignore Evaluate" #-}
-helloIfBody :: (SharedProg r) => MSBody r
+helloIfBody
+  ::
+    ( TypeSym r typ
+    , Literal r val typ
+    , ScopeSym r scope
+    , VariableSym r var typ
+    , VariableValue r var val
+    , BooleanExpression r val
+    , NumericExpression r val
+    , ValueExpression r var val binder typ
+    , MultiStatement r stmt
+    , DeclStatement r bod stmt var scope val
+    , AssignStatement r stmt var val
+    , PrintConsole r stmt val
+    , ReadConsole r stmt var
+    , BlockSym r block stmt
+    , BodySym r bod block
+    )
+  => MS (r bod)
 helloIfBody = addComments "If body" (body [
   block [
     varDec (var "c" int) mainFn,
@@ -244,7 +351,7 @@ helloIfBody = addComments "If body" (body [
     (&++) (var "d" int),
     (&--) (var "c" int),
     (&--) (var "b" int),
-  
+
     listDec 5 (var "myList" (listType int)) mainFn,
     constDecDef (constant "myConst" string) mainFn (litString "Imconstant"),
 
@@ -255,7 +362,7 @@ helloIfBody = addComments "If body" (body [
     printLn (valueOf $ var "d" int),
     printLn (valueOf myOtherList),
     printLn (valueOf mySlicedList),
-  
+
     printStrLn "Type an int",
     getInput (var "d" int),
     printStrLn "Type another",
@@ -294,41 +401,135 @@ helloIfBody = addComments "If body" (body [
     printLn (inlineIf litTrue (litInt 5) (litInt 0)),
     printLn (cot (litDouble 1.0))]])
 
-
 -- | Print the 5th given argument.
-helloElseBody :: (SharedProg r) => MSBody r
+helloElseBody
+  ::
+    ( CommandLineArgs r val
+    , PrintConsole r stmt val
+    , BlockSym r block stmt
+    , BodySym r bod block
+    )
+  => MS (r bod)
 helloElseBody = bodyStatements [printLn (arg 5)]
 
 -- | If-else statement checking if a list is empty.
-helloIfExists :: (SharedProg r) => MSStatement r
+helloIfExists
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , TypeSym r typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    , ControlStatement r bod stmt var val
+    , PrintConsole r stmt val
+    )
+  => MS (r stmt)
 helloIfExists = ifExists (valueOf $ var "boringList" (listType bool))
   (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
 -- | Creates a switch statement.
-helloSwitch :: (SharedProg r) => MSStatement r
+helloSwitch
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , TypeSym r typ
+    , Literal r val typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    , AssignStatement r stmt var val
+    , ControlStatement r bod stmt var val
+    )
+  => MS (r stmt)
 helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)),
   (litInt 0, oneLiner (var "b" int &= litInt 5))]
   (oneLiner (var "b" int &= litInt 0))
 
 -- | Creates a for loop.
-helloForLoop :: (SharedProg r) => MSStatement r
+helloForLoop
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , TypeSym r typ
+    , Literal r val typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    , ControlStatement r bod stmt var val
+    , PrintConsole r stmt val
+    )
+  => MS (r stmt)
 helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn
   (valueOf i)))
   where i = var "i" int
 
 -- | Creates a while loop.
-helloWhileLoop :: (SharedProg r) => MSStatement r
+helloWhileLoop
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , TypeSym r typ
+    , Literal r val typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    , Comparison r val
+    , AssignStatement r stmt var val
+    , ControlStatement r bod stmt var val
+    , PrintConsole r stmt val
+    )
+  => MS (r stmt)
 helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements
   [printStrLn "Hello", (&++) (var "a" int)])
 
 -- | Creates a for-each loop.
-helloForEachLoop :: (SharedProg r) => MSStatement r
+helloForEachLoop
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , TypeSym r typ
+    , Literal r val typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    , ValueExpression r var val binder typ
+    , ControlStatement r bod stmt var val
+    , PrintConsole r stmt val
+    )
+  => MS (r stmt)
 helloForEachLoop = forEach i (valueOf myOtherList)
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" double [valueOf i,
   litDouble 1.0])))
   where i = var "num" double
 
 -- | Creates a try statement to catch an intentional error.
-helloTryCatch :: (SharedProg r) => MSStatement r
+helloTryCatch
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , ControlStatement r bod stmt var val
+    , PrintConsole r stmt val
+    )
+  => MS (r stmt)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
+
+helloWorldClass
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
+  => CS (r cls)
+helloWorldClass = extraClass "TestClass" Nothing
+  [stateVar public instanceLevel (var "a" int)]
+  [initializer [param $ var "a" int]
+    [(var "a" int, valueOf (var "a" int))]]
+  [ method "add" public classLevel (obj "TestClass")
+      [param $ var "t1" (obj "TestClass"), param $ var "t2" (obj "TestClass")]
+      (oneLiner $ returnStmt $ newObj (obj "TestClass")
+        [valueOf (instanceVarAccess (valueOf (var "t1" (obj "TestClass"))) (var "a" int)) #+
+         valueOf (instanceVarAccess (valueOf (var "t2" (obj "TestClass"))) (var "a" int))])
+  , method "addToInstance" public instanceLevel (obj "TestClass")
+      [param $ var "t" (obj "TestClass")]
+      (oneLiner $ returnStmt $ classMethodCall (obj "TestClass") (obj "TestClass")
+       "add" [maybeDeref $ valueOf self, valueOf (var "t" (obj "TestClass"))])
+  , let t1 = var "t1" (referenceType (obj "TestClass"))
+        t2 = var "t2" (referenceType (obj "TestClass"))
+    in method "addWithReferences" public classLevel (obj "TestClass")
+         [param t1, param t2]
+         (oneLiner $ returnStmt $ newObj (obj "TestClass")
+         [valueOf (instanceVarAccess (valueOf t1) (var "a" int)) #+
+          valueOf (instanceVarAccess (valueOf t2) (var "a" int))])]

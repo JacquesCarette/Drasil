@@ -1,20 +1,23 @@
 -- | Defines helpers for printing 'Sentence's.
-module Language.Drasil.Printing.Import.Sentence where
-
-import Language.Drasil hiding (neg, sec, symbol, isIn)
-import Database.Drasil (ChunkDB, refFind)
-import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
-
-import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation
-  (PrintingInformation, ckdb, stg)
-
-import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
-import Language.Drasil.Printing.Import.Helpers (lookupT, lookupS, lookupP, lookupC)
-import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)
+module Language.Drasil.Printing.Import.Sentence (spec) where
 
 import Control.Lens ((^.))
+import Data.Char (toUpper)
 import Data.Maybe (fromMaybe)
+
+import Drasil.Database (UID)
+import Drasil.Database.SearchTools (termResolve', TermAbbr(..), refResolve)
+import Language.Drasil (Sentence(..), NP, NounPhrase(..), (+:+), sParen,
+  atStartNP, atStartNP', titleizeNP, titleizeNP', foldNums, checkValidStr,
+  SentenceStyle(..), TermCapitalization(..), RefInfo(..))
+import Language.Drasil.Development (toSent)
+import Language.Drasil.Document (Reference(..), IRefProg(..), LblType(..),
+  ShortName, getSentSN)
+import qualified Language.Drasil.Printing.AST as P
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, sysdb)
+import Language.Drasil.Printing.Import.ExprCommon (lookupSymb)
+import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
+import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)
 
 -- * Main Function
 
@@ -24,35 +27,34 @@ spec :: PrintingInformation -> Sentence -> P.Spec
 spec sm (EmptyS :+: b)          = spec sm b
 spec sm (a :+: EmptyS)          = spec sm a
 spec sm (a :+: b)               = spec sm a P.:+: spec sm b
-spec _ (S s)                    = either error P.S $ checkValidStr s invalidChars
+spec _  (S s)                   = either error P.S $ checkValidStr s invalidChars
   where invalidChars = ['<', '>', '\"', '&', '$', '%', '&', '~', '^', '\\', '{', '}']
-spec _ (Sy s)                   = P.E $ pUnit s
-spec _ Percent                  = P.E $ P.MO P.Perc
-spec _ (P s)                    = P.E $ symbol s
-spec sm (SyCh s)                = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
+spec _  (Sy s)                  = P.E $ pUnit s
+spec sm (NP np)                 = spec sm (toSent $ phraseNP np)
+spec _  Percent                 = P.E $ P.MO P.Perc
+spec _  (P s)                   = P.E $ symbol s
+spec sm (SyCh s)                = P.E $ symbol $ lookupSymb sm s
 
 -- First term is the tooltip, second term is the rendered short form
 spec sm (Ch ShortStyle caps s)  = P.Tooltip (spec sm $ lookupT
-  (sm ^. ckdb) s caps) (spec sm $ lookupS (sm ^. ckdb) s caps)
-  
-spec sm (Ch TermStyle caps s)   = spec sm $ lookupT (sm ^. ckdb) s caps
-spec sm (Ch PluralTerm caps s) = spec sm $ lookupP (sm ^. ckdb) s caps
+  sm s caps) (spec sm $ lookupS sm s caps)
+
+spec sm (Ch TermStyle caps s)   = spec sm $ lookupT sm s caps
+spec sm (Ch PluralTerm caps s) = spec sm $ lookupP sm s caps
 spec sm (Ref u EmptyS notes)    =
-  let reff = refFind u (sm ^. ckdb) in
-  case reff of 
+  case refResolve (sm ^. sysdb) u of
     (Reference _ (RP rp ra) sn) ->
-      P.Ref P.Internal ra (spec sm $ renderShortName (sm ^. ckdb) rp sn)
+      P.Ref P.Internal ra (spec sm $ renderShortName sm rp sn)
     (Reference _ (Citation ra) _) ->
-      P.Ref (P.Cite2 (spec sm (renderCitInfo notes)))    ra (spec sm $ S ra) 
+      P.Ref (P.Cite2 (spec sm (renderCitInfo notes)))    ra (spec sm $ S ra)
     (Reference _ (URI ra) sn) ->
-      P.Ref P.External    ra (spec sm $ renderURI sm sn)
+      P.Ref P.External    ra (spec sm $ getSentSN sn)
 spec sm (Ref u dName notes) =
-  let reff = refFind u (sm ^. ckdb) in
-  case reff of 
+  case refResolve (sm ^. sysdb) u of
     (Reference _ (RP _ ra) _) ->
       P.Ref P.Internal ra (spec sm dName)
     (Reference _ (Citation ra) _) ->
-      P.Ref (P.Cite2 (spec sm (renderCitInfo notes)))   ra (spec sm dName) 
+      P.Ref (P.Cite2 (spec sm (renderCitInfo notes)))   ra (spec sm dName)
     (Reference _ (URI ra) _) ->
       P.Ref P.External    ra (spec sm dName)
 spec sm (Quote q)          = P.Quote $ spec sm q
@@ -62,15 +64,11 @@ spec sm (E e)              = P.E $ modelExpr e sm
 -- * Helpers
 
 -- | Renders the shortname of a reference/domain.
-renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
-renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $ shortForm $ termResolve' ctx u
-renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
+renderShortName :: PrintingInformation -> IRefProg -> ShortName -> Sentence
+renderShortName pinfo (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $ shortForm $ termResolve' (pinfo ^. sysdb) u
+renderShortName pinfo (RConcat a b) sn = renderShortName pinfo a sn :+: renderShortName pinfo b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = getSentSN sn
-
--- | Render a uniform resource locator as a 'Sentence'.
-renderURI :: ctx -> ShortName -> Sentence
-renderURI _ = getSentSN
 
 -- | Renders citation information.
 renderCitInfo :: RefInfo -> Sentence
@@ -80,3 +78,41 @@ renderCitInfo (Equation [x]) = sParen (S "Eq." +:+ S (show x))
 renderCitInfo (Equation  i ) = sParen (S "Eqs." +:+ foldNums "-" i)
 renderCitInfo (Page     [x]) = sParen (S "pg." +:+ S (show x))
 renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums "-" i)
+
+-- | Look up the acronym/abbreviation of a term. Otherwise returns the singular
+-- form of a term. Takes a chunk database and a 'UID' associated with the term.
+lookupS :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= capHelper sCap
+  where
+    l = termResolve' (sm ^. sysdb) c
+
+    -- | Get the capital case of an abbreviation based on
+    -- 'TermCapitalization'. For sentence and title cases.
+    capHelper :: TermCapitalization -> String -> Maybe String
+    capHelper NoCap s      = pure s
+    capHelper _     []     = Nothing
+    capHelper _     (x:xs) = Just (toUpper x : xs)
+
+-- | Look up a term given a chunk database and a 'UID' associated with the term.
+-- Also specifies capitalization
+lookupT :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' (sm ^. sysdb) c
+
+-- | Get the right function for capitalizing a 'NP' based on its
+-- 'TermCapitalization'. Singular case.
+resolveCapT :: TermCapitalization -> (NP -> Sentence)
+resolveCapT NoCap = toSent . phraseNP
+resolveCapT CapF = toSent . atStartNP
+resolveCapT CapW = toSent . titleizeNP
+
+-- | Look up the plural form of a term given a chunk database and a 'UID'
+-- associated with the term.
+lookupP :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' (sm ^. sysdb) c
+  where
+    -- | Get the right function for capitalizing a 'NP' based on its
+    -- 'TermCapitalization'. Plural case.
+    resolveCapP :: TermCapitalization -> (NP -> Sentence)
+    resolveCapP NoCap = toSent . pluralNP
+    resolveCapP CapF = toSent . atStartNP'
+    resolveCapP CapW = toSent . titleizeNP'

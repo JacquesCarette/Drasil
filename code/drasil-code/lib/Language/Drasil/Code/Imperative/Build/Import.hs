@@ -1,66 +1,58 @@
 module Language.Drasil.Code.Imperative.Build.Import (
-  makeBuild
+  buildMakefile
 ) where
 
-import Language.Drasil.Code.Imperative.Build.AST (asFragment, DocConfig(..),
-  BuildConfig(BuildConfig), BuildDependencies(..), Ext(..), includeExt,
-  NameOpts, nameOpts, packSep, Runnable(Runnable), BuildName(..), RunType(..))
-
-import Drasil.GOOL (FileData(..), ProgData(..), GOOLState(..), headers, sources,
-  mainMod)
-
-import Build.Drasil (Annotation, (+:+), genMake, makeS, MakeString, mkFile, mkRule,
-  mkCheckedCommand, mkFreeVar, RuleTransformer(makeRule))
-
-import Data.Containers.ListUtils (nubOrd)
-
 import Control.Lens ((^.))
+import Data.Containers.ListUtils (nubOrd)
 import Data.Maybe (maybeToList)
 import System.FilePath.Posix (takeExtension, takeBaseName)
 import Text.PrettyPrint.HughesPJ (Doc)
 import Utils.Drasil (capitalize)
+
+import Language.Drasil.Code.Imperative.Build.AST (asFragment, DocConfig(..),
+  BuildConfig(BuildConfig), BuildDependencies(..), Ext(..), includeExt,
+  NameOpts, nameOpts, packSep, Runnable(Runnable), BuildName(..), RunType(..))
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierState,
+  headers, sources, mainMod)
+
+import Drasil.GOOL (FileData(..), ProgData(..))
+import Drasil.Makefile (Annotation, (+:+), printMakefile, makeS, MakeString, mkFile, mkRule,
+  mkCheckedCommand, mkFreeVar, mkMakefile)
 import Drasil.Metadata (watermark)
 
--- | Holds all the needed information to run a program.
-data CodeHarness = Ch {
-  buildConfig :: Maybe BuildConfig,
-  runnable :: Maybe Runnable,
-  goolState :: GOOLState,
-  progData :: ProgData,
-  docConfig :: Maybe DocConfig}
-
--- | Transforms information in 'CodeHarness' into a list of Makefile rules.
-instance RuleTransformer CodeHarness where
-  makeRule (Ch b r s m d) = maybe [mkRule (openingComments m) buildTarget [] []]
-    (\(BuildConfig comp onm anm bt) ->
-    let outnm = maybe (asFragment "") (renderBuildName s m nameOpts) onm
-        addnm = maybe (asFragment "") (renderBuildName s m nameOpts) anm
-    in [
-    mkRule (openingComments m) buildTarget [outnm] [],
-    mkFile [] outnm (map (makeS . filePath) (progMods m)) $
-      map (mkCheckedCommand . foldr (+:+) mempty) $
-        comp (getCompilerInput bt s m) outnm addnm
-    ]) b ++ maybe [] (\(Runnable nm no ty) -> [
-    mkRule [] (makeS "run") [buildTarget] [
-      mkCheckedCommand $ buildRunTarget (renderBuildName s m no nm) ty +:+
-      mkFreeVar "RUNARGS"
-      ]
-    ]) r ++ maybe [] (\(DocConfig dps cmds) -> [
-      mkRule [] (makeS "doc") (dps ++ getCommentedFiles s) cmds
-    ]) d where
-      buildTarget = makeS "build"
+-- | Creates a Makefile.
+buildMakefile :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable ->
+  SoftwareDossierState -> ProgData -> Doc
+buildMakefile d b r s m = printMakefile $ mkMakefile $ maybe [mkRule (openingComments m) buildTarget [] []]
+  (\(BuildConfig comp onm anm bt) ->
+  let outnm = maybe (asFragment "") (renderBuildName s m nameOpts) onm
+      addnm = maybe (asFragment "") (renderBuildName s m nameOpts) anm
+  in [
+  mkRule (openingComments m) buildTarget [outnm] [],
+  mkFile [] outnm (makeS . filePath <$> progMods m) $
+    mkCheckedCommand . foldr (+:+) mempty <$>
+      comp (getCompilerInput bt s m) outnm addnm
+  ]) b <> foldMap (\(Runnable nm no ty) -> [
+  mkRule [] (makeS "run") [buildTarget] [
+    mkCheckedCommand $ buildRunTarget (renderBuildName s m no nm) ty +:+
+    mkFreeVar "RUNARGS"
+    ]
+  ]) r <> foldMap (\(DocConfig dps cmds) -> [
+    mkRule [] (makeS "doc") (dps <> getCommentedFiles s) cmds
+  ]) d where
+    buildTarget = makeS "build"
 
 openingComments :: ProgData -> Annotation
-openingComments m = [watermark,"Project Name: " ++ progName m, progPurpAdd m]
+openingComments m = [watermark, "Project Name: " <> progName m, progPurpAdd m]
 
 -- | Helper that renders project purpose into a string if there is one.
 progPurpAdd :: ProgData -> String
-progPurpAdd m = if progPurp m /= [] then "Project Purpose: " ++
-                  capitalize (progPurp m)
-                else []
+progPurpAdd m
+  | not (null $ progPurp m) = "Project Purpose: " <> capitalize (progPurp m)
+  | otherwise = ""
 
 -- | Helper that renders information into a MakeString. Dependent on the 'BuildName' criteria.
-renderBuildName :: GOOLState -> ProgData -> NameOpts -> BuildName -> MakeString
+renderBuildName :: SoftwareDossierState -> ProgData -> NameOpts -> BuildName -> MakeString
 renderBuildName s _ _ BMain = makeS $ maybe (error "Main module missing")
   takeBaseName (s ^. mainMod)
 renderBuildName _ p _ BPackName = makeS (progName p)
@@ -77,26 +69,16 @@ renderExt CodeExt f = makeS $ takeExtension f
 renderExt (OtherExt e) _ = e
 
 -- | Helper that records the compiler input information.
-getCompilerInput :: BuildDependencies -> GOOLState -> ProgData -> [MakeString]
-getCompilerInput BcSource s _ = map makeS $ s ^. sources
+getCompilerInput :: BuildDependencies -> SoftwareDossierState -> ProgData -> [MakeString]
+getCompilerInput BcSource s _ = makeS <$> s ^. sources
 getCompilerInput (BcSingle n) s p = [renderBuildName s p nameOpts n]
 
 -- | Helper that retrieves commented files.
-getCommentedFiles :: GOOLState -> [MakeString]
-getCommentedFiles s = map makeS (nubOrd (s ^. headers ++
-  maybeToList (s ^. mainMod)))
+getCommentedFiles :: SoftwareDossierState -> [MakeString]
+getCommentedFiles s = makeS <$> nubOrd (s ^. headers <>
+  maybeToList (s ^. mainMod))
 
 -- | Helper that builds and runs a target.
 buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn
-buildRunTarget fn (Interpreter i) = foldr (+:+) mempty $ i ++ [fn]
-
--- | Creates a Makefile.
-makeBuild :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable ->
-  GOOLState -> ProgData -> Doc
-makeBuild d b r s p = genMake [Ch {
-  buildConfig = b,
-  runnable = r,
-  goolState = s,
-  progData = p,
-  docConfig = d}]
+buildRunTarget fn (Interpreter i) = foldr (+:+) mempty $ i <> [fn]

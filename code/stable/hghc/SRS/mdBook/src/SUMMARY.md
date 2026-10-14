@@ -3,6 +3,7 @@
 - [Reference Material](./SecRefMat.md)
   - [Table of Units](./SecToU.md)
   - [Table of Symbols](./SecToS.md)
+- [Introduction](./SecIntro.md)
 - [Specific System Description](./SecSpecSystDesc.md)
   - [Solution Characteristics Specification](./SecSolCharSpec.md)
     - [Theoretical Models](./SecTMs.md)

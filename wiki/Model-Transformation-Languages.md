@@ -66,7 +66,7 @@ independent implementation", which is difficult to do manually; which is how a t
 - "A tool that supports the choice to execute transformations recursively would be more expressive than a language that forces one option in all cases."
 - Concluding point: "Seeing as ATL is being integrated into official Eclipse's M2M project stream, we believe that it will eventually establish itself as a prevalent approach to perform M2M transformations"
 
-## [Beanbag](http://sei.pku.edu.cn/~xiongyf04/papers/SES09.pdf) **ADD TO SE4SC REPO?**
+## [Beanbag](https://xiongyingfei.github.io/papers/SES09.pdf) **ADD TO SE4SC REPO?**
 "A Language for Automatic Model Inconsistency Fixing"
 - "A program in Beanbag mainly defines a consistency relation, but also has a fixing semantics defining how to propagate updates to fix an inconsistency"
 - Similar to Drasil in terms of consistency goals when updating models, as the paper recognizes that "manually implementing such fixing behavior is time-consuming and error-prone"**EXPAND**
@@ -87,7 +87,8 @@ independent implementation", which is difficult to do manually; which is how a t
     - solution = "to use the source and destination meta-models to explicitly specify the temporary vertices and edges" --> a unified meta-model that can be treated as a single graph
 3. As a control flow language ("control the application of the productions and allow the user to manage the complexity of the transformation"; features include sequencing, non-determinism, hierarchy, recursion, test/case)
 
-## [UML-RSDS](https://nms.kcl.ac.uk/kevin.lano/uml2web/) 
+## [UML-RSDS](https://api.pageplace.de/preview/DT0400.9781498752237_A29597084/preview-9781498752237_A29597084.pdf) 
+- [Wikipedia page](https://en.wikipedia.org/wiki/UML-RSDS)
 - "solves the long-standing problem of how to combine declarative high-level specification of model transformations and general software systems, with efficient execution"
 - users write their specifications in OCL and class diagrams --> automatically generates efficient Java code from these specifications
 - "The tool can be used to quickly sketch designs in UML and immediately generate working code - even for incomplete models"

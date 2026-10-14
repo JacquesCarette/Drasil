@@ -1,4 +1,6 @@
-module Drasil.SWHS.Derivations where
+module Drasil.SWHS.Derivations (
+  eBalanceOnWtrDerivEqnsIM1, eBalanceOnPCMDerivEqnsIM2
+) where
 
 import Data.Drasil.Quantities.Physics (time)
 

@@ -1,8 +1,4 @@
-{-# LANGUAGE GADTs                 #-}
-{-# LANGUAGE InstanceSigs          #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-
-module Language.Drasil.Literal.Lang where
+module Language.Drasil.Literal.Lang (Literal(..)) where
 
 import Language.Drasil.Space (Space (..))
 import Language.Drasil.WellTyped (Typed(..), TypingContext, TypeError,

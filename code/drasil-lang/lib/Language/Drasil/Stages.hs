@@ -6,7 +6,7 @@ module Language.Drasil.Stages(
 
 -- | Stages are what part of the development process we are in.
 -- There are currently two:
--- 1) The Equational stage (should be called Specification) 
+-- 1) The Equational stage (should be called Specification)
 -- 2) The Implemenation stage
 --
 -- The point is that information may be rendered differently depending
@@ -17,7 +17,7 @@ data Stage = Equational -- AKA Specification
            | Implementation -- AKA Implementation
 
 {- Note: Keep stages separate from StagedSymbols for lookup purposes, as we may
-   have documents which look up both stages of a symbol and show them 
+   have documents which look up both stages of a symbol and show them
    side-by-side or one after another. -}
 
 -- | For better error messages.

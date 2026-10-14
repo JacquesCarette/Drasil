@@ -1,12 +1,13 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE RankNTypes #-}
+module Language.Drasil.WellTyped (
+  RequiresChecking(..), Typed(..), TypingContext,
+  TypeError, inferFromContext, temporaryIndent,
+  typeCheckByInfer, assertAllEq, (~==)
+) where
 
-module Language.Drasil.WellTyped where
-
-import qualified Data.Map.Strict as M
-import Drasil.Database.UID (UID)
 import Data.List (intercalate)
+import qualified Data.Map.Strict as M
+
+import Drasil.Database (UID)
 
 -- TODO: Rather than using a flat String, it would be better to a
 --       ``breadcrumb''-style error data type that can provide a traceable path
@@ -24,7 +25,7 @@ inferFromContext :: TypingContext t -> UID -> Either TypeError t
 inferFromContext cxt u =
   case M.lookup u cxt of
     Just t  -> pure t
-    Nothing -> Left $ "`" ++ show u ++ "` lacks type binding in context"
+    Nothing -> Left $ "`" <> show u <> "` lacks type binding in context"
 
 -- | Build a bidirectional type checker for your expression language, e, with
 --   respect to a specific type universe, t.
@@ -58,8 +59,8 @@ infix 4 ~==
 typeCheckByInfer :: Typed e t => TypingContext t -> e -> t -> Either TypeError t
 typeCheckByInfer cxt e t = do
   et <- infer cxt e
-  et ~== t 
-    $ \lt rt -> "Inferred type `" ++ lt ++ "` does not match expected type `" ++ rt ++ "`"
+  et ~== t
+    $ \lt rt -> "Inferred type `" <> lt <> "` does not match expected type `" <> rt <> "`"
   pure et
 
 {- FIXME: temporary hacks below (they're aware of the "printing" code!), pending
@@ -68,18 +69,18 @@ typeCheckByInfer cxt e t = do
 assertAllEq :: Typed e t => TypingContext t -> [e] -> t -> TypeError -> Either TypeError ()
 assertAllEq cxt es expect s
   | allTsAreSp = pure ()
-  | otherwise  = Left $ temporaryIndent "  " (s ++ "\nReceived:\n" ++ dumpAllTs)
+  | otherwise  = Left $ temporaryIndent "  " (s <> "\nReceived:\n" <> dumpAllTs)
   where
-    allTs = map (infer cxt) es
+    allTs = infer cxt <$> es
     allTsAreSp = all (\case
       Right  t -> t == expect
       Left _   -> False) allTs
-    dumpAllTs = intercalate "\n" $ map (("- " ++) . either ("ERROR: " ++) show) allTs
+    dumpAllTs = intercalate "\n" $ ("- " ++) . either ("ERROR: " ++) show <$> allTs
 
 -- | A temporary, hacky, indentation function. It should be removed when we
 -- switch to using something else for error messages, which can be later
 -- formatted nicely.
 temporaryIndent :: String -> String -> String
-temporaryIndent r ('\n' : s) = '\n' : (r ++ temporaryIndent r s)
+temporaryIndent r ('\n' : s) = '\n' : (r <> temporaryIndent r s)
 temporaryIndent r (c    : s) = c : temporaryIndent r s
 temporaryIndent _ []         = []

@@ -1,0 +1,8 @@
+Original,Copy
+../../../../datafiles/bss/SystemContextFigure.png,src/assets/SystemContextFigure.png
+../../../../datafiles/bss/bss.png,src/assets/bss.png
+../../TraceyGraph/allvsall.svg,src/assets/allvsall.svg
+../../TraceyGraph/allvsr.svg,src/assets/allvsr.svg
+../../TraceyGraph/avsa.svg,src/assets/avsa.svg
+../../TraceyGraph/avsall.svg,src/assets/avsall.svg
+../../TraceyGraph/refvsref.svg,src/assets/refvsref.svg

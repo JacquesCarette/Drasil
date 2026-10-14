@@ -20,8 +20,8 @@ public class Calculations {
         \param t_step Step Time (s)
         \return Process Variable
     */
-    public static ArrayList<Double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
-        ArrayList<Double> y_t;
+    public static ArrayList<ArrayList<Double>> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
+        ArrayList<ArrayList<Double>> y_t;
         ODEStepHandler stepHandler = new ODEStepHandler();
         ODE ode = new ODE(K_p, K_d, r_t);
         double[] curr_vals = {0.0, 0.0};

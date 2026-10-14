@@ -1,30 +1,29 @@
-{-# LANGUAGE TemplateHaskell, TupleSections #-}
-
+{-# LANGUAGE TemplateHaskell #-}
 module Drasil.Shared.State (
   -- Types
-  GS, GOOLState(..), FS, CS, MS, VS, 
+  GS, GOOLState(..), FS, CS, MS, VS,
   -- Lenses
-  lensFStoGS, lensGStoFS, lensMStoGS, lensFStoCS, lensFStoMS, lensFStoVS, 
-  lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, 
+  lensFStoGS, lensGStoFS, lensMStoGS, lensFStoCS, lensFStoMS, lensFStoVS,
+  lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS,
   lensVStoMS, lensCStoFS, headers, sources, mainMod, currMain, currFileType, currParameters,
   -- Initial states
-  initialState, initialFS, 
+  initialState, initialFS,
   -- State helpers
-  modifyReturn, modifyReturnFunc, modifyReturnList, 
+  modifyReturn, modifyReturnFunc, modifyReturnList,
   -- State modifiers
-  revFiles, addFile, addCombinedHeaderSource, addHeader, addSource, 
-  addProgNameToPaths, setMainMod, addLangImport, addLangImportVS, 
-  addExceptionImports, getLangImports, addLibImport, addLibImportVS, 
-  addLibImports, getLibImports, addModuleImport, addModuleImportVS, 
-  getModuleImports, addHeaderLangImport, getHeaderLangImports, 
-  addHeaderLibImport, getHeaderLibImports, addHeaderModImport, 
-  getHeaderModImports, addDefine, getDefines, addHeaderDefine, 
-  getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing, 
-  setFileType, setModuleName, getModuleName, setClassName, getClassName, 
-  setCurrMain, getCurrMain, addClass, getClasses, updateClassMap, getClassMap, 
-  updateMethodExcMap, getMethodExcMap, updateCallMap, callMapTransClosure, 
-  updateMEMWithCalls, addParameter, getParameters, setOutputsDeclared, 
-  isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
+  revFiles, addFile, addCombinedHeaderSource, addHeader, addSource,
+  addProgNameToPaths, setMainMod, addLangImport, addLangImportVS,
+  addExceptionImports, getLangImports, addLibImport, addLibImportVS,
+  addLibImports, getLibImports, addModuleImport, addModuleImportVS,
+  getModuleImports, addHeaderLangImport, getHeaderLangImports,
+  addHeaderLibImport, getHeaderLibImports, addHeaderModImport,
+  getHeaderModImports, addDefine, getDefines, addHeaderDefine,
+  getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing,
+  setFileType, setModuleName, getModuleName, setClassName, getClassName,
+  setCurrMain, getCurrMain, addClass, getClasses, updateClassMap, getClassMap,
+  updateMethodExcMap, getMethodExcMap, updateCallMap, callMapTransClosure,
+  updateMEMWithCalls, addParameter, getParameters, setOutputsDeclared,
+  isOutputsDeclared, addException, addExceptions, getExceptions, addCall,
   setMainDoc, getMainDoc, setVisibility, getVisibility, setCurrMainFunc,
   getCurrMainFunc, setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined,
   incrementLine, incrementWord, getLineIndex,
@@ -37,14 +36,13 @@ import Drasil.Shared.AST (FileType(..), VisibilityTag(..), ScopeTag(..),
 import Drasil.Shared.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import Drasil.Shared.CodeType (ClassName)
 
-import Utils.Drasil (nubSort)
+import Data.List.Extras (nubSort)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2, both, at)
 import Control.Monad.State (State, modify, gets)
 import Data.Char (isDigit)
 import Data.List (nub)
-import Data.Foldable (foldl')
-import Data.Maybe (isNothing, fromMaybe)
+import Data.Maybe (isNothing)
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Tuple (swap)
@@ -54,35 +52,35 @@ import Text.Read (readMaybe)
 data GOOLState = GS {
   _headers :: [FilePath], -- Used by Drasil for doxygen config gen
   _sources :: [FilePath], -- Used by Drasil for doxygen config and Makefile gen
-  _mainMod :: Maybe FilePath, -- Used by Drasil generator to access main 
+  _mainMod :: Maybe FilePath, -- Used by Drasil generator to access main
                               -- mod file path (needed in Makefile generation)
-  _classMap :: Map String ClassName, -- Used to determine whether an import is 
-                                     -- needed when using extClassVar and obj
+  _classMap :: Map String ClassName, -- Used to determine whether an import is
+                                     -- needed when using extClassVarAccess and obj
 
   -- Only used in Java and Swift, to generate correct "throws Exception" declarations
-  _methodExceptionMap :: Map QualifiedName [ExceptionType], -- Method to exceptions thrown
-  _callMap :: Map QualifiedName [QualifiedName], -- Method to other methods it calls
+  _methodExceptionMap :: Map QualifiedName [ExceptionType], -- map of exceptions thrown by methods
+  _callMap :: Map QualifiedName [QualifiedName], -- mthd other methods it calls
 
   -- Only used for Swift
   _throwUsed :: Bool, -- to add code so Strings can be used as Errors
   _errorDefined :: Bool -- to avoid duplicating that code
-} 
+}
 makeLenses ''GOOLState
 
 data FileState = FS {
   _goolState :: GOOLState,
-  _currModName :: String, -- Used by fileDoc to insert the module name in the 
+  _currModName :: String, -- Used by fileDoc to insert the module name in the
                           -- file path, and by CodeInfo/Java when building
                           -- method exception map and call map
   _currFileType :: FileType, -- Used when populating headers and sources in GOOLState
-  _currMain :: Bool, -- Used to set mainMod in GOOLState, 
-                     -- and in C++ to put documentation for the main 
+  _currMain :: Bool, -- Used to set mainMod in GOOLState,
+                     -- and in C++ to put documentation for the main
                      -- module in the source file instead of header
   _currClasses :: [ClassName], -- Used to update classMap
   _langImports :: [String],
   _libImports :: [String],
   _moduleImports :: [String],
-  
+
   -- Only used for Python and Swift
   _mainDoc :: Doc, -- To print Python/Swift's "main" last
 
@@ -99,8 +97,8 @@ makeLenses ''FileState
 
 data ClassState = CS {
   _fileState :: FileState,
-  _currClassName :: ClassName -- So class name is accessible when generating 
-                              -- constructor or self 
+  _currClassName :: ClassName -- So class name is accessible when generating
+                              -- constructor or self
 }
 makeLenses ''ClassState
 
@@ -108,10 +106,10 @@ type Index = Integer
 
 data MethodState = MS {
   _classState :: ClassState,
-  _currParameters :: [String], -- Used to get parameter names when generating 
+  _currParameters :: [String], -- Used to get parameter names when generating
                                -- function documentation
   _varNames :: Map String Int, -- Used to generate fresh variable names
-  
+
   -- Only used for Julia
   _varScopes :: Map String ScopeData, -- Used to keep track of a variable's scope from its declaration
 
@@ -119,22 +117,22 @@ data MethodState = MS {
   _outputsDeclared :: Bool, -- So Java doesn't redeclare outputs variable when using inOutCall
   _exceptions :: [ExceptionType], -- Used to build methodExceptionMap
   _calls :: [QualifiedName], -- Used to build CallMap
-  
+
   -- Only used for C++
-  _currVisibility :: VisibilityTag, -- Used to maintain correct visibility when adding 
+  _currVisibility :: VisibilityTag, -- Used to maintain correct visibility when adding
                           -- documentation to function in C++
   _currMainFunc :: Bool, -- Used by C++ to put documentation for the main
                         -- function in source instead of header file
 
   -- Only used for Swift
   _contentsIndices :: (Index, Index) -- Used to keep track of the current place
-                                     -- in a file being read. First Int is the 
+                                     -- in a file being read. First Int is the
                                      -- line number, second is the word number.
 }
 makeLenses ''MethodState
 
--- This was once used, but now is not. However it would be a pain to revert all 
--- of the types back to MS from VS, and it is likely that this level of state 
+-- This was once used, but now is not. However it would be a pain to revert all
+-- of the types back to MS from VS, and it is likely that this level of state
 -- will be useful in the future, so I'm just putting in a placeholder.
 newtype ValueState = VS {
   _methodState :: MethodState
@@ -177,7 +175,7 @@ lensCStoFS = fileState
 lensFStoMS :: Lens' FileState MethodState
 lensFStoMS = lens (\fs -> set lensMStoFS fs initialMS) (const (^. lensMStoFS))
 
-lensMStoFS :: Lens' MethodState FileState 
+lensMStoFS :: Lens' MethodState FileState
 lensMStoFS = classState . fileState
 
 -- CS - MS --
@@ -199,7 +197,7 @@ lensVStoFS = methodState . lensMStoFS
 -- CS - VS --
 
 lensCStoVS :: Lens' ClassState ValueState
-lensCStoVS = lens (\cs -> set (methodState . classState) cs initialVS) 
+lensCStoVS = lens (\cs -> set (methodState . classState) cs initialVS)
   (const (^. (methodState . classState)))
 
 -- MS - VS --
@@ -238,7 +236,7 @@ initialFS = FS {
   _langImports = [],
   _libImports = [],
   _moduleImports = [],
-  
+
   _mainDoc = empty,
 
   _headerLangImports = [],
@@ -286,20 +284,20 @@ initialVS = VS {
 modifyReturn :: (s -> s) -> a -> State s a
 modifyReturn sf v = do
   modify sf
-  return v
+  pure v
 
 modifyReturnFunc :: (b -> s -> s) -> (b -> a) -> State s b -> State s a
 modifyReturnFunc sf vf st = do
   v <- st
   modify $ sf v
-  return $ vf v
+  pure $ vf v
 
-modifyReturnList :: [State s b] -> (s -> s) -> 
+modifyReturnList :: [State s b] -> (s -> s) ->
   ([b] -> a) -> State s a
 modifyReturnList l sf vf = do
   v <- sequence l
   modify sf
-  return $ vf v
+  pure $ vf v
 
 -------------------------------
 ------- State Modifiers -------
@@ -315,34 +313,34 @@ addFile Header = addHeader
 
 addHeader :: FilePath -> GOOLState -> GOOLState
 addHeader fp = over headers (\h -> ifElemError fp h $
-  "Multiple files with same name encountered: " ++ fp)
+  "Multiple files with same name encountered: " <> fp)
 
 addSource :: FilePath -> GOOLState -> GOOLState
 addSource fp = over sources (\s -> ifElemError fp s $
-  "Multiple files with same name encountered: " ++ fp)
+  "Multiple files with same name encountered: " <> fp)
 
 addCombinedHeaderSource :: FilePath -> GOOLState -> GOOLState
-addCombinedHeaderSource fp = addSource fp . addHeader fp 
+addCombinedHeaderSource fp = addSource fp . addHeader fp
 
 addProgNameToPaths :: String -> GOOLState -> GOOLState
-addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) . 
-  over headers (map f)
-  where f = ((n++"/")++)
+addProgNameToPaths n = over mainMod (fmap f) . over sources (fmap f) .
+  over headers (fmap f)
+  where f = ((n<>"/")++)
 
 setMainMod :: String -> GOOLState -> GOOLState
-setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
+setMainMod n = over mainMod (\m -> if isNothing m then Just n else error
   "Multiple modules with main methods encountered")
 
 addLangImport :: String -> MethodState -> MethodState
 addLangImport i = over (lensMStoFS . langImports) (\is -> nubSort $ i:is)
-  
+
 addLangImportVS :: String -> ValueState -> ValueState
 addLangImportVS i = over methodState (addLangImport i)
 
 addExceptionImports :: [Exception] -> MethodState -> MethodState
-addExceptionImports es = over (lensMStoFS . langImports) 
-  (\is -> nubSort $ is ++ imps)
-  where imps = map printExc $ filter hasLoc es
+addExceptionImports es = over (lensMStoFS . langImports)
+  (\is -> nubSort $ is <> imps)
+  where imps = printExc <$> filter hasLoc es
 
 getLangImports :: FS [String]
 getLangImports = gets (^. langImports)
@@ -369,7 +367,7 @@ getModuleImports :: FS [String]
 getModuleImports = gets (^. moduleImports)
 
 addHeaderLangImport :: String -> ValueState -> ValueState
-addHeaderLangImport i = over (lensVStoFS . headerLangImports) 
+addHeaderLangImport i = over (lensVStoFS . headerLangImports)
   (\is -> nubSort $ i:is)
 
 getHeaderLangImports :: FS [String]
@@ -394,7 +392,7 @@ addDefine d = over (lensVStoFS . defines) (\ds -> nubSort $ d:ds)
 
 getDefines :: FS [String]
 getDefines = gets (^. defines)
-  
+
 addHeaderDefine :: String -> ValueState -> ValueState
 addHeaderDefine d = over (lensVStoFS . headerDefines) (\ds -> nubSort $ d:ds)
 
@@ -435,14 +433,14 @@ getClassName :: MS ClassName
 getClassName = gets (^. (classState . currClassName))
 
 setCurrMain :: MethodState -> MethodState
-setCurrMain = over (lensMStoFS . currMain) (\b -> if b then 
+setCurrMain = over (lensMStoFS . currMain) (\b -> if b then
   error "Multiple main functions defined" else not b)
 
 getCurrMain :: FS Bool
 getCurrMain = gets (^. currMain)
 
 addClass :: String -> ClassState -> ClassState
-addClass c = over (fileState . currClasses) (\cs -> ifElemError c cs 
+addClass c = over (fileState . currClasses) (\cs -> ifElemError c cs
   "Multiple classes with same name in same file")
 
 getClasses :: FS [String]
@@ -450,13 +448,13 @@ getClasses = gets (^. currClasses)
 
 updateClassMap :: String -> FileState -> FileState
 updateClassMap n fs = over (goolState . classMap) (Map.union (Map.fromList $
-  map (n,) (fs ^. currClasses))) fs
+  (n,) <$> (fs ^. currClasses))) fs
 
 getClassMap :: VS (Map String String)
 getClassMap = gets (^. (lensVStoFS . goolState . classMap))
 
 updateMethodExcMap :: String -> MethodState -> MethodState
-updateMethodExcMap n ms = over (lensMStoFS . goolState . methodExceptionMap) 
+updateMethodExcMap n ms = over (lensMStoFS . goolState . methodExceptionMap)
   (Map.insert (qualName mn n) (ms ^. exceptions)) ms
   where mn = ms ^. (lensMStoFS . currModName)
 
@@ -464,31 +462,31 @@ getMethodExcMap :: VS (Map QualifiedName [ExceptionType])
 getMethodExcMap = gets (^. (lensVStoFS . goolState . methodExceptionMap))
 
 updateCallMap :: String -> MethodState -> MethodState
-updateCallMap n ms = over (lensMStoFS . goolState . callMap) 
+updateCallMap n ms = over (lensMStoFS . goolState . callMap)
   (Map.insert (qualName mn n) (ms ^. calls)) ms
   where mn = ms ^. (lensMStoFS . currModName)
 
 callMapTransClosure :: GOOLState -> GOOLState
 callMapTransClosure = over callMap tClosure
   where tClosure m = Map.map (traceCalls m) m
-        traceCalls :: Map QualifiedName [QualifiedName] -> [QualifiedName] -> 
+        traceCalls :: Map QualifiedName [QualifiedName] -> [QualifiedName] ->
           [QualifiedName]
         traceCalls _ [] = []
-        traceCalls cm (c:cs) = c : traceCalls cm (cs ++ 
+        traceCalls cm (c:cs) = c : traceCalls cm (cs <>
           Map.findWithDefault [] c cm)
 
 updateMEMWithCalls :: GOOLState -> GOOLState
 updateMEMWithCalls s = over methodExceptionMap (\mem -> Map.mapWithKey
   (addCallExcs mem (s ^. callMap)) mem) s
-  where addCallExcs :: Map QualifiedName [ExceptionType] -> 
-          Map QualifiedName [QualifiedName] -> QualifiedName -> [ExceptionType] 
+  where addCallExcs :: Map QualifiedName [ExceptionType] ->
+          Map QualifiedName [QualifiedName] -> QualifiedName -> [ExceptionType]
           -> [ExceptionType]
-        addCallExcs mem cm f es = nub $ es ++ concatMap (\fn -> Map.findWithDefault
+        addCallExcs mem cm f es = nub $ es <> concatMap (\fn -> Map.findWithDefault
           [] fn mem) (Map.findWithDefault [] f cm)
 
 addParameter :: String -> MethodState -> MethodState
-addParameter p = over currParameters (\ps -> ifElemError p ps $ 
-  "Function has duplicate parameter: " ++ p)
+addParameter p = over currParameters (\ps -> ifElemError p ps $
+  "Function has duplicate parameter: " <> p)
 
 getParameters :: MS [String]
 getParameters = gets (reverse . (^. currParameters))
@@ -503,7 +501,7 @@ addException :: ExceptionType -> MethodState -> MethodState
 addException e = over exceptions (\es -> nub $ e : es)
 
 addExceptions :: [ExceptionType] -> ValueState -> ValueState
-addExceptions es = over (methodState . exceptions) (\exs -> nub $ es ++ exs)
+addExceptions es = over (methodState . exceptions) (\exs -> nub $ es <> exs)
 
 getExceptions :: MS [ExceptionType]
 getExceptions = gets (^. exceptions)
@@ -551,15 +549,15 @@ resetIndices :: MethodState -> MethodState
 resetIndices = set contentsIndices (0,0)
 
 useVarName :: String -> MethodState -> MethodState
-useVarName v = over (varNames . at prefix) (Just . max nextSuffix . fromMaybe 0)
+useVarName v = over (varNames . at prefix) (Just . max nextSuffix . sum)
   where (prefix, nextSuffix) = over _2 (maybe 0 (+1)) $ splitVarName v
 
 genVarName :: [String] -> String -> MS String
 genVarName candidates backup = do
   used <- gets (^. varNames)
   let
-    isAvailable (n,c) = maybe True (maybe (const False) (>=) c) $ Map.lookup n used
-    choice = foldr const (splitVarName backup) $ filter isAvailable $ map splitVarName candidates
+    isAvailable (n,c) = all (maybe (const False) (>=) c) $ Map.lookup n used
+    choice = foldr const (splitVarName backup) $ filter isAvailable $ splitVarName <$> candidates
   bumpVarName choice
 
 genLoopIndex :: MS String
@@ -568,12 +566,12 @@ genLoopIndex = genVarName ["i", "j", "k"] "i"
 genVarNameIf :: Bool -> String -> MS String
 genVarNameIf True n = genVarName [] n
 genVarNameIf False _ = do
-  return ""
+  pure ""
 
 varNameAvailable :: String -> MS Bool
 varNameAvailable n = do
   used <- gets (^. varNames)
-  return $ isNothing $ Map.lookup n used
+  pure $ isNothing $ Map.lookup n used
 
 -- Helpers
 
@@ -589,7 +587,7 @@ bumpVarName (n,c) = do
   count <- gets (^. (varNames . at n))
   let suffix = maybe count (flip fmap count . max) c
   modify $ set (varNames . at n) $ Just $ maybe 0 (+1) suffix
-  return $ maybe n ((n ++) . show) count
+  pure $ maybe n ((n ++) . show) count
 
 setVarScope :: String -> ScopeData -> MethodState -> MethodState
 setVarScope n s = over varScopes (Map.insert n s)
@@ -597,6 +595,6 @@ setVarScope n s = over varScopes (Map.insert n s)
 getVarScope :: String -> MS ScopeData
 getVarScope n = do
   sMap <- gets (^. varScopes)
-  return $ case Map.lookup n sMap of
-    Nothing -> error $ "Variable with no declared scope: " ++ n
+  pure $ case Map.lookup n sMap of
+    Nothing -> error $ "Variable with no declared scope: " <> n
     (Just scp) -> scp

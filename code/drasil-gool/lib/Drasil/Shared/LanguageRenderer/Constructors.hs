@@ -1,22 +1,23 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module Drasil.Shared.LanguageRenderer.Constructors (
-  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, 
-  VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec, 
-  andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, 
-  binExpr', binExprNumDbl', typeBinExpr
+  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar,
+  typeFromData, VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec,
+  powerPrec, andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr,
+  binExpr, binExpr', binExprNumDbl', typeBinExpr
 ) where
 
-import Drasil.Shared.InterfaceCommon (VSType, MSStatement, SVariable, SValue,
-  TypeSym(..), TypeElim(..), ValueSym(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
-  RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
+import Drasil.Shared.InterfaceCommon (TypeSym(..), ValueSym(..), getCodeType,
+  TypeElim)
+import Drasil.Shared.RendererClassesCommon (VSUnOp, VSBinOp,
+  OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..),
+  ValueElim(valuePrec), RenderStatement(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
-import Drasil.Shared.AST (Terminator(..), Binding(..), OpData, od)
+import Drasil.Shared.AST (Terminator(..), AttachmentTag(..), OpData, od,
+  TypeData, td)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.Helpers (toCode, toState, on2StateValues)
-import Drasil.Shared.State (VS)
+import Drasil.Shared.State (MS, VS)
 
 import Text.PrettyPrint.HughesPJ (Doc, parens, text)
 import Data.Composition ((.:))
@@ -25,36 +26,44 @@ import Control.Monad (join)
 -- Statements
 
 -- | Constructs a statement terminated by a semi-colon
-mkStmt :: (CommonRenderSym r) => Doc -> MSStatement r
+mkStmt :: (RenderStatement r stmt) => Doc -> MS (r stmt)
 mkStmt = flip stmtFromData Semi
 
 -- | Constructs a statement without a termination character
-mkStmtNoEnd :: (CommonRenderSym r) => Doc -> MSStatement r
+mkStmtNoEnd :: (RenderStatement r stmt) => Doc -> MS (r stmt)
 mkStmtNoEnd = flip stmtFromData Empty
 
 -- Values --
 
 -- | Constructs a value in a stateful context
-mkStateVal :: (CommonRenderSym r) => VSType r -> Doc -> SValue r
+mkStateVal :: (RenderValue r var val typ) => VS (r typ) -> Doc -> VS (r val)
 mkStateVal = valFromData Nothing Nothing
 
 -- | Constructs a value in a non-stateful context
-mkVal :: (CommonRenderSym r) => r (Type r) -> Doc -> SValue r
+mkVal :: (RenderValue r var val typ) => r typ -> Doc -> VS (r val)
 mkVal t = valFromData Nothing Nothing (toState t)
 
 -- Variables --
 
--- | Constructs a dynamic variable in a stateful context
-mkStateVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStateVar = varFromData Dynamic
+-- | Constructs an instance-level variable in a stateful context
+mkStateVar
+  :: (RenderVariable r var typ)
+  => String -> VS (r typ) -> Doc -> VS (r var)
+mkStateVar = varFromData InstanceLevel
 
--- | Constructs a dynamic variable in a non-stateful context
-mkVar :: (CommonRenderSym r) => String -> r (Type r) -> Doc -> SVariable r
-mkVar n t = varFromData Dynamic n (toState t)
+-- | Constructs an instance-level variable in a non-stateful context
+mkVar :: (RenderVariable r var typ) => String -> r typ -> Doc -> VS (r var)
+mkVar n t = varFromData InstanceLevel n (toState t)
 
--- | Constructs a static variable in a stateful context
-mkStaticVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStaticVar = varFromData Static
+-- | Constructs a classLevel variable in a stateful context
+mkClassVar
+  :: (RenderVariable r var typ)
+  => String -> VS (r typ) -> Doc -> VS (r var)
+mkClassVar = varFromData ClassLevel
+
+-- Types --
+typeFromData :: (Monad r) => CodeType -> String -> Doc -> VS (r TypeData)
+typeFromData t s d = pure $ pure $ td t s d
 
 -- Operators --
 
@@ -89,7 +98,7 @@ powerPrec :: (Monad r) => String -> VSOp r
 powerPrec = mkOp 8 . text
 
 -- | Construct an operator with conjunction-level precedence
-andPrec :: (Monad r) => String -> VSOp r 
+andPrec :: (Monad r) => String -> VSOp r
 andPrec = mkOp 3 . text
 
 -- | Construct an operator with disjunction-level precedence
@@ -102,24 +111,42 @@ inPrec = mkOp 2 . text
 -- Expressions --
 
 -- | Constructs a unary expression like ln(v), for some operator ln and value v
-unExpr :: (CommonRenderSym r) => VSUnOp r -> SValue r -> SValue r
+unExpr
+  :: (OpElim r, RenderValue r var val typ, ValueElim r val, ValueSym r val typ)
+  => VSUnOp r -> VS (r val) -> VS (r val)
 unExpr = join .: on2StateValues (mkUnExpr unOpDocD)
 
 -- | Constructs a unary expression like -v, for some operator - and value v
-unExpr' :: (CommonRenderSym r) => VSUnOp r -> SValue r -> SValue r
+unExpr'
+  :: (OpElim r, RenderValue r var val typ, ValueElim r val, ValueSym r val typ)
+  => VSUnOp r -> VS (r val) -> VS (r val)
 unExpr' u' v'= do
   u <- u'
   v <- v'
-  (join .: on2StateValues (mkUnExpr (if maybe False (< uOpPrec u) (valuePrec v) then unOpDocD else unOpDocD'))) u' v'
+  (join .: on2StateValues (mkUnExpr
+    (if any (< uOpPrec u) (valuePrec v)
+       then unOpDocD
+        else unOpDocD')))
+    u' v'
 
-mkUnExpr :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> r (UnaryOp r) -> 
-  r (Value r) -> SValue r
+mkUnExpr
+  :: (OpElim r, RenderValue r var val typ, ValueElim r val, ValueSym r val typ)
+  => (Doc -> Doc -> Doc) -> r OpData -> r val -> VS (r val)
 mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 
--- | To be used in languages where the unary operator returns a double. If the 
--- value passed to the operator is a float, this function preserves that type 
+-- | To be used in languages where the unary operator returns a double. If the
+-- value passed to the operator is a float, this function preserves that type
 -- by casting the result to a float.
-unExprNumDbl :: (CommonRenderSym r) => VSUnOp r -> SValue r -> SValue r
+unExprNumDbl
+  ::
+    ( OpElim r
+    , RenderValue r var val typ
+    , TypeSym r typ
+    , TypeElim r typ
+    , ValueElim r val
+    , ValueSym r val typ
+    )
+  => VSUnOp r -> VS (r val) -> VS (r val)
 unExprNumDbl u' v' = do
   u <- u'
   v <- v'
@@ -127,24 +154,36 @@ unExprNumDbl u' v' = do
   unExprCastFloat (valueType v) w
 
 -- Only used by unExprNumDbl
-unExprCastFloat :: (CommonRenderSym r) => r (Type r) -> r (Value r) -> SValue r
-unExprCastFloat t = castType (getType t) . toState
+unExprCastFloat
+  :: (TypeSym r typ, RenderValue r var val typ, TypeElim r typ)
+  => r typ -> r val -> VS (r val)
+unExprCastFloat t = castType (getCodeType t) . toState
   where castType Float = cast float
         castType _ = id
-  
+
 -- | To be used when the type of the value is different from the type of the
 -- resulting expression. The type of the result is passed as a parameter.
-typeUnExpr :: (CommonRenderSym r) => VSUnOp r -> VSType r -> SValue r -> SValue r
-typeUnExpr u' t' s' = do 
+typeUnExpr
+  :: (OpElim r, RenderValue r var val typ, ValueElim r val)
+  => VSUnOp r -> VS (r typ) -> VS (r val) -> VS (r val)
+typeUnExpr u' t' s' = do
   u <- u'
   t <- t'
   s <- s'
   mkExpr (uOpPrec u) t (unOpDocD (RC.uOp u) (RC.value s))
 
--- | Constructs binary expressions like v + w, for some operator + and values v 
+-- | Constructs binary expressions like v + w, for some operator + and values v
 -- and w, parenthesizing v and w if needed.
-binExpr :: (CommonRenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExpr b' v1' v2'= do 
+binExpr
+  ::
+    ( OpElim r
+    , RenderValue r var val typ
+    , TypeElim r typ
+    , ValueElim r val
+    , ValueSym r val typ
+    )
+  => VSBinOp r -> VS (r val) -> VS (r val) -> VS (r val)
+binExpr b' v1' v2'= do
   b <- b'
   exprType <- numType v1' v2'
   exprRender <- exprRender' binExprRender b' v1' v2'
@@ -152,17 +191,34 @@ binExpr b' v1' v2'= do
 
 -- | Constructs binary expressions like pow(v,w), for some operator pow and
 -- values v and w
-binExpr' :: (CommonRenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExpr' b' v1' v2' = do 
+binExpr'
+  ::
+    ( OpElim r
+    , RenderValue r var val typ
+    , TypeElim r typ
+    , ValueElim r val
+    , ValueSym r val typ
+    )
+  => VSBinOp r -> VS (r val) -> VS (r val) -> VS (r val)
+binExpr' b' v1' v2' = do
   exprType <- numType v1' v2'
   exprRender <- exprRender' binOpDocDRend b' v1' v2'
-  mkExpr 9 exprType exprRender 
+  mkExpr 9 exprType exprRender
 
--- | To be used in languages where the binary operator returns a double. If 
--- either value passed to the operator is a float, this function preserves that 
+-- | To be used in languages where the binary operator returns a double. If
+-- either value passed to the operator is a float, this function preserves that
 -- type by casting the result to a float.
-binExprNumDbl' :: (CommonRenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExprNumDbl' b' v1' v2' = do 
+binExprNumDbl'
+  ::
+    ( OpElim r
+    , RenderValue r var val typ
+    , TypeSym r typ
+    , TypeElim r typ
+    , ValueElim r val
+    , ValueSym r val typ
+    )
+  => VSBinOp r -> VS (r val) -> VS (r val) -> VS (r val)
+binExprNumDbl' b' v1' v2' = do
   v1 <- v1'
   v2 <- v2'
   let t1 = valueType v1
@@ -171,26 +227,30 @@ binExprNumDbl' b' v1' v2' = do
   binExprCastFloat t1 t2 e
 
 -- Only used by binExprNumDbl'
-binExprCastFloat :: (CommonRenderSym r) => r (Type r) -> r (Type r) -> r (Value r) -> 
-  SValue r
-binExprCastFloat t1 t2 = castType (getType t1) (getType t2) . toState
+binExprCastFloat
+  :: (RenderValue r var val typ, TypeSym r typ, TypeElim r typ)
+  => r typ -> r typ -> r val -> VS (r val)
+binExprCastFloat t1 t2 = castType (getCodeType t1) (getCodeType t2) . toState
   where castType Float _ = cast float
         castType _ Float = cast float
         castType _ _ = id
 
 -- | To be used when the types of the values are different from the type of the
 -- resulting expression. The type of the result is passed as a parameter.
-typeBinExpr :: (CommonRenderSym r) => VSBinOp r -> VSType r -> SValue r -> SValue r 
-  -> SValue r
+typeBinExpr
+  :: (OpElim r, RenderValue r var val typ, ValueElim r val)
+  => VSBinOp r -> VS (r typ) -> VS (r val) -> VS (r val) -> VS (r val)
 typeBinExpr b' t' v1' v2' = do
   b <- b'
   t <- t'
   bnexr <- exprRender' binExprRender b' v1' v2'
   mkExpr (bOpPrec b) t bnexr
 
--- For numeric binary expressions, checks that both types are numeric and 
+-- For numeric binary expressions, checks that both types are numeric and
 -- returns result type. Selects the type with lowest precision.
-numType :: (CommonRenderSym r) => SValue r-> SValue r -> VSType r
+numType
+  :: (TypeElim r typ, ValueSym r val typ)
+  => VS (r val)-> VS (r val) -> VS (r typ)
 numType v1' v2' = do
   v1 <- v1'
   v2 <- v2'
@@ -202,41 +262,43 @@ numType v1' v2' = do
       numericType Double _ = t1
       numericType _ Double = t2
       numericType _ _ = error "Numeric types required for numeric expression"
-  toState $ numericType (getType t1) (getType t2)
+  toState $ numericType (getCodeType t1) (getCodeType t2)
 
-exprRender' :: (r (BinaryOp r) -> r (Value r) -> r (Value r) -> Doc) -> 
-  VSBinOp r -> SValue r -> SValue r -> VS Doc
-exprRender' f b' v1' v2' = do 
-  b <- b' 
+exprRender' :: (r OpData -> r val -> r val -> Doc) ->
+  VSBinOp r -> VS (r val) -> VS (r val) -> VS Doc
+exprRender' f b' v1' v2' = do
+  b <- b'
   v1 <- v1'
   v2 <- v2'
   toState $ f b v1 v2
 
-mkExpr :: (CommonRenderSym r) => Int -> r (Type r) -> Doc -> SValue r
+mkExpr :: (RenderValue r var val typ) => Int -> r typ -> Doc -> VS (r val)
 mkExpr p t = valFromData (Just p) Nothing (toState t)
 
-binOpDocDRend :: (CommonRenderSym r) => r (BinaryOp r) -> r (Value r) -> 
-  r (Value r) -> Doc
+binOpDocDRend
+  :: (OpElim r, ValueElim r val)
+  => r OpData -> r val -> r val -> Doc
 binOpDocDRend b v1 v2 = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
 
--- Adds parentheses around an expression passed as the left argument to a 
--- left-associative binary operator if the precedence of the expression is less 
+-- Adds parentheses around an expression passed as the left argument to a
+-- left-associative binary operator if the precedence of the expression is less
 -- than the precedence of the operator
-exprParensL :: (CommonRenderSym r) => r (BinaryOp r) -> r (Value r) -> Doc
-exprParensL o v = (if maybe False (< bOpPrec o) (valuePrec v) then parens else 
+exprParensL :: (OpElim r, ValueElim r val) => r OpData -> r val -> Doc
+exprParensL o v = (if any (< bOpPrec o) (valuePrec v) then parens else
   id) $ RC.value v
 
--- Adds parentheses around an expression passed as the right argument to a 
--- left-associative binary operator if the precedence of the expression is less 
+-- Adds parentheses around an expression passed as the right argument to a
+-- left-associative binary operator if the precedence of the expression is less
 -- than or equal to the precedence of the operator
-exprParensR :: (CommonRenderSym r) => r (BinaryOp r) -> r (Value r) -> Doc
-exprParensR o v = (if maybe False (<= bOpPrec o) (valuePrec v) then parens else 
+exprParensR :: (OpElim r, ValueElim r val) => r OpData -> r val -> Doc
+exprParensR o v = (if any (<= bOpPrec o) (valuePrec v) then parens else
   id) $ RC.value v
 
 -- Renders binary expression, adding parentheses if needed
-binExprRender :: (CommonRenderSym r) =>  r (BinaryOp r) -> r (Value r) -> r (Value r) 
-  -> Doc
-binExprRender b v1 v2 = 
+binExprRender
+  :: (OpElim r, ValueElim r val)
+  =>  r OpData -> r val -> r val -> Doc
+binExprRender b v1 v2 =
   let leftExpr = exprParensL b v1
       rightExpr = exprParensR b v2
   in binOpDocD (RC.bOp b) leftExpr rightExpr

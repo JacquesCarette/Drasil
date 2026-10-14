@@ -3,6 +3,7 @@ module Drasil.SWHSNoPCM.LabelledContent (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (sysCont)
@@ -11,7 +12,6 @@ import Data.Drasil.Concepts.Thermodynamics (htFlux)
 import Drasil.SWHS.Concepts (coil, sWHT)
 import Drasil.SWHS.Unitals (htFluxC)
 
-
 resourcePath :: String
 resourcePath = "../../../../datafiles/swhsnopcm/"
 
@@ -19,11 +19,11 @@ labelledContent :: [LabelledContent]
 labelledContent = [sysCntxtFig, figTank]
 
 figTank :: LabelledContent
-figTank = llcc (makeFigRef "Tank") $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+
+figTank = llccFig "Tank" $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+
   S "from" +:+ phrase coil `S.of_` ch htFluxC)
-  $ resourcePath ++ "TankWaterOnly.png"
+  $ resourcePath <> "TankWaterOnly.png"
 
 sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon")
+sysCntxtFig = llccFig "SysCon"
   $ fig (titleize sysCont)
-  $ resourcePath ++ "SystemContextFigure.png"
+  $ resourcePath <> "SystemContextFigure.png"

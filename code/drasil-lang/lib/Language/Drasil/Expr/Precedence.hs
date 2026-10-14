@@ -1,12 +1,16 @@
 -- | Defines operator precedence.
-module Language.Drasil.Expr.Precedence where
+module Language.Drasil.Expr.Precedence (
+  prec2Arith, prec2Eq, prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV,
+  prec2ESS, prec2ESB, precA, precB, precC, prec1, prec1B, prec1VV, prec1VN,
+  eprec
+) where
 
 import Language.Drasil.Expr.Lang (Expr(..),
-  ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
+  ArithBinOp(..), EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
   UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   AssocBoolOper(..), AssocArithOper(..), VVVBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocConcatOper(..))
 
--- These precedences are inspired from Haskell/F# 
+-- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
 
@@ -15,10 +19,6 @@ prec2Arith :: ArithBinOp -> Int
 prec2Arith Frac = 190
 prec2Arith Pow = 200
 prec2Arith Subt = 180
-
--- | prec2Bool - precedence for boolean-related binary operations.
-prec2Bool :: BoolBinOp -> Int
-prec2Bool _ = 130
 
 -- | prec2Eq - precedence for equality-related binary operations.
 prec2Eq :: EqBinOp -> Int
@@ -65,7 +65,6 @@ precB Or = 110
 precC :: AssocConcatOper -> Int
 precC SUnion = 120
 
-
 -- | prec1 - precedence of unary operators.
 prec1 :: UFunc -> Int
 prec1 Neg = 230
@@ -102,7 +101,6 @@ eprec (UnaryOpVV fn _)       = prec1VV fn
 eprec (UnaryOpVN fn _)       = prec1VN fn
 eprec (Operator o _ _)       = precA o
 eprec (ArithBinaryOp bo _ _) = prec2Arith bo
-eprec (BoolBinaryOp bo _ _)  = prec2Bool bo
 eprec (EqBinaryOp bo _ _)    = prec2Eq bo
 eprec (LABinaryOp bo _ _)    = prec2LA bo
 eprec (OrdBinaryOp bo _ _)   = prec2Ord bo

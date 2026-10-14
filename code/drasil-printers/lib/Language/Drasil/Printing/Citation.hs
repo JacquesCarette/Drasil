@@ -1,7 +1,11 @@
 -- | Defines types used for printing citations.
-module Language.Drasil.Printing.Citation where
+module Language.Drasil.Printing.Citation (
+  -- * Types
+  BibRef, Citation(..), CiteField(..), HP(..)
+) where
 
-import Language.Drasil hiding (CiteField, HP, Citation)
+import Language.Drasil (People, Month)
+import Language.Drasil.Document (EntryID, CitationKind)
 
 import Language.Drasil.Printing.AST (Spec)
 

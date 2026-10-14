@@ -38,7 +38,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 |[TM:NewtonSecLawMot](./SecTMs.md#TM:NewtonSecLawMot)                          |                                      |                                             |                                                 |                                         |                                           |                                                |                                                               |
 |[TM:NewtonThirdLawMot](./SecTMs.md#TM:NewtonThirdLawMot)                      |                                      |                                             |                                                 |                                         |                                           |                                                |                                                               |
 |[TM:UniversalGravLaw](./SecTMs.md#TM:UniversalGravLaw)                        |                                      |                                             |                                                 |                                         |                                           |                                                |                                                               |
-|[TM:NewtonSecLawRotMot](./SecTMs.md#TM:NewtonSecLawRotMot)                    |                                      |X                                            |                                                 |                                         |                                           |                                                |                                                               |
+|[TM:NewtonSecLawRotMot](./SecTMs.md#TM:NewtonSecLawRotMot)                    |                                      |                                             |                                                 |                                         |                                           |                                                |                                                               |
 |[GD:accelGravity](./SecGDs.md#GD:accelGravity)                                |                                      |                                             |                                                 |                                         |                                           |                                                |                                                               |
 |[GD:impulse](./SecGDs.md#GD:impulse)                                          |X                                     |X                                            |                                                 |X                                        |X                                          |                                                |                                                               |
 |[IM:transMot](./SecIMs.md#IM:transMot)                                        |X                                     |X                                            |                                                 |                                         |                                           |X                                               |X                                                              |
@@ -165,8 +165,8 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 For convenience, the following graphs can be found at the links below:
 
-- [TraceGraphAvsA](../../../../traceygraphs/gamephysics/avsa.svg)
-- [TraceGraphAvsAll](../../../../traceygraphs/gamephysics/avsall.svg)
-- [TraceGraphRefvsRef](../../../../traceygraphs/gamephysics/refvsref.svg)
-- [TraceGraphAllvsR](../../../../traceygraphs/gamephysics/allvsr.svg)
-- [TraceGraphAllvsAll](../../../../traceygraphs/gamephysics/allvsall.svg)
+- [TraceGraphAvsA](../../TraceyGraph/avsa.svg)
+- [TraceGraphAvsAll](../../TraceyGraph/avsall.svg)
+- [TraceGraphRefvsRef](../../TraceyGraph/refvsref.svg)
+- [TraceGraphAllvsR](../../TraceyGraph/allvsr.svg)
+- [TraceGraphAllvsAll](../../TraceyGraph/allvsall.svg)

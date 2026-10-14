@@ -8,7 +8,7 @@ objectTy: All objects are rigid bodies. (RefBy: [GD:impulse](./SecGDs.md#GD:impu
 
 <div id="assumpOD"></div>
 
-objectDimension: All objects are 2D. (RefBy: [TM:NewtonSecLawRotMot](./SecTMs.md#TM:NewtonSecLawRotMot), [GD:impulse](./SecGDs.md#GD:impulse), [IM:col2D](./SecIMs.md#IM:col2D), [IM:rotMot](./SecIMs.md#IM:rotMot), [IM:transMot](./SecIMs.md#IM:transMot), [DD:potEnergy](./SecDDs.md#DD:potEnergy), [DD:kEnergy](./SecDDs.md#DD:kEnergy), [DD:angVel](./SecDDs.md#DD:angVel), [DD:angDisp](./SecDDs.md#DD:angDisp), and [DD:angAccel](./SecDDs.md#DD:angAccel).)
+objectDimension: All objects are 2D. (RefBy: [GD:impulse](./SecGDs.md#GD:impulse), [IM:col2D](./SecIMs.md#IM:col2D), [IM:rotMot](./SecIMs.md#IM:rotMot), [IM:transMot](./SecIMs.md#IM:transMot), [DD:potEnergy](./SecDDs.md#DD:potEnergy), [DD:kEnergy](./SecDDs.md#DD:kEnergy), [DD:angVel](./SecDDs.md#DD:angVel), [DD:angDisp](./SecDDs.md#DD:angDisp), and [DD:angAccel](./SecDDs.md#DD:angAccel).)
 
 <div id="assumpCST"></div>
 

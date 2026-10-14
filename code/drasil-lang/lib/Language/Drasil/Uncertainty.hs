@@ -16,6 +16,7 @@ module Language.Drasil.Uncertainty (
 ) where
 
 import Control.Lens (Lens', (^.), makeLenses)
+import Drasil.Database (declareHasChunkRefs, Generically(..))
 
 import Data.Maybe (fromMaybe)
 
@@ -25,6 +26,7 @@ data Uncertainty = Uncert {
   _prec   :: Maybe Int
 }
 makeLenses ''Uncertainty
+declareHasChunkRefs ''Uncertainty
 
 -- | HasUncertainty is just a chunk with some uncertainty associated to it.
 -- This uncertainty is represented as a decimal value between 0 and 1 (percentage).

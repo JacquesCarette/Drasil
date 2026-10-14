@@ -1,13 +1,16 @@
--- | Developing the expression language in Drasil. Re-export many things to simplify external use.
+-- | Developing the expression language in Drasil. Re-export many things to
+-- simplify external use.
 module Language.Drasil.Development (
+  -- * Development.Sentence
+  toSent
   -- * NounPhrase
-    NounPhrase(phraseNP, pluralNP)
+  , NounPhrase(phraseNP, pluralNP)
+  -- * NounPhrase.Core
+  , NPStruct
   -- Sentence.Extract
   , sdep, shortdep, lnames, lnames'
-  -- * UID
-  , showUID
 ) where
 
-import Language.Drasil.NounPhrase (NounPhrase(..))
-import Language.Drasil.Sentence.Extract (sdep, shortdep, lnames, lnames')
-import Drasil.Database.UID (showUID)
+import Language.Drasil.Development.Sentence (toSent)
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NounPhrase(..), NPStruct)
+import Language.Drasil.Sentence (sdep, shortdep, lnames, lnames')

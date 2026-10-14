@@ -93,9 +93,6 @@ you should instead open the `code/docs/full/index.html` file.
 **drasil-code**
   - Contains the code for code generation in Drasil
 
-**drasil-codeLang**
-  - Contains the code language for Drasil
-
 **drasil-data**
   - Contains the current common-knowledge base for Drasil
 

@@ -3,7 +3,9 @@ module Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs) where
 --A list of likely and unlikely changes for GlassBR
 
 import Language.Drasil hiding (variable)
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 
 import Data.Drasil.Concepts.Documentation (condition, goal, input_, likeChgDom,
   software, system, unlikeChgDom, value, variable)
@@ -12,8 +14,7 @@ import Data.Drasil.Concepts.PhysicalProperties (flexure)
 
 import Drasil.GlassBR.Assumptions (assumpGC, assumpES, assumpSV, assumpGL,
   assumpBC, assumpRT, assumpLDFC, assumptionConstants)
-import Drasil.GlassBR.Concepts (blastRisk, glaSlab, glass)
-import Drasil.GlassBR.Unitals (explosion, lite)
+import Drasil.GlassBR.Concepts (blastRisk, glaSlab, glass, explosion, lite)
 
 {--LIKELY CHANGES--}
 
@@ -39,10 +40,10 @@ calcInternalBlastRiskDesc mainConcept = foldlSent [chgsStart assumpES (S "The"),
   S "can be added for the internal", phrase mainConcept]
 
 varValsOfmkEDesc = foldlSent [refS assumpSV `sC` chgsStart assumpLDFC (S "Currently, the"),
-  plural value, S "for", foldlList Comma List (map ch (take 3 assumptionConstants)),
+  plural value, S "for", foldlList Comma List (ch <$> take 3 assumptionConstants),
   S "are assumed to be the same for all" +:+. phrase glass,
   S "In the future, these", plural value, S "can be changed to",
-  pluralNP (combineNINI variable input_)]
+  D.toSent $ pluralNP (combineNINI variable input_)]
 
 accMoreThanSingleLiteDesc = foldlSent [chgsStart assumpGL (S "The"), phrase software,
   S "may be changed to accommodate more than a single", phrase lite]
@@ -67,7 +68,7 @@ accAlteredGlass           = cic "accAlteredGlass"           accAlteredGlassDesc 
 
 predictWithstandOfCertDegDesc, accAlteredGlassDesc :: Sentence
 
-predictWithstandOfCertDegDesc = foldlSent [atStartNP (goal `the_ofThe` system),
+predictWithstandOfCertDegDesc = foldlSent [D.toSent $ atStartNP (goal `the_ofThe` system),
   S "is to predict whether the", phrase glaSlab, S "under consideration can",
   S "withstand an", phrase explosion, S "of a certain degree"]
 

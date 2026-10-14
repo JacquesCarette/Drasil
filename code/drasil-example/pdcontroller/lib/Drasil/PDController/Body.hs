@@ -1,16 +1,13 @@
-module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
+module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil
-import Drasil.Metadata (dataDefn)
-import Drasil.SRSDocument
-import Drasil.Generator (cdb)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import Language.Drasil.Document
+import Drasil.SRS hiding (genDefns)
+import Drasil.Generator (withCommonKnowledge)
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Math (mathcon', ode)
-import Data.Drasil.ExternalLibraries.ODELibraries
-       (apacheODESymbols, odeintSymbols, osloSymbols,
-        scipyODESymbols, odeInfoChunks)
+import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
@@ -19,52 +16,38 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs)
+import Drasil.PDController.Concepts (acronyms, pidC, termDefs, defs,
+  pdControllerCI, proportionalCI, piCI, pidCI)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
-import Drasil.PDController.MetaConcepts (progName)
+import Drasil.PDController.MetaConcepts (projName)
 import Drasil.PDController.GenSysDesc
        (gsdSysContextList, gsdSysContextP1, gsdSysContextP2, gsduserCharacteristics)
 import Drasil.PDController.IModel (instanceModels, imPD)
 import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc, externalLinkRef,
        introUserChar1, introUserChar2, introscopeOfReq, scope)
 import Drasil.PDController.References (citations)
-import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
+import Drasil.PDController.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
   inpConstrained, pidConstants)
 import Drasil.PDController.ODEs (pidODEInfo)
 
-import Drasil.System (SystemKind(Specification), mkSystem)
-
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) si
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS
   = [TableOfContents,
-    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
+    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
-       IntroProg introPara (phrase progName)
-         [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
+       IntroProg introPara []
+         [IPurpose (CustomPurp [[introPurposeOfDoc]]),
+          IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec dataDefn (SRS.inModel [] [])
-            (S "The instance model referred as" +:+ refS imPD +:+
-               S "provides an"
-               +:+ titleize ode +:+ sParen (short ode)
-               +:+ S "that models the"
-               +:+ phrase pidC)],
+          IOrgSec (Just orgSecEnd)],
      GSDSec $
        GSDProg
          [SysCntxt
@@ -75,32 +58,35 @@ mkSRS
        SSDProg
          [SSDProblem $
             PDProg purp []
+              -- FIXME: When removing the manually aggregated list here, expect
+              -- duplicate UID errors! Why? `defs` is a hand-crafted list that
+              -- extends `termDefs` with non-unique chunks containing
+              -- alternative definitions for use in the `Terminology and
+              -- Definitions` section.
               [TermsAndDefs Nothing defs,
-               PhySysDesc progName sysParts sysFigure [],
+               PhySysDesc sysParts sysFigure [],
                Goals sysGoalInput],
           SSDSolChSpec $
             SCSProg
               [Assumptions, TMs [] (Label : stdFields),
                GDs [] (Label : stdFields) HideDerivation,
-               DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation,
+               DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation,
                IMs []
-                 ([Label, Input, Output, InConstraints, OutConstraints] ++
+                 ([Label, Input, Output, InConstraints, OutConstraints] <>
                     stdFields)
                  ShowDerivation,
                Constraints EmptyS inputsUC]],
 
-     ReqrmntSec $ ReqsProg [FReqsSub EmptyS [], NonFReqsSub], LCsSec,
+     ReqrmntSec $ ReqsProg [FReqsSub funcReqsTables, NonFReqsSub], LCsSec,
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
-si :: System
-si = mkSystem
-  progName Specification [naveen]
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO
+  projName [naveen]
   [purp] [background] [scope] [motivation]
-  symbolsAll
   theoreticalModels genDefns dataDefinitions instanceModels
-  []
-  inputs outputs (map cnstrw' inpConstrained)
-  pidConstants symbMap
+  inputs outputs inpConstrained pidConstants allSymbols
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,
@@ -112,56 +98,39 @@ motivation = foldlSent_ [S "The gains of a controller in an application" +:+
               S "must be tuned before the controller is ready for production"]
 
 background :: Sentence
-background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD/PID) is used",
-              S "in a variety of applications such as thermostats, automobile",
-              S "cruise-control, etc"]
+background = foldlSent_ [
+  S "Automatic process control with a controller (" :+:
+  foldOpts (short <$> [proportionalCI, piCI, pdControllerCI, pidCI]) :+:
+  S ") is used in a variety of applications such as thermostats, automobile",
+  S "cruise-control, etc"]
 
--- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is currently added to symbolsAll automatically as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
--- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
-symbolsAll :: [DefinedQuantityDict]
-symbolsAll = symbols ++ map dqdWr pidConstants
-  ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
-  ++ odeInfoChunks pidODEInfo
-
-ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  concepts ++
-  -- CIs
-  nw progName : map nw mathcon'
+orgSecEnd :: Sentence
+orgSecEnd = foldlSent [
+    S "The instance model referred as", refS imPD, S "provides an",
+    titleize ode, sParen (short ode), S "that models the", phrase pidC
+  ]
 
 conceptChunks :: [ConceptChunk]
-conceptChunks =
-  -- ConceptChunks
-  physicalcon ++ [linear, angular]
+conceptChunks = physicalcon <> [linear, angular] <> termDefs
+
+allSymbols :: [DefinedQuantityDict]
+allSymbols = physicscon <> symbols <>
+  [mass, posInf, negInf]
 
 symbMap :: ChunkDB
-symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, dqdWr negInf])
-  ideaDicts
-  conceptChunks
-  ([] :: [UnitDefn])
-  dataDefinitions
-  instanceModels
-  genDefns
-  theoreticalModels
-  conceptInstances
-  labelledContent
-  allRefs
-  citations
+symbMap = withCommonKnowledge projName allRefs allSymbols [] acronyms
+  conceptChunks [] dataDefinitions instanceModels genDefns theoreticalModels
+  conceptInstances citations labelledContent'
+
+labelledContent' :: [LabelledContent]
+labelledContent' = labelledContent <> funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
-abbreviationsList  :: [IdeaDict]
-abbreviationsList  =
-  -- CIs
-  map nw acronyms ++
-  -- QuantityDicts
-  map nw symbolsAll
-
 conceptInstances :: [ConceptInstance]
-conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs
+conceptInstances = assumptions <> goals <> funcReqs <> nonfuncReqs <> likelyChgs
 
 stdFields :: Fields
 stdFields

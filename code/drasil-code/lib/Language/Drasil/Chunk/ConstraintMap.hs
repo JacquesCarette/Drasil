@@ -3,11 +3,12 @@ module Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE,
 ) where
 
 import Control.Lens ((^.))
+import qualified Data.Map as Map
+
+import Drasil.Database (UID, HasUID(..))
+import Language.Drasil (Constraint, Constrained(..), isPhysC, isSfwrC)
 
 import Drasil.Code.CodeExpr.Development (CodeExpr, constraint)
-import Language.Drasil (Constraint, HasUID(..), UID, Constrained(..),
-  isPhysC, isSfwrC)
-import qualified Data.Map as Map
 
 -- | Type synonym for 'Constraint CodeExpr'
 type ConstraintCE = Constraint CodeExpr
@@ -17,7 +18,7 @@ type ConstraintCEMap = Map.Map UID [ConstraintCE]
 
 -- | Creates a map from 'UID' to 'Constraint's for constrained chunks.
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintCEMap
-constraintMap = Map.fromList . map (\x -> (x ^. uid, map constraint $ x ^. constraints))
+constraintMap = Map.fromList . fmap (\x -> (x ^. uid, constraint <$> x ^. constraints))
 
 -- | Returns a pair of a chunk and its physical constraints.
 physLookup :: HasUID q => ConstraintCEMap -> q -> (q, [ConstraintCE])
@@ -30,4 +31,4 @@ sfwrLookup m q = constraintLookup q m (filter isSfwrC)
 -- | Returns a chunk and a filtered list of its constraints.
 constraintLookup :: HasUID q => q -> ConstraintCEMap
                       -> ([ConstraintCE] -> [ConstraintCE]) -> (q, [ConstraintCE])
-constraintLookup q m filt = (q, maybe [] filt (Map.lookup (q ^. uid) m))
+constraintLookup q m filt = (q, foldMap filt (Map.lookup (q ^. uid) m))

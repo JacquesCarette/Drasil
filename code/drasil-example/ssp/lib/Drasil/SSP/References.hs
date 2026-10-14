@@ -1,17 +1,19 @@
-module Drasil.SSP.References where
+module Drasil.SSP.References (
+  citations,
+  morgenstern1965, chen2005, fredlund1977, karchewski2012, huston2008, li2010
+) where
 
 import Language.Drasil
+import Language.Drasil.Document
 
-import Data.Drasil.Citations (jnlCGJ, koothoor2013, parnasClements1986,
- smithEtAl2007, smithLai2005, smithKoothoor2016)
+import Data.Drasil.Citations (jnlCGJ, parnasClements1986, hibbeler2004)
 import Data.Drasil.People (bKarchewski, cfLee, dgFredlund, dStolle, dyZhu,
   grChen, jKrahn, pGuo, pjCleall, qhQian, ssLing, tltZhan, yCLi, ymChen,
   rHuston, hJosephs, nrMorgenstern, vePrice)
 
 citations :: BibRef
-citations = [chen2005, parnasClements1986, koothoor2013, fredlund1977,
-             smithEtAl2007, smithLai2005, smithKoothoor2016, li2010,
-             karchewski2012, huston2008, morgenstern1965]
+citations = [chen2005, parnasClements1986, fredlund1977,
+             li2010, karchewski2012, huston2008, morgenstern1965, hibbeler2004]
 
 chen2005, fredlund1977, li2010, karchewski2012, huston2008,
   morgenstern1965 :: Citation
@@ -27,15 +29,15 @@ fredlund1977 = cArticle [dgFredlund, jKrahn]
   "fredlund1977"
 
 li2010 = cArticle [yCLi, ymChen, tltZhan, ssLing, pjCleall]
-  ("An efficient approach for locating the critical slip surface in" ++
+  ("An efficient approach for locating the critical slip surface in" <>
   " slope stability analyses using a real-coded genetic algorithm")
   jnlCGJ 2010 [month Jun, pages [806..820], volume 47, number 7]
   "li2010"
 
 karchewski2012 = cInProceedings [bKarchewski, pGuo, dStolle]
   "Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis"
-  "Proceedings of the 65th annual Canadian GeoTechnical Conference" 2012 
-  [address "Winnipeg, MB, Canada", organization "Canadian Geotechnical Society"] 
+  "Proceedings of the 65th annual Canadian GeoTechnical Conference" 2012
+  [address "Winnipeg, MB, Canada", organization "Canadian Geotechnical Society"]
   "karchewski2012"
 
 huston2008 = cBookA [rHuston, hJosephs] "Practical stress analysis in engineering design"

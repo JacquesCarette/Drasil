@@ -1,7 +1,8 @@
-module Drasil.GamePhysics.MetaConcepts (progName) where
+module Drasil.GamePhysics.MetaConcepts (projName) where
 
+import Drasil.Database (mkUid)
 import Language.Drasil
-import Drasil.Metadata (physics)
+import Drasil.System (ProjectName, mkCommonProjName)
 
-progName :: CI
-progName = commonIdeaWithDict "gamePhysics" (pn "GamePhysics") "GamePhysics" [physics]
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "gamephysicsProjName") (nounPhraseSP "GamePhysics") "GamePhysics"

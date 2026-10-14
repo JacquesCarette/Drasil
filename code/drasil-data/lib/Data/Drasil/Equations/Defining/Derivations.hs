@@ -3,7 +3,7 @@ module Data.Drasil.Equations.Defining.Derivations where
 import Language.Drasil (ExprC(..), LiteralC(..), ModelExpr, vec2D)
 import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, gravitationalAccel, weight)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density,
   mass, specWeight, vol)
 
 -- * Weight equation derivation

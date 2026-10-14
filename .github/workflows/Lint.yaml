@@ -1,6 +1,7 @@
+# Additional documentation located in .github/workflows/README.md
+
 on:
   pull_request:
-    branches: main
   workflow_dispatch:
     paths: [code/drasil-**, .github/workflows/Lint.yaml, code/scripts/**]
 name: Linter
@@ -16,10 +17,10 @@ jobs:
     name: "Linter"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       # Prepare more specific paths filters
-      - uses: dorny/paths-filter@v3.0.2
+      - uses: dorny/paths-filter@v4
         id: filter
         with:
            filters: |
@@ -34,7 +35,7 @@ jobs:
         if: ${{ steps.filter.outputs.hs == 'true' }}
         uses: haskell-actions/hlint-setup@v2
         with: # DO NOT MODIFY THE BELOW LINE MANUALLY -- code/scripts/update_default_stackage.sh is in charge of this!
-          version: '3.6.1' # HLINT VERSION TIED TO CURRENT TARGET (LTS-22.44)
+          version: '' # HLINT VERSION TIED TO CURRENT TARGET (LTS-24.51)
 
       - name: 'Run HLint'
         if: ${{ steps.filter.outputs.hs == 'true' }}
@@ -43,6 +44,10 @@ jobs:
           hlint-bin: hlint --hint=code/.hlint.yaml
           path: code/
           fail-on: status
+
+      - name: 'Check lines have no trailing whitespace, all files have trailing newlines, and no file contains exessive newlines'
+        if: ${{ steps.filter.outputs.hs == 'true' }}
+        run: scripts/check_whitespace.sh
 
       # If a sh script was edited, then run shellcheck
       - name: "Run ShellCheck"

@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, MultiParamTypeClasses #-}
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines types and functions for Instance Models.
 module Theory.Drasil.InstanceModel(
   -- * Type
@@ -10,13 +10,14 @@ module Theory.Drasil.InstanceModel(
   , qwUC, qwC
   ) where
 
-import Drasil.Database.Chunk (HasChunkRefs(..))
-
+import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
+import Language.Drasil.Document
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
-import Drasil.Metadata (inModel)
+import Drasil.Metadata.TheoryConcepts (inModel)
 
-import Control.Lens ((^.), makeLenses, _1, _2) 
+import Control.Lens ((^.), makeLenses, _1, _2)
+import Theory.Drasil.Components.Derivation (Derivation,MayHaveDerivation(derivations))
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
 
 type Input = (DefinedQuantityDict, Maybe (RealInterval Expr Expr))
@@ -40,7 +41,16 @@ data InstanceModel = IM {
 makeLenses ''InstanceModel
 
 instance HasChunkRefs InstanceModel where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs imd = mconcat
+    [ chunkRefs (imd ^. mk)
+    , chunkRefs (fst <$> (imd ^. imInputs))
+    , chunkRefs (imd ^. imOutput . _1)
+    , chunkRefs (imd ^. rf)
+    , chunkRefs (imd ^. deri)
+    , chunkRefs (lb imd)
+    , chunkRefs (imd ^. notes)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of an 'InstanceModel'.
 instance HasUID             InstanceModel where uid = mk . uid
@@ -50,8 +60,6 @@ instance NamedIdea          InstanceModel where term = mk . term
 instance Idea               InstanceModel where getA = getA . (^. mk)
 -- | Finds the definition of the 'InstanceModel'.
 instance Definition         InstanceModel where defn = mk . defn
--- | Finds the domain of the 'InstanceModel'.
-instance ConceptDomain      InstanceModel where cdom = cdom . (^. mk)
 -- | Converts the 'InstanceModel's related expression into the display language.
 instance Express            InstanceModel where express = express . (^. mk)
 -- | Finds the derivation of the 'InstanceModel'. May contain Nothing.
@@ -88,39 +96,39 @@ instance RequiresChecking InstanceModel Expr Space where
   requiredChecks = requiredChecks . (^. mk)
 
 -- | Smart constructor for instance models with everything defined.
-im :: ModelKind Expr -> Inputs -> Output -> 
+im :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-im mkind _  _ _  [] _  _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
-im mkind i o oc r der sn = 
+im mkind _  _ _  [] _  _  = error $ "Source field of " <> showUID mkind <> " is empty"
+im mkind i o oc r der sn =
   IM mkind i (o, oc) r der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivation.
-imNoDeriv :: ModelKind Expr -> Inputs -> Output -> 
+imNoDeriv :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> [DecRef] -> String -> [Sentence] -> InstanceModel
-imNoDeriv mkind _ _ _  [] _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
+imNoDeriv mkind _ _ _  [] _  = error $ "Source field of " <> showUID mkind <> " is empty"
 imNoDeriv mkind i o oc r  sn =
   IM mkind i (o, oc) r Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no references.
-imNoRefs :: ModelKind Expr -> Inputs -> Output -> 
+imNoRefs :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-imNoRefs mkind i o oc der sn = 
+imNoRefs mkind i o oc der sn =
   IM mkind i (o, oc) [] der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivations or references.
-imNoDerivNoRefs :: ModelKind Expr -> Inputs -> Output -> 
+imNoDerivNoRefs :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> String -> [Sentence] -> InstanceModel
-imNoDerivNoRefs mkind i o oc sn = 
+imNoDerivNoRefs mkind i o oc sn =
   IM mkind i (o, oc) [] Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | For building a quantity with no constraint.
-qwUC :: (Quantity q, MayHaveUnit q, Concept q) => q -> Input 
+qwUC :: (Quantity q, MayHaveUnit q, Concept q) => q -> Input
 qwUC x = (dqdWr x, Nothing)
 
 -- | For building a quantity with a constraint.
-qwC :: (Quantity q, MayHaveUnit q, Concept q) => q -> RealInterval Expr Expr -> Input 
+qwC :: (Quantity q, MayHaveUnit q, Concept q) => q -> RealInterval Expr Expr -> Input
 qwC x y = (dqdWr x, Just y)
 
 -- | Grab all related 'QDefinition's from a list of instance models.
 getEqModQdsFromIm :: [InstanceModel] -> [SimpleQDef]
-getEqModQdsFromIm ims = getEqModQds (map _mk ims)
+getEqModQdsFromIm ims = getEqModQds (_mk <$> ims)

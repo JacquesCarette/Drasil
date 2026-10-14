@@ -1,10 +1,11 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs) where
 
 --A list of likely and unlikely changes for GamePhysics
 
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
+import Language.Drasil.Document (ConceptInstance, chgsStart, cic,
+  maybeExpanded, maybeChanged)
 
 import Data.Drasil.Concepts.Documentation as Doc (library, likeChgDom, unlikeChgDom)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)
@@ -62,6 +63,6 @@ ucSRB = cic "ucSRB" unlikelyChangesStmt1 "Simulate-Rigid-Bodies" unlikeChgDom
 ucEI = cic "ucEI" unlikelyChangesStmt2 "External-Input" unlikeChgDom
 ucCCS = cic "ucCCS" unlikelyChangesStmt3 "Cartesian-Coordinate-System" unlikeChgDom
 ucORB = cic "ucORB" unlikelyChangesStmt4 "Objects-Rigid-Bodies" unlikeChgDom
-  
+
 unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [ucSRB, ucEI, ucCCS, ucORB]

@@ -1,27 +1,35 @@
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..),
-  makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE,
+  makeMaps, spaceToCodeType, Constraints(..), makeConstraints,
+  ODE(..), makeODE, odeInfoReqs, odeLibReqs,
   DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..),
   makeOptFeats, ExtLib(..), Modularity(..), Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
-  Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs, InternalConcept(..)) where
-
-import Language.Drasil hiding (None, Var)
-import Language.Drasil.Code.Code (spaceToCodeType)
-import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.Data.ODEInfo (ODEInfo)
-import Language.Drasil.Data.ODELibPckg (ODELibPckg)
-import Language.Drasil.Mod (Name)
-import Data.Map (Map)
-import qualified Data.Map as Map
-
-import Drasil.GOOL (CodeType)
+  Logging(..), SoftwareDossierFile(..), getSampleData, hasSampleInput, defaultChoices,
+  choicesSent, showChs, InternalConcept(..)
+) where
 
 import Control.Lens ((^.))
+import Data.Map (Map)
+import qualified Data.Map as Map
+import Data.List.NonEmpty (toList)
+
+import Drasil.FileHandling.Legacy (RelativeFile)
+import Drasil.Database (UID, HasUID (..))
+import Drasil.GOOL (CodeType(..))
+import Language.Drasil (SimpleQDef, Sentence(..), Space, DefinedQuantityDict,
+  foldlSent_, (+:+), (+:+.))
+import qualified Language.Drasil as S (Space(..))
+
+import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
+
+import Language.Drasil.Code.Lang (Lang(..))
+import Language.Drasil.Data.ODEInfo (ODEInfo)
+import Language.Drasil.Data.ODELibPckg (ODELibPckg (libDummyQuants))
+import Language.Drasil.Mod (Name, Mod)
 
 -- | The instruction indicates how the generated program should be written down.
 -- Full details of Choices documentation https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
@@ -44,7 +52,21 @@ data Choices = Choices {
   -- | Function to get modifiable function names
   icNames :: InternalConcept -> Name,
   -- | Number of folders to go up in order to obtain the image
-  folderVal :: Int
+  folderVal :: Int,
+  -- | A list of "program configuration files" to be copied over to the exported
+  -- project, required for execution, and configurable by the user.
+  defaultConfigFiles :: [RelativeFile],
+  -- | List of extra modules for generation.
+  extraMods :: [Mod],
+  -- | A list of supplementary hand-wired quantity definitions usable in code
+  -- generation, unique to a particular code solution.
+  --
+  -- FIXME: These formulas are inadequately argued. They should be constructed
+  -- through theory refinement in an SDS describing a software solution for a
+  -- specific SRS. See the following for further discussion:
+  -- * <https://github.com/JacquesCarette/Drasil/pull/4663#issuecomment-3791189095>
+  -- * <https://github.com/JacquesCarette/Drasil/pull/4664#issuecomment-3791983458>
+  handWiredDefs :: [SimpleQDef]
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -52,7 +74,7 @@ class RenderChoices a where
     showChs :: a -> Sentence
     showChsList :: [a] -> Sentence
     showChsList [] = S "None"
-    showChsList lst = foldlSent_ (map showChs lst)
+    showChsList lst = foldlSent_ (showChs <$> lst)
 
 -- | Architecture of a program
 data Architecture = Archt {
@@ -162,7 +184,7 @@ instance RenderChoices CodeConcept where
 
 -- | Builds a 'ConceptMatchMap' from an association list of chunks and 'CodeConcepts'.
 matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
-matchConcepts = Map.fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
+matchConcepts = Map.fromList . fmap (\(cnc,cdc) -> (cnc ^. uid, cdc))
 
 -- | Specifies which 'CodeType' should be used to represent each mathematical
 -- 'Space'. ['CodeType'] is preferentially-ordered, first 'CodeType' that does not
@@ -185,10 +207,10 @@ data OptionalFeatures = OptFeats{
   docConfig :: DocConfig,
   logConfig :: LogConfig,
   -- | Turns generation of different auxiliary (non-source-code) files on or off.
-  auxFiles :: [AuxFile]
+  auxFiles :: [SoftwareDossierFile]
 }
 -- | Constructor to create a OptionalFeatures
-makeOptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
+makeOptFeats :: DocConfig -> LogConfig -> [SoftwareDossierFile] -> OptionalFeatures
 makeOptFeats = OptFeats
 
 -- | Configuration for Doxygen documentation
@@ -259,12 +281,12 @@ instance RenderChoices Logging where
 -- | Currently we only support two kind of auxiliary files: sample input file, readme.
 -- To generate a sample input file compatible with the generated program,
 -- 'FilePath' is the path to the user-provided file containing a sample set of input data.
-data AuxFile = SampleInput FilePath
+data SoftwareDossierFile = SampleInput FilePath
              | ReadME
              deriving Eq
 
 -- | Renders options for auxiliary file generation.
-instance RenderChoices AuxFile where
+instance RenderChoices SoftwareDossierFile where
   showChs (SampleInput fp) = S "SampleInput" +:+ S fp
   showChs ReadME = S "ReadME"
 
@@ -276,8 +298,8 @@ getSampleData chs = getSampleData' (auxFiles $ optFeats chs)
         getSampleData' (SampleInput fp:_) = Just fp
         getSampleData' (_:xs) = getSampleData' xs
 
--- | Predicate that returns true if the list of 'AuxFile's includes a 'SampleInput'.
-hasSampleInput :: [AuxFile] -> Bool
+-- | Predicate that returns true if the list of 'SoftwareDossierFile's includes a 'SampleInput'.
+hasSampleInput :: [SoftwareDossierFile] -> Bool
 hasSampleInput [] = False
 hasSampleInput (SampleInput _:_) = True
 hasSampleInput (_:xs) = hasSampleInput xs
@@ -313,9 +335,16 @@ data ODE = ODE{
   -- | Preferentially-ordered list ODE libraries to try.
   odeLib :: [ODELibPckg]
 }
+
 -- | Constructor to create an ODE
 makeODE :: [ODEInfo] -> [ODELibPckg] -> ODE
 makeODE = ODE
+
+odeInfoReqs :: ExtLib -> [DefinedQuantityDict]
+odeInfoReqs (Math ode) = concatMap odeInfoChunks $ odeInfo ode
+
+odeLibReqs :: ExtLib -> [DefinedQuantityDict]
+odeLibReqs (Math ode) = concatMap libDummyQuants $ odeLib ode
 
 -- | Default choices to be used as the base from which design specifications
 -- can be built.
@@ -334,13 +363,35 @@ defaultChoices = Choices {
   srsConstraints = makeConstraints Exception Warning,
   extLibs = [],
   icNames = defaultICName,
-  folderVal = 4
+  folderVal = 4,
+  defaultConfigFiles = [],
+  extraMods = [],
+  handWiredDefs = []
 }
+
+-- | Default mapping between 'Space' and 'CodeType'.
+spaceToCodeType :: S.Space -> [CodeType]
+spaceToCodeType S.Integer        = [Integer]
+spaceToCodeType S.Natural        = [Integer]
+spaceToCodeType S.Real           = [Double, Float]
+spaceToCodeType S.Rational       = [Double, Float]
+spaceToCodeType S.Boolean        = [Boolean]
+spaceToCodeType S.Char           = [Char]
+spaceToCodeType S.String         = [String]
+spaceToCodeType (S.Vect s)       = List <$> spaceToCodeType s
+spaceToCodeType (S.Matrix _ _ s) = List . List <$> spaceToCodeType s
+spaceToCodeType (S.Set s)        = List <$> spaceToCodeType s
+spaceToCodeType (S.Array s)      = Array <$> spaceToCodeType s
+spaceToCodeType (S.Actor s)      = [Object s]
+spaceToCodeType S.Void           = [Void]
+spaceToCodeType (S.Reference s)  = Reference <$> spaceToCodeType s
+spaceToCodeType (S.Function i t) = [Func is ts | is <- ins, ts <- trgs]
+    where trgs = spaceToCodeType t
+          ins  = spaceToCodeType <$> toList i
 
 -- | Renders 'Choices' as 'Sentence's.
 choicesSent :: Choices -> [Sentence]
-choicesSent chs = map chsFieldSent [
-    (S "Languages",                     foldlSent_ $ map (S . show) $ lang chs),
+choicesSent chs = chsFieldSent <$> [
     (S "Modularity",                    showChs $ modularity $ architecture chs),
     (S "Input Structure",               showChs $ inputStructure $ dataInfo chs),
     (S "Constant Structure",            showChs $ constStructure $ dataInfo chs),
@@ -361,13 +412,13 @@ chsFieldSent :: (Sentence, Sentence) -> Sentence
 chsFieldSent (rec, chc) = rec +:+ S "selected as" +:+. chc
 
 -- | Data type of internal concepts
-data InternalConcept = 
+data InternalConcept =
     InputConstraintsFn
   | InputConstraintsMod
-  | WriteOutput 
+  | WriteOutput
   | DerivedValuesFn
   | DerivedValuesMod
-  | GetInput 
+  | GetInput
   | InputParameters
   | InputFormat
   | OutputFormat

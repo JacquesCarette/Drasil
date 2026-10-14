@@ -7,14 +7,13 @@ package SWHSNoPCM;
 */
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import org.apache.commons.math3.ode.sampling.StepHandler;
 import org.apache.commons.math3.ode.sampling.StepInterpolator;
 
 /** \brief Class defining additional behaviour for each step of an ODE solution
 */
 public class ODEStepHandler implements StepHandler {
-    public ArrayList<Double> T_W;
+    public ArrayList<ArrayList<Double>> T_W;
     
     /** \brief initializes step handler with initial conditions
         \param t0 initial time for ODE solving
@@ -22,7 +21,12 @@ public class ODEStepHandler implements StepHandler {
         \param t current independent variable value in ODE solution
     */
     public void init(double t0, double[] y0, double t) {
-        T_W = new ArrayList<Double>(Arrays.asList(y0[0]));
+        T_W = new ArrayList<ArrayList<Double>>();
+        ArrayList<Double> y0List = new ArrayList<Double>(0);
+        for (double y0El : y0) {
+            y0List.add(y0El);
+        }
+        T_W.add(y0List);
     }
     
     /** \brief appends solution point at each ODE solution step
@@ -31,6 +35,10 @@ public class ODEStepHandler implements StepHandler {
     */
     public void handleStep(StepInterpolator interpolator, boolean isLast) {
         double[] curr = interpolator.getInterpolatedState();
-        T_W.add(curr[0]);
+        ArrayList<Double> currList = new ArrayList<Double>(0);
+        for (double currEl : curr) {
+            currList.add(currEl);
+        }
+        T_W.add(currList);
     }
 }

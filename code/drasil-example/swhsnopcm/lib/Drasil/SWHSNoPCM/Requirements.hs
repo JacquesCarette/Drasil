@@ -1,10 +1,16 @@
-module Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc) where
+module Drasil.SWHSNoPCM.Requirements (
+  funcReqs, inReqDesc, funcReqsTables
+) where
 
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Drasil.DocLang (inReq)
+import Language.Drasil.Document
+import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
+
+import Drasil.SRS (inReqWTab)
+
 import Theory.Drasil (InstanceModel)
 
 import Data.Drasil.Concepts.Documentation (value)
@@ -17,6 +23,7 @@ import Drasil.SWHS.Requirements (calcValues, checkWithPhysConsts,
 
 import Drasil.SWHSNoPCM.DataDefs (waterVolume)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr)
+import Drasil.SWHSNoPCM.Unitals (inputs)
 
 --------------------------
 --Section 5 : REQUIREMENTS
@@ -26,21 +33,28 @@ import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr)
 --Section 5.1 : FUNCTIONAL REQUIREMENTS
 ---------------------------------------
 
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab (Just inReqDesc) inputs
+
 --
 findMass :: ConceptInstance
-findMass = findMassConstruct (inReq EmptyS) (phrase mass) [eBalanceOnWtr]
+findMass = findMassConstruct inputValues (phrase mass) [eBalanceOnWtr]
             [waterMass, waterVolume, tankVolume]
 
 --
 oIDQVals :: [Sentence]
-oIDQVals = map foldlSent_ [
-  [pluralNP (the value), fromSource (inReq EmptyS)],
-  [phraseNP (the mass), fromSource findMass],
+oIDQVals = foldlSent_ <$> [
+  [D.toSent (pluralNP (the value)), fromSource inputValues],
+  [D.toSent (phraseNP (the mass)), fromSource findMass],
   [ch (balanceDecayRate ^. defLhs), fromSource balanceDecayRate]
   ]
 
 funcReqs :: [ConceptInstance]
-funcReqs = [findMass, checkWithPhysConsts, oIDQConstruct oIDQVals, 
+funcReqs = [inputValues, findMass, checkWithPhysConsts, oIDQConstruct oIDQVals,
             calcValues noPCMOutputs, outputValues noPCMOutputs]
 
 noPCMOutputs :: [InstanceModel]

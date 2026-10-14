@@ -1,20 +1,14 @@
-module Drasil.SWHS.MetaConcepts where
+module Drasil.SWHS.MetaConcepts (swhs, projName) where
 
+import Drasil.Database (mkUid)
 import Language.Drasil
-import Drasil.Metadata (materialEng)
-import Drasil.SWHS.Concepts (phsChgMtrl)
+import Drasil.System (ProjectName, mkCommonProjName)
 
-progName :: CI
-progName = commonIdeaWithDict "swhsName"   (nounPhrase "solar water heating system"
-  "solar water heating systems") "SWHS" [materialEng]
-
-progName' :: CI
--- Nounphrase'' hack to get nounPhraseSP words to accept
--- nounPhrases instead of strings
--- Another capitalization hack.
-progName' = commonIdea "swhsPCM" (nounPhrase''
-  (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
-  (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
-  CapFirst CapWords)
+swhs :: IdeaDict
+swhs = idea (mkUid "swhsIdea")
+  (nounPhrase "solar water heating system" "solar water heating systems")
   "SWHS"
-  []
+
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "swhsProjName")
+  (pn "Solar Water Heating Systems incorporating PCM") "SWHS"

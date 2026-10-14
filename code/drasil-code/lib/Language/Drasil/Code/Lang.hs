@@ -8,4 +8,5 @@ data Lang = Cpp
           | Python
           | Swift
           | Julia
+          | Matlab
           deriving (Eq, Show)

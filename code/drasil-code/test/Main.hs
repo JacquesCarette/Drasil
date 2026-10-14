@@ -1,115 +1,199 @@
+{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE QuasiQuotes #-}
+
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
 
-import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC,
-  unCPPC, unSC, initialState, FileData(..), ModData(..))
-import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), ProgData(..))
-import Drasil.GProc (ProcProg, unJLC)
-import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), ProgData(..))
-
-import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..),
-  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP, ImplementationType(..))
-
-import Utils.Drasil (createDirIfMissing)
-
-import Text.PrettyPrint.HughesPJ (Doc, render)
 import Control.Monad.State (evalState, runState)
-import System.Directory (setCurrentDirectory, getCurrentDirectory)
-import System.FilePath.Posix (takeDirectory)
-import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
+import Control.Lens ((^.))
+import System.OsPath (osp)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
+
+import Drasil.FileHandling (FileLayout, directory, ps, ps, (</>))
+import Drasil.GOOL (OOProg, Literal, Comparison, GetSet, StrategyPattern,
+  ObserverPattern, DeclStatement, ControlStatement, unJC, unPC, unCSC, unCPPC,
+  unSC, initialState, ProgData(..), headers, sources, mainMod, GOOLState)
+import qualified Drasil.GOOL as OO (unCI, GSProgram)
+import Drasil.GProc (ProcProg, NativeVectorType, NativeVector, unJLC, unMLC)
+import qualified Drasil.GProc as Proc (GSProgram)
+import Drasil.TestingKit (testMain)
+import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
+import Language.Drasil.Code (ImplementationType(..), makeSds, toFileLayout)
+import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
+  PackageData(..), pattern PackageData,
+  unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP)
 
 import HelloWorld (helloWorldOO, helloWorldProc)
 import GOOL.PatternTest (patternTest)
 import FileTests (fileTestsOO, fileTestsProc)
-import VectorTest (vectorTestOO, vectorTestProc)
+import OOVector (ooVector)
 import NameGenTest (nameGenTestOO, nameGenTestProc)
+import VectorTest (vectorTestProc)
+import Test.Tasty (TestTree, testGroup)
 
--- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
+-- | Renders five GOOL tests (FileTests, HelloWorld, OOVector, PatternTest, and NameGenTest)
 -- in Java, Python, C#, C++, Swift, and Julia.
-main :: IO()
-main = do
-  workingDir <- getCurrentDirectory
-  createDirIfMissing False "java"
-  setCurrentDirectory "java"
-  genCode (classes unJC unJP)
-  setCurrentDirectory workingDir
-  createDirIfMissing False "python"
-  setCurrentDirectory "python"
-  genCode (classes unPC unPP)
-  setCurrentDirectory workingDir
-  createDirIfMissing False "csharp"
-  setCurrentDirectory "csharp"
-  genCode (classes unCSC unCSP)
-  setCurrentDirectory workingDir
-  createDirIfMissing False "cpp"
-  setCurrentDirectory "cpp"
-  genCode (classes unCPPC unCPPP)
-  setCurrentDirectory workingDir
-  createDirIfMissing False "swift"
-  setCurrentDirectory "swift"
-  genCode (classes unSC unSP)
-  setCurrentDirectory workingDir
-  createDirIfMissing False "julia"
-  setCurrentDirectory "julia"
-  genCode (jlClasses unJLC unJLP)
-  setCurrentDirectory workingDir
+main :: IO ()
+main = testMain codeGenTestGroup
 
--- | Gathers all information needed to generate code, sorts it, and calls the renderers.
-genCode :: [PackData] -> IO()
-genCode files = createCodeFiles (concatMap (\p -> replicate (length (OO.progMods
-  (packProg p)) + length (packAux p)) (OO.progName $ packProg p)) files) $
-    makeCode (map (OO.progMods . packProg) files) (map packAux files)
+codeGenTestGroup :: TestTree
+codeGenTestGroup =
+  testGroup
+    "Codegen Test"
+    [ testGroup
+        "GOOL"
+        [ goolTestGroup "HelloWorldOO" helloWorldOO,
+          goolTestGroup "PatternTestOO" patternTest,
+          goolTestGroup "FileTestsOO" fileTestsOO,
+          goolTestGroup "NameGenTestOO" nameGenTestOO,
+          goolTestGroup "OOVector" ooVector
+        ],
+      testGroup
+        "GProc"
+        [ gProcTestGroup "HelloWorldProc" helloWorldProc,
+          gProcTestGroup "FileTestsProc" fileTestsProc,
+          gProcTestGroup "NameGenTestProc" nameGenTestProc,
+          gProcVectorTestGroup "VectorTestProc" vectorTestProc
+        ]
+    ]
 
--- Cannot assign the list of tests in a where clause and re-use it because the
--- "r" type variable needs to be instantiated to two different types
--- (CodeInfo and a renderer) each time this function is called
--- | Gathers the GOOL file tests and prepares them for rendering
-classes :: (OOProg r, PackageSym r') => (r (OO.Program r) -> OO.ProgData) ->
-  (r' (Package r') -> PackData) -> [PackData]
-classes unRepr unRepr' = zipWith
-  (\p gs -> let (p',gs') = runState p gs
-                pd = unRepr p'
-  in unRepr' $ package pd [makefile [] Program [] gs' pd])
-  [helloWorldOO, patternTest, fileTestsOO, vectorTestOO, nameGenTestOO]
-  (map (OO.unCI . (`evalState` initialState)) [helloWorldOO, patternTest,
-    fileTestsOO, vectorTestOO, nameGenTestOO])
+goolTestGroup
+  :: String
+  -> ( forall r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ.
+       ( OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
+       , GetSet r var val
+       , StrategyPattern r bod block var val
+       , ObserverPattern r stmt typ
+       ) => OO.GSProgram r prg
+     )
+  -> TestTree
+goolTestGroup n p =
+  goldenTestingGroup
+    ([osp|test/build|] </> [ps|{n}|])
+    ([osp|test/golden|] </> [ps|{n}|])
+    n
+    [ goldenTest "java" $ directory [ps|java|] $ genCodeGOOL unJC unJP p,
+      goldenTest "python" $ directory [ps|python|] $ genCodeGOOL unPC unPP p,
+      goldenTest "csharp" $ directory [ps|csharp|] $ genCodeGOOL unCSC unCSP p,
+      goldenTest "cpp" $ directory [ps|cpp|] $ genCodeGOOL unCPPC unCPPP p,
+      goldenTest "swift" $ directory [ps|swift|] $ genCodeGOOL unSC unSP p
+    ]
 
--- Classes that Julia is currently able to render
-jlClasses :: (ProcProg r, PackageSym r') => (r (Proc.Program r) ->
-  Proc.ProgData) -> (r' (Package r') -> PackData) -> [PackData]
-jlClasses unRepr unRepr' = zipWith
-  (\p gs -> let (p',gs') = runState p gs
-                pd = unRepr p'
-  in unRepr' $ package pd [makefile [] Program [] gs' pd])
-  [helloWorldProc, fileTestsProc, vectorTestProc, nameGenTestProc]
-  (map (Proc.unCI . (`evalState` initialState)) [helloWorldProc,
-    fileTestsProc, vectorTestProc, nameGenTestProc])
+gProcTestGroup
+  :: String
+  ->
+    ( forall r prg file mod mthd vis param bod block stmt var scope val binder typ.
+      -- TODO [Brandon Bosman, 09/21/2026]: Add Literal, Comparision, DeclStatement, ControlStatement to ProcProg
+      ( Literal r val typ
+      , Comparison r val
+      , DeclStatement r bod stmt var scope val
+      , ControlStatement r bod stmt var val
+      , ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
+      ) => Proc.GSProgram r prg)
+  -> TestTree
+gProcTestGroup n p =
+  goldenTestingGroup
+    ([osp|test/build|] </> [ps|{n}|])
+    ([osp|test/golden|] </> [ps|{n}|])
+    n
+    [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p,
+      goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProc unMLC unMLP p
+    ]
 
--- | Formats code to be rendered.
-makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]
-makeCode files auxs = concat $ zipWith (++)
-  (map (map (\fd -> (filePath fd, modDoc $ fileMod fd))) files)
-  (map (map (\ad -> (auxFilePath ad, auxDoc ad))) auxs)
+gProcVectorTestGroup
+  :: String
+  ->
+    ( forall r prg file mod mthd vis param bod block stmt var scope val binder typ.
+      ( Comparison r val
+      , NativeVectorType r typ
+      , NativeVector r val typ
+      , DeclStatement r bod stmt var scope val
+      , ControlStatement r bod stmt var val
+      , ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
+      ) => Proc.GSProgram r prg
+    )
+  -> TestTree
+gProcVectorTestGroup n p =
+  goldenTestingGroup
+    ([osp|test/build|] </> [ps|{n}|])
+    ([osp|test/golden|] </> [ps|{n}|])
+    n
+    [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProcNoMake unJLC unJLP p,
+      goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProcNoMake unMLC unMLP p
+    ]
 
-  -- zip (map filePath files) (map (modDoc . fileMod) files)
-  -- ++ zip (map auxFilePath auxs) (map auxDoc auxs)
+genCodeProcNoMake
+  ::
+    ( NativeVectorType r typ
+    , NativeVector r val typ
+    , ProcProg r ProgData file mod mthd vis param bod block stmt var scope val binder typ
+    , Monad r'
+    )
+  => (r ProgData -> ProgData)
+  -> (r' PackageData -> PackageData)
+  ->
+    ( forall s prg' file' mod' mthd' vis' param' bod' block' stmt' var' scope' val' binder' typ'.
+      ( Comparison s val'
+      , NativeVectorType s typ'
+      , NativeVector s val' typ'
+      , DeclStatement s bod' stmt' var' scope' val'
+      , ProcProg s prg' file' mod' mthd' vis' param' bod' block' stmt' var' scope' val' binder' typ'
+      ) => Proc.GSProgram s prg'
+    )
+  -> [FileLayout]
+genCodeProcNoMake unRepr unRepr' p =
+  let
+    (p', gs') = runState p initialState
+    (PackageData prog aux) = unRepr' $ package (unRepr p') []
+  in seq gs' $ toFileLayout (progMods prog) <> aux
 
-------------------
--- IO Functions --
-------------------
+genCodeGOOL
+  ::
+    ( OOProg r ProgData file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
+    , GetSet r var val
+    , StrategyPattern r bod block var val
+    , ObserverPattern r stmt typ
+    , SoftwareDossierSym r'
+    , Monad r'
+    )
+  => (r ProgData -> ProgData)
+  -> (r' PackageData -> PackageData)
+  -> ( forall s prg' file' mod' cls' stvr' mthd' attch' vis' param' bod' block' stmt' var' scope' val' binder' typ'.
+       ( OOProg s prg' file' mod' cls' stvr' mthd' attch' vis' param' bod' block' stmt' var' scope' val' binder' typ'
+       , GetSet s var' val'
+       , StrategyPattern s bod' block' var' val'
+       , ObserverPattern s stmt' typ'
+       ) => OO.GSProgram s prg'
+     )
+  -> [FileLayout]
+genCodeGOOL unRepr unRepr' p =
+  let
+    gs = OO.unCI (evalState p initialState)
+    (p', gs') = runState p gs
+  in genCode' (unRepr p') gs' unRepr'
 
--- | Creates the requested 'Code' by producing files.
-createCodeFiles :: [Label] -> [(FilePath, Doc)] -> IO () -- [(FilePath, Doc)] -> IO ()
-createCodeFiles ns cs = mapM_ createCodeFile (zip ns cs)
+genCodeProc
+  ::
+    ( ProcProg r ProgData file mod mthd vis param bod block stmt var scope val binder typ
+    , SoftwareDossierSym r'
+    , Monad r'
+    )
+  => (r ProgData -> ProgData)
+  -> (r' PackageData -> PackageData)
+  -> ( forall s prg' file' mod' mthd' vis' param' bod' block' stmt' scope' typ' val' var' binder'.
+       ( ProcProg s prg' file' mod' mthd' vis' param' bod' block' stmt' scope' typ' val' var' binder'
+       ) => Proc.GSProgram s prg'
+     )
+  -> [FileLayout]
+genCodeProc unRepr unRepr' p =
+  let
+    (p', gs') = runState p initialState
+  in genCode' (unRepr p') gs' unRepr'
 
--- | Helper that creates the file and renders code.
-createCodeFile :: (Label, (FilePath, Doc)) -> IO ()
-createCodeFile (n, (path, code)) = do
-    createDirIfMissing False n
-    setCurrentDirectory n
-    createDirIfMissing True (takeDirectory path)
-    h <- openFile path WriteMode
-    hPutStrLn h (render code)
-    hClose h
-    setCurrentDirectory ".."
+genCode' :: (SoftwareDossierSym r', Monad r') => ProgData -> GOOLState ->
+  (r' PackageData -> PackageData) -> [FileLayout]
+genCode' pd gs' unRepr' =
+  let
+    fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources) (gs' ^. mainMod)
+    (PackageData prog aux) = unRepr' $ package pd [makefile [] Program [] fileInfoState pd]
+  in toFileLayout (progMods prog) <> aux

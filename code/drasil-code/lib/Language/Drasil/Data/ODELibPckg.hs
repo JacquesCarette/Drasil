@@ -3,6 +3,8 @@ module Language.Drasil.Data.ODELibPckg (
   ODELibPckg(..), mkODELib, mkODELibNoPath
 ) where
 
+import Language.Drasil (DefinedQuantityDict)
+
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary)
 import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall)
 import Language.Drasil.Code.Lang (Lang)
@@ -15,6 +17,8 @@ data ODELibPckg = ODELib {
   libName :: Name,
   -- | Version.
   libVers :: Version,
+  -- | Dummy quantities necessary for use in ODE solving.
+  libDummyQuants :: [DefinedQuantityDict],
   -- | Library specifications.
   libSpec :: ExternalLibrary,
   -- | Library call.
@@ -35,15 +39,17 @@ data ODELibPckg = ODELib {
 }
 
 -- | Makes an 'ODELibPckg' with the given name, 'ExternalLibrary' specification,
--- 'ExternalLibraryCall' specification parameterized by an 'ODEInfo', local file
--- path to the library, and list of compatible languages.
-mkODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo ->
-  ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
-mkODELib n v e c f = ODELib n v e c (Just f)
+-- a list of necessary dummy quantities usage relies on, 'ExternalLibraryCall'
+-- specification parameterized by an 'ODEInfo', local file path to the library,
+-- and list of compatible languages.
+mkODELib :: Name -> Version -> [DefinedQuantityDict] -> ExternalLibrary ->
+  (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
+mkODELib n v dqs e c f = ODELib n v dqs e c (Just f)
 
 -- | Makes an 'ODELibPckg' with the given name, 'ExternalLibrary' specification,
--- 'ExternalLibraryCall' specification parameterized by an 'ODEInfo', and list of
--- compatible languages.
-mkODELibNoPath :: Name -> Version -> ExternalLibrary -> (ODEInfo ->
-  ExternalLibraryCall) -> [Lang] -> ODELibPckg
-mkODELibNoPath n v e c = ODELib n v e c Nothing
+-- a list of necessary dummy quantities usage relies on, 'ExternalLibraryCall'
+-- specification parameterized by an 'ODEInfo', and list of compatible
+-- languages.
+mkODELibNoPath :: Name -> Version -> [DefinedQuantityDict] -> ExternalLibrary ->
+  (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
+mkODELibNoPath n v dqs e c = ODELib n v dqs e c Nothing

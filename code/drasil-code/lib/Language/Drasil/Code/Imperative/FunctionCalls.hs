@@ -4,109 +4,278 @@ module Language.Drasil.Code.Imperative.FunctionCalls (
   genCalcCall, genCalcCallProc, genOutputCall, genOutputCallProc
 ) where
 
-import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppProc, fAppInOut,
-  fAppInOutProc)
-import Language.Drasil.Code.Imperative.Helpers (convScope)
-import Language.Drasil.Code.Imperative.Import (codeType, mkVal, mkValProc,
-  mkVar, mkVarProc)
-import Language.Drasil.Code.Imperative.Logging (maybeLog)
-import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
-  getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns,
-  getInputFormatOuts, getOutputParams)
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  genICName)
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
-import Language.Drasil.Mod (Name)
-import Language.Drasil.Choices (InternalConcept(..))
-
-import Drasil.GOOL (VSType, SValue, MSStatement, SharedProg, OOProg,
-  TypeSym(..), VariableValue(..), StatementSym(..), DeclStatement(..),
-  convType, convTypeOO)
-
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Applicative ((<|>))
 import Control.Monad.State (get)
 
+import Drasil.Code.CodeVar (CodeIdea(codeName), CodeVarChunk, quantvar)
+import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppProc, fAppInOut,
+  fAppInOutProc)
+import Language.Drasil.Code.Imperative.Helpers (convScope)
+import Language.Drasil.Code.Imperative.Import (codeType, mkVal, mkValProc,
+  mkVar, mkVarProc)
+import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
+  getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns,
+  getInputFormatOuts, getOutputParams)
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
+  genICName)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
+import Language.Drasil.Mod (Name)
+import Language.Drasil.Choices (InternalConcept(..))
+
+import Drasil.GOOL (MS, VS, TypeSym(..), OOTypeSym, ScopeSym, ValueSym,
+  OOVariableSym, VariableValue(..), ValueStatement(valStmt), DeclStatement(..),
+  convType, convTypeOO, FuncAppStatement, TypeElim, VariableSym,
+  VariableElim, Argument, Set, ValueExpression, Comparison, BooleanExpression,
+  MathConstant, List, SelfSym, OOFuncAppStatement, InternalValueExp, Literal,
+  OOValueExpression)
+import Drasil.GProc (NativeVector, Reference, NumericExpression)
+
 -- | Generates calls to all of the input-related functions. First is the call to
 -- the function for reading inputs, then the function for calculating derived
 -- inputs, then the function for checking input constraints.
-genAllInputCalls :: (OOProg r) => GenState [MSStatement r]
+genAllInputCalls
+  ::
+    ( ValueSym r val typ
+    , Argument r val
+    , Literal r val typ
+    , MathConstant r val
+    , TypeSym r typ
+    , OOTypeSym r typ
+    , VariableSym r var typ
+    , OOVariableSym r var val typ
+    , VariableValue r var val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r var val binder typ
+    , SelfSym r var
+    , InternalValueExp r var val typ
+    , OOValueExpression r var val typ
+    , List r val
+    , Reference r val
+    , Set r val
+    , ValueStatement r stmt val
+    , FuncAppStatement r stmt var val
+    , OOFuncAppStatement r stmt var val
+    , TypeElim r typ
+    , VariableElim r var typ
+    )
+  => GenState [MS (r stmt)]
 genAllInputCalls = do
   gi <- genInputCall
   dv <- genDerivedCall
   ic <- genConstraintCall
-  return $ catMaybes [gi, dv, ic]
+  pure $ catMaybes [gi, dv, ic]
 
 -- | Generates a call to the function for reading inputs from a file.
-genInputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
+genInputCall
+  ::
+    ( TypeSym r typ
+    , OOTypeSym r typ
+    , VariableSym r var typ
+    , OOVariableSym r var val typ
+    , VariableValue r var val
+    , SelfSym r var
+    , FuncAppStatement r stmt var val
+    , OOFuncAppStatement r stmt var val
+    , VariableElim r var typ
+    )
+  => GenState (Maybe (MS (r stmt)))
 genInputCall = do
   giName <- genICName GetInput
   genInOutCall giName getInputFormatIns getInputFormatOuts
 
 -- | Generates a call to the function for calculating derived inputs.
-genDerivedCall :: (OOProg r) => GenState (Maybe (MSStatement r))
+genDerivedCall
+  ::
+    ( TypeSym r typ
+    , OOTypeSym r typ
+    , VariableSym r var typ
+    , OOVariableSym r var val typ
+    , VariableValue r var val
+    , SelfSym r var
+    , FuncAppStatement r stmt var val
+    , OOFuncAppStatement r stmt var val
+    , VariableElim r var typ
+    )
+  => GenState (Maybe (MS (r stmt)))
 genDerivedCall = do
   dvName <- genICName DerivedValuesFn
   genInOutCall dvName getDerivedIns getDerivedOuts
 
 -- | Generates a call to the function for checking constraints on the input.
-genConstraintCall :: (OOProg r) => GenState (Maybe (MSStatement r))
+genConstraintCall
+  ::
+    ( ValueSym r val typ
+    , Argument r val
+    , Literal r val typ
+    , MathConstant r val
+    , TypeSym r typ
+    , OOTypeSym r typ
+    , VariableSym r var typ
+    , OOVariableSym r var val typ
+    , VariableValue r var val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r var val binder typ
+    , SelfSym r var
+    , InternalValueExp r var val typ
+    , OOValueExpression r var val typ
+    , List r val
+    , Reference r val
+    , Set r val
+    , ValueStatement r stmt val
+    , TypeElim r typ
+    , VariableElim r var typ
+    )
+  => GenState (Maybe (MS (r stmt)))
 genConstraintCall = do
   icName <- genICName InputConstraintsFn
   val <- genFuncCall icName void getConstraintParams
-  return $ fmap valStmt val
+  pure $ valStmt <$> val
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
-genCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
+genCalcCall
+  ::
+    ( ValueSym r val typ
+    , Argument r val
+    , Literal r val typ
+    , MathConstant r val
+    , TypeSym r typ
+    , OOTypeSym r typ
+    , VariableSym r var typ
+    , OOVariableSym r var val typ
+    , ScopeSym r scope
+    , VariableValue r var val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r var val binder typ
+    , SelfSym r var
+    , InternalValueExp r var val typ
+    , OOValueExpression r var val typ
+    , List r val
+    , Reference r val
+    , Set r val
+    , DeclStatement r bod stmt var scope val
+    , TypeElim r typ
+    , VariableElim r var typ
+    )
+  => CodeDefinition -> GenState (Maybe (MS (r stmt)))
 genCalcCall c = do
   g <- get
   let scp = convScope $ currentScope g
   t <- codeType c
   val <- genFuncCall (codeName c) (convTypeOO t) (getCalcParams c)
   v <- mkVar (quantvar c)
-  l <- maybeLog v
-  return $ fmap (multi . (: l) . varDecDef v scp) val
+  pure $ varDecDef v scp <$> val
 
 -- | Generates a call to the function for printing outputs.
-genOutputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
+genOutputCall
+  ::
+    ( ValueSym r val typ
+    , Argument r val
+    , Literal r val typ
+    , MathConstant r val
+    , TypeSym r typ
+    , OOTypeSym r typ
+    , VariableSym r var typ
+    , OOVariableSym r var val typ
+    , VariableValue r var val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r var val binder typ
+    , SelfSym r var
+    , InternalValueExp r var val typ
+    , OOValueExpression r var val typ
+    , List r val
+    , Reference r val
+    , Set r val
+    , ValueStatement r stmt val
+    , TypeElim r typ
+    , VariableElim r var typ
+    )
+  => GenState (Maybe (MS (r stmt)))
 genOutputCall = do
   woName <- genICName WriteOutput
   val <- genFuncCall woName void getOutputParams
-  return $ fmap valStmt val
+  pure $ valStmt <$> val
 
 -- | Generates a function call given the name, return type, and arguments to
 -- the function.
-genFuncCall :: (OOProg r) => Name -> VSType r ->
-  GenState [CodeVarChunk] -> GenState (Maybe (SValue r))
+genFuncCall
+  ::
+    ( ValueSym r val typ
+    , Argument r val
+    , Literal r val typ
+    , MathConstant r val
+    , TypeSym r typ
+    , OOTypeSym r typ
+    , VariableSym r var typ
+    , OOVariableSym r var val typ
+    , VariableValue r var val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r var val binder typ
+    , SelfSym r var
+    , InternalValueExp r var val typ
+    , OOValueExpression r var val typ
+    , List r val
+    , Reference r val
+    , Set r val
+    , TypeElim r typ
+    , VariableElim r var typ
+    )
+  => Name
+  -> VS (r typ)
+  -> GenState [CodeVarChunk]
+  -> GenState (Maybe (VS (r val)))
 genFuncCall n t funcPs = do
   mm <- genCall n
-  let genFuncCall' Nothing = return Nothing
+  let genFuncCall' Nothing = pure Nothing
       genFuncCall' (Just m) = do
         cs <- funcPs
         pvals <- mapM mkVal cs
         val <- fApp m n t pvals []
-        return $ Just val
+        pure $ Just val
   genFuncCall' mm
 
 -- | Generates a function call given the name, inputs, and outputs for the
 -- function.
-genInOutCall :: (OOProg r) => Name -> GenState [CodeVarChunk] ->
-  GenState [CodeVarChunk] -> GenState (Maybe (MSStatement r))
+genInOutCall
+  ::
+    ( TypeSym r typ
+    , OOTypeSym r typ
+    , VariableSym r var typ
+    , OOVariableSym r var val typ
+    , VariableValue r var val
+    , SelfSym r var
+    , FuncAppStatement r stmt var val
+    , OOFuncAppStatement r stmt var val
+    , VariableElim r var typ
+    )
+  => Name
+  -> GenState [CodeVarChunk]
+  -> GenState [CodeVarChunk]
+  -> GenState (Maybe (MS (r stmt)))
 genInOutCall n inFunc outFunc = do
   mm <- genCall n
-  let genInOutCall' Nothing = return Nothing
+  let genInOutCall' Nothing = pure Nothing
       genInOutCall' (Just m) = do
         ins' <- inFunc
         outs' <- outFunc
         ins <- mapM mkVar (ins' \\ outs')
         outs <- mapM mkVar (outs' \\ ins')
         both <- mapM mkVar (ins' `intersect` outs')
-        stmt <- fAppInOut m n (map valueOf ins) outs both
-        return $ Just stmt
+        stmt <- fAppInOut m n (valueOf <$> ins) outs both
+        pure $ Just stmt
   genInOutCall' mm
 
 -- | Gets the name of the module containing the function being called.
@@ -120,11 +289,11 @@ genCall n = do
   g <- get
   let currc = currentClass g
       genCallExported Nothing = genCallInClass (Map.lookup n $ clsMap g)
-      genCallExported m = return m
-      genCallInClass Nothing = return Nothing
-      genCallInClass (Just c) = if c == currc then return $ Map.lookup c (eMap
-        g) <|> error (c ++ " class missing from export map")
-        else return Nothing
+      genCallExported m = pure m
+      genCallInClass Nothing = pure Nothing
+      genCallInClass (Just c) = if c == currc then pure $ Map.lookup c (eMap
+        g) <|> error (c <> " class missing from export map")
+        else pure Nothing
   genCallExported $ Map.lookup n (eMap g)
 
 -- Procedural Versions --
@@ -132,79 +301,203 @@ genCall n = do
 -- | Generates calls to all of the input-related functions. First is the call to
 -- the function for reading inputs, then the function for calculating derived
 -- inputs, then the function for checking input constraints.
-genAllInputCallsProc :: (SharedProg r) => GenState [MSStatement r]
+genAllInputCallsProc
+  ::
+    ( TypeSym r typ
+    , ValueSym r val typ
+    , Literal r val typ
+    , MathConstant r val
+    , VariableSym r var typ
+    , VariableValue r var val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r var val binder typ
+    , NativeVector r val typ
+    , FuncAppStatement r stmt var val
+    , Argument r val
+    , List r val
+    , Reference r val
+    , Set r val
+    , ValueStatement r stmt val
+    , TypeElim r typ
+    )
+  => GenState [MS (r stmt)]
 genAllInputCallsProc = do
   gi <- genInputCallProc
   dv <- genDerivedCallProc
   ic <- genConstraintCallProc
-  return $ catMaybes [gi, dv, ic]
+  pure $ catMaybes [gi, dv, ic]
 
 -- | Generates a call to the function for reading inputs from a file.
-genInputCallProc:: (SharedProg r) => GenState (Maybe (MSStatement r))
+genInputCallProc
+  ::
+    ( FuncAppStatement r stmt var val
+    , TypeSym r typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    )
+  => GenState (Maybe (MS (r stmt)))
 genInputCallProc = do
   giName <- genICName GetInput
   genInOutCallProc giName getInputFormatIns getInputFormatOuts
 
 -- | Generates a call to the function for calculating derived inputs.
-genDerivedCallProc :: (SharedProg r) => GenState (Maybe (MSStatement r))
+genDerivedCallProc
+  ::
+    ( FuncAppStatement r stmt var val
+    , TypeSym r typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    )
+  => GenState (Maybe (MS (r stmt)))
 genDerivedCallProc = do
   dvName <- genICName DerivedValuesFn
   genInOutCallProc dvName getDerivedIns getDerivedOuts
 
 -- | Generates a call to the function for checking constraints on the input.
-genConstraintCallProc :: (SharedProg r) => GenState (Maybe (MSStatement r))
+genConstraintCallProc
+  ::
+    ( TypeSym r typ
+    , ValueSym r val typ
+    , Literal r val typ
+    , MathConstant r val
+    , VariableSym r var typ
+    , VariableValue r var val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r var val binder typ
+    , NativeVector r val typ
+    , Argument r val
+    , List r val
+    , Reference r val
+    , Set r val
+    , ValueStatement r stmt val
+    , TypeElim r typ
+    )
+  => GenState (Maybe (MS (r stmt)))
 genConstraintCallProc = do
   icName <- genICName InputConstraintsFn
   val <- genFuncCallProc icName void getConstraintParams
-  return $ fmap valStmt val
+  pure $ valStmt <$> val
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
-genCalcCallProc :: (SharedProg r) => CodeDefinition ->
-  GenState (Maybe (MSStatement r))
+genCalcCallProc
+  ::
+    ( TypeSym r typ
+    , ValueSym r val typ
+    , Literal r val typ
+    , MathConstant r val
+    , VariableValue r var val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , VariableSym r var typ
+    , ScopeSym r scope
+    , ValueExpression r var val binder typ
+    , DeclStatement r bod stmt var scope val
+    , Argument r val
+    , List r val
+    , NativeVector r val typ
+    , Reference r val
+    , Set r val
+    , TypeElim r typ
+    )
+  => CodeDefinition -> GenState (Maybe (MS (r stmt)))
 genCalcCallProc c = do
   g <- get
   let scp = convScope $ currentScope g
   t <- codeType c
   val <- genFuncCallProc (codeName c) (convType t) (getCalcParams c)
   v <- mkVarProc (quantvar c)
-  l <- maybeLog v
-  return $ fmap (multi . (: l) . (`varDecDef` scp) v) val
+  pure $ (`varDecDef` scp) v <$> val
 
 -- | Generates a call to the function for printing outputs.
-genOutputCallProc :: (SharedProg r) => GenState (Maybe (MSStatement r))
+genOutputCallProc
+  ::
+    ( TypeSym r typ
+    , ValueSym r val typ
+    , Literal r val typ
+    , MathConstant r val
+    , VariableSym r var typ
+    , VariableValue r var val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r var val binder typ
+    , Argument r val
+    , List r val
+    , NativeVector r val typ
+    , Reference r val
+    , Set r val
+    , ValueStatement r stmt val
+    , TypeElim r typ
+    )
+  => GenState (Maybe (MS (r stmt)))
 genOutputCallProc = do
   woName <- genICName WriteOutput
   val <- genFuncCallProc woName void getOutputParams
-  return $ fmap valStmt val
+  pure $ valStmt <$> val
 
 -- | Generates a function call given the name, return type, and arguments to
 -- the function.
-genFuncCallProc :: (SharedProg r) => Name -> VSType r ->
-  GenState [CodeVarChunk] -> GenState (Maybe (SValue r))
+genFuncCallProc
+  ::
+    ( TypeSym r typ
+    , ValueSym r val typ
+    , Literal r val typ
+    , MathConstant r val
+    , VariableSym r var typ
+    , VariableValue r var val
+    , BooleanExpression r val
+    , Comparison r val
+    , NumericExpression r val
+    , ValueExpression r var val binder typ
+    , Argument r val
+    , List r val
+    , NativeVector r val typ
+    , Reference r val
+    , Set r val
+    , TypeElim r typ
+    )
+  => Name
+  -> VS (r typ)
+  -> GenState [CodeVarChunk]
+  -> GenState (Maybe (VS (r val)))
 genFuncCallProc n t funcPs = do
   mm <- genCall n
-  let genFuncCall' Nothing = return Nothing
+  let genFuncCall' Nothing = pure Nothing
       genFuncCall' (Just m) = do
         cs <- funcPs
         pvals <- mapM mkValProc cs
         val <- fAppProc m n t pvals []
-        return $ Just val
+        pure $ Just val
   genFuncCall' mm
 
 -- | Generates a function call given the name, inputs, and outputs for the
 -- function.
-genInOutCallProc :: (SharedProg r) => Name -> GenState [CodeVarChunk] ->
-  GenState [CodeVarChunk] -> GenState (Maybe (MSStatement r))
+genInOutCallProc
+  ::
+    ( FuncAppStatement r stmt var val
+    , TypeSym r typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    )
+  => Name
+  -> GenState [CodeVarChunk]
+  -> GenState [CodeVarChunk]
+  -> GenState (Maybe (MS (r stmt)))
 genInOutCallProc n inFunc outFunc = do
   mm <- genCall n
-  let genInOutCall' Nothing = return Nothing
+  let genInOutCall' Nothing = pure Nothing
       genInOutCall' (Just m) = do
         ins' <- inFunc
         outs' <- outFunc
         ins <- mapM mkVarProc (ins' \\ outs')
         outs <- mapM mkVarProc (outs' \\ ins')
         both <- mapM mkVarProc (ins' `intersect` outs')
-        stmt <- fAppInOutProc m n (map valueOf ins) outs both
-        return $ Just stmt
+        stmt <- fAppInOutProc m n (valueOf <$> ins) outs both
+        pure $ Just stmt
   genInOutCall' mm

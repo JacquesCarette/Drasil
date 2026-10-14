@@ -1,19 +1,14 @@
-module Drasil.DblPend.Choices where
+module Drasil.DblPend.Choices (choices) where
 
-import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
-  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
-  AuxFile(..), Visibility(..), defaultChoices, makeArchit, makeData,
-  makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats,
-  ExtLib(..))
-
+import Language.Drasil.Code (Choices(..), Comments(..), ExtLib(..),
+  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
+  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..),
+  SoftwareDossierFile(..), Visibility(..), defaultChoices, makeArchit, makeData,
+  makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg,
   apacheODEPckg, odeintPckg)
-import Drasil.DblPend.Body (fullSI)
-import Drasil.DblPend.ODEs (dblPenODEInfo)
 
-code :: CodeSpec
-code = codeSpec fullSI choices []
+import Drasil.DblPend.ODEs (dblPenODEInfo)
 
 choices :: Choices
 choices = defaultChoices {
@@ -23,7 +18,7 @@ choices = defaultChoices {
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [] "log.txt")
-    [SampleInput "../../datafiles/dblpend/sampleInput.txt", ReadME],
+    [SampleInput "../datafiles/dblpend/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Warning Warning,
   extLibs = [Math (makeODE [dblPenODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])]
 }

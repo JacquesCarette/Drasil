@@ -1,25 +1,28 @@
-module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
+module Drasil.Projectile.Body (si, mkSRS) where
 
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
+import Drasil.Database (ChunkDB)
 import Language.Drasil
-import Drasil.SRSDocument
-import Drasil.Generator (cdb)
+import Language.Drasil.Document
+import qualified Language.Drasil.Development as D
+import Drasil.SRS hiding (constants, genDefns)
+import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
+import Theory.Drasil (TheoryModel)
+import Drasil.System (projAbrvS, projTitleS)
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (analysis, physics,
-  problem, assumption, goalStmt, physSyst, sysCont, software, user,
-  requirement, refBy, refName, typUnc, example, softwareSys, system, environment, 
-  product_, interface, condition, physical, datum, input_, softwareConstraint, 
-  output_, endUser)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
+import Data.Drasil.Concepts.Documentation (analysis, physics, problem,
+  assumption, sysCont, user, software, example, softwareSys, system,
+  environment, product_, interface, condition, physical, datum, input_,
+  softwareConstraint, output_, endUser)
+import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (gravity, physicCon',
-  rectilinear, oneD, twoD, motion, distance, collision, positionVec)
+import Data.Drasil.Concepts.Physics (gravity,
+  rectilinear, twoD, motion, distance, collision, positionVec)
 import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
@@ -30,33 +33,23 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccel,
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
-import Data.Drasil.Concepts.Education(calculus, undergraduate, 
+import Data.Drasil.Concepts.Education(calculus, undergraduate,
   highSchoolPhysics, highSchoolCalculus)
 
 import Drasil.Projectile.Assumptions (assumptions)
-import Drasil.Projectile.Concepts (launcher, projectile, target, defs, projMotion, rectVel)
+import Drasil.Projectile.Changes (likelyChgs)
+import Drasil.Projectile.Concepts (launcher, projectile, target, defs,
+  ideaDicts)
 import Drasil.Projectile.DataDefs (dataDefs)
+import Drasil.Projectile.Expressions (equations)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.LabelledContent (figLaunch, sysCtxFig1, labelledContent)
-import Drasil.Projectile.MetaConcepts (progName)
+import Drasil.Projectile.MetaConcepts (projName)
 import Drasil.Projectile.References (citations)
-import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
+import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.Projectile.Unitals
-
-import Theory.Drasil (TheoryModel)
-
-import Drasil.System (SystemKind(Specification), mkSystem)
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) si
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -64,86 +57,89 @@ mkSRS = [TableOfContents,
     RefProg intro
       [ TUnits
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-      , TAandA abbreviationsList 
+      , TAandA
       ],
   IntroSec $
-    IntroProg justification (phrase progName)
-      [ IPurpose $ purpDoc progName Verbose
+    IntroProg justification []
+      [ IPurpose (StdPurp Verbose)
       , IScope scope
       , IChar [] charsOfReader []
-      , IOrgSec inModel (SRS.inModel [] []) EmptyS],
-  GSDSec $ 
-      GSDProg 
+      , IOrgSec Nothing],
+  GSDSec $
+      GSDProg
         [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]
         , UsrChars [userCharacteristicsIntro]
-        , SystCons [] []],  
+        , SystCons [] []],
   SSDSec $
     SSDProg
       [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
-        , PhySysDesc progName physSystParts figLaunch []
-        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile, 
+        , PhySysDesc physSystParts figLaunch []
+        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile,
                   S "geometric layout" `S.the_ofThe` phrase launcher `S.and_` phrase target]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , GDs [] ([Label, Units] <> stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) ShowDerivation
         , Constraints EmptyS inConstraints
         , CorrSolnPpties outConstraints []
         ]
       ],
   ReqrmntSec $
     ReqsProg
-      [ FReqsSub EmptyS []
+      [ FReqsSub funcReqsTables
       , NonFReqsSub
       ],
+  LCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-    AuxConsProg progName constants,
+    AuxConsProg constants,
   Bibliography
   ]
 
 justification, scope :: Sentence
 justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:+.
-  phraseNP (problem `in_` physics), S "Therefore" `sC` S "it is useful to have a",
-  phrase program, S "to solve and model these types of" +:+. plural problem, 
-  S "Common", plural example `S.of_` phraseNP (combineNINI projectile motion), 
+  D.toSent (phraseNP (problem `in_` physics)), S "Therefore" `sC` S "it is useful to have a",
+  phrase program, S "to solve and model these types of" +:+. plural problem,
+  S "Common", plural example `S.of_` D.toSent (phraseNP (combineNINI projectile motion)),
   S "include" +:+. foldlList Comma List projectileExamples,
-  S "The document describes the program called", phrase progName,
+  S "The document describes the program called", projTitleS projName,
   S ", which is based" `S.onThe` S "original, manually created version of" +:+
   namedRef externalLinkRef (S "Projectile")]
-scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
-  sParen (short twoD), phraseNP (combineNINI projectile motion), phrase problem, 
+scope = foldlSent_ [D.toSent $ phraseNP (NP.the (analysis `ofA` twoD)),
+  sParen (short twoD), D.toSent $ phraseNP (combineNINI projectile motion), phrase problem,
   S "with", phrase constAccel]
 
 externalLinkRef :: Reference
-externalLinkRef = makeURI "projectileSRSLink" 
+externalLinkRef = makeURI "projectileSRSLink"
   "https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile"
   (shortname' $ S "projectileSRSLink")
 
 projectileExamples :: [Sentence]
-projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles" `sC` 
-  S "bullets" `sC` S "etc."), S "the flight" `S.of_` S "balls" `S.in_` 
+projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles" `sC`
+  S "bullets" `sC` S "etc."), S "the flight" `S.of_` S "balls" `S.in_`
   S "various sports" +:+ sParen (S "baseball" `sC` S "golf" `sC` S "football" `sC`
   S "etc.")]
 
-si :: System
-si = mkSystem progName Specification
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO projName
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
-  symbols tMods genDefns dataDefs iMods
-  []
-  inputs outputs (map cnstrw' constrained) constants
+  tMods genDefns dataDefs iMods
+  inputs outputs constrained constants symbols
   symbMap
+
+labelledContent' :: [LabelledContent]
+labelledContent' = labelledContent <> funcReqsTables <> equations
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]
 
 motivation :: Sentence
 motivation = foldlSent_ [phrase projectile, phrase motion, S "is a common" +:+
-  phraseNP (problem `in_` physics)]
+  D.toSent (phraseNP (problem `in_` physics))]
 
 background :: Sentence
 background = foldlSent_ [S "Common examples of", phrase projectile, phrase motion, S "include",
@@ -153,29 +149,15 @@ background = foldlSent_ [S "Common examples of", phrase projectile, phrase motio
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
 
-ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  [projMotion, rectVel] ++
-  -- CIs
-  nw progName : map nw physicCon'
-
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
-  [mass] ++ defs ++ [distance, motion, gravity, collision, rectilinear,
+  [mass] <> defs <> [distance, motion, gravity, collision, rectilinear,
   positionVec]
 
 symbMap :: ChunkDB
-symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
-  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
-
-abbreviationsList  :: [IdeaDict]
-abbreviationsList  =
-  -- CIs
-  map nw acronyms ++
-  -- DefinedQuantityDicts
-  map nw symbols
+symbMap = withCommonKnowledge projName allRefs symbols ideaDicts []
+  conceptChunks [] dataDefs iMods genDefns tMods concIns citations
+  labelledContent'
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -185,7 +167,7 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
+concIns = assumptions <> funcReqs <> goals <> likelyChgs <> nonfuncReqs
 
 ----------------------------------------
 -- Characteristics of Intended Reader --
@@ -203,40 +185,41 @@ sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external" `S.toThe` phrase software
-   `sC` phraseNP (the user), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself" +:+. sParen (short progName),
-   S "Arrows are used to show the data flow between the", phraseNP (system
+   `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
+   phrase softwareSys, S "itself" +:+. sParen (projAbrvS projName),
+   S "Arrows are used to show the data flow between the", D.toSent $ phraseNP (system
    `andIts` environment)]
 
 sysCtxDesc :: Contents
-sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
+sysCtxDesc = foldlSPCol [S "The interaction between the", D.toSent $ phraseNP (product_
    `andThe` user), S "is through an application programming" +:+.
-   phrase interface, S "responsibilities" `S.the_ofTheC` phraseNP (user 
-   `andThe` system), S "are as follows"]
+   phrase interface, S "responsibilities" `S.the_ofTheC` D.toSent (phraseNP (user
+   `andThe` system)), S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = map foldlSent [[S "Provide initial", pluralNP (condition `ofThePS`
+sysCtxUsrResp = foldlSent <$> [[S "Provide initial", D.toSent $ pluralNP (condition `ofThePS`
   physical), S "state" `S.ofThe` phrase motion `S.andThe` plural inDatum, S "related" `S.toThe`
-  phrase progName `sC` S "ensuring no errors" `S.inThe` plural datum, S "entry"], 
-  [S "Ensure that consistent units" `S.are` S "used for", pluralNP (combineNINI input_ Doc.variable)],
-  [S "Ensure required", namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) 
+  projTitleS projName `sC` S "ensuring no errors" `S.inThe` plural datum, S "entry"],
+  [S "Ensure that consistent units" `S.are` S "used for",
+   D.toSent $ pluralNP (combineNINI input_ Doc.variable)],
+  [S "Ensure required", namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section]))
    (phrase software +:+ plural assumption), S "are appropriate for any particular",
   phrase problem, phrase input_ `S.toThe` phrase software]]
 
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = map foldlSent [[S "Detect data type mismatch" `sC` S "such as a string of characters",
+sysCtxSysResp = foldlSent <$> [[S "Detect data type mismatch" `sC` S "such as a string of characters",
   phrase input_, S "instead of a floating point number"],
   [S "Determine if the", plural input_, S "satisfy the required",
-  pluralNP (physical `and_` softwareConstraint)],
+  D.toSent $ pluralNP (physical `and_` softwareConstraint)],
   [S "Calculate the required", plural output_]]
 
 sysCtxResp :: [Sentence]
-sysCtxResp = map (\x -> x +:+ S "Responsibilities") 
-  [titleize user, short progName]
+sysCtxResp = (\x -> x +:+ S "Responsibilities")
+  <$> [titleize user, projAbrvS projName]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+  bulletFlat <$> [sysCtxUsrResp, sysCtxSysResp]
 
 -------------------------
 --User Characteristics --
@@ -244,8 +227,8 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharacteristicsIntro :: Contents
 userCharacteristicsIntro = foldlSP
-  [S "The", phrase endUser `S.of_` short progName,
-   S "should have an understanding of", 
+  [S "The", phrase endUser `S.of_` projAbrvS projName,
+   S "should have an understanding of",
    phrase highSchoolPhysics `S.and_` phrase highSchoolCalculus]
 
 -------------------------
@@ -267,32 +250,26 @@ terms = [launcher, projectile, target, gravity, cartesian, rectilinear]
 ---------------------------------
 
 physSystParts :: [Sentence]
-physSystParts = map (!.)
-  [atStartNP (the launcher),
-  atStartNP (the projectile) +:+ sParen (S "with" +:+ getTandS iVel `S.and_` getTandS launAngle),
-  atStartNP (the target)]
+physSystParts = (!.)
+  <$> [D.toSent $ atStartNP (the launcher),
+  D.toSent (atStartNP (the projectile)) +:+ sParen (S "with" +:+ getTandS iVel `S.and_` getTandS launAngle),
+  D.toSent $ atStartNP (the target)]
 
 ----------------------------------------------------
 -- Various gathered data that should be automated --
 ----------------------------------------------------
 symbols :: [DefinedQuantityDict]
-symbols = unitalQuants ++ map dqdWr [gravitationalAccelConst, tol] ++
-  map dqdWr [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
-  iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
+symbols = pi_ : unitalQuants <> [dqdWr gravitationalAccelConst] <>
+  [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
+  iyPos, ixVel, iyVel, position, scalarPos, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
-  constAccelV]
+  constAccelV, projPos, projSpeed]
 
 constants :: [ConstQDef]
-constants = [gravitationalAccelConst, piConst, tol]
-
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr [launSpeed, launAngle, targPos]
-
-outputs :: [DefinedQuantityDict]
-outputs = [message, dqdWr offset, dqdWr flightDur]
+constants = [gravitationalAccelConst, piConst]
 
 unitalQuants :: [DefinedQuantityDict]
-unitalQuants = message : map dqdWr constrained
+unitalQuants = dqdWr <$> constrained
 
 inConstraints :: [UncertQ]
 inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]
@@ -302,8 +279,3 @@ outConstraints = [landPosUnc, offsetUnc, flightDurUnc]
 
 constrained :: [ConstrConcept]
 constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
-
-acronyms :: [CI]
-acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, Doc.srs, refBy, refName, thModel, typUnc]
-

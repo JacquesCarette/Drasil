@@ -1,6 +1,4 @@
-{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators, GADTs  #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines types and functions for creating models.
 module Theory.Drasil.ModelKinds (
   -- * Types
@@ -18,14 +16,18 @@ module Theory.Drasil.ModelKinds (
 import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')
 import Data.Maybe (mapMaybe)
 
-import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..), Expr,
-  RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..),
-  UID, DifferentialModel, mkUid, nsUid, RequiresChecking(..), Space,
+import Drasil.Database (UID, HasUID(..), mkUid, nsUid, HasChunkRefs(..))
+import Language.Drasil (NamedIdea(..), NP, QDefinition, Expr,
+  Definition(..), Idea(..), Express(..),
+  RequiresChecking(..), Space,
   HasSpace(typ), DefiningExpr(..))
-import Theory.Drasil.ConstraintSet (ConstraintSet)
-import Theory.Drasil.MultiDefn (MultiDefn)
 
--- | Models can be of different kinds: 
+import Theory.Drasil.ConstraintSet (ConstraintSet)
+import Theory.Drasil.DifferentialModel (DifferentialModel)
+import Theory.Drasil.MultiDefn (MultiDefn)
+import Theory.Drasil.RelationConcept (RelationConcept)
+
+-- | Models can be of different kinds:
 --
 --     * 'NewDEModel's represent differential equations as 'DifferentialModel's
 --     * 'DEModel's represent differential equations as 'RelationConcept's
@@ -125,6 +127,15 @@ othModel u n rc = MK (OthModel rc) (mkUid' u) n
 othModel' :: RelationConcept -> ModelKind e
 othModel' rc = MK (OthModel rc) (modelNs $ rc ^. uid) (rc ^. term)
 
+instance HasChunkRefs (ModelKinds e) where
+  chunkRefs (NewDEModel dm)            = chunkRefs dm
+  chunkRefs (DEModel rc)               = chunkRefs rc
+  chunkRefs (EquationalConstraints cs) = chunkRefs cs
+  chunkRefs (EquationalModel qd)       = chunkRefs qd
+  chunkRefs (EquationalRealm md)       = chunkRefs md
+  chunkRefs (OthModel rc)              = chunkRefs rc
+  {-# INLINABLE chunkRefs #-}
+
 -- | Finds the 'UID' of the 'ModelKinds'.
 instance HasUID        (ModelKinds e) where uid     = getterMk uid uid uid uid uid
 -- | Finds the term ('NP') of the 'ModelKinds'.
@@ -133,11 +144,9 @@ instance NamedIdea     (ModelKinds e) where term    = lensMk term term term term
 instance Idea          (ModelKinds e) where getA    = elimMk (to getA) (to getA) (to getA) (to getA) (to getA)
 -- | Finds the definition of the 'ModelKinds'.
 instance Definition    (ModelKinds e) where defn    = lensMk defn defn defn defn defn
--- | Finds the domain of the 'ModelKinds'.
-instance ConceptDomain (ModelKinds e) where cdom    = elimMk (to cdom) (to cdom) (to cdom) (to cdom) (to cdom)
 -- | Rewrites the underlying model using 'ModelExpr'
 instance Express e => Express (ModelKinds e) where
-  express = elimMk (to express) (to express) (to express) (to express) (to express)
+  mexpress = elimMk (to mexpress) (to mexpress) (to mexpress) (to mexpress) (to mexpress)
 -- | Expose all expressions that need to be type-checked for theories that need
 --   expose 'Expr's.
 instance RequiresChecking (ModelKinds Expr) Expr Space where
@@ -148,7 +157,15 @@ instance RequiresChecking (ModelKinds Expr) Expr Space where
   requiredChecks (EquationalRealm md)       = requiredChecks md
   requiredChecks (OthModel _)               = mempty
 
--- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
+-- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed
+-- OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
+
+instance HasChunkRefs (ModelKind e) where
+  chunkRefs mkd = mconcat
+    [ chunkRefs (mkd ^. mk)
+    , chunkRefs (mkd ^. mkTerm)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'ModelKind'.
 instance HasUID        (ModelKind e) where uid     = mkUID
@@ -158,18 +175,16 @@ instance NamedIdea     (ModelKind e) where term    = mkTerm
 instance Idea          (ModelKind e) where getA    = getA . (^. mk)
 -- | Finds the definition of the 'ModelKind'.
 instance Definition    (ModelKind e) where defn    = mk . defn
--- | Finds the domain of the 'ModelKind'.
-instance ConceptDomain (ModelKind e) where cdom    = cdom . (^. mk)
 -- | Rewrites the underlying model using 'ModelExpr'
 instance Express e => Express (ModelKind e) where
-  express = express . (^. mk)
+  mexpress = mexpress . (^. mk)
 -- | Expose all expressions that need to be type-checked for theories that need
 --   expose 'Expr's.
 instance RequiresChecking (ModelKind Expr) Expr Space where
   requiredChecks = requiredChecks . (^. mk)
 
 -- | Retrieve internal data from ModelKinds
-elimMk :: Getter DifferentialModel a 
+elimMk :: Getter DifferentialModel a
   -> Getter RelationConcept a -> Getter (ConstraintSet e) a
   -> Getter (QDefinition e) a -> Getter (MultiDefn e) a
   -> ModelKinds e -> a
@@ -196,7 +211,7 @@ setMk (OthModel q)              _ f _ _ _ x = OthModel              $ set f x q
 -- | Make a 'Lens' for 'ModelKinds'.
 lensMk :: forall e a.
      Lens' DifferentialModel a
-  -> Lens' RelationConcept a -> Lens' (ConstraintSet e) a 
+  -> Lens' RelationConcept a -> Lens' (ConstraintSet e) a
   -> Lens' (QDefinition e) a -> Lens' (MultiDefn e) a
   -> Lens' (ModelKinds e) a
 lensMk ld lr lcs lq lmd = lens g s
@@ -208,9 +223,9 @@ lensMk ld lr lcs lq lmd = lens g s
 -- | Make a 'Getter' for 'ModelKinds'.
 getterMk :: forall e a.
      Getter DifferentialModel a
-  -> Getter RelationConcept a 
-  -> Getter (ConstraintSet e) a 
-  -> Getter (QDefinition e) a 
+  -> Getter RelationConcept a
+  -> Getter (ConstraintSet e) a
+  -> Getter (QDefinition e) a
   -> Getter (MultiDefn e) a
   -> Getter (ModelKinds e) a
 getterMk gd gr gcs gq gmd = to $ \modelKinds ->

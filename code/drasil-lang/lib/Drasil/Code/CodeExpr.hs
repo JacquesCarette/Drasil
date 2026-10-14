@@ -1,4 +1,3 @@
-{-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 -- | Re-export CodeExpr constructors.
 module Drasil.Code.CodeExpr (
   CodeExpr,

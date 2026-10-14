@@ -1,46 +1,41 @@
--- Changes to this template should be reflected in the 'Creating Your Project 
+-- Changes to this template should be reflected in the 'Creating Your Project
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 -- This comment can be removed after copying this template to build your own example.
 
-module Drasil.Template.Body where
+module Drasil.Template.Body (mkSRS, si) where
 
-import Drasil.System (SystemKind(Specification), mkSystem)
-import Drasil.Metadata
+import Data.List.NonEmpty (NonEmpty((:|)))
+import qualified Data.List.NonEmpty as NE
+
+import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil
-import Drasil.SRSDocument
-import Drasil.Generator (cdb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
-import qualified Language.Drasil.Sentence.Combinators as S
-
-import qualified Drasil.DocLang.SRS as SRS
+import Language.Drasil.Document
+import Language.Drasil.Display (Symbol(Atop, Integ), Decoration(..))
+import Language.Drasil.ShortHands (lT)
+import Drasil.SRS
+import Drasil.Generator (withCommonKnowledge)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, ddENoRefs)
+import Data.Drasil.Concepts.Documentation (output_, funcReqDom)
+import Data.Drasil.SI_Units (second)
 import Data.Drasil.Citations
-import Drasil.DocumentLanguage.TraceabilityGraph
-import Drasil.DocLang (tunitNone)
 
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) si
-
-fullSI :: System
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
+import Drasil.Template.MetaConcepts (projName)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $      --This creates the Reference section of the SRS
-  RefProg intro      -- This add the introduction blob to the reference section  
-    [ tunitNone []      -- Adds table of unit section with a table frame
-    , tsymb [] -- Adds table of symbol section with a table frame
-    --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
+  RefProg intro      -- This add the introduction blob to the reference section
+    [ TUnits      -- Adds table of unit section with a table frame
+    , tsymb [TSPurpose, SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
+    --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
     ],
   IntroSec $
-  IntroProg EmptyS (phrase progName)
-    [ IPurpose $ purpDoc progName Verbose,
+  IntroProg EmptyS []
+    [ IPurpose (StdPurp Verbose),
       IScope EmptyS,
       IChar [] [] [],
-      IOrgSec inModel (SRS.inModel [] []) EmptyS
+      IOrgSec Nothing
     ],
   GSDSec $
     GSDProg
@@ -52,7 +47,7 @@ mkSRS = [TableOfContents,
     SSDProg
       [ SSDProblem $ PDProg EmptyS []                --  This adds a is used to define the problem your system will solve
       [ TermsAndDefs Nothing ([] :: [ConceptChunk])   -- This is used to define the terms to be defined in terminology sub section
-      , PhySysDesc progName [] figTemp [] -- This defines the Physicalsystem sub-section, define the parts
+      , PhySysDesc [] figTemp [] -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
       , Goals []
       ] -- This adds a goals section and goals input is defined for the preample of the goal.
@@ -60,7 +55,7 @@ mkSRS = [TableOfContents,
         [ Assumptions
         , TMs [] []
         , GDs [] [] HideDerivation
-        , DDs [] [] HideDerivation
+        , DDs [] [Label, Symbol, Units, DefiningEquation, Description Verbose IncludeUnits] HideDerivation
         , IMs [] [] HideDerivation
         , Constraints EmptyS ([] :: [UncertQ])
         , CorrSolnPpties ([] :: [UncertQ]) []
@@ -69,58 +64,78 @@ mkSRS = [TableOfContents,
       ],
   ReqrmntSec $ ReqsProg
     [
-       FReqsSub EmptyS []
+       FReqsSub [inputValuesTable]
      , NonFReqsSub
     ],
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [],
+     AuxConsProg [],
   Bibliography]
 
-si :: System
-si = mkSystem
-  progName Specification [authorName]
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = t0 :| [dt]
+
+outputs :: NE.NonEmpty DefinedQuantityDict
+outputs = NE.singleton t1
+
+t0 :: DefinedQuantityDict
+t0 = quant (mkUid "t0") (cn' "start time") (S "the start time") (sub lT (Integ 0)) Real second
+
+t1 :: DefinedQuantityDict
+t1 = quant (mkUid "t1") (cn' "end time") (S "the end time") (sub lT (Integ 1)) Real second
+
+dt :: DefinedQuantityDict
+dt = quant (mkUid "dt") (cn' "time delta") (S "the time delta") (Atop Delta lT) Real second
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab Nothing inputs
+
+outputValues :: ConceptInstance
+outputValues = cic "outputValues" (atStart output_ +:+. ch t1) "Output-Values" funcReqDom
+
+dataDefs :: [DataDefinition]
+dataDefs = [t1DD]
+
+t1DD :: DataDefinition
+t1DD = ddENoRefs t1QD Nothing "t1" []
+
+t1QD :: SimpleQDef
+t1QD = mkQuantDef t1 $ sy t0 $+ sy dt
+
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO
+  projName [authorName]
   [] [] [] []
-  ([] :: [DefinedQuantityDict])
-  ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  []
-  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef])
+  ([] :: [TheoryModel]) ([] :: [GenDefn]) dataDefs ([] :: [InstanceModel])
+  inputs outputs
+  ([] :: [ConstrConcept]) ([] :: [ConstQDef]) symbols
   symbMap
 
-ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- CIs
-  [nw progName]
+symbols :: [DefinedQuantityDict]
+symbols = NE.toList $ inputs <> outputs
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = [] :: [ConceptChunk]
+conceptChunks = []
+
+concIns :: [ConceptInstance]
+concIns = [inputValues, outputValues]
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [DefinedQuantityDict]) ideaDicts conceptChunks
-  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [LabelledContent]) ([] :: [Reference]) citations
+symbMap = withCommonKnowledge projName [] symbols [] [] conceptChunks []
+  dataDefs [] [] [] concIns citations [inputValuesTable]
 
 citations :: BibRef
-citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,
-             smithKoothoor2016]
+citations = [parnasClements1986]
 
-inConstraints :: [UncertQ]
-inConstraints = []
-
-outConstraints :: [UncertQ]
-outConstraints = []
+resourcePath :: String
+resourcePath = "../../../../datafiles/dblpend/" -- FIXME: Change to your resource path!
 
 figTemp :: LabelledContent
-figTemp = llcc (makeFigRef "dblpend") $ figWithWidth EmptyS
-  (resourcePath ++ "dblpend.png") 60
-
-
--- MOVE TO CONCEPTS
-progName :: CI
-progName = commonIdeaWithDict "progName" (pn "ProgName") "ProgName" []
+figTemp = llccFig "dblpend" $ figWithWidth EmptyS
+  (resourcePath <> "dblpend.png") 60
 
 -- MOVE TO DATA.PEOPLE
 authorName :: Person

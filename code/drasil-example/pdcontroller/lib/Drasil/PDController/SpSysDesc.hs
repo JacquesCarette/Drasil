@@ -1,18 +1,21 @@
-module Drasil.PDController.SpSysDesc where
+module Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts) where
+
+import Language.Drasil
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
+import Language.Drasil.Document (ConceptInstance, cic)
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 
 import Drasil.PDController.Concepts
-import Language.Drasil
-import Language.Drasil.Chunk.Concept.NamedCombinators
 
 -- Introduction of the Problem Description section derives from purpose in
 -- System (purp in Body.hs)
 
 sysParts :: [Sentence]
 sysParts
-  = map ((!.) . atStartNP . the)
-      [summingPt, pidC, powerPlant]
+  = (!.) . D.toSent . atStartNP . the
+      <$> [summingPt, pidC, powerPlant]
 
 sysGoalInput :: [Sentence]
 sysGoalInput

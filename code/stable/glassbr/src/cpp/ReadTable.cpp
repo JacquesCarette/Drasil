@@ -132,66 +132,34 @@ void read_table(string filename, vector<double> &z_vector, vector<vector<double>
             x_matrix_temp.push_back(std::stod(linetokens.at(j * 2 + 0)));
             y_matrix_temp.push_back(std::stod(linetokens.at(j * 2 + 1)));
         }
+        outfile.open("log.txt", std::fstream::app);
+        outfile << "var 'x_matrix_temp' assigned ";
+        outfile << "[";
+        for (int list_i1 = 0; list_i1 < (int)(x_matrix_temp.size()) - 1; list_i1++) {
+            outfile << x_matrix_temp.at(list_i1);
+            outfile << ", ";
+        }
+        if ((int)(x_matrix_temp.size()) > 0) {
+            outfile << x_matrix_temp.at((int)(x_matrix_temp.size()) - 1);
+        }
+        outfile << "]";
+        outfile << " in module ReadTable" << std::endl;
+        outfile.close();
+        outfile.open("log.txt", std::fstream::app);
+        outfile << "var 'y_matrix_temp' assigned ";
+        outfile << "[";
+        for (int list_i1 = 0; list_i1 < (int)(y_matrix_temp.size()) - 1; list_i1++) {
+            outfile << y_matrix_temp.at(list_i1);
+            outfile << ", ";
+        }
+        if ((int)(y_matrix_temp.size()) > 0) {
+            outfile << y_matrix_temp.at((int)(y_matrix_temp.size()) - 1);
+        }
+        outfile << "]";
+        outfile << " in module ReadTable" << std::endl;
+        outfile.close();
         x_matrix.push_back(x_matrix_temp);
         y_matrix.push_back(y_matrix_temp);
     }
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'x_matrix' assigned ";
-    outfile << "[";
-    for (int list_i2 = 0; list_i2 < (int)(x_matrix.size()) - 1; list_i2++) {
-        outfile << "[";
-        for (int list_i1 = 0; list_i1 < (int)(x_matrix.at(list_i2).size()) - 1; list_i1++) {
-            outfile << x_matrix.at(list_i2).at(list_i1);
-            outfile << ", ";
-        }
-        if ((int)(x_matrix.at(list_i2).size()) > 0) {
-            outfile << x_matrix.at(list_i2).at((int)(x_matrix.at(list_i2).size()) - 1);
-        }
-        outfile << "]";
-        outfile << ", ";
-    }
-    if ((int)(x_matrix.size()) > 0) {
-        outfile << "[";
-        for (int list_i1 = 0; list_i1 < (int)(x_matrix.at((int)(x_matrix.size()) - 1).size()) - 1; list_i1++) {
-            outfile << x_matrix.at((int)(x_matrix.size()) - 1).at(list_i1);
-            outfile << ", ";
-        }
-        if ((int)(x_matrix.at((int)(x_matrix.size()) - 1).size()) > 0) {
-            outfile << x_matrix.at((int)(x_matrix.size()) - 1).at((int)(x_matrix.at((int)(x_matrix.size()) - 1).size()) - 1);
-        }
-        outfile << "]";
-    }
-    outfile << "]";
-    outfile << " in module ReadTable" << std::endl;
-    outfile.close();
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'y_matrix' assigned ";
-    outfile << "[";
-    for (int list_i2 = 0; list_i2 < (int)(y_matrix.size()) - 1; list_i2++) {
-        outfile << "[";
-        for (int list_i1 = 0; list_i1 < (int)(y_matrix.at(list_i2).size()) - 1; list_i1++) {
-            outfile << y_matrix.at(list_i2).at(list_i1);
-            outfile << ", ";
-        }
-        if ((int)(y_matrix.at(list_i2).size()) > 0) {
-            outfile << y_matrix.at(list_i2).at((int)(y_matrix.at(list_i2).size()) - 1);
-        }
-        outfile << "]";
-        outfile << ", ";
-    }
-    if ((int)(y_matrix.size()) > 0) {
-        outfile << "[";
-        for (int list_i1 = 0; list_i1 < (int)(y_matrix.at((int)(y_matrix.size()) - 1).size()) - 1; list_i1++) {
-            outfile << y_matrix.at((int)(y_matrix.size()) - 1).at(list_i1);
-            outfile << ", ";
-        }
-        if ((int)(y_matrix.at((int)(y_matrix.size()) - 1).size()) > 0) {
-            outfile << y_matrix.at((int)(y_matrix.size()) - 1).at((int)(y_matrix.at((int)(y_matrix.size()) - 1).size()) - 1);
-        }
-        outfile << "]";
-    }
-    outfile << "]";
-    outfile << " in module ReadTable" << std::endl;
-    outfile.close();
     infile.close();
 }

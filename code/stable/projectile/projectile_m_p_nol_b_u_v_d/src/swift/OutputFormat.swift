@@ -7,27 +7,15 @@
 import Foundation
 
 /** Writes the output values to output.txt
-    - Parameter s: output message as a string
     - Parameter d_offset: distance between the target position and the landing position (m)
     - Parameter t_flight: flight duration (s)
 */
-func write_output(_ s: String, _ d_offset: Double, _ t_flight: Double) throws -> Void {
+func write_output(_ d_offset: Double, _ t_flight: Double) throws -> Void {
     var outputfile: FileHandle
     do {
         outputfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("output.txt"))
     } catch {
         throw "Error opening file."
-    }
-    do {
-        try outputfile.write(contentsOf: Data("s = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outputfile.write(contentsOf: Data(s.utf8))
-        try outputfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
     }
     do {
         try outputfile.write(contentsOf: Data("d_offset = ".utf8))

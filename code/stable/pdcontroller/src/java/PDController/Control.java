@@ -29,7 +29,7 @@ public class Control {
         t_step = (double)(outputs[3]);
         t_sim = (double)(outputs[4]);
         InputParameters.input_constraints(r_t, K_d, K_p, t_step, t_sim);
-        ArrayList<Double> y_t = Calculations.func_y_t(K_d, K_p, r_t, t_sim, t_step);
+        ArrayList<ArrayList<Double>> y_t = Calculations.func_y_t(K_d, K_p, r_t, t_sim, t_step);
         OutputFormat.write_output(y_t);
     }
 }

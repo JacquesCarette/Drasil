@@ -1,9 +1,16 @@
-module Drasil.DblPend.Expressions where
+module Drasil.DblPend.Expressions (
+  velXExpr_2, velYExpr_2, velXExpr_1, velYExpr_1,
+  accelXExpr_1, accelYExpr_1, accelXExpr_2, accelYExpr_2,
+  xForceWithAngle_1, yForceWithAngle_1, xForceWithAngle_2, yForceWithAngle_2,
+  angularAccelExpr_1, angularAccelExpr_2, cosAngleExpr1,
+  cosAngleExpr2, forceDerivExpr1, forceDerivExpr2, sinAngleExpr1, sinAngleExpr2
+) where
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 
 import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalMagnitude)
+
 import Drasil.DblPend.DataDefs (positionXEqn_1)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
   xVel_1, yVel_1, xAccel_1, yAccel_1, angularAccel_1, angularAccel_2,
@@ -42,8 +49,8 @@ xForceWithAngle_1 = neg (sy tension_1 $* sin (sy pendDisAngle_1)) $+
                     (sy tension_2 $* sin (sy pendDisAngle_2))
 
 yForceWithAngle_1 :: PExpr
-yForceWithAngle_1 = sy tension_1 $* cos (sy pendDisAngle_1) $- 
-                    (sy tension_2 $* cos (sy pendDisAngle_2)) $- 
+yForceWithAngle_1 = sy tension_1 $* cos (sy pendDisAngle_1) $-
+                    (sy tension_2 $* cos (sy pendDisAngle_2)) $-
                     (sy massObj_1 $* sy gravitationalAccel)
 
 -- Horizontal/Vertical force acting on the second object
@@ -51,42 +58,42 @@ xForceWithAngle_2 :: PExpr
 xForceWithAngle_2 = neg (sy tension_2) $* sin (sy pendDisAngle_2)
 
 yForceWithAngle_2 :: PExpr
-yForceWithAngle_2 = sy tension_2 $* cos (sy pendDisAngle_2) $- 
+yForceWithAngle_2 = sy tension_2 $* cos (sy pendDisAngle_2) $-
                     (sy massObj_2 $* sy gravitationalAccel)
 
 -- Angular acceleration acting on the first object
 angularAccelExpr_1 :: PExpr
-angularAccelExpr_1 = neg(sy gravitationalMagnitude) $* 
+angularAccelExpr_1 = neg(sy gravitationalMagnitude) $*
                    (exactDbl 2 $* sy massObj_1 $+ sy massObj_2) $* sin (sy pendDisAngle_1 ) $-
-                   (sy massObj_2 $* sy gravitationalMagnitude $* 
+                   (sy massObj_2 $* sy gravitationalMagnitude $*
                    sin (sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2))) $-
-                   ((exactDbl 2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2 )) $* sy massObj_2 $* 
+                   ((exactDbl 2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2 )) $* sy massObj_2 $*
                    (
-                       square (sy angularVel_2) $* sy lenRod_2 $+ 
+                       square (sy angularVel_2) $* sy lenRod_2 $+
                        (square (sy angularVel_1) $* sy lenRod_1 $* cos (sy pendDisAngle_1 $- sy pendDisAngle_2))
                    ))
                    $/
-                   sy lenRod_1 $* 
+                   sy lenRod_1 $*
                    (
-                       exactDbl 2 $* sy massObj_1 $+ sy massObj_2 $- 
-                       (sy massObj_2 $* 
+                       exactDbl 2 $* sy massObj_1 $+ sy massObj_2 $-
+                       (sy massObj_2 $*
                        cos (exactDbl 2 $* sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2)))
                    )
 
 -- Angular acceleration acting on the first object
 angularAccelExpr_2 :: PExpr
-angularAccelExpr_2 = exactDbl 2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2) $* 
+angularAccelExpr_2 = exactDbl 2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2) $*
                    (
                        square (sy angularVel_1) $* sy lenRod_1 $* (sy massObj_1 $+ sy massObj_2 ) $+
                        (sy gravitationalMagnitude $* (sy massObj_1 $+ sy massObj_2 ) $* cos (sy pendDisAngle_1)) $+
-                       (square (sy angularVel_2) $* sy lenRod_2 $* sy massObj_2 $* 
+                       (square (sy angularVel_2) $* sy lenRod_2 $* sy massObj_2 $*
                        cos (sy pendDisAngle_1 $- sy pendDisAngle_2 ))
                    )
                    $/
-                   sy lenRod_2 $* 
+                   sy lenRod_2 $*
                    (
-                       exactDbl 2 $* sy massObj_1 $+ sy massObj_2 $- 
-                       (sy massObj_2 $* 
+                       exactDbl 2 $* sy massObj_1 $+ sy massObj_2 $-
+                       (sy massObj_2 $*
                        cos (exactDbl 2 $* sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2)))
                    )
 

@@ -1,5 +1,3 @@
-{-# LANGUAGE ConstraintKinds #-}
-
 -- | Defining all the classes which represent knowledge-about-knowledge.
 module Language.Drasil.Classes (
     -- * Classes
@@ -17,26 +15,25 @@ module Language.Drasil.Classes (
   , HasAdditionalNotes(getNotes)
     -- the unsorted rest
   , IsUnit(udefn, getUnits)
-  , UnitEq(uniteq)
     -- ** Expr and expressions
-  , Express(express)
+  , Express(express, mexpress)
   , DefiningExpr(defnExpr)
   ) where
+
+import Control.Lens (Lens')
+
+import Drasil.Database (UID)
 
 -- some classes are so 'core' that they are defined elsewhere
 -- also helps with cycles...
 import Language.Drasil.Symbol (HasSymbol)
-
 import Language.Drasil.Chunk.NamedIdea (Idea(..), NamedIdea(..))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.UnitLang (UDefn, USymb)
-import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.ExprClasses (Express(express))
+import Language.Drasil.ExprClasses (Express(express, mexpress))
+import Language.Drasil.ReasonableValue (ReasonableValue)
 import Language.Drasil.Space (HasSpace)
 import Language.Drasil.Sentence (Sentence)
-import Drasil.Database.UID (UID)
-
-import Control.Lens (Lens')
 
 -- TODO: conceptual typeclass?
 -- TODO: I was thinking of splitting QDefinitions into Definitions with 2 type variables
@@ -63,14 +60,14 @@ class ConceptDomain c where
 
 -- TODO: conceptual type synonym?
 -- | Concepts are 'Idea's with definitions and domains.
-type Concept c = (Idea c, Definition c, ConceptDomain c)
+type Concept c = (Idea c, Definition c)
 -- TODO: Would the below make this a bit better to work with?
 --        type Concept = forall c. (Idea c, Definition c, ConceptDomain c) => c
 
 -- | CommonIdea is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation. This is the main
 -- distinction between getA and abrv, where getA may return Nothing,
--- while abrv will always return the abbreviation. 
+-- while abrv will always return the abbreviation.
 class NamedIdea c => CommonIdea c where
   -- | Introduces abrv which necessarily provides an abbreviation.
   abrv :: c -> String
@@ -84,12 +81,12 @@ class Constrained c where
 -- | A 'Quantity' that could have a reasonable value.
 class HasReasVal c where
   -- | Provides a 'Lens' to the possible reasonable value.
-  reasVal     :: Lens' c (Maybe Expr)
+  reasVal     :: Lens' c (Maybe ReasonableValue)
 
 -- | A Quantity is an 'Idea' with a 'Space' and a 'Symbol'.
 -- In theory, it should also restrict to being a part of 'MayHaveUnit', but that causes
 -- all sorts of import cycles (or lots of orphans).
-class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
+type Quantity c = (Idea c, HasSpace c, HasSymbol c)
 
 -- TODO: potential alternative design for "Quantity"?
 --
@@ -116,12 +113,6 @@ class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
   udefn :: u -> Maybe UDefn
   -- | Holds units as a list of 'UID'.
   getUnits :: u -> [UID]
-
--- Investigate (TODO): is this really needed?
--- | Contains a 'UDefn'
-class UnitEq u where
-  -- | Provides the 'Lens' to a unit definition.
-  uniteq :: Lens' u UDefn
 
 -----------------------------------------------------
 

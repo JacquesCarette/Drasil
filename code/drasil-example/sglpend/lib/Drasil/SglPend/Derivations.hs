@@ -1,4 +1,9 @@
-module Drasil.SglPend.Derivations where
+module Drasil.SglPend.Derivations (
+  angularDisplacementDerivEqns, angFrequencyDerivEqns, periodPendDerivEqns,
+  velocityIXDerivEqns, velocityIYDerivEqns,
+  accelerationIXDerivEqn3, accelerationIXDerivEqn4,
+  accelerationIYDerivEqn3,accelerationIYDerivEqn4, accelerationIDerivEqn1
+) where
 
 import Prelude hiding (sin, cos, tan, sqrt)
 
@@ -31,7 +36,7 @@ velocityIYDerivEqns = [velocityIDerivEqn1, velocityIYDerivEqn2, velocityIYDerivE
 
 -- Acceleration IX/IY
 accelerationIDerivEqn1, accelerationIXDerivEqn3, accelerationIXDerivEqn4 :: ModelExpr
-accelerationIDerivEqn1 = sy acceleration $= deriv (sy velocity) time 
+accelerationIDerivEqn1 = sy acceleration $= deriv (sy velocity) time
 accelerationIXDerivEqn3 = sy xAccel $= deriv (sy angularVelocity $* sy lenRod $* cos (sy pendDisplacementAngle)) time
 accelerationIXDerivEqn4 = sy xAccel $= deriv (sy angularVelocity) time $* sy lenRod $* cos (sy pendDisplacementAngle)
                         $- (sy angularVelocity $* sy lenRod $* sin (sy pendDisplacementAngle) $* deriv (sy pendDisplacementAngle) time)

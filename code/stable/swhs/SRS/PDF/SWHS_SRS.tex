@@ -28,7 +28,7 @@
   \adjustbox{max width=\linewidth}{$#1$}
 }
 \bibliography{bibfile}
-\title{Software Requirements Specification for Solar Water Heating Systems Incorporating PCM}
+\title{Software Requirements Specification for Solar Water Heating Systems incorporating PCM}
 \author{Thulasi Jegatheesan, Brooks MacLachlan, and W. Spencer Smith}
 \begin{document}
 \maketitle
@@ -302,9 +302,9 @@ Uncert. & Typical Uncertainty
 \end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
-Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use a renewable energy source and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
+Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar water heating systems (SWHS) incorporating phase change material (PCM) use a renewable energy source and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems incorporating PCM. The developed program will be referred to as Solar Water Heating System (SWHS) based on the original, manually created version of \hyperref{https://github.com/smiths/swhs/tree/master}{}{}{SWHS}. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the software requirements specification (SRS) for SWHS. The program is based on the original, manually created version of \hyperref{https://github.com/smiths/swhs/tree/master}{}{}{SWHS}. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -324,7 +324,7 @@ Reviewers of this documentation should have an understanding of heat transfer th
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
 
-The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. The instance models to be solved are referred to as \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM:heatEInPCM}. The instance models provide the ordinary differential equations (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
+The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. The instance models to be solved are referred to as \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM:heatEInPCM}. The instance models provide the ordinary differential equations (ODEs) and algebraic equations that model solar water heating system. SWHS solves these ODEs.
 
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -437,7 +437,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Volume-Change-Melting-PCM-Negligible:\phantomsection\label{assumpVCMPN}]{The volume change of the PCM due to melting is negligible. (RefBy: \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}.)}
 \item[No-Gaseous-State-PCM:\phantomsection\label{assumpNGSP}]{The PCM is either in a liquid state or a solid state but not a gaseous state. (RefBy: \hyperref[IM:heatEInPCM]{IM:heatEInPCM}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[unlikeChgWPFS]{UC:Water-PCM-Fixed-States}, and \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}.)}
 \item[Atmospheric-Pressure-Tank:\phantomsection\label{assumpAPT}]{The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${{}^{\circ}\text{C}}$ and 100${{}^{\circ}\text{C}}$, respectively. (RefBy: \hyperref[IM:heatEInWtr]{IM:heatEInWtr} and \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}.)}
-\item[Volume-Coil-Negligible:\phantomsection\label{assumpVCN}]{When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: \hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}.)}
+\item[Volume-Coil-Negligible:\phantomsection\label{assumpVCN}]{When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: \hyperref[DD:waterVolume_pcm]{DD:waterVolume\_pcm}.)}
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -741,7 +741,7 @@ Description & \begin{symbDescription}
 Notes & ${q_{\text{P}}}$ is found by assuming that Newton's law of cooling applies (\hyperref[assumpLCCWP]{A:Law-Convective-Cooling-Water-PCM}). This law (defined in \hyperref[TM:nwtnCooling]{TM:nwtnCooling}) is used on the surface of the phase change material.
         
 \\ \midrule
-Source & \cite{koothoor2013}
+Source & \cite{lightstone2012}
          
 \\ \midrule
 RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} and \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}
@@ -794,9 +794,9 @@ RefBy & \hyperref[findMass]{FR:Find-Mass}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:waterVolume.pcm}
+\toprule \textbf{Refname} & \textbf{DD:waterVolume\_pcm}
 \phantomsection 
-\label{DD:waterVolume.pcm}
+\label{DD:waterVolume_pcm}
 \\ \midrule
 Label & Volume of water
         
@@ -860,7 +860,7 @@ Description & \begin{symbDescription}
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[findMass]{FR:Find-Mass} and \hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}
+RefBy & \hyperref[findMass]{FR:Find-Mass} and \hyperref[DD:waterVolume_pcm]{DD:waterVolume\_pcm}
         
 \\ \bottomrule
 \end{tabular}
@@ -1448,12 +1448,12 @@ RefBy & \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[unlikeChgNGS]{U
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (\hyperref[assumpPIS]{A:PCM-Initially-Solid}). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{\text{min}}}}$, where ${h_{\text{min}}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
+The \hyperref[Table:InDataConstraints]{Input Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of reasonable values is intended to provide examples of values that are physically admissible. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (\hyperref[assumpPIS]{A:PCM-Initially-Solid}). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{\text{min}}}}$, where ${h_{\text{min}}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
 
 \begin{longtblr}
 [caption={Input Data Constraints}]
 {colspec={l l X[l] l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Reasonable Value} & \textbf{Uncert.}
 \\
 ${A_{\text{C}}}$ & ${A_{\text{C}}}\gt{}0$ & ${A_{\text{C}}}\leq{}{{A_{\text{C}}}^{\text{max}}}$ & $0.12$ ${\text{m}^{2}}$ & 10$\%$
 \\
@@ -1494,7 +1494,7 @@ ${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}\gt{}0$ & ${{ρ_{\text{W}}}^{\text{min}}}\lt
 \end{longtblr}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
-The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+The \hyperref[Table:OutDataConstraints]{Output Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 
 \begin{longtblr}
 [caption={Output Data Constraints}]
@@ -1532,7 +1532,7 @@ This section provides the functional requirements, the tasks and behaviours that
 
 \begin{description}[font=\normalfont]
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}, which define the tank parameters, material properties, and initial conditions.}
-\item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputValues]{FR:Input-Values} to find the masses needed for \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM:heatEInPCM}, using \hyperref[DD:waterMass]{DD:waterMass}, \hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}, and \hyperref[DD:tankVolume]{DD:tankVolume}.}
+\item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputValues]{FR:Input-Values} to find the masses needed for \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM:heatEInPCM}, using \hyperref[DD:waterMass]{DD:waterMass}, \hyperref[DD:waterVolume_pcm]{DD:waterVolume\_pcm}, and \hyperref[DD:tankVolume]{DD:tankVolume}.}
 \item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]{Verify that the inputs satisfy the required \hyperref[Sec:DataConstraints]{physical constraints}.}
 \item[Output-Input-Derived-Values:\phantomsection\label{outputInputDerivVals}]{Output the input values and derived values in the following list: the values (from \hyperref[inputValues]{FR:Input-Values}), the masses (from \hyperref[findMass]{FR:Find-Mass}), ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}), $η$ (from \hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}), ${{τ_{\text{P}}}^{\text{S}}}$ (from \hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}), and ${{τ_{\text{P}}}^{\text{L}}}$ (from \hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}).}
 \item[Calculate-Values:\phantomsection\label{calcValues}]{Calculate the following values: ${T_{\text{W}}}$($t$) (from \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}), ${T_{\text{P}}}$($t$) (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}), ${E_{\text{W}}}$($t$) (from \hyperref[IM:heatEInWtr]{IM:heatEInWtr}), and ${E_{\text{P}}}$($t$) (from \hyperref[IM:heatEInPCM]{IM:heatEInPCM}).}
@@ -1600,7 +1600,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
-This section lists the likely changes to be made to the software.
+This section lists the likely changes (LC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[Uniform-Temperature-PCM:\phantomsection\label{likeChgUTP}]{\hyperref[assumpTPCAV]{A:Temp-PCM-Constant-Across-Volume} - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.}
@@ -1612,7 +1612,7 @@ This section lists the likely changes to be made to the software.
 \end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
-This section lists the unlikely changes to be made to the software.
+This section lists the unlikely changes (UC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[Water-PCM-Fixed-States:\phantomsection\label{unlikeChgWPFS}]{\hyperref[assumpWAL]{A:Water-Always-Liquid}, \hyperref[assumpNGSP]{A:No-Gaseous-State-PCM} - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.}
@@ -1676,7 +1676,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:waterMass]{DD:waterMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
+\hyperref[DD:waterVolume_pcm]{DD:waterVolume\_pcm} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
 \\
 \hyperref[DD:tankVolume]{DD:tankVolume} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1716,16 +1716,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:heatEInPCM]{IM:heatEInPCM} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X &  & 
 \\
-\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[findMass]{FR:Find-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1743,6 +1733,16 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[likeChgUTP]{LC:Uniform-Temperature-PCM} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1766,11 +1766,11 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:waterMass]{DD:waterMass}} & \textbf{\hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}} & \textbf{\hyperref[DD:tankVolume]{DD:tankVolume}} & \textbf{\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD:htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD:meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM:consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM:sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM:latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM:nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD:rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}} & \textbf{\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM:heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM:heatEInPCM}}
+\textbf{} & \textbf{\hyperref[DD:waterMass]{DD:waterMass}} & \textbf{\hyperref[DD:waterVolume_pcm]{DD:waterVolume\_pcm}} & \textbf{\hyperref[DD:tankVolume]{DD:tankVolume}} & \textbf{\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD:htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD:meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM:consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM:sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM:latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM:nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD:rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}} & \textbf{\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM:heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM:heatEInPCM}}
 \\
 \hyperref[DD:waterMass]{DD:waterMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:waterVolume_pcm]{DD:waterVolume\_pcm} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:tankVolume]{DD:tankVolume} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1814,7 +1814,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:waterMass]{DD:waterMass}} & \textbf{\hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}} & \textbf{\hyperref[DD:tankVolume]{DD:tankVolume}} & \textbf{\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD:htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD:meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM:consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM:sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM:latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM:nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD:rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}} & \textbf{\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM:heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM:heatEInPCM}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[verifiable]{NFR:Verifiability}} & \textbf{\hyperref[understandable]{NFR:Understandability}} & \textbf{\hyperref[reusable]{NFR:Reusability}} & \textbf{\hyperref[maintainable]{NFR:Maintainability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[findMass]{FR:Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[verifyEnergyOutput]{FR:Verify-Energy-Output-Follow-Conservation-of-Energy}} & \textbf{\hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time}} & \textbf{\hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
+\textbf{} & \textbf{\hyperref[DD:waterMass]{DD:waterMass}} & \textbf{\hyperref[DD:waterVolume_pcm]{DD:waterVolume\_pcm}} & \textbf{\hyperref[DD:tankVolume]{DD:tankVolume}} & \textbf{\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD:htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD:meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM:consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM:sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM:latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM:nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD:rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}} & \textbf{\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM:heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM:heatEInPCM}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[findMass]{FR:Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[verifyEnergyOutput]{FR:Verify-Energy-Output-Follow-Conservation-of-Energy}} & \textbf{\hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time}} & \textbf{\hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[verifiable]{NFR:Verifiability}} & \textbf{\hyperref[understandable]{NFR:Understandability}} & \textbf{\hyperref[reusable]{NFR:Reusability}} & \textbf{\hyperref[maintainable]{NFR:Maintainability}}
 \\
 \hyperref[waterTempGS]{GS:Predict-Water-Temperature} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1824,23 +1824,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[pcmEnergyGS]{GS:Predict-PCM-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[findMass]{FR:Find-Mass} & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[findMass]{FR:Find-Mass} & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  & 
+\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1851,41 +1841,51 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/swhs/avsa}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/swhs/avsall}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/swhs/refvsref}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/swhs/allvsr}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/swhs/allvsall}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/allvsall}
 \caption{TraceGraphAllvsAll}
 \label{Figure:TraceGraphAllvsAll}
 \end{center}
@@ -1893,11 +1893,11 @@ The purpose of the traceability graphs is also to provide easy references on wha
 For convenience, the following graphs can be found at the links below:
 
 \begin{itemize}
-\item{\hyperref{../../../../traceygraphs/swhs/avsa.svg}{}{}{TraceGraphAvsA}}
-\item{\hyperref{../../../../traceygraphs/swhs/avsall.svg}{}{}{TraceGraphAvsAll}}
-\item{\hyperref{../../../../traceygraphs/swhs/refvsref.svg}{}{}{TraceGraphRefvsRef}}
-\item{\hyperref{../../../../traceygraphs/swhs/allvsr.svg}{}{}{TraceGraphAllvsR}}
-\item{\hyperref{../../../../traceygraphs/swhs/allvsall.svg}{}{}{TraceGraphAllvsAll}}
+\item{\hyperref{../../TraceyGraph/avsa.svg}{}{}{TraceGraphAvsA}}
+\item{\hyperref{../../TraceyGraph/avsall.svg}{}{}{TraceGraphAvsAll}}
+\item{\hyperref{../../TraceyGraph/refvsref.svg}{}{}{TraceGraphRefvsRef}}
+\item{\hyperref{../../TraceyGraph/allvsr.svg}{}{}{TraceGraphAllvsR}}
+\item{\hyperref{../../TraceyGraph/allvsall.svg}{}{}{TraceGraphAllvsAll}}
 \end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}

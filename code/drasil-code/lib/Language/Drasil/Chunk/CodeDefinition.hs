@@ -3,12 +3,15 @@ module Language.Drasil.Chunk.CodeDefinition (
   CodeDefinition, DefinitionType(..), qtoc, qtov, odeDef, auxExprs, defType,
 ) where
 
-import Drasil.Code.CodeExpr.Development (expr, CanGenCode(..))
-import Language.Drasil
-import Language.Drasil.Chunk.Code (quantvar, quantfunc)
-import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..))
-
 import Control.Lens ((^.), makeLenses, view)
+
+import Drasil.Database (HasUID(..), HasChunkRefs(..))
+import Language.Drasil
+
+import Drasil.Code.CodeExpr.Development (CodeExpr, expr, CanGenCode(..))
+import Drasil.Code.CodeVar
+import Language.Drasil.Chunk.Code () -- Importing for the instances.
+import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..))
 
 -- | The definition may be specialized to use ODEs.
 data DefinitionType = Definition | ODE
@@ -21,6 +24,10 @@ data CodeDefinition = CD { _cchunk   :: CodeChunk
                          }
 makeLenses ''CodeDefinition
 
+instance HasChunkRefs CodeDefinition where
+  chunkRefs cd = chunkRefs (cd ^. cchunk)
+  {-# INLINABLE chunkRefs #-}
+
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeDefinition'.
 instance HasUID           CodeDefinition where uid = cchunk . uid
 -- | Finds the term ('NP') of the 'CodeChunk' used to make the 'CodeDefinition'.
@@ -29,20 +36,16 @@ instance NamedIdea        CodeDefinition where term = cchunk . term
 instance Idea             CodeDefinition where getA = getA . view cchunk
 -- | Finds the Definition of the 'CodeChunk' used to make the 'CodeDefinition'.
 instance Definition       CodeDefinition where defn = cchunk . defn
--- | Finds the concept domains of the 'CodeChunk' used to make the 'CodeDefinition'
-instance ConceptDomain    CodeDefinition where cdom = cdom . view cchunk
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeDefinition'.
 instance HasSpace         CodeDefinition where typ = cchunk . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeDefinition'.
 instance HasSymbol        CodeDefinition where symbol c = symbol (c ^. cchunk)
--- | 'CodeDefinition's have a 'Quantity'.
-instance Quantity         CodeDefinition
 -- | Finds the code name of a 'CodeDefinition'.
 -- 'Function' 'CodeDefinition's are named with the function prefix to distinguish
 -- them from the corresponding variable version.
 instance CodeIdea         CodeDefinition where
   codeName (CD c@(CodeC _ Var) _ _ _) = codeName c
-  codeName (CD c@(CodeC _ Func) _ _ _) = funcPrefix ++ codeName c
+  codeName (CD c@(CodeC _ Func) _ _ _) = funcPrefix <> codeName c
   codeChunk = view cchunk
 -- | Equal if 'UID's are equal.
 instance Eq               CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
@@ -68,8 +71,12 @@ qtov q = CD (codeChunk $ quantvar q) (toCodeExpr $ q ^. defnExpr) [] Definition
 -- | Constructs a 'CodeDefinition' for an ODE.
 odeDef :: ODEInfo -> CodeDefinition
 odeDef info = CD
-  (codeChunk $ quantfunc $ depVar info)
+  (codeChunk $ quantfunc odeSolList)
   (matrix [odeSyst info])
   (matrix [initVal info]:
-    map ($ info) [tInit, tFinal, absTol . odeOpts, relTol . odeOpts, stepSize . odeOpts])
+    fmap ($ info) [tInit, tFinal, absTol . odeOpts, relTol . odeOpts, stepSize . odeOpts])
   ODE
+  where
+    dv = depVar info
+    odeSolList = implVarAU' (dv ^. uid) (dv ^. term) (dv ^. defn)
+      (getA dv) (Vect $ dv ^. typ) (symbol dv Implementation) (getUnit dv)

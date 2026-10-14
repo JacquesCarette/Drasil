@@ -1,20 +1,24 @@
 module Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, iMods, instModIntro, eBalanceOnWtrRC) where
 
-import Language.Drasil
-import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel')
-import Utils.Drasil (weave)
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
 import Control.Lens ((^.))
+import Data.List.NonEmpty (NonEmpty((:|)), singleton)
 
 import Data.Drasil.Citations (koothoor2013)
 import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Thermodynamics (melting, boilPt)
-
 import Data.Drasil.Quantities.Physics (energy, time)
+import Language.Drasil
+import Language.Drasil.Document
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
+import qualified Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel',
+  Derivation, mkDerivName, DifferentialModel, makeASystemDE)
+import Data.List.Extras (weave)
 
+-- other parts of SHWS
 import Drasil.SWHS.Concepts (water)
 import Drasil.SWHS.DataDefs (balanceDecayRate)
 import Drasil.SWHS.GenDefs (htFluxWaterFromCoil)
@@ -22,6 +26,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc3, heat
 import Drasil.SWHS.Unitals (coilHTC, coilSA, htCapW, htFluxC, tauW, tempC,
   tempInit, tempW, timeFinal, wMass)
 
+-- local
 import Drasil.SWHSNoPCM.Assumptions (assumpNIHGBW, assumpWAL)
 import Drasil.SWHSNoPCM.Goals (waterTempGS, waterEnergyGS)
 import Drasil.SWHSNoPCM.Derivations (eBalanceOnWtrDerivEqns)
@@ -42,37 +47,37 @@ eBalanceOnWtr = im (newDEModel' eBalanceOnWtrRC)
   [dRefInfo koothoor2013 $ RefNote "with PCM removed"]
   (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrNotes
 
-eBalanceOnWtrRC :: DifferentialModel 
-eBalanceOnWtrRC = 
+eBalanceOnWtrRC :: DifferentialModel
+eBalanceOnWtrRC =
   makeASystemDE
     time
     tempW
     coeffs
     unknowns
     constants
-    "eBalanceOnWtrRC" 
-    (nounPhraseSP $ "Energy balance on " ++ "water to find the temperature of the water") 
+    "eBalanceOnWtrRC"
+    (nounPhraseSP $ "Energy balance on " <> "water to find the temperature of the water")
     (tempW ^. defn)
-    where coeffs = [[exactDbl 1, recip_ (sy tauW)]]
+    where coeffs = singleton (exactDbl 1 :| [recip_ (sy tauW)])
           unknowns = [1, 0]
-          constants = [recip_ (sy tauW) $* sy tempC]
+          constants = singleton $ recip_ (sy tauW) $* sy tempC
 
 balWtrNotes :: [Sentence]
-balWtrNotes = map foldlSent [
+balWtrNotes = foldlSent <$> [
   [ch tauW `S.is` S "calculated from", refS balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
    S "is in", phrase liquid, S "form" `sC` eS (realInterval tempW $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)),
-   sParen (unwrap $ getUnit tempW), S "where", eS (exactDbl 0),
-   sParen (unwrap $ getUnit tempW) `S.and_` eS (exactDbl 100),
-   sParen (unwrap $ getUnit tempW), S "are the", pluralNP ((melting `and_`
-   boilPt) `of_PSNPNI` water) `sC` S "respectively", sParen (refS assumpWAL)]]
+   unitInParen tempW, S "where", eS (exactDbl 0),
+   unitInParen tempW `S.and_` eS (exactDbl 100),
+   unitInParen tempW, S "are the", D.toSent (pluralNP ((melting `and_`
+   boilPt) `of_PSNPNI` water)) `sC` S "respectively", sParen (refS assumpWAL)]]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
 ----------------------------------------------
 eBalanceOnWtrDeriv :: Derivation
-eBalanceOnWtrDeriv = mkDerivName (phraseNP (the energy) +:+ S "balance on water")
-  (weave [eBalanceOnWtrDerivSentences, map eS eBalanceOnWtrDerivEqns])
+eBalanceOnWtrDeriv = mkDerivName (D.toSent (phraseNP (the energy)) +:+ S "balance on water")
+  (weave eBalanceOnWtrDerivSentences $ eS <$> eBalanceOnWtrDerivEqns)
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+ ch coilSA) EmptyS assumpNIHGBW,
@@ -90,6 +95,6 @@ eBalanceOnWtrDerivDesc4 = substitute [balanceDecayRate]
 -----------
 
 instModIntro :: Sentence
-instModIntro = foldlSent [atStartNP (the goal), refS waterTempGS,
+instModIntro = foldlSent [D.toSent (atStartNP (the goal)), refS waterTempGS,
   S "is met by", refS eBalanceOnWtr `S.andThe` phrase goal,
   refS waterEnergyGS, S "is met by", refS heatEInWtr]

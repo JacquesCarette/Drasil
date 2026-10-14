@@ -1,11 +1,11 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPend.IMods (iMods, angleIM_1, angleIM_2) where
 
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
+import Language.Drasil.Document
 import Theory.Drasil
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (condition)
@@ -30,19 +30,19 @@ angleDerivSents = [angleDerivSent1, EmptyS, angleDerivSent2, EmptyS, angleDerivS
 
 angleDerivSent1, angleDerivSent2, angleDerivSent3,
   angleDerivSent4, angleDerivSent5, angleDerivSent6 :: Sentence
-angleDerivSent1 = foldlSentCol [S "By solving equations" +:+ refS xForceGD_2 `S.and_` refS yForceGD_2 
-                    `S.for` eS forceDerivExpr1 `S.and_` eS forceDerivExpr2 `S.and_` S "then substituting into equation" +:+ 
+angleDerivSent1 = foldlSentCol [S "By solving equations" +:+ refS xForceGD_2 `S.and_` refS yForceGD_2
+                    `S.for` eS forceDerivExpr1 `S.and_` eS forceDerivExpr2 `S.and_` S "then substituting into equation" +:+
                     refS xForceGD_1 `S.and_` refS yForceGD_1 +:+ S ", we can get equations 1 and 2"]
-angleDerivSent2 = foldlSentCol [S "Multiply the equation 1 by" +:+ 
+angleDerivSent2 = foldlSentCol [S "Multiply the equation 1 by" +:+
                     eS cosAngleExpr1 `S.and_` S "the equation 2 by" +:+ eS sinAngleExpr1 `S.and_`
                     S "rearrange to get"]
 angleDerivSent3 = S "This leads to the equation 3"
-angleDerivSent4 = foldlSentCol[S "Next, multiply equation" +:+ refS xForceGD_2 +:+ S "by" +:+ 
-                    eS cosAngleExpr2 `S.and_` S "equation" +:+ refS yForceGD_2 +:+ S "by" +:+ 
+angleDerivSent4 = foldlSentCol[S "Next, multiply equation" +:+ refS xForceGD_2 +:+ S "by" +:+
+                    eS cosAngleExpr2 `S.and_` S "equation" +:+ refS yForceGD_2 +:+ S "by" +:+
                     eS sinAngleExpr2 `S.and_` S "rearrange to get"]
 angleDerivSent5 = S "which leads to equation 4"
-angleDerivSent6 = foldlSentCol[S "By giving equations" +:+ refS accelXGD_1 `S.and_` refS accelXGD_2 `S.and_` 
-                    refS accelYGD_1 `S.and_` refS accelYGD_2 +:+ 
+angleDerivSent6 = foldlSentCol[S "By giving equations" +:+ refS accelXGD_1 `S.and_` refS accelXGD_2 `S.and_`
+                    refS accelYGD_1 `S.and_` refS accelYGD_2 +:+
                     S "plus additional two equations, 3 and 4, we can get" +:+ refS angleIM_1 `S.and_`
                     refS angleIM_2 +:+ S "via a computer algebra program"]
 
@@ -54,7 +54,7 @@ angleIM_1 = imNoRefs angleMK_1
    qwC massObj_2 $ UpFrom (Exc, exactDbl 0),
    qwUC pendDisAngle_1,
    qwUC pendDisAngle_2]
-  (dqdWr pendDisAngle_1) []
+  pendDisAngle_1 []
   Nothing "calOfAngle1" [foldlSent [ch pendDisAngle_1 `S.is`
       S "calculated by solving the", short ode, S "here together with the initial",
       plural condition `S.and_` refS angleIM_2]]
@@ -75,7 +75,7 @@ angleIM_2 = imNoRefs angleMK_2
    qwC massObj_2 $ UpFrom (Exc, exactDbl 0),
    qwUC pendDisAngle_1,
    qwUC pendDisAngle_2]
-  (dqdWr pendDisAngle_2) []
+  pendDisAngle_2 []
   (Just angleDeriv_2) "calOfAngle2" [foldlSent [ch pendDisAngle_2 `S.is`
       S "calculated by solving the", short ode, S "here together with the initial",
       plural condition `S.and_` refS angleIM_1]]
@@ -89,4 +89,4 @@ angleFD_2 = mkFuncDefByQ angularAccel_2
   [pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2] angularAccelExpr_2
 
 angleDeriv_2 :: Derivation
-angleDeriv_2 = mkDerivName (phrase pendDisAngle_2) (weave [angleDerivSents, map eS angularAccelDerivEqns])
+angleDeriv_2 = mkDerivName (phrase pendDisAngle_2) (weave angleDerivSents $ eS <$> angularAccelDerivEqns)

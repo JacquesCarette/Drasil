@@ -151,7 +151,7 @@ ${\mathit{SD}_{\text{y}}}$ & Stand off distance ($y$-component) & ${\text{m}}$
 \\
 ${\mathit{SD}_{\text{z}}}$ & Stand off distance ($z$-component) & ${\text{m}}$
 \\
-$t$ & Nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & ${\text{mm}}$
+$t$ & Nominal thickness & ${\text{mm}}$
 \\
 ${t_{\text{d}}}$ & Duration of load & ${\text{s}}$
 \\
@@ -183,6 +183,8 @@ DD & Data Definition
 \\
 FT & Fully Tempered
 \\
+GD & General Definition
+\\
 GS & Goal Statement
 \\
 GTF & Glass Type Factor
@@ -194,8 +196,6 @@ IG & Insulating Glass
 IM & Instance Model
 \\
 LC & Likely Change
-\\
-LDF & Load Duration Factor
 \\
 LG & Laminated Glass
 \\
@@ -228,7 +228,7 @@ Uncert. & Typical Uncertainty
 \label{Sec:Intro}
 Explosions in downtown areas are dangerous from the blast itself and also potentially from the secondary effect of falling glass. Therefore, software is needed to predict whether a glass slab can withstand a blast under given conditions. For example, we might wish to know whether a pane of glass fails from a gas main explosion or from a small fertilizer truck bomb. The document describes the program called GlassBR , which is based on the original, manually created version of \hyperref{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}{}{}{GlassBR}.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the software requirements specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -246,7 +246,7 @@ Reviewers of this documentation should have an understanding of second year calc
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{data definitions} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
 
 The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. The data definitions are used to support the definitions of the different models.
 
@@ -496,10 +496,12 @@ Equation & \begin{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$h$ is the minimum thickness (${\text{m}}$)}
-              \item{$t$ is the nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (${\text{mm}}$)}
+              \item{$t$ is the nominal thickness (${\text{mm}}$)}
               \end{symbDescription}
 \\ \midrule
 Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
+        
+        nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$
         
 \\ \midrule
 Source & \cite{astm2009}
@@ -1298,12 +1300,12 @@ RefBy & \hyperref[IM:isSafePb]{IM:isSafePb} and \hyperref[checkGlassSafety]{FR:C
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The \hyperref[Sec:AuxConstants]{auxiliary constants} give the values of the specification parameters used in the \hyperref[Table:InDataConstraints]{Data Constraints Table}.
+The \hyperref[Table:InDataConstraints]{Input Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of reasonable values is intended to provide examples of values that are physically admissible. The \hyperref[Sec:AuxConstants]{auxiliary constants} give the values of the specification parameters used in the \hyperref[Table:InDataConstraints]{Input Data Constraints Table}.
 
 \begin{longtblr}
 [caption={Input Data Constraints}]
 {colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Reasonable Value} & \textbf{Uncert.}
 \\
 $a$ & $a\gt{}0\land{}a\geq{}b$ & ${d_{\text{min}}}\leq{}a\leq{}{d_{\text{max}}}$ & $1.5$ ${\text{m}}$ & 10$\%$
 \\
@@ -1322,7 +1324,7 @@ $w$ & $w\gt{}0$ & ${w_{\text{min}}}\leq{}w\leq{}{w_{\text{max}}}$ & $42$ ${\text
 \end{longtblr}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
-The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+The \hyperref[Table:OutDataConstraints]{Output Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 
 \begin{longtblr}
 [caption={Output Data Constraints}]
@@ -1352,7 +1354,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \end{description}
 \begin{longtblr}
 [caption={Required Inputs}]
-{colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
 $a$ & Plate length (long dimension) & ${\text{m}}$
@@ -1369,7 +1371,7 @@ ${\mathit{SD}_{\text{y}}}$ & Stand off distance ($y$-component) & ${\text{m}}$
 \\
 ${\mathit{SD}_{\text{z}}}$ & Stand off distance ($z$-component) & ${\text{m}}$
 \\
-$t$ & Nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & ${\text{mm}}$
+$t$ & Nominal thickness & ${\text{mm}}$
 \\
 $\mathit{TNT}$ & TNT equivalent factor & --
 \\
@@ -1444,11 +1446,11 @@ This section provides the non-functional requirements, the qualities that the so
 \item[Understandability:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
 \item[Reusability:\phantomsection\label{reusable}]{The code is modularized.}
 \item[Maintainability:\phantomsection\label{maintainable}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
-\item[Portablity:\phantomsection\label{portable}]{The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.}
+\item[Portability:\phantomsection\label{portable}]{The code shall be portable to multiple environments, particularly Linux, macOS, and Windows.}
 \end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
-This section lists the likely changes to be made to the software.
+This section lists the likely changes (LC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[Calculate-Internal-Blast-Risk:\phantomsection\label{calcInternalBlastRisk}]{\hyperref[assumpES]{A:explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.}
@@ -1459,7 +1461,7 @@ This section lists the likely changes to be made to the software.
 \end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
-This section lists the unlikely changes to be made to the software.
+This section lists the unlikely changes (UC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[Predict-Withstanding-of-Certain-Degree:\phantomsection\label{predictWithstandOfCertDeg}]{The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.}
@@ -1534,18 +1536,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:isSafeLR]{IM:isSafeLR} &  &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  & 
-\\
-\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  & 
-\\
-\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  & 
-\\
-\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  & 
-\\
-\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  & 
-\\
-\hyperref[portable]{NFR:Portablity} &  &  &  &  &  &  &  & 
-\\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  & 
 \\
 \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  & 
@@ -1557,6 +1547,18 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[checkGlassSafety]{FR:Check-Glass-Safety} &  &  &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcInternalBlastRisk]{LC:Calculate-Internal-Blast-Risk} &  &  & X &  &  &  &  & 
 \\
@@ -1620,9 +1622,21 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:riskFun]{IM:riskFun}} & \textbf{\hyperref[IM:stressDistFac]{IM:stressDistFac}} & \textbf{\hyperref[IM:nFL]{IM:nFL}} & \textbf{\hyperref[IM:dimlessLoad]{IM:dimlessLoad}} & \textbf{\hyperref[IM:tolLoad]{IM:tolLoad}} & \textbf{\hyperref[IM:sdfTol]{IM:sdfTol}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:calofCapacity]{IM:calofCapacity}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[verifiable]{NFR:Verifiability}} & \textbf{\hyperref[understandable]{NFR:Understandability}} & \textbf{\hyperref[reusable]{NFR:Reusability}} & \textbf{\hyperref[maintainable]{NFR:Maintainability}} & \textbf{\hyperref[portable]{NFR:Portablity}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values}} & \textbf{\hyperref[checkGlassSafety]{FR:Check-Glass-Safety}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
+\textbf{} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:riskFun]{IM:riskFun}} & \textbf{\hyperref[IM:stressDistFac]{IM:stressDistFac}} & \textbf{\hyperref[IM:nFL]{IM:nFL}} & \textbf{\hyperref[IM:dimlessLoad]{IM:dimlessLoad}} & \textbf{\hyperref[IM:tolLoad]{IM:tolLoad}} & \textbf{\hyperref[IM:sdfTol]{IM:sdfTol}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:calofCapacity]{IM:calofCapacity}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values}} & \textbf{\hyperref[checkGlassSafety]{FR:Check-Glass-Safety}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[verifiable]{NFR:Verifiability}} & \textbf{\hyperref[understandable]{NFR:Understandability}} & \textbf{\hyperref[reusable]{NFR:Reusability}} & \textbf{\hyperref[maintainable]{NFR:Maintainability}} & \textbf{\hyperref[portable]{NFR:Portability}}
 \\
 \hyperref[willBreakGS]{GS:Predict-Glass-Withstands-Explosion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[checkGlassSafety]{FR:Check-Glass-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1634,54 +1648,42 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR:Portablity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
-\\
-\hyperref[checkGlassSafety]{FR:Check-Glass-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/glassbr/avsa}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/glassbr/avsall}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/glassbr/refvsref}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/glassbr/allvsr}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/glassbr/allvsall}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/allvsall}
 \caption{TraceGraphAllvsAll}
 \label{Figure:TraceGraphAllvsAll}
 \end{center}
@@ -1689,11 +1691,11 @@ The purpose of the traceability graphs is also to provide easy references on wha
 For convenience, the following graphs can be found at the links below:
 
 \begin{itemize}
-\item{\hyperref{../../../../traceygraphs/glassbr/avsa.svg}{}{}{TraceGraphAvsA}}
-\item{\hyperref{../../../../traceygraphs/glassbr/avsall.svg}{}{}{TraceGraphAvsAll}}
-\item{\hyperref{../../../../traceygraphs/glassbr/refvsref.svg}{}{}{TraceGraphRefvsRef}}
-\item{\hyperref{../../../../traceygraphs/glassbr/allvsr.svg}{}{}{TraceGraphAllvsR}}
-\item{\hyperref{../../../../traceygraphs/glassbr/allvsall.svg}{}{}{TraceGraphAllvsAll}}
+\item{\hyperref{../../TraceyGraph/avsa.svg}{}{}{TraceGraphAvsA}}
+\item{\hyperref{../../TraceyGraph/avsall.svg}{}{}{TraceGraphAvsAll}}
+\item{\hyperref{../../TraceyGraph/refvsref.svg}{}{}{TraceGraphRefvsRef}}
+\item{\hyperref{../../TraceyGraph/allvsr.svg}{}{}{TraceGraphAllvsR}}
+\item{\hyperref{../../TraceyGraph/allvsall.svg}{}{}{TraceGraphAllvsAll}}
 \end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}

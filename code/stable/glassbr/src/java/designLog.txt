@@ -1,4 +1,3 @@
-Languages selected as Python Cpp CSharp Java Swift.
 Modularity selected as Modular.
 Input Structure selected as Bundled.
 Constant Structure selected as Inline.
@@ -11,7 +10,7 @@ Dox Verbosity selected as Quiet.
 Dates selected as Hide.
 Log File Name selected as log.txt.
 Logging selected as LogVar LogFunc.
-Auxiliary Files selected as SampleInput ../../datafiles/glassbr/sampleInput.txt ReadME.
+Auxiliary Files selected as SampleInput ../datafiles/glassbr/sampleInput.txt ReadME.
 Successfully matched String with String.
 Successfully matched Actor "Constants" with Object "Constants".
 Successfully matched Actor "InputParameters" with Object "InputParameters".

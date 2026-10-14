@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs #-}
 -- | Defines an AST for defining Modules.
 module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..),
   FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name,
@@ -7,18 +6,17 @@ module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..),
   funcDefParams, packmod, packmodRequires
 ) where
 
-import Language.Drasil (Space, MayHaveUnit, Quantity, CodeExpr, LiteralC(..), Concept)
-import Database.Drasil (ChunkDB)
+import Data.List ((\\), nub)
+
+import Language.Drasil (Space, MayHaveUnit, Quantity, LiteralC(int), Concept)
+import Drasil.Database (ChunkDB)
 import Drasil.GOOL (VisibilityTag(..))
 
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
-  codevars', quantvar)
+import Drasil.Code.CodeExpr (CodeExpr)
+import Drasil.Code.CodeVar (CodeVarChunk, CodeFuncChunk, quantvar)
+import Language.Drasil.Chunk.CodeBase (codevars, codevars')
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
-
-import Utils.Drasil (toPlainName)
-
-import Data.List ((\\), nub)
 
 -- | Type synonym for clarity.
 type Name = String
@@ -39,7 +37,7 @@ packmod n d = packmodRequires n d []
 -- | Define a 'Mod' that requires some library imports, with the given Name,
 -- Description, Classes, and Functions.
 packmodRequires :: Name -> Description -> [Import] -> [Class] -> [Func] -> Mod
-packmodRequires n = Mod (toPlainName n)
+packmodRequires = Mod
 
 -- | Holds information needed to define a class.
 data Class = ClassDef {
@@ -81,20 +79,20 @@ data Func = FDef FuncDef
 -- | Define a function that reads data from a file, according to the given
 -- 'DataDesc'.
 funcData :: Name -> Description -> DataDesc -> Func
-funcData n desc d = FData $ FuncData (toPlainName n) desc d
+funcData n desc d = FData $ FuncData n desc d
 
 -- | Define a function by providing the 'FuncStmt's for its body. Other
 -- parameters are function name, description, list of parameters, space of the
 -- returned value, and description of the returned value.
 funcDef :: (Quantity c, MayHaveUnit c, Concept c) => Name -> Description -> [c] ->
   Space -> Maybe Description -> [FuncStmt] -> Func
-funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc
-  (map (pcAuto . quantvar) i) t returnDesc fs
+funcDef s desc i t returnDesc fs = FDef $ FuncDef s desc
+  (pcAuto . quantvar <$> i) t returnDesc fs
 
 -- | Like 'funcDef' but uses 'ParameterChunk's to represent the parameters.
 funcDefParams :: Name -> Description -> [ParameterChunk] -> Space ->
   Maybe Description -> [FuncStmt] -> Func
-funcDefParams s desc ps t returnDesc fs = FDef $ FuncDef (toPlainName s) desc
+funcDefParams s desc ps t returnDesc fs = FDef $ FuncDef s desc
   ps t returnDesc fs
 
 -- | Define a constructor, with the given name, description, parameters,
@@ -166,35 +164,35 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
   where
     fstvars :: ChunkDB -> FuncStmt -> [CodeVarChunk]
     fstvars sm (FDecDef cch e) = cch:codevars' e sm
-    fstvars sm (FFuncDef cch ps sts) = quantvar cch : map quantvar ps
-      ++ concatMap (fstvars sm) sts
+    fstvars sm (FFuncDef cch ps sts) = quantvar cch : fmap quantvar ps
+      <> concatMap (fstvars sm) sts
     fstvars sm (FAsg cch e) = cch:codevars' e sm
     fstvars sm (FAsgIndex cch _ e) = cch:codevars' e sm
-    fstvars sm (FFor cch s e st fs) = nub $ cch : codevars' e sm ++ codevars' s sm
-       ++ codevars' st sm ++ concatMap (fstvars sm) fs
-    fstvars sm (FForEach cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
-    fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
-    fstvars sm (FCond e tfs efs) = codevars' e sm ++ concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) efs
+    fstvars sm (FFor cch s e st fs) = nub $ cch : codevars' e sm <> codevars' s sm
+       <> codevars' st sm <> concatMap (fstvars sm) fs
+    fstvars sm (FForEach cch e fs) = nub (cch : codevars' e sm <> concatMap (fstvars sm) fs)
+    fstvars sm (FWhile e fs) = codevars' e sm <> concatMap (fstvars sm) fs
+    fstvars sm (FCond e tfs efs) = codevars' e sm <> concatMap (fstvars sm) tfs <> concatMap (fstvars sm) efs
     fstvars sm (FRet e) = codevars' e sm
-    fstvars sm (FTry tfs cfs) = concatMap (fstvars sm) tfs ++ concatMap (fstvars sm ) cfs
+    fstvars sm (FTry tfs cfs) = concatMap (fstvars sm) tfs <> concatMap (fstvars sm ) cfs
     fstvars _  (FThrow _) = [] -- is this right?
     fstvars _  FContinue = []
     fstvars sm (FVal v) = codevars' v sm
     fstvars sm (FMulti ss) = concatMap (fstvars sm) ss
-    fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
+    fstvars sm (FAppend a b) = nub (codevars a sm <> codevars b sm)
 
     declared :: ChunkDB -> FuncStmt -> [CodeVarChunk]
     declared _  (FDecDef cch _) = [cch]
-    declared sm (FFuncDef cch ps sts) = quantvar cch : map quantvar ps
-      ++ concatMap (declared sm) sts
+    declared sm (FFuncDef cch ps sts) = quantvar cch : fmap quantvar ps
+      <> concatMap (declared sm) sts
     declared _  (FAsg _ _) = []
     declared _  FAsgIndex {} = []
     declared sm (FFor cch _ _ _ fs) = cch : concatMap (declared sm) fs
     declared sm (FForEach cch _ fs) = cch : concatMap (declared sm) fs
     declared sm (FWhile _ fs) = concatMap (declared sm) fs
-    declared sm (FCond _ tfs efs) = concatMap (declared sm) tfs ++ concatMap (declared sm) efs
+    declared sm (FCond _ tfs efs) = concatMap (declared sm) tfs <> concatMap (declared sm) efs
     declared _  (FRet _) = []
-    declared sm (FTry tfs cfs) = concatMap (declared sm) tfs ++ concatMap (declared sm) cfs
+    declared sm (FTry tfs cfs) = concatMap (declared sm) tfs <> concatMap (declared sm) cfs
     declared _  (FThrow _) = [] -- is this right?
     declared _  FContinue = []
     declared _  (FVal _) = []

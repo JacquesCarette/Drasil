@@ -19,7 +19,7 @@ genDefs :: [RelationConcept]
 --genDefs = []
 
 impulseGDef :: RelationConcept
-impulseGDef = makeRC "impulse" (nounPhraseSP "Impulse") 
+impulseGDef = makeRC "impulse" (nounPhraseSP "Impulse")
   impulseDesc impulseRel
 
 impulseRel :: Relation
@@ -33,14 +33,14 @@ impulseDesc = foldlSent [S "An", phrase impulseS, getS impulseS,
 --[impulseS, force, changeInMomentum, mass, changeInVelocity]
 
 impulseDeriv :: Sentence
-impulseDeriv = foldlSent [S "Newton's second law of motion (ref to T1)", 
-  S "states" +: S "(expr1)", 
-  S "rearranging" +: S "(expr2)", 
+impulseDeriv = foldlSent [S "Newton's second law of motion (ref to T1)",
+  S "states" +: S "(expr1)",
+  S "rearranging" +: S "(expr2)",
   S "Integrating the right side" +: S "(expr3)"
   ]
 
 conservationOfMomentGDef :: RelationConcept
-conservationOfMomentGDef = makeRC "conservOfMoment" (nounPhraseSP "Conservation of Momentum") 
+conservationOfMomentGDef = makeRC "conservOfMoment" (nounPhraseSP "Conservation of Momentum")
   conservationOfMomentDesc conservationOfMomentRel
 
 conservationOfMomentRel :: Relation
@@ -60,9 +60,9 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
   S "an equal (force) on each other in opposite directions" +:+.
   S "This is Newton's third law:",
   S "(expr1)",
-  S "The objects collide with each other" `S.for` S "the exact same amount of", 
+  S "The objects collide with each other" `S.for` S "the exact same amount of",
   phrase time, getS time,
-  S "The above equation is equal" `S.toThe` phrase impulseS, 
+  S "The above equation is equal" `S.toThe` phrase impulseS,
   S "(GD1 ref)",
   S "(expr2)",
   S "The", phrase impulseS, S "is equal" `S.toThe` S "change in momentum:",
@@ -75,10 +75,9 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
   S "(expr6)"
   ]
 
-
 accelerationDueToGravityGDef :: RelationConcept
-accelerationDueToGravityGDef = makeRC "accelDueToGrav" 
-  (nounPhraseSP "Acceleration due to gravity") 
+accelerationDueToGravityGDef = makeRC "accelDueToGrav"
+  (nounPhraseSP "Acceleration due to gravity")
   accelerationDueToGravityDesc accelerationDueToGravityRel
 
 accelerationDueToGravityRel :: Relation
@@ -101,7 +100,7 @@ accelerationDueToGravityDeriv = foldlSent [S "From Newton's law of universal",
   S "chosen such that this force acts on a line which lies along one of the",
   S "principle axes (A2 ref)" +:+. S "Then our unit vector", S "(expr2)", S "for",
   S "the x or y axes (A3 ref), respectively"
-  S "Given the above assumptions, let M and m be the", phrase mass, 
+  S "Given the above assumptions, let M and m be the", phrase mass,
   S "of the massive and",
   S "light body, respectively" +:+. S "Using 3 **ref to 3** and equating this",
   S "with Newton's second law (T1 ref) for the force experienced by the light",
@@ -116,7 +115,6 @@ accelerationDueToGravityDeriv = foldlSent [S "From Newton's law of universal",
   S "(expr6)"
   ]
 
-
 relativeVelocityInCollisionsGDef :: RelationConcept
 relativeVelocityInCollisionsGDef = makeRC "relVeloInColl"
   (nounPhraseSP "Relative velocity in collision")
@@ -124,9 +122,9 @@ relativeVelocityInCollisionsGDef = makeRC "relVeloInColl"
 
 relativeVelocityInCollisionsDesc :: Sentence
 relativeVelocityInCollisionsDesc = foldlSent [S "In a collision, the",
-  phrase velocity `S.of_` S "rigid body A", 
+  phrase velocity `S.of_` S "rigid body A",
   S "colliding with another body B relative to that",
-  S "body, (symbol vAB)," `S.is` "the difference between the", plural velocity, 
+  S "body, (symbol vAB)," `S.is` "the difference between the", plural velocity,
   S "of A", S "and B at point P"
   ]
 
@@ -137,12 +135,12 @@ relativeVelocityInCollisionsRel = FCall (C thFluxVect) [C QP.time] := C htTransC
   FCall (C temp_diff) [C QP.time] -- replace with proper Expr
 
 coefficientOfRestitutionGDef :: RelationConcept
-coefficientOfRestitutionGDef = makeRC "coeffOfRest" 
+coefficientOfRestitutionGDef = makeRC "coeffOfRest"
   (nounPhraseSP "Coefficient of restitution")
   coefficientOfRestitutionDesc coefficientOfRestitutionRel
 
 coefficientOfRestitutionDesc :: Sentence
-coefficientOfRestitutionDesc = foldlSent [S "The", phrase restitutionCoef, 
+coefficientOfRestitutionDesc = foldlSent [S "The", phrase restitutionCoef,
   getS restitutionCoef, S "is",
   S "a unitless, dimensionless quantity that determines the elasticity of a",
   S "collision between two bodies. (symbol/expr)[CR = 1] results" `S.in_` S "an elastic",
@@ -156,15 +154,14 @@ coefficientOfRestitutionRel :: Relation
 coefficientOfRestitutionRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*
   FCall (C temp_diff) [C QP.time] -- replace with proper Expr
 
-
 torqueGDef :: RelationConcept
 torqueGDef = makeRC "torque"
   (nounPhraseSP "Torque")
   torqueDesc torqueRel
 
 torqueDesc :: Sentence
-torqueDesc = foldlSent [S "The", phrase torque, getS torque, 
-  S "on a body measures the", S "the tendency" `S.ofA` phrase force, 
+torqueDesc = foldlSent [S "The", phrase torque, getS torque,
+  S "on a body measures the", S "the tendency" `S.ofA` phrase force,
   S "to rotate the body around an axis or pivot"
   ]
 
@@ -181,7 +178,6 @@ momentOfInertiaGDef = makeRC "momentOfInertia"
 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent []
-
 
 --[momentOfInertia, numOfParticles, massj, distanceBtwParticleI]
 

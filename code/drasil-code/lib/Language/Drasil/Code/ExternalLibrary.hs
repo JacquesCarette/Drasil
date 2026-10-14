@@ -1,4 +1,3 @@
-{-# LANGUAGE LambdaCase #-}
 -- | Defines a language for specifying external library use scenarios
 module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   FunctionInterface(..), Result(..), Argument(..), ArgumentInfo(..),
@@ -8,22 +7,22 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   libConstructor, libConstructorMultiReqs, constructAndReturn, lockedArg,
   lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg,
   functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass,
-  implementation, constructorInfo, methodInfo, methodInfoNoReturn,
+  implementation, constructorInfo, isConstructor, methodInfo, methodInfoNoReturn,
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj,
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile,
   returnExprList, fixedReturn, fixedReturn', initSolWithVal
 ) where
 
+import Control.Lens ((^.))
+import Data.List.NonEmpty (NonEmpty(..), fromList)
+
 import Drasil.Code.CodeExpr.Development
 import Drasil.Code.CodeExpr
+import Drasil.Code.CodeVar (CodeVarChunk, CodeFuncChunk, codeName)
 import Language.Drasil (Space, HasSpace(typ))
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
 import Language.Drasil.Mod (FuncStmt(..), Description)
-
-import Control.Lens ((^.))
-import Data.List.NonEmpty (NonEmpty(..), fromList)
 
 -- | Condition for loops.
 type Condition = CodeExpr
@@ -103,7 +102,7 @@ choiceSteps sg = fromList sg
 --   use-case-specific factor decides which step to use.
 choiceStep :: [Step] -> StepGroup
 choiceStep [] = error "choiceStep should be called with a non-empty list"
-choiceStep ss = fromList $ map (: []) ss
+choiceStep ss = fromList $ (: []) <$> ss
 
 -- | Specifies a step which must exist in some form in every use case.
 mandatoryStep :: Step -> StepGroup
@@ -156,7 +155,7 @@ libConstructor rq c as r = FI (rq :| []) Constructor c as (Just $ Assign r)
 --   the external library are required, and the result is assigned to a variable.
 libConstructorMultiReqs :: [Requires] -> CodeFuncChunk -> [Argument] ->
   CodeVarChunk -> FunctionInterface
-libConstructorMultiReqs [] _ _ _ = error $ "libConstructorMultiReqs should" ++
+libConstructorMultiReqs [] _ _ _ = error $ "libConstructorMultiReqs should" <>
   " be called with a non-empty list of Requires"
 libConstructorMultiReqs rqs c as r = FI (fromList rqs) Constructor c as
   (Just $ Assign r)
@@ -229,7 +228,12 @@ implementation = Implements
 
 -- | Specifies a constructor.
 constructorInfo :: CodeFuncChunk -> [Parameter] -> [Step] -> MethodInfo
-constructorInfo c = CI ("Constructor for " ++ codeName c ++ " objects")
+constructorInfo c = CI ("Constructor for " <> codeName c <> " objects")
+
+-- | Check if a 'MethodInfo' captures a constructor.
+isConstructor :: MethodInfo -> Bool
+isConstructor CI{} = True
+isConstructor _    = False
 
 -- | Specifies a method.
 methodInfo :: CodeFuncChunk -> Description -> [Parameter] -> Description ->
@@ -274,16 +278,16 @@ assignSolFromObj o = statementStep (\cdchs es -> case (cdchs, es) of
   (_,_) -> error "Fill for assignSolFromObj should provide one CodeChunk and no Exprs")
 
 -- | Specifies a statement where a solution list is initialized with the first
---   element of an array.
+--   value of an array.
 initSolListFromArray :: CodeVarChunk -> Step
 initSolListFromArray a = statementStep (\cdchs es -> case (cdchs, es) of
-  ([s],[]) -> FAsg s (matrix [[idx (sy a) (int 0)]])
+  ([s],[]) -> FAsg s (matrix [[sy a]])
   (_,_) -> error "Fill for initSolListFromArray should provide one CodeChunk and no Exprs")
 
--- | Specifies a statement where a solution list is initialized with the first value.
+-- | Specifies a statement where a solution list is initialized with the given value.
 initSolListWithVal :: Step
 initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
-  ([s],[v]) -> FDecDef s (matrix [[idx v (int 0)]])
+  ([s],[v]) -> FDecDef s (matrix [[v]])
   (_,_) -> error "Fill for initSolListWithVal should provide one CodeChunk and one Expr")
 
 -- | A solve and populate loop. 'FunctionInterface' for loop condition, 'CodeChunk' for solution object,
@@ -305,7 +309,7 @@ returnExprList = statementStep (\cdchs es -> case (cdchs, es) of
 
 -- | A statement where a current solution is appended to a solution list.
 appendCurrSolFS :: CodeExpr -> CodeVarChunk -> FuncStmt
-appendCurrSolFS cs s = FAppend (sy s) (idx cs (int 0))
+appendCurrSolFS cs s = FAppend (sy s) cs
 
 -- | Specifies a use-case-independent statement that returns a fixed value.
 fixedReturn :: CodeExpr -> Step

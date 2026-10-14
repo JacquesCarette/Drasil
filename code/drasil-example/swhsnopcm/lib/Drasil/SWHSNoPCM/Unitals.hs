@@ -1,6 +1,11 @@
-module Drasil.SWHSNoPCM.Unitals where
+module Drasil.SWHSNoPCM.Unitals (
+  inputs, constrained, specParamValList, outputs
+) where
 
 import Language.Drasil
+
+import Data.List.NonEmpty (NonEmpty((:|)))
+import qualified Data.List.NonEmpty as NE
 
 import Data.Drasil.SI_Units (centigrade)
 import Data.Drasil.Quantities.Thermodynamics (temp)
@@ -8,10 +13,13 @@ import Data.Drasil.Quantities.Thermodynamics (temp)
 import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTC, coilHTCMax,
   coilHTCMin, coilSA, coilSAMax, diam, htCapW, htCapWMax, htCapWMin, lInit,
   relTol, tankLength, tankLengthMax, tankLengthMin, tempC, timeFinal,
-  timeFinalMax, timeStep, wDensity, wDensityMax, wDensityMin)
+  timeFinalMax, timeStep, wDensity, wDensityMax, wDensityMin, watE, tempW)
 
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr constrained ++ map dqdWr unconstrained
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = (fmap dqdWr constrained <> fmap dqdWr unconstrained) `NE.prependList` NE.singleton (dqdWr watE)
+
+outputs :: NE.NonEmpty ConstrConcept
+outputs =  tempW :| [watE]
 
 unconstrained :: [UncertQ]
 unconstrained = [absTol, relTol]
@@ -29,5 +37,5 @@ tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
 
 specParamValList :: [ConstQDef]
 specParamValList = [tankLengthMin, tankLengthMax,
-  wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax, 
+  wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax,
   coilHTCMin, coilHTCMax, timeFinalMax, arMin, arMax]

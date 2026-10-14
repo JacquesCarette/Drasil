@@ -16,7 +16,6 @@
 |RefBy       |Referenced by                      |
 |Refname     |Reference Name                     |
 |SRS         |Software Requirements Specification|
-|SSP         |Slope Stability analysis Program   |
 |TM          |Theoretical Model                  |
 |UC          |Unlikely Change                    |
 |Uncert.     |Typical Uncertainty                |

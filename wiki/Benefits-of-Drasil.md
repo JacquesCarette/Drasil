@@ -1,6 +1,6 @@
 # Benefits of Drasil
 
-Drasil's use of generative programming has a transformative impact on the development process. Here we collect examples demonstrating how Drasil's generative approach simplifies the development process, enhances code quality, and ensures the reliability of your projects.
+Drasil's use of generative programming has a transformative impact on the development process. Here we collect examples demonstrating how Drasil's generative approach simplifies the development process, enhances code quality, and ensures the reliability of your projects. See [Quantifying Productivity and Ease of Use](Quantifying-Productivity-and-Ease-of-Use) for a similar discussion.
 
 ---
 

@@ -1,45 +1,33 @@
 -- | Gathers and organizes all the information for the [Drasil website](https://jacquescarette.github.io/Drasil/).
-module Drasil.Website.Body where
+module Drasil.Website.Body (
+  FolderLocation(..), webSys, symbMap,
+  gitHubRef, sections, websiteTitle,
+) where
 
-import Control.Lens ((^.))
-
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil
-import Drasil.Generator (cdb)
-import Drasil.System
+import Drasil.Database (ChunkDB, mkUid, insertAll)
+import Drasil.Generator (withCommonKnowledge)
+import Drasil.System (mkSystemMeta, ProjectName, mkCommonProjName)
+import Drasil.Website.Core (DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
-import Drasil.DocLang (findAllRefs)
+import Language.Drasil.Document
 
 import Drasil.Website.Introduction (introSec)
 import Drasil.Website.About (aboutSec)
-import Drasil.Website.CaseStudy (caseStudySec)
-import Drasil.Website.Example (exampleSec, exampleRefs, allExampleSI)
+import Drasil.Website.CaseStudy (caseStudySec, caseStudyTable)
+import Drasil.Website.Example (exampleSec, exampleRefs, allExampleProjNames)
 import Drasil.Website.Documentation (docsSec, docRefs)
-import Drasil.Website.Analysis (analysisSec, analysisRefs)
+import Drasil.Website.Analysis (analysisSec, analysisRefs, graphsTable, dependencyGraph)
 import Drasil.Website.GettingStarted (gettingStartedSec)
-import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody, twoD)
-import Data.Drasil.Concepts.Documentation (game, physics, condition, safety)
-import Drasil.GlassBR.Unitals (blast)
-import Drasil.GlassBR.Concepts (glaSlab)
+import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody)
+import Drasil.GlassBR.Concepts (glaSlab, glass, blast)
 import Data.Drasil.Concepts.Thermodynamics (heatTrans)
 import Drasil.SWHS.Concepts (sWHT, water, phsChgMtrl)
 import Drasil.PDController.Concepts (pidC)
 import Drasil.Projectile.Concepts (target, projectile)
-import Drasil.SSP.Defs (crtSlpSrf, intrslce, slope, slpSrf, factor)
+import Drasil.SSP.Defs (crtSlpSrf, intrslce, slope, slpSrf, factor, fsConcept)
 import Data.Drasil.Concepts.SolidMechanics (shearForce, normForce)
-import Drasil.SSP.IMods (fctSfty)
 
 -- * Functions to Generate the Website Through Drasil
-
--- | Printing info to get document to generate. Takes in the 'FolderLocation'.
-printSetting :: FolderLocation -> PrintingInformation
-printSetting fl = PI (symbMap fl) Equational defaultConfiguration
-
--- | Instead of being an 'SRSDecl', this takes the folder locations and generates the document from there.
-mkWebsite :: FolderLocation -> Document
-mkWebsite fl =
-    --Document  -- Title  --  author  (hack for now to show up in proper spot) -- no table of contents -- [Section]
-    Document (S websiteTitle) (namedRef gitHubRef (S "Link to GitHub Repository")) NoToC $ sections fl
 
 -- | Folder locations based on environment variables (using 'getEnv' in "Drasil.Website.Main").
 data FolderLocation = Folder {
@@ -67,111 +55,117 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
--- TODO: Should the website be using a ``System''? This is primarily for the SmithEtAl template.
---       It seems like the website is primarily that functions on a chunkdb.
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "drasilWebProjName") (nounPhraseSP "Drasil Website") "Website"
 
--- | System information.
-si :: FolderLocation -> System
-si fl = mkSystem
-  webName Website []
-  [] [] [] []
-  ([] :: [DefinedQuantityDict])
-  [] [] [] []
-  []
-  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []
-  (symbMap fl)
+webSys :: Document -> FolderLocation -> DrasilWebsite
+-- FIXME: Missing metadata!
+webSys d@(Document _ _ _ ss) fl = mkDrasilWebsite meta d
+  where
+    meta = mkSystemMeta projName [] [] [] [] [] db'
+    db' = insertAll allExampleProjNames
+        $ insertAll (allRefs fl)
+        $ insertAll (websiteLCs fl)
+        $ insertAll ss symbMap
+webSys Notebook{} _ = error "DrasilWebsite expects a `Document`"
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
-sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspaceSetupWiki contribGuideWiki workflowWiki 
-  createProjWiki debuggingWiki, aboutSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl) 
-  (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef infoEncodingWiki chunksWiki recipesWiki 
+sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspaceSetupWiki contribGuideWiki workflowWiki
+  createProjWiki debuggingWiki, aboutSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl)
+  (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef infoEncodingWiki chunksWiki recipesWiki
   paperGOOL papersWiki icsePositionPaper danPoster wellUnderstoodPaper, exampleSec (repoRt fl) (exRt fl), caseStudySec, docsSec (docsRt fl),
   analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl, footer fl]
 
 -- | Needed for references and terms to work.
-symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, phsChgMtrl, twoD] ++ 
-  map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast, 
-  heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
-  normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,
-  slope, safety, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] 
-  [] [] (allRefs fl) []
+ideaDicts :: [IdeaDict]
+ideaDicts = [glass, glaSlab, intrslce, slope, factor]
 
--- | Helper to get the system name as an 'IdeaDict' from 'System'.
-getSysName :: System -> IdeaDict
-getSysName SI{_sys = nm} = nw nm 
+cis :: [CI]
+cis = [phsChgMtrl]
+
+conceptChunks :: [ConceptChunk]
+conceptChunks = [pendulum, motion, rigidBody, blast, heatTrans, sWHT, water,
+  pidC, target, projectile, crtSlpSrf, shearForce, normForce, slpSrf, fsConcept]
+
+symbMap :: ChunkDB
+symbMap = withCommonKnowledge projName [] [] ideaDicts cis conceptChunks [] [] [] [] [] [] [] []
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
-allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, paperGOOL, papersWiki, 
+allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, paperGOOL, papersWiki,
   quickStartWiki, newWorkspaceSetupWiki, contribGuideWiki, workflowWiki, createProjWiki, debuggingWiki,
   icsePositionPaper, danPoster, wellUnderstoodPaper]
-  ++ exampleRefs (repoRt fl) (exRt fl)
-  ++ docRefs (docsRt fl) 
-  ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
-  ++ concatMap findAllRefs (sections fl)
+  <> exampleRefs (repoRt fl) (exRt fl)
+  <> docRefs (docsRt fl)
+  <> analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
 
--- | Used for system name and kind inside of 'si'.
-webName :: CI
-webName = commonIdea "websiteName" (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
+-- | List of all 'LabelledContent's necessary for the website.
+websiteLCs :: FolderLocation -> [LabelledContent]
+websiteLCs fl = [
+    imageContent
+  , caseStudyTable
+  , graphsTable (typeGraphFolder fl) (classInstFolder fl) (packages fl)
+  , dependencyGraph (graphRt fl) "drasil-website"
+  , dependencyGraph (graphRt fl) "drasil-all-pkgs-deps"
+  ]
 
 -- * Header Section
 
 -- | Header section creator.
 headerSec :: Section
-headerSec = 
+headerSec =
   section EmptyS -- No title
   [LlC imageContent] -- Contents
   [] $ makeSecRef "Header" $ S "Header" -- Section reference
 
 -- | For the drasil tree image on the website.
 imageContent :: LabelledContent
-imageContent = llcc (makeFigRef "Drasil") $ figNoCapWithWidth EmptyS imagePath 50
+imageContent = llccFig "Drasil" $ figNoCapWithWidth EmptyS imagePath 50
 
 -- | Used for the repository link.
 gitHubRef :: Reference
 gitHubRef = makeURI "gitHubRepo" gitHubInfoURL (shortname' $ S "gitHubRepo")
 wikiRef :: Reference
-wikiRef = makeURI "gitHubWiki" (gitHubInfoURL ++ "/wiki") (shortname' $ S "gitHubWiki")
+wikiRef = makeURI "gitHubWiki" (gitHubInfoURL <> "/wiki") (shortname' $ S "gitHubWiki")
 infoEncodingWiki :: Reference
-infoEncodingWiki = makeURI "InfoEncodingWiki" (gitHubInfoURL ++ "/wiki/Information-Encoding") (shortname' $ S "InfoEncodingWiki")
+infoEncodingWiki = makeURI "InfoEncodingWiki" (gitHubInfoURL <> "/wiki/Information-Encoding") (shortname' $ S "InfoEncodingWiki")
 chunksWiki :: Reference
-chunksWiki = makeURI "chunksWiki" (gitHubInfoURL ++ "/wiki/Chunks") (shortname' $ S "chunksWiki")
+chunksWiki = makeURI "chunksWiki" (gitHubInfoURL <> "/wiki/Chunks") (shortname' $ S "chunksWiki")
 recipesWiki :: Reference
-recipesWiki = makeURI "recipesWiki" (gitHubInfoURL ++ "/wiki/Recipes") (shortname' $ S "recipesWiki")
+recipesWiki = makeURI "recipesWiki" (gitHubInfoURL <> "/wiki/Recipes") (shortname' $ S "recipesWiki")
 paperGOOL :: Reference
-paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL ++ "/blob/main/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
+paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL <> "/blob/main/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
 papersWiki :: Reference
-papersWiki = makeURI "papersWiki" (gitHubInfoURL ++ "/wiki/Drasil-Papers-and-Documents") (shortname' $ S "papersWiki")
+papersWiki = makeURI "papersWiki" (gitHubInfoURL <> "/wiki/Drasil-Papers-and-Documents") (shortname' $ S "papersWiki")
 icsePositionPaper :: Reference
 icsePositionPaper = makeURI "icsePositionPaper" (danContributionPath
-  ++ "/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf") (shortname' $ S "icsePositionPaper")
+  <> "/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf") (shortname' $ S "icsePositionPaper")
 danPoster :: Reference
 danPoster = makeURI "danPoster" (danContributionPath
-  ++ "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
+  <> "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
 wellUnderstoodPaper :: Reference
-wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL 
-  ++ "/blob/master/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
+wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL
+  <> "/blob/main/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
 quickStartWiki :: Reference
-quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL ++ "#quick-start") (shortname' $ S "quickStartWiki")
+quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL <> "#quick-start") (shortname' $ S "quickStartWiki")
 newWorkspaceSetupWiki :: Reference
-newWorkspaceSetupWiki = makeURI "newWorkspaceSetupWiki" (gitHubInfoURL ++ "/wiki/New-Workspace-Setup") (shortname' $ S "newWorkspaceSetupWiki")
+newWorkspaceSetupWiki = makeURI "newWorkspaceSetupWiki" (gitHubInfoURL <> "/wiki/New-Workspace-Setup") (shortname' $ S "newWorkspaceSetupWiki")
 contribGuideWiki :: Reference
-contribGuideWiki = makeURI "contribGuideWiki" (gitHubInfoURL ++ "/wiki/Contributor's-Guide") (shortname' $ S "contribGuideWiki")
+contribGuideWiki = makeURI "contribGuideWiki" (gitHubInfoURL <> "/wiki/Contributor's-Guide") (shortname' $ S "contribGuideWiki")
 workflowWiki :: Reference
-workflowWiki = makeURI "workflowWiki" (gitHubInfoURL ++ "/wiki/Workflow") (shortname' $ S "workflowWiki")
+workflowWiki = makeURI "workflowWiki" (gitHubInfoURL <> "/wiki/Workflow") (shortname' $ S "workflowWiki")
 createProjWiki :: Reference
-createProjWiki = makeURI "createProjWiki" (gitHubInfoURL ++ "/wiki/Creating-Your-Project-in-Drasil") (shortname' $ S "createProjWiki")
+createProjWiki = makeURI "createProjWiki" (gitHubInfoURL <> "/wiki/Creating-Your-Project-in-Drasil") (shortname' $ S "createProjWiki")
 debuggingWiki :: Reference
-debuggingWiki = makeURI "debuggingWiki" (gitHubInfoURL ++ "/wiki/Debugging-in-Drasil") (shortname' $ S "debuggingWiki")
+debuggingWiki = makeURI "debuggingWiki" (gitHubInfoURL <> "/wiki/Debugging-in-Drasil") (shortname' $ S "debuggingWiki")
 
 -- | Hardcoded info for the title, URL, and image path.
 websiteTitle :: String
 gitHubInfoURL, imagePath, danContributionPath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
-danContributionPath = gitHubInfoURL ++ "/blob/master/People/Dan"
+danContributionPath = gitHubInfoURL <> "/blob/main/People/Dan"
 imagePath = "./images/Icon.png"
 
 -- * Footer Section
@@ -183,7 +177,3 @@ footer _ = section EmptyS [mkParagraph copyrightInfo] [] $ makeSecRef "Footer" $
 -- | 'footer' contents.
 copyrightInfo :: Sentence
 copyrightInfo = S "Copyright (c) Jacques Carette, 2021. All rights reserved. This website is a software artifact generated by Drasil."
-
--- uncomment to add in build number and path information
---buildInfo :: String -> String -> Sentence
---buildInfo bnum bPath = S $ "Build number: " ++ bnum ++ ". Generated from " ++ bPath ++ "."

@@ -1,37 +1,32 @@
-name:                drasil-website
-version:             0.1.0.0
-github:              JacquesCarette/Drasil
-maintainer:          "Jacques Carette"
-synopsis:            Using the Drasil generators to create Drasil's website
-homepage:            https://jacquescarette.github.io/Drasil/
-description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+spec-version: 0.36.0
+name:         drasil-website
+version:      0.1.0.0
+github:       JacquesCarette/Drasil
+maintainer:   "Jacques Carette"
+synopsis:     Using the Drasil generators to create Drasil's website
+homepage:     https://jacquescarette.github.io/Drasil/
+description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
-language: Haskell2010
+language: GHC2024
 default-extensions:
 - StrictData
 
 ghc-options:
 - -Wall
 - -Wredundant-constraints
+- -Wmissing-export-lists
 
 extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
+- containers
 - lens
 - split
 - directory
-- drasil-data
-- drasil-database
-- drasil-docLang
-- drasil-code
-- drasil-gool
+- prettyprinter
 - drasil-gen
 - drasil-lang
-- drasil-printers
-- drasil-system
-- drasil-theory
-- drasil-utils
 - sglpend
 - dblpend
 - gamephysics
@@ -42,13 +37,21 @@ dependencies:
 - projectile
 - ssp
 - swhs
+- bss
 - template
 
 library:
+  dependencies:
+  - drasil-code
+  - drasil-data
+  - drasil-database
+  - drasil-file-handling
+  - drasil-gool
+  - drasil-printers
+  - drasil-srs
+  - drasil-system
+  - drasil-data-formats
   source-dirs: lib
-  when:
-  - condition: false
-    other-modules: Paths_drasil_website
 
 executables:
   website:
@@ -59,6 +62,3 @@ executables:
     - -O2
     dependencies:
     - drasil-website
-    when:
-    - condition: false
-      other-modules: Paths_drasil_website

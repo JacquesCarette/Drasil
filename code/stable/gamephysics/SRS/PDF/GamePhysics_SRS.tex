@@ -217,8 +217,6 @@ $ϕ$ & Orientation & ${\text{rad}}$
 \\
 A & Assumption
 \\
-CM & Centre of Mass
-\\
 DD & Data Definition
 \\
 GD & General Definition
@@ -250,7 +248,7 @@ Uncert. & Typical Uncertainty
 \label{Sec:Intro}
 Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products. The document describes the program  based on the original, manually created version of \hyperref{https://github.com/smiths/caseStudies/blob/master/CaseStudies/gamephys}{}{}{GamePhysics}.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for GamePhysics. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the software requirements specification (SRS) for GamePhysics. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -351,7 +349,7 @@ This section simplifies the original problem and helps in developing the theoret
 
 \begin{description}[font=\normalfont]
 \item[objectTy:\phantomsection\label{assumpOT}]{All objects are rigid bodies. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:chaslesThm]{DD:chaslesThm}, \hyperref[DD:reVeInColl]{DD:reVeInColl}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:ctrOfMass]{DD:ctrOfMass}, \hyperref[DD:momentOfInertia]{DD:momentOfInertia}, \hyperref[DD:linVel]{DD:linVel}, \hyperref[DD:linDisp]{DD:linDisp}, \hyperref[DD:linAcc]{DD:linAcc}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[DD:impulseV]{DD:impulseV}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
-\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}, \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
+\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]{The library uses a Cartesian coordinate system.}
 \item[axesDefined:\phantomsection\label{assumpAD}]{The axes are defined using right-handed coordinate system. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, and \hyperref[IM:rotMot]{IM:rotMot}.)}
 \item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, and \hyperref[lcEC]{LC:Expanded-Collisions}.)}
@@ -386,7 +384,7 @@ Description & \begin{symbDescription}
 Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}\text{(}t\text{)}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
         
 \\ \midrule
-Source & --
+Source & \cite{hibbeler2004}
          
 \\ \midrule
 RefBy & \hyperref[IM:transMot]{IM:transMot}
@@ -438,11 +436,11 @@ Label & Newton's law of universal gravitation
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{F}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\symbf{\hat{d}}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\frac{\symbf{d}}{\|\symbf{d}\|}}
+           \resizeExpression{{\symbf{F}_{\symbf{g}}}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\symbf{\hat{d}}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\frac{\symbf{d}}{\|\symbf{d}\|}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{$\symbf{F}$ is the force (${\text{N}}$)}
+              \item{${\symbf{F}_{\symbf{g}}}$ is the force of gravity (${\text{N}}$)}
               \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}$)}
               \item{${m_{1}}$ is the mass of the first body (${\text{kg}}$)}
               \item{${m_{2}}$ is the mass of the second body (${\text{kg}}$)}
@@ -486,10 +484,8 @@ Description & \begin{symbDescription}
 \\ \midrule
 Notes & The net torque $\symbf{τ}$ on a rigid body is proportional to its angular acceleration $α$, where $\symbf{I}$ denotes the moment of inertia of the rigid body as the constant of proportionality.
         
-        We also assume that all rigid bodies involved are two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
-        
 \\ \midrule
-Source & --
+Source & \cite{hibbeler2004}
          
 \\ \midrule
 RefBy & \hyperref[IM:rotMot]{IM:rotMot}
@@ -1457,12 +1453,12 @@ RefBy &
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+The \hyperref[Table:InDataConstraints]{Input Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of reasonable values is intended to provide examples of values that are physically admissible.
 
 \begin{longtblr}
 [caption={Input Data Constraints}]
 {colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Reasonable Value} & \textbf{Uncert.}
 \\
 ${C_{\text{R}}}$ & $0\leq{}{C_{\text{R}}}\leq{}1$ & -- & $0.8$ & 10$\%$
 \\
@@ -1489,20 +1485,20 @@ $ϕ$ & -- & $0\leq{}ϕ\leq{}2\,π$ & $\frac{π}{2}$ ${\text{rad}}$ & 10$\%$
 \end{longtblr}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
-The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+The \hyperref[Table:OutDataConstraints]{Output Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 
 \begin{longtblr}
 [caption={Output Data Constraints}]
-{colspec={l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{Var}
+{colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{Var} & \textbf{Physical Constraints}
 \\
-$\symbf{p}\text{(}t\text{)}$
+$\symbf{p}\text{(}t\text{)}$ & --
 \\
-$\symbf{v}\text{(}t\text{)}$
+$\symbf{v}\text{(}t\text{)}$ & --
 \\
-$ϕ$
+$ϕ$ & $0\leq{}ϕ\leq{}2\,π$
 \\
-$ω$
+$ω$ & --
 \label{Table:OutDataConstraints}
 \end{longtblr}
 \section{Requirements}
@@ -1528,7 +1524,7 @@ This section provides the functional requirements, the tasks and behaviours that
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
 \begin{description}[font=\normalfont]
-\item[Performance:\phantomsection\label{performance}]{The execution time for collision detection and collision resolution shall be comparable to an existing 2D physics library on the market (e.g. Pymunk).}
+\item[Performance:\phantomsection\label{performance}]{The execution time for collision detection and collision resolution shall be within 1$\%$ of the execution time of the Pymunk 2D physics library.}
 \item[Correctness:\phantomsection\label{correctness}]{The output of simulation results shall be compared to an existing implementation like \hyperref{http://www.pymunk.org/en/latest/}{}{}{Pymunk}.}
 \item[Usability:\phantomsection\label{usability}]{Software shall be easy to learn and use. Usability shall be measured by how long it takes a user to learn how to use the library to create a small program to simulate the movement of 2 bodies over time in space. Creating a program should take no less than 30 to 60 minutes for an intermediate to experienced programmer.}
 \item[Understandability:\phantomsection\label{understandability}]{Users of Tamias2D shall be able to learn the software with ease. Users shall be able to easily create a small program using the library. Creating a small program to simulate the movement of 2 bodies in space should take no less that 60 minutes.}
@@ -1536,7 +1532,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
-This section lists the likely changes to be made to the software.
+This section lists the likely changes (LC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[Variable-ODE-Solver:\phantomsection\label{lcVODES}]{The internal ODE-solving algorithm used by the library may be changed in the future.}
@@ -1546,7 +1542,7 @@ This section lists the likely changes to be made to the software.
 \end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
-This section lists the unlikely changes to be made to the software.
+This section lists the unlikely changes (UC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[Simulate-Rigid-Bodies:\phantomsection\label{ucSRB}]{The goal of the system is to simulate the interactions of rigid bodies.}
@@ -1634,7 +1630,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:UniversalGravLaw]{TM:UniversalGravLaw} &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} &  & X &  &  &  &  & 
+\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} &  &  &  &  &  &  & 
 \\
 \hyperref[GD:accelGravity]{GD:accelGravity} &  &  &  &  &  &  & 
 \\
@@ -1783,35 +1779,35 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/gamephysics/avsa}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/gamephysics/avsall}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/gamephysics/refvsref}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/gamephysics/allvsr}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/gamephysics/allvsall}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/allvsall}
 \caption{TraceGraphAllvsAll}
 \label{Figure:TraceGraphAllvsAll}
 \end{center}
@@ -1819,11 +1815,11 @@ The purpose of the traceability graphs is also to provide easy references on wha
 For convenience, the following graphs can be found at the links below:
 
 \begin{itemize}
-\item{\hyperref{../../../../traceygraphs/gamephysics/avsa.svg}{}{}{TraceGraphAvsA}}
-\item{\hyperref{../../../../traceygraphs/gamephysics/avsall.svg}{}{}{TraceGraphAvsAll}}
-\item{\hyperref{../../../../traceygraphs/gamephysics/refvsref.svg}{}{}{TraceGraphRefvsRef}}
-\item{\hyperref{../../../../traceygraphs/gamephysics/allvsr.svg}{}{}{TraceGraphAllvsR}}
-\item{\hyperref{../../../../traceygraphs/gamephysics/allvsall.svg}{}{}{TraceGraphAllvsAll}}
+\item{\hyperref{../../TraceyGraph/avsa.svg}{}{}{TraceGraphAvsA}}
+\item{\hyperref{../../TraceyGraph/avsall.svg}{}{}{TraceGraphAvsAll}}
+\item{\hyperref{../../TraceyGraph/refvsref.svg}{}{}{TraceGraphRefvsRef}}
+\item{\hyperref{../../TraceyGraph/allvsr.svg}{}{}{TraceGraphAllvsR}}
+\item{\hyperref{../../TraceyGraph/allvsall.svg}{}{}{TraceGraphAllvsAll}}
 \end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
@@ -1832,23 +1828,17 @@ There are no auxiliary constants.
 \section{References}
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
-@misc{jfBeucheIntro,
-author={Bueche, J. Frederick},
-title={Introduction to Physics for Scientists, Fourth Edition},
-publisher={Mcgraw-Hill College},
-year={1986}}
+@book{hibbeler2004,
+author={Hibbeler, R. C.},
+title={Engineering Mechanics: Dynamics},
+publisher={Pearson Prentice Hall},
+year={2004}}
 @mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},
 title={A Document Driven Approach to Certifying Scientific Computing Software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
-@inproceedings{parnas1978,
-author={Parnas, David L.},
-title={Designing Software for Ease of Extension and Contraction},
-booktitle={ICSE '78: Proceedings of the 3rd international conference on Software engineering},
-year={1978},
-pages={264--277}}
 @article{parnasClements1986,
 author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
@@ -1918,13 +1908,6 @@ title={Damping},
 howpublished={\url{https://en.wikipedia.org/wiki/Damping\_ratio}},
 month=jul,
 year={2019}}
-@article{sciComp2013,
-author={Wilson, Greg and Aruliah, D. A. and Titus, C. and Chue Hong, Neil P. and Davis, Matt and Guy, Richard T. and Haddock, Steven H. D. and Huff, Kathryn D. and Mitchell, Ian M. and Plumblet, Mark D. and Waugh, Ben and White, Ethan P. and Wilson, Paul},
-title={Best Practices for Scientific Computing, 2013},
-journal={PLoS Biol},
-year={2013},
-volume={12},
-number={1}}
 \end{filecontents*}
 \nocite{*}
 \bibstyle{ieeetr}

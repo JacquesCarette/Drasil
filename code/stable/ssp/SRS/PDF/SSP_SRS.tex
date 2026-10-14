@@ -287,8 +287,6 @@ Refname & Reference Name
 \\
 SRS & Software Requirements Specification
 \\
-SSP & Slope Stability analysis Program
-\\
 TM & Theoretical Model
 \\
 UC & Unlikely Change
@@ -298,9 +296,9 @@ Uncert. & Typical Uncertainty
 \end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
-A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in significant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety..
+A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in significant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (SSP) based on the original, manually created version of \hyperref{https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp}{}{}{SSP}. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the software requirements specification (SRS) for SSP. The program is based on the original, manually created version of \hyperref{https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp}{}{}{SSP}. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -627,7 +625,7 @@ Description & \begin{symbDescription}
 Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}\text{(}t\text{)}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
         
 \\ \midrule
-Source & --
+Source & \cite{hibbeler2004}
          
 \\ \midrule
 RefBy & \hyperref[GD:weight]{GD:weight}
@@ -2532,12 +2530,12 @@ RefBy & \hyperref[displayGraph]{FR:Display-Graph} and \hyperref[determineCritSli
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+The \hyperref[Table:InDataConstraints]{Input Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of reasonable values is intended to provide examples of values that are physically admissible.
 
 \begin{longtblr}
 [caption={Input Data Constraints}]
 {colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{Var} & \textbf{Physical Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Reasonable Value} & \textbf{Uncert.}
 \\
 $c'$ & $c'\gt{}0$ & $10000$ ${\text{Pa}}$ & 10$\%$
 \\
@@ -2572,7 +2570,7 @@ $φ'$ & $0\lt{}φ'\lt{}90$ & $25$ ${{}^{\circ}}$ & 10$\%$
 \end{longtblr}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
-The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+The \hyperref[Table:OutDataConstraints]{Output Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 
 \begin{longtblr}
 [caption={Output Data Constraints}]
@@ -2674,7 +2672,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
-This section lists the likely changes to be made to the software.
+This section lists the likely changes (LC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[Calculate-Inhomogeneous-Soil-Layers:\phantomsection\label{LC_inhomogeneous}]{\hyperref[assumpSLH]{A:Soil-Layer-Homogeneous} - The system currently assumes the soil mass is homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.}
@@ -2683,7 +2681,7 @@ This section lists the likely changes to be made to the software.
 \end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
-This section lists the unlikely changes to be made to the software.
+This section lists the unlikely changes (UC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[Normal-And-Shear-Linear-Only:\phantomsection\label{UC_normshearlinear}]{Changes related to \hyperref[assumpINSFL]{A:Interslice-Norm-Shear-Forces-Linear} are not possible due to the dependency of the calculations on the linear relationship between interslice normal forces and interslice shear forces.}
@@ -2993,35 +2991,35 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/ssp/avsa}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/ssp/avsall}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/ssp/refvsref}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/ssp/allvsr}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/ssp/allvsall}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../TraceyGraph/allvsall}
 \caption{TraceGraphAllvsAll}
 \label{Figure:TraceGraphAllvsAll}
 \end{center}
@@ -3029,11 +3027,11 @@ The purpose of the traceability graphs is also to provide easy references on wha
 For convenience, the following graphs can be found at the links below:
 
 \begin{itemize}
-\item{\hyperref{../../../../traceygraphs/ssp/avsa.svg}{}{}{TraceGraphAvsA}}
-\item{\hyperref{../../../../traceygraphs/ssp/avsall.svg}{}{}{TraceGraphAvsAll}}
-\item{\hyperref{../../../../traceygraphs/ssp/refvsref.svg}{}{}{TraceGraphRefvsRef}}
-\item{\hyperref{../../../../traceygraphs/ssp/allvsr.svg}{}{}{TraceGraphAllvsR}}
-\item{\hyperref{../../../../traceygraphs/ssp/allvsall.svg}{}{}{TraceGraphAllvsAll}}
+\item{\hyperref{../../TraceyGraph/avsa.svg}{}{}{TraceGraphAvsA}}
+\item{\hyperref{../../TraceyGraph/avsall.svg}{}{}{TraceGraphAvsAll}}
+\item{\hyperref{../../TraceyGraph/refvsref.svg}{}{}{TraceGraphRefvsRef}}
+\item{\hyperref{../../TraceyGraph/allvsr.svg}{}{}{TraceGraphAllvsR}}
+\item{\hyperref{../../TraceyGraph/allvsall.svg}{}{}{TraceGraphAllvsAll}}
 \end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
@@ -3051,6 +3049,11 @@ month=apr,
 pages={429--439},
 volume={14},
 number={3}}
+@book{hibbeler2004,
+author={Hibbeler, R. C.},
+title={Engineering Mechanics: Dynamics},
+publisher={Pearson Prentice Hall},
+year={2004}}
 @book{huston2008,
 author={Huston, Ronald and Josephs, Harold},
 title={Practical stress analysis in engineering design},

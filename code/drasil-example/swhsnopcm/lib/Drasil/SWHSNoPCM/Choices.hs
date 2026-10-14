@@ -1,19 +1,14 @@
-module Drasil.SWHSNoPCM.Choices where
+module Drasil.SWHSNoPCM.Choices (choices) where
 
-import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
-  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
-  AuxFile(..), Visibility(..), defaultChoices, makeArchit, makeData,
-  makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats,
-  ExtLib(..))
+import Language.Drasil.Code (Choices(..), Comments(..), ExtLib(..),
+  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
+  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..),
+  SoftwareDossierFile(..), Visibility(..), defaultChoices, makeArchit, makeData,
+  makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg,
   apacheODEPckg, odeintPckg)
-import Drasil.SWHSNoPCM.Body (noPCMODEInfo, fullSI)
-
-code :: CodeSpec
-code = codeSpec fullSI choices []
--- Sub interpolation mod into list when possible
+import Drasil.SWHSNoPCM.Body (noPCMODEInfo)
 
 choices :: Choices
 choices = defaultChoices {
@@ -23,7 +18,7 @@ choices = defaultChoices {
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [] "log.txt")
-    [SampleInput "../../datafiles/swhsnopcm/sampleInput.txt", ReadME],
+    [SampleInput "../datafiles/swhsnopcm/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Warning Warning,
   extLibs = [Math (makeODE [noPCMODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])]
 }

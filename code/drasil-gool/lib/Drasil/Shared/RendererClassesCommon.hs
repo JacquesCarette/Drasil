@@ -1,94 +1,89 @@
 {-# LANGUAGE TypeFamilies #-}
-
+{-# LANGUAGE FunctionalDependencies #-}
 module Drasil.Shared.RendererClassesCommon (
-  CommonRenderSym, ImportSym(..), ImportElim(..),
-  RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..),
-  InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..),
-  OpElim(..), RenderVariable(..), InternalVarElim(..), RenderValue(..),
-  ValueElim(..), InternalListFunc(..), RenderFunction(..), FunctionElim(..),
-  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim(..),
-  MSMthdType, MethodTypeSym(..), RenderParam(..), ParamElim(..),
-  RenderMethod(..), MethodElim(..), BlockCommentSym(..), BlockCommentElim(..),
-  ScopeElim(..)
+  CommonRenderSym, ImportSym(..), import', RenderBody(..), BodyElim(..),
+  RenderBlock(..), BlockElim(..), RenderType(..), VSUnOp, UnaryOpSym(..),
+  VSBinOp, BinaryOpSym(..), OpElim(..), RenderVariable(..), InternalVarElim(..),
+  InternalBinderElim(..), RenderValue(..), ValueElim(..), InternalListFunc(..),
+  RenderFunction(..), FunctionElim(..), InternalAssignStmt(..),
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
+  StatementElim(..), RenderVisibility(..), VisibilityElim(..), MethodTypeSym(..),
+  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..),
+  BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
-  VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall,
-  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), ValueExpression(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..), List(..),
-  InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+import Drasil.Shared.InterfaceCommon (Label, Library, MixedCall, TypeSym(..),
+  VariableElim(..), Argument(..), Literal(..), MathConstant(..), VariableSym,
+  ValueSym, VariableValue(..), ValueExpression(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  IndexTranslator(..), List(..), ListStatement, InternalList(..),
+  AssignStatement(..), ScopeSym, DeclStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..))
-import Drasil.Shared.CodeType (CodeType)
-import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData)
+  ParameterSym(..), BinderElim(..), UnRepr(..), BodySym, BlockSym)
+import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, OpData,
+  FuncData)
 import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (AssignStatement r, DeclStatement r, IOStatement r, 
-  StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement
-  r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
-  NumericExpression r, BooleanExpression r, Comparison r, List r,
-  InternalList r, VectorExpression r, TypeElim r, VariableElim r, RenderBlock r,
-  BlockElim r, RenderBody r, BodyElim r, InternalListFunc r, RenderFunction r,
-  FunctionElim r, OpElim r, RenderParam r, ParamElim r, RenderVisibility r,
-  VisibilityElim r, InternalAssignStmt r, InternalIOStmt r,
-  InternalControlStmt r, RenderStatement r, StatementElim r, RenderType r,
-  InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r,
-  InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
-  BlockCommentSym r, BlockCommentElim r, ValueExpression r, RenderMethod r,
-  MethodElim r, ParameterSym r, ScopeElim r
-  ) => CommonRenderSym r
-
-
--- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
+class (BodySym r bod block, BlockSym r block stmt,
+  AssignStatement r stmt var val, ScopeSym r scope,
+  DeclStatement r bod stmt var scope val, StringStatement r stmt var val,
+  FuncAppStatement r stmt var val, CommentStatement r stmt,
+  ControlStatement r bod stmt var val, Argument r val, Literal r val typ,
+  MathConstant r val, ValueSym r val typ, VariableSym r var typ,
+  VariableValue r var val, CommandLineArgs r val, NumericExpression r val,
+  BooleanExpression r val, Comparison r val, IndexTranslator r val, List r val,
+  ListStatement r stmt val, InternalList r block var val, VariableElim r var typ,
+  BinderElim r binder typ, RenderBlock r block, BlockElim r block, RenderBody r bod,
+  BodyElim r bod, InternalListFunc r val typ, RenderFunction r typ,
+  FunctionElim r typ, OpElim r, RenderParam r param var, ParamElim r param typ,
+  RenderVisibility r vis, VisibilityElim r vis,
+  InternalAssignStmt r stmt var val, InternalIOStmt r stmt val,
+  InternalControlStmt r stmt val, RenderStatement r stmt, StatementElim r stmt,
+  RenderType r typ, RenderValue r var val typ, ValueElim r val,
+  RenderVariable r var typ, InternalVarElim r var, InternalBinderElim r binder,
+  ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
+  BlockCommentElim r, ValueExpression r var val binder typ, TypeSym r typ,
+  MethodTypeSym r typ, RenderMethod r mthd, MethodElim r mthd,
+  ParameterSym r param var, ScopeElim r scope
+  ) => CommonRenderSym r mthd vis param bod block stmt var scope val binder typ
 
 -- Common Typeclasses --
 
 -- Couldn't this just be in InterfaceCommon?
 class ImportSym r where
-  type Import r
   -- For importing an external library
-  langImport :: Label -> r (Import r)
+  langImport :: Label -> r Doc
   -- For importing a local (same project) module
-  modImport :: Label -> r (Import r)
+  modImport :: Label -> r Doc
 
-class ImportElim r where
-  import' :: r (Import r) -> Doc
+import' :: (UnRepr r Doc) => r Doc -> Doc
+import' = unRepr
 
-class RenderBody r where
-  multiBody :: [MSBody r] -> MSBody r
+class RenderBody r bod | r -> bod where
+  multiBody :: [MS (r bod)] -> MS (r bod)
 
-class BodyElim r where
-  body :: r (Body r) -> Doc
+class BodyElim r bod | r -> bod where
+  body :: r bod -> Doc
 
-class RenderBlock r where
-  multiBlock :: [MSBlock r] -> MSBlock r
+class RenderBlock r block | r -> block where
+  multiBlock :: [MS (r block)] -> MS (r block)
 
 -- This assumes that the renderers encode Body as Doc
-class BlockElim r where
-  block :: r (Block r) -> Doc
+class BlockElim r block | r -> block where
+  block :: r block -> Doc
 
 -- This relates to TypeData, which keeps ADT, String, and Doc representations of a type for _reasons_
-class RenderType r where
-  multiType :: [VSType r] -> VSType r
-  typeFromData :: CodeType -> String -> Doc -> VSType r
+class RenderType r typ | r -> typ where
+  multiType :: [VS (r typ)] -> VS (r typ)
 
--- This is coupled to TypeData
-class InternalTypeElim r where
-  type' :: r (Type r) -> Doc
-
-type VSUnOp a = VS (a (UnaryOp a))
+type VSUnOp a = VS (a OpData)
 
 -- Why do we have these, when we also have NumericExpression in InterfaceCommon?
 -- It looks like the implementations for NumericExpression link here, but why?
 class UnaryOpSym r where
-  type UnaryOp r
   notOp    :: VSUnOp r
   negateOp :: VSUnOp r
   sqrtOp   :: VSUnOp r
@@ -104,11 +99,10 @@ class UnaryOpSym r where
   atanOp   :: VSUnOp r
   floorOp  :: VSUnOp r
   ceilOp   :: VSUnOp r
-  
-type VSBinOp a = VS (a (BinaryOp a))
+
+type VSBinOp a = VS (a OpData)
 
 class BinaryOpSym r where
-  type BinaryOp r
   equalOp        :: VSBinOp r
   notEqualOp     :: VSBinOp r
   greaterOp      :: VSBinOp r
@@ -125,128 +119,119 @@ class BinaryOpSym r where
   orOp           :: VSBinOp r
 
 class OpElim r where
-  uOp :: r (UnaryOp r) -> Doc
-  bOp :: r (BinaryOp r) -> Doc
-  uOpPrec :: r (UnaryOp r) -> Int
-  bOpPrec :: r (BinaryOp r) -> Int
+  uOp :: r OpData -> Doc
+  bOp :: r OpData -> Doc
+  uOpPrec :: r OpData -> Int
+  bOpPrec :: r OpData -> Int
 
 -- These assume we represent Scope with ScopeData
-class ScopeElim r where
-  scopeData :: r (Scope r) -> ScopeData
+class ScopeElim r scope | r -> scope where
+  scopeData :: r scope -> scope
 
 -- What exactly is this, since it adds a bunch of extra required data?
-class RenderVariable r where
-  varFromData :: Binding -> String -> VSType r -> Doc -> SVariable r
+class RenderVariable r var typ | r -> var typ where
+  varFromData :: AttachmentTag -> String -> VS (r typ) -> Doc -> VS (r var)
 
 -- This assumes variables are represented in a certain way, and
 -- its existence seems a bit sketchy
-class InternalVarElim r where
-  variableBind :: r (Variable r) -> Binding
-  variable  :: r (Variable r) -> Doc
+class InternalVarElim r var | r -> var where
+  variableBind :: r var -> AttachmentTag
+  variable  :: r var -> Doc
 
-class RenderValue r where
-  inputFunc       :: SValue r
-  printFunc       :: SValue r
-  printLnFunc     :: SValue r
-  printFileFunc   :: SValue r -> SValue r
-  printFileLnFunc :: SValue r -> SValue r
+class InternalBinderElim r binder where
+  binderElim  :: r binder -> Doc
 
-  cast :: VSType r -> SValue r -> SValue r
+class RenderValue r var val typ | r -> var val typ where
+  inputFunc       :: VS (r val)
+  printFunc       :: VS (r val)
+  printLnFunc     :: VS (r val)
+  printFileFunc   :: VS (r val) -> VS (r val)
+  printFileLnFunc :: VS (r val) -> VS (r val)
 
-  -- | Very generic internal function for generating calls, to reduce repeated 
+  cast :: VS (r typ) -> VS (r val) -> VS (r val)
+
+  -- | Very generic internal function for generating calls, to reduce repeated
   -- code throughout generators.
-  -- Parameters are: maybe name of external module, maybe Doc for object 
-  -- variable (including separator between object and function) for method 
+  -- Parameters are: maybe name of external module, maybe Doc for object
+  -- variable (including separator between object and function) for method
   -- calls.
-  call :: Maybe Library -> Maybe Doc -> MixedCall r
+  call :: Maybe Library -> Maybe Doc -> MixedCall r var val typ
 
-  valFromData :: Maybe Int -> Maybe Integer -> VSType r -> Doc -> SValue r
+  valFromData :: Maybe Int -> Maybe Integer -> VS (r typ) -> Doc -> VS (r val)
 
-class ValueElim r where
-  valuePrec :: r (Value r) -> Maybe Int
-  valueInt :: r (Value r) -> Maybe Integer
-  value :: r (Value r) -> Doc
+class ValueElim r val | r -> val where
+  valuePrec :: r val -> Maybe Int
+  valueInt :: r val -> Maybe Integer
+  value :: r val -> Doc
 
 -- Again, wh are we recreating all these list functions?
-class InternalListFunc r where
-  -- | List
-  listSizeFunc   :: SValue r -> VSFunction r
-  -- | List, Index, Value
-  listAddFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
-  -- | List, Value
-  listAppendFunc :: SValue r -> SValue r -> VSFunction r
+class InternalListFunc r val typ | r -> val typ where
   -- | List, Index
-  listAccessFunc :: VSType r -> SValue r -> VSFunction r
-  -- | List, Index, Value
-  listSetFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
+  listAccessFunc :: VS (r typ) -> VS (r val) -> VS (r FuncData)
 
-class RenderFunction r where
-  funcFromData :: Doc -> VSType r -> VSFunction r
-  
+class RenderFunction r typ | r -> typ where
+  funcFromData :: Doc -> VS (r typ) -> VS (r FuncData)
+
 -- Assumes a certain representation for functions
-class FunctionElim r where
-  functionType :: r (Function r) -> r (Type r)
-  function :: r (Function r) -> Doc
+class FunctionElim r typ | r -> typ where
+  functionType :: r FuncData -> r typ
+  function :: r FuncData -> Doc
 
 -- Shouldn't this be in InterfaceCommon?
-class InternalAssignStmt r where
-  multiAssign       :: [SVariable r] -> [SValue r] -> MSStatement r 
+class InternalAssignStmt r stmt var val | r -> stmt var val where
+  multiAssign :: [VS (r var)] -> [VS (r val)] -> MS (r stmt)
 
-class InternalIOStmt r where
+class InternalIOStmt r stmt val | r -> stmt val where
   -- newLn, maybe a file to print to, printFunc, value to print
-  printSt :: Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MSStatement r
-    
-class InternalControlStmt r where
-  multiReturn :: [SValue r] -> MSStatement r
+  printSt :: Bool -> Maybe (VS (r val)) -> VS (r val) -> VS (r val) -> MS (r stmt)
 
-class RenderStatement r where
-  stmt     :: MSStatement r -> MSStatement r
-  loopStmt :: MSStatement r -> MSStatement r
+class InternalControlStmt r stmt val | r -> stmt val where
+  multiReturn :: [VS (r val)] -> MS (r stmt)
 
-  stmtFromData :: Doc -> Terminator -> MSStatement r
+class RenderStatement r stmt | r -> stmt where
+  stmt     :: MS (r stmt) -> MS (r stmt)
+  loopStmt :: MS (r stmt) -> MS (r stmt)
 
-class StatementElim r where
-  statement :: r (Statement r) -> Doc
-  statementTerm :: r (Statement r) -> Terminator
+  stmtFromData :: Doc -> Terminator -> MS (r stmt)
 
-class RenderVisibility r where
-  visibilityFromData :: VisibilityTag -> Doc -> r (Visibility r)
+class StatementElim r stmt | r -> stmt where
+  statement :: r stmt -> Doc
+  statementTerm :: r stmt -> Terminator
 
--- This assumes a certain representation of visibility 
-class VisibilityElim r where
-  visibility :: r (Visibility r) -> Doc
+class RenderVisibility r vis | r -> vis where
+  visibilityFromData :: VisibilityTag -> Doc -> r vis
+
+-- This assumes a certain representation of visibility
+class VisibilityElim r vis | r -> vis where
+  visibility :: r vis -> Doc
 
 -- Why do we need a Doc here?
-class RenderParam r where
-  paramFromData :: SVariable r -> Doc -> MSParameter r
-  
+class RenderParam r param var | r -> param var where
+  paramFromData :: VS (r var) -> Doc -> MS (r param)
+
 -- This assumes a certain representation for Parameter
-class ParamElim r where
-  parameterName :: r (Parameter r) -> Label
-  parameterType :: r (Parameter r) -> r (Type r)
-  parameter     :: r (Parameter r) -> Doc
+class ParamElim r param typ | r -> param typ where
+  parameterName :: r param -> Label
+  parameterType :: r param -> r typ
+  parameter     :: r param -> Doc
 
 class BlockCommentSym r where
-  type BlockComment r
-  blockComment :: [String] -> r (BlockComment r)
+  blockComment :: [String] -> r Doc
   -- | Converts a list of strings into a block comment
-  docComment :: State a [String] -> State a (r (BlockComment r))
+  docComment :: State a [String] -> State a (r Doc)
 
 -- This assumes a certain representation for BlockComment
 class BlockCommentElim r where
-  blockComment' :: r (BlockComment r) -> Doc
+  blockComment' :: r Doc -> Doc
 
-type MSMthdType a = MS (a (MethodType a))
+class MethodTypeSym r typ | r -> typ where
+  mType :: VS (r typ) -> MS (r typ)
 
-class (TypeSym r) => MethodTypeSym r where
-  type MethodType r
-  mType    :: VSType r -> MSMthdType r
-    
-class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r where
+class RenderMethod r mthd | r -> mthd where
   -- | Takes a BlockComment and a method and generates a function.
-  commentedFunc :: MS (r (BlockComment r)) -> SMethod r -> SMethod r
-  mthdFromData :: VisibilityTag -> Doc -> SMethod r
+  commentedFunc :: MS (r Doc) -> MS (r mthd) -> MS (r mthd)
+  mthdFromData :: VisibilityTag -> Doc -> MS (r mthd)
 
 -- This assumes a certain representation for Method
-class MethodElim r where
-  method :: r (Method r) -> Doc
+class MethodElim r mthd | r -> mthd where
+  method :: r mthd -> Doc

@@ -31,6 +31,10 @@
 # - functions:
 #   - {name: unsafePerformIO, within: []} # unsafePerformIO can only appear in no modules
 
+- group: {name: teaching, enabled: true}
+- group: {name: future, enabled: true}
+- group: {name: generalise, enabled: true}
+- group: {name: generalise-for-conciseness, enabled: true}
 
 # Add custom hints for this project
 #
@@ -46,15 +50,13 @@
 #
 # Replace a $ b $ c with a . b $ c
 # - group: {name: dollar, enabled: true}
-#
-# Generalise map to fmap, ++ to <>
-# - group: {name: generalise, enabled: true}
 
 
 # Ignore some builtin hints
 # - ignore: {name: Use let}
 # - ignore: {name: Use const, within: SpecialModule} # Only within certain modules
 - ignore: {name: "Use camelCase"}
+- ignore: {name: "Avoid NonEmpty.unzip"} # Known false-positive: <https://github.com/ndmitchell/hlint/issues/1657>
 
 
 # Define some custom infix operators

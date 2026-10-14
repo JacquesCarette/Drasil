@@ -1,18 +1,20 @@
 -- | Routines to help with Symbols and Stages.
 module Language.Drasil.Symbol.Helpers(eqSymb, codeSymb, hasStageSymbol,
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft,
-  vec, label, variable) where
+  vec, label, variable, sortBySymbol, sortBySymbolTuple, compareBySymbol) where
 
 import Data.Char (isLatin1, toLower)
 import Data.Char.Properties.Names (getCharacterName)
+import Data.Function (on)
+import Data.List (sortBy)
 import Data.List.Split (splitOn)
 
-import Language.Drasil.Symbol (HasSymbol(symbol), Symbol(..), Decoration(..))
+import Language.Drasil.Symbol (HasSymbol(symbol), Symbol(..), Decoration(..), compsy)
 import Language.Drasil.Stages (Stage(Equational,Implementation))
 
 -- | Helper for creating smart constructors for 'Symbol's.
 neSymb :: (String -> Symbol) -> String -> String -> Symbol
-neSymb _  s [] = error $ s ++ " names must be non-empty"
+neSymb _  s [] = error $ s <> " names must be non-empty"
 neSymb sy _ s  = sy s
 
 -- | Label smart constructor, requires non-empty labels
@@ -82,8 +84,8 @@ unicodeConv (Variable st) = Variable $ unicodeString st
 unicodeConv (Label    st) = Label    $ unicodeString st
 unicodeConv (Atop    d s) = Atop d   $ unicodeConv s
 unicodeConv (Corners a b c d s) =
-  Corners (map unicodeConv a) (map unicodeConv b) (map unicodeConv c) (map unicodeConv d) (unicodeConv s)
-unicodeConv (Concat ss) = Concat $ map unicodeConv ss
+  Corners (unicodeConv <$> a) (unicodeConv <$> b) (unicodeConv <$> c) (unicodeConv <$> d) (unicodeConv s)
+unicodeConv (Concat ss) = Concat $ unicodeConv <$> ss
 unicodeConv x = x
 
 -- | Helper for 'unicodeConv' that converts each Unicode character to text equivalent.
@@ -93,6 +95,21 @@ unicodeConv x = x
 unicodeString :: String -> String
 unicodeString = concatMap (\x -> if isLatin1 x then [x] else getName $ nameList x)
   where
-    nameList = splitOn " " . map toLower . getCharacterName
+    nameList = splitOn " " . fmap toLower . getCharacterName
     getName ("greek":_:_:name) = unwords name
     getName _ = error "unicodeString not fully implemented"
+
+-----------------------
+-- Useful for sorting
+
+-- | Compare the equational 'Symbol' of two things.
+compareBySymbol :: HasSymbol a => a -> a -> Ordering
+compareBySymbol a b = compsy (eqSymb a) (eqSymb b)
+
+-- | Sorts a list of 'HasSymbols' by 'Symbol'.
+sortBySymbol :: HasSymbol a => [a] -> [a]
+sortBySymbol = sortBy compareBySymbol
+
+-- | Sorts a tuple list of 'HasSymbols' by first Symbol in the tuple.
+sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
+sortBySymbolTuple = sortBy (compareBySymbol `on` fst)

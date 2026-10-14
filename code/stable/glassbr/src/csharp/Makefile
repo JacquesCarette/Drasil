@@ -26,7 +26,7 @@ GlassBR$(TARGET_EXTENSION): Control.cs InputParameters.cs Calculations.cs Output
 	$(CSC) -out:GlassBR$(TARGET_EXTENSION) Control.cs InputParameters.cs Calculations.cs OutputFormat.cs ReadTable.cs Interpolation.cs
 
 run: build
-	./GlassBR$(TARGET_EXTENSION) $(RUNARGS)
+	mono GlassBR$(TARGET_EXTENSION) $(RUNARGS)
 
 doc: doxConfig Control.cs InputParameters.cs Calculations.cs OutputFormat.cs ReadTable.cs Interpolation.cs
 	doxygen doxConfig

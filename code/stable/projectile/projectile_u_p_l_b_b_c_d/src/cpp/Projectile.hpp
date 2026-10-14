@@ -44,7 +44,6 @@ class InputParameters {
 class Constants {
     public:
         static const double g;
-        static const double epsilon;
         
 };
 
@@ -67,18 +66,10 @@ double func_p_land(InputParameters &inParams);
 */
 double func_d_offset(InputParameters &inParams, double p_land);
 
-/** \brief Calculates output message as a string
-    \param inParams structure holding the input values
-    \param d_offset distance between the target position and the landing position (m)
-    \return output message as a string
-*/
-string func_s(InputParameters &inParams, double d_offset);
-
 /** \brief Writes the output values to output.txt
-    \param s output message as a string
     \param d_offset distance between the target position and the landing position (m)
     \param t_flight flight duration (s)
 */
-void write_output(string s, double d_offset, double t_flight);
+void write_output(double d_offset, double t_flight);
 
 #endif

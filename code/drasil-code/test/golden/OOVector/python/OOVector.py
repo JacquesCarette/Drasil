@@ -1,0 +1,86 @@
+import math
+
+## \brief Vectors of doubles and common vector-related operations.
+class Vector:
+    ## \brief Construct a vector from an array of doubles.
+    # \param v The doubles.
+    def __init__(self, v):
+        assert len(v) > 0, "Vector dimension must be > 0."
+        self.v = v.copy()
+    
+    ## \brief Returns the dimension of this vector.
+    # \return The dimension of the vector.
+    def dimension(self):
+        return len(self.v)
+    
+    ## \brief Calculate the Euclidean norm (magnitude) of this vector.
+    # \return The magnitude.
+    def magnitude(self):
+        return math.sqrt(Vector.dot(self, self))
+    
+    ## \brief Calculate unit vector of this vector.
+    # \return A new unit vector.
+    @staticmethod
+    def norm(v):
+        mag = v.magnitude()
+        assert mag > 0.0, "Cannot normalize a zero vector."
+        return Vector.scale(v, 1.0 / mag)
+    
+    ## \brief Calculate the dot product of two vectors.
+    # \param v1 First vector.
+    # \param v2 Second vector.
+    # \return The dot product.
+    @staticmethod
+    def dot(v1, v2):
+        assert v1.dimension() == v2.dimension(), "Vector dimensions must match for dot product."
+        res = 0.0
+        for i in range(0, v1.dimension(), 1):
+            res += v1.v[i] * v2.v[i]
+        return res
+    
+    ## \brief Calculate the resultant vector of two vectors.
+    # \param v1 First vector.
+    # \param v2 Second vector.
+    # \return The resultant vector.
+    @staticmethod
+    def add(v1, v2):
+        assert v1.dimension() == v2.dimension(), "Vector dimensions must match for addition."
+        res = v1.v.copy()
+        for i in range(0, v1.dimension(), 1):
+            res[i] += v2.v[i]
+        return Vector(res)
+    
+    ## \brief Scale this vector by a factor.
+    # \param v Scalar factor.
+    # \return A new scaled vector.
+    @staticmethod
+    def scale(v, s):
+        res = v.v.copy()
+        for i in range(0, v.dimension(), 1):
+            res[i] = s * res[i]
+        return Vector(res)
+    
+    ## \brief Prints the vector elements to console.
+    def printSelf(self):
+        print(self.v)
+
+ds1 = [1.0, 2.0, 3.0]
+ds2 = [4.0, 5.0, 6.0]
+v1 = Vector(ds1)
+v2 = Vector(ds2)
+print("v1: ", end="")
+v1.printSelf()
+print("v2: ", end="")
+v2.printSelf()
+d = Vector.dot(v1, v2)
+print("Dot product: ", end="")
+print(d)
+m = v1.magnitude()
+print("Magnitude of v1: ", end="")
+print(m)
+vAdd = Vector.add(v1, v2)
+print("v1 + v2: ", end="")
+vAdd.printSelf()
+vUnit = Vector.norm(Vector.add(v1, Vector.scale(v2, 2.0)))
+print("Unit vector of v1 + 2 * v2: ", end="")
+vUnit.printSelf()

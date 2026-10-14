@@ -1,33 +1,37 @@
 -- | Performs IO actions to get file path information
 -- and then generate an updated Drasil website.
-module Main where
+module Main (main) where
 
-import GHC.IO.Encoding
-import Drasil.Generator (gen, DocSpec(DocSpec), DocType(Website), Format(..), docChoices)
-import Drasil.Website.Body (mkWebsite, printSetting, FolderLocation(..))
-import System.Environment (getEnv, lookupEnv)
 import Data.Maybe (fromMaybe)
+import System.Environment (getEnv, lookupEnv)
+
+import Drasil.Generator (concretizeAndWrite, drasilMakefileReqOpts)
+import Language.Drasil (Sentence(S))
+import Language.Drasil.Document (Document(Document), ShowTableOfContents(NoToC), namedRef)
+import Drasil.Website.Core (defaultDrasilWebsiteGenOpts)
+
+import Drasil.Website.Body (FolderLocation (..), gitHubRef, sections,
+  websiteTitle, webSys)
 
 -- | Collect environment variables, place them in 'FolderLocation',
 -- and generate the Drasil website.
-main :: IO()
+main :: IO ()
 main = do
-  -- Require the Makefile (or deploy script as it will usually be) to feed locations for where to find certain
-  -- files/groups of files in the staged deploy folder.
+  -- Require the Makefile (or deploy script as it will usually be) to feed
+  -- locations for where to find certain files/groups of files in the staged
+  -- deploy folder.
   deployLocation <- getEnv "DEPLOY_FOLDER"
   docsRoot <- getEnv "DOCS_FOLDER"
   exampleRoot <- getEnv "EXAMPLES_FOLDER"
-  --srsDir <- getEnv "SRS_FOLDER_FRAG"
-  --doxDir <- getEnv "DOX_FOLDER"
   graphRoot <- getEnv "GRAPH_FOLDER"
   analysisRoot <- getEnv "ANALYSIS_FOLDER"
   listOfPackages <- getEnv "PACKAGES"
   typeGFolder <- getEnv "TYPEGRAPH_FOLDER"
   classIFolder <- getEnv "CLASSINST_GRAPH_FOLDER"
 
-  -- Env variables relating to variables exposed on CI.
-  -- Because we want to be able to test site building locally, we fill in these stubs with
-  -- (sometimes correct) assumptions.
+  -- Env variables relating to variables exposed on CI. Because we want to be
+  -- able to test site building locally, we fill in these stubs with (sometimes
+  -- correct) assumptions.
   repoSlug <- fromMaybe "JacquesCarette/Drasil" <$> lookupEnv "GITHUB_REPOSITORY"
   tree <- fromMaybe "main" <$> lookupEnv "DRASIL_WEBSITE_TREE"
   -- Next two are metadata used to produce the footer.
@@ -35,20 +39,30 @@ main = do
   buildId <- lookupEnv "GITHUB_RUN_ID"
 
   -- get commit root and build path
-  let repoCommitRoot = "https://github.com/" ++ repoSlug ++ "/tree/" ++ tree ++ "/"
-      buildPath = "https://github.com/" ++ repoSlug ++ "/actions" ++ maybe "" ("/runs/" ++) buildId
+  let repoCommitRoot = "https://github.com/" <> repoSlug <> "/tree/" <> tree <> "/"
+      buildPath = "https://github.com/" <> repoSlug <> "/actions" <> maybe "" ("/runs/" ++) buildId
 
       -- organize all the possible folder locations to use in functions
-      allFolders = Folder {depL = deployLocation, docsRt = docsRoot,
-        exRt = exampleRoot, graphRt = graphRoot,
-        analysisRt = analysisRoot, repoRt = repoCommitRoot, 
-        buildNum = buildNumber, buildPth = buildPath,
-        typeGraphFolder = typeGFolder, classInstFolder = classIFolder,
-        packages = words listOfPackages ++ ["example"]
-        -- manually add example because it's not actually a package anymore,
-        -- but the analysis scripts work nonetheless, so we display it here.
-        }
+      allFolders =
+        Folder
+          { depL = deployLocation
+          , docsRt = docsRoot
+          , exRt = exampleRoot
+          , graphRt = graphRoot
+          , analysisRt = analysisRoot
+          , repoRt = repoCommitRoot
+          , buildNum = buildNumber
+          , buildPth = buildPath
+          , typeGraphFolder = typeGFolder
+          , classInstFolder = classIFolder
+          , packages = words listOfPackages <> ["example"]
+            -- manually add example because it's not actually a package anymore,
+            -- but the analysis scripts work nonetheless, so we display it here.
+          }
 
-  -- generate the html document/website.
-  setLocaleEncoding utf8
-  gen (DocSpec (docChoices Website [HTML]) "index") (mkWebsite allFolders) (printSetting allFolders)
+      --  FIXME: Author is hack for now to show up in proper spot.
+      author = namedRef gitHubRef (S "Link to GitHub Repository")
+      websiteDoc = Document (S websiteTitle) author NoToC $ sections allFolders
+      syst = webSys websiteDoc allFolders
+
+  concretizeAndWrite syst defaultDrasilWebsiteGenOpts drasilMakefileReqOpts

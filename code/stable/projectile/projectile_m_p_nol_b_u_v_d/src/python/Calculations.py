@@ -25,16 +25,3 @@ def func_p_land(inParams, g):
 # \return distance between the target position and the landing position (m)
 def func_d_offset(inParams, p_land):
     return p_land - inParams.p_target
-
-## \brief Calculates output message as a string
-# \param inParams structure holding the input values
-# \param epsilon hit tolerance
-# \param d_offset distance between the target position and the landing position (m)
-# \return output message as a string
-def func_s(inParams, epsilon, d_offset):
-    if math.fabs(d_offset / inParams.p_target) < epsilon:
-        return "The target was hit."
-    elif d_offset < 0.0:
-        return "The projectile fell short."
-    else:
-        return "The projectile went long."

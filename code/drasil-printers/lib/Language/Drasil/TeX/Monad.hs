@@ -1,13 +1,19 @@
 {-# Language FlexibleInstances #-}
 -- | Printing Monad. Starts with a specific data type (reader monad) and extends from there.
-module Language.Drasil.TeX.Monad where
+module Language.Drasil.TeX.Monad (
+  -- * Types
+  MathContext(..), PrintLaTeX(..), D, Latex(..),
+  -- * Functions
+  switch, toMath, toText, getCtx, (%%), ($+$), vcat, vpunctuate,
+  hpunctuate, nest, lub
+) where
 
 import Prelude hiding (print)
 import qualified Text.PrettyPrint as TP
 
-import Language.Drasil
+import Language.Drasil (RenderSpecial(..), Special(..))
 
-import qualified Language.Drasil.Printing.Helpers as H
+import Drasil.Printers.Common
 
 -----------------------------------------------------------------------------
 -- * Printing Monad
@@ -17,8 +23,8 @@ import qualified Language.Drasil.Printing.Helpers as H
 -- to extend, so start there.
 
 -- | There are two proper contexts, Text and Math; Curr is the current context.
--- There are multiple ways of getting there: for Text, either being at the top-level 
--- or inside \text. For Math, either surrounded by $ or 
+-- There are multiple ways of getting there: for Text, either being at the top-level
+-- or inside \text. For Math, either surrounded by $ or
 -- in \begin{equation} .. \end{equation}.
 -- Curr is when the current context is fine.
 data MathContext = Text | Math | Curr deriving Eq
@@ -38,12 +44,15 @@ instance Applicative PrintLaTeX where
 -- | Define the printing monad.
 instance Monad PrintLaTeX where
   return = pure
-  m >>= k = PL $ \ctx -> 
+  m >>= k = PL $ \ctx ->
     let a = runPrint m ctx in
     runPrint (k a) ctx
 
 -- | Convenient abbreviation.
 type D = PrintLaTeX TP.Doc
+
+instance CanCarryText D where
+  holdText = pure . holdText
 
 -- | MonadReader calls this @local@.
 -- Can switch contexts (including no-switch cases).  Adjust printing as necessary.
@@ -51,17 +60,16 @@ switch :: (MathContext -> MathContext) -> D -> D
 switch f (PL g) = PL $ \c -> adjust c (f c) g
   where
     bstext = TP.text "\\text"
-    br doc = TP.text "{" TP.<> doc TP.<> TP.text "}"
     adjust :: MathContext -> MathContext -> (MathContext -> TP.Doc) -> TP.Doc
     adjust Math Math gen = gen Math
     adjust Text Text gen = gen Text
     -- we are producing Math, but want some Text embedded
-    adjust Math Text gen = bstext TP.<> br (gen Text)
+    adjust Math Text gen = bstext TP.<> brace (gen Text)
     -- we are producing Text, but want some Math embedded
-    adjust Text Math gen = H.dollarDoc $ gen Math
+    adjust Text Math gen = dollar $ gen Math
     adjust Curr Curr gen = gen Text -- default
     adjust Curr x gen = gen x
-    adjust x Curr gen = gen x 
+    adjust x Curr gen = gen x
 
 toMath, toText :: D -> D
 -- | Change context to Math.
@@ -94,7 +102,7 @@ infixr 6 $+$
 
 -- | Concatenates a list of 'D' using a function from ['TP.Doc'] -> 'TP.Doc'.
 tpRunPrint :: ([TP.Doc] -> TP.Doc) -> [D] -> D
-tpRunPrint f l = PL $ \ctx -> f $ map (`runPrint` ctx) l
+tpRunPrint f l = PL $ \ctx -> f $ (`runPrint` ctx) <$> l
 
 -- | List version of 'TP.$$'. Above, except that if the last line of the first
 -- argument stops at least one position before the first line of the second begins,

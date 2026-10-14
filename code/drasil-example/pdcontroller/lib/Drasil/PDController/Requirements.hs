@@ -1,17 +1,29 @@
-{-#LANGUAGE PostfixOperators#-}
-module Drasil.PDController.Requirements where
+module Drasil.PDController.Requirements (
+  funcReqs, nonfuncReqs, funcReqsTables
+) where
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, datumConstraint)
-import Drasil.DocLang.SRS (datCon)
-import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkVerifiableNFR, mkSecurityNFR)
+import Data.Drasil.Requirements (portable)
+import Drasil.SRS.Concepts (datCon)
+import Drasil.SRS (mkMaintainableNFR, mkVerifiableNFR,
+  mkSecurityNFR, inReqWTab)
 
 import Drasil.PDController.Concepts
 import Drasil.PDController.IModel
+import Drasil.PDController.Unitals (inputs)
 
 import Language.Drasil
+import Language.Drasil.Document
 
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInputs, calculateValues, outputValues]
+funcReqs = [inputValues, verifyInputs, calculateValues, outputValues]
+
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab Nothing inputs
 
 verifyInputs, calculateValues, outputValues :: ConceptInstance
 verifyInputs
@@ -41,10 +53,7 @@ outputValuesDesc
 -----------------------------------------------------------------------------
 
 nonfuncReqs :: [ConceptInstance]
-nonfuncReqs = [portability, security, maintainability, verifiability]
-
-portability :: ConceptInstance
-portability = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portability"
+nonfuncReqs = [portable, security, maintainability, verifiability]
 
 security :: ConceptInstance
 security = mkSecurityNFR "security" "Security"

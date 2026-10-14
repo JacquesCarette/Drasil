@@ -1,0 +1,59 @@
+digraph "allvsr" {
+    "instance:calcPositions" -> "theory:accelIMX1";
+    "instance:calcPositions" -> "theory:accelIMY1";
+    "instance:calcPositions" -> "theory:accelIMX2";
+    "instance:calcPositions" -> "theory:accelIMY2";
+    "instance:outputValues" -> "theory:accelIMX1";
+    "instance:outputValues" -> "theory:accelIMY1";
+    "instance:outputValues" -> "theory:accelIMX2";
+    "instance:outputValues" -> "theory:accelIMY2";
+    "instance:twoBody" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:twoBody"];
+    "instance:isolated" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:isolated"];
+    "instance:newtonianGravity" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:newtonianGravity"];
+    "instance:nonRelativistic" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:nonRelativistic"];
+    "instance:pointMass" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:pointMass"];
+    "instance:constantMass" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:constantMass"];
+    "instance:inertialFrame" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:inertialFrame"];
+    "instance:planar" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:planar"];
+    "instance:nonzeroSeparation" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:nonzeroSeparation"];
+    subgraph "A" {
+        rank="same";
+        "instance:twoBody" "instance:isolated" "instance:newtonianGravity" "instance:nonRelativistic" "instance:pointMass" "instance:constantMass" "instance:inertialFrame" "instance:planar" "instance:nonzeroSeparation";
+    }
+    "theory:centerOfMassCS" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:centerOfMass"];
+    "theory:newtonSL" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:NewtonSecLawMot"];
+    "theory:velocityTM" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:velocity"];
+    "theory:accelerationTM" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:acceleration"];
+    "theory:fOfGravity" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:UniversalGravLaw"];
+    "theory:r_12" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:relPosAndSep"];
+    subgraph "TM" {
+        rank="same";
+        "theory:centerOfMassCS" "theory:newtonSL" "theory:velocityTM" "theory:accelerationTM" "theory:fOfGravity" "theory:r_12";
+    }
+    "theory:accelIMX1" [shape=box, color=black, style=filled, fillcolor="khaki1", label="IM:accelX1"];
+    "theory:accelIMY1" [shape=box, color=black, style=filled, fillcolor="khaki1", label="IM:accelY1"];
+    "theory:accelIMX2" [shape=box, color=black, style=filled, fillcolor="khaki1", label="IM:accelX2"];
+    "theory:accelIMY2" [shape=box, color=black, style=filled, fillcolor="khaki1", label="IM:accelY2"];
+    subgraph "IM" {
+        rank="same";
+        "theory:accelIMX1" "theory:accelIMY1" "theory:accelIMX2" "theory:accelIMY2";
+    }
+    "instance:inputValues" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:inputValues"];
+    "instance:verifyInptVals" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:verifyInptVals"];
+    "instance:calcPositions" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:calcPositions"];
+    "instance:verifyOutput" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:verifyOutput"];
+    "instance:outputValues" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:outputValues"];
+    "instance:correct" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:correct"];
+    "instance:portable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:portable"];
+    "instance:maintainable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:maintainable"];
+    "instance:usable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:usable"];
+    subgraph "FR" {
+        rank="same";
+        "instance:inputValues" "instance:verifyInptVals" "instance:calcPositions" "instance:verifyOutput" "instance:outputValues" "instance:correct" "instance:portable" "instance:maintainable" "instance:usable";
+    }
+    "instance:positionsOverTime" [shape=box, color=black, style=filled, fillcolor="darkgoldenrod1", label="GS:positionsOverTime"];
+    subgraph "GS" {
+        rank="same";
+        "instance:positionsOverTime";
+    }
+}

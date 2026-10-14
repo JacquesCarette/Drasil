@@ -1,44 +1,50 @@
-module Drasil.PDController.IntroSection where
+module Drasil.PDController.IntroSection (
+  introPara, introPurposeOfDoc, externalLinkRef, introUserChar1, introUserChar2,
+  introscopeOfReq, scope
+) where
 
-import Drasil.PDController.Concepts
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
+import Drasil.PDController.Concepts
+
 introPara, introPurposeOfDoc, introscopeOfReq :: Sentence
-introPara
-  = foldlSent
-      [S "Automatic process control with a controller (P/PI/PD/PID) is used",
-         S "in a variety of applications such as thermostats, automobile",
-         S "cruise-control, etc. The gains" `S.ofA` S "controller in an application" +:+. 
-         S "must be tuned before the controller is ready for production",
-         S "Therefore, a simulation" `S.ofThe` phrase pidC, S "with a",
-         phrase secondOrderSystem,
-         S "is created in this project based" `S.onThe` S "original, manually created version of" +:+
-         namedRef externalLinkRef (S "PD Controller"),
-         S "that can be used to tune the gain constants"]
+introPara = foldlSent [
+  S "Automatic process control with a controller (" :+:
+  foldOpts (short <$> [proportionalCI, piCI, pdControllerCI, pidCI]) :+:
+  S ") is used in a variety of applications such as thermostats, automobile",
+  S "cruise-control, etc. The gains" `S.ofA` S "controller in an application" +:+.
+  S "must be tuned before the controller is ready for production",
+  S "Therefore, a simulation" `S.ofThe` phrase pidC, S "with a",
+  phrase secondOrderSystem,
+  S "is created in this project based" `S.onThe` S "original, manually created version of" +:+
+  namedRef externalLinkRef (S "PD Controller"),
+  S "that can be used to tune the gain constants"]
 
 externalLinkRef :: Reference
-externalLinkRef = makeURI "PD_Controller_SRSLink" 
-  "https://github.com/muralidn/CAS741-Fall20/tree/master" 
+externalLinkRef = makeURI "PD_Controller_SRSLink"
+  "https://github.com/muralidn/CAS741-Fall20/tree/master"
   (shortname' $ S "PD_Controller_SRSLink")
 
 introscopeOfReq
   = foldlSent_
-      [phraseNP (a_ pidCL),
+      [D.toSent (phraseNP (a_ pidCL)),
        S "with three subsystems, namely:" +:+.
-          foldlList Comma List (map (phraseNP.a_)
-           [pidC, summingPt, powerPlant]),
+          foldlList Comma List (D.toSent . phraseNP . a_
+           <$> [pidC, summingPt, powerPlant]),
        S "Only the Proportional and Derivative controllers" `S.are` S "used in this software;" +:+.
        (S "the Integral controller" `S.is` S "beyond the scope of this project"),
        S "Additionally, this software" `S.is` S "intended to aid with the manual",
        S "tuning" `S.ofThe` phrase pidC]
 
 scope :: Sentence
-scope = foldlSent_ [phraseNP (a_ pidCL),
+scope = foldlSent_ [D.toSent (phraseNP (a_ pidCL)),
   S "with three subsystems, namely:" +:+
-  foldlList Comma List (map (phraseNP.a_)
-  [pidC, summingPt, powerPlant])]
+  foldlList Comma List (D.toSent . phraseNP . a_
+  <$> [pidC, summingPt, powerPlant])]
 
 introPurposeOfDoc
   = foldlSent

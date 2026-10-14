@@ -1,22 +1,24 @@
 {-# Language TemplateHaskell #-}
 -- | Contains the common idea type and respective constructors.
+-- SHOULD BE DEPRECATED. Some of the uses (for program name) should have
+-- its own chunk type. Others need examined.
 module Language.Drasil.Chunk.CommonIdea (
   -- * Common Idea datatype
-  CI, 
+  CI,
   -- * Constructors
-  commonIdea, commonIdeaWithDict,
+  commonIdea,
   -- * Functions
-  prependAbrv) where
-
-import Language.Drasil.Chunk.NamedIdea (IdeaDict, nc)
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
- CommonIdea(abrv), ConceptDomain(cdom))
-import Language.Drasil.NounPhrase.Core (NP)
-import Drasil.Database.UID (UID, HasUID(uid))
-
-import Utils.Drasil (repUnd)
+  prependAbrv
+) where
 
 import Control.Lens (makeLenses, (^.), view)
+
+import Drasil.Database (UID, HasUID(uid), declareHasChunkRefs, Generically(..))
+
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, idea')
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+ CommonIdea(abrv))
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 
 -- | The common idea (with 'NounPhrase') data type. It must have a 'UID',
 -- 'NounPhrase' for its term, an abbreviation ('String'), and a domain (['UID']).
@@ -26,6 +28,7 @@ import Control.Lens (makeLenses, (^.), view)
 -- Ex. The term "Operating System" has the abbreviation "OS" and comes from the domain of computer science.
 data CI = CI { _nc' :: IdeaDict, _ab :: String, cdom' :: [UID]}
 makeLenses ''CI
+declareHasChunkRefs ''CI
 
 -- | Finds 'UID' of the 'IdeaDict' used to make the 'CI'.
 instance HasUID        CI where uid  = nc' . uid
@@ -35,19 +38,15 @@ instance NamedIdea     CI where term = nc' . term
 instance Idea          CI where getA = Just . view ab
 -- | Finds the idea of a 'CI' (abbreviation).
 instance CommonIdea    CI where abrv = view ab
--- | Finds the domain of a 'CI'.
-instance ConceptDomain CI where cdom = cdom'
-  
+
 -- | The commonIdea smart constructor requires a chunk id ('String'), a
--- term ('NP'), an abbreviation ('String'), and a domain (['UID']).
-commonIdea :: String -> NP -> String -> [UID] -> CI
-commonIdea s np = CI (nc s np)
-
--- | Similar to 'commonIdea', but takes a list of 'IdeaDict' (often a domain).
-commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
-commonIdeaWithDict x y z = commonIdea x y z . map (^.uid)
-
+-- term ('NP'), an abbreviation ('String'), and a
+-- list of 'IdeaDict' (should be domains).
+-- Note: should be polymorphic in 'IdeaDict', but currently causes issues with
+-- ambiguous type variables, punting for now.
+commonIdea :: UID -> NP -> String -> [IdeaDict] -> CI
+commonIdea x y z = CI (idea' x y) z . fmap (^.uid)
 
 -- | Prepends the abbreviation from a 'CommonIdea' to a 'String'.
 prependAbrv :: CommonIdea c => c -> String -> String
-prependAbrv c s = abrv c ++ (':' : repUnd s)
+prependAbrv c s = abrv c <> (':' : s)

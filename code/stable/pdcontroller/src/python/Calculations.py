@@ -21,9 +21,9 @@ def func_y_t(K_d, K_p, r_t, t_sim, t_step):
     r = scipy.integrate.ode(f)
     r.set_integrator("dopri5", atol=Constants.Constants.ABS_TOL, rtol=Constants.Constants.REL_TOL)
     r.set_initial_value([0.0, 0.0], 0.0)
-    y_t = [[0.0, 0.0][0]]
+    y_t = [[0.0, 0.0]]
     while r.successful() and r.t < t_sim:
         r.integrate(r.t + t_step)
-        y_t.append(r.y[0])
+        y_t.append(r.y.tolist())
     
     return y_t

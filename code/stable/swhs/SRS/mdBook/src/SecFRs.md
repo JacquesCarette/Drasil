@@ -8,7 +8,7 @@ Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs)
 
 <div id="findMass"></div>
 
-Find-Mass: Use the inputs in [FR:Input-Values](./SecFRs.md#inputValues) to find the masses needed for [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr), [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM), [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr), and [IM:heatEInPCM](./SecIMs.md#IM:heatEInPCM), using [DD:waterMass](./SecDDs.md#DD:waterMass), [DD:waterVolume_pcm](./SecDDs.md#DD:waterVolume.pcm), and [DD:tankVolume](./SecDDs.md#DD:tankVolume).
+Find-Mass: Use the inputs in [FR:Input-Values](./SecFRs.md#inputValues) to find the masses needed for [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr), [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM), [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr), and [IM:heatEInPCM](./SecIMs.md#IM:heatEInPCM), using [DD:waterMass](./SecDDs.md#DD:waterMass), [DD:waterVolume_pcm](./SecDDs.md#DD:waterVolume_pcm), and [DD:tankVolume](./SecDDs.md#DD:tankVolume).
 
 <div id="checkWithPhysConsts"></div>
 

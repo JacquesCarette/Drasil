@@ -6,7 +6,7 @@
 
 import Foundation
 
-extension String: Error {}
+extension String: @retroactive Error {}
 
 /** Reads input from a file with the given file name
     - Parameter filename: name of the input file
@@ -23,7 +23,7 @@ func get_input(_ filename: String) throws -> (Float, Float, Float) {
     infile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
     var goolContents: [[String]]
     do {
-        goolContents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
+        goolContents = try String(contentsOf: infile, encoding: .utf8).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
     } catch {
         throw "Error reading from file."
     }

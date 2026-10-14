@@ -3,26 +3,13 @@
 module Language.Drasil.Config(
   -- * Printer Configurations
   numberedSections,hyperSettings,fontSize,bibFname,
-  verboseDDDescription,
   -- * Bibliography
   StyleGuide(..),bibStyleH,bibStyleT,colAwidth,colBwidth,
-  numberedDDEquations,numberedTMEquations) where
+) where
 
 -- | TeX font size.
 fontSize :: Int
 fontSize = 12
-
--- | (Currently Unused) Print verbose data definition descriptions?
-verboseDDDescription :: Bool
-verboseDDDescription = True
-
--- | (Currently Unused) TeX Only - Number Data Definition equations?
-numberedDDEquations :: Bool
-numberedDDEquations = False -- Does not affect HTML
-
--- | (Currently Unused) TeX Only - Number Theoretical Model equations?
-numberedTMEquations :: Bool
-numberedTMEquations = False
 
 -- | TeX Only - Numbered sections?
 numberedSections :: Bool
@@ -36,7 +23,7 @@ numberedSections = True
 --  (UsePackages ["fullpage","booktabs","longtable","listings","graphics","hyperref","caption",
 --  "amsmath"])
 
--- | TeX Only - column width for data definitions 
+-- | TeX Only - column width for data definitions
 -- (fraction of LaTeX textwidth).
 colAwidth, colBwidth :: Double
 colAwidth = 0.13
@@ -46,11 +33,11 @@ colBwidth = 0.82
 hyperSettings :: String
 hyperSettings =
      "bookmarks=true,"     -- show bookmarks bar?
-  ++ "colorlinks=true,"    -- false: boxed links; true: colored links
-  ++ "linkcolor=red,"      -- color of internal links
-  ++ "citecolor=blue,"     -- color of links to bibliography
-  ++ "filecolor=magenta,"  -- color of file links
-  ++ "urlcolor=cyan"       -- color of external links
+  <> "colorlinks=true,"    -- false: boxed links; true: colored links
+  <> "linkcolor=red,"      -- color of internal links
+  <> "citecolor=blue,"     -- color of links to bibliography
+  <> "filecolor=magenta,"  -- color of file links
+  <> "urlcolor=cyan"       -- color of external links
 
 -- | The bibliography format.
 data StyleGuide = MLA | APA | Chicago

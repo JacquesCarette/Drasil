@@ -1,56 +1,36 @@
 module Language.Drasil.Printers (
-  -- * Formats
-  DocType(SRS, Website, Lesson), 
-  Format(..)
-  -- * DOT
-  -- ** Types
-  , GraphInfo(..), NodeFamily(..)
-  -- ** Functions
-  , outputDot
+  -- * Document
+    makeDocument, makeProject
   -- * HTML
-  -- ** Printer 
-  , genHTML
-  -- ** Helpers
-  , makeCSS
-  -- * Markdown
   -- ** Printer
-  , makeMd
-  -- ** Section Printers
-  , introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec, endNote, whatInfo
+  , genHTML
+  , HTMLGenOptions(..), defaultHTMLGO, renderHTML
+  -- ** CSS
+  , genericCSS
   -- * Plain
   -- ** Types
   , SingleLine(..)
-  -- ** Functions
-  , sentenceDoc, exprDoc, codeExprDoc, symbolDoc, unitDoc, showSymb,
-  showHasSymbImpl
+  -- ** Renderers
+  , oneLineCodeSymbolDoc, oneLineSentenceDoc, oneLineExprDoc
+  , oneLineCodeExprDoc, oneLineUnitDoc
   -- * TeX
   , genTeX
   -- * Jupyter
-  , genJupyter
+  , genJupyterLessonPlan, genJupyterSRS
   -- * Markdown
-  , genMDBook, makeBook, makeRequirements
-  -- * Log
-  , printAllDebugInfo
+  , genMDBook
   -- * Printing Information and Options
-  , PrintingInformation(..), piSys
-  , HasPrintingOptions (..)
-  , Notation(..)
-  , defaultConfiguration
+  , PrintingInformation, piSys, Notation(..)
 ) where
 
-import Language.Drasil.Format (DocType(SRS, Website, Lesson), 
-  Format(..))
-import Language.Drasil.HTML.CSS (makeCSS)
-import Language.Drasil.HTML.Print (genHTML)
-import Language.Drasil.JSON.Print (genJupyter)
+import Language.Drasil.HTML.CSS (genericCSS)
+import Language.Drasil.HTML.Render (HTMLGenOptions (..), defaultHTMLGO,
+  renderHTML, genHTML)
+import Language.Drasil.JSON.Print (genJupyterLessonPlan, genJupyterSRS)
 import Language.Drasil.Markdown.Print (genMDBook)
-import Language.Drasil.Markdown.Config (makeBook, makeRequirements)
-import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
-  extLibSec, instDoc, regularSec, endNote, whatInfo)
-import Language.Drasil.Plain.Print (SingleLine(..), sentenceDoc, exprDoc,
-  codeExprDoc, symbolDoc, unitDoc, showSymb, showHasSymbImpl)
+import Language.Drasil.Plain.Print (SingleLine(..), oneLineCodeSymbolDoc,
+  oneLineSentenceDoc, oneLineExprDoc, oneLineCodeExprDoc, oneLineUnitDoc)
 import Language.Drasil.TeX.Print (genTeX)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
-  HasPrintingOptions(..), Notation(..), defaultConfiguration, piSys)
-import Language.Drasil.DOT.Print (outputDot, GraphInfo(..), NodeFamily(..))
-import Language.Drasil.Debug.Print (printAllDebugInfo)
+import Language.Drasil.Printing.Import.Document (makeDocument, makeProject)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
+  Notation(..), piSys)

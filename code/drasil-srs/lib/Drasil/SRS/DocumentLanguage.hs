@@ -1,0 +1,409 @@
+{-# Language TupleSections #-}
+---------------------------------------------------------------------------
+-- | Start the process of moving away from Document as the main internal
+-- representation of information, to something more informative. Over time,
+-- we'll want to have a cleaner separation, but doing that all at once would
+-- break too much for too long. So we start here instead.
+module Drasil.SRS.DocumentLanguage (mkDoc) where
+
+-- General Haskell
+import Control.Lens ((^.), set)
+import Data.Either (rights)
+import Data.Function (on)
+import Data.List (nub, sortBy, (\\))
+import Data.Maybe (maybeToList, isJust, fromMaybe)
+import qualified Data.Map as Map (keys)
+import qualified Data.Set as Set
+
+-- General Drasil
+import Language.Drasil
+import Language.Drasil.Document
+import Language.Drasil.Display (compsy)
+import Language.Drasil.Development (shortdep)
+
+import Drasil.Database (ChunkDB, insertAll, UID, HasUID(..), invert)
+import Drasil.Database.SearchTools (TermAbbr, shortForm, termResolve')
+
+import Drasil.System (HasSystemMeta(..), HasProjectName(..), projTitleS, ProjectName)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
+import Drasil.SRS.GetChunks (resolveAllVars)
+
+-- Vocabulary
+import Drasil.Metadata.Documentation (likelyChg, section_, software, srs,
+  unlikelyChg, requirement, software, assumption, goalStmt, refBy, refName)
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+
+-- Other docLang
+import Drasil.SRS.DocDecl (SRSDecl, mkDocDesc)
+import qualified Drasil.SRS.DocDecl as DD
+import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
+  DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
+  GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..),
+  PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
+  ReqsSub(..), SCSSub(..), StkhldrSec(..), StkhldrSub(..), SolChSpec(..),
+  SSDSec(..), SSDSub(..), TraceabilitySec(..), TraceConfig(..),
+  TSIntro(..), UCsSec(..))
+import Drasil.SRS.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
+  gdefn, tmodel)
+import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc, extractUnits)
+import Drasil.SRS.TraceTable (generateTraceMap)
+
+import Drasil.SRS.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
+import Drasil.SRS.Sections.TableOfContents (toToC)
+import Drasil.SRS.Sections.TableOfSymbols (table, tsIntro)
+import Drasil.SRS.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
+import qualified Drasil.SRS.Concepts as SRS (appendix,
+  genSysDes, likeChg, unlikeChg, reference, solCharSpec,
+  stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
+  tOfAbbAcc, inModel)
+import qualified Drasil.SRS.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
+import qualified Drasil.SRS.Sections.GeneralSystDesc as GSD (genSysIntro,
+  systCon, usrCharsF, sysContxt)
+import qualified Drasil.SRS.Sections.Introduction as Intro (charIntRdrF,
+  introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
+import qualified Drasil.SRS.Sections.Requirements as R (reqF, fReqF, nfReqF)
+import qualified Drasil.SRS.Sections.SpecificSystemDescription as SSD (assumpF,
+  datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
+  propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF, helperCI,
+  tmStub, ddStub, gdStub, imStub, pdStub)
+import qualified Drasil.SRS.Sections.Stakeholders as Stk (stakeholderIntro,
+  tClientF, tCustomerF)
+import qualified Drasil.SRS.DocumentLanguage.TraceabilityMatrix as TM (
+  generateTraceTableView, traceMHeader, layoutUIDs)
+import qualified Drasil.SRS.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
+import Drasil.SRS.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
+import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard)
+import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
+
+-- * Main Function
+
+-- | Creates a document from a 'System', a document description ('SRSDecl'), and
+-- a title combinator.
+mkDoc :: SmithEtAlSRS -> SRSDecl -> (Sentence -> Sentence -> Sentence) -> (Document, SmithEtAlSRS)
+mkDoc si srsDecl headingComb =
+  let dd = mkDocDesc si srsDecl
+      -- /Pre-generate/ the SRS artifact. It is missing content involving
+      -- 'Reference's and 'LabelledContent' for potential traceability graphs as
+      -- well as 'Citation's.
+      sections = mkSections si dd Nothing
+      -- Extract all referenced 'Citations' from the pre-generated artifact.
+      refdCites = extractSectionsBib (si ^. systemdb) sections
+      -- Injects "traceability" maps into the 'ChunkDB' and adds missing
+      -- 'LabelledContent' (the generated traceability-related tables).
+      si' = buildTraceMaps dd si
+      -- Now, the /real generation/ of the SRS artifact can begin, with the
+      -- 'Reference' map now full (so 'Reference' references can resolve to
+      -- 'Reference's) and the true list of bibliography entries known.
+      heading = titleize srs `headingComb` projTitleS (si ^. projectName)
+      authorsList = foldlList Comma List $ S . fullName <$> si ^. authors
+      toc = findToC srsDecl
+      dd' = mkDocDesc si' srsDecl
+      sections' = mkSections si' dd' (Just refdCites)
+  in (Document heading authorsList toc sections', si')
+
+-- * Functions to Fill 'ChunkDB'
+
+-- FIXME: None of these 'fill$x$InTheCDB' should exist here. Generating new
+-- chunks and inserting them into the ChunkDB is not an issue, but:
+-- - The traceability-stuff should be internal to ChunkDB.
+-- - The References and LabelledContent entirely need to be rebuilt. Some will
+--   be chunks that are manually written, others will not be chunks.
+
+-- | If a traceability section is present in the document description, builds
+-- the "trace" (refers to) and "refBy" (referenced by) maps, placing them in the
+-- output 'System', and generating corresponding 'LabelledContent' chunks for
+-- the traceability graphs to be used in the SRS.
+buildTraceMaps :: DocDesc -> SmithEtAlSRS -> SmithEtAlSRS
+buildTraceMaps sd si
+  | containsTraceSec sd =
+    let db = si ^. systemdb
+        -- Generate a copy to the /future/ SVG-based 'LabelledContent's
+        -- containing the traceability graphs.
+        tglcs = genTraceGraphLabCons
+        -- Generates the traceability map from the 'DocDesc' for use in the
+        -- later generation pipeline that produces the ".dot" files for which
+        -- the main Drasil Makefile converts to SVGs (via `make tracegraphs`).
+        tdb = generateTraceMap sd
+        traceMats = (\(TraceConfig u _ desc cols rows) ->
+          TM.generateTraceTableView u desc cols rows si) <$> traceMatStandard si
+        db' = insertAll tglcs
+            $ insertAll traceMats
+            $ insertAll traceyGraphGetRefs db
+    in set systemdb db'
+     $ set traceTable tdb
+     $ set refbyTable (invert tdb) si
+  | otherwise = si
+  where
+    containsTraceSec :: DocDesc -> Bool
+    containsTraceSec ((TraceabilitySec _):_) = True
+    containsTraceSec (_:ss)                = containsTraceSec ss
+    containsTraceSec []                    = False
+
+-- * Section Creator Functions
+
+-- | Helper for creating the different document sections.
+mkSections :: SmithEtAlSRS -> DocDesc -> Maybe BibRef -> [Section]
+mkSections si dd mbib = either renderRefSec id <$> partialRender
+  where
+    delayRenderRefSec :: DocSection -> Either RefSec Section
+    delayRenderRefSec (RefSec rs) = Left rs
+    delayRenderRefSec x           = Right (render x)
+
+    partialRender :: [Either RefSec Section]
+    partialRender = delayRenderRefSec <$> dd
+
+    nonRefSecs :: [Section]
+    nonRefSecs = rights partialRender
+
+    renderRefSec :: RefSec -> Section
+    renderRefSec rs = mkRefSec si dd rs nonRefSecs
+
+    render :: DocSection -> Section
+    render TableOfContents      = mkToC dd
+    render (IntroSec is)        = mkIntroSec si is
+    render (StkhldrSec sts)     = mkStkhldrSec (si ^. projName) sts
+    render (SSDSec ss)          = mkSSDSec si ss
+    render (AuxConstntSec acs)  = mkAuxConsSec (si ^. projName) acs
+    render Bibliography         = mkBib $ fromMaybe [] mbib
+    render (GSDSec gs')         = mkGSDSec gs'
+    render (ReqrmntSec r)       = mkReqrmntSec r
+    render (LCsSec lc)          = mkLCsSec lc
+    render (UCsSec ulcs)        = mkUCsSec ulcs
+    render (TraceabilitySec t)  = mkTraceabilitySec t si
+    render (AppndxSec a)        = mkAppndxSec a
+    render (OffShelfSolnsSec o) = mkOffShelfSolnSec o
+    render (RefSec _)           = error
+      "mkSections passed `render` a `RefSec` in partial-render phase!"
+
+-- ** Table of Contents
+
+-- | Helper for making the Table of Contents section.
+mkToC :: DocDesc -> Section
+mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ (, Nothing) . toToC <$> dd] []
+  where
+    intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
+
+-- ** Reference Materials
+
+-- | Helper for creating the reference section and subsections.
+-- Includes Table of Symbols, Units and Abbreviations and Acronyms.
+mkRefSec :: SmithEtAlSRS -> DocDesc -> RefSec -> [Section] -> Section
+mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (mkSubRef <$> l)
+  where
+    projNameUID = si ^. projName . uid
+    db = si ^. systemdb
+
+    mkSubRef :: RefTab -> Section
+    mkSubRef TUnits = mkSubRef $ TUnits' defaultTUI tOfUnitSIName
+    mkSubRef (TUnits' con f) =
+        SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
+    mkSubRef (TSymb con) =
+      SRS.tOfSymb
+      [tsIntro con,
+                LlC $ table Equational (sortBySymbol
+                $ filter (`hasStageSymbol` Equational)
+                (nub $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) db))
+                atStart] []
+    mkSubRef (TSymb' f con) =
+      mkTSymb (resolveAllVars (getDocDesc dd) (egetDocDesc dd) db) f con
+
+    mkSubRef TAandA =
+      SRS.tOfAbbAcc
+        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations [projNameUID] renderedSecs db]
+        []
+
+collectDocumentAbbreviations :: [UID] -> [Section] -> ChunkDB -> [TermAbbr]
+collectDocumentAbbreviations rms renderedSecs cdb =
+  filter (isJust . shortForm) allTerms
+  where
+    -- Terms found in the document using the list of `Sentence`s extracted from
+    -- the sections.
+    foundInDoc = concatMap (Set.toList . shortdep) $ concatMap getSec renderedSecs
+    -- Terms that could not be found in `Sentence`s, but are important to
+    -- include in the table of abbreviations and acronyms.
+    missingFromDocHACK = (^. uid) <$> [assumption, dataDefn, genDefn, goalStmt,
+      inModel, requirement, thModel, refName, refBy]
+    -- Filter out the system name and duplicates
+    filtered = nub (foundInDoc <> missingFromDocHACK) \\ rms
+    allTerms = termResolve' cdb <$> filtered
+
+-- | Helper for creating the table of symbols.
+mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
+  [e] -> LFunc -> [TSIntro] -> Section
+mkTSymb v f c = SRS.tOfSymb [tsIntro c,
+  LlC $ table Equational
+    (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
+    (lf f)]
+    []
+  where lf Term = atStart
+        lf Defn = capSent . (^. defn)
+        lf (TermExcept cs) = \x -> if (x ^. uid) `elem` fmap (^. uid) cs then
+          capSent (x ^. defn) else atStart x --Compare chunk uids, since we don't
+          --actually care about the chunks themselves in LFunc.
+        lf (DefnExcept cs) = \x -> if (x ^. uid) `elem` fmap (^.uid) cs then
+          atStart x else capSent (x ^. defn)
+        lf TAD = \tDef -> titleize tDef +: EmptyS +:+. capSent (tDef ^. defn)
+
+-- ** Introduction
+
+-- | Makes the Introduction section into a 'Section'.
+mkIntroSec :: SmithEtAlSRS -> IntroSec -> Section
+mkIntroSec si (IntroProg probIntro extraInfo l) =
+  Intro.introductionSection probIntro si extraInfo l $ mkSubIntro <$> l
+  where
+    im = SRS.inModel [] []
+    mkSubIntro :: IntroSub -> Section
+    mkSubIntro (IPurpose intro) = Intro.purposeOfDoc si intro
+    mkSubIntro (IScope main) = Intro.scopeOfRequirements main
+    mkSubIntro (IChar assumed topic asset) =
+      Intro.charIntRdrF (si ^. projName) assumed topic asset (SRS.userChar [] [])
+    mkSubIntro (IOrgSec t) = Intro.orgSec inModel im t
+    -- FIXME: s should be "looked up" using "b" once we have all sections being generated
+
+-- ** Stakeholders
+
+-- | Helper for making the Stakeholders section.
+mkStkhldrSec :: ProjectName -> StkhldrSec -> Section
+mkStkhldrSec progN (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ mkSubs <$> l
+  where
+    mkSubs :: StkhldrSub -> Section
+    mkSubs (Client details) = Stk.tClientF progN details
+    mkSubs Cstmr            = Stk.tCustomerF progN
+
+-- ** General System Description
+
+-- | Helper for making the General System Description section.
+mkGSDSec :: GSDSec -> Section
+mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ mkSubs <$> l
+   where
+     mkSubs :: GSDSub -> Section
+     mkSubs (SysCntxt cs)            = GSD.sysContxt cs
+     mkSubs (UsrChars intro)         = GSD.usrCharsF intro
+     mkSubs (SystCons cntnts subsec) = GSD.systCon cntnts subsec
+
+-- ** Specific System Description
+
+-- | Helper for making the Specific System Description section.
+mkSSDSec :: SmithEtAlSRS -> SSDSec -> Section
+mkSSDSec si (SSDProg l) =
+  SSD.specSysDescr $ mkSubSSD si <$> l
+  where
+    mkSubSSD :: SmithEtAlSRS -> SSDSub -> Section
+    mkSubSSD sysi (SSDProblem pd)    = mkSSDProb sysi pd
+    mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
+
+-- | Helper for making the Specific System Description Problem section.
+mkSSDProb :: SmithEtAlSRS -> ProblemDescription -> Section
+mkSSDProb si (PDProg prob subSec subPD) = SSD.probDescF prob (subSec <> fmap mkSubPD subPD)
+  where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
+        mkSubPD (PhySysDesc parts dif extra) = SSD.physSystDesc (si ^. projName) parts dif extra
+        mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
+
+-- | Helper for making the Solution Characteristics Specification section.
+mkSolChSpec :: SmithEtAlSRS -> SolChSpec -> Section
+mkSolChSpec si (SCSProg l) =
+  SRS.solCharSpec [SSD.solutionCharSpecIntro (si ^. projName) SSD.imStub] $
+    mkSubSCS si <$> l
+  where
+    mkSubSCS :: SmithEtAlSRS -> SCSSub -> Section
+    mkSubSCS si' (TMs intro fields ts) =
+      SSD.thModF (si' ^. projName) $ fmap mkParagraph intro <> fmap (LlC . tmodel fields si') ts
+    mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
+      SSD.dataDefnF EmptyS $ fmap mkParagraph intro <> concatMap f dds
+      where f e = LlC (ddefn fields si' e) : maybeToList (derivation e)
+    mkSubSCS si' (DDs intro fields dds _) =
+      SSD.dataDefnF EmptyS $ fmap mkParagraph intro <> fmap f dds
+      where f e = LlC $ ddefn fields si' e
+    mkSubSCS si' (GDs intro fields gs' ShowDerivation) =
+      SSD.genDefnF $ fmap mkParagraph intro <> concatMap (\x -> LlC (gdefn fields si' x) : maybeToList (derivation x)) gs'
+    mkSubSCS si' (GDs intro fields gs' _) =
+      SSD.genDefnF $ fmap mkParagraph intro <> fmap (LlC . gdefn fields si') gs'
+    mkSubSCS si' (IMs intro fields ims ShowDerivation) =
+      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub $ fmap mkParagraph intro <>
+      concatMap (\x -> LlC (instanceModel fields si' x) : maybeToList (derivation x)) ims
+    mkSubSCS si' (IMs intro fields ims _) =
+      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub $ fmap mkParagraph intro <>
+      fmap (LlC . instanceModel fields si') ims
+    mkSubSCS si' (Assumptions ci) =
+      SSD.assumpF $ mkEnumSimpleD $ (`SSD.helperCI` si') <$> ci
+    mkSubSCS _ (Constraints end cs)  = SSD.datConF end cs
+    mkSubSCS _ (CorrSolnPpties c cs) = SSD.propCorSolF c cs
+
+-- ** Requirements
+
+-- | Helper for making the Requirements section.
+mkReqrmntSec :: ReqrmntSec -> Section
+mkReqrmntSec (ReqsProg l) = R.reqF $ mkSubs <$> l
+  where
+    mkSubs :: ReqsSub -> Section
+    mkSubs (FReqsSub  frs tbs) = R.fReqF (mkEnumSimpleD frs <> fmap LlC tbs)
+    mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
+
+-- ** Likely Changes
+
+-- | Helper for making the Likely Changes section.
+mkLCsSec :: LCsSec -> Section
+mkLCsSec (LCsProg c) = SRS.likeChg (introChgs likelyChg c: mkEnumSimpleD c) []
+
+-- ** Unlikely Changes
+
+-- | Helper for making the Unikely Changes section.
+mkUCsSec :: UCsSec -> Section
+mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs unlikelyChg  c : mkEnumSimpleD c) []
+
+-- | Intro paragraph for likely and unlikely changes
+introChgs :: Idea n => n -> [ConceptInstance] -> Contents
+introChgs xs [] = mkParagraph $ emptySectSentPlu [xs]
+introChgs xs _ = foldlSP [S "This", phrase section_, S "lists the",
+  introduceAbbPlrl xs, S "to be made to the", phrase software]
+
+-- ** Traceability
+
+-- | Helper for making the Traceability Matrices and Graphs section.
+mkTraceabilitySec :: TraceabilitySec -> SmithEtAlSRS -> Section
+mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
+  ((\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) <$> fProgs)
+  (LlC <$> trace) []
+  where
+    trace = (\(TraceConfig u _ desc cols rows) ->
+      TM.generateTraceTableView u desc cols rows si) <$> fProgs
+    notNull xs = not (null (header (TM.layoutUIDs xs si) si))
+    fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
+      notNull rows && notNull cols) progs
+
+-- | Helper to get headers of rows and columns
+header :: ([UID] -> [UID]) -> SmithEtAlSRS -> [Sentence]
+header f = TM.traceMHeader (f . Map.keys . (^. refbyTable))
+
+-- ** Off the Shelf Solutions
+
+-- | Helper for making the Off-the-Shelf Solutions section.
+mkOffShelfSolnSec :: OffShelfSolnsSec -> Section
+mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs []
+
+-- ** Auxiliary Constants
+
+-- | Helper for making the Values of Auxiliary Constants section.
+mkAuxConsSec :: ProjectName -> AuxConstntSec -> Section
+mkAuxConsSec c (AuxConsProg listOfCons) = AC.valsOfAuxConstantsF c $ sortBySymbol listOfCons
+
+-- ** References
+
+-- | Helper for making the References section.
+mkBib :: BibRef -> Section
+mkBib bib = SRS.reference [UlC $ ulcc (Bib bib)] []
+
+-- ** Appendix
+
+-- | Helper for making the Appendix section.
+mkAppndxSec :: AppndxSec -> Section
+mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
+
+-- ** Find Table of Contents
+
+-- Find more concise way to do this
+-- | Finds whether the Table of Contents is in a SRSDecl.
+findToC :: SRSDecl -> ShowTableOfContents
+findToC [] = NoToC
+findToC (DD.TableOfContents:_) = ToC
+findToC (_:dds) = findToC dds

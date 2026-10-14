@@ -1,0 +1,45 @@
+digraph "refvsref" {
+    "theory:fOfGravity" -> "theory:r_12";
+    "theory:accelIMX1" -> "theory:centerOfMassCS";
+    "theory:accelIMX1" -> "theory:newtonSL";
+    "theory:accelIMX1" -> "theory:velocityTM";
+    "theory:accelIMX1" -> "theory:accelerationTM";
+    "theory:accelIMX1" -> "theory:fOfGravity";
+    "theory:accelIMX1" -> "theory:r_12";
+    "theory:accelIMY1" -> "theory:centerOfMassCS";
+    "theory:accelIMY1" -> "theory:newtonSL";
+    "theory:accelIMY1" -> "theory:velocityTM";
+    "theory:accelIMY1" -> "theory:accelerationTM";
+    "theory:accelIMY1" -> "theory:fOfGravity";
+    "theory:accelIMY1" -> "theory:r_12";
+    "theory:accelIMX2" -> "theory:centerOfMassCS";
+    "theory:accelIMX2" -> "theory:newtonSL";
+    "theory:accelIMX2" -> "theory:velocityTM";
+    "theory:accelIMX2" -> "theory:accelerationTM";
+    "theory:accelIMX2" -> "theory:fOfGravity";
+    "theory:accelIMX2" -> "theory:r_12";
+    "theory:accelIMY2" -> "theory:centerOfMassCS";
+    "theory:accelIMY2" -> "theory:newtonSL";
+    "theory:accelIMY2" -> "theory:velocityTM";
+    "theory:accelIMY2" -> "theory:accelerationTM";
+    "theory:accelIMY2" -> "theory:fOfGravity";
+    "theory:accelIMY2" -> "theory:r_12";
+    "theory:centerOfMassCS" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:centerOfMass"];
+    "theory:newtonSL" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:NewtonSecLawMot"];
+    "theory:velocityTM" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:velocity"];
+    "theory:accelerationTM" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:acceleration"];
+    "theory:fOfGravity" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:UniversalGravLaw"];
+    "theory:r_12" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:relPosAndSep"];
+    subgraph "TM" {
+        rank="same";
+        "theory:centerOfMassCS" "theory:newtonSL" "theory:velocityTM" "theory:accelerationTM" "theory:fOfGravity" "theory:r_12";
+    }
+    "theory:accelIMX1" [shape=box, color=black, style=filled, fillcolor="khaki1", label="IM:accelX1"];
+    "theory:accelIMY1" [shape=box, color=black, style=filled, fillcolor="khaki1", label="IM:accelY1"];
+    "theory:accelIMX2" [shape=box, color=black, style=filled, fillcolor="khaki1", label="IM:accelX2"];
+    "theory:accelIMY2" [shape=box, color=black, style=filled, fillcolor="khaki1", label="IM:accelY2"];
+    subgraph "IM" {
+        rank="same";
+        "theory:accelIMX1" "theory:accelIMY1" "theory:accelIMX2" "theory:accelIMY2";
+    }
+}

@@ -1,6 +1,7 @@
 module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import Theory.Drasil (TheoryModel, tm, equationalModel')
 
 import Drasil.GlassBR.References (astm2009)
@@ -19,12 +20,9 @@ tMods = [pbIsSafe, lrIsSafe]
 -- glass_concept :: [ConceptInstance]
 -- glass_concept = []
 
-
 lrIsSafe :: TheoryModel
-lrIsSafe = tm (equationalModel' lrIsSafeQD)
-   ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
-   [lrIsSafeQD] [] [] [dRef astm2009] 
-   "isSafeLoad" [lrIsSafeDesc]
+lrIsSafe =
+  tm (equationalModel' lrIsSafeQD) [dRef astm2009] "isSafeLoad" [lrIsSafeDesc]
 
 lrIsSafeQD :: ModelQDef
 lrIsSafeQD = mkQuantDef' isSafeLoad (nounPhraseSP "Safety Load") lrIsSafeExpr
@@ -36,10 +34,8 @@ lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc isSafeLoad
 
 pbIsSafe :: TheoryModel
-pbIsSafe = tm (equationalModel' pbIsSafeQD) 
-  ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
-  [pbIsSafeQD] [] [] [dRef astm2009]
-  "isSafeProb" [pbIsSafeDesc]
+pbIsSafe =
+  tm (equationalModel' pbIsSafeQD) [dRef astm2009] "isSafeProb" [pbIsSafeDesc]
 
 pbIsSafeQD :: ModelQDef
 pbIsSafeQD = mkQuantDef' isSafeProb (nounPhraseSP "Safety Probability") pbIsSafeExpr

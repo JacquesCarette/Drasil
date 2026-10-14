@@ -7,6 +7,7 @@ desktop.ini
 .idea
 .vscode
 .direnv
+.projectile
 
 # Drasil/Haskell
 *.cabal
@@ -48,7 +49,7 @@ code/stable/*/src/*/latex
 */Projectile/output.txt
 
 # Website
-code/Website
+code/website
 
 # PDF generation, TeX caches, and misc. file types
 *.aux
@@ -73,3 +74,10 @@ code/Website
 *.lol
 *.equ
 *.code
+
+# Brandon :)
+!People/Brandon-Bosman/**/typeclass-graph-plugin.cabal
+People/Brandon-Bosman/**/typeclass-graph-plugin/dist-newstyle/
+People/Brandon-Bosman**/typeclass-graph-plugin/facts.pl
+People/Brandon-Bosman**/typeclass-graph-plugin/graph.dot
+People/Brandon-Bosman/**/typeclass-graph-plugin/graph.svg

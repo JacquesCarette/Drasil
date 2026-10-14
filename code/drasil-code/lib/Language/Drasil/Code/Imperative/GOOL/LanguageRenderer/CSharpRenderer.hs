@@ -1,29 +1,23 @@
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE PostfixOperators #-}
-
 -- | The logic to render C# auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
   CSharpProject(..)
 ) where
 
-import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
-import qualified
-  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
-  docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
-  packD)
-import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
-  asFragment, buildAll, nativeBinary, osClassDefault, executable, sharedLibrary)
-import Language.Drasil.Code.Imperative.Doxygen.Import (no)
-
-import Drasil.GOOL (onCodeList, csName, csVersion)
-
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
-import Text.PrettyPrint.HughesPJ (Doc)
+
+import Drasil.GOOL (csName, csVersion)
+
+import Language.Drasil.Choices (ImplementationType(..))
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
+import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
+import qualified
+  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
+  G (doxConfig, readMe, makefile, noRunIfLib, doxDocConfig,
+  docIfEnabled)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
+  asFragment, buildAll, interp, nameOpts, osClassDefault, executable, sharedLibrary)
+import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
 -- | Holds a C# project.
 newtype CSharpProject a = CSP {unCSP :: a}
@@ -38,34 +32,26 @@ instance Applicative CSharpProject where
 instance Monad CSharpProject where
   CSP x >>= f = f x
 
-instance PackageSym CSharpProject where
-  type Package CSharpProject = PackData
-  package p = onCodeList (packD p)
-
-instance AuxiliarySym CSharpProject where
-  type Auxiliary CSharpProject = AuxData
-  type AuxHelper CSharpProject = Doc
-  doxConfig = G.doxConfig optimizeDox
+instance SoftwareDossierSym CSharpProject where
+  doxConfig n s v = Just $ G.doxConfig optimizeDox n s v
   readMe rmi =
     G.readMe rmi {
         langName = csName,
         langVersion = csVersion,
         invalidOS = Just "All OS's except Windows"}
-  sampleInput = G.sampleInput
 
   optimizeDox = pure no
 
   makefile fs it cms = G.makefile (csBuildConfig fs it)
     (G.noRunIfLib it csRunnable) (G.docIfEnabled cms G.doxDocConfig)
 
-  auxHelperDoc = unCSP
-  auxFromData fp d = pure $ ad fp d
+  unReprDoc = unCSP
 
 -- | Create a build configuration for C# files. Takes in 'FilePath's and the type of implementation.
 csBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
 csBuildConfig fs it = buildAll (\i o -> [osClassDefault "CSC" "csc" "mcs"
-  : target it ++ [asFragment "-out:" P.<> o] ++ map (asFragment . ("-r:" ++)) fs
-  ++ i]) (outName it)
+  : target it P.<> [asFragment "-out:" P.<> o] P.<> fmap (asFragment . ("-r:" ++)) fs
+  P.<> i]) (outName it)
   where target Library = [asFragment "-t:library"]
         target Program = []
         outName Library = sharedLibrary
@@ -73,4 +59,4 @@ csBuildConfig fs it = buildAll (\i o -> [osClassDefault "CSC" "csc" "mcs"
 
 -- | Default runnable information for C# files.
 csRunnable :: Maybe Runnable
-csRunnable = nativeBinary
+csRunnable = interp executable nameOpts "mono" []

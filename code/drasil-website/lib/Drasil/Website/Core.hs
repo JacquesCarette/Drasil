@@ -1,0 +1,64 @@
+{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE TemplateHaskell #-}
+module Drasil.Website.Core
+  ( DrasilWebsite,
+    mkDrasilWebsite,
+    indexDoc,
+    defaultDrasilWebsiteGenOpts,
+  )
+where
+
+import Control.Lens (makeLenses, (^.))
+import Prettyprinter (Doc)
+
+import Drasil.Data.Formats.HTML (defaultHTMLRO)
+import Drasil.FileHandling (file, ps)
+import Drasil.System (HasProjectName (..), HasSystemMeta (..), SystemMeta, ToFiles (..))
+import Language.Drasil (Stage (Equational))
+import Language.Drasil.Document (Document)
+import Language.Drasil.Printers (defaultHTMLGO, Notation (Engineering),
+  genHTML, renderHTML, genericCSS, piSys, makeDocument)
+
+data DrasilWebsite = DW
+  { _sm :: SystemMeta,
+    _indexDoc :: Document
+  }
+
+makeLenses ''DrasilWebsite
+
+instance HasSystemMeta DrasilWebsite where
+  systemMeta = sm
+
+instance HasProjectName DrasilWebsite where
+  projectName = systemMeta . projectName
+
+mkDrasilWebsite :: SystemMeta -> Document -> DrasilWebsite
+mkDrasilWebsite = DW
+
+-- | HTML generation options for the 'DrasilWebsite'.
+newtype DrasilWebsiteGenOptions = DWGO
+  { -- | What CSS should be loaded?
+    css :: Doc ()
+  }
+
+-- | Default options for the 'DrasilWebsite' generator.
+defaultDrasilWebsiteGenOpts :: DrasilWebsiteGenOptions
+defaultDrasilWebsiteGenOpts = DWGO genericCSS
+
+instance ToFiles DrasilWebsite DrasilWebsiteGenOptions where
+  toFiles dw DWGO {..} =
+    [ file [ps|index.html|] renderedHTML,
+      file [ps|index.css|] css
+    ]
+    where
+      -- Steps:
+
+      -- 1. Transform the Semantic-Document-Language-encoded website to the
+      -- Typesetting Document Language (TDL).
+      printSetting = piSys (dw ^. systemdb) Equational Engineering
+      pd = makeDocument printSetting $ dw ^. indexDoc
+
+      -- 2. Transform the TDL into HTML.
+      html = genHTML defaultHTMLGO "index" pd
+      renderedHTML = renderHTML defaultHTMLRO html

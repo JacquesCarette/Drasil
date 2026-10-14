@@ -1,33 +1,55 @@
 -- | Makes the helper file for the GOOL HelloWorld tests.
 module Helper (helperOO, helperProc) where
 
-import Drasil.GOOL (SMethod, SharedProg, OOProg, bodyStatements, TypeSym(..),
-  DeclStatement(..), ControlStatement(..), (&=), VariableSym(var), Literal(..),
-  VariableValue(..), NumericExpression(..), VisibilitySym(..), ParameterSym(..),
-  MethodSym(..), ScopeSym(local))
-import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
+import Drasil.GOOL (OOProg, FS, MS, bodyStatements, BodySym, BlockSym,
+  TypeSym(..), DeclStatement(..), AssignStatement, ControlStatement(..),
+  (&=), VariableSym(var), Literal(..), VariableValue(..),
+  NumericExpression(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
+  ScopeSym(local))
+import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 import Drasil.GProc (ProcProg)
-import qualified Drasil.GProc as GProc (SFile, FileSym(..), ModuleSym(..))
+import qualified Drasil.GProc as GProc (FileSym(..), ModuleSym(..))
 
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 -- | Creates Helper module that contains an addition function.
-helperOO :: (OOProg r) => OO.SFile r
+helperOO
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
+  => FS (r file)
 helperOO = OO.fileDoc (OO.buildModule "Helper" [] [doubleAndAdd] [])
 
 -- | Creates Helper module that contains an addition function.
-helperProc :: (ProcProg r) => GProc.SFile r
+helperProc
+  :: (ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ)
+  => FS (r file)
 helperProc = GProc.fileDoc (GProc.buildModule "Helper" [] [doubleAndAdd])
 
 -- | Creates a function that doubles the arguments and adds them together.
-doubleAndAdd :: (SharedProg r) => SMethod r
+doubleAndAdd
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , TypeSym r typ
+    , Literal r val typ
+    , ScopeSym r scope
+    , VariableSym r var typ
+    , VariableValue r var val
+    , NumericExpression r val
+    , ParameterSym r param var
+    , VisibilitySym r vis
+    , DeclStatement r bod stmt var scope val
+    , AssignStatement r stmt var val
+    , ControlStatement r bod stmt var val
+    , MethodSym r mthd vis param bod var typ
+    )
+  => MS (r mthd)
 doubleAndAdd = docFunc "This function adds two numbers"
   ["First number to add", "Second number to add"] (Just "Sum") $
   function "doubleAndAdd"  public double
   [param $ var "num1" double, param $ var "num2" double]
   (bodyStatements [
     varDec (var "doubledSum" double) local,
-    var "doubledSum" double &= ((litDouble 2.0 #*
-      valueOf (var "num1" double)) #+
-      (litDouble 2.0 #* valueOf (var "num2" double))),
+    var "doubledSum" double &=
+      (litDouble 2.0 #* valueOf (var "num1" double)) #+
+      (litDouble 2.0 #* valueOf (var "num2" double)),
     returnStmt (valueOf (var "doubledSum" double))])

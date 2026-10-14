@@ -1,4 +1,4 @@
-- [Software Requirements Specification for ProgName](./title.md)
+- [Software Requirements Specification for Template](./title.md)
 - [Table of Contents](./SecToC.md)
 - [Reference Material](./SecRefMat.md)
   - [Table of Units](./SecToU.md)

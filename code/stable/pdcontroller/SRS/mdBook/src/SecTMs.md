@@ -1,6 +1,6 @@
 # Theoretical Models {#Sec:TMs}
 
-This section focuses on the general equations and laws that PD Controller is based on.
+This section focuses on the general equations and laws that PDController is based on.
 
 <div align="center">
 

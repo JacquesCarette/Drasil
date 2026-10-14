@@ -1,47 +1,49 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
 module Drasil.GProc.RendererClassesProc (
   ProcRenderSym, RenderFile(..), RenderMod(..), ModuleElim(..),
   ProcRenderMethod(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, MSParameter,
-  MSBody, BlockSym(..), VisibilitySym(..))
-import qualified Drasil.GProc.InterfaceProc as IP (SFile, FSModule, FileSym(..),
-  ModuleSym(..))
-import Drasil.Shared.State (FS)
+import Drasil.Shared.InterfaceCommon (Label, Block, ParameterSym, VisibilitySym,
+  MethodSym)
+import qualified Drasil.GProc.InterfaceProc as IP (FileSym(..), ModuleSym)
+import Drasil.Shared.State (FS, MS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
-  RenderMethod(..), MSMthdType)
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderMethod(..))
 
-class (CommonRenderSym r, IP.FileSym r, RenderFile r, RenderMod r, ModuleElim r,
-  ProcRenderMethod r
-  ) => ProcRenderSym r
-
+class (CommonRenderSym r mthd vis param bod block stmt var scope val binder typ,
+  ParameterSym r param var, VisibilitySym r vis,
+  MethodSym r mthd vis param bod var typ, IP.ModuleSym r mod mthd,
+  IP.FileSym r file mod, RenderFile r file mod, RenderMod r mod,
+  ModuleElim r mod, RenderMethod r mthd,
+  ProcRenderMethod r mthd vis param bod typ
+  ) => ProcRenderSym r file mod mthd vis param bod block stmt var scope val binder typ
 -- Procedural-Only Typeclasses --
 
-class (BlockCommentSym r) => RenderFile r where
-  -- top and bottom are only used for pre-processor guards for C++ header 
-  -- files. FIXME: Remove them (generation of pre-processor guards can be 
+class RenderFile r file mod | r -> file mod where
+  -- top and bottom are only used for pre-processor guards for C++ header
+  -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
-  top :: r (IP.Module r) -> r (Block r) 
-  bottom :: r (Block r)
+  top :: r mod -> r Block
+  bottom :: r Block
 
-  commentedMod :: IP.SFile r -> FS (r (BlockComment r)) -> IP.SFile r
+  commentedMod :: FS (r file) -> FS (r Doc) -> FS (r file)
 
-  fileFromData :: FilePath -> IP.FSModule r -> IP.SFile r
+  fileFromData :: FilePath -> FS (r mod) -> FS (r file)
 
-class RenderMod r where
-  modFromData :: String -> FS Doc -> IP.FSModule r
-  updateModuleDoc :: (Doc -> Doc) -> r (IP.Module r) -> r (IP.Module r)
-  
-class ModuleElim r where
-  module' :: r (IP.Module r) -> Doc
+class RenderMod r mod | r -> mod where
+  modFromData :: String -> FS Doc -> FS (r mod)
+  updateModuleDoc :: (Doc -> Doc) -> r mod -> r mod
 
-class (RenderMethod r) => ProcRenderMethod r where
+class ModuleElim r mod | r -> mod where
+  module' :: r mod -> Doc
+
+class ProcRenderMethod r mthd vis param bod typ | r -> mthd vis param bod typ where
   -- | Main method?, name, public/private,
   --   return type, parameters, body
-  intFunc     :: Bool -> Label -> r (Visibility r) -> MSMthdType r ->
-    [MSParameter r] -> MSBody r -> SMethod r
+  intFunc     :: Bool -> Label -> r vis -> MS (r typ) ->
+    [MS (r param)] -> MS (r bod) -> MS (r mthd)

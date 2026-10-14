@@ -43,9 +43,13 @@ table, th, td {
   margin-left: auto;
   margin-right: auto;}
 th, td {border: 1px solid black; padding: 0.5em;}
-.tdefn, .ddefn, .gdefn, .idefn {width: 75%; margin-top: 1%; margin-bottom: 1%;}
-.tdefn th, .ddefn th, .gdefn th, .idefn th {width: 15%;}
-.section {width: 80%; margin: 0 auto; text-align: left;}
+.defn-table {width: 75%; margin-top: 1%; margin-bottom: 1%;}
+.defn-table th {width: 15%;}
+section {width: 80%; margin: 0 auto; text-align: left;}
+section > section {width: 100%}
+section h1 { font-size: 2em; }
+section h2 { font-size: 1.5em; }
+section h3 { font-size: 1.17em; }
 .code {
   display: inline-block;
   text-align: left;

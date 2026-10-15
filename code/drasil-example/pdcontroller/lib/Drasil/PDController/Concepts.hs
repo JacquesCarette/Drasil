@@ -21,7 +21,8 @@ pidCI           = commonIdea (mkUid "pidCI")           (pn "proportional integra
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
       simulationTime, propControl, derControl, simulation, ccFrequencyDomain, ccTimeDomain,
-      ccLaplaceTransform, controlVariable, stepTime, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
+      ccLaplaceTransform, controlVariable, stepTime, ccTransferFxn, ccDampingCoeff, ccStiffCoeff,
+      processVariable, setPoint, propGain, derGain, ccAbsTolerance, ccRelTolerance :: ConceptChunk
 pidCL
   = cncpt''' (mkUid "pdCtrlLoop") (nounPhraseSP "PD Control Loop") (S ("Closed-Loop control " <>
         "system with PD Controller, Summing Point and Power Plant"))
@@ -100,9 +101,36 @@ ccStiffCoeff
   = cncpt''' (mkUid "ccStiffnessCoeff") (nounPhraseSP "Stiffness coefficient")
       (S "Quantity that characterizes a spring's stiffness")
 
+processVariable
+  = cncpt''' (mkUid "processVariable") (nounPhraseSP "Process Variable")
+      (S "The output value from the power plant")
+
+setPoint
+  = cncpt''' (mkUid "setPoint") (nounPhraseSP "Set-Point")
+      (S ("The desired value that the control system must reach. This also knows "
+         <> "as the reference variable"))
+
+propGain
+  = cncpt''' (mkUid "propGain") (nounPhraseSP "Proportional Gain")
+      (S "Gain constant of the proportional controller")
+
+derGain
+  = cncpt''' (mkUid "derGain") (nounPhraseSP "Derivative Gain")
+      (S "Gain constant of the derivative controller")
+
+ccAbsTolerance
+  = cncpt''' (mkUid "absoluteTolerance") (nounPhraseSP "Absolute Tolerance")
+      (S "Absolute tolerance for the integrator")
+
+ccRelTolerance
+  = cncpt''' (mkUid "relativeTolerance") (nounPhraseSP "Relative Tolerance")
+      (S "Relative tolerance for the integrator")
+
 defs :: [ConceptChunk]
 defs
-  = termDefs <> [simulationTime, ccLaplaceTransform, stepTime]
+  = termDefs <> [simulationTime, processVariable, setPoint, propGain, derGain,
+     ccLaplaceTransform, stepTime,
+     ccAbsTolerance, ccRelTolerance]
 
 termDefs :: [ConceptChunk]
 termDefs

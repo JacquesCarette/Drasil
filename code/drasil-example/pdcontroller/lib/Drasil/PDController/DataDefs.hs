@@ -38,12 +38,12 @@ ddErrSigNote :: Sentence
 ddErrSigNote
   = foldlSent
       [D.toSent (atStartNP (the processError)), S "is the difference between the Set-Point and" +:+.
-         phrase processVariable,
+         phrase dqdProcessVariableTD,
        D.toSent (atStartNP (the equation)), S "is converted" `S.toThe` phrase ccFrequencyDomain,
          S "by applying the", atStart ccLaplaceTransform +:+. fromSource tmLaplace,
-       D.toSent (atStartNP (the setPoint)), S "is assumed to be constant throughout the",
+       D.toSent (atStartNP (the dqdSetPointTD)), S "is assumed to be constant throughout the",
          phrase simulation +:+. fromSource aSP,
-       S "The initial value" `S.ofThe` phrase processVariable, S "is assumed",
+       S "The initial value" `S.ofThe` phrase dqdProcessVariableTD, S "is assumed",
          S "to be zero", fromSource aInitialValue]
 
 ----------------------------------------------
@@ -62,7 +62,7 @@ ddPropCtrlEqn = sy dqdPropGain $* sy dqdProcessErrorFD
 ddPropCtrlNote :: Sentence
 ddPropCtrlNote
   = foldlSent
-      [S "The Proportional Controller" `S.is` S "the product" `S.ofThe` D.toSent (phraseNP (propGain `andThe`
+      [S "The Proportional Controller" `S.is` S "the product" `S.ofThe` D.toSent (phraseNP (dqdPropGain `andThe`
          processError)) +:+. fromSource ddErrSig,
          D.toSent (atStartNP (the equation)), S "is converted" `S.toThe` phrase ccFrequencyDomain,
          S "by applying the", atStart ccLaplaceTransform, fromSource tmLaplace]
@@ -84,7 +84,7 @@ ddDerivCtrlEqn
 ddDerivCtrlNote :: Sentence
 ddDerivCtrlNote
   = foldlSent
-      [S "The Derivative Controller" `S.is` S "the product" `S.ofThe` phrase derGain
+      [S "The Derivative Controller" `S.is` S "the product" `S.ofThe` phrase dqdDerivGain
          `S.andThe` S "differential" `S.ofThe` phrase processError +:+. fromSource ddErrSig,
        D.toSent (atStartNP (the equation)), S "is converted" `S.toThe` phrase ccFrequencyDomain,
          S "by applying the", atStart ccLaplaceTransform +:+. fromSource tmLaplace,

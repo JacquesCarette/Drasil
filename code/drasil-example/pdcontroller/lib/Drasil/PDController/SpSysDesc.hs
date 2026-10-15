@@ -8,6 +8,7 @@ import Language.Drasil.Document (ConceptInstance, cic)
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 
 import Drasil.PDController.Concepts
+import Drasil.PDController.Unitals (dqdPropGain, dqdDerivGain, dqdSetPointTD, dqdProcessVariableTD)
 
 -- Introduction of the Problem Description section derives from purpose in
 -- System (purp in Body.hs)
@@ -19,7 +20,7 @@ sysParts
 
 sysGoalInput :: [Sentence]
 sysGoalInput
-  = [phrase setPoint, phrase simulationTime, phrase propGain, phrase derGain,
+  = [phrase dqdSetPointTD, phrase simulationTime, phrase dqdPropGain, phrase dqdDerivGain,
      phrase stepTime]
 
 goals :: [ConceptInstance]
@@ -30,7 +31,7 @@ sysProcessVariable
   = cic "calculateProcessVariable"
       (foldlSent
          [S "Calculate the output of the", phrase powerPlant,
-            sParen (phrase processVariable),
+            sParen (phrase dqdProcessVariableTD),
             S "over time"])
       "Process-Variable"
       goalStmtDom

@@ -1,10 +1,9 @@
 module Drasil.PDController.Concepts (
   acronyms, termDefs, defs, simulation, processError, simulationTime, stepTime,
   controlVariable, propControl, derControl,
-  pdControllerCI, proportionalCI, pidC, piCI, pidCI, pidCL, processVariable,
+  pdControllerCI, proportionalCI, pidC, piCI, pidCI, pidCL,
   ccDampingCoeff, ccStiffCoeff, ccFrequencyDomain, ccLaplaceTransform, ccTransferFxn,
-  ccAbsTolerance, ccRelTolerance,
-  secondOrderSystem, summingPt, propGain, derGain, powerPlant, setPoint
+  secondOrderSystem, summingPt, powerPlant
 ) where
 
 import Language.Drasil (commonIdea, cn', nounPhraseSP, pn, CI, ConceptChunk,
@@ -21,10 +20,8 @@ piCI            = commonIdea (mkUid "piCI")            (pn "proportional integra
 pidCI           = commonIdea (mkUid "pidCI")           (pn "proportional integral derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
-      simulationTime, processVariable, setPoint, propGain, derGain,
-      propControl, derControl, simulation,ccFrequencyDomain, ccTimeDomain,
-      ccLaplaceTransform, controlVariable, stepTime, ccAbsTolerance,
-      ccRelTolerance, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
+      simulationTime, propControl, derControl, simulation, ccFrequencyDomain, ccTimeDomain,
+      ccLaplaceTransform, controlVariable, stepTime, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
 pidCL
   = cncpt''' (mkUid "pdCtrlLoop") (nounPhraseSP "PD Control Loop") (S ("Closed-Loop control " <>
         "system with PD Controller, Summing Point and Power Plant"))
@@ -58,26 +55,9 @@ simulationTime
   = cncpt''' (mkUid "simulationTime") (nounPhraseSP "Simulation Time")
       (S "Total execution time of the PD simulation")
 
-processVariable
-  = cncpt''' (mkUid "processVariable") (nounPhraseSP "Process Variable")
-      (S "The output value from the power plant")
-
 controlVariable
   = cncpt''' (mkUid "controlVariable") (nounPhraseSP "Control Variable")
       (S "The Control Variable is the output of the PD controller")
-
-setPoint
-  = cncpt''' (mkUid "setPoint") (nounPhraseSP "Set-Point")
-      (S ("The desired value that the control system must reach. This also knows "
-         <> "as the reference variable"))
-
-propGain
-  = cncpt''' (mkUid "propGain") (nounPhraseSP "Proportional Gain")
-      (S "Gain constant of the proportional controller")
-
-derGain
-  = cncpt''' (mkUid "derGain") (nounPhraseSP "Derivative Gain")
-      (S "Gain constant of the derivative controller")
 
 propControl
   = cncpt''' (mkUid "propControl") (nounPhraseSP "Proportional control")
@@ -107,14 +87,6 @@ ccLaplaceTransform
       (S ("An integral transform that converts a function of a real variable t " <>
          "(often time) to a function of a complex variable s (complex frequency)"))
 
-ccAbsTolerance
-  = cncpt''' (mkUid "absoluteTolerance") (nounPhraseSP "Absolute Tolerance")
-      (S "Absolute tolerance for the integrator")
-
-ccRelTolerance
-  = cncpt''' (mkUid "relativeTolerance") (nounPhraseSP "Relative Tolerance")
-      (S "Relative tolerance for the integrator")
-
 ccTransferFxn
   = cncpt''' (mkUid "transferFxn") (nounPhraseSP "Transfer Function")
       (S ("The Transfer Function of a system is the ratio of the output to the input"
@@ -130,9 +102,7 @@ ccStiffCoeff
 
 defs :: [ConceptChunk]
 defs
-  = termDefs <> [simulationTime, processVariable, setPoint, propGain, derGain,
-     ccLaplaceTransform, stepTime,
-     ccAbsTolerance, ccRelTolerance]
+  = termDefs <> [simulationTime, ccLaplaceTransform, stepTime]
 
 termDefs :: [ConceptChunk]
 termDefs

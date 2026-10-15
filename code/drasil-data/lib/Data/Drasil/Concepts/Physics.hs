@@ -24,7 +24,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVe
   friction, gravity, gravitationalAccel, gravitationalConst, gravitationalMagnitude, height,
   iPos, iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos,
   iyVel, joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
-  momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
+  momentOfInertia, position, potEnergy, pressure, rectilinear,
   rigidBody, scalarAccel, scalarPos, shm, space, speed, stiffCoeff, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
   yAccel, yConstAccel, yDist, yPos, yVel, momentum, chgMomentum, moment, moment2D, fOfGravity,
@@ -46,7 +46,7 @@ acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohes
   gravitationalAccel, gravitationalConst, gravitationalMagnitude, height, iPos, iSpeed,
   iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, iyVel, joint,
   kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
-  potEnergy, pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos, shm,
+  potEnergy, pressure, rectilinear, rigidBody, scalarAccel, scalarPos, shm,
   space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel, momentum, moment, moment2D, fOfGravity, positionVec, pendulum, body,
@@ -239,8 +239,6 @@ linAccel = cncpt''' (mkUid "linearAcceleration") (combineNINI linear acceleratio
 -- The following feel like they're missing something/need to be more
 -- descriptive. See issue tracker for details.
 -- FIXME: plurals below?
-restitutionCoef = cncpt''' (mkUid "restitutionCoef") (cn "coefficient of restitution")
-  (S "a measure of the restitution of a collision between two objects")
 momentOfInertia = cncpt''' (mkUid "momentOfInertia") (cn "moment of inertia")
   (S "a quantity expressing a body's tendency to resist angular acceleration")
 angFreq = cncpt''' (mkUid "angularFrequency") (cn "angular frequency")

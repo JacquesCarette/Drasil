@@ -150,11 +150,11 @@ dqdProcessVariableTD = quantNoUnit' (mkUid "processVariable")
   (const symYT) (Vect Real)
 
 dqdSetPointFD
-  = quantNoUnit (mkUid "dqdSetPointFD") (setPoint `inThe` ccFrequencyDomain)
+  = quantNoUnit (mkUid "dqdSetPointFD") (dqdSetPointTD `inThe` ccFrequencyDomain)
     (S "the set point in the frequency domain") symYrS Real
 
 dqdProcessVariableFD = quantNoUnit (mkUid "dqdProcessVariableFD")
-  (processVariable `inThe` ccFrequencyDomain) (S "the process variable in the frequency domain") symYS Real
+  (dqdProcessVariableTD `inThe` ccFrequencyDomain) (S "the process variable in the frequency domain") symYS Real
 
 dqdProcessErrorFD = quantNoUnit (mkUid "dqdProcessErrorFD") (processError `inThe`
   ccFrequencyDomain) (S "the process error in the time domain") symES Real

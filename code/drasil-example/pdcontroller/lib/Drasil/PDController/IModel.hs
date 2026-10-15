@@ -56,7 +56,7 @@ imPDRC
 
 imDeriv :: Derivation
 imDeriv
-  = mkDerivName (phrase processVariable)
+  = mkDerivName (phrase dqdProcessVariableTD)
       (weave imDerivStmts $ eS <$> imDerivEqns)
 
 imDerivStmts :: [Sentence]
@@ -68,7 +68,7 @@ imDerivEqns = [derivEqn1, derivEqn2, derivEqn3, derivEqn4]
 derivStmt1 :: Sentence
 derivStmt1
   = foldlSent
-      [D.toSent (atStartNP (the processVariable)), eS' dqdProcessVariableFD, S "in a", phrase pidCL +:+
+      [D.toSent (atStartNP (the dqdProcessVariableTD)), eS' dqdProcessVariableFD, S "in a", phrase pidCL +:+
          S "is the product" `S.ofThe` phrase processError, fromSource ddErrSig `sC`
          phrase controlVariable, fromSource ddCtrlVar `sC` EmptyS
          `S.andThe` phrase powerPlant, fromSource gdPowerPlant]
@@ -107,7 +107,7 @@ derivEqn3
 derivStmt4 :: Sentence
 derivStmt4
   = foldlSent_
-      [D.toSent (atStartNP (the setPoint)), eS' dqdSetPointTD, S "is a step function and a constant" +:+.
+      [D.toSent (atStartNP (the dqdSetPointTD)), eS' dqdSetPointTD, S "is a step function and a constant" +:+.
          fromSource aSP,
        S "Therefore the",
          S "differential" `S.ofThe` S "set point" `S.is` S "zero. Hence the equation",

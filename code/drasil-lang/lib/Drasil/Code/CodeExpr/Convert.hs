@@ -60,6 +60,7 @@ realInterval (UpFrom (i, e))             = UpFrom (i, expr e)
 constraint :: ConstraintE -> Constraint CodeExpr
 constraint (Range r ri) = Range r (realInterval ri)
 constraint (Elem r ri) = Elem r (expr ri)
+constraint (Eqn r e) = Eqn r (expr e)
 
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
 renderDomainDesc :: DiscreteDomainDesc E.Expr E.Expr -> DiscreteDomainDesc CodeExpr CodeExpr

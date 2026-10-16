@@ -302,6 +302,7 @@ foldConstraints c e  = E $ foldr1 ($&&) $ constraintToExpr <$> e
   where
     constraintToExpr (Range _ ri) = express $ realInterval c ri
     constraintToExpr (Elem _ set) = express set
+    constraintToExpr (Eqn _ rel) = express rel
 
 -- | Creates the Properties of a Correct Solution section.
 -- If there are variables in c with any constraints, the table will be generated.

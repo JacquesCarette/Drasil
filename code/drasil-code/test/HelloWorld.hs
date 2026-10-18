@@ -13,7 +13,7 @@ import Drasil.GOOL (VS, CS, MS, OOProg, BodySym(..), bodyStatements, oneLiner,
   ValueExpression(..), extFuncApp, newObj, Reference(..), Array(..), List(..),
   ListStatement(..), InternalList, MethodSym(..), OOMethodSym(..), objMethodCall,
   classMethodCall, initializer, OODeclStatement(objDecDef), Set(..),
-  ParameterSym(..))
+  ParameterSym(..), BinderSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -67,7 +67,7 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] <> lis
 helloWorldMainProc
   :: (ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ)
   => MS (r mthd)
-helloWorldMainProc = mainFunction (body ([ helloInitVariables] <> listSliceTests
+helloWorldMainProc = mainFunction (body ([ helloInitVariables, setTests, lambdaTests] <> listSliceTests
     <> [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (var "dummy" string) mainFn (litString "dummy")]),
@@ -145,6 +145,58 @@ helloInitVariables = block [comment "Initializing variables",
   setDecDef (var "s" (setType int)) mainFn (litSet int [litInt 4, litInt 7, litInt 5]),
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
+
+setTests
+  ::
+    ( BlockSym r block stmt
+    , Literal r val typ
+    , VariableValue r var val
+    , Set r val
+    , TypeSym r typ
+    , VariableSym r var typ
+    , AssignStatement r stmt var val
+    , CommentStatement r stmt
+    , PrintConsole r stmt val
+    )
+  => MS (r block)
+setTests = block
+  [ comment "Set operation tests"
+  , sVar &= setAdd sVal (litInt 10)
+  , sVar &= setRemove sVal (litInt 7)
+  , sVar &= setUnion sVal tVal
+  , printStr "Set after operations: "
+  , printLn sVal
+  ]
+  where
+    sVar = var "s" (setType int)
+    sVal = valueOf sVar
+    tVal = litSet int [litInt 20, litInt 30]
+
+lambdaTests
+  ::
+    ( BlockSym r block stmt
+    , Literal r val typ
+    , VariableValue r var val
+    , NumericExpression r val
+    , ValueExpression r var val binder typ
+    , TypeSym r typ
+    , ScopeSym r scope
+    , BinderSym r binder typ
+    , VariableSym r var typ
+    , DeclStatement r bod stmt var scope val
+    , CommentStatement r stmt
+    , PrintConsole r stmt val
+    )
+  => MS (r block)
+lambdaTests = block
+  [ comment "Lambda test"
+  , varDecDef myLambdaVar mainFn (lambda [xBinder] (xVal #* litDouble 2.0))
+  , printLn $ litString "Lambda defined successfully"
+  ]
+  where
+    myLambdaVar = var "myLambda" (funcType [double] double)
+    xBinder = binder "x" double
+    xVal = valueOf (var "x" double)
 
 objectTests
   :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)

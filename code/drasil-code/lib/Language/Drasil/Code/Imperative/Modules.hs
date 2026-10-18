@@ -760,6 +760,9 @@ printConstraint v c = do
       printConstraint' name (Elem _ e) = do
         lb <- convExpr (Variable ("set_" <> name) e)
         pure $ [printStr "an element of the set ", print lb] <> [printStrLn "."]
+      printConstraint' _ (Eqn _ e) = do
+        lb <- convExpr e
+        pure $ [printStr "satisfying ", print lb] <> [printStrLn "."]
   printConstraint' v c
 
 -- | Don't print expressions that are just literals, because that would be
@@ -1961,6 +1964,9 @@ printConstraintProc c = do
       printConstraint' (Elem _ e) = do
         lb <- convExprProc e
         pure $ [printStr "an element of the set ", print lb] <> [printStrLn "."]
+      printConstraint' (Eqn _ e) = do
+        lb <- convExprProc e
+        pure $ [printStr "satisfying ", print lb] <> [printStrLn "."]
   printConstraint' c
 
 -- | Generates a module containing the function for printing outputs.

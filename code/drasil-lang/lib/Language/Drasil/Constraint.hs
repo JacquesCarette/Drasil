@@ -4,7 +4,7 @@ module Language.Drasil.Constraint (
   -- * Types
   Constraint(..), ConstraintE, ConstraintReason(..),
   -- * Functions
-  physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
+  physRange, sfwrRange, physElem, sfwrElem, physEqn, isPhysC, isSfwrC
   ) where
 
 import Language.Drasil.Expr.Lang
@@ -23,6 +23,10 @@ data Constraint a where
 
   Elem           :: ConstraintReason -> a -> Constraint a
 
+  -- | A relation the quantity must satisfy, written as a boolean expression
+  -- over the quantity itself (e.g. @|v| = 1@ for a unit vector).
+  Eqn            :: ConstraintReason -> a -> Constraint a
+
 -- | Smart constructor for range of 'Physical' constraints between two given expressions.
 physRange :: RealInterval Expr Expr -> ConstraintE
 physRange = Range Physical
@@ -37,14 +41,20 @@ sfwrRange = Range Software
 sfwrElem :: Expr -> ConstraintE
 sfwrElem = Elem Software
 
+-- | Smart constructor for a 'Physical' constraint given as a relation on the quantity.
+physEqn :: Expr -> ConstraintE
+physEqn = Eqn Physical
+
 isPhysC, isSfwrC:: Constraint e -> Bool
 
 -- | Helpful for filtering for Physical constraints. True if constraint is 'Physical'.
 isPhysC (Range Physical _) = True
 isPhysC (Elem Physical _) = True
+isPhysC (Eqn Physical _) = True
 isPhysC _ = False
 
 -- | Helpful for filtering for Software constraints. True if constraint is 'Software'.
 isSfwrC (Range Software _) = True
 isSfwrC (Elem Software _) = True
+isSfwrC (Eqn Software _) = True
 isSfwrC _ = False

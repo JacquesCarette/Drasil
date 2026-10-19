@@ -7,7 +7,7 @@ import Language.Drasil.Document hiding (organization)
 import qualified Language.Drasil.Development as D
 import qualified Drasil.SRS.Concepts as SRS (valsOfAuxCons)
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (projAbrvS)
 

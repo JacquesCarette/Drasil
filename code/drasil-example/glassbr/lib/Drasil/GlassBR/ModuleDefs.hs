@@ -14,7 +14,7 @@ import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod,
   asVC, funcDef, fDecDef, ffor, funcData, quantvar,
   multiLine, packmod, repeated, singleLine)
 import qualified Drasil.GlassBR.Unitals as U (interpY, interpZ)
-import Language.Drasil.Printers (showHasSymbImpl)
+import Language.Drasil.Printers (oneLineCodeSymbolDoc)
 
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]
@@ -174,7 +174,7 @@ extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix"
 -- counterparts. Unfortunately, cannot change the `UID` here because it creates
 -- an error "call to non-existent function interpY"
 interpY :: Func
-interpY = funcDef (showHasSymbImpl U.interpY)
+interpY = funcDef (oneLineCodeSymbolDoc U.interpY)
   "Linearly interpolates a y value at given x and z values"
   [filename, x, z] Real (Just "y value interpolated at given x and z values")
   [
@@ -200,7 +200,7 @@ interpY = funcDef (showHasSymbImpl U.interpY)
   ]
 
 interpZ :: Func
-interpZ = funcDef (showHasSymbImpl U.interpZ)
+interpZ = funcDef (oneLineCodeSymbolDoc U.interpZ)
   "Linearly interpolates a z value at given x and y values"
   [filename, x, y] Real (Just "z value interpolated at given x and y values")
   [

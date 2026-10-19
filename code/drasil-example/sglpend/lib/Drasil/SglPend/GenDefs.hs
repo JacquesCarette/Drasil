@@ -18,7 +18,7 @@ import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import Theory.Drasil (GenDefn, gdNoRefs,
     Derivation, mkDerivName,
     equationalModel', equationalModelU, equationalRealmU,

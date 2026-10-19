@@ -2,8 +2,8 @@
 -- the Observer class both work.
 module GOOL.PatternTest (patternTest) where
 
-import Drasil.GOOL (GSProgram, Variable, OOProg, MS, VS, ProgramSym(..),
-  FileSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..),
+import Drasil.GOOL (GSProgram, OOProg, MS, VS, ProgramSym(..), FileSym(..),
+  BodySym(..), oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..),
   ValueStatement(valStmt), DeclStatement(..), PrintConsole(..), initObserverList,
   addObserver, VariableSym(var), ScopeSym(..), Literal(..), VariableValue(..),
   OOValueExpression(..), extNewObj, OOFunctionSym(..), GetSet(..),
@@ -26,23 +26,23 @@ observerType :: (OOTypeSym r typ) => VS (r typ)
 observerType = obj observerName
 
 -- | Variables used in the generated code.
-n :: (TypeSym r typ, VariableSym r typ) => VS (r Variable)
+n :: (TypeSym r typ, VariableSym r var typ) => VS (r var)
 n = var nName int
-obs1, obs2 :: (OOTypeSym r typ, VariableSym r typ) => VS (r Variable)
+obs1, obs2 :: (OOTypeSym r typ, VariableSym r var typ) => VS (r var)
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
 -- | New Observer object.
-newObserver :: (OOTypeSym r typ, OOValueExpression r typ val) => VS (r val)
+newObserver :: (OOTypeSym r typ, OOValueExpression r var val typ) => VS (r val)
 newObserver = extNewObj observerName observerType []
 
 -- | Creates the pattern test program.
 patternTest
   ::
-    ( OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block
-    , GetSet r val
-    , StrategyPattern r val bod block
-    , ObserverPattern r typ stmt
+    ( OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
+    , GetSet r var val
+    , StrategyPattern r bod block var val
+    , ObserverPattern r stmt typ
   ) => GSProgram r prg
 patternTest = prog progName "" [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
@@ -50,10 +50,10 @@ patternTest = prog progName "" [fileDoc (buildModule progName []
 -- | Creates the main function for PatternTest.
 patternTestMainMethod
   ::
-    ( OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block
-    , GetSet r val
-    , StrategyPattern r val bod block
-    , ObserverPattern r typ stmt
+    ( OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
+    , GetSet r var val
+    , StrategyPattern r bod block var val
+    , ObserverPattern r stmt typ
   ) => MS (r mthd)
 patternTestMainMethod = mainFunction (body [block [
   varDec n mainFn],

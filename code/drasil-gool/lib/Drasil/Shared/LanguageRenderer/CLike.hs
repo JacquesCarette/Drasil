@@ -11,8 +11,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Library, TypeElim(..),
-  Variable, MixedCall, MixedCtorCall, VariableSym(..), VariableValue(..),
-  VariableElim(..), ValueSym(valueType), getCodeType, getTypeString)
+  MixedCall, MixedCtorCall, VariableSym(..), VariableValue(..), VariableElim(..),
+  ValueSym(valueType), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (extNewObj, objMethodCallNoParams, ($->))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
@@ -90,24 +90,24 @@ orOp :: (Monad r) => VSOp r
 orOp = orPrec "||"
 -- Variables --
 
-self :: (IG.OOTypeSym r typ, RC.RenderVariable r typ) => VS (r Variable)
+self :: (IG.OOTypeSym r typ, RC.RenderVariable r var typ) => VS (r var)
 self = do
   l <- zoom lensVStoMS getClassName
   mkStateVar R.this (IG.obj l) R.this'
 
 -- Values --
 
-litTrue :: (RenderValue r typ val, IC.TypeSym r typ) => VS (r val)
+litTrue :: (RenderValue r var val typ, IC.TypeSym r typ) => VS (r val)
 litTrue = mkStateVal IC.bool (text "true")
 
-litFalse :: (RenderValue r typ val, IC.TypeSym r typ) => VS (r val)
+litFalse :: (RenderValue r var val typ, IC.TypeSym r typ) => VS (r val)
 litFalse = mkStateVal IC.bool (text "false")
 
-litFloat :: (RenderValue r typ val, IC.TypeSym r typ) => Float -> VS (r val)
+litFloat :: (RenderValue r var val typ, IC.TypeSym r typ) => Float -> VS (r val)
 litFloat f = mkStateVal IC.float (D.float f <> text "f")
 
 inlineIf
-  :: (RenderValue r typ val, ValueElim r val, ValueSym r typ val)
+  :: (RenderValue r var val typ, ValueElim r val, ValueSym r val typ)
   => VS (r val) -> VS (r val) -> VS (r val) -> VS (r val)
 inlineIf c' v1' v2' = do
   c <- c'
@@ -118,30 +118,30 @@ inlineIf c' v1' v2' = do
   where prec cd = valuePrec cd <|> Just 0
 
 libFuncAppMixedArgs
-  :: (IC.ValueExpression r typ val)
-  => Library -> MixedCall r typ val
+  :: (IC.ValueExpression r var val binder typ)
+  => Library -> MixedCall r var val typ
 libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >>
   IC.funcAppMixedArgs n t vs ns
 
 libNewObjMixedArgs
-  :: (IG.OOValueExpression r typ val)
-  => Library -> MixedCtorCall r typ val
+  :: (IG.OOValueExpression r var val typ)
+  => Library -> MixedCtorCall r var val typ
 libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
   IG.newObjMixedArgs tp vs ns
 
 -- Functions --
 
 listSize
-  :: (IC.TypeSym r typ, IG.InternalValueExp r typ val)
+  :: (IC.TypeSym r typ, IG.InternalValueExp r var val typ)
   => String -> VS (r val) -> VS (r val)
 listSize fnName list = objMethodCallNoParams IC.int list fnName
 
 listSize'
   ::
     ( IC.TypeSym r typ
-    , VariableSym r typ
-    , IG.OOVariableSym r typ val
-    , VariableValue r val
+    , VariableSym r var typ
+    , IG.OOVariableSym r var val typ
+    , VariableValue r var val
     )
   => String -> VS (r val) -> VS (r val)
 listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
@@ -149,37 +149,37 @@ listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 -- Statements --
 
 increment
-  :: (InternalVarElim r, RC.RenderStatement r stmt, ValueElim r val)
-  => VS (r Variable) -> VS (r val) -> MS (r stmt)
+  :: (InternalVarElim r var, RC.RenderStatement r stmt, ValueElim r val)
+  => VS (r var) -> VS (r val) -> MS (r stmt)
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   mkStmt $ R.addAssign vr v
 
 increment1
-  :: (InternalVarElim r, RC.RenderStatement r stmt)
-  => VS (r Variable) -> MS (r stmt)
+  :: (InternalVarElim r var, RC.RenderStatement r stmt)
+  => VS (r var) -> MS (r stmt)
 increment1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.increment) vr
 
 decrement1
-  :: (InternalVarElim r, RC.RenderStatement r stmt)
-  => VS (r Variable) -> MS (r stmt)
+  :: (InternalVarElim r var, RC.RenderStatement r stmt)
+  => VS (r var) -> MS (r stmt)
 decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
 
 varDec
-  :: ( InternalVarElim r
+  :: ( InternalVarElim r var
      , RO.PermElim r attch
      , RC.RenderStatement r stmt
      , ScopeElim r ScopeData
      , UnRepr r TypeData
      , TypeElim r TypeData
-     , VariableElim r TypeData
+     , VariableElim r var TypeData
      )
-  => r attch -> r attch -> Doc -> VS (r Variable) -> r ScopeData -> MS (r stmt)
+  => r attch -> r attch -> Doc -> VS (r var) -> r ScopeData -> MS (r stmt)
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
@@ -194,12 +194,12 @@ varDec s d pdoc v' scp = do
         ptrdoc _ = empty
 
 varDecDef
-  :: ( IC.DeclStatement r scope val stmt bod
+  :: ( IC.DeclStatement r bod stmt var scope val
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
      , ValueElim r val
      )
-  => Terminator -> VS (r Variable) -> r scope -> VS (r val) -> MS (r stmt)
+  => Terminator -> VS (r var) -> r scope -> VS (r val) -> MS (r stmt)
 varDecDef t vr scp vl' = do
   vd <- IC.varDec vr scp
   vl <- zoom lensMStoVS vl'
@@ -208,12 +208,12 @@ varDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 setDecDef
-  :: ( IC.DeclStatement r scope val stmt bod
+  :: ( IC.DeclStatement r bod stmt var scope val
      , RC.RenderStatement r stmt
      , RC.StatementElim r stmt
      , ValueElim r val
      )
-  => Terminator -> VS (r Variable) -> r scope -> VS (r val) -> MS (r stmt)
+  => Terminator -> VS (r var) -> r scope -> VS (r val) -> MS (r stmt)
 setDecDef t vr scp vl' = do
   vd <- IC.setDec vr scp
   vl <- zoom lensMStoVS vl'
@@ -223,11 +223,11 @@ setDecDef t vr scp vl' = do
 
 listDec
   ::
-    ( IC.DeclStatement r scope val stmt bod
+    ( IC.DeclStatement r bod stmt var scope val
     , RC.RenderStatement r stmt
     , RC.StatementElim r stmt
     )
-  => (r val -> Doc) -> VS (r val) -> VS (r Variable) -> r scope -> MS (r stmt)
+  => (r val -> Doc) -> VS (r val) -> VS (r var) -> r scope -> MS (r stmt)
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
@@ -235,11 +235,11 @@ listDec f vl v scp = do
 
 extObjDecNew
   ::
-    ( IC.DeclStatement r scope val stmt bod
-    , IG.OOValueExpression r typ val
-    , VariableElim r typ
+    ( IC.DeclStatement r bod stmt var scope val
+    , IG.OOValueExpression r var val typ
+    , VariableElim r var typ
     )
-  => Library -> VS (r Variable) -> r scope -> [VS (r val)] -> MS (r stmt)
+  => Library -> VS (r var) -> r scope -> [VS (r val)] -> MS (r stmt)
 extObjDecNew l v scp vs = IC.varDecDef v scp
   (extNewObj l (onStateValue variableType v) vs)
 

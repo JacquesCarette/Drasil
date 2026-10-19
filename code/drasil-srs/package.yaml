@@ -28,6 +28,7 @@ dependencies:
 - drasil-lang
 - drasil-makefile
 - drasil-metadata
+- drasil-natural-language
 - drasil-printers
 - drasil-system
 - drasil-theory

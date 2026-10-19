@@ -27,15 +27,14 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 import Utils.Drasil (capitalize, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, Variable, ValueSym(..),
-  TypeElim(..))
+import Drasil.Shared.InterfaceCommon (Label, Library, ValueSym(..), TypeElim(..))
 import Drasil.Shared.RendererClassesCommon (ValueElim, StatementElim, BodyElim,
   InternalVarElim, InternalBinderElim, ParamElim)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   InternalVarElim(..), ValueElim(..), StatementElim(..),
   ParamElim(..), InternalBinderElim(..))
 import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod,
-  updateMod, TypeData(..), VarData(..), BinderD)
+  updateMod, TypeData(..), VarData(..), Statement)
 import Drasil.Shared.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 import Drasil.Shared.State (VS)
 
@@ -176,7 +175,7 @@ class' n p s vs fs = vcat [
 
 -- Groupings --
 
-multiStmt :: [(Doc, Terminator)] -> (Doc, Terminator)
+multiStmt :: [Statement] -> Statement
 multiStmt sts = (vcat (applyEnd statements), needsEnd statements)
   where applyEnd [] = []
         applyEnd [(s, _)] = [s]
@@ -243,20 +242,20 @@ switch f st v defBody cs =
 -- Statements --
 
 assign
-  :: (InternalVarElim r, ValueElim r val)
-  => r Variable -> r val -> Doc
+  :: (InternalVarElim r var, ValueElim r val)
+  => r var -> r val -> Doc
 assign vr vl = RC.variable vr <+> equals <+> RC.value vl
 
-addAssign :: (InternalVarElim r, ValueElim r val) => r Variable -> r val -> Doc
+addAssign :: (InternalVarElim r var, ValueElim r val) => r var -> r val -> Doc
 addAssign vr vl = RC.variable vr <+> text "+=" <+> RC.value vl
 
-subAssign :: (InternalVarElim r, ValueElim r val) => r Variable -> r val -> Doc
+subAssign :: (InternalVarElim r var, ValueElim r val) => r var -> r val -> Doc
 subAssign vr vl = RC.variable vr <+> text "-=" <+> RC.value vl
 
-increment :: (InternalVarElim r) => r Variable -> Doc
+increment :: (InternalVarElim r var) => r var -> Doc
 increment v = RC.variable v <> text "++"
 
-decrement :: (InternalVarElim r) => r Variable -> Doc
+decrement :: (InternalVarElim r var) => r var -> Doc
 decrement v = RC.variable v <> text "--"
 
 return' :: (ValueElim r val) => [r val] -> Doc
@@ -265,7 +264,7 @@ return' vs = returnLabel <+> valueList vs
 comment :: Label -> Doc -> Doc
 comment cmt cStart = cStart <+> text cmt
 
-statement :: (Doc, Terminator) -> (Doc, Terminator)
+statement :: Statement -> Statement
 statement (s, t) = (s <> getTerm t, Empty)
 
 getTerm :: Terminator -> Doc
@@ -406,30 +405,30 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem $ cmt $+$ blank) (f
 valueList :: (ValueElim r val) => [r val] -> Doc
 valueList = hicat listSep' . fmap RC.value
 
-variableList :: (InternalVarElim r) => [r Variable] -> Doc
+variableList :: (InternalVarElim r var) => [r var] -> Doc
 variableList = hicat listSep' . fmap RC.variable
 
-binderList :: (InternalBinderElim r) => [r BinderD] -> Doc
+binderList :: (InternalBinderElim r binder) => [r binder] -> Doc
 binderList = hicat listSep' . fmap RC.binderElim
 
-parameterList :: (ParamElim r typ param) => [r param] -> Doc
+parameterList :: (ParamElim r param typ) => [r param] -> Doc
 parameterList = hicat listSep' . fmap RC.parameter
 
 namedArgList
-  :: (InternalVarElim r, ValueElim r val)
-  => Doc -> [(r Variable, r val)] -> Doc
+  :: (InternalVarElim r var, ValueElim r val)
+  => Doc -> [(r var, r val)] -> Doc
 namedArgList sep = hicat listSep' . fmap (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 
-prependToBody :: (Doc, Terminator) -> Doc -> Doc
+prependToBody :: Statement -> Doc -> Doc
 prependToBody s b = vcat [fst $ statement s, maybeBlank, b]
   where maybeBlank = emptyIfEmpty (fst s) (emptyIfEmpty b blank)
 
-appendToBody :: Doc -> (Doc, Terminator) -> Doc
+appendToBody :: Doc -> Statement -> Doc
 appendToBody b s = vcat [b, maybeBlank, fst $ statement s]
   where maybeBlank = emptyIfEmpty b (emptyIfEmpty (fst s) blank)
 
-surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
+surroundBody :: Statement -> Doc -> Statement -> Doc
 surroundBody p b a = prependToBody p (appendToBody b a)
 
 getterName :: String -> String
@@ -438,7 +437,7 @@ getterName s = "get" P.<> capitalize s
 setterName :: String -> String
 setterName s = "set" P.<> capitalize s
 
-intValue :: (TypeElim r typ, ValueSym r typ val) => VS (r val) -> VS (r val)
+intValue :: (TypeElim r typ, ValueSym r val typ) => VS (r val) -> VS (r val)
 intValue i = i >>= intValue' . getCodeType . valueType
   where intValue' Integer = i
         intValue' _ = error "Value passed to intValue must be Integer"

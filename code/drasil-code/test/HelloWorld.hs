@@ -2,10 +2,10 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (Class, Variable, VS, CS, MS, OOProg, BodySym(..),
-  bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..),
-  MultiStatement(multi), AssignStatement(..), (&=), DeclStatement(..),
-  PrintConsole(..), ReadConsole(..), StringStatement(..), CommentStatement(..),
+import Drasil.GOOL (VS, CS, MS, OOProg, BodySym(..), bodyStatements, oneLiner,
+  BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..), MultiStatement(multi),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), StringStatement(..), CommentStatement(..),
   ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
   StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
   VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
@@ -13,7 +13,7 @@ import Drasil.GOOL (Class, Variable, VS, CS, MS, OOProg, BodySym(..),
   ValueExpression(..), extFuncApp, newObj, Reference(..), Array(..), List(..),
   ListStatement(..), InternalList, MethodSym(..), OOMethodSym(..), objMethodCall,
   classMethodCall, initializer, OODeclStatement(objDecDef), Set(..),
-  ParameterSym(..))
+  ParameterSym(..), BinderSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -26,7 +26,7 @@ import Helper (helperOO, helperProc)
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldOO
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => OO.GSProgram r prg
 helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
   ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
@@ -34,7 +34,7 @@ helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldProc
-  :: (ProcProg r vis scope typ param val stmt mthd prg file mod bod block)
+  :: (ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ)
   => GProc.GSProgram r prg
 helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod descriptionProc
   watermark
@@ -47,12 +47,12 @@ description = "Tests various GOOL functions. It should run without errors."
 descriptionProc = "Tests various GProc functions. It should run without errors."
 
 -- | Variable for a list of doubles
-myOtherList :: (TypeSym r typ, VariableSym r typ) => VS (r Variable)
+myOtherList :: (TypeSym r typ, VariableSym r var typ) => VS (r var)
 myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainOO
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => MS (r mthd)
 helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] <> listSliceTests
     <> [block [printLn $ litString "", ifCond [
@@ -65,9 +65,9 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] <> lis
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainProc
-  :: (ProcProg r vis scope typ param val stmt mthd prg file mod bod block)
+  :: (ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ)
   => MS (r mthd)
-helloWorldMainProc = mainFunction (body ([ helloInitVariables] <> listSliceTests
+helloWorldMainProc = mainFunction (body ([ helloInitVariables, setTests, lambdaTests] <> listSliceTests
     <> [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (var "dummy" string) mainFn (litString "dummy")]),
@@ -80,21 +80,21 @@ helloInitVariables
   ::
     ( BlockSym r block stmt
     , TypeSym r typ
-    , Literal r typ val
+    , Literal r val typ
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r var typ
+    , VariableValue r var val
     , Comparison r val
-    , Array r val
+    , Array r var val
     , List r val
-    , ListStatement r val stmt
+    , ListStatement r stmt val
     , Set r val
-    , DeclStatement r scope val stmt bod
-    , AssignStatement r val stmt
-    , ControlStatement r val stmt bod
-    , StringStatement r val stmt
+    , DeclStatement r bod stmt var scope val
+    , AssignStatement r stmt var val
+    , ControlStatement r bod stmt var val
+    , StringStatement r stmt var val
     , CommentStatement r stmt
-    , PrintConsole r val stmt
+    , PrintConsole r stmt val
     )
   => MS (r block)
 helloInitVariables = block [comment "Initializing variables",
@@ -146,7 +146,61 @@ helloInitVariables = block [comment "Initializing variables",
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
 
-objectTests :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block) => MS (r block)
+setTests
+  ::
+    ( BlockSym r block stmt
+    , Literal r val typ
+    , VariableValue r var val
+    , Set r val
+    , TypeSym r typ
+    , VariableSym r var typ
+    , AssignStatement r stmt var val
+    , CommentStatement r stmt
+    , PrintConsole r stmt val
+    )
+  => MS (r block)
+setTests = block
+  [ comment "Set operation tests"
+  , sVar &= setAdd sVal (litInt 10)
+  , sVar &= setRemove sVal (litInt 7)
+  , sVar &= setUnion sVal tVal
+  , printStr "Set after operations: "
+  , printLn sVal
+  ]
+  where
+    sVar = var "s" (setType int)
+    sVal = valueOf sVar
+    tVal = litSet int [litInt 20, litInt 30]
+
+lambdaTests
+  ::
+    ( BlockSym r block stmt
+    , Literal r val typ
+    , VariableValue r var val
+    , NumericExpression r val
+    , ValueExpression r var val binder typ
+    , TypeSym r typ
+    , ScopeSym r scope
+    , BinderSym r binder typ
+    , VariableSym r var typ
+    , DeclStatement r bod stmt var scope val
+    , CommentStatement r stmt
+    , PrintConsole r stmt val
+    )
+  => MS (r block)
+lambdaTests = block
+  [ comment "Lambda test"
+  , varDecDef myLambdaVar mainFn (lambda [xBinder] (xVal #* litDouble 2.0))
+  , printLn $ litString "Lambda defined successfully"
+  ]
+  where
+    myLambdaVar = var "myLambda" (funcType [double] double)
+    xBinder = binder "x" double
+    xVal = valueOf (var "x" double)
+
+objectTests
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
+  => MS (r block)
 objectTests = block [comment "Object tests",
   varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
   varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4]),
@@ -168,8 +222,8 @@ objectTests = block [comment "Object tests",
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
   mySlicedList10, mySlicedList11
-  :: (TypeSym r typ, VariableSym r typ)
-  => VS (r Variable)
+  :: (TypeSym r typ, VariableSym r var typ)
+  => VS (r var)
 mySlicedList = var "mySlicedList" (listType double)
 mySlicedList2 = var "mySlicedList2" (listType double)
 mySlicedList3 = var "mySlicedList3" (listType double)
@@ -185,14 +239,14 @@ mySlicedList11 = var "mySlicedList11" (listType double)
 listSliceTests
   ::
     ( TypeSym r typ
-    , Literal r typ val
+    , Literal r val typ
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
-    , InternalList r val block
-    , DeclStatement r scope val stmt bod
+    , VariableSym r var typ
+    , VariableValue r var val
+    , InternalList r block var val
+    , DeclStatement r bod stmt var scope val
     , CommentStatement r stmt
-    , PrintConsole r val stmt
+    , PrintConsole r stmt val
     , BlockSym r block stmt
     )
   => [MS (r block)]
@@ -317,18 +371,18 @@ listSliceTests = [
 helloIfBody
   ::
     ( TypeSym r typ
-    , Literal r typ val
+    , Literal r val typ
     , ScopeSym r scope
-    , VariableSym r typ
-    , VariableValue r val
+    , VariableSym r var typ
+    , VariableValue r var val
     , BooleanExpression r val
     , NumericExpression r val
-    , ValueExpression r typ val
+    , ValueExpression r var val binder typ
     , MultiStatement r stmt
-    , DeclStatement r scope val stmt bod
-    , AssignStatement r val stmt
-    , PrintConsole r val stmt
-    , ReadConsole r stmt
+    , DeclStatement r bod stmt var scope val
+    , AssignStatement r stmt var val
+    , PrintConsole r stmt val
+    , ReadConsole r stmt var
     , BlockSym r block stmt
     , BodySym r bod block
     )
@@ -403,7 +457,7 @@ helloIfBody = addComments "If body" (body [
 helloElseBody
   ::
     ( CommandLineArgs r val
-    , PrintConsole r val stmt
+    , PrintConsole r stmt val
     , BlockSym r block stmt
     , BodySym r bod block
     )
@@ -416,10 +470,10 @@ helloIfExists
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , VariableSym r typ
-    , VariableValue r val
-    , ControlStatement r val stmt bod
-    , PrintConsole r val stmt
+    , VariableSym r var typ
+    , VariableValue r var val
+    , ControlStatement r bod stmt var val
+    , PrintConsole r stmt val
     )
   => MS (r stmt)
 helloIfExists = ifExists (valueOf $ var "boringList" (listType bool))
@@ -431,11 +485,11 @@ helloSwitch
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , Literal r typ val
-    , VariableSym r typ
-    , VariableValue r val
-    , AssignStatement r val stmt
-    , ControlStatement r val stmt bod
+    , Literal r val typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    , AssignStatement r stmt var val
+    , ControlStatement r bod stmt var val
     )
   => MS (r stmt)
 helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)),
@@ -448,11 +502,11 @@ helloForLoop
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , Literal r typ val
-    , VariableSym r typ
-    , VariableValue r val
-    , ControlStatement r val stmt bod
-    , PrintConsole r val stmt
+    , Literal r val typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    , ControlStatement r bod stmt var val
+    , PrintConsole r stmt val
     )
   => MS (r stmt)
 helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn
@@ -465,13 +519,13 @@ helloWhileLoop
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , Literal r typ val
-    , VariableSym r typ
-    , VariableValue r val
+    , Literal r val typ
+    , VariableSym r var typ
+    , VariableValue r var val
     , Comparison r val
-    , AssignStatement r val stmt
-    , ControlStatement r val stmt bod
-    , PrintConsole r val stmt
+    , AssignStatement r stmt var val
+    , ControlStatement r bod stmt var val
+    , PrintConsole r stmt val
     )
   => MS (r stmt)
 helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements
@@ -483,12 +537,12 @@ helloForEachLoop
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , Literal r typ val
-    , VariableSym r typ
-    , VariableValue r val
-    , ValueExpression r typ val
-    , ControlStatement r val stmt bod
-    , PrintConsole r val stmt
+    , Literal r val typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    , ValueExpression r var val binder typ
+    , ControlStatement r bod stmt var val
+    , PrintConsole r stmt val
     )
   => MS (r stmt)
 helloForEachLoop = forEach i (valueOf myOtherList)
@@ -501,16 +555,16 @@ helloTryCatch
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
-    , ControlStatement r val stmt bod
-    , PrintConsole r val stmt
+    , ControlStatement r bod stmt var val
+    , PrintConsole r stmt val
     )
   => MS (r stmt)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
 
 helloWorldClass
-  :: (OOProg r vis scope typ param val stmt mthd stvr attch prg file mod bod block)
-  => CS (r Class)
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
+  => CS (r cls)
 helloWorldClass = extraClass "TestClass" Nothing
   [stateVar public instanceLevel (var "a" int)]
   [initializer [param $ var "a" int]

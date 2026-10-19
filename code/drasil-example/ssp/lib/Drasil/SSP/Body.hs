@@ -16,7 +16,7 @@ import qualified Drasil.SRS.Concepts as SRS (assumpt,
 import Drasil.System (projAbrvS, ProjectName)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,

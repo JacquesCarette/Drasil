@@ -5,7 +5,7 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   listAdd, funcDecDef, function
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Variable,
+import Drasil.Shared.InterfaceCommon (Label,
   VariableElim(variableName, variableType), TypeSym, VisibilitySym(..), funcApp,
   getCodeType, convType, ValueStatement(..), ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
@@ -81,7 +81,11 @@ innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
 listAppend
-  :: (TypeSym r typ, ValueStatement r val stmt, ValueExpression r typ val)
+  ::
+    ( TypeSym r typ
+    , ValueStatement r stmt val
+    , ValueExpression r var val binder typ
+    )
   => String -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAppend fnName list val = valStmt $
   funcApp fnName IC.void [list, val]
@@ -91,8 +95,8 @@ listAdd
   ::
     ( TypeSym r typ
     , IndexTranslator r val
-    , ValueStatement r val stmt
-    , ValueExpression r typ val
+    , ValueStatement r stmt val
+    , ValueExpression r var val binder typ
     )
   => String -> VS (r val) -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAdd fnName list idx val = valStmt $
@@ -101,13 +105,13 @@ listAdd fnName list idx val = valStmt $
 arrayElem
   ::
     ( TypeSym r typ
-    , IC.ValueSym r typ val
+    , IC.ValueSym r val typ
     , IndexTranslator r val
-    , RC.RenderVariable r typ
+    , RC.RenderVariable r var typ
     , IC.TypeElim r typ
     , RC.ValueElim r val
     )
-  => VS (r val) -> VS (r val) -> VS (r Variable)
+  => VS (r val) -> VS (r val) -> VS (r var)
 arrayElem arr' i' = do
   i <- IC.intToIndex i'
   arr <- arr'
@@ -117,10 +121,10 @@ arrayElem arr' i' = do
   mkStateVar vName vType vRender
 
 funcDecDef
-  :: (RP.ProcRenderSym r vis ScopeData typ param val stmt mthd file mod bod block)
-  => VS (r Variable)
+  :: (RP.ProcRenderSym r file mod mthd vis param bod block stmt var ScopeData val binder typ)
+  => VS (r var)
   -> r ScopeData
-  -> [VS (r Variable)]
+  -> [VS (r var)]
   -> MS (r bod)
   -> MS (r stmt)
 funcDecDef v scp ps b = do
@@ -134,7 +138,7 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 function
-  :: (RC.MethodTypeSym r typ, RP.ProcRenderMethod r vis typ param mthd bod)
+  :: (RC.MethodTypeSym r typ, RP.ProcRenderMethod r mthd vis param bod typ)
   => Label
   -> r vis
   -> VS (r typ)

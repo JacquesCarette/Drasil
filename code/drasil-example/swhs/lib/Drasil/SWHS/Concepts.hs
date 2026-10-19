@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 
 import Drasil.Database (mkUid)
 import Language.Drasil
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Domains (materialEng)

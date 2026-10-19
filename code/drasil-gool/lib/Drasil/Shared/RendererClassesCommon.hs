@@ -12,40 +12,43 @@ module Drasil.Shared.RendererClassesCommon (
   BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Library, Variable, MixedCall,
-  TypeSym(..), VariableElim(..), Argument(..), Literal(..), MathConstant(..),
-  VariableSym, ValueSym, VariableValue(..), ValueExpression(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), IndexTranslator(..), List(..), ListStatement, InternalList(..),
+import Drasil.Shared.InterfaceCommon (Label, Library, MixedCall, TypeSym(..),
+  VariableElim(..), Argument(..), Literal(..), MathConstant(..), VariableSym,
+  ValueSym, VariableValue(..), ValueExpression(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  IndexTranslator(..), List(..), ListStatement, InternalList(..),
   AssignStatement(..), ScopeSym, DeclStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   ParameterSym(..), BinderElim(..), UnRepr(..), BodySym, BlockSym)
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, OpData,
-  BinderD, FuncData)
+  FuncData)
 import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (BodySym r bod block, BlockSym r block stmt, AssignStatement r val stmt,
-  ScopeSym r scope, DeclStatement r scope val stmt bod, StringStatement r val stmt,
-  FuncAppStatement r val stmt, CommentStatement r stmt,
-  ControlStatement r val stmt bod, Argument r val, Literal r typ val,
-  MathConstant r val, ValueSym r typ val, VariableSym r typ, VariableValue r val,
-  CommandLineArgs r val, NumericExpression r val, BooleanExpression r val,
-  Comparison r val, IndexTranslator r val, List r val, ListStatement r val stmt,
-  InternalList r val block, VariableElim r typ, BinderElim r typ,
-  RenderBlock r block, BlockElim r block, RenderBody r bod, BodyElim r bod,
-  InternalListFunc r typ val, RenderFunction r typ, FunctionElim r typ, OpElim r,
-  RenderParam r param, ParamElim r typ param, RenderVisibility r vis,
-  VisibilityElim r vis, InternalAssignStmt r val stmt, InternalIOStmt r val stmt,
-  InternalControlStmt r val stmt, RenderStatement r stmt, StatementElim r stmt,
-  RenderType r typ, RenderValue r typ val, ValueElim r val, RenderVariable r typ,
-  InternalVarElim r, InternalBinderElim r, ImportSym r, UnaryOpSym r,
-  BinaryOpSym r, BlockCommentSym r, BlockCommentElim r,
-  ValueExpression r typ val, TypeSym r typ, MethodTypeSym r typ,
-  RenderMethod r mthd, MethodElim r mthd, ParameterSym r param, ScopeElim r scope
-  ) => CommonRenderSym r vis scope typ param val stmt mthd bod block
+class (BodySym r bod block, BlockSym r block stmt,
+  AssignStatement r stmt var val, ScopeSym r scope,
+  DeclStatement r bod stmt var scope val, StringStatement r stmt var val,
+  FuncAppStatement r stmt var val, CommentStatement r stmt,
+  ControlStatement r bod stmt var val, Argument r val, Literal r val typ,
+  MathConstant r val, ValueSym r val typ, VariableSym r var typ,
+  VariableValue r var val, CommandLineArgs r val, NumericExpression r val,
+  BooleanExpression r val, Comparison r val, IndexTranslator r val, List r val,
+  ListStatement r stmt val, InternalList r block var val, VariableElim r var typ,
+  BinderElim r binder typ, RenderBlock r block, BlockElim r block, RenderBody r bod,
+  BodyElim r bod, InternalListFunc r val typ, RenderFunction r typ,
+  FunctionElim r typ, OpElim r, RenderParam r param var, ParamElim r param typ,
+  RenderVisibility r vis, VisibilityElim r vis,
+  InternalAssignStmt r stmt var val, InternalIOStmt r stmt val,
+  InternalControlStmt r stmt val, RenderStatement r stmt, StatementElim r stmt,
+  RenderType r typ, RenderValue r var val typ, ValueElim r val,
+  RenderVariable r var typ, InternalVarElim r var, InternalBinderElim r binder,
+  ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
+  BlockCommentElim r, ValueExpression r var val binder typ, TypeSym r typ,
+  MethodTypeSym r typ, RenderMethod r mthd, MethodElim r mthd,
+  ParameterSym r param var, ScopeElim r scope
+  ) => CommonRenderSym r mthd vis param bod block stmt var scope val binder typ
 
 -- Common Typeclasses --
 
@@ -119,17 +122,17 @@ class OpElim r where
 class ScopeElim r scope | r -> scope where
   scopeData :: r scope -> scope
 
-class RenderVariable r typ | r -> typ where
-  varFromData :: AttachmentTag -> String -> VS (r typ) -> Doc -> VS (r Variable)
+class RenderVariable r var typ | r -> var typ where
+  varFromData :: AttachmentTag -> String -> VS (r typ) -> Doc -> VS (r var)
 
-class InternalVarElim r where
-  variableBind :: r Variable -> AttachmentTag
-  variable  :: r Variable -> Doc
+class InternalVarElim r var | r -> var where
+  variableBind :: r var -> AttachmentTag
+  variable  :: r var -> Doc
 
-class InternalBinderElim r where
-  binderElim  :: r BinderD -> Doc
+class InternalBinderElim r binder where
+  binderElim  :: r binder -> Doc
 
-class RenderValue r typ val | r -> typ val where
+class RenderValue r var val typ | r -> var val typ where
   inputFunc       :: VS (r val)
   printFunc       :: VS (r val)
   printLnFunc     :: VS (r val)
@@ -143,7 +146,7 @@ class RenderValue r typ val | r -> typ val where
   -- Parameters are: maybe name of external module, maybe Doc for object
   -- variable (including separator between object and function) for method
   -- calls.
-  call :: Maybe Library -> Maybe Doc -> MixedCall r typ val
+  call :: Maybe Library -> Maybe Doc -> MixedCall r var val typ
 
   valFromData :: Maybe Int -> Maybe Integer -> VS (r typ) -> Doc -> VS (r val)
 
@@ -152,7 +155,7 @@ class ValueElim r val | r -> val where
   valueInt :: r val -> Maybe Integer
   value :: r val -> Doc
 
-class InternalListFunc r typ val | r -> typ val where
+class InternalListFunc r val typ | r -> val typ where
   -- | List, Index
   listAccessFunc :: VS (r typ) -> VS (r val) -> VS (r FuncData)
 
@@ -163,14 +166,14 @@ class FunctionElim r typ | r -> typ where
   functionType :: r FuncData -> r typ
   function :: r FuncData -> Doc
 
-class InternalAssignStmt r val stmt | r -> val stmt where
-  multiAssign       :: [VS (r Variable)] -> [VS (r val)] -> MS (r stmt)
+class InternalAssignStmt r stmt var val | r -> stmt var val where
+  multiAssign :: [VS (r var)] -> [VS (r val)] -> MS (r stmt)
 
-class InternalIOStmt r val stmt | r -> val stmt where
+class InternalIOStmt r stmt val | r -> stmt val where
   -- newLn, maybe a file to print to, printFunc, value to print
   printSt :: Bool -> Maybe (VS (r val)) -> VS (r val) -> VS (r val) -> MS (r stmt)
 
-class InternalControlStmt r val stmt | r -> val stmt where
+class InternalControlStmt r stmt val | r -> stmt val where
   multiReturn :: [VS (r val)] -> MS (r stmt)
 
 class RenderStatement r stmt | r -> stmt where
@@ -189,10 +192,10 @@ class RenderVisibility r vis | r -> vis where
 class VisibilityElim r vis | r -> vis where
   visibility :: r vis -> Doc
 
-class RenderParam r param | r -> param where
-  paramFromData :: VS (r Variable) -> Doc -> MS (r param)
+class RenderParam r param var | r -> param var where
+  paramFromData :: VS (r var) -> Doc -> MS (r param)
 
-class ParamElim r typ param | r -> typ param where
+class ParamElim r param typ | r -> param typ where
   parameterName :: r param -> Label
   parameterType :: r param -> r typ
   parameter     :: r param -> Doc

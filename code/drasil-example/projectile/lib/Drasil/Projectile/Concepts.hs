@@ -1,6 +1,6 @@
 module Drasil.Projectile.Concepts (
   launcher, projectile, target, projMotion, defs, rectVel, ideaDicts,
-  flightDur, offset, landPos, launAngle, launSpeed, targPos, projSpeed, projPos
+  flightDur, offset, landPos, launAngleTerm, launAngleDef, launSpeed, targPos, projSpeed, projPos
 ) where
 
 import Drasil.Database (mkUid)
@@ -31,7 +31,7 @@ projMotion = compoundNC projectile motion
 defs :: [ConceptChunk]
 defs = [launcher, projectile, target]
 
-launcher, projectile, target, projSpeed, projPos, landPos, launAngle, launSpeed,
+launcher, projectile, target, projSpeed, projPos, landPos, launSpeed,
   offset, targPos, flightDur :: ConceptChunk
 launcher   = cncpt''' (mkUid "launcher")        (nounPhraseSP "launcher")
   (S "where the projectile is launched from and the device that does the launching")
@@ -46,9 +46,12 @@ projPos    = cncpt''' (mkUid "projPos")         (nounPhraseSP "1D position")
 landPos    = cncpt''' (mkUid "landingposition") (compoundPhrase (nounPhraseSP "landing") (position ^. term))
   (foldlSent_ [D.toSent (phraseNP (the distance)) `S.fromThe` phrase launcher
     `S.toThe` S "final", D.toSent $ phraseNP (position `ofThe` projectile)])
-launAngle  = cncpt''' (mkUid "launchangle")     (compoundPhrase (launch ^. term) (angle ^. term))
-  (foldlSent_ [D.toSent $ phraseNP (the angle), S "between the", phrase launcher
-    `S.and_` S "a straight line" `S.fromThe` D.toSent (phraseNP (launcher `toThe` target))])
+launAngleTerm :: NP
+launAngleTerm = compoundPhrase (launch ^. term) (angle ^. term)
+
+launAngleDef :: Sentence
+launAngleDef = foldlSent_ [D.toSent $ phraseNP (the angle), S "between the", phrase launcher
+    `S.and_` S "a straight line" `S.fromThe` D.toSent (phraseNP (launcher `toThe` target))]
 launSpeed  = cncpt''' (mkUid "launchspeed")     (compoundPhrase (launch ^. term) (speed ^. term))
   (D.toSent (phraseNP (iSpeed `the_ofThe` projectile)) +:+ S "when launched")
 offset     = cncpt''' (mkUid "offset")          (compoundPhrase (cn "distance between the") (targPos `andThe` landPos))

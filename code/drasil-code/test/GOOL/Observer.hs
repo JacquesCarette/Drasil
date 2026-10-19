@@ -18,20 +18,20 @@ printNum = "printNum"
 
 -- | Creates the observer class.
 observer
-  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => FS (r file)
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
 -- | Makes a variable @x@.
-x :: (TypeSym r typ, VariableSym r typ var) => VS (r var)
+x :: (TypeSym r typ, VariableSym r var typ) => VS (r var)
 x = var "x" int
 
 -- | Acces the @x@ attribute of @self@.
 selfX ::
   ( TypeSym r typ
-  , VariableSym r typ var
-  , OOVariableSym r typ var val
+  , VariableSym r var typ
+  , OOVariableSym r var val typ
   , SelfSym r var
   , VariableValue r var val
   )
@@ -45,14 +45,14 @@ helperClass
     , BodySym r bod block
     , AttachmentSym r attch
     , VisibilitySym r vis
-    , StateVarSym r vis var val stvr attch
-    , ClassSym r cls mthd stvr
-    , OOMethodSym r vis typ var param val mthd attch bod
-    , PrintConsole r val stmt
+    , StateVarSym r stvr attch vis var val
+    , ClassSym r cls stvr mthd
+    , OOMethodSym r mthd attch vis param bod var val typ
+    , PrintConsole r stmt val
     , TypeSym r typ
-    , Literal r typ val
-    , VariableSym r typ var
-    , OOVariableSym r typ var val
+    , Literal r val typ
+    , VariableSym r var typ
+    , OOVariableSym r var val typ
     , SelfSym r var
     , VariableValue r var val
     )
@@ -65,9 +65,9 @@ observerConstructor
   ::
     ( BodySym r bod block
     , TypeSym r typ
-    , VariableSym r typ var
-    , OOMethodSym r vis typ var param val mthd attch bod
-    , Literal r typ val
+    , VariableSym r var typ
+    , OOMethodSym r mthd attch vis param bod var val typ
+    , Literal r val typ
     )
   => MS (r mthd)
 observerConstructor = initializer [] [(x, litInt 5)]
@@ -78,12 +78,12 @@ printNumMethod
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , OOMethodSym r vis typ var param val mthd attch bod
+    , OOMethodSym r mthd attch vis param bod var val typ
     , AttachmentSym r attch
     , VisibilitySym r vis
-    , PrintConsole r val stmt
-    , VariableSym r typ var
-    , OOVariableSym r typ var val
+    , PrintConsole r stmt val
+    , VariableSym r var typ
+    , OOVariableSym r var val typ
     , SelfSym r var
     , VariableValue r var val
     )

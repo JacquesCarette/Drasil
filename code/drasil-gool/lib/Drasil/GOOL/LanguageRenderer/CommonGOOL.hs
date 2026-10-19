@@ -26,7 +26,7 @@ constDecDef
      , ScopeElim r ScopeData
      , UnRepr r TypeData
      , ValueElim r val
-     , VariableElim r TypeData var
+     , VariableElim r var TypeData
      )
   => VS (r var) -> r ScopeData -> VS (r val) -> MS (r stmt)
 constDecDef vr' scp v'= do
@@ -37,7 +37,7 @@ constDecDef vr' scp v'= do
   mkStmt (renderConstDecDef vr v)
 
 classMethodCall
-  :: (RenderValue r TypeData var val, UnRepr r TypeData)
+  :: (RenderValue r var val TypeData, UnRepr r TypeData)
   => String
   -> VS (r TypeData)
   -> VS (r TypeData)
@@ -49,7 +49,7 @@ classMethodCall f t cls vs ns = do
   call Nothing (Just $ renderType c <> dot) f t vs ns
 
 listAppend
-  :: (TypeSym r typ, InternalValueExp r typ var val, ValueStatement r val stmt)
+  :: (TypeSym r typ, InternalValueExp r var val typ, ValueStatement r stmt val)
   => String -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 
@@ -57,8 +57,8 @@ listAdd
   ::
     ( TypeSym r typ
     , IndexTranslator r val
-    , InternalValueExp r typ var val
-    , ValueStatement r val stmt
+    , InternalValueExp r var val typ
+    , ValueStatement r stmt val
     )
   => String -> VS (r val) -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]

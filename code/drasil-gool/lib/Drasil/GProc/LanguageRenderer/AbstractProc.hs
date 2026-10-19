@@ -83,8 +83,8 @@ innerType t = t >>= (convType . getInnerType . getCodeType)
 listAppend
   ::
     ( TypeSym r typ
-    , ValueStatement r val stmt
-    , ValueExpression r typ binder var val
+    , ValueStatement r stmt val
+    , ValueExpression r var val binder typ
     )
   => String -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAppend fnName list val = valStmt $
@@ -95,8 +95,8 @@ listAdd
   ::
     ( TypeSym r typ
     , IndexTranslator r val
-    , ValueStatement r val stmt
-    , ValueExpression r typ binder var val
+    , ValueStatement r stmt val
+    , ValueExpression r var val binder typ
     )
   => String -> VS (r val) -> VS (r val) -> VS (r val) -> MS (r stmt)
 listAdd fnName list idx val = valStmt $
@@ -105,9 +105,9 @@ listAdd fnName list idx val = valStmt $
 arrayElem
   ::
     ( TypeSym r typ
-    , IC.ValueSym r typ val
+    , IC.ValueSym r val typ
     , IndexTranslator r val
-    , RC.RenderVariable r typ var
+    , RC.RenderVariable r var typ
     , IC.TypeElim r typ
     , RC.ValueElim r val
     )
@@ -121,7 +121,7 @@ arrayElem arr' i' = do
   mkStateVar vName vType vRender
 
 funcDecDef
-  :: (RP.ProcRenderSym r vis ScopeData typ binder var param val stmt mthd file mod bod block)
+  :: (RP.ProcRenderSym r file mod mthd vis param bod block stmt var ScopeData val binder typ)
   => VS (r var)
   -> r ScopeData
   -> [VS (r var)]
@@ -138,7 +138,7 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 function
-  :: (RC.MethodTypeSym r typ, RP.ProcRenderMethod r vis typ param mthd bod)
+  :: (RC.MethodTypeSym r typ, RP.ProcRenderMethod r mthd vis param bod typ)
   => Label
   -> r vis
   -> VS (r typ)

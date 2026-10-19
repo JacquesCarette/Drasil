@@ -14,14 +14,14 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
 
 -- | Creates a program in GOOL to test reading and writing to files.
 fileTestsOO
-  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => OO.GSProgram r prg
 fileTestsOO = OO.prog "FileTests" "" [OO.fileDoc (OO.buildModule "FileTests" []
   [fileTestMethod] [])]
 
 -- | Creates a program in GProc to test reading and writing to files.
 fileTestsProc
-  :: (ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block)
+  :: (ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ)
   => GProc.GSProgram r prg
 fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
   "FileTests" [] [fileTestMethod])]
@@ -32,19 +32,19 @@ fileTestMethod
     ( BlockSym r block stmt
     , BodySym r bod block
     , TypeSym r typ
-    , Literal r typ val
+    , Literal r val typ
     , ScopeSym r scope
-    , VariableSym r typ var
+    , VariableSym r var typ
     , VariableValue r var val
     , Comparison r val
     , List r val
-    , DeclStatement r scope var val stmt bod
-    , ControlStatement r var val stmt bod
-    , PrintConsole r val stmt
-    , FileHandling r var val stmt
-    , PrintFile r val stmt
-    , ReadFile r var val stmt
-    , MethodSym r vis typ var param mthd bod
+    , DeclStatement r bod stmt var scope val
+    , ControlStatement r bod stmt var val
+    , PrintConsole r stmt val
+    , FileHandling r stmt var val
+    , PrintFile r stmt val
+    , ReadFile r stmt var val
+    , MethodSym r mthd vis param bod var typ
     )
   => MS (r mthd)
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
@@ -54,16 +54,16 @@ writeStory
   ::
     ( BlockSym r block stmt
     , TypeSym r typ
-    , Literal r typ val
+    , Literal r val typ
     , ScopeSym r scope
-    , VariableSym r typ var
+    , VariableSym r var typ
     , VariableValue r var val
     , Comparison r val
-    , DeclStatement r scope var val stmt bod
-    , ControlStatement r var val stmt bod
-    , FileHandling r var val stmt
-    , PrintFile r val stmt
-    , ReadFile r var val stmt
+    , DeclStatement r bod stmt var scope val
+    , ControlStatement r bod stmt var val
+    , FileHandling r stmt var val
+    , PrintFile r stmt val
+    , ReadFile r stmt var val
     )
   => MS (r block)
 writeStory = block [
@@ -88,7 +88,12 @@ writeStory = block [
 
 -- | Generates functions to read from a file.
 readStory
-  :: (TypeSym r typ, VariableSym r typ var, VariableValue r var val, ReadFile r var val stmt)
+  ::
+    ( TypeSym r typ
+    , VariableSym r var typ
+    , VariableValue r var val
+    , ReadFile r stmt var val
+    )
   => MS (r stmt)
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
   (var "fileContents" (listType string))
@@ -100,13 +105,13 @@ goodBye
     ( BlockSym r block stmt
     , TypeSym r typ
     , Comparison r val
-    , Literal r typ val
-    , VariableSym r typ var
+    , Literal r val typ
+    , VariableSym r var typ
     , VariableValue r var val
     , List r val
-    , ControlStatement r var val stmt bod
-    , PrintConsole r val stmt
-    , FileHandling r var val stmt
+    , ControlStatement r bod stmt var val
+    , PrintConsole r stmt val
+    , FileHandling r stmt var val
     )
   => MS (r block)
 goodBye = block [

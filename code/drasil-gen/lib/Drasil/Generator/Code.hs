@@ -48,7 +48,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
 
     genCall
       ::
-        ( OOProg progRepr vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block
+        ( OOProg progRepr prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
         , SoftwareDossierSym packRepr
         , Monad packRepr
         )
@@ -65,8 +65,8 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
 
     genCallProc
       ::
-        ( ProcProg progRepr vis scope typ binder var param val stmt mthd prg file mod bod block
-        , NativeVector progRepr typ val
+        ( ProcProg progRepr prg file mod mthd vis param bod block stmt var scope val binder typ
+        , NativeVector progRepr val typ
         , SoftwareDossierSym packRepr
         , Monad packRepr
         )

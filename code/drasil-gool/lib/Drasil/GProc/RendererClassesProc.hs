@@ -15,13 +15,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderMethod(..))
 
-class (CommonRenderSym r vis scope typ binder var param val stmt mthd bod block,
-  ParameterSym r var param, VisibilitySym r vis,
-  MethodSym r vis typ var param mthd bod, IP.ModuleSym r mod mthd,
+class (CommonRenderSym r mthd vis param bod block stmt var scope val binder typ,
+  ParameterSym r param var, VisibilitySym r vis,
+  MethodSym r mthd vis param bod var typ, IP.ModuleSym r mod mthd,
   IP.FileSym r file mod, RenderFile r file mod, RenderMod r mod,
   ModuleElim r mod, RenderMethod r mthd,
-  ProcRenderMethod r vis typ param mthd bod
-  ) => ProcRenderSym r vis scope typ binder var param val stmt mthd file mod bod block
+  ProcRenderMethod r mthd vis param bod typ
+  ) => ProcRenderSym r file mod mthd vis param bod block stmt var scope val binder typ
 -- Procedural-Only Typeclasses --
 
 class RenderFile r file mod | r -> file mod where
@@ -42,7 +42,7 @@ class RenderMod r mod | r -> mod where
 class ModuleElim r mod | r -> mod where
   module' :: r mod -> Doc
 
-class ProcRenderMethod r vis typ param mthd bod | r -> vis typ param bod where
+class ProcRenderMethod r mthd vis param bod typ | r -> mthd vis param bod typ where
   -- | Main method?, name, public/private,
   --   return type, parameters, body
   intFunc     :: Bool -> Label -> r vis -> MS (r typ) ->

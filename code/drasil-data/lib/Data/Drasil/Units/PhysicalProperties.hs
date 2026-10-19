@@ -2,7 +2,7 @@
 module Data.Drasil.Units.PhysicalProperties where
 
 import Data.Drasil.SI_Units (kilogram, m_3)
-import Language.Drasil (UnitDefn, newUnit, (/:))
+import Language.Drasil (UnitDefn, compoundUnit, cn', (/:))
 
 densityU :: UnitDefn
-densityU = newUnit "density"              $ kilogram /: m_3
+densityU = compoundUnit "density" (cn' "density") "density" $ kilogram /: m_3

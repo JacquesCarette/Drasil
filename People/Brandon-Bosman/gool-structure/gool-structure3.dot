@@ -1,0 +1,22 @@
+digraph {
+  prg    -> file
+  file   -> mod
+  mod    -> cls
+  cls    -> stvr
+  cls    -> mthd
+  mthd   -> vis
+  mthd   -> attch
+  mthd   -> param
+  mthd   -> bod
+  stvr   -> vis
+  stvr   -> attch
+  stvr   -> var
+  var    -> val
+  val    -> typ
+  stmt   -> var
+  stmt   -> scope
+  block  -> stmt
+  bod    -> block
+  binder -> typ
+  param  -> var
+}

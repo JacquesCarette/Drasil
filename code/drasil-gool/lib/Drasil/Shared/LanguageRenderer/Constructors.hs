@@ -36,28 +36,28 @@ mkStmtNoEnd = flip stmtFromData Empty
 -- Values --
 
 -- | Constructs a value in a stateful context
-mkStateVal :: (RenderValue r typ var val) => VS (r typ) -> Doc -> VS (r val)
+mkStateVal :: (RenderValue r var val typ) => VS (r typ) -> Doc -> VS (r val)
 mkStateVal = valFromData Nothing Nothing
 
 -- | Constructs a value in a non-stateful context
-mkVal :: (RenderValue r typ var val) => r typ -> Doc -> VS (r val)
+mkVal :: (RenderValue r var val typ) => r typ -> Doc -> VS (r val)
 mkVal t = valFromData Nothing Nothing (toState t)
 
 -- Variables --
 
 -- | Constructs an instance-level variable in a stateful context
 mkStateVar
-  :: (RenderVariable r typ var)
+  :: (RenderVariable r var typ)
   => String -> VS (r typ) -> Doc -> VS (r var)
 mkStateVar = varFromData InstanceLevel
 
 -- | Constructs an instance-level variable in a non-stateful context
-mkVar :: (RenderVariable r typ var) => String -> r typ -> Doc -> VS (r var)
+mkVar :: (RenderVariable r var typ) => String -> r typ -> Doc -> VS (r var)
 mkVar n t = varFromData InstanceLevel n (toState t)
 
 -- | Constructs a classLevel variable in a stateful context
 mkClassVar
-  :: (RenderVariable r typ var)
+  :: (RenderVariable r var typ)
   => String -> VS (r typ) -> Doc -> VS (r var)
 mkClassVar = varFromData ClassLevel
 
@@ -112,13 +112,13 @@ inPrec = mkOp 2 . text
 
 -- | Constructs a unary expression like ln(v), for some operator ln and value v
 unExpr
-  :: (OpElim r, RenderValue r typ var val, ValueElim r val, ValueSym r typ val)
+  :: (OpElim r, RenderValue r var val typ, ValueElim r val, ValueSym r val typ)
   => VSUnOp r -> VS (r val) -> VS (r val)
 unExpr = join .: on2StateValues (mkUnExpr unOpDocD)
 
 -- | Constructs a unary expression like -v, for some operator - and value v
 unExpr'
-  :: (OpElim r, RenderValue r typ var val, ValueElim r val, ValueSym r typ val)
+  :: (OpElim r, RenderValue r var val typ, ValueElim r val, ValueSym r val typ)
   => VSUnOp r -> VS (r val) -> VS (r val)
 unExpr' u' v'= do
   u <- u'
@@ -130,7 +130,7 @@ unExpr' u' v'= do
     u' v'
 
 mkUnExpr
-  :: (OpElim r, RenderValue r typ var val, ValueElim r val, ValueSym r typ val)
+  :: (OpElim r, RenderValue r var val typ, ValueElim r val, ValueSym r val typ)
   => (Doc -> Doc -> Doc) -> r OpData -> r val -> VS (r val)
 mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 
@@ -140,11 +140,11 @@ mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 unExprNumDbl
   ::
     ( OpElim r
-    , RenderValue r typ var val
+    , RenderValue r var val typ
     , TypeSym r typ
     , TypeElim r typ
     , ValueElim r val
-    , ValueSym r typ val
+    , ValueSym r val typ
     )
   => VSUnOp r -> VS (r val) -> VS (r val)
 unExprNumDbl u' v' = do
@@ -155,7 +155,7 @@ unExprNumDbl u' v' = do
 
 -- Only used by unExprNumDbl
 unExprCastFloat
-  :: (TypeSym r typ, RenderValue r typ var val, TypeElim r typ)
+  :: (TypeSym r typ, RenderValue r var val typ, TypeElim r typ)
   => r typ -> r val -> VS (r val)
 unExprCastFloat t = castType (getCodeType t) . toState
   where castType Float = cast float
@@ -164,7 +164,7 @@ unExprCastFloat t = castType (getCodeType t) . toState
 -- | To be used when the type of the value is different from the type of the
 -- resulting expression. The type of the result is passed as a parameter.
 typeUnExpr
-  :: (OpElim r, RenderValue r typ var val, ValueElim r val)
+  :: (OpElim r, RenderValue r var val typ, ValueElim r val)
   => VSUnOp r -> VS (r typ) -> VS (r val) -> VS (r val)
 typeUnExpr u' t' s' = do
   u <- u'
@@ -177,10 +177,10 @@ typeUnExpr u' t' s' = do
 binExpr
   ::
     ( OpElim r
-    , RenderValue r typ var val
+    , RenderValue r var val typ
     , TypeElim r typ
     , ValueElim r val
-    , ValueSym r typ val
+    , ValueSym r val typ
     )
   => VSBinOp r -> VS (r val) -> VS (r val) -> VS (r val)
 binExpr b' v1' v2'= do
@@ -194,10 +194,10 @@ binExpr b' v1' v2'= do
 binExpr'
   ::
     ( OpElim r
-    , RenderValue r typ var val
+    , RenderValue r var val typ
     , TypeElim r typ
     , ValueElim r val
-    , ValueSym r typ val
+    , ValueSym r val typ
     )
   => VSBinOp r -> VS (r val) -> VS (r val) -> VS (r val)
 binExpr' b' v1' v2' = do
@@ -211,11 +211,11 @@ binExpr' b' v1' v2' = do
 binExprNumDbl'
   ::
     ( OpElim r
-    , RenderValue r typ var val
+    , RenderValue r var val typ
     , TypeSym r typ
     , TypeElim r typ
     , ValueElim r val
-    , ValueSym r typ val
+    , ValueSym r val typ
     )
   => VSBinOp r -> VS (r val) -> VS (r val) -> VS (r val)
 binExprNumDbl' b' v1' v2' = do
@@ -228,7 +228,7 @@ binExprNumDbl' b' v1' v2' = do
 
 -- Only used by binExprNumDbl'
 binExprCastFloat
-  :: (RenderValue r typ var val, TypeSym r typ, TypeElim r typ)
+  :: (RenderValue r var val typ, TypeSym r typ, TypeElim r typ)
   => r typ -> r typ -> r val -> VS (r val)
 binExprCastFloat t1 t2 = castType (getCodeType t1) (getCodeType t2) . toState
   where castType Float _ = cast float
@@ -238,7 +238,7 @@ binExprCastFloat t1 t2 = castType (getCodeType t1) (getCodeType t2) . toState
 -- | To be used when the types of the values are different from the type of the
 -- resulting expression. The type of the result is passed as a parameter.
 typeBinExpr
-  :: (OpElim r, RenderValue r typ var val, ValueElim r val)
+  :: (OpElim r, RenderValue r var val typ, ValueElim r val)
   => VSBinOp r -> VS (r typ) -> VS (r val) -> VS (r val) -> VS (r val)
 typeBinExpr b' t' v1' v2' = do
   b <- b'
@@ -249,7 +249,7 @@ typeBinExpr b' t' v1' v2' = do
 -- For numeric binary expressions, checks that both types are numeric and
 -- returns result type. Selects the type with lowest precision.
 numType
-  :: (TypeElim r typ, ValueSym r typ val)
+  :: (TypeElim r typ, ValueSym r val typ)
   => VS (r val)-> VS (r val) -> VS (r typ)
 numType v1' v2' = do
   v1 <- v1'
@@ -272,7 +272,7 @@ exprRender' f b' v1' v2' = do
   v2 <- v2'
   toState $ f b v1 v2
 
-mkExpr :: (RenderValue r typ var val) => Int -> r typ -> Doc -> VS (r val)
+mkExpr :: (RenderValue r var val typ) => Int -> r typ -> Doc -> VS (r val)
 mkExpr p t = valFromData (Just p) Nothing (toState t)
 
 binOpDocDRend

@@ -18,12 +18,12 @@ renderType tp = case cType $ unRepr tp of
     _ -> typeDoc $ unRepr tp
 
 renderParam
-  :: (InternalVarElim r var, UnRepr r TypeData, VariableElim r TypeData var)
+  :: (InternalVarElim r var, UnRepr r TypeData, VariableElim r var TypeData)
   => r var -> Doc
 renderParam v = renderType (variableType v) <+> variable v
 
 renderListDec
-  :: (UnRepr r TypeData, ValueElim r val, VariableElim r TypeData var)
+  :: (UnRepr r TypeData, ValueElim r val, VariableElim r var TypeData)
   => r var -> r val -> Doc
 renderListDec v n = space <> equals <+> new' <+> renderType (variableType v)
   <> parens (value n)
@@ -33,7 +33,7 @@ renderConstDecDef
     ( InternalVarElim r var
     , UnRepr r TypeData
     , ValueElim r val
-    , VariableElim r TypeData var
+    , VariableElim r var TypeData
     )
   => r var -> r val -> Doc
 renderConstDecDef v def = constDec' <+> renderType (variableType v) <+>

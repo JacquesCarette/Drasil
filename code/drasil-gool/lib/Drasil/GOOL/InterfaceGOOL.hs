@@ -45,28 +45,28 @@ import Text.PrettyPrint.HughesPJ (Doc)
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
 class (UnRepr r typ, Argument r val, BodySym r bod block, BlockSym r block stmt,
-  CommandLineArgs r val, Literal r typ val, MathConstant r val,
-  VariableValue r var val, VariableSym r typ var, TypeSym r typ, OOTypeSym r typ,
-  OOVariableSym r typ var val, SelfSym r var, BooleanExpression r val,
-  Comparison r val, NumericExpression r val, ValueSym r typ val,
-  InternalValueExp r typ var val, ValueExpression r typ binder var val,
-  OOValueExpression r typ var val, IndexTranslator r val, Array r var val,
-  List r val, ListStatement r val stmt, Reference r val, Set r val,
-  OOFunctionSym r typ val, ParameterSym r var param, ScopeSym r scope,
-  BinderSym r typ binder, InternalList r var val block,
-  MethodSym r vis typ var param mthd bod,
-  OOMethodSym r vis typ var param val mthd attch bod, AttachmentSym r attch,
-  VisibilitySym r vis, StateVarSym r vis var val stvr attch,
-  ClassSym r cls mthd stvr, TypeElim r typ, VariableElim r typ var,
-  EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r val stmt,
-  CommentStatement r stmt, DeclStatement r scope var val stmt bod,
-  OODeclStatement r scope var val stmt, AssignStatement r var val stmt,
-  FuncAppStatement r var val stmt, OOFuncAppStatement r var val stmt,
-  ControlStatement r var val stmt bod, StringStatement r var val stmt,
-  PrintConsole r val stmt, ReadConsole r var stmt, FileHandling r var val stmt,
-  PrintFile r val stmt, ReadFile r var val stmt, ModuleSym r mod cls mthd,
+  CommandLineArgs r val, Literal r val typ, MathConstant r val,
+  VariableValue r var val, VariableSym r var typ, TypeSym r typ, OOTypeSym r typ,
+  OOVariableSym r var val typ, SelfSym r var, BooleanExpression r val,
+  Comparison r val, NumericExpression r val, ValueSym r val typ,
+  InternalValueExp r var val typ, ValueExpression r var val binder typ,
+  OOValueExpression r var val typ, IndexTranslator r val, Array r var val,
+  List r val, ListStatement r stmt val, Reference r val, Set r val,
+  OOFunctionSym r val typ, ParameterSym r param var, ScopeSym r scope,
+  BinderSym r binder typ, InternalList r block var val,
+  MethodSym r mthd vis param bod var typ,
+  OOMethodSym r mthd attch vis param bod var val typ, AttachmentSym r attch,
+  VisibilitySym r vis, StateVarSym r stvr attch vis var val,
+  ClassSym r cls stvr mthd, TypeElim r typ, VariableElim r var typ,
+  EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt val,
+  CommentStatement r stmt, DeclStatement r bod stmt var scope val,
+  OODeclStatement r stmt var scope val, AssignStatement r stmt var val,
+  FuncAppStatement r stmt var val, OOFuncAppStatement r stmt var val,
+  ControlStatement r bod stmt var val, StringStatement r stmt var val,
+  PrintConsole r stmt val, ReadConsole r stmt var, FileHandling r stmt var val,
+  PrintFile r stmt val, ReadFile r stmt var val, ModuleSym r mod cls mthd,
   FileSym r file mod, ProgramSym r prg file
-  ) => OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block
+  ) => OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)
@@ -98,7 +98,7 @@ class ModuleSym r mod cls mthd | r -> mod cls mthd where
 type Class = Doc
 
 -- | Class for representing an OO class.
-class ClassSym r cls mthd stvr | r -> cls mthd stvr where
+class ClassSym r cls stvr mthd | r -> cls stvr mthd where
   -- | Main external method for creating a class.
   -- Inputs: parent class, variables, constructor(s), methods
   buildClass :: Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] ->
@@ -116,7 +116,7 @@ class ClassSym r cls mthd stvr | r -> cls mthd stvr where
 
 type Initializers r var val = [(VS (r var), VS (r val))]
 
-class OOMethodSym r vis typ var param val mthd attch bod | r -> vis typ var param val mthd attch bod where
+class OOMethodSym r mthd attch vis param bod var val typ | r -> mthd attch vis param bod var val typ where
   method      :: Label -> r vis -> r attch -> VS (r typ) ->
     [MS (r param)] -> MS (r bod) -> MS (r mthd)
   getMethod   :: VS (r var) -> MS (r mthd)
@@ -124,12 +124,12 @@ class OOMethodSym r vis typ var param val mthd attch bod | r -> vis typ var para
   constructor :: [MS (r param)] -> Initializers r var val -> MS (r bod) -> MS (r mthd)
 
   -- inOutMethod and docInOutMethod both need AttachmentSym
-  inOutMethod :: Label -> r vis -> r attch -> InOutFunc r var mthd bod
-  docInOutMethod :: Label -> r vis -> r attch -> DocInOutFunc r var mthd bod
+  inOutMethod :: Label -> r vis -> r attch -> InOutFunc r mthd bod var
+  docInOutMethod :: Label -> r vis -> r attch -> DocInOutFunc r mthd bod var
 
 privMethod
   ::
-    ( OOMethodSym r vis typ var param val mthd attch bod
+    ( OOMethodSym r mthd attch vis param bod var val typ
     , AttachmentSym r attch
     , VisibilitySym r vis
     )
@@ -138,7 +138,7 @@ privMethod n = method n private instanceLevel
 
 pubMethod
   ::
-    ( OOMethodSym r vis typ var param val mthd attch bod
+    ( OOMethodSym r mthd attch vis param bod var val typ
     , AttachmentSym r attch
     , VisibilitySym r vis
     )
@@ -146,12 +146,12 @@ pubMethod
 pubMethod n = method n public instanceLevel
 
 initializer
-  :: (OOMethodSym r vis typ var param val mthd attch bod, BodySym r bod block)
+  :: (OOMethodSym r mthd attch vis param bod var val typ, BodySym r bod block)
   => [MS (r param)] -> Initializers r var val -> MS (r mthd)
 initializer ps is = constructor ps is (body [])
 
 nonInitConstructor
-  :: (OOMethodSym r vis typ var param val mthd attch bod)
+  :: (OOMethodSym r mthd attch vis param bod var val typ)
   => [MS (r param)] -> MS (r bod) -> MS (r mthd)
 nonInitConstructor ps = constructor ps []
 
@@ -162,7 +162,7 @@ type CSStateVar r stvr = CS (r stvr)
 -- Used when creating a class, to hold extra information about `Attachment`
 -- and `Visibility`.
 -- Usually 'Doc' is used for the representation.
-class StateVarSym r vis var val stvr attch | r -> vis var val stvr attch where
+class StateVarSym r stvr attch vis var val | r -> stvr attch vis var val where
   -- | Given a visibility, attachment, and variable, represent the declaration
   -- of a state variable with no initial value.
   stateVar :: r vis -> r attch -> VS (r var) -> CSStateVar r stvr
@@ -177,7 +177,7 @@ privDVar
   ::
     ( AttachmentSym r attch
     , VisibilitySym r vis
-    , StateVarSym r vis var val stvr attch
+    , StateVarSym r stvr attch vis var val
     )
   => VS (r var) -> CSStateVar r stvr
 privDVar = stateVar private instanceLevel
@@ -186,7 +186,7 @@ pubDVar
   ::
     ( AttachmentSym r attch
     , VisibilitySym r vis
-    , StateVarSym r vis var val stvr attch
+    , StateVarSym r stvr attch vis var val
     )
   => VS (r var) -> CSStateVar r stvr
 pubDVar = stateVar public instanceLevel
@@ -195,7 +195,7 @@ pubSVar
   ::
     ( AttachmentSym r attch
     , VisibilitySym r vis
-    , StateVarSym r vis var val stvr attch
+    , StateVarSym r stvr attch vis var val
     )
   => VS (r var) -> CSStateVar r stvr
 pubSVar = stateVar public classLevel
@@ -208,7 +208,7 @@ class AttachmentSym r attch | r -> attch where
 class OOTypeSym r typ | r -> typ where
   obj :: ClassName -> VS (r typ)
 
-class OOVariableSym r typ var val | r -> typ var val where
+class OOVariableSym r var val typ | r -> var val typ where
   -- | A class-level variable, separate from its class (i.e. `v`, not `C.v`)
   classVar          :: Label -> VS (r typ) -> VS (r var)
   -- | A class-level constant, separate from its class (i.e. `v`, not `C.v`)
@@ -222,7 +222,7 @@ class OOVariableSym r typ var val | r -> typ var val where
   instanceVarAccess :: VS (r val) -> VS (r var) -> VS (r var)
 
 ($->)
-  :: (OOVariableSym r typ var val)
+  :: (OOVariableSym r var val typ)
   => VS (r val) -> VS (r var) -> VS (r var)
 infixl 9 $->
 ($->) = instanceVarAccess
@@ -233,36 +233,36 @@ class SelfSym r var | r -> var where
 
 -- | Given a variable `v`, creates `self.v`
 instanceVarSelf
-  :: (OOVariableSym r typ var val, SelfSym r var, VariableValue r var val)
+  :: (OOVariableSym r var val typ, SelfSym r var, VariableValue r var val)
   => VS (r var) -> VS (r var)
 instanceVarSelf = instanceVarAccess (valueOf self)
 
 -- for values that can include expressions
-class OOValueExpression r typ var val | r -> typ var val where
-  newObjMixedArgs         ::            MixedCtorCall r typ var val
-  extNewObjMixedArgs      :: Library -> MixedCtorCall r typ var val
-  libNewObjMixedArgs      :: Library -> MixedCtorCall r typ var val
+class OOValueExpression r var val typ | r -> var val typ where
+  newObjMixedArgs         ::            MixedCtorCall r var val typ
+  extNewObjMixedArgs      :: Library -> MixedCtorCall r var val typ
+  libNewObjMixedArgs      :: Library -> MixedCtorCall r var val typ
 
 selfMethodCall
-  :: (InternalValueExp r typ var val, VariableValue r var val, SelfSym r var)
-  => PosCall r typ val
+  :: (InternalValueExp r var val typ, VariableValue r var val, SelfSym r var)
+  => PosCall r val typ
 selfMethodCall n t = objMethodCall t (valueOf self) n
 
 newObj
-  :: (OOValueExpression r typ var val) => PosCtorCall r typ val
+  :: (OOValueExpression r var val typ) => PosCtorCall r val typ
 newObj t vs = newObjMixedArgs t vs []
 
 extNewObj
-  :: (OOValueExpression r typ var val) => Library -> PosCtorCall r typ val
+  :: (OOValueExpression r var val typ) => Library -> PosCtorCall r val typ
 extNewObj l t vs = extNewObjMixedArgs l t vs []
 
 libNewObj
-  :: (OOValueExpression r typ var val) => Library -> PosCtorCall r typ val
+  :: (OOValueExpression r var val typ) => Library -> PosCtorCall r val typ
 libNewObj l t vs = libNewObjMixedArgs l t vs []
 
 -- TODO [Brandon Bosman, 07/22/2026]: Give this a better name
 -- | A class for representing method calls, both instance- and class-level
-class InternalValueExp r typ var val | r -> typ var val where
+class InternalValueExp r var val typ | r -> var val typ where
   -- TODO [Brandon Bosman, 07/22/2026]: rename this to `instanceMethodCallMixedArgs'`
   -- | Generic function for calling a method.
   --   Takes the function name, the return type, the object, a list of
@@ -278,44 +278,44 @@ class InternalValueExp r typ var val | r -> typ var val where
 -- | Calling a method. t is the return type of the method, o is the
 --   object, f is the method name, and ps is a list of positional arguments.
 objMethodCall
-  :: (InternalValueExp r typ var val)
+  :: (InternalValueExp r var val typ)
   => VS (r typ) -> VS (r val) -> Label -> [VS (r val)] -> VS (r val)
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
 -- | Calling a method with named arguments.
 objMethodCallNamedArgs
-  :: (InternalValueExp r typ var val)
+  :: (InternalValueExp r var val typ)
   => VS (r typ) -> VS (r val) -> Label -> NamedArgs r var val -> VS (r val)
 objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
 
 -- | Calling a method with a mix of positional and named arguments.
 objMethodCallMixedArgs
-  :: (InternalValueExp r typ var val)
+  :: (InternalValueExp r var val typ)
   => VS (r typ) -> VS (r val) -> Label -> [VS (r val)] -> NamedArgs r var val -> VS (r val)
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
 -- | Calling a method with no parameters.
 objMethodCallNoParams
-  :: (InternalValueExp r typ var val)
+  :: (InternalValueExp r var val typ)
   => VS (r typ) -> VS (r val) -> Label -> VS (r val)
 objMethodCallNoParams t o f = objMethodCall t o f []
 
 -- | Calling a class method. t is the return type of the method, c is the
 --   class, f is the method name, and ps is a list of positional arguments.
 classMethodCall
-  :: (InternalValueExp r typ var val)
+  :: (InternalValueExp r var val typ)
   => VS (r typ) -> VS (r typ) -> Label -> [VS (r val)] -> VS (r val)
 classMethodCall t c f ps = classMethodCallMixedArgs' f t c ps []
 
 -- | Calling a class method with named arguments.
 classMethodCallNamedArgs
-  :: (InternalValueExp r typ var val)
+  :: (InternalValueExp r var val typ)
   => VS (r typ) -> VS (r typ) -> Label -> NamedArgs r var val -> VS (r val)
 classMethodCallNamedArgs t c f = classMethodCallMixedArgs' f t c []
 
 -- | Calling a class method with a mix of positional and named arguments.
 classMethodCallMixedArgs
-  :: (InternalValueExp r typ var val)
+  :: (InternalValueExp r var val typ)
   => VS (r typ)
   -> VS (r typ)
   -> Label
@@ -326,11 +326,11 @@ classMethodCallMixedArgs t c f = classMethodCallMixedArgs' f t c
 
 -- | Calling a class method with no parameters.
 classMethodCallNoParams
-  :: (InternalValueExp r typ var val)
+  :: (InternalValueExp r var val typ)
   => VS (r typ) -> VS (r typ) -> Label -> VS (r val)
 classMethodCallNoParams t c f = classMethodCall t c f []
 
-class OODeclStatement r scope var val stmt | r -> scope var val stmt where
+class OODeclStatement r stmt var scope val | r -> stmt var scope val where
   objDecDef    :: VS (r var) -> r scope -> VS (r val) -> MS (r stmt)
   -- Parameters: variable to store the object, scope of the variable,
   --             constructor arguments.  Object type is not needed,
@@ -340,58 +340,58 @@ class OODeclStatement r scope var val stmt | r -> scope var val stmt where
     -> MS (r stmt)
 
 objDecNewNoParams
-  :: (OODeclStatement r scope var val stmt)
+  :: (OODeclStatement r stmt var scope val)
   => VS (r var) -> r scope
   -> MS (r stmt)
 objDecNewNoParams v tp = objDecNew v tp []
 
 extObjDecNewNoParams
-  :: (OODeclStatement r scope var val stmt)
+  :: (OODeclStatement r stmt var scope val)
   => Library -> VS (r var) -> r scope -> MS (r stmt)
 extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 
-class OOFuncAppStatement r var val stmt | r -> var val stmt where
-  selfInOutCall :: InOutCall r var val stmt
+class OOFuncAppStatement r stmt var val | r -> stmt var val where
+  selfInOutCall :: InOutCall r stmt var val
 
-class ObserverPattern r typ stmt | r -> typ stmt where
+class ObserverPattern r stmt typ | r -> stmt typ where
   notifyObservers :: VS (r FuncData) -> VS (r typ) -> MS (r stmt)
 
 observerListName :: Label
 observerListName = "observerList"
 
 initObserverList
-  :: (TypeSym r typ, VariableSym r typ var, DeclStatement r scope var val stmt bod)
+  :: (TypeSym r typ, VariableSym r var typ, DeclStatement r bod stmt var scope val)
   => VS (r typ) -> [VS (r val)] -> r scope -> MS (r stmt)
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
 addObserver
   ::
     ( TypeSym r typ
-    , VariableSym r typ var
+    , VariableSym r var typ
     , VariableValue r var val
-    , ValueSym r typ val
+    , ValueSym r val typ
     , List r val
-    , ListStatement r val stmt
+    , ListStatement r stmt val
     )
   => VS (r val) -> MS (r stmt)
 addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
-class StrategyPattern r var val bod block | r -> var val bod block where
+class StrategyPattern r bod block var val | r -> bod block var val where
   runStrategy
     :: Label -> [(Label, MS (r bod))] -> Maybe (VS (r val)) -> Maybe (VS (r var)) -> MS (r block)
 
-class OOFunctionSym r typ val | r -> typ val where
+class OOFunctionSym r val typ | r -> val typ where
   func :: Label -> VS (r typ) -> [VS (r val)] -> VS (r FuncData)
   objAccess :: VS (r val) -> VS (r FuncData) -> VS (r val)
 
-($.) :: (OOFunctionSym r typ val) => VS (r val) -> VS (r FuncData) -> VS (r val)
+($.) :: (OOFunctionSym r val typ) => VS (r val) -> VS (r FuncData) -> VS (r val)
 infixl 9 $.
 ($.) = objAccess
 
 selfAccess
-  :: (VariableValue r var val, SelfSym r var, OOFunctionSym r typ val)
+  :: (VariableValue r var val, SelfSym r var, OOFunctionSym r val typ)
   => VS (r FuncData) -> VS (r val)
 selfAccess = objAccess (valueOf self)
 

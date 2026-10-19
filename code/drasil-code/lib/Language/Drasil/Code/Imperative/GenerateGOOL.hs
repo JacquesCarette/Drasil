@@ -36,7 +36,7 @@ import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImports
-  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => Name
   -> Description
   -> [Import]
@@ -56,7 +56,7 @@ genModuleWithImports n desc is maybeMs maybeCs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModule
-  :: (OOProg r vis scope typ binder var param val stmt cls mthd stvr attch prg file mod bod block)
+  :: (OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ)
   => Name
   -> Description
   -> [GenState (Maybe (MS (r mthd)))]
@@ -91,7 +91,7 @@ data ClassType = Primary | Auxiliary
 -- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the
 -- interface the class implements, if applicable.
 mkClass
-  :: (ClassSym r cls mthd stvr)
+  :: (ClassSym r cls stvr mthd)
   => ClassType
   -> Name
   -> Maybe Name
@@ -117,7 +117,7 @@ mkClass s n l desc vs cstrs mths = do
 
 -- | Generates a primary class.
 primaryClass
-  :: (ClassSym r cls mthd stvr)
+  :: (ClassSym r cls stvr mthd)
   => Name
   -> Maybe Name
   -> Description
@@ -129,7 +129,7 @@ primaryClass = mkClass Primary
 
 -- | Generates an auxiliary class (for when a module contains multiple classes).
 auxClass
-  :: (ClassSym r cls mthd stvr)
+  :: (ClassSym r cls stvr mthd)
   => Name
   -> Maybe Name
   -> Description
@@ -142,7 +142,7 @@ auxClass = mkClass Auxiliary
 -- | Converts lists or objects to pointer arguments, since we use pointerParam
 -- for list or object-type parameters.
 mkArg
-  :: (ValueSym r typ val, Argument r val, TypeElim r typ)
+  :: (ValueSym r val typ, Argument r val, TypeElim r typ)
   => VS (r val) -> VS (r val)
 mkArg v = do
   vl <- v
@@ -154,7 +154,7 @@ mkArg v = do
 -- | Gets the current module and calls mkArg on the arguments.
 -- Called by more specific function call generators ('fApp' and 'ctorCall').
 fCall
-  :: (ValueSym r typ val, Argument r val, TypeElim r typ)
+  :: (ValueSym r val typ, Argument r val, TypeElim r typ)
   => (Name -> [VS (r val)] -> NamedArgs r var val -> VS (r val))
   -> [VS (r val)]
   -> NamedArgs r var val
@@ -177,12 +177,12 @@ fCall f vl ns = do
 --   which is true for this generator.
 fApp
   ::
-    ( ValueSym r typ val
+    ( ValueSym r val typ
     , Argument r val
     , VariableValue r var val
     , SelfSym r var
-    , InternalValueExp r typ var val
-    , ValueExpression r typ binder var val
+    , InternalValueExp r var val typ
+    , ValueExpression r var val binder typ
     , TypeElim r typ
     )
   => Name
@@ -202,9 +202,9 @@ fApp m s t vl ns = do
 -- (because constructor will never be private). Calls 'newObjMixedArgs'.
 ctorCall
   ::
-    ( ValueSym r typ val
+    ( ValueSym r val typ
     , Argument r val
-    , OOValueExpression r typ var val
+    , OOValueExpression r var val typ
     , TypeElim r typ
     )
   => Name
@@ -217,7 +217,7 @@ ctorCall m t = fCall (\cm args nargs -> if m /= cm then
 
 -- | Logic similar to 'fApp', but for In/Out calls.
 fAppInOut
-  :: (FuncAppStatement r var val stmt, OOFuncAppStatement r var val stmt)
+  :: (FuncAppStatement r stmt var val, OOFuncAppStatement r stmt var val)
   => Name
   -> Name
   -> [VS (r val)]
@@ -239,7 +239,7 @@ fAppInOut m n ins outs both = do
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImportsProc
-  :: (ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block)
+  :: (ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ)
   => Name
   -> Description
   -> [Import]
@@ -257,7 +257,7 @@ genModuleWithImportsProc n desc is maybeMs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModuleProc
-  :: (ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block)
+  :: (ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ)
   => Name
   -> Description
   -> [GenState (Maybe (MS (r mthd)))]
@@ -275,10 +275,10 @@ genModuleProc n desc = genModuleWithImportsProc n desc []
 --   which is true for this generator.
 fAppProc
   ::
-    ( ValueSym r typ val
+    ( ValueSym r val typ
     , Argument r val
     , TypeElim r typ
-    , ValueExpression r typ binder var val
+    , ValueExpression r var val binder typ
     )
   => Name
   -> Name
@@ -295,7 +295,7 @@ fAppProc m s t vl ns = do
 
 -- | Logic similar to 'fApp', but for In/Out calls.
 fAppInOutProc
-  :: (FuncAppStatement r var val stmt)
+  :: (FuncAppStatement r stmt var val)
   => Name
   -> Name
   -> [VS (r val)]

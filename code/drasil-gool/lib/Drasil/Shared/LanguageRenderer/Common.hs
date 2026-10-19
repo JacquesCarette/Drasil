@@ -36,7 +36,7 @@ bool = typeFromData Boolean boolRender (text boolRender)
 -- Python, Java, C#, and Julia --
 
 extVar
-  :: (RenderVariable r typ var)
+  :: (RenderVariable r var typ)
   => Label -> Label -> VS (r typ) -> VS (r var)
 extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
@@ -52,8 +52,8 @@ funcType ps' r' =  do
 
 -- Python, Java, C#, Swift, and Julia --
 extFuncAppMixedArgs
-  :: (RenderValue r typ var val)
-  => Library -> MixedCall r typ var val
+  :: (RenderValue r var val typ)
+  => Library -> MixedCall r var val typ
 extFuncAppMixedArgs l = call (Just l) Nothing
 
 -- Python, C#, Swift, and Julia --
@@ -63,7 +63,7 @@ listAccessFunc
     ( RenderFunction r typ
     , IC.TypeElim r typ
     , ValueElim r val
-    , ValueSym r typ val
+    , ValueSym r val typ
     )
   => VS (r typ) -> VS (r val) -> VS (r FuncData)
 listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
@@ -88,9 +88,9 @@ forEach' f i' v' b' = do
 varDecDef
   ::
     ( EmptyStatement r stmt
-    , AssignStatement r var val stmt
+    , AssignStatement r stmt var val
     , ScopeElim r ScopeData
-    , VariableElim r typ var
+    , VariableElim r var typ
     )
   => VS (r var) -> r ScopeData -> Maybe (VS (r val)) -> MS (r stmt)
 varDecDef v scp e = do
@@ -116,6 +116,6 @@ increment vr' v'= do
 
 -- | Call to get the size of a list as a function call
 listSize
-  :: (TypeSym r typ, ValueExpression r typ binder var val)
+  :: (TypeSym r typ, ValueExpression r var val binder typ)
   => String -> VS (r val) -> VS (r val)
 listSize fnName list = funcApp fnName int [list]

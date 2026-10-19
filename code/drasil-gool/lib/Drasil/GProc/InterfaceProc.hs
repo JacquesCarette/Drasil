@@ -23,23 +23,23 @@ import Drasil.Shared.AST (ProgData, TypeData)
 -- | Wrapper typeclass that bundles everything essential
 -- for generating a procedural program.
 class (UnRepr r TypeData, BodySym r bod block, BlockSym r block stmt,
-  ValueSym r typ val, VariableSym r typ var, VariableValue r var val,
-  ScopeSym r scope, BinderSym r typ binder, InternalList r var val block,
-  VisibilitySym r vis, MethodSym r vis typ var param mthd bod, TypeSym r typ,
-  TypeElim r typ, VariableElim r typ var, IndexTranslator r val, Array r var val,
-  EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r val stmt,
-  AssignStatement r var val stmt, Argument r val, BooleanExpression r val,
+  ValueSym r val typ, VariableSym r var typ, VariableValue r var val,
+  ScopeSym r scope, BinderSym r binder typ, InternalList r block var val,
+  VisibilitySym r vis, MethodSym r mthd vis param bod var typ, TypeSym r typ,
+  TypeElim r typ, VariableElim r var typ, IndexTranslator r val, Array r var val,
+  EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt val,
+  AssignStatement r stmt var val, Argument r val, BooleanExpression r val,
   CommandLineArgs r val, CommentStatement r stmt, Comparison r val,
-  ControlStatement r var val stmt bod, DeclStatement r scope var val stmt bod,
-  FuncAppStatement r var val stmt, PrintConsole r val stmt,
-  ReadConsole r var stmt, FileHandling r var val stmt, PrintFile r val stmt,
-  ReadFile r var val stmt, List r val, ListStatement r val stmt,
-  Literal r typ val, MathConstant r val, NumericExpression r val,
-  ParameterSym r var param, Reference r val, Set r val,
-  StringStatement r var val stmt, ValueExpression r typ binder var val,
+  ControlStatement r bod stmt var val, DeclStatement r bod stmt var scope val,
+  FuncAppStatement r stmt var val, PrintConsole r stmt val,
+  ReadConsole r stmt var, FileHandling r stmt var val, PrintFile r stmt val,
+  ReadFile r stmt var val, List r val, ListStatement r stmt val,
+  Literal r val typ, MathConstant r val, NumericExpression r val,
+  ParameterSym r param var, Reference r val, Set r val,
+  StringStatement r stmt var val, ValueExpression r var val binder typ,
   VariableValue r var val, ModuleSym r mod mthd, FileSym r file mod,
   ProgramSym r prg file)
-  => ProcProg r vis scope typ binder var param val stmt mthd prg file mod bod block
+  => ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)

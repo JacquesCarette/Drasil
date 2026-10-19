@@ -3,24 +3,23 @@ module Data.Drasil.Units.Physics where
 
 import Data.Drasil.SI_Units (metre, radian, s_2, second, newton, kilogram,
   m_2, m_3, newton)
-import Language.Drasil (cn, newUnit, UnitDefn, (/:), (/$), (*:), makeDerU, cncpt''', Sentence(..))
-import Drasil.Database (mkUid)
+import Language.Drasil (cn, cn', UnitDefn, (/:), (/$), (*:), compoundUnit)
 
 accelU, angVelU, angAccelU, forcePerMeterU, momtInertU, momentOfForceU,
  impulseU, springConstU, torqueU, velU :: UnitDefn
 
-accelU          = newUnit "acceleration"         $ metre /: s_2
-angVelU         = newUnit "angular velocity"     $ radian /: second
-angAccelU       = newUnit "angular acceleration" $ radian /: s_2
-forcePerMeterU  = newUnit "force per meter"      $ newton /: metre
-impulseU        = newUnit "impulse"              $ newton *: second
-momtInertU      = newUnit "moment of inertia"    $ kilogram *: m_2
-momentOfForceU  = newUnit "moment of force"      $ newton *: metre
-springConstU    = newUnit "spring constant"      $ newton /: metre
-torqueU         = newUnit "torque"               $ newton *: metre
-velU            = newUnit "velocity"             $ metre /: second
+accelU          = compoundUnit "acceleration"         (cn' "acceleration")         "acceleration"         $ metre /: s_2
+angVelU         = compoundUnit "angular velocity"     (cn' "angular velocity")     "angular velocity"     $ radian /: second
+angAccelU       = compoundUnit "angular acceleration" (cn' "angular acceleration") "angular acceleration" $ radian /: s_2
+forcePerMeterU  = compoundUnit "force per meter"      (cn' "force per meter")      "force per meter"      $ newton /: metre
+impulseU        = compoundUnit "impulse"              (cn' "impulse")              "impulse"              $ newton *: second
+momtInertU      = compoundUnit "moment of inertia"    (cn' "moment of inertia")    "moment of inertia"    $ kilogram *: m_2
+momentOfForceU  = compoundUnit "moment of force"      (cn' "moment of force")      "moment of force"      $ newton *: metre
+springConstU    = compoundUnit "spring constant"      (cn' "spring constant")      "spring constant"      $ newton /: metre
+torqueU         = compoundUnit "torque"               (cn' "torque")               "torque"               $ newton *: metre
+velU            = compoundUnit "velocity"              (cn' "velocity")             "velocity"              $ metre /: second
 
 gravConstU :: UnitDefn
 
-gravConstU = makeDerU (cncpt''' (mkUid "gravConstU") (cn "gravitational constant")
-  (S "universal gravitational constant")) (m_3 /$ (kilogram *: s_2))
+gravConstU = compoundUnit "gravConstU" (cn "gravitational constant")
+  "universal gravitational constant" (m_3 /$ (kilogram *: s_2))

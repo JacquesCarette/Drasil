@@ -36,7 +36,7 @@ data Block
       [Block] -- ^ Quoted block contents.
   | -- | A fenced code block.
     CodeBlock
-      (Maybe Text) -- ^ Optional CommonMark info string.
+      (Maybe Text) -- ^ Optional info string; its first word usually names the code language.
       Text -- ^ Literal code contents.
   | -- | An ordered list.
     OrderedList

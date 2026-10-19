@@ -23,8 +23,8 @@ renderParagraph :: [Inline] -> Text
 renderParagraph nodes = renderStrict $ layoutPretty defaultLayoutOptions $
   renderCommonMark defaultCommonMarkRO (CommonMark [Paragraph nodes])
 
--- Expected Markdown is handwritten. Character references protect literal
--- whitespace; HTML fallbacks keep neighboring delimiters from merging.
+-- Character references preserve literal whitespace; HTML fallbacks keep
+-- neighboring delimiters from merging.
 inlineCases :: [(String, [Inline], Text)]
 inlineCases =
   [ -- A CRLF pair may span text nodes, even with absent nodes between them.

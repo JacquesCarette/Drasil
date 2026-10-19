@@ -3,6 +3,7 @@
 -- | Render the supported CommonMark subset, including structured HTML fallbacks.
 module Drasil.Data.Formats.Markdown.CommonMark.Render
   ( EmphasisDelimiter (..),
+    CodeFenceStyle (..),
     CommonMarkRenderOptions (..),
     defaultCommonMarkRO,
     renderCommonMark,
@@ -48,26 +49,38 @@ data EmphasisDelimiter
     Underscore
   deriving (Eq, Show)
 
+-- | Preferred marker for fenced code blocks.
+data CodeFenceStyle
+  = -- | Use backticks, falling back to tildes when the info string contains a backtick.
+    BacktickFence
+  | -- | Use tildes.
+    TildeFence
+  deriving (Eq, Show)
+
 -- | Options controlling CommonMark rendering.
 data CommonMarkRenderOptions
-  = -- | Configure inline delimiters and embedded HTML rendering.
+  = -- | Configure inline delimiters, code fences and embedded HTML rendering.
     CommonMarkRO
       { -- | Marker surrounding emphasized contents.
         emphasisDelimiter :: EmphasisDelimiter,
         -- | Marker, repeated twice, surrounding strongly emphasized contents.
         strongDelimiter :: EmphasisDelimiter,
+        -- | Preferred fence style; backticks in an info string require tildes.
+        codeFenceStyle :: CodeFenceStyle,
         -- | Options used when rendering structured HTML fallbacks.
         htmlRenderOptions :: HTML.HTMLRenderOptions
       }
 
 -- | Default CommonMark rendering options.
 --
--- Both emphasis forms use asterisks and HTML uses its default renderer.
+-- Both emphasis forms use asterisks, code fences prefer backticks, and HTML
+-- uses its default renderer.
 defaultCommonMarkRO :: CommonMarkRenderOptions
 defaultCommonMarkRO =
   CommonMarkRO
     { emphasisDelimiter = Asterisk,
       strongDelimiter = Asterisk,
+      codeFenceStyle = BacktickFence,
       htmlRenderOptions = HTML.defaultHTMLRO
     }
 
@@ -126,7 +139,7 @@ renderBlock opt (Paragraph contents) =
       _ -> protectLeadingWhitespace line
       where (_, tagEnd) = T.breakOn ">" line
 renderBlock opt (BlockQuote blocks) = prefixBlockQuote (renderBlocks opt blocks)
-renderBlock _ (CodeBlock info contents) = renderCodeFence info contents
+renderBlock opt (CodeBlock info contents) = renderCodeFence (codeFenceStyle opt) info contents
 renderBlock opt (OrderedList items) = renderList opt [T.pack (show n) <> "." | n <- [1 :: Int ..]] items
 renderBlock opt (UnorderedList items) = renderList opt (repeat "-") items
 renderBlock _ ThematicBreak = singletonLine "---"
@@ -477,26 +490,39 @@ renderCodeSpan input
   where
     contents = normalizeCodeSpan input
     marker = T.replicate (longestRun '`' contents + 1) "`"
-    padding
-      | "`" `T.isPrefixOf` contents || "`" `T.isSuffixOf` contents ||
-        (" " `T.isPrefixOf` contents && " " `T.isSuffixOf` contents &&
-          not (T.all (== ' ') contents)) = " "
-      | otherwise = ""
+    padding = if needsCodeSpanPadding contents then " " else ""
+
+-- When both ends contain an ASCII space, CommonMark strips one from each end
+-- unless the content is all spaces. Padding preserves those spaces and separates
+-- boundary backticks from the delimiters.
+-- See <https://spec.commonmark.org/0.31.2/#code-spans>.
+needsCodeSpanPadding :: Text -> Bool
+needsCodeSpanPadding contents =
+  "`" `T.isPrefixOf` contents || "`" `T.isSuffixOf` contents ||
+  (" " `T.isPrefixOf` contents && " " `T.isSuffixOf` contents &&
+    not (T.all (== ' ') contents))
 
 -- | Render a fenced code fragment.
 -- Normalize line endings, retain trailing blank lines and add a final content
 -- newline when needed. Collapse info-string whitespace to keep it on one line.
--- Backticks in the info string select a tilde fence instead.
-renderCodeFence :: Maybe Text -> Text -> RenderedLines ann
-renderCodeFence info input = textToRenderedLines
+-- Use tildes if the info string contains a backtick.
+-- See <https://spec.commonmark.org/0.31.2/#fenced-code-blocks>.
+renderCodeFence :: CodeFenceStyle -> Maybe Text -> Text -> RenderedLines ann
+renderCodeFence style info input = textToRenderedLines
   (fence <> infoPrefix <> escapeHTMLText (T.replace "\\" "\\\\" infoText) <> "\n" <> contents <> finalBreak <> fence)
   where
     contents = normalizeLineEndings input
     infoText = foldMap (T.unwords . T.words) info
-    fenceChar = if T.elem '`' infoText then '~' else '`'
+    fenceChar = case style of
+      TildeFence -> '~'
+      BacktickFence
+        | T.elem '`' infoText -> '~'
+        | otherwise -> '`'
     infoPrefix = if T.singleton fenceChar `T.isPrefixOf` infoText then " " else ""
     fence = T.replicate (max 3 (longestRun fenceChar contents + 1)) (T.singleton fenceChar)
     finalBreak = if T.null contents || "\n" `T.isSuffixOf` contents then "" else "\n"
 
+-- Choosing a delimiter longer than every run in the content prevents a
+-- collision; fenced code additionally requires at least three markers.
 longestRun :: Char -> Text -> Int
 longestRun marker = maximum . (0 :) . fmap T.length . T.split (/= marker)

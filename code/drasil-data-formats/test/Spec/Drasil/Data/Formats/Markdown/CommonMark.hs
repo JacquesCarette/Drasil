@@ -6,7 +6,7 @@ import Data.Text (Text)
 import Data.Text qualified as T
 import Drasil.Data.Formats.HTML qualified as HTML
 import Drasil.Data.Formats.Markdown.CommonMark
-  ( Block (..), CommonMark (..), CommonMarkRenderOptions (..),
+  ( Block (..), CodeFenceStyle (..), CommonMark (..), CommonMarkRenderOptions (..),
     EmphasisDelimiter (..), HLevel (..), Inline (..), ListItem (..),
     defaultCommonMarkRO, renderCommonMark )
 import Drasil.TestingKit.Golden (file, goldenTest, goldenTestingGroup, ps)
@@ -17,7 +17,7 @@ import System.OsPath (osp)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (testCase, (@?=))
 
--- All tests exercise the public facade; expected Markdown is handwritten.
+-- These tests use the public CommonMark API.
 commonMarkTests :: TestTree
 commonMarkTests = testGroup "Drasil.Data.Formats.Markdown.CommonMark"
   [ inlineTests,
@@ -107,7 +107,15 @@ codeSyntaxTests = testGroup "Code syntax"
     testGroup "Code fences"
       [ testCase name $
           renderText (CommonMark [CodeBlock info contents]) @?= expected
-      | (name, info, contents, expected) <- fenceCases ]
+      | (name, info, contents, expected) <- fenceCases ],
+    testGroup "Code fence style options"
+      [ testCase name $
+          renderWith (defaultCommonMarkRO {codeFenceStyle = style})
+            (CommonMark [CodeBlock info contents]) @?= expected
+      | (name, style, info, contents, expected) <- fenceStyleCases ],
+    testCase "fence style does not change inline code" $
+      renderWith (defaultCommonMarkRO {codeFenceStyle = TildeFence})
+        (CommonMark [Paragraph [CodeSpan "x"]]) @?= "`x`"
   ]
 
 renderText :: CommonMark -> Text
@@ -205,7 +213,7 @@ htmlDocument = CommonMark
     Paragraph [Strong [Plain "After"], Plain " ", Link "#main-title" [Plain "heading"]]
   ]
 
--- Preserve the original MD escaping fixture through the public CommonMark API.
+-- Check that plain text escapes Markdown punctuation.
 escapingDocument :: CommonMark
 escapingDocument = CommonMark
   [p "These characters should be escaped: *, _, [, ], \\, and #."]
@@ -239,4 +247,21 @@ fenceCases =
     ("info stays on one line", Just "  hs\r\n extra  ", "x", "```hs extra\nx\n```"),
     ("info preserves literal backslashes", Just "a\\b", "x", "```a\\\\b\nx\n```"),
     ("info preserves literal entities", Just "a&copy;", "x", "```a&amp;copy;\nx\n```")
+  ]
+
+fenceStyleCases :: [(String, CodeFenceStyle, Maybe Text, Text, Text)]
+fenceStyleCases =
+  [ ("tilde fence with a language", TildeFence, Just "haskell", "x = 1",
+      "~~~haskell\nx = 1\n~~~"),
+    ("tilde fence exceeds embedded tildes", TildeFence, Nothing, "before\n~~~\nafter",
+      "~~~~\nbefore\n~~~\nafter\n~~~~"),
+    ("tilde fence ignores embedded backticks", TildeFence, Nothing, "````",
+      "~~~\n````\n~~~"),
+    ("backtick preference retains info fallback", BacktickFence, Just "a`b", "~~~",
+      "~~~~a`b\n~~~\n~~~~"),
+    ("tilde info cannot extend the fence", TildeFence, Just "~hs", "x",
+      "~~~ ~hs\nx\n~~~"),
+    ("empty tilde code", TildeFence, Nothing, "", "~~~\n~~~"),
+    ("tilde fence preserves normalized blank lines", TildeFence, Nothing, "a\r\nb\rc\n\n",
+      "~~~\na\nb\nc\n\n~~~")
   ]

@@ -110,7 +110,7 @@ renderBlock opt (Heading level contents) =
   singletonLine (pretty marker <> if T.null text then mempty else " " <> pretty text)
   where
     marker = T.replicate (fromEnum level + 1) "#"
-    text = protectLeadingWhitespace $ protectTrailingWhitespace $
+    text = T.dropAround (\c -> c == ' ' || c == '\t') $
       T.replace "\n" " " (renderInlineTextWithBreaks opt " " "<br />" contents)
 renderBlock opt (Paragraph contents) =
   nonemptyText $ T.intercalate "\n" $

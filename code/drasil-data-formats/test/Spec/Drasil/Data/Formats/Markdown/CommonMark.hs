@@ -79,10 +79,22 @@ commonMarkTests = testGroup "Drasil.Data.Formats.Markdown.CommonMark"
           renderText (CommonMark [p " x "]) @?= "&#32;x&#32;",
         testCase "spaces and tabs retain otherwise-empty paragraphs" $
           renderText (CommonMark [p "  ", p "\t"]) @?= "&#32;&#32;\n\n&#9;",
-        testCase "heading literal spaces and boundary soft breaks are preserved" $
+        testCase "heading edge spaces and boundary soft breaks are trimmed" $
           renderText (CommonMark [Heading H1 [Plain "  x  "],
             Heading H2 [SoftBreak, Plain "x", SoftBreak]])
-            @?= "# &#32; x &#32;\n\n## &#32;x&#32;"
+            @?= "# x\n\n## x",
+        testCase "heading edge tabs and whitespace-only contents are trimmed" $
+          renderText (CommonMark [Heading H1 [Plain "\t x \t"],
+            Heading H2 [Plain " \t "]]) @?= "# x\n\n##",
+        testCase "heading trimming preserves spaces between inline nodes" $
+          renderText (CommonMark [Heading H1 [Plain " A ", Emphasis [Plain "B"], Plain " C "]])
+            @?= "# A *B* C",
+        testCase "heading trimming preserves code span padding" $
+          renderText (CommonMark [Heading H1 [Plain " ", CodeSpan " x ", Plain " "]])
+            @?= "# `  x  `",
+        testCase "heading trimming preserves nonbreaking spaces" $
+          renderText (CommonMark [Heading H1 [Plain "\x00A0x\x00A0"]])
+            @?= "# \x00A0x\x00A0"
       ]
   ]
 

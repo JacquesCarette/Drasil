@@ -118,7 +118,14 @@ renderHTMLTests =
 
         goldenTest "escapingHTMLTest" $
           file [ps|escaping.html|] $ renderHTML testRenderOptions  escapingHTMLTest
-      ]
+      ],
+      testCase "empty document retains its wrappers and indentation" $
+        renderStrict (layoutPretty defaultLayoutOptions (renderHTML defaultHTMLRO (HTML [] [])))
+          @?= "<!DOCTYPE html>\n<html>\n  <head>\n    \n  </head>\n  <body>\n    \n  </body>\n</html>",
+      testCase "full document merges adjacent body text" $
+        renderStrict (layoutPretty defaultLayoutOptions
+          (renderHTML defaultHTMLRO (HTML [] [RawText "Hello", RawText " world"])))
+          @?= "<!DOCTYPE html>\n<html>\n  <head>\n    \n  </head>\n  <body>\n    Hello world\n  </body>\n</html>"
     ]
 
 -- | Body-only output must retain the existing HTML rendering rules.

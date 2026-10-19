@@ -53,7 +53,7 @@ defaultHTMLRO = HTMLRO M.empty 2
 
 -- | Render 'HTML' to a 'Doc'
 renderHTML :: HTMLRenderOptions -> HTML -> Doc ann
-renderHTML opt htmlTree =
+renderHTML opt (HTML heads bodies) =
   vcat
     [ "<!DOCTYPE html>",
       wrapBlock
@@ -62,8 +62,6 @@ renderHTML opt htmlTree =
         []
         [renderHeadSec opt heads, renderBodySec opt bodies]
     ]
-  where
-    HTML heads bodies = normalizeHTML htmlTree
 
 -- | Render body nodes without the doctype, @html@, @head@ or @body@ wrappers.
 -- Adjacent text nodes are normalized using the full-document renderer's rules.
@@ -77,7 +75,7 @@ renderHeadSec opt heads = wrapBlock opt "head" [] (renderHead opt <$> heads)
 
 -- | Internal: Render the 'body' section
 renderBodySec :: HTMLRenderOptions -> [HTMLBody] -> Doc ann
-renderBodySec opt bodies = wrapBlock opt "body" [] (renderBody opt <$> bodies)
+renderBodySec opt bodies = wrapBlock opt "body" [] [renderHTMLFragment opt bodies]
 
 -- | Internal: Render 'head' elements
 renderHead :: HTMLRenderOptions -> HTMLHead -> Doc ann
@@ -192,10 +190,6 @@ escapeHTMLText = T.concatMap escapeChar
     escapeChar '"'  = "&quot;"
     escapeChar '\'' = "&#39;"
     escapeChar c    = T.singleton c
-
--- | Internal: Normalizes the whole HTML tree at once
-normalizeHTML :: HTML -> HTML
-normalizeHTML (HTML heads bodies) = HTML heads (normalizeBody bodies)
 
 -- | Internal: Normalizes body elements, merging adjacent 'RawText'
 normalizeBody :: [HTMLBody] -> [HTMLBody]

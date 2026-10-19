@@ -69,7 +69,7 @@ data Inline
   | -- | Strongly emphasized contents.
     Strong
       [Inline] -- ^ Inline contents to strongly emphasize.
-  | -- | Inline code.
+  | -- | Inline code. Empty contents are retained using an HTML fallback.
     CodeSpan
       Text -- ^ Literal code contents.
   | -- | A hyperlink.

@@ -367,7 +367,6 @@ normalizeInlines :: [Inline] -> [Inline]
 normalizeInlines = mergePlain . filter visible
   where
     visible (Plain t) = not (T.null t)
-    visible (CodeSpan t) = not (T.null t)
     visible (HTMLInline (HTML.RawText t)) = not (T.null t)
     visible _ = True
     mergePlain [] = []
@@ -470,10 +469,10 @@ normalizeCodeSpan :: Text -> Text
 normalizeCodeSpan = T.replace "\n" " " . normalizeLineEndings
 
 -- | Delimit literal inline code, preserving spaces and embedded backticks.
--- Line endings become spaces as in CommonMark; an empty span emits no text.
+-- Line endings become spaces as in CommonMark; an empty span uses HTML.
 renderCodeSpan :: Text -> Text
 renderCodeSpan input
-  | T.null contents = ""
+  | T.null contents = "<code></code>"
   | otherwise = marker <> padding <> contents <> padding <> marker
   where
     contents = normalizeCodeSpan input

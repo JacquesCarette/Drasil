@@ -212,7 +212,7 @@ escapingDocument = CommonMark
 
 codeCases :: [(String, Text, Text)]
 codeCases =
-  [ ("empty", "", ""),
+  [ ("empty", "", "<code></code>"),
     ("no Markdown escaping", "a*b", "`a*b`"),
     ("embedded backtick", "a`b", "``a`b``"),
     ("backtick edges", "`x`", "`` `x` ``"),

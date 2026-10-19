@@ -9,7 +9,7 @@ import Drasil.SRS (mkMaintainableNFR, mkVerifiableNFR,
   mkSecurityNFR, inReqWTab)
 
 import Drasil.PDController.IModel
-import Drasil.PDController.Unitals (inputs, dqdProcessVariableTD)
+import Drasil.PDController.Unitals (inputs, processVariable)
 
 import Language.Drasil
 import Language.Drasil.Document
@@ -41,12 +41,12 @@ verifyInputsDesc
 
 calculateValuesDesc
   = foldlSent
-      [S "Calculate the", phrase dqdProcessVariableTD, fromSource imPD,
+      [S "Calculate the", phrase processVariable, fromSource imPD,
          S "over the simulation time"]
 
 outputValuesDesc
   = foldlSent
-      [S "Output the", phrase dqdProcessVariableTD, fromSource imPD,
+      [S "Output the", phrase processVariable, fromSource imPD,
          S "over the simulation time"]
 
 -----------------------------------------------------------------------------

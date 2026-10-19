@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.SI_Units (kilogram)
 
 import Drasil.PDController.Concepts
-import Drasil.PDController.Unitals (dqdSetPointTD, dqdProcessVariableTD)
+import Drasil.PDController.Unitals (setPoint, processVariable)
 assumptions :: [ConceptInstance]
 assumptions
   = [aPwrPlant, aDecoupled, aSP, aExtDisturb, aInitialValue, aParallelEq,
@@ -77,7 +77,7 @@ aDecoupledDesc
 
 aSPDesc
   = foldlSent
-      [D.toSent (atStartNP (the dqdSetPointTD)), S "is constant throughout",
+      [D.toSent (atStartNP (the setPoint)), S "is constant throughout",
          D.toSent (phraseNP (the simulation))]
 
 aExtDisturbDesc
@@ -87,7 +87,7 @@ aExtDisturbDesc
 
 aInitialValueDesc
   = foldlSent
-      [S "The initial value" `S.ofThe` phrase dqdProcessVariableTD,
+      [S "The initial value" `S.ofThe` phrase processVariable,
          S "is assumed to be zero"]
 
 aParallelEqDesc

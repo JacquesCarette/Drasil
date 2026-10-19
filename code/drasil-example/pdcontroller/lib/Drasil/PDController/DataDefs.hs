@@ -38,12 +38,12 @@ ddErrSigNote :: Sentence
 ddErrSigNote
   = foldlSent
       [D.toSent (atStartNP (the processError)), S "is the difference between the Set-Point and" +:+.
-         phrase dqdProcessVariableTD,
+         phrase processVariable,
        D.toSent (atStartNP (the equation)), S "is converted" `S.toThe` phrase ccFrequencyDomain,
          S "by applying the", atStart ccLaplaceTransform +:+. fromSource tmLaplace,
-       D.toSent (atStartNP (the dqdSetPointTD)), S "is assumed to be constant throughout the",
+       D.toSent (atStartNP (the setPoint)), S "is assumed to be constant throughout the",
          phrase simulation +:+. fromSource aSP,
-       S "The initial value" `S.ofThe` phrase dqdProcessVariableTD, S "is assumed",
+       S "The initial value" `S.ofThe` phrase processVariable, S "is assumed",
          S "to be zero", fromSource aInitialValue]
 
 ----------------------------------------------
@@ -57,12 +57,12 @@ ddPropCtrlDefn :: SimpleQDef
 ddPropCtrlDefn = mkQuantDef dqdPropControlFD ddPropCtrlEqn
 
 ddPropCtrlEqn :: Expr
-ddPropCtrlEqn = sy dqdPropGain $* sy dqdProcessErrorFD
+ddPropCtrlEqn = sy propGain $* sy dqdProcessErrorFD
 
 ddPropCtrlNote :: Sentence
 ddPropCtrlNote
   = foldlSent
-      [S "The Proportional Controller" `S.is` S "the product" `S.ofThe` D.toSent (phraseNP (dqdPropGain `andThe`
+      [S "The Proportional Controller" `S.is` S "the product" `S.ofThe` D.toSent (phraseNP (propGain `andThe`
          processError)) +:+. fromSource ddErrSig,
          D.toSent (atStartNP (the equation)), S "is converted" `S.toThe` phrase ccFrequencyDomain,
          S "by applying the", atStart ccLaplaceTransform, fromSource tmLaplace]
@@ -79,12 +79,12 @@ ddDerivCtrlDefn = mkQuantDef dqdDerivativeControlFD ddDerivCtrlEqn
 
 ddDerivCtrlEqn :: Expr
 ddDerivCtrlEqn
-  = sy dqdDerivGain $* sy dqdProcessErrorFD $* sy dqdFreqDomain
+  = sy derGain $* sy dqdProcessErrorFD $* sy dqdFreqDomain
 
 ddDerivCtrlNote :: Sentence
 ddDerivCtrlNote
   = foldlSent
-      [S "The Derivative Controller" `S.is` S "the product" `S.ofThe` phrase dqdDerivGain
+      [S "The Derivative Controller" `S.is` S "the product" `S.ofThe` phrase derGain
          `S.andThe` S "differential" `S.ofThe` phrase processError +:+. fromSource ddErrSig,
        D.toSent (atStartNP (the equation)), S "is converted" `S.toThe` phrase ccFrequencyDomain,
          S "by applying the", atStart ccLaplaceTransform +:+. fromSource tmLaplace,
@@ -102,8 +102,8 @@ ddCtrlVarDefn = mkQuantDef dqdCtrlVarFD ddCtrlEqn
 
 ddCtrlEqn :: Expr
 ddCtrlEqn
-  = sy dqdProcessErrorFD $* (sy dqdPropGain $+
-        (sy dqdDerivGain $* sy dqdFreqDomain))
+  = sy dqdProcessErrorFD $* (sy propGain $+
+        (sy derGain $* sy dqdFreqDomain))
 
 ddCtrlNote :: Sentence
 ddCtrlNote

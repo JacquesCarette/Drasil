@@ -2,9 +2,9 @@ module Drasil.PDController.Unitals (
   symbols, inputs, outputs, inputsUC, inpConstrained,
   pidConstants,
   symDampingCoeff, symStifnessCoeff,
-  dqdSetPointTD, dqdPropGain, dqdDerivGain, dqdSimTime, dqdStepTime,
+  setPoint, propGain, derGain, dqdSimTime, dqdStepTime,
   dqdProcessErrorFD, dqdSetPointFD, dqdProcessVariableFD, dqdPropControlFD,
-  dqdDerivativeControlFD, dqdFreqDomain, dqdCtrlVarFD, dqdProcessVariableTD,
+  dqdDerivativeControlFD, dqdFreqDomain, dqdCtrlVarFD, processVariable,
   dqdInvLaplaceTransform, dqdLaplaceTransform, dqdFxnTDomain, dqdDampingCoeff,
   dqdStiffnessCoeff,
   odeRelTolConst, odeAbsTolConst, opProcessVariable
@@ -51,25 +51,25 @@ symStifnessCoeff = variable "k"
 symbols :: [DefinedQuantityDict]
 symbols
   = [dqdLaplaceTransform, dqdFreqDomain, dqdFxnTDomain,
-     dqdInvLaplaceTransform, dqdPropGain, dqdDerivGain, dqdSetPointTD, dqdSetPointFD,
-     dqdProcessVariableTD, dqdProcessVariableFD,
+     dqdInvLaplaceTransform, propGain, derGain, setPoint, dqdSetPointFD,
+     processVariable, dqdProcessVariableFD,
      dqdProcessErrorFD, dqdDerivativeControlFD, dqdPropControlFD,
      dqdCtrlVarFD, dqdStepTime, dqdSimTime,
-     dqdDampingCoeff, dqdStiffnessCoeff, dqdAbsTol, dqdRelTol]
+     dqdDampingCoeff, dqdStiffnessCoeff, absTol, relTol]
 
 dqdLaplaceTransform, dqdFreqDomain, dqdFxnTDomain,
-                    dqdInvLaplaceTransform, dqdPropGain, dqdDerivGain,
-                    dqdSetPointTD, dqdSetPointFD, dqdProcessVariableTD,
+                    dqdInvLaplaceTransform, propGain, derGain,
+                    setPoint, dqdSetPointFD, processVariable,
                     dqdProcessVariableFD, dqdProcessErrorFD,
                     dqdPropControlFD, dqdDerivativeControlFD,
                     dqdCtrlVarFD, dqdStepTime,
-                    dqdSimTime, dqdDampingCoeff, dqdStiffnessCoeff, dqdAbsTol, dqdRelTol :: DefinedQuantityDict
+                    dqdSimTime, dqdDampingCoeff, dqdStiffnessCoeff, absTol, relTol :: DefinedQuantityDict
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = dqdSetPointTD :| [dqdDerivGain, dqdPropGain, dqdStepTime, dqdSimTime]
+inputs = setPoint :| [derGain, propGain, dqdStepTime, dqdSimTime]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
-outputs = NE.singleton dqdProcessVariableTD
+outputs = NE.singleton processVariable
 
 inputsUC :: [UncertQ]
 inputsUC
@@ -85,25 +85,25 @@ ipPropGain, ipDerivGain, ipSetPt, ipStepTime, ipSimTime, opProcessVariable ::
 ipSetPtUnc, ipPropGainUnc, ipDerGainUnc, ipStepTimeUnc, ipSimTimeUnc :: UncertQ
 
 ipPropGain
-  = constrained' dqdPropGain [gtZeroConstr] (exactDbl 20)
+  = constrained' propGain [gtZeroConstr] (exactDbl 20)
 ipPropGainUnc = uq ipPropGain defaultUncrt
-dqdPropGain = quantNoUnit' (mkUid "propGain")
+propGain = quantNoUnit' (mkUid "propGain")
   (nounPhraseSP "Proportional Gain")
   (S "Gain constant of the proportional controller")
   (const symKp) Real
 
 ipDerivGain
-  = constrained' dqdDerivGain [physRange $ UpFrom (Inc, exactDbl 0)]
+  = constrained' derGain [physRange $ UpFrom (Inc, exactDbl 0)]
       (exactDbl 1)
 ipDerGainUnc = uq ipDerivGain defaultUncrt
-dqdDerivGain = quantNoUnit' (mkUid "derGain")
+derGain = quantNoUnit' (mkUid "derGain")
   (nounPhraseSP "Derivative Gain")
   (S "Gain constant of the derivative controller")
   (const symKd) Real
 
-ipSetPt = constrained' dqdSetPointTD [gtZeroConstr] (exactDbl 1)
+ipSetPt = constrained' setPoint [gtZeroConstr] (exactDbl 1)
 ipSetPtUnc = uq ipSetPt defaultUncrt
-dqdSetPointTD = quantNoUnit' (mkUid "setPoint")
+setPoint = quantNoUnit' (mkUid "setPoint")
   (nounPhraseSP "Set-Point")
   (S "The desired value that the control system must reach. This also knows as the reference variable")
   (const symYrT) Real
@@ -128,33 +128,33 @@ odeAbsTolConst, odeRelTolConst :: ConstQDef
 pidConstants :: [ConstQDef]
 pidConstants = [odeAbsTolConst, odeRelTolConst]
 
-dqdAbsTol = quantNoUnit' (mkUid "absoluteTolerance")
+absTol = quantNoUnit' (mkUid "absoluteTolerance")
   (nounPhraseSP "Absolute Tolerance")
   (S "Absolute tolerance for the integrator")
   (const symAbsTol) Real
-dqdRelTol = quantNoUnit' (mkUid "relativeTolerance")
+relTol = quantNoUnit' (mkUid "relativeTolerance")
   (nounPhraseSP "Relative Tolerance")
   (S "Relative tolerance for the integrator")
   (const symRelTol) Real
 
-odeAbsTolConst = mkQuantDef dqdAbsTol (dbl 1.0e-10)
-odeRelTolConst = mkQuantDef dqdRelTol (dbl 1.0e-10)
+odeAbsTolConst = mkQuantDef absTol (dbl 1.0e-10)
+odeRelTolConst = mkQuantDef relTol (dbl 1.0e-10)
 
 opProcessVariable
-  = constrained' dqdProcessVariableTD
+  = constrained' processVariable
       [gtZeroConstr]
       (exactDbl 1)
-dqdProcessVariableTD = quantNoUnit' (mkUid "processVariable")
+processVariable = quantNoUnit' (mkUid "processVariable")
   (nounPhraseSP "Process Variable")
   (S "The output value from the power plant")
   (const symYT) (Vect Real)
 
 dqdSetPointFD
-  = quantNoUnit (mkUid "dqdSetPointFD") (dqdSetPointTD `inThe` ccFrequencyDomain)
+  = quantNoUnit (mkUid "dqdSetPointFD") (setPoint `inThe` ccFrequencyDomain)
     (S "the set point in the frequency domain") symYrS Real
 
 dqdProcessVariableFD = quantNoUnit (mkUid "dqdProcessVariableFD")
-  (dqdProcessVariableTD `inThe` ccFrequencyDomain) (S "the process variable in the frequency domain") symYS Real
+  (processVariable `inThe` ccFrequencyDomain) (S "the process variable in the frequency domain") symYS Real
 
 dqdProcessErrorFD = quantNoUnit (mkUid "dqdProcessErrorFD") (processError `inThe`
   ccFrequencyDomain) (S "the process error in the time domain") symES Real

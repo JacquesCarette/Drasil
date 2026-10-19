@@ -26,9 +26,9 @@ instanceModels = [imPD]
 imPD :: InstanceModel
 imPD
   = im (newDEModel' imPDRC)
-      [qwC dqdSetPointTD $ UpFrom (Exc, exactDbl 0), qwC dqdPropGain $ UpFrom (Exc, exactDbl 0),
-       qwC dqdDerivGain $ UpFrom (Exc, exactDbl 0)]
-      dqdProcessVariableTD
+      [qwC setPoint $ UpFrom (Exc, exactDbl 0), qwC propGain $ UpFrom (Exc, exactDbl 0),
+       qwC derGain $ UpFrom (Exc, exactDbl 0)]
+      processVariable
       [UpFrom (Exc, exactDbl 0)]
       [dRef abbasi2015, dRef johnson2008]
       (Just imDeriv)
@@ -45,10 +45,10 @@ imPDRC
       "imPDRC"
       (nounPhraseSP "Computation of the Process Variable as a function of time")
       EmptyS
-      where lhs = [exactDbl 1 $+ sy dqdDerivGain $** (opProcessVariable $^^ 1)]
+      where lhs = [exactDbl 1 $+ sy derGain $** (opProcessVariable $^^ 1)]
                   $++ (exactDbl 1 $** (opProcessVariable $^^ 2))
-                  $++ (exactDbl 20 $+ sy dqdPropGain $** (opProcessVariable $^^ 0))
-            rhs = sy dqdSetPointTD $* sy dqdPropGain
+                  $++ (exactDbl 20 $+ sy propGain $** (opProcessVariable $^^ 0))
+            rhs = sy setPoint $* sy propGain
       -- Matrix form:
       -- coeffs = [[exactDbl 1, exactDbl 1 $+ sy dqdDerivGain, exactDbl 20 $+ sy dqdPropGain]]
       -- unknowns = [2, 1, 0]
@@ -56,7 +56,7 @@ imPDRC
 
 imDeriv :: Derivation
 imDeriv
-  = mkDerivName (phrase dqdProcessVariableTD)
+  = mkDerivName (phrase processVariable)
       (weave imDerivStmts $ eS <$> imDerivEqns)
 
 imDerivStmts :: [Sentence]
@@ -68,7 +68,7 @@ imDerivEqns = [derivEqn1, derivEqn2, derivEqn3, derivEqn4]
 derivStmt1 :: Sentence
 derivStmt1
   = foldlSent
-      [D.toSent (atStartNP (the dqdProcessVariableTD)), eS' dqdProcessVariableFD, S "in a", phrase pidCL +:+
+      [D.toSent (atStartNP (the processVariable)), eS' dqdProcessVariableFD, S "in a", phrase pidCL +:+
          S "is the product" `S.ofThe` phrase processError, fromSource ddErrSig `sC`
          phrase controlVariable, fromSource ddCtrlVar `sC` EmptyS
          `S.andThe` phrase powerPlant, fromSource gdPowerPlant]
@@ -77,7 +77,7 @@ derivEqn1 :: ModelExpr
 derivEqn1
   = sy dqdProcessVariableFD
       $= (sy dqdSetPointFD $- sy dqdProcessVariableFD)
-      $* (sy dqdPropGain $+ (sy dqdDerivGain $* sy dqdFreqDomain))
+      $* (sy propGain $+ (sy derGain $* sy dqdFreqDomain))
       $* recip_ (square (sy dqdFreqDomain) $+ sy dqdFreqDomain $+ exactDbl 20)
 
 derivStmt2 :: Sentence
@@ -86,10 +86,10 @@ derivStmt2 = (S "Substituting the values and rearranging the equation" !.)
 derivEqn2 :: ModelExpr
 derivEqn2
   = square (sy dqdFreqDomain) $* sy dqdProcessVariableFD
-      $+ ((exactDbl 1 $+ sy dqdDerivGain) $* sy dqdProcessVariableFD $* sy dqdFreqDomain)
-      $+ ((exactDbl 20 $+ sy dqdPropGain) $* sy dqdProcessVariableFD)
-      $- (sy dqdSetPointFD $* sy dqdFreqDomain $* sy dqdDerivGain)
-      $- (sy dqdSetPointFD $* sy dqdPropGain) $= exactDbl 0
+      $+ ((exactDbl 1 $+ sy derGain) $* sy dqdProcessVariableFD $* sy dqdFreqDomain)
+      $+ ((exactDbl 20 $+ sy propGain) $* sy dqdProcessVariableFD)
+      $- (sy dqdSetPointFD $* sy dqdFreqDomain $* sy derGain)
+      $- (sy dqdSetPointFD $* sy propGain) $= exactDbl 0
 
 derivStmt3 :: Sentence
 derivStmt3
@@ -98,16 +98,16 @@ derivStmt3
 
 derivEqn3 :: ModelExpr
 derivEqn3
-  = deriv (deriv (sy dqdProcessVariableTD) time) time $+
-      (((exactDbl 1 $+ sy dqdDerivGain) $* deriv (sy dqdProcessVariableTD) time)
-      $+ ((exactDbl 20 $+ sy dqdPropGain) $* sy dqdProcessVariableTD))
-      $- (sy dqdDerivGain $* deriv (sy dqdSetPointTD) time)
-      $- (sy dqdSetPointTD $* sy dqdPropGain) $= exactDbl 0
+  = deriv (deriv (sy processVariable) time) time $+
+      (((exactDbl 1 $+ sy derGain) $* deriv (sy processVariable) time)
+      $+ ((exactDbl 20 $+ sy propGain) $* sy processVariable))
+      $- (sy derGain $* deriv (sy setPoint) time)
+      $- (sy setPoint $* sy propGain) $= exactDbl 0
 
 derivStmt4 :: Sentence
 derivStmt4
   = foldlSent_
-      [D.toSent (atStartNP (the dqdSetPointTD)), eS' dqdSetPointTD, S "is a step function and a constant" +:+.
+      [D.toSent (atStartNP (the setPoint)), eS' setPoint, S "is a step function and a constant" +:+.
          fromSource aSP,
        S "Therefore the",
          S "differential" `S.ofThe` S "set point" `S.is` S "zero. Hence the equation",
@@ -115,7 +115,7 @@ derivStmt4
 
 derivEqn4 :: ModelExpr
 derivEqn4
-  = deriv (deriv (sy dqdProcessVariableTD) time) time $+
-      ((exactDbl 1 $+ sy dqdDerivGain) $* deriv (sy dqdProcessVariableTD) time)
-      $+ ((exactDbl 20 $+ sy dqdPropGain) $* sy dqdProcessVariableTD)
-      $- (sy dqdSetPointTD $* sy dqdPropGain) $= exactDbl 0
+  = deriv (deriv (sy processVariable) time) time $+
+      ((exactDbl 1 $+ sy derGain) $* deriv (sy processVariable) time)
+      $+ ((exactDbl 20 $+ sy propGain) $* sy processVariable)
+      $- (sy setPoint $* sy propGain) $= exactDbl 0

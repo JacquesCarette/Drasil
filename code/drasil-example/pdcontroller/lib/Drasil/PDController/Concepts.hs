@@ -22,7 +22,7 @@ pidCI           = commonIdea (mkUid "pidCI")           (pn "proportional integra
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
       simulationTime, propControl, derControl, simulation, ccFrequencyDomain, ccTimeDomain,
       ccLaplaceTransform, controlVariable, stepTime, ccTransferFxn, ccDampingCoeff, ccStiffCoeff,
-      processVariable, setPoint, propGain, derGain, ccAbsTolerance, ccRelTolerance :: ConceptChunk
+      ccProcessVariable, ccSetPoint, ccPropGain, ccDerGain, ccAbsTolerance, ccRelTolerance :: ConceptChunk
 pidCL
   = cncpt''' (mkUid "pdCtrlLoop") (nounPhraseSP "PD Control Loop") (S ("Closed-Loop control " <>
         "system with PD Controller, Summing Point and Power Plant"))
@@ -101,20 +101,20 @@ ccStiffCoeff
   = cncpt''' (mkUid "ccStiffnessCoeff") (nounPhraseSP "Stiffness coefficient")
       (S "Quantity that characterizes a spring's stiffness")
 
-processVariable
+ccProcessVariable
   = cncpt''' (mkUid "processVariable") (nounPhraseSP "Process Variable")
       (S "The output value from the power plant")
 
-setPoint
+ccSetPoint
   = cncpt''' (mkUid "setPoint") (nounPhraseSP "Set-Point")
       (S ("The desired value that the control system must reach. This also knows "
          <> "as the reference variable"))
 
-propGain
+ccPropGain
   = cncpt''' (mkUid "propGain") (nounPhraseSP "Proportional Gain")
       (S "Gain constant of the proportional controller")
 
-derGain
+ccDerGain
   = cncpt''' (mkUid "derGain") (nounPhraseSP "Derivative Gain")
       (S "Gain constant of the derivative controller")
 
@@ -128,7 +128,7 @@ ccRelTolerance
 
 defs :: [ConceptChunk]
 defs
-  = termDefs <> [simulationTime, processVariable, setPoint, propGain, derGain,
+  = termDefs <> [simulationTime, ccProcessVariable, ccSetPoint, ccPropGain, ccDerGain,
      ccLaplaceTransform, stepTime,
      ccAbsTolerance, ccRelTolerance]
 

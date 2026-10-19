@@ -21,6 +21,7 @@ import Test.Tasty.HUnit (testCase, (@?=))
 commonMarkTests :: TestTree
 commonMarkTests = testGroup "Drasil.Data.Formats.Markdown.CommonMark"
   [ inlineTests,
+    codeSyntaxTests,
     goldenTestingGroup
       [osp|test/build/markdown/commonmark|]
       [osp|test/golden/markdown/commonmark|]
@@ -63,6 +64,11 @@ commonMarkTests = testGroup "Drasil.Data.Formats.Markdown.CommonMark"
       renderStrict (layoutPretty (LayoutOptions (AvailablePerLine 10 1.0))
         (renderCommonMark defaultCommonMarkRO containersDocument))
         @?= renderText containersDocument,
+    testCase "group and narrow layout preserve code lines" $
+      renderStrict (layoutPretty (LayoutOptions (AvailablePerLine 1 1))
+        (group (renderCommonMark defaultCommonMarkRO
+          (CommonMark [CodeBlock Nothing "first\n\nlast\n\n"]))))
+        @?= "```\nfirst\n\nlast\n\n```",
     testCase "public HTML options reach document fragments" $
       renderWith (defaultCommonMarkRO
         {htmlRenderOptions = HTML.defaultHTMLRO {HTML.indentationSize = 4}})
@@ -78,6 +84,18 @@ commonMarkTests = testGroup "Drasil.Data.Formats.Markdown.CommonMark"
             Heading H2 [SoftBreak, Plain "x", SoftBreak]])
             @?= "# &#32; x &#32;\n\n## &#32;x&#32;"
       ]
+  ]
+
+codeSyntaxTests :: TestTree
+codeSyntaxTests = testGroup "Code syntax"
+  [ testGroup "Code spans"
+      [ testCase name $
+          renderText (CommonMark [Paragraph [CodeSpan contents]]) @?= expected
+      | (name, contents, expected) <- codeCases ],
+    testGroup "Code fences"
+      [ testCase name $
+          renderText (CommonMark [CodeBlock info contents]) @?= expected
+      | (name, info, contents, expected) <- fenceCases ]
   ]
 
 renderText :: CommonMark -> Text
@@ -99,6 +117,12 @@ boundaryCases =
     ("omitted blocks add no blank lines", [p "a", UnorderedList [], Paragraph [], p "b"], "a\n\nb"),
     ("empty headings, quotes and list items retain markers",
       [Heading H1 [], BlockQuote [], UnorderedList [ListItem []]], "#\n\n>\n\n-"),
+    ("quote prefixes content and blank lines",
+      [BlockQuote [p "a", p "b"]], "> a\n>\n> b"),
+    ("empty paragraphs do not add quote lines",
+      [BlockQuote [Paragraph []]], ">"),
+    ("code normalizes mixed line endings and retains trailing blank lines",
+      [CodeBlock Nothing "a\r\nb\rc\n\n"], "```\na\nb\nc\n\n```"),
     ("paragraphs have one separating blank line", [p "a", p "b"], "a\n\nb"),
     ("adjacent unordered lists stay distinct",
       [UnorderedList (oneItem "a"), UnorderedList (oneItem "b")], "- a\n\n<!-- -->\n\n- b"),
@@ -173,3 +197,34 @@ htmlDocument = CommonMark
 escapingDocument :: CommonMark
 escapingDocument = CommonMark
   [p "These characters should be escaped: *, _, [, ], \\, and #."]
+
+codeCases :: [(String, Text, Text)]
+codeCases =
+  [ ("empty", "", ""),
+    ("no Markdown escaping", "a*b", "`a*b`"),
+    ("embedded backtick", "a`b", "``a`b``"),
+    ("backtick edges", "`x`", "`` `x` ``"),
+    ("multiple backticks", "a``b", "```a``b```"),
+    ("only backticks", "``", "``` `` ```"),
+    ("leading space", " x", "` x`"),
+    ("trailing space", "x ", "`x `"),
+    ("both spaces", " x ", "`  x  `"),
+    ("only spaces", "   ", "`   `"),
+    ("normalized newlines", "a\r\nb\rc\nd", "`a b c d`")
+  ]
+
+fenceCases :: [(String, Maybe Text, Text, Text)]
+fenceCases =
+  [ ("ordinary code", Just "haskell", "x = 1", "```haskell\nx = 1\n```"),
+    ("empty code", Nothing, "", "```\n```"),
+    ("empty info", Just "", "x", "```\nx\n```"),
+    ("embedded fence", Nothing, "before\n```\nafter", "````\nbefore\n```\nafter\n````"),
+    ("existing final newline", Nothing, "x\n", "```\nx\n```"),
+    ("trailing blank lines", Nothing, "x\n\n", "```\nx\n\n```"),
+    ("line endings", Nothing, "a\r\nb\rc", "```\na\nb\nc\n```"),
+    ("backtick info uses tildes", Just "a`b", "~~~", "~~~~a`b\n~~~\n~~~~"),
+    ("info cannot extend the fence", Just "~`x", "hello", "~~~ ~`x\nhello\n~~~"),
+    ("info stays on one line", Just "  hs\r\n extra  ", "x", "```hs extra\nx\n```"),
+    ("info preserves literal backslashes", Just "a\\b", "x", "```a\\\\b\nx\n```"),
+    ("info preserves literal entities", Just "a&copy;", "x", "```a&amp;copy;\nx\n```")
+  ]

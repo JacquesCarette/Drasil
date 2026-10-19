@@ -19,7 +19,7 @@ common :: [UnitDefn]
 common = [s_2, m_2, m_3]
 
 siUnits :: [UnitDefn]
-siUnits = fundamentals <> derived <> common
+siUnits = fundamentals <> common <> derived
 
 -- * Fundamental SI Units
 

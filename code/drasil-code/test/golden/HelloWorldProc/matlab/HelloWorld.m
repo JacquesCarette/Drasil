@@ -136,7 +136,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(s) > 0
-        fprintf('%g', s(length(s) - 1 + 1));
+        fprintf('%g', s(end));
     end
     fprintf('%s\n', "]");
     

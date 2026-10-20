@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 -- | Drasil uses symbols in expressions and sentences.
 module Language.Drasil.Symbol (
   -- * Types
@@ -8,6 +9,7 @@ module Language.Drasil.Symbol (
   compsy
 ) where
 
+import Drasil.Database (HasChunkRefs(..), declareHasChunkRefs, Generically(..))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.Unicode(Special)
 
@@ -23,6 +25,8 @@ data Decoration =
   | Magnitude -- ^ Places @||@ before and after a symbol.
   deriving (Eq, Ord)
 
+instance HasChunkRefs Decoration where
+  chunkRefs _ = mempty
 -- | A 'Symbol' is actually going to be a graphical description of what gets
 -- rendered as a (unique) symbol.  This is actually NOT based on semantics at
 -- all, but just a description of how things look.
@@ -62,6 +66,8 @@ data Symbol =
   | Concat   [Symbol] -- ^ Concatentation of two symbols: @[s1, s2] -> s1s2@
   | Empty -- ^ Placeholder for when a symbol is not needed.
   deriving Eq
+
+declareHasChunkRefs ''Symbol
 
 -- TODO: Instead of having "Stage" as a parameter of "symbol", we can make it a typeclass parameter instead.. extensibility for cheap!
 -- | A HasSymbol is anything which has a 'Symbol'.

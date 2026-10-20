@@ -33,8 +33,8 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
-  bOp, variable, value, function, statement, visibility, parameter, method,
-  blockComment')
+  bOp, variable, value, valueInt, function, statement, visibility, parameter,
+  method, blockComment')
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
@@ -73,7 +73,8 @@ import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
 import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue, binderList)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
-  onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty, vibcat)
+  onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty, vibcat,
+  getInnerType)
 import Drasil.Shared.State (MS, VS, FS, lensGStoFS, lensFStoMS, lensMStoVS,
   revFiles, setFileType, setModuleName, getMainDoc)
 
@@ -345,6 +346,15 @@ instance Array MatlabCode Variable Value where
 instance List MatlabCode Value where
   listSize = CS.listSize "length"   -- length(v)
   listAccess = G.listAccess
+  listAccessFromEnd v n = do
+    v' <- v
+    n' <- n
+    let t = innerType $ pure $ valueType v'
+        innerCt = getInnerType $ cType $ unMLC $ valueType v'
+        idx = case RC.valueInt n' of
+          Just 0  -> text "end"
+          _       -> text "end" <+> text "-" <+> RC.value n'
+    mkStateVal t (RC.value v' <> mlCellWrap innerCt idx)
   indexOf lst v = funcApp "find" int [lst ?== v, litInt 1] #- litInt 1
 
 instance ListStatement MatlabCode Statement Value where

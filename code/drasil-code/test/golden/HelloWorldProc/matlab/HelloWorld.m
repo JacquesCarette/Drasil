@@ -16,7 +16,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(arr) > 0
-        fprintf('%g', arr(length(arr) - 1 + 1));
+        fprintf('%g', arr(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "Length of arr: ");
@@ -33,7 +33,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(arr2) > 0
-        fprintf('%g', arr2(length(arr2) - 1 + 1));
+        fprintf('%g', arr2(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "Length of arr2: ");
@@ -49,7 +49,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(arr_copy) > 0
-        fprintf('%g', arr_copy(length(arr_copy) - 1 + 1));
+        fprintf('%g', arr_copy(end));
     end
     fprintf('%s\n', "]");
     arr(2) = 42;
@@ -62,7 +62,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(arr) > 0
-        fprintf('%g', arr(length(arr) - 1 + 1));
+        fprintf('%g', arr(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "Value of arr_copy after modifying arr: ");
@@ -74,7 +74,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(arr_copy) > 0
-        fprintf('%g', arr_copy(length(arr_copy) - 1 + 1));
+        fprintf('%g', arr_copy(end));
     end
     fprintf('%s\n', "]");
     oneIndex = find(myOtherList == 1.0, 1) - 1;
@@ -84,6 +84,13 @@ function HelloWorld(varargin)
     myOtherList = [myOtherList(1:(3 - 1)), 2.0, myOtherList(3:end)];
     myOtherList(length(myOtherList) + 1) = 2.5;
     e = myOtherList(2);
+    fprintf('%s', "Last element of myOtherList: ");
+    fprintf('%g\n', myOtherList(end));
+    fprintf('%s', "Second-last element of myOtherList: ");
+    fprintf('%g\n', myOtherList(end - 1));
+    thirdLast = 2;
+    fprintf('%s', "Third-last element of myOtherList (using a variable): ");
+    fprintf('%g\n', myOtherList(end - thirdLast));
     myOtherList(2) = 17.4;
     myName = {};
     myName = strsplit("Brooks Mac", " ");
@@ -95,7 +102,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(myName) > 0
-        fprintf('%s', myName{length(myName) - 1 + 1});
+        fprintf('%s', myName{end});
     end
     fprintf('%s\n', "]");
     boringList = [false, false, false, false, false];
@@ -107,7 +114,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(boringList) > 0
-        fprintf('%g', boringList(length(boringList) - 1 + 1));
+        fprintf('%g', boringList(end));
     end
     fprintf('%s\n', "]");
     assert(b == 5, "b should be 5");
@@ -266,7 +273,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(myOtherList) > 0
-        fprintf('%g', myOtherList(length(myOtherList) - 1 + 1));
+        fprintf('%g', myOtherList(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "mySlicedList: ");
@@ -278,7 +285,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(mySlicedList) > 0
-        fprintf('%g', mySlicedList(length(mySlicedList) - 1 + 1));
+        fprintf('%g', mySlicedList(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "mySlicedList2: ");
@@ -290,7 +297,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(mySlicedList2) > 0
-        fprintf('%g', mySlicedList2(length(mySlicedList2) - 1 + 1));
+        fprintf('%g', mySlicedList2(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "mySlicedList3: ");
@@ -302,7 +309,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(mySlicedList3) > 0
-        fprintf('%g', mySlicedList3(length(mySlicedList3) - 1 + 1));
+        fprintf('%g', mySlicedList3(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "mySlicedList4: ");
@@ -314,7 +321,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(mySlicedList4) > 0
-        fprintf('%g', mySlicedList4(length(mySlicedList4) - 1 + 1));
+        fprintf('%g', mySlicedList4(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "mySlicedList5: ");
@@ -326,7 +333,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(mySlicedList5) > 0
-        fprintf('%g', mySlicedList5(length(mySlicedList5) - 1 + 1));
+        fprintf('%g', mySlicedList5(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "mySlicedList6: ");
@@ -338,7 +345,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(mySlicedList6) > 0
-        fprintf('%g', mySlicedList6(length(mySlicedList6) - 1 + 1));
+        fprintf('%g', mySlicedList6(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "mySlicedList7: ");
@@ -350,7 +357,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(mySlicedList7) > 0
-        fprintf('%g', mySlicedList7(length(mySlicedList7) - 1 + 1));
+        fprintf('%g', mySlicedList7(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "mySlicedList8: ");
@@ -362,7 +369,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(mySlicedList8) > 0
-        fprintf('%g', mySlicedList8(length(mySlicedList8) - 1 + 1));
+        fprintf('%g', mySlicedList8(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "mySlicedList9: ");
@@ -374,7 +381,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(mySlicedList9) > 0
-        fprintf('%g', mySlicedList9(length(mySlicedList9) - 1 + 1));
+        fprintf('%g', mySlicedList9(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "mySlicedList10: ");
@@ -386,7 +393,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(mySlicedList10) > 0
-        fprintf('%g', mySlicedList10(length(mySlicedList10) - 1 + 1));
+        fprintf('%g', mySlicedList10(end));
     end
     fprintf('%s\n', "]");
     fprintf('%s', "mySlicedList11: ");
@@ -398,7 +405,7 @@ function HelloWorld(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(mySlicedList11) > 0
-        fprintf('%g', mySlicedList11(length(mySlicedList11) - 1 + 1));
+        fprintf('%g', mySlicedList11(end));
     end
     fprintf('%s\n', "]");
     
@@ -434,7 +441,7 @@ function HelloWorld(varargin)
             list_i1 = list_i1 + 1;
         end
         if length(myOtherList) > 0
-            fprintf('%g', myOtherList(length(myOtherList) - 1 + 1));
+            fprintf('%g', myOtherList(end));
         end
         fprintf('%s\n', "]");
         fprintf('%s', "[");
@@ -445,7 +452,7 @@ function HelloWorld(varargin)
             list_i1 = list_i1 + 1;
         end
         if length(mySlicedList) > 0
-            fprintf('%g', mySlicedList(length(mySlicedList) - 1 + 1));
+            fprintf('%g', mySlicedList(end));
         end
         fprintf('%s\n', "]");
         fprintf('%s\n', "Type an int");

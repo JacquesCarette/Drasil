@@ -14,7 +14,7 @@ module Drasil.Shared.InterfaceCommon (
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
   IndexTranslator(..), Reference(..), Array(..), List(..), ListStatement(..),
   Set(..), NativeVectorType(..), NativeVector(..), InternalList(..), listSlice,
-  listIndexExists, at, EmptyStatement(..), MultiStatement(..),
+  listLast, listIndexExists, at, EmptyStatement(..), MultiStatement(..),
   ValueStatement(..), AssignStatement(..), (&=), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
   ReadFile(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..),
@@ -323,6 +323,9 @@ class List r val | r -> val where
   -- | Gets the value of an index of a list.
   --   Arguments are: List, Index
   listAccess :: VS (r val) -> VS (r val) -> VS (r val)
+  -- | Gets an element from the end of a list.
+  --   Arguments are: List, Offset (0 = last, 1 = second-to-last, ...)
+  listAccessFromEnd :: VS (r val) -> VS (r val) -> VS (r val)
   -- | Finds the index of the first occurrence of a value in a list.
   --   Arguments are: List, val
   indexOf :: VS (r val) -> VS (r val) -> VS (r val)
@@ -408,6 +411,10 @@ listSlice
   -> Maybe (VS (r val))
   -> MS (r block)
 listSlice vnew vold b e tp = listSlice' b e tp vnew vold
+
+-- | Gets the last element of a list.
+listLast :: (List r val, Literal r val typ) => VS (r val) -> VS (r val)
+listLast v = listAccessFromEnd v (litInt 0)
 
 listIndexExists
   :: (List r val, Comparison r val)

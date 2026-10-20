@@ -130,6 +130,7 @@ instance
 instance (List r val) => List (LoggingFor r) val where
   listSize = liftLogging listSize
   listAccess = liftLogging listAccess
+  listAccessFromEnd = liftLogging listAccessFromEnd
   indexOf = liftLogging indexOf
 
 instance (ListStatement r stmt val) => ListStatement (LoggingFor r) stmt val where

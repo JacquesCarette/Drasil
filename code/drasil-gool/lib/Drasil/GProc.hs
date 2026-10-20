@@ -11,12 +11,13 @@ module Drasil.GProc (Label, GSProgram, Body, FS, MS, VS, Value, NamedArgs,
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
   libFuncApp, exists, Reference(..), Array(..), List(..), ListStatement(..),
-  InternalList, listSlice, listIndexExists, at, Set(..), NativeVectorType(..),
-  NativeVector(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
-  ModuleSym(..), convType, ProgData(..), FileData(..), ModData(..), TypeData(..),
-  VisibilityTag(..), ParamData, CodeType(..), GOOLState(..), lensMStoVS, headers,
-  sources, mainMod, initialState, onStateValue, onCodeList, unJLC, jlName,
-  jlVersion, unMLC, mlName, mlVersion, LoggingFor(..),
+  InternalList, listSlice, listLast, listIndexExists, at, Set(..),
+  NativeVectorType(..), NativeVector(..), VisibilitySym(..), ParameterSym(..),
+  MethodSym(..), ModuleSym(..), convType, ProgData(..), FileData(..),
+  ModData(..), TypeData(..), VisibilityTag(..), ParamData, CodeType(..),
+  GOOLState(..), lensMStoVS, headers, sources, mainMod, initialState,
+  onStateValue, onCodeList, unJLC, jlName, jlVersion, unMLC, mlName, mlVersion,
+  LoggingFor(..),
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these from external interface
   TypeElim(..), getTypeString
   ) where
@@ -33,7 +34,7 @@ import Drasil.Shared.InterfaceCommon (Label, Body, Value, NamedArgs, BodySym(..)
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
   Reference(..), Array(..), List(..), ListStatement(..), InternalList, listSlice,
-  listIndexExists, at, Set(..), NativeVectorType(..), NativeVector(..),
+  listLast, listIndexExists, at, Set(..), NativeVectorType(..), NativeVector(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..), convType,
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
   TypeElim(..), getTypeString)

@@ -59,6 +59,13 @@ assert a == 2, "List size should be 2"
 myOtherList.insert(2, 2.0)
 myOtherList.append(2.5)
 e = myOtherList[1]
+print("Last element of myOtherList: ", end="")
+print(myOtherList[-1])
+print("Second-last element of myOtherList: ", end="")
+print(myOtherList[-2])
+thirdLast = 2
+print("Third-last element of myOtherList (using a variable): ", end="")
+print(myOtherList[-(thirdLast + 1)])
 myOtherList[1] = 17.4
 myName = []
 myName = "Brooks Mac".split(" ")

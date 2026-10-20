@@ -6,7 +6,7 @@ import Data.Containers.ListUtils (nubOrd)
 import Drasil.Database (UID)
 
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..))
-import Language.Drasil.Space (RealInterval(..))
+import Language.Drasil.Space (RealInterval(..), DomainDesc(..))
 
 -- | Get dependencies from an equation.
 meDep :: ModelExpr -> [UID]
@@ -37,17 +37,21 @@ meNames (OrdBinaryOp _ a b)   = meNames a <> meNames b
 meNames (VVVBinaryOp _ a b)   = meNames a <> meNames b
 meNames (VVNBinaryOp _ a b)   = meNames a <> meNames b
 meNames (NVVBinaryOp _ a b)   = meNames a <> meNames b
-meNames (ESSBinaryOp _ _ s)   = meNames s
-meNames (ESBBinaryOp _ _ s)   = meNames s
-meNames (Operator _ _ e)      = meNames e
+meNames (ESSBinaryOp _ el st) = meNames el <> meNames st
+meNames (ESBBinaryOp _ el st) = meNames el <> meNames st
+meNames (Operator _ dom body) = meNames body <> meNamesDD dom
 meNames (Matrix a)            = concatMap (concatMap meNames) a
 meNames (Set _ a)             = concatMap meNames a
 meNames (Variable _ e)        = meNames e
 meNames (RealI c b)           = c : meNamesRI b
-meNames (ForAll _ _ de)       = meNames de
+meNames (ForAll c _ de)       = c : meNames de
 
 -- | Generic traversal of everything that could come from an interval to names (similar to 'meNames').
 meNamesRI :: RealInterval ModelExpr ModelExpr -> [UID]
 meNamesRI (Bounded (_, il) (_, iu)) = meNames il <> meNames iu
 meNamesRI (UpTo (_, iu))            = meNames iu
 meNamesRI (UpFrom (_, il))          = meNames il
+
+meNamesDD :: DomainDesc t ModelExpr ModelExpr -> [UID]
+meNamesDD (BoundedDD _ _ lo hi) = meNames lo <> meNames hi
+meNamesDD AllDD{}               = []

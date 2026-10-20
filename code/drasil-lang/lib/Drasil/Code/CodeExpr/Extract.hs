@@ -7,7 +7,7 @@ import Data.Containers.ListUtils (nubOrd)
 
 import Drasil.Database (UID)
 
-import Language.Drasil.Space (RealInterval(..))
+import Language.Drasil.Space (RealInterval(..), DomainDesc(..), DiscreteDomainDesc)
 import Drasil.Code.CodeExpr.Lang (CodeExpr(..))
 
 -- | Generic traverse of all expressions that could lead to names.
@@ -36,9 +36,9 @@ eNames (OrdBinaryOp _ a b)   = eNames a <> eNames b
 eNames (VVVBinaryOp _ a b)   = eNames a <> eNames b
 eNames (VVNBinaryOp _ a b)   = eNames a <> eNames b
 eNames (NVVBinaryOp _ a b)   = eNames a <> eNames b
-eNames (ESSBinaryOp _ _ s)   = eNames s
-eNames (ESBBinaryOp _ _ s)   = eNames s
-eNames (Operator _ _ e)      = eNames e
+eNames (ESSBinaryOp _ el st) = eNames el <> eNames st
+eNames (ESBBinaryOp _ el st) = eNames el <> eNames st
+eNames  (Operator _ dom body) = eNames body  <> eNamesDD dom
 eNames (Matrix a)            = concatMap (concatMap eNames) a
 eNames (Set _ a)             = concatMap eNames a
 eNames (Variable _ e)        = eNames e
@@ -79,9 +79,9 @@ eNames' (OrdBinaryOp _ a b)   = eNames' a <> eNames' b
 eNames' (VVVBinaryOp _ a b)   = eNames' a <> eNames' b
 eNames' (VVNBinaryOp _ a b)   = eNames' a <> eNames' b
 eNames' (NVVBinaryOp _ a b)   = eNames' a <> eNames' b
-eNames' (ESSBinaryOp _ _ s)   = eNames' s
-eNames' (ESBBinaryOp _ _ s)   = eNames' s
-eNames' (Operator _ _ e)      = eNames' e
+eNames' (ESSBinaryOp _ el st) = eNames' el <> eNames' st
+eNames' (ESBBinaryOp _ el st) = eNames' el <> eNames' st
+eNames' (Operator _ dom body) = eNames' body <> eNamesDD' dom
 eNames' (Matrix a)            = concatMap (concatMap eNames') a
 eNames' (Set _ a)             = concatMap eNames' a
 eNames' (Variable _ e)        = eNames' e
@@ -103,3 +103,9 @@ eDep = nubOrd . eNames
 -- | Get dependencies from an equation, without functions.
 eDep' :: CodeExpr -> [UID]
 eDep' = nubOrd . eNames'
+
+eNamesDD :: DiscreteDomainDesc CodeExpr CodeExpr -> [UID]
+eNamesDD (BoundedDD _ _ lo hi) = eNames lo <> eNames hi
+
+eNamesDD' :: DiscreteDomainDesc CodeExpr CodeExpr -> [UID]
+eNamesDD' (BoundedDD _ _ lo hi) = eNames' lo <> eNames' hi

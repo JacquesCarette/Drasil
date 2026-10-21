@@ -6,7 +6,7 @@ module Drasil.PDController.Unitals (
   dqdProcessErrorFD, dqdSetPointFD, dqdProcessVariableFD, dqdPropControlFD,
   dqdDerivativeControlFD, dqdFreqDomain, dqdCtrlVarFD, processVariable,
   dqdInvLaplaceTransform, dqdLaplaceTransform, dqdFxnTDomain, dqdDampingCoeff,
-  dqdStiffnessCoeff,
+  dqdStiffnessCoeff, absTol, relTol,
   odeRelTolConst, odeAbsTolConst, opProcessVariable
 ) where
 

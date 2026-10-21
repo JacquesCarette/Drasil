@@ -1,5 +1,5 @@
 module Drasil.PDController.Concepts (
-  acronyms, termDefs, defs, simulation, processError, simulationTime, stepTime,
+  acronyms, termDefs, simulation, processError, simulationTime, stepTime,
   controlVariable, propControl, derControl,
   pdControllerCI, proportionalCI, pidC, piCI, pidCI, pidCL,
   ccDampingCoeff, ccStiffCoeff, ccFrequencyDomain, ccLaplaceTransform, ccTransferFxn,
@@ -21,8 +21,7 @@ pidCI           = commonIdea (mkUid "pidCI")           (pn "proportional integra
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
       simulationTime, propControl, derControl, simulation, ccFrequencyDomain, ccTimeDomain,
-      ccLaplaceTransform, controlVariable, stepTime, ccTransferFxn, ccDampingCoeff, ccStiffCoeff,
-      ccProcessVariable, ccSetPoint, ccPropGain, ccDerGain, ccAbsTolerance, ccRelTolerance :: ConceptChunk
+      ccLaplaceTransform, controlVariable, stepTime, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
 pidCL
   = cncpt''' (mkUid "pdCtrlLoop") (nounPhraseSP "PD Control Loop") (S ("Closed-Loop control " <>
         "system with PD Controller, Summing Point and Power Plant"))
@@ -100,37 +99,6 @@ ccDampingCoeff
 ccStiffCoeff
   = cncpt''' (mkUid "ccStiffnessCoeff") (nounPhraseSP "Stiffness coefficient")
       (S "Quantity that characterizes a spring's stiffness")
-
-ccProcessVariable
-  = cncpt''' (mkUid "processVariable") (nounPhraseSP "Process Variable")
-      (S "The output value from the power plant")
-
-ccSetPoint
-  = cncpt''' (mkUid "setPoint") (nounPhraseSP "Set-Point")
-      (S ("The desired value that the control system must reach. This also knows "
-         <> "as the reference variable"))
-
-ccPropGain
-  = cncpt''' (mkUid "propGain") (nounPhraseSP "Proportional Gain")
-      (S "Gain constant of the proportional controller")
-
-ccDerGain
-  = cncpt''' (mkUid "derGain") (nounPhraseSP "Derivative Gain")
-      (S "Gain constant of the derivative controller")
-
-ccAbsTolerance
-  = cncpt''' (mkUid "absoluteTolerance") (nounPhraseSP "Absolute Tolerance")
-      (S "Absolute tolerance for the integrator")
-
-ccRelTolerance
-  = cncpt''' (mkUid "relativeTolerance") (nounPhraseSP "Relative Tolerance")
-      (S "Relative tolerance for the integrator")
-
-defs :: [ConceptChunk]
-defs
-  = termDefs <> [simulationTime, ccProcessVariable, ccSetPoint, ccPropGain, ccDerGain,
-     ccLaplaceTransform, stepTime,
-     ccAbsTolerance, ccRelTolerance]
 
 termDefs :: [ConceptChunk]
 termDefs

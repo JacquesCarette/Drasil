@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.DefinedQuantity (
   DefinesQuantity(defLhs),
   -- * Constructors
   quant, quant', quantAU, quantNoUnit, quantNoUnit',
-  dqd, dqdNoUnit, dqd', dqdWr,
+  dqd, dqd', dqdNoUnit, dqdWr,
   implVar, implVar', implVarAU, implVarAU'
 ) where
 

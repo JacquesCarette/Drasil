@@ -5,6 +5,8 @@ import Drasil.NaturalLanguage.English.NounPhrase.Combinators (parensNP)
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Drasil.Database(mkUid)
+import Drasil.GlassBR.References (astm2016)
+import Language.Drasil.Document (refS)
 
 import Prelude hiding (log)
 import Control.Lens ((^.))
@@ -21,8 +23,8 @@ import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 import Drasil.GlassBR.Concepts (annealedGl, aspectRatioCon, fTemperedGl, glTyFac,
   hStrengthGl, loadResis, loadShareFac, nonFactoredL, stdOffDist, loadDurFac, blast,
   blastResisGla, blastTy, bomb, capacity, demandq, eqTNTChar, explosion, glassGeo,
-  glassTy, glassWL, glBreakage, lateral, lite, load, longDurLoad, modE, notSafe,
-  probBreak, safeMessage, shortDurLoad, specA, specDeLoad, glassType)
+  glassWL, glBreakage, lateral, lite, load, longDurLoad, modE, notSafe,
+  safeMessage, shortDurLoad, specA, specDeLoad, glassType)
 import Drasil.GlassBR.Units (sFlawPU)
 
 symbols :: [DefinedQuantityDict]
@@ -113,7 +115,10 @@ nomThick = cuc' "nomThick" (nounPhraseSP "nominal thickness")
   {-Discrete nominalThicknesses, but not implemented-} Rational
   [sfwrElem $ mkSet Rational (dbl <$> nominalThicknesses)] $ exactDbl 8 -- for testing
 
-glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
+glassTypeCon = constrainedNRV' (quantNoUnit' (mkUid "glassTy")
+  (cn' "glass type")
+  (S "type of glass")
+  (const lG) String)
   [sfwrElem $ mkSet String $ str . abrv . snd <$> glassType]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
@@ -124,8 +129,12 @@ tmSymbols :: [DefinedQuantityDict]
 tmSymbols = dqdWr <$> [probFail, pbTolfail]
 
 probBr, probFail, pbTolfail, stressDistFac :: ConstrConcept
-probBr = constrained' (dqdNoUnit probBreak
-  (sub cP lBreak) Real)
+probBr = constrained' (quantNoUnit' (mkUid "probBr")
+  (nounPhraseSP "probability of breakage")
+  (foldlSent_ [S "the fraction of glass lites or plies that would break at the",
+    S "first occurrence of a specified load and duration, typically expressed",
+    S "in lites per 1000", sParen $ refS astm2016])
+  (const $ sub cP lBreak) Real)
   [probConstr] (dbl 0.4)
 
 stressDistFac = cucNoUnit' "stressDistFac" (nounPhraseSP "stress distribution factor (Function)")
@@ -262,7 +271,7 @@ gTF, loadSF, loadDF :: DefinedQuantityDict
 dimlessLoad = quantNoUnit (mkUid "dimlessLoad") (nounPhraseSP "dimensionless load")
   (S "the dimensionless load") (hat lQ) Real
 
-gTF           = dqdNoUnit glTyFac (variable "GTF") Integer
+gTF = dqdNoUnit glTyFac (variable "GTF") Integer
 
 isSafePb   = quantNoUnit (mkUid "isSafePb") (nounPhraseSP "probability of glass breakage safety requirement")
   (S "the probability of glass breakage safety requirement") (variable "isSafePb") Boolean
@@ -278,8 +287,8 @@ interpY = quantNoUnit (mkUid "interpY") (nounPhraseSP "interpY")
 interpZ = quantNoUnit (mkUid "interpZ") (nounPhraseSP "interpZ")
   (S "interpolated z") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
-loadDF        = dqdNoUnit loadDurFac (variable "LDF") Real
-loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
+loadDF = dqdNoUnit loadDurFac (variable "LDF") Real
+loadSF = dqdNoUnit loadShareFac (variable "LSF") Real
 
 riskFun = quantNoUnit (mkUid "riskFun") (nounPhraseSP "risk of failure")
   (S "the percentage risk of the glass slab failing to resist the blast") cB Real

@@ -8,9 +8,8 @@ import Drasil.SRS.Concepts (datCon)
 import Drasil.SRS (mkMaintainableNFR, mkVerifiableNFR,
   mkSecurityNFR, inReqWTab)
 
-import Drasil.PDController.Concepts
 import Drasil.PDController.IModel
-import Drasil.PDController.Unitals (inputs)
+import Drasil.PDController.Unitals (inputs, processVariable)
 
 import Language.Drasil
 import Language.Drasil.Document

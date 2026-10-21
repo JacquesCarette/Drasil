@@ -1030,7 +1030,7 @@ instance FileSym CppSrcCode FileData ModData where
 
   docMod = CP.doxMod cppSrcExt
 
-instance RenderFile CppSrcCode FileData ModData where
+instance RenderFile CppSrcCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -1639,7 +1639,7 @@ instance OOMethodSym CppSrcCode MethodData AttachmentData (Doc, VisibilityTag) P
   inOutMethod n s p = cppsInOut (method n s p)
   docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-instance RenderMethod CppSrcCode MethodData where
+instance RenderMethod CppSrcCode MethodData Statement where
   commentedFunc = cppCommentedFunc Source
 
   mthdFromData s d = toState $ toCode $ mthd s d
@@ -1707,12 +1707,12 @@ instance RenderMod CppSrcCode ModData where
 instance ModuleElim CppSrcCode ModData where
   module' = modDoc . unCPPSC
 
-instance BlockCommentSym CppSrcCode where
+instance BlockCommentSym CppSrcCode Statement where
   blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
     blockCmtEnd)
 
-instance BlockCommentElim CppSrcCode where
+instance BlockCommentElim CppSrcCode Statement where
   blockComment' = unCPPSC
 
 -----------------
@@ -1744,7 +1744,7 @@ instance FileSym CppHdrCode FileData ModData where
 
   docMod = CP.doxMod cppHdrExt
 
-instance RenderFile CppHdrCode FileData ModData where
+instance RenderFile CppHdrCode FileData ModData Statement where
   top = onCodeValue cpphtop
   bottom = toCode endif
 
@@ -2255,7 +2255,7 @@ instance OOMethodSym CppHdrCode MethodData AttachmentData (Doc, VisibilityTag) P
   inOutMethod n s p = cpphInOut (method n s p)
   docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-instance RenderMethod CppHdrCode MethodData where
+instance RenderMethod CppHdrCode MethodData Statement where
   commentedFunc = cppCommentedFunc Header
 
   mthdFromData s d = toState $ toCode $ mthd s d
@@ -2334,12 +2334,12 @@ instance RenderMod CppHdrCode ModData where
 instance ModuleElim CppHdrCode ModData where
   module' = modDoc . unCPPHC
 
-instance BlockCommentSym CppHdrCode where
+instance BlockCommentSym CppHdrCode Statement where
   blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
     blockCmtEnd)
 
-instance BlockCommentElim CppHdrCode where
+instance BlockCommentElim CppHdrCode Statement where
   blockComment' = unCPPHC
 
 -- helpers
@@ -2823,7 +2823,7 @@ cpphMethod n t a ps = let attchDoc = RC.perm a
     <> parens (parameterList ps) <> endStatement
 
 cppCommentedFunc
-  :: (BlockCommentElim r, Monad r)
+  :: (BlockCommentElim r stmt, Monad r)
   => FileType -> MS (r Doc) -> MS (r MethodData) -> MS (r MethodData)
 cppCommentedFunc ft cmt fn = do
   f <- fn

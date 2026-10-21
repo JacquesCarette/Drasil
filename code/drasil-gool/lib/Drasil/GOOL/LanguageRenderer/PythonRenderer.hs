@@ -140,7 +140,7 @@ instance FileSym PythonCode FileData ModData where
 
   docMod = CP.doxMod pyExt
 
-instance RenderFile PythonCode FileData ModData where
+instance RenderFile PythonCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -663,7 +663,7 @@ instance OOMethodSym PythonCode MethodData AttachmentData Doc ParamData Body Var
   inOutMethod n s p = CP.inOutFunc (method n s p)
   docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
 
-instance RenderMethod PythonCode MethodData where
+instance RenderMethod PythonCode MethodData Statement where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
@@ -709,7 +709,7 @@ instance ClassSym PythonCode Class StateVar MethodData where
 
   docClass = CP.doxClass
 
-instance RenderClass PythonCode Class StateVar MethodData Doc where
+instance RenderClass PythonCode Class StateVar MethodData Doc Statement where
   intClass = CP.intClass pyClass
   commentedClass = G.commentedClass
 
@@ -738,12 +738,12 @@ instance RenderMod PythonCode ModData where
 instance ModuleElim PythonCode ModData where
   module' = modDoc . unPC
 
-instance BlockCommentSym PythonCode where
+instance BlockCommentSym PythonCode Statement where
   blockComment lns = toCode $ pyBlockComment lns pyCommentStart
   docComment = onStateValue (\lns -> toCode $ pyDocComment lns pyDocCommentStart
     pyCommentStart)
 
-instance BlockCommentElim PythonCode where
+instance BlockCommentElim PythonCode Statement where
   blockComment' = unPC
 
 -- convenience

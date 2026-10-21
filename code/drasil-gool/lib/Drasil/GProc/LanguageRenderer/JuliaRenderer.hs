@@ -129,7 +129,7 @@ instance FileSym JuliaCode FileData ModData where
     A.fileDoc jlExt m
   docMod = A.docMod jlExt
 
-instance RenderFile JuliaCode FileData ModData where
+instance RenderFile JuliaCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -582,7 +582,7 @@ instance MethodSym JuliaCode MethodData Doc ParamData Body Variable TypeData whe
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance RenderMethod JuliaCode MethodData where
+instance RenderMethod JuliaCode MethodData Statement where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd "" d
@@ -606,12 +606,12 @@ instance RenderMod JuliaCode ModData where
 instance ModuleElim JuliaCode ModData where
   module' = modDoc . unJLC
 
-instance BlockCommentSym JuliaCode where
+instance BlockCommentSym JuliaCode Statement where
   blockComment lns = toCode $ R.blockCmt lns jlBlockCmtStart jlBlockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns jlDocCmtStart
     jlDocCmtEnd)
 
-instance BlockCommentElim JuliaCode where
+instance BlockCommentElim JuliaCode Statement where
   blockComment' = unJLC
 
 -- convenience

@@ -30,16 +30,16 @@ class (CommonRenderSym r mthd vis param bod block stmt var scope val binder typ,
   IG.ObserverPattern r stmt typ, IG.StrategyPattern r bod block var val,
   VariableSym r var typ, TypeSym r typ, IG.OOTypeSym r typ,
   IG.OOVariableSym r var val typ, IG.SelfSym r var,
-  IG.OOValueExpression r var val typ, RenderClass r cls stvr mthd vis,
-  ClassElim r cls, RenderFile r file mod, InternalGetSet r var val typ,
-  MethodTypeSym r typ, OOMethodTypeSym r typ, RenderMethod r mthd,
+  IG.OOValueExpression r var val typ, RenderClass r cls stvr mthd vis stmt,
+  ClassElim r cls, RenderFile r file mod stmt, InternalGetSet r var val typ,
+  MethodTypeSym r typ, OOMethodTypeSym r typ, RenderMethod r mthd stmt,
   OORenderMethod r mthd attch vis param bod typ, RenderMod r mod,
   ModuleElim r mod, StateVarElim r stvr, PermElim r attch
   ) => OORenderSym r file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
 
 -- OO-Only Typeclasses --
 
-class RenderFile r file mod | r -> file mod where
+class RenderFile r file mod stmt | r -> file mod stmt where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
@@ -78,7 +78,7 @@ class StateVarElim r stvr | r -> stvr where
 
 type ParentSpec = Doc
 
-class RenderClass r cls stvr mthd vis | r -> cls stvr mthd vis where
+class RenderClass r cls stvr mthd vis stmt | r -> cls stvr mthd vis stmt where
   -- class name, visibility, parent, state variables, constructor(s), methods
   intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r stvr]
     -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r cls)

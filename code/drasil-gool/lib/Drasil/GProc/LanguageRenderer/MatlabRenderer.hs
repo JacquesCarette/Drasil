@@ -117,7 +117,7 @@ instance FileSym MatlabCode FileData ModData where
     A.fileDoc mlExt m
   docMod = A.docMod mlExt
 
-instance RenderFile MatlabCode FileData ModData where
+instance RenderFile MatlabCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
   commentedMod = on2StateValues (on2CodeValues R.commentedMod)
@@ -573,7 +573,7 @@ instance MethodSym MatlabCode MethodData Doc ParamData Body Variable TypeData wh
     pure $ toCode $ mthd n $ mlFuncDoc n (RC.variable <$> rets) pms (RC.body bod)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance RenderMethod MatlabCode MethodData where
+instance RenderMethod MatlabCode MethodData Statement where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd "" d
@@ -607,11 +607,11 @@ instance RenderMod MatlabCode ModData where
 instance ModuleElim MatlabCode ModData where
   module' = modDoc . unMLC
 
-instance BlockCommentSym MatlabCode where
+instance BlockCommentSym MatlabCode Statement where
   blockComment lns = toCode $ mlLineCmt lns
   docComment = onStateValue (toCode . mlLineCmt)
 
-instance BlockCommentElim MatlabCode where
+instance BlockCommentElim MatlabCode Statement where
   blockComment' = unMLC
 
 -- convenience

@@ -31,7 +31,7 @@ import Text.PrettyPrint.HughesPJ (Doc, isEmpty, brackets, (<>), render)
 
 -- Files --
 
-fileDoc :: (RP.RenderFile r file mod) => String -> FS (r mod) -> FS (r file)
+fileDoc :: (RP.RenderFile r file mod stmt) => String -> FS (r mod) -> FS (r file)
 fileDoc ext md = do
   m <- md
   nm <- getModuleName
@@ -66,7 +66,7 @@ buildModule n imps bot fs = RP.modFromData n (do
   pure $ emptyIfEmpty fnDocs (vibcat (filter (not . isEmpty) [is, fnDocs])))
 
 docMod
-  :: (RC.BlockCommentSym r, RP.RenderFile r file mod)
+  :: (RC.BlockCommentSym r stmt, RP.RenderFile r file mod stmt)
   => String -> String -> String -> [String] -> String -> FS (r file) -> FS (r file)
 docMod e d wm a dt fl = RP.commentedMod fl
   (RC.docComment $ CP.modDoc' d wm a dt . addExt e <$> getModuleName)

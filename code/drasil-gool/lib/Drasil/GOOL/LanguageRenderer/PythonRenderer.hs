@@ -740,7 +740,7 @@ instance ModuleElim PythonCode ModData where
 
 instance BlockCommentSym PythonCode Statement where
   blockComment lns = toCode $ pyBlockComment lns
-  docComment = onStateValue (\lns -> toCode $ pyDocComment lns)
+  docComment = onStateValue (toCode . pyDocComment)
 
 instance BlockCommentElim PythonCode Statement where
   blockComment' = unPC

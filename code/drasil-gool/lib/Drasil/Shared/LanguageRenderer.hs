@@ -401,7 +401,7 @@ moduleDox desc watermark as date m = (doxFile P.<> m) :
 
 commentedMod :: FileData -> Statement -> FileData
 commentedMod m cmt = updateFileMod
-  (updateMod (\itm -> commentedItem (mkComment ((fst cmt) $+$ blank)) itm) (fileMod m)) m
+  (updateMod (commentedItem (mkComment (fst cmt $+$ blank))) (fileMod m)) m
 
 -- Helper Functions --
 

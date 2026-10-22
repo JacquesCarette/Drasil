@@ -16,11 +16,11 @@ module Drasil.Shared.LanguageRenderer (
   increment, decrement, getTerm, return', comment, var, extVar, arg,
   classVarAccess, instanceVarAccess, unOpDocD, unOpDocD', binOpDocD, binOpDocD',
   func, cast, listAccessFunc, objAccess, castObj, break, continue, classLevel,
-  instanceLevel, private, public, blockCmt, docCmt, commentedItem, addComments,
-  FuncDocRenderer, functionDox, ClassDocRenderer, classDox, ModuleDocRenderer,
-  moduleDox, commentedMod, valueList, variableList, binderList, parameterList,
-  namedArgList, prependToBody, appendToBody, surroundBody, getterName,
-  setterName, intValue
+  instanceLevel, private, public, mkComment, blockCmt, docCmt, commentedItem,
+  addComments, FuncDocRenderer, functionDox, ClassDocRenderer, classDox,
+  ModuleDocRenderer, moduleDox, commentedMod, valueList, variableList,
+  binderList, parameterList, namedArgList, prependToBody, appendToBody,
+  surroundBody, getterName, setterName, intValue
 ) where
 
 import Drasil.FileHandling.Legacy (blank, indent, indentList)
@@ -342,16 +342,18 @@ public :: Doc
 public = text "public"
 
 -- Comment Functions --
+mkComment :: Doc -> Statement
+mkComment c = (c, Empty)
 
-blockCmt :: [String] -> Doc -> Doc -> Doc
-blockCmt lns start end = start <+> vcat (text <$> lns) <+> end
+blockCmt :: [String] -> Doc -> Doc -> Statement
+blockCmt lns start end = mkComment $ start <+> vcat (text <$> lns) <+> end
 
-docCmt :: [String] -> Doc -> Doc -> Doc
-docCmt lns start end = emptyIfNull lns $
-  vcat $ start : fmap (indent . text) lns P.<> [end]
+docCmt :: [String] -> Doc -> Doc -> Statement
+docCmt lns start end = mkComment $ emptyIfNull lns $ vcat $
+  start : fmap (indent . text) lns P.<> [end]
 
-commentedItem :: Doc -> Doc -> Doc
-commentedItem cmt itm = emptyIfEmpty itm cmt $+$ itm
+commentedItem :: Statement -> Doc -> Doc
+commentedItem cmt itm = emptyIfEmpty itm (fst cmt) $+$ itm
 
 commentLength :: Int
 commentLength = 75
@@ -397,8 +399,9 @@ moduleDox desc watermark as date m = (doxFile P.<> m) :
   [doxBrief P.<> desc | not (null desc)] P.<>
   [doxNote P.<> watermark]
 
-commentedMod :: FileData -> Doc -> FileData
-commentedMod m cmt = updateFileMod (updateMod (commentedItem $ cmt $+$ blank) (fileMod m)) m
+commentedMod :: FileData -> Statement -> FileData
+commentedMod m cmt = updateFileMod
+  (updateMod (commentedItem (mkComment (fst cmt $+$ blank))) (fileMod m)) m
 
 -- Helper Functions --
 

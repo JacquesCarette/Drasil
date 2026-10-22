@@ -44,9 +44,9 @@ class (BodySym r bod block, BlockSym r block stmt,
   InternalControlStmt r stmt val, RenderStatement r stmt, StatementElim r stmt,
   RenderType r typ, RenderValue r var val typ, ValueElim r val,
   RenderVariable r var typ, InternalVarElim r var, InternalBinderElim r binder,
-  ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
-  BlockCommentElim r, ValueExpression r var val binder typ, TypeSym r typ,
-  MethodTypeSym r typ, RenderMethod r mthd, MethodElim r mthd,
+  ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r stmt,
+  BlockCommentElim r stmt, ValueExpression r var val binder typ, TypeSym r typ,
+  MethodTypeSym r typ, RenderMethod r mthd stmt, MethodElim r mthd,
   ParameterSym r param var, ScopeElim r scope
   ) => CommonRenderSym r mthd vis param bod block stmt var scope val binder typ
 
@@ -200,20 +200,20 @@ class ParamElim r param typ | r -> param typ where
   parameterType :: r param -> r typ
   parameter     :: r param -> Doc
 
-class BlockCommentSym r where
-  blockComment :: [String] -> r Doc
+class BlockCommentSym r stmt | r -> stmt where
+  blockComment :: [String] -> r stmt
   -- | Converts a list of strings into a block comment
-  docComment :: State a [String] -> State a (r Doc)
+  docComment :: State a [String] -> State a (r stmt)
 
-class BlockCommentElim r where
-  blockComment' :: r Doc -> Doc
+class BlockCommentElim r stmt | r -> stmt where
+  blockComment' :: r stmt -> stmt
 
 class MethodTypeSym r typ | r -> typ where
   mType :: VS (r typ) -> MS (r typ)
 
-class RenderMethod r mthd | r -> mthd where
+class RenderMethod r mthd stmt | r -> mthd stmt where
   -- | Takes a BlockComment and a method and generates a function.
-  commentedFunc :: MS (r Doc) -> MS (r mthd) -> MS (r mthd)
+  commentedFunc :: MS (r stmt) -> MS (r mthd) -> MS (r mthd)
   mthdFromData :: VisibilityTag -> Doc -> MS (r mthd)
 
 class MethodElim r mthd | r -> mthd where

@@ -49,16 +49,16 @@ import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
 import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
   argv, printLabel, listSep, piLabel, access, functionDox, binderList,
-  parameterList)
+  parameterList, mkComment)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
   classVarAccess, castObj, instanceLevel, break, continue, addComments,
   commentedMod, commentedItem, var)
 import Drasil.GOOL.Renderers (renderType)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkComment,
-  mkStateVal, mkVal, mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec,
-  multPrec, andPrec, orPrec, inPrec, unExpr, unExpr', typeUnExpr, binExpr,
-  typeBinExpr, mkClassVar, typeFromData)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
+  mkVal, mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec, multPrec, andPrec,
+  orPrec, inPrec, unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar,
+  typeFromData)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
@@ -739,9 +739,8 @@ instance ModuleElim PythonCode ModData where
   module' = modDoc . unPC
 
 instance BlockCommentSym PythonCode Statement where
-  blockComment lns = toCode $ pyBlockComment lns pyCommentStart
-  docComment = onStateValue (\lns -> toCode $ pyDocComment lns pyDocCommentStart
-    pyCommentStart)
+  blockComment lns = toCode $ pyBlockComment lns
+  docComment = onStateValue (\lns -> toCode $ pyDocComment lns)
 
 instance BlockCommentElim PythonCode Statement where
   blockComment' = unPC
@@ -1074,13 +1073,13 @@ pyInherit n = toCode $ maybe empty (parens . text) n
 pyImplements :: (Monad r) => [Label] -> r ParentSpec
 pyImplements is = toCode $ parens (text $ intercalate listSep is)
 
-pyBlockComment :: [String] -> Doc -> Statement
-pyBlockComment lns cmt = mkComment $ vcat $ (<+>) cmt . text <$> lns
+pyBlockComment :: [String] -> Statement
+pyBlockComment lns = mkComment $ vcat $ (<+>) pyCommentStart . text <$> lns
 
-pyDocComment :: [String] -> Doc -> Doc -> Statement
-pyDocComment [] _ _ = mkComment empty
-pyDocComment (l:lns) start mid = mkComment $ vcat $
-  start <+> text l : fmap ((<+>) mid . text) lns
+pyDocComment :: [String] -> Statement
+pyDocComment [] = mkComment empty
+pyDocComment (l:lns) = mkComment $ vcat $
+  pyDocCommentStart <+> text l : fmap ((<+>) pyCommentStart . text) lns
 
 toConstName :: String -> String
 toConstName (s:s':ss) = if isLower s && isUpper s'

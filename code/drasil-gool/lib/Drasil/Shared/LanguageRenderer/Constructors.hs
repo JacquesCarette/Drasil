@@ -1,9 +1,9 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module Drasil.Shared.LanguageRenderer.Constructors (
-  mkStmt, mkStmtNoEnd, mkComment, mkStateVal, mkVal, mkStateVar, mkVar,
-  mkClassVar, typeFromData, VSOp, mkOp, unOpPrec, compEqualPrec, compPrec,
-  addPrec, multPrec, powerPrec, andPrec, orPrec, inPrec, unExpr, unExpr',
-  unExprNumDbl, typeUnExpr, binExpr, binExpr', binExprNumDbl', typeBinExpr
+  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar,
+  typeFromData, VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec,
+  powerPrec, andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr,
+  binExpr, binExpr', binExprNumDbl', typeBinExpr
 ) where
 
 import Drasil.Shared.InterfaceCommon (TypeSym(..), ValueSym(..), getCodeType,
@@ -14,7 +14,7 @@ import Drasil.Shared.RendererClassesCommon (VSUnOp, VSBinOp,
 import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
 import Drasil.Shared.AST (Terminator(..), AttachmentTag(..), OpData, od,
-  TypeData, td, Statement)
+  TypeData, td)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.Helpers (toCode, toState, on2StateValues)
 import Drasil.Shared.State (MS, VS)
@@ -32,10 +32,6 @@ mkStmt = flip stmtFromData Semi
 -- | Constructs a statement without a termination character
 mkStmtNoEnd :: (RenderStatement r stmt) => Doc -> MS (r stmt)
 mkStmtNoEnd = flip stmtFromData Empty
-
--- Comments
-mkComment :: Doc -> Statement
-mkComment c = (c, Empty)
 
 -- Values --
 

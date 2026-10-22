@@ -69,8 +69,9 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, multPrec, unExpr, unExpr', binExpr, binExpr', mkStateVal, mkVal,
-  mkStateVar, mkStmtNoEnd, mkComment, compEqualPrec, typeUnExpr, typeBinExpr)
-import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue, binderList)
+  mkStateVar, mkStmtNoEnd, compEqualPrec, typeUnExpr, typeBinExpr)
+import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue, binderList,
+  mkComment)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty, vibcat,

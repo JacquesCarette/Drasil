@@ -46,7 +46,7 @@ class RenderFile r file mod stmt | r -> file mod stmt where
   top :: r mod -> r Block
   bottom :: r Block
 
-  commentedMod :: FS (r file) -> FS (r Doc) -> FS (r file)
+  commentedMod :: FS (r file) -> FS (r stmt) -> FS (r file)
 
   fileFromData :: FilePath -> FS (r mod) -> FS (r file)
 
@@ -82,7 +82,7 @@ class RenderClass r cls stvr mthd vis stmt | r -> cls stvr mthd vis stmt where
   -- class name, visibility, parent, state variables, constructor(s), methods
   intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r stvr]
     -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r cls)
-  commentedClass :: CS (r Doc) -> CS (r cls) -> CS (r cls)
+  commentedClass :: CS (r stmt) -> CS (r cls) -> CS (r cls)
 
 class ClassElim r cls where
   class' :: r cls -> Doc

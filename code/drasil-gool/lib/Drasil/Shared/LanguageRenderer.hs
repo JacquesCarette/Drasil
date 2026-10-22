@@ -343,15 +343,15 @@ public = text "public"
 
 -- Comment Functions --
 
-blockCmt :: [String] -> Doc -> Doc -> Doc
-blockCmt lns start end = start <+> vcat (text <$> lns) <+> end
+blockCmt :: [String] -> Doc -> Doc -> Statement
+blockCmt lns start end = (start <+> vcat (text <$> lns) <+> end, Empty)
 
-docCmt :: [String] -> Doc -> Doc -> Doc
-docCmt lns start end = emptyIfNull lns $
-  vcat $ start : fmap (indent . text) lns P.<> [end]
+docCmt :: [String] -> Doc -> Doc -> Statement
+docCmt lns start end = (emptyIfNull lns $
+  vcat $ start : fmap (indent . text) lns P.<> [end], Empty)
 
-commentedItem :: Doc -> Doc -> Doc
-commentedItem cmt itm = emptyIfEmpty itm cmt $+$ itm
+commentedItem :: Statement -> Doc -> Doc
+commentedItem cmt itm = emptyIfEmpty itm (fst cmt) $+$ itm
 
 commentLength :: Int
 commentLength = 75
@@ -397,8 +397,9 @@ moduleDox desc watermark as date m = (doxFile P.<> m) :
   [doxBrief P.<> desc | not (null desc)] P.<>
   [doxNote P.<> watermark]
 
-commentedMod :: FileData -> Doc -> FileData
-commentedMod m cmt = updateFileMod (updateMod (commentedItem $ cmt $+$ blank) (fileMod m)) m
+commentedMod :: FileData -> Statement -> FileData
+commentedMod m cmt = updateFileMod
+  (updateMod (\itm -> commentedItem ((fst cmt) $+$ blank, Empty) itm) (fileMod m)) m
 
 -- Helper Functions --
 

@@ -55,10 +55,10 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   classVarAccess, castObj, instanceLevel, break, continue, addComments,
   commentedMod, commentedItem, var)
 import Drasil.GOOL.Renderers (renderType)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
-  mkVal, mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec, multPrec, andPrec,
-  orPrec, inPrec, unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar,
-  typeFromData)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkComment,
+  mkStateVal, mkVal, mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec,
+  multPrec, andPrec, orPrec, inPrec, unExpr, unExpr', typeUnExpr, binExpr,
+  typeBinExpr, mkClassVar, typeFromData)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
@@ -1074,13 +1074,13 @@ pyInherit n = toCode $ maybe empty (parens . text) n
 pyImplements :: (Monad r) => [Label] -> r ParentSpec
 pyImplements is = toCode $ parens (text $ intercalate listSep is)
 
-pyBlockComment :: [String] -> Doc -> Doc
-pyBlockComment lns cmt = vcat $ (<+>) cmt . text <$> lns
+pyBlockComment :: [String] -> Doc -> Statement
+pyBlockComment lns cmt = mkComment $ vcat $ (<+>) cmt . text <$> lns
 
-pyDocComment :: [String] -> Doc -> Doc -> Doc
-pyDocComment [] _ _ = empty
-pyDocComment (l:lns) start mid = vcat $ start <+> text l : fmap ((<+>) mid .
-  text) lns
+pyDocComment :: [String] -> Doc -> Doc -> Statement
+pyDocComment [] _ _ = mkComment empty
+pyDocComment (l:lns) start mid = mkComment $ vcat $
+  start <+> text l : fmap ((<+>) mid . text) lns
 
 toConstName :: String -> String
 toConstName (s:s':ss) = if isLower s && isUpper s'

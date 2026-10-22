@@ -41,7 +41,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(commentedMod),
   OORenderMethod(intMethod), RenderClass, RenderMod(updateModuleDoc), ParentSpec)
 import qualified Drasil.GOOL.RendererClassesOO as RO
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource,
-  ScopeTag(Local), ScopeData, sd, TypeData(..), FuncData)
+  ScopeTag(Local), ScopeData, sd, TypeData(..), FuncData, Statement)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getNestDegree,
   on2StateWrapped)
@@ -736,8 +736,8 @@ docClass
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 
 commentedClass
-  :: (RC.BlockCommentElim r stmt, RO.ClassElim r cls, Monad r)
-  => CS (r Doc) -> CS (r cls) -> CS (r Doc)
+  :: (RC.BlockCommentElim r Statement, RO.ClassElim r cls, Monad r)
+  => CS (r Statement) -> CS (r cls) -> CS (r Doc)
 commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
   (RC.blockComment' cmt) (RO.class' cs))
 

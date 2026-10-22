@@ -69,7 +69,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, multPrec, unExpr, unExpr', binExpr, binExpr', mkStateVal, mkVal,
-  mkStateVar, mkStmtNoEnd, compEqualPrec, typeUnExpr, typeBinExpr)
+  mkStateVar, mkStmtNoEnd, mkComment, compEqualPrec, typeUnExpr, typeBinExpr)
 import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue, binderList)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
@@ -657,8 +657,8 @@ mlCmtStart = text "%"
 
 -- | Makes a MATLAB comment. Every line starts with %.
 --   (We avoid %{ %} blocks: those need the markers alone on a line.)
-mlLineCmt :: [String] -> Doc
-mlLineCmt = vcat . fmap ((mlCmtStart <+>) . text)
+mlLineCmt :: [String] -> Statement
+mlLineCmt cmt = mkComment $ (vcat . fmap ((mlCmtStart <+>) . text)) cmt
 
 -- | A stand-in print function. mlPrint never uses it, but it must be a real
 --   value so the print methods type-check.

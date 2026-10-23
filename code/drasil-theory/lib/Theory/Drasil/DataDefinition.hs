@@ -88,8 +88,6 @@ instance HasAdditionalNotes DataDefinition where getNotes = ddPkt pktSS
 instance HasShortName       DataDefinition where shortname = (^. ddPkt pktSN)
 -- | Finds the reference address of a 'DataDefinition where'.
 instance HasRefAddress      DataDefinition where getRefAdd l = RP (prepend $ abrv l) (l ^. ddPkt pktS)
--- | Finds the domain of the 'QDefinition' used to make the 'DataDefinition where'.
-instance ConceptDomain      DataDefinition where cdom _ = cdom dataDefn
 -- | Finds the idea of a 'DataDefinition where' (abbreviation).
 instance CommonIdea         DataDefinition where abrv _ = abrv dataDefn
 -- | Finds the reference address of a 'DataDefinition where'.
@@ -108,7 +106,7 @@ ddUid = nsUid "dataDefn" . (^. uid)
 
 -- | Smart constructor for data definitions.
 ddE :: SimpleQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddE q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
+ddE q []   _   _  = error $ "Source field of " <> showUID q <> " is empty"
 ddE q refs der sn = DDE q . DDPkt (ddUid q) refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.
@@ -117,7 +115,7 @@ ddENoRefs q der sn = DDE q . DDPkt (ddUid q) [] der (shortname' $ S sn) (prepend
 
 -- | Smart constructor for data definitions.
 ddME :: ModelQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddME q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
+ddME q []   _   _  = error $ "Source field of " <> showUID q <> " is empty"
 ddME q refs der sn = DDME q . DDPkt (ddUid q) refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.

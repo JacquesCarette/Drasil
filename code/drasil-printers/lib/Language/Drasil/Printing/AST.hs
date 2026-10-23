@@ -63,10 +63,11 @@ data Spec = E Expr                   -- ^ Holds an expression.
           | Ref LinkType String Spec -- ^ Holds the actual reference of form 'LinkType', reference address, and display name
           | EmptyS                   -- ^ Empty sentence.
           | Quote Spec               -- ^ Quotes are different in different languages.
-          | HARDNL                   -- Temp fix for multi-line descriptions;
-                                     -- May move to a new LayoutObj, but only exists in TeX
-                                     -- so it's not really a big deal ATM.
-                                     -- ^ Newline.
+
+-- TODO: Semigroup instance for 'Spec', closed under both definitional and
+-- rendering equality. Former _might_ require replacing `:+:` with a `Concat
+-- [Spec]` term.
+
 -- | A title is just a sentence ('Spec').
 type Title    = Spec
 

@@ -5,10 +5,11 @@ module Drasil.DblPend.Requirements (
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS.Concepts (datCon)
-import Drasil.SRS (mkPortableNFR, mkCorrectNFR, inReqWTab)
+import Drasil.SRS (mkCorrectNFR, inReqWTab)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (inValue)
+import Data.Drasil.Requirements (portable)
 import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
         output_, value)
 --  likelyChg, mg, mis, module_, nonFuncReqDom,
@@ -57,6 +58,3 @@ nonFuncReqs = [correct, portable]
 
 correct :: ConceptInstance
 correct = mkCorrectNFR "correct" "Correctness"
-
-portable :: ConceptInstance
-portable = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portability"

@@ -30,7 +30,6 @@ instance Idea        ParameterChunk where getA = getA . view pcc
 -- | Finds the definition of the 'CodeChunk' used to make the 'ParameterChunk'.
 instance Definition  ParameterChunk where defn = pcc . defn
 
-instance ConceptDomain ParameterChunk where cdom = cdom . view pcc
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'ParameterChunk'.
 instance HasSpace    ParameterChunk where typ = pcc . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'ParameterChunk'.

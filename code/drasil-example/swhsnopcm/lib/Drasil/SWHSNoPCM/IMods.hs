@@ -56,14 +56,14 @@ eBalanceOnWtrRC =
     unknowns
     constants
     "eBalanceOnWtrRC"
-    (nounPhraseSP $ "Energy balance on " ++ "water to find the temperature of the water")
+    (nounPhraseSP $ "Energy balance on " <> "water to find the temperature of the water")
     (tempW ^. defn)
     where coeffs = singleton (exactDbl 1 :| [recip_ (sy tauW)])
           unknowns = [1, 0]
           constants = singleton $ recip_ (sy tauW) $* sy tempC
 
 balWtrNotes :: [Sentence]
-balWtrNotes = map foldlSent [
+balWtrNotes = foldlSent <$> [
   [ch tauW `S.is` S "calculated from", refS balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
    S "is in", phrase liquid, S "form" `sC` eS (realInterval tempW $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)),
@@ -77,7 +77,7 @@ balWtrNotes = map foldlSent [
 ----------------------------------------------
 eBalanceOnWtrDeriv :: Derivation
 eBalanceOnWtrDeriv = mkDerivName (D.toSent (phraseNP (the energy)) +:+ S "balance on water")
-  (weave eBalanceOnWtrDerivSentences $ map eS eBalanceOnWtrDerivEqns)
+  (weave eBalanceOnWtrDerivSentences $ eS <$> eBalanceOnWtrDerivEqns)
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+ ch coilSA) EmptyS assumpNIHGBW,

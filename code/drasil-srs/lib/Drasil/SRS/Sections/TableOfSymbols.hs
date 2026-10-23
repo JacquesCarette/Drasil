@@ -7,9 +7,8 @@ import Control.Lens (view)
 import Text.PrettyPrint.HughesPJ (text, render, vcat, (<+>)) -- FIXME
 
 -- Generic Drasil
-import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-                                             -- Vector - Name conflict (defined in file)
-import Language.Drasil.Document
+import Language.Drasil
+import Language.Drasil.Document hiding (Manual, Verb) -- Both name conflicts.
 import Drasil.Database (HasUID(..))
 import Data.List.Extras (mkTable)
 
@@ -26,7 +25,7 @@ import Drasil.SRS.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntr
 -- | Table of Symbols creation function. Takes in a 'Stage', 'Symbol's, and something that turns
 -- the symbols into a 'Sentence'. Filters non-symbol chunks and checks for duplicate symbol error.
 table :: (Quantity s, MayHaveUnit s) => Stage -> [s] -> (s -> Sentence) -> LabelledContent
-table _ [] _ = mkRawLC (Paragraph EmptyS) symbTableRef
+table _ [] _ = mkRawLC (Para []) symbTableRef
 table st ls f
     |noDuplicate = mkRawLC (Table [atStart symbol_, atStart description, atStart' unit_]
       (mkTable [P . (`symbol` st), f, toSentence] filteredChunks)
@@ -34,18 +33,18 @@ table st ls f
     | otherwise = error errorMessage
     where
         filteredChunks = filter (`hasStageSymbol` st) ls
-        symbolsCol     = map (`symbol` st) filteredChunks
-        uidCol         = map (view uid)    filteredChunks
+        symbolsCol     = (`symbol` st) <$> filteredChunks
+        uidCol         = view uid <$> filteredChunks
         symUidPair     = zip symbolsCol uidCol
         symDuplicates  = nub (symbolsCol \\ nub symbolsCol)
         noDuplicate    = null symDuplicates
         -- If there are duplicates then the following will extract the UID's of duplicates symbols
         extractPairs symb = filter (\x -> fst x == symb) symUidPair
-        extractUid  = map snd
+        extractUid  = fmap snd
         extractUidFromPairs = text . show . extractUid . extractPairs
-        errSymUidDuplicates = vcat $ map (\symb ->
-          extractUidFromPairs symb <+> text "all have the same symbol") symDuplicates
-        errorMessage = "Same symbols for different quantities found: " ++ render errSymUidDuplicates
+        errSymUidDuplicates = vcat $ (\symb ->
+          extractUidFromPairs symb <+> text "all have the same symbol") <$> symDuplicates
+        errorMessage = "Same symbols for different quantities found: " <> render errSymUidDuplicates
 
 -- | Makes a reference to the Table of Symbols.
 symbTableRef :: Reference
@@ -82,8 +81,8 @@ tsI VectorUnits = S "For vector quantities, the units shown are for each compone
 -- to a 'Sentence'.
 typogConvention :: [TConvention] -> Sentence
 typogConvention [] = error "No arguments given for typographic conventions"
-typogConvention ts = S "Throughout the document," +:+. foldlList Comma List (map tcon ts)
-  where tcon (Vector emph) = S ("symbols in " ++ show emph ++
+typogConvention ts = S "Throughout the document," +:+. foldlList Comma List (tcon <$> ts)
+  where tcon (Vector emph) = S ("symbols in " <> show emph <>
                                 " will represent vectors, and scalars otherwise")
         tcon (Verb s) = s
 
@@ -91,7 +90,7 @@ typogConvention ts = S "Throughout the document," +:+. foldlList Comma List (map
 symbConvention :: [Literature] -> Sentence
 symbConvention [] = error "Attempting to reference no literature for SymbConvention"
 symbConvention scs = S "The choice of symbols was made to be consistent with the" +:+.
-                      makeSentence (map scon scs)
+                      makeSentence (scon <$> scs)
   where makeSentence [x,y] = x +:+ S "and with" +:+ y
         makeSentence xs    = foldlList Comma List xs
         scon (Lit x)       = phrase x +:+ S "literature"

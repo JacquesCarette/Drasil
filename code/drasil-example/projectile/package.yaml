@@ -32,7 +32,9 @@ library:
   - drasil-database
   - drasil-gool
   - drasil-lang
+  - drasil-natural-language
   - drasil-srs
+  - drasil-system
   - drasil-theory
   - drasil-utils
   source-dirs: lib

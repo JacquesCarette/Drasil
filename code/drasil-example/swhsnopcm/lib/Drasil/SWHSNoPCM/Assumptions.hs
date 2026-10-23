@@ -3,7 +3,8 @@ module Drasil.SWHSNoPCM.Assumptions (module Drasil.SWHSNoPCM.Assumptions) where 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import Language.Drasil.Document (ConceptInstance, cic)
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (model, assumpDom, material_)

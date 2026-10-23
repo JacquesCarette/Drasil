@@ -4,10 +4,11 @@ module Drasil.BinaryStar.Requirements (funcReqs, funcReqsTables,
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS.Concepts (datCon)
-import Drasil.SRS (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, inReqWTab)
+import Drasil.SRS (mkMaintainableNFR, mkCorrectNFR, inReqWTab)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (inValue)
+import Data.Drasil.Requirements (portable)
 import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
   nonFuncReqDom, output_)
 import Data.Drasil.Concepts.Software (errMsg)
@@ -70,9 +71,6 @@ nonFuncReqs = [correct, portable, maintainable, usable]
 
 correct :: ConceptInstance
 correct = mkCorrectNFR "correct" "Correctness"
-
-portable :: ConceptInstance
-portable = mkPortableNFR "portable" ["Linux", "Mac OSX", "Windows"] "Portability"
 
 maintainable :: ConceptInstance
 maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"

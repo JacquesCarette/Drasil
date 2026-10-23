@@ -71,13 +71,13 @@ saneLengths :: (Natural, String) -> Maybe [Text] -> [[Text]] -> Maybe String
 saneLengths (expLen, expLenSrc) mhr rs =
   case mhr of
     Just hdr | let l = len hdr, l /= expLen -> Just $ formatErr "Header" l
-    _ -> format <$> find ((/= expLen) . snd) (zip [1 :: Natural ..] (map len rs))
+    _ -> format <$> find ((/= expLen) . snd) (zip [1 :: Natural ..] (len <$> rs))
   where
     formatErr target actualLen = concat [
         target, " has ", show actualLen, " columns, but expected ",
         show expLen, " (based on ", expLenSrc, ")"
       ]
-    format (i, l) = formatErr ("Row " ++ show i) l
+    format (i, l) = formatErr ("Row " <> show i) l
 
 -- | Internal: Find the expected number of columns for a CSV, along with a
 -- description of the source of the expectation.

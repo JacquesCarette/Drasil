@@ -2,13 +2,13 @@ module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   ScopeData(..), sd, QualifiedName, qualName, FileType(..), isSource,
   AttachmentTag(..), onAttachment, AttachmentData(attachment, attachmentDoc), ad, FileData(filePath,
   fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), fd, ModData(name,
-  modDoc), md, updateMod, MethodData(mthdDoc), mthd, updateMthd, OpData(opPrec,
+  modDoc), md, updateMod, MethodData(mthdName, mthdDoc), mthd, updateMthd, OpData(opPrec,
   opDoc), od, ParamData(paramVar, paramDoc), pd, paramName, updateParam,
   ProgData(progName, progPurp, progMods), progD, emptyProg,
   StateVarData(getStVarScp, stVar), svd, TypeData(cType,
   typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), vd,
   updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
-  BinderD(bindName, bindType), bindFormD
+  BinderD(bindName, bindType), bindFormD, Statement
   ) where
 
 import Drasil.Shared.CodeType (CodeType)
@@ -79,13 +79,13 @@ updateMod :: (Doc -> Doc) -> ModData -> ModData
 updateMod f m = md (name m) (f $ modDoc m)
 
 -- Used as the underlying data type for Methods in all renderers except C++
-newtype MethodData = MthD {mthdDoc :: Doc}
+data MethodData = MthD {mthdName :: String, mthdDoc :: Doc}
 
-mthd :: Doc -> MethodData
+mthd :: String -> Doc -> MethodData
 mthd = MthD
 
 updateMthd :: MethodData -> (Doc -> Doc) -> MethodData
-updateMthd m f = mthd ((f . mthdDoc) m)
+updateMthd m f = MthD (mthdName m) ((f . mthdDoc) m)
 
 -- Used as the underlying data type for UnaryOp and BinaryOp in all renderers
 data OpData = OD {opPrec :: Int, opDoc :: Doc}
@@ -159,3 +159,6 @@ data BinderD = BindFormD {bindName :: String, bindType :: TypeData}
 
 bindFormD :: String -> TypeData -> BinderD
 bindFormD = BindFormD
+
+-- (Current) underlying type of Statement
+type Statement = (Doc, Terminator)

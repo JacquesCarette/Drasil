@@ -4,6 +4,7 @@ module Drasil.SSP.Goals (goals, identifyCritAndFSGS, determineNormalFGS,
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
+import Language.Drasil.Document (ConceptInstance, cic)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)

@@ -55,8 +55,6 @@ instance Definition         TheoryModel where defn = mk . defn
 instance HasReference       TheoryModel where getReferences l = map ref $ rf l-}
 -- | Finds 'DecRef's contained in the 'TheoryModel'.
 instance HasDecRef          TheoryModel where getDecRefs = rf
--- | Finds the domain of the 'ConceptChunk' contained in a 'TheoryModel'.
-instance ConceptDomain      TheoryModel where cdom = cdom . view mk
 -- | Finds any additional notes for the 'TheoryModel'.
 instance HasAdditionalNotes TheoryModel where getNotes = notes
 
@@ -84,7 +82,7 @@ instance Referable TheoryModel where
 -- have the same type!
 -- | Constructor for theory models. Must have a source. Uses the shortname of the reference address.
 tm :: ModelKind ModelExpr -> [DecRef] -> String -> [Sentence] -> TheoryModel
-tm mkind [] _   = error $ "Source field of " ++ showUID mkind ++ " is empty"
+tm mkind [] _   = error $ "Source field of " <> showUID mkind <> " is empty"
 tm mkind r  lbe = TM mkind r (shortname' $ S lbe) (prependAbrv thModel lbe)
 
 -- | Constructor for theory models. Uses the shortname of the reference address.

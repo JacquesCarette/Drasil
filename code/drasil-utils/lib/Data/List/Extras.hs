@@ -11,11 +11,11 @@ import Data.List (sort)
 
 import Data.Containers.ListUtils (nubOrd)
 
--- | Replaces all elements of a target list that belong to a provided "bad"
---   input list.
-replaceAll :: Eq a => [a] -> a -> [a] -> [a]
-replaceAll bad repl (c:cs) | c `elem` bad = repl : replaceAll bad repl cs
-                           | otherwise    = c : replaceAll bad repl cs
+-- | Replaces all elements of a target list that satisfy a predicate.
+replaceAll :: (a -> Bool) -> a -> [a] -> [a]
+replaceAll p repl (c:cs)
+  | p c        = repl : replaceAll p repl cs
+  | otherwise = c : replaceAll p repl cs
 replaceAll _   _    it                    = it
 
 -- | Checks if the first set is a subset of the second.
@@ -49,7 +49,7 @@ foldle1 f g (x:y:xs) = foldle f g (f x y) xs
 
 -- | Convert "row" of elements into "column" of elements.
 toColumn :: [a] -> [[a]]
-toColumn = map (: [])
+toColumn = fmap (: [])
 
 {- |
   Create a table body (not including header row) by applying the given
@@ -66,4 +66,4 @@ toColumn = map (: [])
 
 -}
 mkTable :: [a -> b] -> [a] -> [[b]]
-mkTable fs = map (\x -> map ($ x) fs)
+mkTable fs = fmap (\x -> ($ x) <$> fs)

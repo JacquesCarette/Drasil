@@ -6,10 +6,11 @@ import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
+import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (inValue)
+import Data.Drasil.Requirements (portable)
 import Data.Drasil.Concepts.Documentation (characteristic, condition,
   datumConstraint, funcReqDom, message, output_, system,
   type_, value)
@@ -18,7 +19,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Drasil.SRS (inReqWTab, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
-  mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
+  mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR)
 import Drasil.SRS.Concepts (datCon)
 
@@ -64,11 +65,11 @@ inputValuesTable :: LabelledContent
 sysSetValsFollowingAssumpsTable :: LabelledContent
 sysSetValsFollowingAssumpsTable =
   mkValsSourceTable
-    (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs)
+    (mkQRTupleRef r2AQs r2ARs <> mkQRTuple r2DDs)
     "ReqAssignments"
     (S "Required Assignments")
   where
-    r2AQs = loadSF : map dqdWr (take 4 assumptionConstants)
+    r2AQs = loadSF : fmap dqdWr (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
     r2DDs = [loadDFDD, hFromt, glaTyFac, standOffDis, aspRat]
 
@@ -94,7 +95,7 @@ outputValuesDesc :: Sentence
 outputValuesDesc = foldlSent [titleize output_, D.toSent $ pluralNP (the value), S "from the table for", namedRef outputValuesTable (S "Required Outputs")]
 
 outputValuesTable :: LabelledContent
-outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
+outputValuesTable = mkValsSourceTable (mkQRTuple iMods <> mkQRTuple r6DDs) "ReqOutputs"
                               (S "Required" +:+ titleize' output_)
   where
     r6DDs :: [DataDefinition]
@@ -119,6 +120,3 @@ reusable = mkReusableNFR "reusable" "Reusability"
 
 maintainable :: ConceptInstance
 maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"
-
-portable :: ConceptInstance
-portable = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portablity"

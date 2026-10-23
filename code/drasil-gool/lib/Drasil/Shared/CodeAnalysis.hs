@@ -14,7 +14,7 @@ data Exception = Exc {
 }
 
 printExc :: Exception -> String
-printExc (Exc l e) = if null l then e else l ++ "." ++ e
+printExc (Exc l e) = if null l then e else l <> "." <> e
 
 hasLoc :: Exception -> Bool
 hasLoc (Exc [] _) = False

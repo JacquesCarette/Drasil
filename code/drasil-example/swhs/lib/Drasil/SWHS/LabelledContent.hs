@@ -2,8 +2,8 @@ module Drasil.SWHS.LabelledContent (
   labelledContent, sysCntxtFig, figTank
 ) where
 
-import Language.Drasil hiding (organization, variable)
-import Language.Drasil.Document
+import Language.Drasil hiding (variable)
+import Language.Drasil.Document hiding (organization)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (sysCont)
@@ -20,10 +20,10 @@ labelledContent = [sysCntxtFig, figTank]
 sysCntxtFig :: LabelledContent
 sysCntxtFig = llccFig "SysCon"
   $ fig (titleize sysCont)
-  $ resourcePath ++ "SystemContextFigure.png"
+  $ resourcePath <> "SystemContextFigure.png"
 
 figTank :: LabelledContent
 figTank = llccFig "Tank" $ fig (
   foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC `S.of_`
   ch htFluxC `S.and_` phrase htFluxP `S.of_` ch htFluxP])
-  $ resourcePath ++ "Tank.png"
+  $ resourcePath <> "Tank.png"

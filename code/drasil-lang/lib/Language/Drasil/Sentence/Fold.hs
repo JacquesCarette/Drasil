@@ -5,30 +5,15 @@ module Language.Drasil.Sentence.Fold (
   -- to make different kinds of lists based on the options defined here.
   EnumType(..), WrapType(..), SepType(..), FoldType(..),
   -- * Folding Functions
-  -- ** Expression-related
-  foldConstraints,
   -- ** Sentence-related
   foldlEnumList, foldlList, foldlSent, foldlSent_,
   foldlSentCol, foldOpts, foldNums, numList
 ) where
 
-import Language.Drasil.Classes ( Express(express), Quantity )
-import Language.Drasil.Constraint
-    ( Constraint(Range, Elem), ConstraintE )
-import Language.Drasil.Expr.Class ( ExprC(($&&), realInterval) )
-import Language.Drasil.Sentence
-    ( Sentence(S, E, EmptyS, (:+:)), sParen, (+:+), sC, (+:+.), (+:) )
+import Language.Drasil.Sentence (Sentence(S, EmptyS, (:+:)), sParen, (+:+), sC,
+  (+:+.), (+:))
 import qualified Language.Drasil.Sentence.Combinators as S (and_, or_)
 import Data.List.Extras (foldle, foldle1)
-
--- TODO: This looks like it should be moved to wherever uses it, it's too specific.
--- | Helper for formatting a list of constraints.
-foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
-foldConstraints _ [] = EmptyS
-foldConstraints c e  = E $ foldr1 ($&&) $ map constraintToExpr e
-  where
-    constraintToExpr (Range _ ri) = express $ realInterval c ri
-    constraintToExpr (Elem _ set) = express set
 
 -- | Partial function application of 'foldle' for sentences specifically.
 -- Folds with spaces and adds a period (".") at the end.
@@ -70,10 +55,10 @@ foldlList s f lst    = foldle1 (sep s) (\a b -> end f (sep s a EmptyS) b) lst
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
 foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (enumList e w $ length lst) lst
   where
-    enumList enum wt len = map (wrap wt . S) (take len (chList enum))
-    chList Numb  = map show ([1..] :: [Integer])
-    chList Upper = map show ['A'..'Z']
-    chList Lower = map show ['a'..'z']
+    enumList enum wt len = wrap wt . S <$> take len (chList enum)
+    chList Numb  = show <$> ([1..] :: [Integer])
+    chList Upper = show <$> ['A'..'Z']
+    chList Lower = show <$> ['a'..'z']
     wrap Parens x = sParen x
     wrap Period x = x :+: S "."
 
@@ -89,7 +74,7 @@ sep SemiCol = \a b -> a :+: S ";" +:+ b
 
 -- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and 13").
 foldNums :: String -> [Int] -> Sentence
-foldNums s x = foldlList Comma List $ map S (numList s x)
+foldNums s x = foldlList Comma List $ S <$> numList s x
 
 -- | Parses a list of integers into a list of strings (ie. ["1", "4-7", "13"]).
 numList :: String -> [Int] -> [String]
@@ -97,7 +82,7 @@ numList _ []  = error "Empty list used with foldNums"
 numList _ [y] = [show y]
 numList s [y, z]
   | z == y + 1 = [rangeSep y z s]
-  | otherwise  = map show [y, z]
+  | otherwise  = show <$> [y, z]
 numList s (y:z:xs)
   | z == y + 1 = range y z xs
   | otherwise  = show y : numList s (z:xs)
@@ -112,4 +97,4 @@ numList s (y:z:xs)
 
 -- | Helper for numList that concatenates integers to strings.
 rangeSep :: Int -> Int -> String -> String
-rangeSep p q s = show p ++ s ++ show q
+rangeSep p q s = show p <> s <> show q

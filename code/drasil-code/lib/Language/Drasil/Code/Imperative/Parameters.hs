@@ -46,9 +46,9 @@ getInConstructorParams = do
   icPs <- getConstraintParams
   ipName <- genICName InputParameters
   let getCParams False = []
-      getCParams True = ifPs ++ dvPs ++ icPs
+      getCParams True = ifPs <> dvPs <> icPs
   ps <- getParams ipName In $ getCParams (ipName `elem` defSet g)
-  return $ filter ((Just ipName /=) . flip Map.lookup (clsMap g) . codeName) ps
+  pure $ filter ((Just ipName /=) . flip Map.lookup (clsMap g) . codeName) ps
 
 -- | The inputs to the function for reading inputs are the input file name.
 getInputFormatIns :: GenState [CodeVarChunk]
@@ -79,7 +79,7 @@ getDerivedOuts :: GenState [CodeVarChunk]
 getDerivedOuts = do
   g <- get
   dvName <- genICName DerivedValuesFn
-  getParams dvName Out $ map codeChunk $ g ^. derivedInputs
+  getParams dvName Out $ codeChunk <$> g ^. derivedInputs
 
 -- | The parameters to the function for checking constraints on the inputs are
 -- any inputs with constraints, and any variables used in the expressions of
@@ -91,7 +91,7 @@ getConstraintParams = do
       cm = s ^. cMap
       db = s ^. systemdb
       varsList = filter (\i -> member (i ^. uid) cm) (s ^. inputs)
-      reqdVals = nub $ varsList ++
+      reqdVals = nub $ varsList <>
         concatMap (`constraintvars` db) (getConstraints cm varsList)
   icName <- genICName InputConstraintsFn
   getParams icName In reqdVals
@@ -109,7 +109,7 @@ getOutputParams :: GenState [CodeVarChunk]
 getOutputParams = do
   g <- get
   woName <- genICName WriteOutput
-  getParams woName In $ map (resolveOutputDefType g) (g ^. outputs)
+  getParams woName In $ resolveOutputDefType g <$> (g ^. outputs)
 
 -- | Prefer the calculated definition's type when an output is produced by a
 -- generated definition (notably ODE outputs, whose solved result may have a
@@ -120,7 +120,7 @@ resolveOutputDefType g out =
     Map.lookup (out ^. uid) (Map.fromList defsByUID)
   where
     defsByUID :: [(UID, CodeDefinition)]
-    defsByUID = map (\d -> (d ^. uid, d)) (g ^. execOrder)
+    defsByUID = (\d -> (d ^. uid, d)) <$> (g ^. execOrder)
 
 -- | Passes parameters that are inputs to 'getInputVars' for further processing.
 -- Passes parameters that are constants to 'getConstVars' for further processing.
@@ -131,16 +131,16 @@ getParams :: (Quantity c, MayHaveUnit c, Concept c) => Name -> ParamType -> [c] 
 getParams n pt cs' = do
   g <- get
   let s = g
-      cs = map quantvar cs'
+      cs = quantvar <$> cs'
       ins = s ^. inputs
-      cnsnts = map quantvar $ s ^. constDefns
+      cnsnts = quantvar <$> s ^. constDefns
       inpVars = filter (`elem` ins) cs
       conVars = filter (`elem` cnsnts) cs
       csSubIns = filter ((`notMember` (g ^. concMatches)) . (^. uid))
-        (cs \\ (ins ++ cnsnts))
+        (cs \\ (ins <> cnsnts))
   inVs <- getInputVars n pt (g ^. inStruct) Var inpVars
   conVs <- getConstVars n pt (g ^. conStruct) (g ^. conRepr) conVars
-  return $ nub $ inVs ++ conVs ++ csSubIns
+  pure $ nub $ inVs <> conVs <> csSubIns
 
 -- | If the passed list of input variables is empty, then return empty list.
 -- If the user has chosen 'Unbundled' inputs, then the input variables are
@@ -159,13 +159,13 @@ getParams n pt cs' = do
 -- an object, so no parameters are required.
 getInputVars :: Name -> ParamType -> Structure -> ConstantRepr ->
   [CodeVarChunk] -> GenState [CodeVarChunk]
-getInputVars _ _ _ _ [] = return []
-getInputVars _ _ Unbundled _ cs = return cs
+getInputVars _ _ _ _ [] = pure []
+getInputVars _ _ Unbundled _ cs = pure cs
 getInputVars n pt Bundled Var _ = do
   g <- get
   cname <- genICName InputParameters
-  return [quantvar inParams | Map.lookup n (clsMap g) /= Just cname && isIn pt]
-getInputVars _ _ Bundled Const _ = return []
+  pure [quantvar inParams | Map.lookup n (clsMap g) /= Just cname && isIn pt]
+getInputVars _ _ Bundled Const _ = pure []
 
 -- | If the passed list of constant variables is empty, then return empty list.
 -- If the user has chosen 'Unbundled' constants, then the constant variables are
@@ -182,11 +182,11 @@ getInputVars _ _ Bundled Const _ = return []
 -- an object, so no parameters are required.
 getConstVars :: Name -> ParamType -> ConstantStructure -> ConstantRepr ->
   [CodeVarChunk] -> GenState [CodeVarChunk]
-getConstVars _ _ _ _ [] = return []
-getConstVars _ _ (Store Unbundled) _ cs = return cs
-getConstVars _ pt (Store Bundled) Var _ = return [quantvar consts | isIn pt]
-getConstVars _ _ (Store Bundled) Const _ = return []
+getConstVars _ _ _ _ [] = pure []
+getConstVars _ _ (Store Unbundled) _ cs = pure cs
+getConstVars _ pt (Store Bundled) Var _ = pure [quantvar consts | isIn pt]
+getConstVars _ _ (Store Bundled) Const _ = pure []
 getConstVars n pt WithInputs cr cs = do
   g <- get
   getInputVars n pt (g ^. inStruct) cr cs
-getConstVars _ _ Inline _ _ = return []
+getConstVars _ _ Inline _ _ = pure []

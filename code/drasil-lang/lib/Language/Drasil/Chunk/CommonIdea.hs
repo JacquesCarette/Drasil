@@ -17,8 +17,8 @@ import Drasil.Database (UID, HasUID(uid), declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, idea')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
- CommonIdea(abrv), ConceptDomain(cdom))
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
+ CommonIdea(abrv))
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 
 -- | The common idea (with 'NounPhrase') data type. It must have a 'UID',
 -- 'NounPhrase' for its term, an abbreviation ('String'), and a domain (['UID']).
@@ -38,8 +38,6 @@ instance NamedIdea     CI where term = nc' . term
 instance Idea          CI where getA = Just . view ab
 -- | Finds the idea of a 'CI' (abbreviation).
 instance CommonIdea    CI where abrv = view ab
--- | Finds the domain of a 'CI'.
-instance ConceptDomain CI where cdom = cdom'
 
 -- | The commonIdea smart constructor requires a chunk id ('String'), a
 -- term ('NP'), an abbreviation ('String'), and a
@@ -47,8 +45,8 @@ instance ConceptDomain CI where cdom = cdom'
 -- Note: should be polymorphic in 'IdeaDict', but currently causes issues with
 -- ambiguous type variables, punting for now.
 commonIdea :: UID -> NP -> String -> [IdeaDict] -> CI
-commonIdea x y z = CI (idea' x y) z . map (^.uid)
+commonIdea x y z = CI (idea' x y) z . fmap (^.uid)
 
 -- | Prepends the abbreviation from a 'CommonIdea' to a 'String'.
 prependAbrv :: CommonIdea c => c -> String -> String
-prependAbrv c s = abrv c ++ ':' : s
+prependAbrv c s = abrv c <> (':' : s)

@@ -3,7 +3,8 @@
 module Language.Drasil.Document.Core (
   Contents(..), ListType(..), ItemType(..), RawContent(..),
   ListTuple, MaxWidthPercent, HasContents(..), LabelledContent(..),
-  UnlabelledContent(..), HasCaption(..), Lbl, Filepath, Author, Title
+  UnlabelledContent(..), HasCaption(..), Lbl, Filepath, Author, Title,
+  Paragraph
 ) where
 
 import Control.Lens ((^.), makeLenses, Lens', set, view)
@@ -11,10 +12,10 @@ import Control.Lens ((^.), makeLenses, Lens', set, view)
 import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 
 import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.Chunk.Citation (BibRef)
-import Language.Drasil.ShortName (HasShortName(shortname))
+import Language.Drasil.Document.Citation.Core (BibRef)
+import Language.Drasil.Document.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
+import Language.Drasil.Document.Labels (getAdd, prepend, IRefProg,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Document.Reference (Reference)
 import Language.Drasil.Sentence (Sentence)
@@ -47,6 +48,10 @@ type ListTuple = (Title, ItemType, Maybe String) -- ^ Formats as Title: Item. Fo
 type Filepath = String
 type Lbl      = Sentence  -- ^ Label.
 
+-- | A paragraph is a group of 'Sentence's that are folded into one when
+-- rendered.
+type Paragraph = [Sentence]
+
 -- * Contents
 
 -- | Contents may be labelled or unlabelled.
@@ -66,7 +71,7 @@ data HasCaption = NoCaption | WithCaption
 -- | Types of layout objects we deal with explicitly.
 data RawContent =
     Table [Sentence] [[Sentence]] Title Bool -- ^ table has: header-row, data(rows), label/caption, and a bool that determines whether or not to show label.
-  | Paragraph Sentence                       -- ^ Paragraphs are just sentences.
+  | Para Paragraph                           -- ^ A paragraph of 'Sentence's.
   | EqnBlock ModelExpr                       -- ^ Block of Equations holds an expression.
   | DerivBlock Sentence [RawContent]         -- ^ Grants the ability to label a group of 'RawContent'.
   | Enumeration ListType                     -- ^ For enumerated lists.
@@ -118,8 +123,8 @@ instance HasContents  UnlabelledContent where accessContents = cntnts
 
 -- | Access the 'RawContent' within 'Contents'.
 instance HasContents Contents where
-  accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
-  accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)
+  accessContents f (UlC c) = UlC . (\x -> set cntnts x c) <$> f (c ^. cntnts)
+  accessContents f (LlC c) = LlC . (\x -> set ctype x c) <$> f (c ^. ctype)
 
 -- | Finds the reference information of 'LabelledContent'.
 instance Referable LabelledContent where
@@ -138,7 +143,7 @@ prependLabel EqnBlock{}     = prepend "EqnB"
 prependLabel CodeBlock{}    = prepend "CodeB"
 prependLabel DerivBlock{}   = prepend "Deriv"
 prependLabel Enumeration{}  = prepend "Lst"
-prependLabel Paragraph{}    = prepend "Par" -- error "Shouldn't reference paragraphs"
+prependLabel Para{}         = prepend "Par" -- error "Shouldn't reference paragraphs"
 prependLabel Bib{}          = error $
-    "Bibliography list of references cannot be referenced. " ++
+    "Bibliography list of references cannot be referenced. " <>
     "You must reference the Section or an individual citation."

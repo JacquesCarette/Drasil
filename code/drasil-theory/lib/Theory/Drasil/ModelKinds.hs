@@ -18,7 +18,7 @@ import Data.Maybe (mapMaybe)
 
 import Drasil.Database (UID, HasUID(..), mkUid, nsUid, HasChunkRefs(..))
 import Language.Drasil (NamedIdea(..), NP, QDefinition, Expr,
-  ConceptDomain(..), Definition(..), Idea(..), Express(..),
+  Definition(..), Idea(..), Express(..),
   RequiresChecking(..), Space,
   HasSpace(typ), DefiningExpr(..))
 
@@ -144,8 +144,6 @@ instance NamedIdea     (ModelKinds e) where term    = lensMk term term term term
 instance Idea          (ModelKinds e) where getA    = elimMk (to getA) (to getA) (to getA) (to getA) (to getA)
 -- | Finds the definition of the 'ModelKinds'.
 instance Definition    (ModelKinds e) where defn    = lensMk defn defn defn defn defn
--- | Finds the domain of the 'ModelKinds'.
-instance ConceptDomain (ModelKinds e) where cdom    = elimMk (to cdom) (to cdom) (to cdom) (to cdom) (to cdom)
 -- | Rewrites the underlying model using 'ModelExpr'
 instance Express e => Express (ModelKinds e) where
   mexpress = elimMk (to mexpress) (to mexpress) (to mexpress) (to mexpress) (to mexpress)
@@ -177,8 +175,6 @@ instance NamedIdea     (ModelKind e) where term    = mkTerm
 instance Idea          (ModelKind e) where getA    = getA . (^. mk)
 -- | Finds the definition of the 'ModelKind'.
 instance Definition    (ModelKind e) where defn    = mk . defn
--- | Finds the domain of the 'ModelKind'.
-instance ConceptDomain (ModelKind e) where cdom    = cdom . (^. mk)
 -- | Rewrites the underlying model using 'ModelExpr'
 instance Express e => Express (ModelKind e) where
   mexpress = mexpress . (^. mk)

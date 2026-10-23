@@ -98,7 +98,8 @@ genPreamble los = let (pkgs, defs) = parseDoc los
   in docclass (show fontSize <> "pt") "article" %%
      vcat (addPackage <$> pkgs) %% vcat (addDef <$> defs)
 
--- | Look at a document (@[LayoutObj]@) for what TeX packages and definitions will be needed for
+-- | Look at a document (@[LayoutObj]@) for what TeX packages and definitions
+-- will be needed for compilation.
 parseDoc :: [LayoutObj] -> ([Package], [Def])
 parseDoc los' =
   ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] <>

@@ -93,8 +93,8 @@ defaultCommonMarkRO =
 -- HTML fragments beginning with inline content receive a @div@ wrapper, so
 -- their text is interpreted as HTML rather than Markdown.
 -- At paragraph boundaries, source line breaks are omitted and hard breaks use
--- inline HTML. Heading source line breaks become spaces, and hard breaks use
--- inline HTML because ATX headings occupy a single physical line.
+-- inline HTML. Headings are validated by @mkHeading@ before rendering; their
+-- leading and trailing spaces and tabs follow CommonMark's trimming rules.
 renderCommonMark :: CommonMarkRenderOptions -> CommonMark -> Doc ann
 renderCommonMark opt (CommonMark blocks) = renderedLinesToDoc (renderBlocks opt blocks)
 
@@ -123,8 +123,9 @@ renderBlock opt (Heading level contents) =
   singletonLine (pretty marker <> if T.null text then mempty else " " <> pretty text)
   where
     marker = T.replicate (fromEnum level + 1) "#"
+    -- Inline HTML can introduce layout newlines even when its contents have none.
     text = T.dropAround (\c -> c == ' ' || c == '\t') $
-      T.replace "\n" " " (renderInlineTextWithBreaks opt " " "<br />" contents)
+      T.replace "\n" " " (renderInlineText opt contents)
 renderBlock opt (Paragraph contents) =
   nonemptyText $ T.intercalate "\n" $
     protectStart . protectTrailingWhitespace <$> trimLines (T.splitOn "\n" (renderParagraphText opt contents))

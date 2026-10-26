@@ -21,16 +21,19 @@ data ConstraintSet e = CL {
 
 makeLenses ''ConstraintSet
 
-instance HasChunkRefs (ConstraintSet e) where
-  chunkRefs cs = chunkRefs (cs ^. con)
+instance HasChunkRefs e => HasChunkRefs (ConstraintSet e) where
+  chunkRefs cs = mconcat
+    [ chunkRefs (cs ^. con)
+    , chunkRefs (cs ^. invs)
+    ]
   {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'ConstraintSet'.
 instance HasUID        (ConstraintSet e) where uid  = con . uid
 -- | Finds the term ('NP') of the 'ConstraintSet'.
-instance NamedIdea     (ConstraintSet e) where term = con . term
+instance HasChunkRefs e => NamedIdea (ConstraintSet e) where term = con . term
 -- | Finds the idea of the 'ConstraintSet'.
-instance Idea          (ConstraintSet e) where getA = getA . (^. con)
+instance HasChunkRefs e => Idea      (ConstraintSet e) where getA = getA . (^. con)
 -- | Finds the definition of the 'ConstraintSet'.
 instance Definition    (ConstraintSet e) where defn = con . defn
 -- | The complete 'ModelExpr' of a ConstraintSet is the logical conjunction of

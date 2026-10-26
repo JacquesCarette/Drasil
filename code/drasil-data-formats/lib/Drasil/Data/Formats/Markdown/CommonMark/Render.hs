@@ -520,7 +520,7 @@ renderCodeFence style info input = textToRenderedLines
         | T.elem '`' infoText -> '~'
         | otherwise -> '`'
     infoPrefix = if T.singleton fenceChar `T.isPrefixOf` infoText then " " else ""
-    fence = T.replicate (max 3 (longestRun fenceChar contents + 1)) (T.singleton fenceChar)
+    fence = T.replicate (max 2 (longestRun fenceChar contents) + 1) (T.singleton fenceChar)
     finalBreak = if T.null contents || "\n" `T.isSuffixOf` contents then "" else "\n"
 
 -- Choosing a delimiter longer than every run in the content prevents a

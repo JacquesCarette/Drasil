@@ -31,7 +31,7 @@ data Block
     Heading
       HeadingLevel -- ^ Heading level.
       [Inline] -- ^ Heading contents.
-  | -- | A paragraph. Literal spaces and tabs are preserved.
+  | -- | A paragraph. Ordinary edge whitespace follows CommonMark rules.
     Paragraph
       [Inline] -- ^ Paragraph contents.
   | -- | A block quote.

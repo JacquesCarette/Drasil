@@ -40,6 +40,7 @@ import Drasil.Data.Formats.Markdown.CommonMark.Core
 import Numeric (showHex)
 import Prettyprinter (Doc, concatWith, defaultLayoutOptions, hardline, layoutPretty, pretty, surround)
 import Prettyprinter.Render.Text (renderStrict)
+import Text.Regex.TDFA (Regex, makeRegex, matchTest)
 
 -- | Marker used to delimit emphasized CommonMark text.
 data EmphasisDelimiter
@@ -125,20 +126,24 @@ renderBlock opt (Heading level contents) =
     marker = T.replicate (fromEnum level + 1) "#"
     -- Inline HTML can introduce layout newlines even when its contents have none.
     text = T.dropAround (\c -> c == ' ' || c == '\t') $
-      T.replace "\n" " " (renderInlineText opt contents)
-renderBlock opt (Paragraph contents) =
-  nonemptyText $ T.intercalate "\n" $
-    protectStart . protectTrailingWhitespace <$> trimLines (T.splitOn "\n" (renderParagraphText opt contents))
+      T.replace "\n" " " (renderInlineTextWithBreaks opt id "\n" "\\\n" contents)
+renderBlock opt (Paragraph contents)
+  | all paragraphWhitespace (normalizeInlines contents) = RenderedLines []
+  | otherwise = nonemptyText $ T.intercalate "\n" $
+      protectStart <$> trimLines (T.splitOn "\n" (renderParagraphText opt contents))
   where
     trimLines = reverse . dropWhile T.null . reverse . dropWhile T.null
-    protectStart line = case T.uncons line of
+    protectStart original = case T.uncons unindented of
       -- A comment can interrupt a paragraph even when another tag follows it.
-      Just ('<', _) | "<!--" `T.isPrefixOf` line -> "<span></span>" <> line
+      Just ('<', _) | "<!--" `T.isPrefixOf` unindented -> indentation <> "<span></span>" <> unindented
       -- A standalone inline tag must not open a CommonMark HTML block.
       Just ('<', _) | not (T.null tagEnd) && T.null (T.strip (T.drop 1 tagEnd)) ->
         line <> "<!-- -->"
-      _ -> protectLeadingWhitespace line
-      where (_, tagEnd) = T.breakOn ">" line
+      _ -> line
+      where
+        line = protectCodeIndentation original
+        (indentation, unindented) = T.span (== ' ') line
+        (_, tagEnd) = T.breakOn ">" unindented
 renderBlock opt (BlockQuote blocks) = prefixBlockQuote (renderBlocks opt blocks)
 renderBlock opt (CodeBlock info contents) = renderCodeFence (codeFenceStyle opt) info contents
 renderBlock opt (OrderedList items) = renderList opt [T.pack (show n) <> "." | n <- [1 :: Int ..]] items
@@ -222,8 +227,18 @@ renderParagraphText opt contents =
     middle = reverse reversedMiddle
     leading (SoftBreak : remaining) = leading remaining
     leading (HardBreak : remaining) =
-      let (breaks, rest) = leading remaining in ("<br />" <> breaks, rest)
+      let (breaks, rest) = leading remaining
+      in ("<br />" <> breaks, if all paragraphWhitespace rest then [] else rest)
+    leading (node@Plain{} : remaining)
+      | paragraphWhitespace node =
+          let (breaks, rest) = leading remaining
+          in if T.null breaks then ("", node : rest) else (breaks, rest)
     leading remaining = ("", remaining)
+
+paragraphWhitespace :: Inline -> Bool
+paragraphWhitespace (Plain text) = T.all (`elem` [' ', '\t', '\r', '\n']) text
+paragraphWhitespace SoftBreak = True
+paragraphWhitespace _ = False
 
 -- True marks a syntactically empty line, which must not acquire indentation.
 data PhysicalLine ann = PhysicalLine Bool (Doc ann)
@@ -322,16 +337,17 @@ renderInlines :: CommonMarkRenderOptions -> [Inline] -> RenderedLines ann
 renderInlines opt = textToRenderedLines . renderInlineText opt
 
 renderInlineText :: CommonMarkRenderOptions -> [Inline] -> Text
-renderInlineText opt = renderInlineTextWithBreaks opt "\n" "\\\n"
+renderInlineText opt = renderInlineTextWithBreaks opt
+  (protectLeadingWhitespace . protectTrailingWhitespace) "\n" "\\\n"
 
-renderInlineTextWithBreaks :: CommonMarkRenderOptions -> Text -> Text -> [Inline] -> Text
-renderInlineTextWithBreaks opt softBreak hardBreak = T.concat . go Nothing False . normalizeInlines
+renderInlineTextWithBreaks :: CommonMarkRenderOptions -> (Text -> Text) -> Text -> Text -> [Inline] -> Text
+renderInlineTextWithBreaks opt protectHTMLEdges softBreak hardBreak = T.concat . go Nothing False . normalizeInlines
   where
     go _ _ [] = []
     go previous startsLine (node : remaining) =
       let next = listToMaybe remaining
           rendered = renderNode previous node next
-          contents = if startsLine then protectLeadingWhitespace rendered else rendered
+          contents = if startsLine then protectCodeIndentation rendered else rendered
           following = go (Just node) ("\n" `T.isSuffixOf` contents) remaining
           -- A newline can come from a break node, literal text or inline HTML.
           -- Trailing spaces must not turn any such newline into a hard break.
@@ -346,15 +362,16 @@ renderInlineTextWithBreaks opt softBreak hardBreak = T.concat . go Nothing False
       emphasized "strong" (strongDelimiter opt) 2 before ch after
     renderNode before (CodeSpan t) after
       | any adjacentCode [before, after] =
-          "<code>" <> renderInlineHTML opt (HTML.RawText (normalizeCodeSpan t)) <> "</code>"
+          "<code>" <> protectLeadingWhitespace (protectTrailingWhitespace
+            (renderInlineHTML opt (HTML.RawText (normalizeCodeSpan t)))) <> "</code>"
       | otherwise = renderCodeSpan t
     renderNode _ (Link url ch) _ = link "" url ch
     renderNode _ (Image source ch) _ = link "!" source ch
     renderNode _ SoftBreak _ = softBreak
     renderNode _ HardBreak _ = hardBreak
-    renderNode _ (HTMLInline body) _ = renderInlineHTML opt body
+    renderNode _ (HTMLInline body) _ = protectHTMLEdges (renderInlineHTML opt body)
     link prefix destination ch =
-      prefix <> "[" <> renderInlineTextWithBreaks opt softBreak hardBreak ch <> "](<" <>
+      prefix <> "[" <> renderInlineTextWithBreaks opt protectHTMLEdges softBreak hardBreak ch <> "](<" <>
         escapeDestination destination <> ">)"
     -- Only use delimiter syntax where its boundaries are unambiguous.
     -- HTML handles whitespace, punctuation, nesting and touching emphasis.
@@ -368,7 +385,7 @@ renderInlineTextWithBreaks opt softBreak hardBreak = T.concat . go Nothing False
           in marker <> contents <> marker
       | otherwise = "<" <> tag <> ">" <> guardLine <> contents <> "</" <> tag <> ">"
       where
-        contents = renderInlineTextWithBreaks opt softBreak hardBreak ch
+        contents = renderInlineTextWithBreaks opt protectHTMLEdges softBreak hardBreak ch
         -- A tag-only opening line would start an HTML block in CommonMark.
         (opening, rest) = T.breakOn "\n" contents
         guardLine
@@ -414,7 +431,7 @@ delimiterText Asterisk = "*"
 delimiterText Underscore = "_"
 
 escapePlain :: Text -> Text
-escapePlain = protectLineIndentation . T.replace " \n" "&#32;\n" . T.concatMap escapeChar
+escapePlain = protectLineIndentation protectCodeIndentation . T.replace " \n" "&#32;\n" . T.concatMap escapeChar
   where
     escapeChar c
       | isAscii c && (isPunctuation c || isSymbol c) = "\\" <> T.singleton c
@@ -430,8 +447,14 @@ escapeDestination = T.concatMap escapeChar
           in "%" <> T.justifyRight 2 '0' digits
       | otherwise = T.singleton c
 
--- CommonMark trims space and tab at block edges and after source newlines.
--- Encoding the edge character protects the whole literal whitespace run.
+-- Prevent paragraph text from becoming an indented code block.
+protectCodeIndentation :: Text -> Text
+protectCodeIndentation text
+  | T.length indentation >= 4 || T.any (== '\t') indentation = protectLeadingWhitespace text
+  | otherwise = text
+  where indentation = T.takeWhile (`elem` [' ', '\t']) text
+
+-- Preserve literal HTML whitespace at fragment edges and after newlines.
 protectLeadingWhitespace :: Text -> Text
 protectLeadingWhitespace text = case T.uncons text of
   Just (' ', rest) -> "&#32;" <> rest
@@ -444,9 +467,9 @@ protectTrailingWhitespace text = case T.unsnoc text of
   Just (rest, '\t') -> rest <> "&#9;"
   _ -> text
 
-protectLineIndentation :: Text -> Text
-protectLineIndentation text = case T.splitOn "\n" text of
-  first : rest -> T.intercalate "\n" (first : fmap protectLeadingWhitespace rest)
+protectLineIndentation :: (Text -> Text) -> Text -> Text
+protectLineIndentation protect text = case T.splitOn "\n" text of
+  first : rest -> T.intercalate "\n" (first : fmap protect rest)
   [] -> text
 
 protectTrailingSpaces :: Text -> Text
@@ -461,7 +484,7 @@ protectTrailingSpaces contents =
 renderInlineHTML :: CommonMarkRenderOptions -> HTML.HTMLBody -> Text
 renderInlineHTML opt body = guardOpeningLine rendered
   where
-    rendered = protectLineIndentation $ T.replace " \n" "&#32;\n" $ normalizeLineEndings $
+    rendered = protectLineIndentation protectLeadingWhitespace $ T.replace " \n" "&#32;\n" $ normalizeLineEndings $
       renderStrict (layoutPretty defaultLayoutOptions
         (HTML.renderHTMLFragment (htmlRenderOptions opt) [protectText body]))
     protectText (HTML.RawText t) = HTML.RawText (T.concatMap escapeChar t)
@@ -498,10 +521,10 @@ renderCodeSpan input
 -- boundary backticks from the delimiters.
 -- See <https://spec.commonmark.org/0.31.2/#code-spans>.
 needsCodeSpanPadding :: Text -> Bool
-needsCodeSpanPadding contents =
-  "`" `T.isPrefixOf` contents || "`" `T.isSuffixOf` contents ||
-  (" " `T.isPrefixOf` contents && " " `T.isSuffixOf` contents &&
-    not (T.all (== ' ') contents))
+needsCodeSpanPadding = matchTest codeSpanPaddingRegex
+
+codeSpanPaddingRegex :: Regex
+codeSpanPaddingRegex = makeRegex ("^`|`$|^ .*[^ ].* $" :: Text)
 
 -- | Render a fenced code fragment.
 -- Normalize line endings, retain trailing blank lines and add a final content
@@ -520,10 +543,10 @@ renderCodeFence style info input = textToRenderedLines
         | T.elem '`' infoText -> '~'
         | otherwise -> '`'
     infoPrefix = if T.singleton fenceChar `T.isPrefixOf` infoText then " " else ""
-    fence = T.replicate (max 2 (longestRun fenceChar contents) + 1) (T.singleton fenceChar)
+    fence = T.replicate (longestRun fenceChar contents + 1) (T.singleton fenceChar)
     finalBreak = if T.null contents || "\n" `T.isSuffixOf` contents then "" else "\n"
 
 -- Choosing a delimiter longer than every run in the content prevents a
 -- collision; fenced code additionally requires at least three markers.
 longestRun :: Char -> Text -> Int
-longestRun marker = maximum . (0 :) . fmap T.length . T.split (/= marker)
+longestRun marker = maximum . (2 :) . fmap T.length . T.split (/= marker)

@@ -23,8 +23,8 @@ renderParagraph :: [Inline] -> Text
 renderParagraph nodes = renderStrict $ layoutPretty defaultLayoutOptions $
   renderCommonMark defaultCommonMarkRO (CommonMark [Paragraph nodes])
 
--- Character references preserve literal whitespace; HTML fallbacks keep
--- neighboring delimiters from merging.
+-- Character references protect structural indentation and HTML literals;
+-- HTML fallbacks keep neighboring delimiters from merging.
 inlineCases :: [(String, [Inline], Text)]
 inlineCases =
   [ -- A CRLF pair may span text nodes, even with absent nodes between them.
@@ -57,7 +57,7 @@ inlineCases =
     -- A tag-only opening line would otherwise start a CommonMark HTML block.
     ("TAB then LF in emphasis stays inline",
       [Emphasis [Plain "\t\nx"]],
-      "<em><!-- -->&#9;\nx</em>"),
+      "<em><!-- -->\t\nx</em>"),
     -- CommonMark normally trims indentation following a source newline.
     ("literal indentation inside emphasis survives a newline",
       [Emphasis [Plain "a\n\tb"]],
@@ -74,6 +74,12 @@ inlineCases =
         HTMLInline (HTML.Custom (HTML.CT "span") [] [HTML.RawText "*literal*"]),
         Plain " after"],
       "before <span><!-- -->\n&#32; \\*literal\\*\n</span> after"),
+    ("leading spaces do not expose an HTML comment as a block",
+      [Plain "  ", HTMLInline (HTML.Comment "note"), Plain " after"],
+      "  <span></span><!-- note --> after"),
+    ("leading spaces do not expose a standalone HTML tag as a block",
+      [Plain "  ", HTMLInline (HTML.Img "image.png" "x" [])],
+      "  <img src=\"image.png\" alt=\"x\"><!-- -->"),
     ("HTML text is escaped once while Markdown remains literal",
       [HTMLInline (HTML.TextFormat HTML.Emphasis [] [HTML.RawText "<&*x*>"])],
       "<em>&lt;&amp;\\*x\\*&gt;</em>"),
@@ -92,7 +98,7 @@ inlineCases =
       "[encoded](<target.md?value=a%26b%23c#target-heading>)"),
     ("image description supports formatting and code syntax",
       [Image "my photo.png" [Strong [Plain "plot"], Plain " ", CodeSpan "x"]],
-      "![**plot** `x`](<my%20photo.png>)"),
+      "![**plot** ```x```](<my%20photo.png>)"),
     ("interior soft and hard breaks stay distinct",
       [Plain "a", SoftBreak, Plain "b", HardBreak, Plain "c"],
       "a\nb\\\nc")

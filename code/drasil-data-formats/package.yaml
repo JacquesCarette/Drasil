@@ -18,6 +18,7 @@ extra-source-files:
 dependencies:
 - base >= 4.7 && < 5
 - prettyprinter
+- regex-tdfa
 - scientific
 - text
 - containers

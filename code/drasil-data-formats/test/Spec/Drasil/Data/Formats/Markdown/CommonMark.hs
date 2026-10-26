@@ -75,29 +75,55 @@ commonMarkTests = testGroup "Drasil.Data.Formats.Markdown.CommonMark"
         {htmlRenderOptions = HTML.defaultHTMLRO {HTML.indentationSize = 4}})
         (CommonMark [HTMLBlock [HTML.Div [] [HTML.Paragraph [] [HTML.RawText "x"]]]])
         @?= "<div>\n    <p>\n        x\n    </p>\n</div>",
-    testGroup "Literal whitespace"
-      [ testCase "paragraph edge spaces use character references" $
-          renderText (CommonMark [p " x "]) @?= "&#32;x&#32;",
+    testGroup "Whitespace and block structure"
+      [ testCase "ordinary paragraph edge spaces remain raw" $
+          renderText (CommonMark [p " x "]) @?= " x ",
+        testCase "up to three leading spaces remain raw" $
+          renderText (CommonMark [p " x", p "  x", p "   x"])
+            @?= " x\n\n  x\n\n   x",
         testCase "four leading spaces stay in a paragraph" $
-          renderText (CommonMark [p "    x"]) @?= "&#32;   x",
+          renderText (CommonMark [p "    x", p "a\n    b"])
+            @?= "&#32;   x\n\na\n&#32;   b",
+        testCase "tabs count toward four-column indentation" $
+          renderText (CommonMark [p "\tx", p " \tx"])
+            @?= "&#9;x\n\n&#32;\tx",
         testCase "interior spaces and tabs are preserved" $
           renderText (CommonMark [p "a  b\tc"]) @?= "a  b\tc",
         testCase "spaces around soft breaks do not become hard breaks" $
           renderText (CommonMark [Paragraph [Plain "a  ", SoftBreak, Plain "  b"]])
-            @?= "a&#32;&#32;\n&#32; b",
-        testCase "spaces and tabs retain otherwise-empty paragraphs" $
-          renderText (CommonMark [p "  ", p "\t"]) @?= "&#32;&#32;\n\n&#9;",
+            @?= "a&#32;&#32;\n  b",
+        testCase "plain whitespace and soft-break-only paragraphs are omitted" $
+          renderText (CommonMark [p "  ", p "\t",
+            Paragraph [Plain "\r\n", SoftBreak, Plain "\t "]]) @?= "",
+        testCase "nonbreaking spaces retain a paragraph" $
+          renderText (CommonMark [p "\x00A0"]) @?= "\x00A0",
+        testCase "code HTML and hard breaks retain whitespace paragraphs" $
+          renderText (CommonMark [Paragraph [CodeSpan " "],
+            Paragraph [HTMLInline (HTML.RawText " ")], Paragraph [HardBreak]])
+            @?= "``` ```\n\n&#32;\n\n<br /><!-- -->",
+        testCase "whitespace does not hide boundary hard breaks" $
+          renderText (CommonMark
+            [Paragraph [Plain " ", HardBreak, Plain "x", HardBreak, Plain " "],
+             Paragraph [Plain " ", HardBreak, Plain " "]])
+            @?= "<br />x<br />\n\n<br /><!-- -->",
         testCase "heading edge spaces are trimmed" $
           renderText (CommonMark [heading H1 [Plain "  x  "]]) @?= "# x",
         testCase "heading edge tabs and whitespace-only contents are trimmed" $
           renderText (CommonMark [heading H1 [Plain "\t x \t"],
             heading H2 [Plain " \t "]]) @?= "# x\n\n##",
+        testCase "heading trims raw HTML edge spaces and tabs" $
+          renderText (CommonMark
+            [heading H1 [HTMLInline (HTML.RawText "\t x \t")],
+             heading H2 [HTMLInline (HTML.RawText " \t ")]]) @?= "# x\n\n##",
+        testCase "heading trimming preserves adjacent code span spaces" $
+          renderText (CommonMark [heading H1 [CodeSpan " x ", CodeSpan " "]])
+            @?= "# <code>&#32;x&#32;</code><code>&#32;</code>",
         testCase "heading trimming preserves spaces between inline nodes" $
           renderText (CommonMark [heading H1 [Plain " A ", Emphasis [Plain "B"], Plain " C "]])
             @?= "# A *B* C",
         testCase "heading trimming preserves code span padding" $
           renderText (CommonMark [heading H1 [Plain " ", CodeSpan " x ", Plain " "]])
-            @?= "# `  x  `",
+            @?= "# ```  x  ```",
         testCase "heading trimming preserves nonbreaking spaces" $
           renderText (CommonMark [heading H1 [Plain "\x00A0x\x00A0"]])
             @?= "# \x00A0x\x00A0"
@@ -113,7 +139,7 @@ headingValidationTests = testGroup "Heading validation"
     testCase "accept nested single-line formatting" $
       fmap (renderText . CommonMark . pure)
         (mkHeading H2 [Strong [Plain "Title"], Plain " ", Link "/target" [CodeSpan "x"]])
-        @?= Right "## **Title** [`x`](</target>)",
+        @?= Right "## **Title** [```x```](</target>)",
     testCase "accept inline HTML with renderer layout newlines" $
       fmap (renderText . CommonMark . pure)
         (mkHeading H1 [HTMLInline (HTML.Custom (HTML.CT "span") [] [HTML.RawText "x"])])
@@ -173,7 +199,7 @@ codeSyntaxTests = testGroup "Code syntax"
         @?= "```python\nx = 1\n```\n\n```haskell\nx = 1\n```\n\n```\nplain\n```",
     testCase "fence style does not change inline code" $
       renderWith (defaultCommonMarkRO {codeFenceStyle = TildeFence})
-        (CommonMark [Paragraph [CodeSpan "x"]]) @?= "`x`"
+        (CommonMark [Paragraph [CodeSpan "x"]]) @?= "```x```"
   ]
 
 renderText :: CommonMark -> Text
@@ -192,13 +218,14 @@ boundaryCases :: [(String, [Block], Text)]
 boundaryCases =
   [ ("empty document", [], ""),
     ("empty content is omitted", [Paragraph [], UnorderedList [], OrderedList [], HTMLBlock []], ""),
-    ("omitted blocks add no blank lines", [p "a", UnorderedList [], Paragraph [], p "b"], "a\n\nb"),
+    ("omitted blocks add no blank lines",
+      [p "a", UnorderedList [], Paragraph [], p " \t", p "b"], "a\n\nb"),
     ("empty headings, quotes and list items retain markers",
       [heading H1 [], BlockQuote [], UnorderedList [ListItem []]], "#\n\n>\n\n-"),
     ("quote prefixes content and blank lines",
       [BlockQuote [p "a", p "b"]], "> a\n>\n> b"),
-    ("empty paragraphs do not add quote lines",
-      [BlockQuote [Paragraph []]], ">"),
+    ("empty and whitespace-only paragraphs do not add quote lines",
+      [BlockQuote [Paragraph [], p " \t", Paragraph [SoftBreak]]], ">"),
     ("code normalizes mixed line endings and retains trailing blank lines",
       [CodeBlock Nothing "a\r\nb\rc\n\n"], "```\na\nb\nc\n\n```"),
     ("paragraphs have one separating blank line", [p "a", p "b"], "a\n\nb"),
@@ -207,7 +234,7 @@ boundaryCases =
     ("adjacent ordered lists stay distinct",
       [OrderedList (oneItem "a"), OrderedList (oneItem "b")], "1. a\n\n<!-- -->\n\n1. b"),
     ("empty blocks do not hide list adjacency",
-      [UnorderedList (oneItem "a"), Paragraph [], UnorderedList (oneItem "b")],
+      [UnorderedList (oneItem "a"), Paragraph [], p " \t", UnorderedList (oneItem "b")],
       "- a\n\n<!-- -->\n\n- b"),
     ("thematic break remains inside its list item",
       [UnorderedList [ListItem [Paragraph [], ThematicBreak, p "after"]]], "-\n  ---\n\n  after"),
@@ -275,16 +302,22 @@ escapingDocument = CommonMark
 codeCases :: [(String, Text, Text)]
 codeCases =
   [ ("empty", "", "<code></code>"),
-    ("no Markdown escaping", "a*b", "`a*b`"),
-    ("embedded backtick", "a`b", "``a`b``"),
-    ("backtick edges", "`x`", "`` `x` ``"),
+    ("no Markdown escaping", "a*b", "```a*b```"),
+    ("embedded backtick", "a`b", "```a`b```"),
+    ("backtick edges", "`x`", "``` `x` ```"),
     ("multiple backticks", "a``b", "```a``b```"),
     ("only backticks", "``", "``` `` ```"),
-    ("leading space", " x", "` x`"),
-    ("trailing space", "x ", "`x `"),
-    ("both spaces", " x ", "`  x  `"),
-    ("only spaces", "   ", "`   `"),
-    ("normalized newlines", "a\r\nb\rc\nd", "`a b c d`")
+    ("longer backtick run", "a```b", "````a```b````"),
+    ("leading space", " x", "``` x```"),
+    ("trailing space", "x ", "```x ```"),
+    ("both spaces", " x ", "```  x  ```"),
+    ("only spaces", "   ", "```   ```"),
+    ("tab edges need no padding", "\tx\t", "```\tx\t```"),
+    ("spaces surrounding a tab need padding", " \t ", "```  \t  ```"),
+    ("nonbreaking space edges need no padding", "\x00A0x\x00A0", "```\x00A0x\x00A0```"),
+    ("normalized newlines", "a\r\nb\rc\nd", "```a b c d```"),
+    ("normalized boundary newlines need padding", "\r\nx\r", "```  x  ```"),
+    ("only normalized newlines", "\r\n\r\n", "```  ```")
   ]
 
 fenceCases :: [(String, Maybe Text, Text, Text)]

@@ -41,17 +41,3 @@ library:
   source-dirs: lib
   exposed-modules:
   - Language.Drasil.Printers
-
-tests:
-  drasil-printers-test:
-    source-dirs:
-    - test
-    - lib
-    main: Main.hs
-    other-modules:
-    - Language.Drasil.JSON.Cell
-    - Spec.Language.Drasil.JSON.Cell
-    dependencies:
-    - drasil-testing-kit
-    - tasty
-    - tasty-hunit

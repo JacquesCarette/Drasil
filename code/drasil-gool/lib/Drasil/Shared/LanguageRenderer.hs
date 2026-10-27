@@ -264,8 +264,8 @@ return' vs = returnLabel <+> valueList vs
 comment :: Label -> Doc -> Doc
 comment cmt cStart = cStart <+> text cmt
 
-statement :: Statement -> Statement
-statement (s, t) = (s <> getTerm t, Empty)
+statement :: Statement -> Doc
+statement (s, t) = s <> getTerm t
 
 getTerm :: Terminator -> Doc
 getTerm Semi = semi
@@ -421,11 +421,11 @@ namedArgList sep = hicat listSep' . fmap (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 
 prependToBody :: Statement -> Doc -> Doc
-prependToBody s b = vcat [fst $ statement s, maybeBlank, b]
+prependToBody s b = vcat [statement s, maybeBlank, b]
   where maybeBlank = emptyIfEmpty (fst s) (emptyIfEmpty b blank)
 
 appendToBody :: Doc -> Statement -> Doc
-appendToBody b s = vcat [b, maybeBlank, fst $ statement s]
+appendToBody b s = vcat [b, maybeBlank, statement s]
   where maybeBlank = emptyIfEmpty b (emptyIfEmpty (fst s) blank)
 
 surroundBody :: Statement -> Doc -> Statement -> Doc

@@ -38,7 +38,7 @@ import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod,
 import Drasil.Shared.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 import Drasil.Shared.State (VS)
 
-import Data.List (last, intercalate)
+import Data.List (intercalate)
 import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,
   atan,floor,mod,(<>))
 import qualified Prelude as P ((<>))
@@ -176,13 +176,8 @@ class' n p s vs fs = vcat [
 -- Groupings --
 
 multiStmt :: [Statement] -> Statement
-multiStmt sts = (vcat (applyEnd statements), needsEnd statements)
-  where applyEnd [] = []
-        applyEnd [(s, _)] = [s]
-        applyEnd ((s, t):ss) = (s <> getTerm t) : applyEnd ss
-        needsEnd [] = Empty
-        needsEnd ss = snd (last ss)
-        statements = filter notNullStatement sts
+multiStmt sts = (vcat (map statement statements), Empty)
+  where statements = filter notNullStatement sts
         notNullStatement s = not (isEmpty (fst s))
 
 block :: [Doc] -> Doc

@@ -34,17 +34,15 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
-  VisibilityElim, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
+  RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim,
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
-  bOp, variable, value, function, statement, visibility, parameter, method,
-  blockComment')
+  bOp, variable, value, function, visibility, parameter, method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
-  PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
-  OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
-  ModuleElim)
+  PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..), OORenderMethod(..),
+  StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 import Drasil.GOOL.Renderers (renderType, renderParam, renderMethod,
@@ -85,8 +83,9 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize',
-  increment, increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew,
-  switch, for, while, multiAssignError, multiReturnError, multiTypeError)
+  statement, increment, increment1, decrement1, varDec, varDecDef, listDec,
+  extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
+  multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -489,6 +488,7 @@ instance RenderStatement CSharpCode Statement where
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CSharpCode Statement where
+  statementButForReal = C.statement
   statement = fst . unCSC
   statementTerm = snd . unCSC
 

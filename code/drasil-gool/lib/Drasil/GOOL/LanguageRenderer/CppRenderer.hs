@@ -34,13 +34,14 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalVarElim(variableBind), InternalBinderElim(..), RenderValue(..),
   ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
+  InternalControlStmt(..), RenderStatement(..), StatementElim(..),
   RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment', InternalBinderElim(binderElim), RenderValue(call))
+  method, blockComment', InternalBinderElim(binderElim), RenderValue(call),
+  StatementElim(statementButForReal))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, ParentSpec, RenderClass(..), ClassElim,
@@ -81,9 +82,10 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   listAppend, innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
-  increment1, decrement1, varDec, setType, varDecDef, listDec, extObjDecNew,
-  switch, for, while, multiAssignError, multiReturnError, multiTypeError)
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
+  increment, increment1, decrement1, varDec, setType, varDecDef, listDec,
+  extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
+  multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
@@ -508,6 +510,7 @@ instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) Statement where
   stmtFromData d t = on2StateValues pair (stmtFromData d t) (stmtFromData d t)
 
 instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) Statement where
+  statementButForReal s = RC.statementButForReal $ pfst s
   statement s = RC.statement $ pfst s
   statementTerm s = statementTerm $ pfst s
 
@@ -1428,6 +1431,7 @@ instance RenderStatement CppSrcCode Statement where
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppSrcCode Statement where
+  statementButForReal = C.statement
   statement = fst . unCPPSC
   statementTerm = snd . unCPPSC
 
@@ -2087,6 +2091,7 @@ instance RenderStatement CppHdrCode Statement where
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppHdrCode Statement where
+  statementButForReal = C.statement
   statement = fst . unCPPHC
   statementTerm = snd . unCPPHC
 

@@ -183,6 +183,9 @@ class RenderStatement r stmt | r -> stmt where
   stmtFromData :: Doc -> Terminator -> MS (r stmt)
 
 class StatementElim r stmt | r -> stmt where
+  -- | Render a stmt to Doc
+  statementButForReal :: r stmt -> Doc
+  -- | Render a stmt with no additional syntax (e.g. `;`)
   statement :: r stmt -> Doc
   statementTerm :: r stmt -> Terminator
 

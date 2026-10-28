@@ -2,8 +2,8 @@
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, listSize',
-  increment, increment1, decrement1, varDec, varDecDef, setDecDef, listDec,
-  extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
+  statement, increment, increment1, decrement1, varDec, varDecDef, setDecDef,
+  listDec, extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
   multiTypeError
 ) where
 
@@ -24,7 +24,7 @@ import qualified Drasil.GOOL.RendererClassesOO as RO
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData,
   TypeData)
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
-import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
+import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing, getTerm)
 import qualified Drasil.Shared.LanguageRenderer as R
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStmt,
   mkStmtNoEnd, mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
@@ -147,6 +147,9 @@ listSize'
 listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
 -- Statements --
+
+statement :: (RC.StatementElim r stmt) => r stmt -> Doc
+statement st = RC.statement st <> getTerm (RC.statementTerm st)
 
 increment
   :: (InternalVarElim r var, RC.RenderStatement r stmt, ValueElim r val)

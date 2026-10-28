@@ -16,7 +16,7 @@ defaults:
 jobs:
   build:
     name: "Build & Test"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
 
@@ -89,7 +89,7 @@ jobs:
 
   haddock:
     name: Haddock
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
 
@@ -121,7 +121,7 @@ jobs:
   gooltest:
     name: "Compile GOOL"
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     env:
       SKIP_GEN: 1
     steps:
@@ -208,7 +208,7 @@ jobs:
   prepare_deploy:
     name: "Prepare Deployment"
     needs: [haddock, generate]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     env:
       SKIP_GEN: 1
     steps:
@@ -246,7 +246,7 @@ jobs:
   deploy:
     name: "Deploy"
     needs: prepare_deploy
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -263,7 +263,7 @@ jobs:
   cleanup_cache:
     name: "Cleanup Cache"
     needs: [build, haddock]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       actions: write
       contents: read

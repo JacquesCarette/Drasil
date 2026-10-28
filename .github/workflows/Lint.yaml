@@ -12,10 +12,12 @@ defaults:
   run:
     shell: bash
     working-directory: code
+env:
+  CI_IMAGE: &ci-image ubuntu-26.04
 jobs:
   linter:
     name: "Linter"
-    runs-on: ubuntu-26.04
+    runs-on: *ci-image
     steps:
       - uses: actions/checkout@v7
 

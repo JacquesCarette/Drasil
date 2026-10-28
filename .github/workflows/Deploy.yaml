@@ -13,10 +13,12 @@ defaults:
   run:
     shell: bash
     working-directory: code
+env:
+  CI_IMAGE: &ci-image ubuntu-26.04
 jobs:
   build:
     name: "Build & Test"
-    runs-on: ubuntu-26.04
+    runs-on: *ci-image
     steps:
       - uses: actions/checkout@v7
 
@@ -33,7 +35,7 @@ jobs:
         with:
           path: |
             ~/.stack
-          key: ${{ runner.os }}-stack-${{ hashFiles('code/stack.yaml') }}
+          key: ${{ env.CI_IMAGE }}-stack-${{ hashFiles('code/stack.yaml') }}
 
       - name: "Install dependencies"
         run: make stackArgs="--no-terminal" deps
@@ -85,11 +87,11 @@ jobs:
             code/.stack-work
             code/**/.stack-work
             code/**/.hie
-          key: ${{ runner.os }}-stack-work--${{ github.sha }}
+          key: ${{ env.CI_IMAGE }}-stack-work--${{ github.sha }}
 
   haddock:
     name: Haddock
-    runs-on: ubuntu-26.04
+    runs-on: *ci-image
     steps:
       - uses: actions/checkout@v7
 
@@ -98,7 +100,7 @@ jobs:
         with:
           path: |
             ~/.stack
-          key: ${{ runner.os }}-stack-${{ hashFiles('code/stack.yaml') }}
+          key: ${{ env.CI_IMAGE }}-stack-${{ hashFiles('code/stack.yaml') }}
 
       - name: "Generate Haddock docs (full + std)"
         run: make docs FULL=1
@@ -116,12 +118,12 @@ jobs:
             code/.stack-work
             code/**/.stack-work
             code/**/.hie
-          key: ${{ runner.os }}-stack-work-haddock--${{ github.sha }}
+          key: ${{ env.CI_IMAGE }}-stack-work-haddock--${{ github.sha }}
 
   gooltest:
     name: "Compile GOOL"
     needs: build
-    runs-on: ubuntu-26.04
+    runs-on: *ci-image
     env:
       SKIP_GEN: 1
     steps:
@@ -156,7 +158,7 @@ jobs:
   generate:
     name: "Generate Documents"
     needs: build
-    runs-on: ubuntu-26.04
+    runs-on: *ci-image
     env:
       SKIP_GEN: 1
     steps:
@@ -208,7 +210,7 @@ jobs:
   prepare_deploy:
     name: "Prepare Deployment"
     needs: [haddock, generate]
-    runs-on: ubuntu-26.04
+    runs-on: *ci-image
     env:
       SKIP_GEN: 1
     steps:
@@ -246,7 +248,7 @@ jobs:
   deploy:
     name: "Deploy"
     needs: prepare_deploy
-    runs-on: ubuntu-26.04
+    runs-on: *ci-image
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -263,7 +265,7 @@ jobs:
   cleanup_cache:
     name: "Cleanup Cache"
     needs: [build, haddock]
-    runs-on: ubuntu-26.04
+    runs-on: *ci-image
     permissions:
       actions: write
       contents: read
@@ -271,8 +273,8 @@ jobs:
       - name: "Cleanup Cache"
         run: |
           echo "Fetching list of cache keys"
-          gh cache list --key ${{ runner.os }}-stack-work
-          oldCacheKeys=$(gh cache list --key ${{ runner.os }}-stack-work --json id,key --jq "$JQ_FILTER")
+          gh cache list --key ${{ env.CI_IMAGE }}-stack-work
+          oldCacheKeys=$(gh cache list --key ${{ env.CI_IMAGE }}-stack-work --json id,key --jq "$JQ_FILTER")
           echo "Keys to delete:"
           echo $oldCacheKeys
 
@@ -290,4 +292,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           # This JQ filter ignores cache keys matching the current commit (the ones we just pushed to the cache)
-          JQ_FILTER: map(select(.key != "${{ runner.os }}-stack-work--${{ github.sha }}" and .key != "${{ runner.os }}-stack-work-haddock--${{ github.sha }}")) | .[].id
+          JQ_FILTER: map(select(.key != "${{ env.CI_IMAGE }}-stack-work--${{ github.sha }}" and .key != "${{ env.CI_IMAGE }}-stack-work-haddock--${{ github.sha }}")) | .[].id

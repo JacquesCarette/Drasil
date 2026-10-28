@@ -176,7 +176,7 @@ class' n p s vs fs = vcat [
 -- Groupings --
 
 multiStmt :: [Statement] -> Statement
-multiStmt sts = (vcat (map statement statements), Empty)
+multiStmt sts = (vcat (fmap statement statements), Empty)
   where statements = filter notNullStatement sts
         notNullStatement s = not (isEmpty (fst s))
 

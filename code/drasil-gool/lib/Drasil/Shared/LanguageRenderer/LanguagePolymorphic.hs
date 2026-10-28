@@ -77,7 +77,7 @@ multiBody bs = onStateList (toCode . vibcat) $ onStateValue RC.body <$> bs
 block
   :: (Monad r, StatementElim r stmt)
   => [MS (r stmt)] -> MS (r Doc)
-block sts = onStateList (toCode . R.block . fmap RC.statement) sts
+block = onStateList (toCode . R.block . fmap RC.statement)
 
 multiBlock :: (RC.BlockElim r block, Monad r) => [MS (r block)] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ onStateValue RC.block <$> bs

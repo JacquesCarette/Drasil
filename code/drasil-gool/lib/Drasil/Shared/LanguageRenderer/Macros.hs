@@ -77,7 +77,7 @@ runStrategy
   -> MS (r Doc)
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy")
-  (strat (resultState)) (lookup l strats)
+  (strat resultState) (lookup l strats)
   where resultState = maybe emptyStmt asgState av
         asgState v = maybe (strError l
           "Attempt to assign null return to a Value") (v &=) rv

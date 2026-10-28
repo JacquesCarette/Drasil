@@ -42,7 +42,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, binderElim, value, function, preStatement, visibility,
-  parameter, method, blockComment', stmt)
+  parameter, method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
@@ -67,7 +67,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  listAccess, getFunc, setFunc, loopStmt, emptyStmt, assign, subAssign,
   objDecNew, print, returnStmt, valStmt, comment, throw, ifCond, tryCatch,
   construct, param, method, getMethod, setMethod, initStmts, function, docFunc,
   buildClass, implementingClass, docClass, commentedClass, modFromData, docMod,
@@ -494,7 +494,6 @@ instance InternalControlStmt SwiftCode Statement Value where
   multiReturn = CP.multiReturn parens
 
 instance RenderStatement SwiftCode Statement where
-  stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 
@@ -624,7 +623,7 @@ instance ControlStatement SwiftCode Body Statement Variable Value where
 
   ifCond = G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
   switch v cs bod = do
-    st <- RC.stmt emptyStmt
+    st <- emptyStmt
     vl <- zoom lensMStoVS v
     vals <- mapM (zoom lensMStoVS . fst) cs
     bods <- mapM snd cs

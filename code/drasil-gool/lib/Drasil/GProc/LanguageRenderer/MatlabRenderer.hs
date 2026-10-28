@@ -45,12 +45,11 @@ import qualified Drasil.Shared.LanguageRenderer as R (commentedMod,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, break, continue)
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
-  comment, param, docFunc, var, multiBody, block, multiBlock, stmt, loopStmt,
-  negateOp, plusOp, minusOp, multOp, divideOp, equalOp, greaterOp,
-  greaterEqualOp, lessOp, lessEqualOp, csc, sec, cot, valueOf, litChar,
-  litDouble, litInt, litString, valStmt, emptyStmt, assign,
-  funcAppMixedArgs, call, print, ifCond, tryCatch, listAccess, smartAdd, local,
-  lambda)
+  comment, param, docFunc, var, multiBody, block, multiBlock, loopStmt, negateOp,
+  plusOp, minusOp, multOp, divideOp, equalOp, greaterOp, greaterEqualOp, lessOp,
+  lessEqualOp, csc, sec, cot, valueOf, litChar, litDouble, litInt, litString,
+  valStmt, emptyStmt, assign, funcAppMixedArgs, call, print, ifCond, tryCatch,
+  listAccess, smartAdd, local, lambda)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt',
   listDecDef, argExists, multiReturn, litSet)
@@ -423,7 +422,6 @@ instance InternalControlStmt MatlabCode Statement Value where
   multiReturn = CP.multiReturn id
 
 instance RenderStatement MatlabCode Statement where
-  stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 

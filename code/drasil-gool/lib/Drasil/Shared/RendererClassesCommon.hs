@@ -177,7 +177,6 @@ class InternalControlStmt r stmt val | r -> stmt val where
   multiReturn :: [VS (r val)] -> MS (r stmt)
 
 class RenderStatement r stmt | r -> stmt where
-  stmt     :: MS (r stmt) -> MS (r stmt)
   loopStmt :: MS (r stmt) -> MS (r stmt)
 
   stmtFromData :: Doc -> Terminator -> MS (r stmt)

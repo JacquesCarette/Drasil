@@ -17,10 +17,9 @@ import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (($.), observerListName, OOFunctionSym)
 import Drasil.Shared.RendererClassesCommon (RenderValue(cast),
   ValueElim(valueInt))
-import qualified Drasil.Shared.RendererClassesCommon as S (
-  RenderStatement(stmt), RenderValue)
+import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
-  StatementElim(preStatement))
+  StatementElim(statementButForReal))
 import Drasil.Shared.Helpers (toCode, onStateValue, on2StateValues)
 import Drasil.Shared.State (MS, VS, MS, lensMStoVS, genVarName, genLoopIndex,
   genVarNameIf, getVarScope)
@@ -62,14 +61,13 @@ strat
   :: (RC.BodyElim r bod, Monad r, RC.StatementElim r stmt)
   => MS (r stmt) -> MS (r bod) -> MS (r Doc)
 strat = on2StateValues (\result b -> toCode $ vcat [RC.body b,
-  RC.preStatement result])
+  RC.statementButForReal result])
 
 runStrategy
   :: ( EmptyStatement r stmt
      , IC.AssignStatement r stmt var val
      , RC.BodyElim r bod
      , Monad r
-     , S.RenderStatement r stmt
      , RC.StatementElim r stmt
      )
   => Label
@@ -79,7 +77,7 @@ runStrategy
   -> MS (r Doc)
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy")
-  (strat (S.stmt resultState)) (lookup l strats)
+  (strat (resultState)) (lookup l strats)
   where resultState = maybe emptyStmt asgState av
         asgState v = maybe (strError l
           "Attempt to assign null return to a Value") (v &=) rv

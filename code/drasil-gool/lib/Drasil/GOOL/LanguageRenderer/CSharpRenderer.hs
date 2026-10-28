@@ -65,7 +65,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  listAccess, getFunc, setFunc, loopStmt, emptyStmt, assign, subAssign,
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
   implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
@@ -483,7 +483,6 @@ instance InternalControlStmt CSharpCode Statement Value where
   multiReturn _ = error $ C.multiReturnError csName
 
 instance RenderStatement CSharpCode Statement where
-  stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 

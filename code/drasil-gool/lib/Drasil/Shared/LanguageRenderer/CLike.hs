@@ -261,7 +261,7 @@ switch
   -> MS (r bod)
   -> MS (r stmt)
 switch f st v cs bod = do
-  s <- RC.stmt st
+  s <- st
   val <- zoom lensMStoVS v
   vals <- mapM (zoom lensMStoVS . fst) cs
   bods <- mapM snd cs

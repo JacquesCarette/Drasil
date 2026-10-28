@@ -68,9 +68,9 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
   funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAccess, getFunc,
-  setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
-  param, method, getMethod, setMethod, function, buildClass, implementingClass,
+  setFunc, loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
   smartAdd)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
@@ -505,7 +505,6 @@ instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) Statement Val
   multiReturn = pair1List multiReturn multiReturn . fmap (zoom lensMStoVS)
 
 instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) Statement where
-  stmt = pair1 stmt stmt
   loopStmt = pair1 loopStmt loopStmt
   stmtFromData d t = on2StateValues pair (stmtFromData d t) (stmtFromData d t)
 
@@ -1426,7 +1425,6 @@ instance InternalControlStmt CppSrcCode Statement Value where
   multiReturn _ = error $ C.multiReturnError cppName
 
 instance RenderStatement CppSrcCode Statement where
-  stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 
@@ -2086,7 +2084,6 @@ instance InternalControlStmt CppHdrCode Statement Value where
   multiReturn _ = emptyStmt
 
 instance RenderStatement CppHdrCode Statement where
-  stmt = G.stmt
   loopStmt _ = emptyStmt
   stmtFromData d t = toState $ toCode (d, t)
 
@@ -2279,9 +2276,9 @@ instance MethodElim CppHdrCode MethodData where
 
 instance StateVarSym CppHdrCode StateVarData AttachmentData (Doc, VisibilityTag) Variable Value where
   stateVar s p v = do
-    dec <- zoom lensCStoMS $ stmt $ C.varDec classLevel instanceLevel empty v local
+    dec <- zoom lensCStoMS $ C.varDec classLevel instanceLevel empty v local
     pure $ on2CodeValues svd (onCodeValue snd s)
-      (toCode $ R.stateVar empty (RC.perm p) (preStatement dec))
+      (toCode $ R.stateVar empty (RC.perm p) (statementButForReal dec))
   stateVarDef s p vr vl = do
     d <- cpphStateVarDef empty p vr vl
     pure $ pure $ svd (snd $ unCPPHC s) d
@@ -2891,7 +2888,7 @@ cpphStateVarDef
   -> VS (CppHdrCode Variable)
   -> VS (CppHdrCode Value) -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
-  preStatement) (zoom lensCStoMS $ stmt $ onAttachment (binding p)
+  statementButForReal) (zoom lensCStoMS $ onAttachment (binding p)
   (varDec vr local) (varDecDef vr local vl))
 
 cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode StateVarData] ->

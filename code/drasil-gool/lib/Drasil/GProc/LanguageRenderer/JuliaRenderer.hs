@@ -55,9 +55,9 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
-  listAccess, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt,
-  print, comment, valStmt, returnStmt, param, docFunc, throw, arg, argsList,
-  ifCond, smartAdd, local, var, smartSub)
+  listAccess, tryCatch, csc, multiBody, sec, cot, loopStmt, emptyStmt, print,
+  comment, valStmt, returnStmt, param, docFunc, throw, arg, argsList, ifCond,
+  smartAdd, local, var, smartSub)
 import Drasil.GProc.Renderers (renderType)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
@@ -450,7 +450,6 @@ instance InternalControlStmt JuliaCode Statement Value where
   multiReturn = CP.multiReturn id
 
 instance RenderStatement JuliaCode Statement where
-  stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 

@@ -18,6 +18,8 @@ import qualified Data.List.NonEmpty        as NE
 
 import           Control.Lens              (Getter)
 import           Language.Drasil.Symbol    (Symbol)
+import           Drasil.Database           (HasChunkRefs(..))
+import qualified Data.Set                  as S (union)
 
 -- FIXME: These need to be spaces and not just types.
 
@@ -77,6 +79,14 @@ data RealInterval a b where
   Bounded :: (Inclusive, a) -> (Inclusive, b) -> RealInterval a b -- ^ Interval from (x .. y).
   UpTo    :: (Inclusive, a) -> RealInterval a b                   -- ^ Interval from (-infinity .. x).
   UpFrom  :: (Inclusive, b) -> RealInterval a b                   -- ^ Interval from (x .. infinity).
+
+-- | An interval refers to whatever its bounds refer to. Whether a bound is
+-- inclusive or exclusive is only a marker, not a reference.
+instance (HasChunkRefs a, HasChunkRefs b) => HasChunkRefs (RealInterval a b) where
+  chunkRefs (Bounded (_, lo) (_, hi)) = chunkRefs lo `S.union` chunkRefs hi
+  chunkRefs (UpTo (_, hi))            = chunkRefs hi
+  chunkRefs (UpFrom (_, lo))          = chunkRefs lo
+  {-# INLINABLE chunkRefs #-}
 
 -- | Gets the name of an 'Actor'.
 getActorName :: Space -> String

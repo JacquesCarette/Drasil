@@ -149,7 +149,7 @@ listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 -- Statements --
 
 statement :: (RC.StatementElim r stmt) => r stmt -> Doc
-statement st = RC.statement st <> getTerm (RC.statementTerm st)
+statement st = RC.preStatement st <> getTerm (RC.statementTerm st)
 
 increment
   :: (InternalVarElim r var, RC.RenderStatement r stmt, ValueElim r val)
@@ -208,7 +208,7 @@ varDecDef t vr scp vl' = do
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt
-  stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
+  stmtCtor t (RC.preStatement vd <+> equals <+> RC.value vl)
 
 setDecDef
   :: ( IC.DeclStatement r bod stmt var scope val
@@ -222,7 +222,7 @@ setDecDef t vr scp vl' = do
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt
-  stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
+  stmtCtor t (RC.preStatement vd <+> equals <+> RC.value vl)
 
 listDec
   ::
@@ -234,7 +234,7 @@ listDec
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
-  mkStmt (RC.statement vd <> f sz)
+  mkStmt (RC.preStatement vd <> f sz)
 
 extObjDecNew
   ::
@@ -287,8 +287,8 @@ for bStart bEnd sInit vGuard sUpdate b = do
   upd <- RC.loopStmt sUpdate
   bod <- b
   mkStmtNoEnd $ vcat [
-    forLabel <+> parens (RC.statement initl <> semi <+> RC.value guard <>
-      semi <+> RC.statement upd) <+> bStart,
+    forLabel <+> parens (RC.preStatement initl <> semi <+> RC.value guard <>
+      semi <+> RC.preStatement upd) <+> bStart,
     indent $ RC.body bod,
     bEnd]
 

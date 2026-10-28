@@ -41,7 +41,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
   ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  uOp, bOp, variable, binderElim, value, function, statement, visibility,
+  uOp, bOp, variable, binderElim, value, function, preStatement, visibility,
   parameter, method, blockComment', stmt)
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
@@ -499,8 +499,8 @@ instance RenderStatement SwiftCode Statement where
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim SwiftCode Statement where
-  statementButForReal = statement
-  statement = fst . unSC
+  statementButForReal = preStatement
+  preStatement = fst . unSC
   statementTerm = snd . unSC
 
 instance EmptyStatement SwiftCode Statement where
@@ -531,7 +531,7 @@ instance DeclStatement SwiftCode Body Statement Variable ScopeData Value where
   constDecDef vr scp vl' = do
     vdec <- swiftVarDec swiftConst vr scp
     vl <- zoom lensMStoVS vl'
-    mkStmtNoEnd $ RC.statement vdec <+> equals <+> RC.value vl
+    mkStmtNoEnd $ RC.preStatement vdec <+> equals <+> RC.value vl
   funcDecDef = CP.funcDecDef
 
 instance OODeclStatement SwiftCode Statement Variable ScopeData Value where

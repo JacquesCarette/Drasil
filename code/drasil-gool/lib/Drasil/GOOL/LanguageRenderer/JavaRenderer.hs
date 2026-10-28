@@ -514,7 +514,7 @@ instance RenderStatement JavaCode Statement where
 
 instance StatementElim JavaCode Statement where
   statementButForReal = C.statement
-  statement = fst . unJC
+  preStatement = fst . unJC
   statementTerm = snd . unJC
 
 instance EmptyStatement JavaCode Statement where

@@ -489,7 +489,7 @@ instance RenderStatement CSharpCode Statement where
 
 instance StatementElim CSharpCode Statement where
   statementButForReal = C.statement
-  statement = fst . unCSC
+  preStatement = fst . unCSC
   statementTerm = snd . unCSC
 
 instance EmptyStatement CSharpCode Statement where

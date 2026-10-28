@@ -455,8 +455,8 @@ instance RenderStatement JuliaCode Statement where
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JuliaCode Statement where
-  statementButForReal = statement
-  statement = fst . unJLC
+  statementButForReal = preStatement
+  preStatement = fst . unJLC
   statementTerm = snd . unJLC
 
 instance EmptyStatement JuliaCode Statement where

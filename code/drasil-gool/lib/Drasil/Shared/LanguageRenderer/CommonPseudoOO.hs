@@ -256,7 +256,7 @@ arrayDecDef
 arrayDecDef v' scp vals' = do
   vs <- mapM (zoom lensMStoVS) vals'
   vd <- IC.varDec v' scp
-  mkStmt (RC.statement vd <+> equals <+> braces (valueList vs))
+  mkStmt (RC.preStatement vd <+> equals <+> braces (valueList vs))
 
 openFileA
   ::
@@ -449,7 +449,7 @@ setDec
 setDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
-  mkStmt (RC.statement vd <> f sz)
+  mkStmt (RC.preStatement vd <> f sz)
 
 setMethodCall
   :: (TypeSym r typ, ValueSym r val typ, IG.InternalValueExp r var val typ)
@@ -466,7 +466,7 @@ stateVarDef
     )
   => r vis -> r attch -> VS (r var) -> VS (r val) -> CS (r Doc)
 stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
-  (RC.visibility  s) (RG.perm p) . RC.statement)
+  (RC.visibility  s) (RG.perm p) . RC.preStatement)
   (RC.stmt $ IC.varDecDef vr IC.local vl)
 
 constVar
@@ -476,7 +476,7 @@ constVar
     )
   => Doc -> r vis -> VS (r var) -> VS (r val) -> CS (r Doc)
 constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
-  (RC.visibility s) p . RC.statement) (RC.stmt $ IC.constDecDef vr IC.local vl)
+  (RC.visibility s) p . RC.preStatement) (RC.stmt $ IC.constDecDef vr IC.local vl)
 
 -- Python, Java, C++, and Swift --
 
@@ -542,7 +542,7 @@ stateVar
     )
   => r vis -> r attch -> VS (r var) -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
-  (RC.visibility s) (RG.perm p) . RC.statement) (RC.stmt $ IC.varDec v IC.local)
+  (RC.visibility s) (RG.perm p) . RC.preStatement) (RC.stmt $ IC.varDec v IC.local)
 
 -- Python and Swift --
 

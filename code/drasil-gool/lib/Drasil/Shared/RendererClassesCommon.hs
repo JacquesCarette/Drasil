@@ -186,7 +186,7 @@ class StatementElim r stmt | r -> stmt where
   -- | Render a stmt to Doc
   statementButForReal :: r stmt -> Doc
   -- | Render a stmt with no additional syntax (e.g. `;`)
-  statement :: r stmt -> Doc
+  preStatement :: r stmt -> Doc
   statementTerm :: r stmt -> Terminator
 
 class RenderVisibility r vis | r -> vis where

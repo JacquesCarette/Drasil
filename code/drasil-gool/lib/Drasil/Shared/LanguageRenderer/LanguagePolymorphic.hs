@@ -33,7 +33,7 @@ import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
   FunctionElim(functionType), RenderStatement(stmtFromData),
-  StatementElim(statementTerm), MethodTypeSym(mType), RenderParam(paramFromData),
+  StatementElim, MethodTypeSym(mType), RenderParam(paramFromData),
   RenderMethod(commentedFunc), BlockCommentSym(..), ValueElim (value),
   RenderVariable)
 import qualified Drasil.Shared.RendererClassesCommon as RC
@@ -77,7 +77,7 @@ multiBody bs = onStateList (toCode . vibcat) $ onStateValue RC.body <$> bs
 block
   :: (Monad r, RenderStatement r stmt, StatementElim r stmt)
   => [MS (r stmt)] -> MS (r Doc)
-block sts = onStateList (toCode . R.block . fmap RC.statement) (RC.stmt <$> sts)
+block sts = onStateList (toCode . R.block . fmap RC.preStatement) (RC.stmt <$> sts)
 
 multiBlock :: (RC.BlockElim r block, Monad r) => [MS (r block)] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ onStateValue RC.block <$> bs
@@ -416,7 +416,7 @@ stmt
   => MS (r stmt) -> MS (r stmt)
 stmt s' = do
   s <- s'
-  mkStmtNoEnd (RC.statement s <> R.getTerm (statementTerm s))
+  mkStmtNoEnd (RC.statementButForReal s)
 
 loopStmt
   :: (RenderStatement r stmt, StatementElim r stmt)
@@ -798,4 +798,4 @@ fileFromData f fpath mdl' = do
 -- Helper functions
 
 setEmpty :: (RenderStatement r stmt, StatementElim r stmt) => MS (r stmt) -> MS (r stmt)
-setEmpty s' = s' >>= mkStmtNoEnd . RC.statement
+setEmpty s' = s' >>= mkStmtNoEnd . RC.preStatement

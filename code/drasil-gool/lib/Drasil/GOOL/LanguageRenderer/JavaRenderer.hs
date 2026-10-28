@@ -512,7 +512,7 @@ instance RenderStatement JavaCode Statement where
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JavaCode Statement where
-  statementButForReal = C.statement
+  statement = C.statement
   preStatement = fst . unJC
   statementTerm = snd . unJC
 

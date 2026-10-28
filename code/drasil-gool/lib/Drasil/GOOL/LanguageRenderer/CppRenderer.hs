@@ -41,7 +41,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, value, function, visibility, parameter, method,
   blockComment', InternalBinderElim(binderElim), RenderValue(call),
-  StatementElim(statementButForReal))
+  StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, ParentSpec, RenderClass(..), ClassElim,
@@ -509,7 +509,7 @@ instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) Statement where
   stmtFromData d t = on2StateValues pair (stmtFromData d t) (stmtFromData d t)
 
 instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) Statement where
-  statementButForReal s = RC.statementButForReal $ pfst s
+  statement s = RC.statement $ pfst s
   preStatement s = preStatement $ pfst s
   statementTerm s = statementTerm $ pfst s
 
@@ -1429,7 +1429,7 @@ instance RenderStatement CppSrcCode Statement where
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppSrcCode Statement where
-  statementButForReal = C.statement
+  statement = C.statement
   preStatement = fst . unCPPSC
   statementTerm = snd . unCPPSC
 
@@ -2088,7 +2088,7 @@ instance RenderStatement CppHdrCode Statement where
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppHdrCode Statement where
-  statementButForReal = C.statement
+  statement = C.statement
   preStatement = fst . unCPPHC
   statementTerm = snd . unCPPHC
 
@@ -2278,7 +2278,7 @@ instance StateVarSym CppHdrCode StateVarData AttachmentData (Doc, VisibilityTag)
   stateVar s p v = do
     dec <- zoom lensCStoMS $ C.varDec classLevel instanceLevel empty v local
     pure $ on2CodeValues svd (onCodeValue snd s)
-      (toCode $ R.stateVar empty (RC.perm p) (statementButForReal dec))
+      (toCode $ R.stateVar empty (RC.perm p) (statement dec))
   stateVarDef s p vr vl = do
     d <- cpphStateVarDef empty p vr vl
     pure $ pure $ svd (snd $ unCPPHC s) d
@@ -2888,7 +2888,7 @@ cpphStateVarDef
   -> VS (CppHdrCode Variable)
   -> VS (CppHdrCode Value) -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
-  statementButForReal) (zoom lensCStoMS $ onAttachment (binding p)
+  statement) (zoom lensCStoMS $ onAttachment (binding p)
   (varDec vr local) (varDecDef vr local vl))
 
 cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode StateVarData] ->

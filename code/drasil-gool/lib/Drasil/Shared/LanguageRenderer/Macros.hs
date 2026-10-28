@@ -19,7 +19,7 @@ import Drasil.Shared.RendererClassesCommon (RenderValue(cast),
   ValueElim(valueInt))
 import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
-  StatementElim(statementButForReal))
+  StatementElim(statement))
 import Drasil.Shared.Helpers (toCode, onStateValue, on2StateValues)
 import Drasil.Shared.State (MS, VS, MS, lensMStoVS, genVarName, genLoopIndex,
   genVarNameIf, getVarScope)
@@ -61,7 +61,7 @@ strat
   :: (RC.BodyElim r bod, Monad r, RC.StatementElim r stmt)
   => MS (r stmt) -> MS (r bod) -> MS (r Doc)
 strat = on2StateValues (\result b -> toCode $ vcat [RC.body b,
-  RC.statementButForReal result])
+  RC.statement result])
 
 runStrategy
   :: ( EmptyStatement r stmt

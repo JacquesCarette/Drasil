@@ -426,7 +426,7 @@ instance RenderStatement MatlabCode Statement where
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim MatlabCode Statement where
-  statementButForReal = C.statement
+  statement = C.statement
   preStatement = fst . unMLC
   statementTerm = snd . unMLC
 
@@ -517,10 +517,10 @@ instance ControlStatement MatlabCode Body Statement Variable Value where
     u <- updateS
     bd <- b
     mkStmtNoEnd (vcat [
-      statementButForReal i,
+      statement i,
       text "while" <+> RC.value c,
       indent (RC.body bd),
-      indent (statementButForReal u),
+      indent (statement u),
       mlEnd])
   forRange i initv finalv stepv = forEach i (mlRange initv finalv stepv)
   forEach = CS.forEach' mlForEach

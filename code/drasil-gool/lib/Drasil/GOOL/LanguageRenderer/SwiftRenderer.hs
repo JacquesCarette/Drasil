@@ -498,7 +498,7 @@ instance RenderStatement SwiftCode Statement where
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim SwiftCode Statement where
-  statementButForReal = preStatement
+  statement = preStatement
   preStatement = fst . unSC
   statementTerm = snd . unSC
 

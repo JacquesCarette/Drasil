@@ -221,12 +221,12 @@ switch f st v defBody cs =
         text "case" <+> RC.value l <> colon,
         indentList [
           RC.body result,
-          RC.statementButForReal st]]
+          RC.statement st]]
       defaultSection = vcat [
         text "default" <> colon,
         indentList [
           RC.body defBody,
-          RC.statementButForReal st]]
+          RC.statement st]]
   in vcat [
       text "switch" <> f (RC.value v) <+> lbrace,
       indentList [

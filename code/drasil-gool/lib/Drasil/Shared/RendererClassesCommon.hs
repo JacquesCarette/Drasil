@@ -183,7 +183,7 @@ class RenderStatement r stmt | r -> stmt where
 
 class StatementElim r stmt | r -> stmt where
   -- | Render a stmt to Doc
-  statementButForReal :: r stmt -> Doc
+  statement :: r stmt -> Doc
   -- | Render a stmt with no additional syntax (e.g. `;`)
   preStatement :: r stmt -> Doc
   statementTerm :: r stmt -> Terminator

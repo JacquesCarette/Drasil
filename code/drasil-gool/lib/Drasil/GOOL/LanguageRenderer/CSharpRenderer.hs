@@ -487,7 +487,7 @@ instance RenderStatement CSharpCode Statement where
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CSharpCode Statement where
-  statementButForReal = C.statement
+  statement = C.statement
   preStatement = fst . unCSC
   statementTerm = snd . unCSC
 

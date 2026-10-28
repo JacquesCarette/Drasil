@@ -490,7 +490,7 @@ instance RenderStatement PythonCode Statement where
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim PythonCode Statement where
-  statementButForReal = preStatement
+  statement = preStatement
   preStatement = fst . unPC
   statementTerm = snd . unPC
 

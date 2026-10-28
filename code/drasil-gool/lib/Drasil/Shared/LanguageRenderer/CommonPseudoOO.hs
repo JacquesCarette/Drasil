@@ -466,7 +466,7 @@ stateVarDef
     )
   => r vis -> r attch -> VS (r var) -> VS (r val) -> CS (r Doc)
 stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
-  (RC.visibility  s) (RG.perm p) . RC.statementButForReal)
+  (RC.visibility  s) (RG.perm p) . RC.statement)
   (IC.varDecDef vr IC.local vl)
 
 constVar
@@ -476,7 +476,7 @@ constVar
     )
   => Doc -> r vis -> VS (r var) -> VS (r val) -> CS (r Doc)
 constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
-  (RC.visibility s) p . RC.statementButForReal) (IC.constDecDef vr IC.local vl)
+  (RC.visibility s) p . RC.statement) (IC.constDecDef vr IC.local vl)
 
 -- Python, Java, C++, and Swift --
 
@@ -542,7 +542,7 @@ stateVar
     )
   => r vis -> r attch -> VS (r var) -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
-  (RC.visibility s) (RG.perm p) . RC.statementButForReal) (IC.varDec v IC.local)
+  (RC.visibility s) (RG.perm p) . RC.statement) (IC.varDec v IC.local)
 
 -- Python and Swift --
 

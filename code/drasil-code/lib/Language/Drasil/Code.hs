@@ -13,6 +13,9 @@ module Language.Drasil.Code (
   module Language.Drasil.CodeSpec,
   module Language.Drasil.Mod,
   module Language.Drasil.Chunk.Code,
+  module Language.Drasil.Chunk.CodeBase,
+  module Language.Drasil.Chunk.CodeDefinition,
+  module Language.Drasil.Chunk.ConstraintMap,
   module Language.Drasil.Chunk.NamedArgument,
   module Language.Drasil.Data.ODEInfo,
   module Language.Drasil.Data.ODELibPckg,
@@ -65,12 +68,15 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   Visibility(..), defaultChoices, makeArchit, Architecture(..), DataInfo(..),
   makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints, makeODE,
   makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
-  makeOptFeats, ExtLib(..))
-import Language.Drasil.CodeSpec (CodeSpec, HasCodeSpec(..),
-  mkCodeSpec, funcUID, asVC)
+  makeOptFeats, ExtLib(..), odeInfoReqs, odeLibReqs)
+import Language.Drasil.CodeSpec (CodeSpec, HasCodeSpec(..), Input, Const,
+  mkCodeSpec, getODE, mapODE, funcUID, asVC)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..),
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
 import Language.Drasil.Chunk.Code (ccObjVar)
+import Language.Drasil.Chunk.CodeBase (codevars, codevars')
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, auxExprs)
+import Language.Drasil.Chunk.ConstraintMap (constraintMap)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, odeInfo', ODEOptions(..),
   odeOptions, ODEMethod(..))

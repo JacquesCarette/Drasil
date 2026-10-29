@@ -9,10 +9,12 @@ on:
     paths: [wiki/**, .github/workflows/Wiki.yaml]
 permissions:
   contents: write
+env:
+  CI_IMAGE: &ci-image ubuntu-26.04
 jobs:
   check_directories:
     name: "Audit changes"
-    runs-on: ubuntu-latest
+    runs-on: *ci-image
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v7
@@ -47,7 +49,7 @@ jobs:
 
   wiki:
     name: "Publish changes"
-    runs-on: ubuntu-latest
+    runs-on: *ci-image
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v7

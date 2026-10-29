@@ -494,7 +494,6 @@ instance RenderStatement PythonCode Statement where
 instance StatementElim PythonCode Statement where
   statement = preStatement
   preStatement = unPC
-  statementTerm _ = error "Shouldn't be doing this in Python..."
 
 instance EmptyStatement PythonCode Statement where
   emptyStmt = G.emptyStmt

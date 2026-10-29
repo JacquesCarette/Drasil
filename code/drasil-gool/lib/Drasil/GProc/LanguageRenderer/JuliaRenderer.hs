@@ -457,7 +457,6 @@ instance RenderStatement JuliaCode Statement where
 instance StatementElim JuliaCode Statement where
   statement = preStatement
   preStatement = unJLC
-  statementTerm _ = error "Shouldn't be doing this in Julia..."
 
 instance EmptyStatement JuliaCode Statement where
   emptyStmt = G.emptyStmt

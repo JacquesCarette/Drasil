@@ -502,7 +502,6 @@ instance RenderStatement SwiftCode Statement where
 instance StatementElim SwiftCode Statement where
   statement = preStatement
   preStatement = unSC
-  statementTerm _ = error "Shouldn't be doing this in Swift..."
 
 instance EmptyStatement SwiftCode Statement where
   emptyStmt = G.emptyStmt

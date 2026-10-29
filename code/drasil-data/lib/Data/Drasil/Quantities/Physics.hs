@@ -9,17 +9,20 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   distance, energy, fSpeed, fVel, force, frequency, gravitationalAccel, gravitationalConst,
   gravitationalMagnitude, height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV,
   ixPos, ixVel, iyPos, iyVel, kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position,
-  potEnergy, pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
+  potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque,
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angFreq, period,
   frequency, chgMomentum)
+import Drasil.Database (mkUid)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second, hertz)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU,
     impulseU, momtInertU, torqueU, velU)
 
 restitutionCoef :: DefinedQuantityDict
-restitutionCoef = dqdNoUnit CP.restitutionCoef (sub cC (label "R")) Real
+restitutionCoef = quantNoUnit' (mkUid "restitutionCoef") (cn "coefficient of restitution")
+  (S "a measure of the restitution of a collision between two objects")
+  (const $ sub cC (label "R")) Real
 
 -- | Collects all physical quantities defined in this file for easy use in Drasil.
 physicscon :: [DefinedQuantityDict]

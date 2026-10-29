@@ -5,7 +5,7 @@ import Language.Drasil.Code (odeInfo', odeOptions, quantvar, ODEInfo,
     ODEMethod(RK45), ODEOptions)
 import Theory.Drasil (InitialValueProblem, makeAIVP)
 
-import Drasil.PDController.Unitals (dqdSetPointTD, dqdPropGain, dqdDerivGain,
+import Drasil.PDController.Unitals (setPoint, propGain, derGain,
     dqdSimTime, dqdStepTime, odeRelTolConst, odeAbsTolConst)
 import Drasil.PDController.IModel(imPDRC)
 
@@ -18,7 +18,7 @@ pdIVP = makeAIVP (exactDbl 0) (sy dqdSimTime) [exactDbl 0, exactDbl 0]
 
 pidODEInfo :: ODEInfo
 pidODEInfo = odeInfo'
-  [quantvar dqdPropGain, quantvar dqdDerivGain, quantvar dqdSetPointTD]
+  [quantvar propGain, quantvar derGain, quantvar setPoint]
   pidODEOptions
   imPDRC
   pdIVP

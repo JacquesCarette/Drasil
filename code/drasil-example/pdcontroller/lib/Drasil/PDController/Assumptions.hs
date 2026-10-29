@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.SI_Units (kilogram)
 
 import Drasil.PDController.Concepts
-
+import Drasil.PDController.Unitals (setPoint, processVariable)
 assumptions :: [ConceptInstance]
 assumptions
   = [aPwrPlant, aDecoupled, aSP, aExtDisturb, aInitialValue, aParallelEq,

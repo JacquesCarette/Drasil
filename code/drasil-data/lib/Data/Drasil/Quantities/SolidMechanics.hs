@@ -4,8 +4,10 @@ module Data.Drasil.Quantities.SolidMechanics where
 import Language.Drasil
 import Language.Drasil.ShortHands (cE, cS, cP, cK, lSigma, lNu)
 
+import Drasil.Database (mkUid)
 import Data.Drasil.Concepts.SolidMechanics as CSM (elastMod, mobShear, nrmStrss,
-    poissnsR, shearRes, stffness)
+    shearRes, stffness)
+import qualified Data.Drasil.Concepts.Physics as CP (strain)
 import Data.Drasil.SI_Units (newton, pascal)
 import Data.Drasil.Units.SolidMechanics (stiffnessU)
 
@@ -22,4 +24,6 @@ nrmStrss = dqd CSM.nrmStrss lSigma Real pascal
 -- * Without Units
 
 poissnsR :: DefinedQuantityDict
-poissnsR = dqdNoUnit CSM.poissnsR lNu Real
+poissnsR = quantNoUnit' (mkUid "poissnsR") (nounPhraseSP "Poisson's ratio")
+  (S "the ratio of perpendicular" +:+ phrase CP.strain +:+ S "to parallel" +:+ phrase CP.strain)
+  (const lNu) Real

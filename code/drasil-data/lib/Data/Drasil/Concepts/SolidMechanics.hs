@@ -9,10 +9,10 @@ import Data.Drasil.Concepts.Physics (force, strain, stress)
 --       to make a combined "mobilized shear force" for example
 -- | Collects all solid mechanics-related concepts.
 solidcon :: [ConceptChunk]
-solidcon = [elastMod, mobShear, normForce, nrmStrss, poissnsR, shearForce,
+solidcon = [elastMod, mobShear, normForce, nrmStrss, shearForce,
   shearRes, stffness]
 
-elastMod, mobShear, normForce, nrmStrss, poissnsR, shearForce,
+elastMod, mobShear, normForce, nrmStrss, shearForce,
   shearRes, stffness :: ConceptChunk
 
 elastMod   = cncpt''' (mkUid "elastMod") (cn "elastic modulus")
@@ -28,9 +28,6 @@ normForce  = cncpt''' (mkUid "normForce") (cn' "normal force")
 
 nrmStrss   = cncpt''' (mkUid "nrmStrss") (cn "normal stress")
   (S "the" +:+ phrase stress +:+  S "exerted perpendicular to the plane of the object")
-
-poissnsR   = cncpt''' (mkUid "poissnsR") (nounPhraseSP "Poisson's ratio")
-  (S "the ratio of perpendicular" +:+ phrase strain +:+ S "to parallel" +:+ phrase strain)
 
 shearRes   = cncpt''' (mkUid "shearRes") (cn "resistive shear force")
   (S "the" +:+ phrase shearForce +:+ S "in the direction opposite to the direction" +:+

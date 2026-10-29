@@ -57,7 +57,7 @@ ddPropCtrlDefn :: SimpleQDef
 ddPropCtrlDefn = mkQuantDef dqdPropControlFD ddPropCtrlEqn
 
 ddPropCtrlEqn :: Expr
-ddPropCtrlEqn = sy dqdPropGain $* sy dqdProcessErrorFD
+ddPropCtrlEqn = sy propGain $* sy dqdProcessErrorFD
 
 ddPropCtrlNote :: Sentence
 ddPropCtrlNote
@@ -79,7 +79,7 @@ ddDerivCtrlDefn = mkQuantDef dqdDerivativeControlFD ddDerivCtrlEqn
 
 ddDerivCtrlEqn :: Expr
 ddDerivCtrlEqn
-  = sy dqdDerivGain $* sy dqdProcessErrorFD $* sy dqdFreqDomain
+  = sy derGain $* sy dqdProcessErrorFD $* sy dqdFreqDomain
 
 ddDerivCtrlNote :: Sentence
 ddDerivCtrlNote
@@ -102,8 +102,8 @@ ddCtrlVarDefn = mkQuantDef dqdCtrlVarFD ddCtrlEqn
 
 ddCtrlEqn :: Expr
 ddCtrlEqn
-  = sy dqdProcessErrorFD $* (sy dqdPropGain $+
-        (sy dqdDerivGain $* sy dqdFreqDomain))
+  = sy dqdProcessErrorFD $* (sy propGain $+
+        (sy derGain $* sy dqdFreqDomain))
 
 ddCtrlNote :: Sentence
 ddCtrlNote

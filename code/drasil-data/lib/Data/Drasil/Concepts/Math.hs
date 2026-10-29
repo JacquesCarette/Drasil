@@ -33,9 +33,9 @@ mathcon' = [de, leftSide, ode, pde, rightSide]
 -- * Mathematical Concepts
 
 amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint, diameter,
-  direction, euclidN, euclidSpace, gradient, laplaceTransform, law, line, matrix, norm, normal, normalV,
-  number, orient, origin, perp, perpV, positive, negative, point, probability,
-  rOfChng, rate, rightHand, shape, surArea, surface, unitV, vector, xAxis, xCoord, xComp, xDir,
+  direction, euclidSpace, laplaceTransform, law, line, matrix, norm, normal,
+  number, orient, origin, perp, positive, negative, point, probability,
+  rOfChng, rate, rightHand, shape, surArea, surface, vector, xAxis, xCoord, xComp, xDir,
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
 amplitude   = cncpt''' (mkUid "amplitude")   (nounPhraseSP "amplitude")  (D.S "The peak deviation of a function from zero")
@@ -57,7 +57,6 @@ diameter     = cncpt''' (mkUid "diameter")       (cn' "diameter")        (D.S ("
 direction    = cncpt''' (mkUid "direction")      (cn' "direction")       (D.S "'which way' a vector points, extending from the tail to the tip")
 euclidSpace  = cncpt''' (mkUid "euclidSpace")    (cn' "Euclidean")       (D.S ("Denoting the system of geometry corresponding to the geometry of ordinary" <>
                                                                          "experience"))
-gradient     = cncpt'''  (mkUid "gradient")      (cn' "gradient")        (D.S "degree of steepness of a graph at any point")
 laplaceTransform = cncpt''' (mkUid "laplaceTransform") (cn' "laplace transform") (D.S ("An integral transform that converts a function of a real variable t "
                                                                          <> "(often time) to a function of a complex variable s (complex frequency)"))
 law          = cncpt''' (mkUid "law") (cn' "law")                        (D.S "a generalization based on a fact or event perceived to be recurrent")
@@ -109,9 +108,5 @@ rightSide = commonIdea (mkUid "rightSide") (nounPhrase "right-hand side" "right-
 
 --FIXME: COMBINATION HACK (all below)
 -- do we really need fterms here? Would combineNINI work?
-euclidN = cncpt''' (mkUid "euclidNorm")    (combineNINI euclidSpace norm) (D.S "euclidean norm")
-normalV = cncpt''' (mkUid "normal vector") (combineNINI normal vector)    (D.S "unit outward normal vector for a surface")
-perpV   = cncpt''' (mkUid "perp_vect")     (combineNINI perp vector)      (D.S "vector perpendicular or 90 degrees to another vector")
 rOfChng = cncpt''' (mkUid "rOfChng")       (rate `of_` change) (D.S "ratio between a change in one variable relative to a corresponding change in another")
 surArea = cncpt''' (mkUid "surArea")       (combineNINI surface area)     (D.S "a measure of the total area that the surface of the object occupies")
-unitV   = cncpt''' (mkUid "unit_vect")     (combineNINI unit_ vector)     (D.S "a vector that has a magnitude of one")

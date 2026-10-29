@@ -44,9 +44,9 @@ import Drasil.Shared.LanguageRenderer (printLabel, listSep, listSep',
   parameterList, forLabel, inLabel, tryLabel, catchLabel,
   valueList, binderList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
-  exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
-  addComments, blockCmt, docCmt, commentedMod, commentedItem, break, continue,
-  constDec', assign, subAssign, addAssign)
+  exp, sin, cos, tan, asin, acos, atan, floor, ceil, body, addComments, blockCmt,
+  docCmt, commentedMod, commentedItem, break, continue, constDec', assign,
+  subAssign, addAssign)
 import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmtNoEnd, typeFromData)
@@ -78,8 +78,7 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
 import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..),
   ModData(..), md, updateMod, MethodData(..), mthd, OpData(..), ParamData(..),
   ProgData(..), TypeData(..), ValData(..), vd, VarData(..), vard, progD, fd, pd,
-  updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD, FileData,
-  Statement)
+  updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD, FileData)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.Shared.State (FS, MS, VS, lensGStoFS, revFiles, setFileType,
@@ -99,6 +98,8 @@ import qualified Text.PrettyPrint.HughesPJ as D (float)
 
 jlExt :: String
 jlExt = "jl"
+
+type Statement = Doc
 
 newtype JuliaCode a = JLC {unJLC :: a} deriving Functor
 
@@ -451,18 +452,18 @@ instance InternalControlStmt JuliaCode Statement Value where
 
 instance RenderStatement JuliaCode Statement where
   loopStmt = G.loopStmt
-  stmtFromData d t = toState $ toCode (d, t)
+  stmtFromData d _ = toState $ toCode d
 
 instance StatementElim JuliaCode Statement where
   statement = preStatement
-  preStatement = fst . unJLC
-  statementTerm = snd . unJLC
+  preStatement = unJLC
+  statementTerm _ = error "Shouldn't be doing this in Julia..."
 
 instance EmptyStatement JuliaCode Statement where
   emptyStmt = G.emptyStmt
 
 instance MultiStatement JuliaCode Statement where
-  multi = onStateList (onCodeList R.multiStmt)
+  multi = onStateList (onCodeList vcat)
 
 instance ValueStatement JuliaCode Statement Value where
   valStmt = G.valStmt Empty

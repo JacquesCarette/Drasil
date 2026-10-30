@@ -11,8 +11,8 @@ import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 import qualified Prettyprinter as PNew (Doc)
 
-import Drasil.Data.Formats.JSON (JSON(..), JSONRenderOptions, JSONStyle(..),
-  jsonRenderOpts, renderJSON)
+import Drasil.Data.Formats.JSON (JSONRenderOptions, JSONStyle(..), jsonRenderOpts)
+import qualified Drasil.Jupyter as Jupyter (Notebook(..), Cell, renderNotebook)
 import Language.Drasil (checkValidStr, Special(Circle))
 import Language.Drasil.Document (MaxWidthPercent)
 
@@ -26,7 +26,7 @@ import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
 import Language.Drasil.Markdown.Citation (BibFormatter(..), renderCite)
 
-import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine,
+import Language.Drasil.JSON.Helpers (notebookMetadata, h, stripnewLine,
  tr, td, th, bold, em, image, li, pa, ba, table, refwrap, refID, reflink,
  reflinkInfo, reflinkURI, mkDiv, markdownCell, codeCell)
 
@@ -38,16 +38,16 @@ genJupyterLessonPlan :: Document -> PNew.Doc ann
 genJupyterLessonPlan (Document t a c) =
   let
     titleCell = markdownCell (vcat [text "# " <> pSpec t, text "## " <> pSpec a])
-    cells = JArray $ titleCell : concatMap printLO' c
-  in renderJSON pretty $ JObject $ ("cells", cells) : makeMetadata
+    cells = titleCell : concatMap printLO' c
+  in Jupyter.renderNotebook pretty $ Jupyter.Notebook notebookMetadata cells
 
 -- | Build an SRS document in JSON format.
 genJupyterSRS :: Document -> PNew.Doc ann
 genJupyterSRS (Document t a c) =
   let
     titleCell = markdownCell (vcat [text "# " <> pSpec t, text "## " <> pSpec a])
-    cells = JArray $ titleCell : [markdownCell (print c)]
-  in renderJSON pretty $ JObject $ ("cells", cells) : makeMetadata
+    cells = titleCell : [markdownCell (print c)]
+  in Jupyter.renderNotebook pretty $ Jupyter.Notebook notebookMetadata cells
 
 -- | Helper for rendering a D from Latex print
 printMath :: D -> Doc
@@ -74,7 +74,7 @@ printLO Graph{}                         = empty
 printLO CodeBlock {}                    = empty
 
 -- printLO' is used for generating general notebook (lesson plans)
-printLO' :: LayoutObj -> [JSON]
+printLO' :: LayoutObj -> [Jupyter.Cell]
 printLO' (Header n contents l)            = [markdownCell $ (h (n + 1) <> pSpec contents) $$ refID (pSpec l)]
 printLO' (Cell layoutObs)                 = concatMap printLO' layoutObs
 printLO' HDiv{} = []

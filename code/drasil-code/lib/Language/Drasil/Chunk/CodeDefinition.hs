@@ -24,8 +24,15 @@ data CodeDefinition = CD { _cchunk   :: CodeChunk
                          }
 makeLenses ''CodeDefinition
 
+-- The definition type is only a tag (plain definition or ODE), so it has
+-- nothing to report.
 instance HasChunkRefs CodeDefinition where
-  chunkRefs cd = chunkRefs (cd ^. cchunk)
+  chunkRefs (CD codeChk bodyExpr otherExprs _tag) =
+    mconcat
+      [ chunkRefs codeChk
+      , chunkRefs bodyExpr
+      , chunkRefs otherExprs
+      ]
   {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeDefinition'.
@@ -65,7 +72,7 @@ qtoc :: (Quantity (q Expr), MayHaveUnit (q Expr), DefiningExpr q, Concept (q Exp
 qtoc q = CD (codeChunk $ quantfunc q) (expr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a variable.
-qtov :: CanGenCode e => QDefinition e -> CodeDefinition
+qtov :: (CanGenCode e, HasChunkRefs e) => QDefinition e -> CodeDefinition
 qtov q = CD (codeChunk $ quantvar q) (toCodeExpr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' for an ODE.

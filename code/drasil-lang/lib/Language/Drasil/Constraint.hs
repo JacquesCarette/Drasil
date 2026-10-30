@@ -7,6 +7,7 @@ module Language.Drasil.Constraint (
   physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
   ) where
 
+import Drasil.Database (HasChunkRefs(..))
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Space (RealInterval(..))
 
@@ -22,6 +23,14 @@ data Constraint a where
   Range          :: ConstraintReason -> RealInterval a a -> Constraint a
 
   Elem           :: ConstraintReason -> a -> Constraint a
+
+-- | A constraint refers to whatever its interval or expression refers to. The
+-- 'ConstraintReason' is only a label. Every constructor is listed (no wildcard)
+-- so adding a new form of constraint makes this fail to compile.
+instance HasChunkRefs a => HasChunkRefs (Constraint a) where
+  chunkRefs (Range _ ri) = chunkRefs ri
+  chunkRefs (Elem _ e)   = chunkRefs e
+  {-# INLINABLE chunkRefs #-}
 
 -- | Smart constructor for range of 'Physical' constraints between two given expressions.
 physRange :: RealInterval Expr Expr -> ConstraintE

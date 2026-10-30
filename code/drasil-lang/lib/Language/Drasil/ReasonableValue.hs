@@ -12,7 +12,9 @@ module Language.Drasil.ReasonableValue (
 ) where
 
 import Control.Lens (makeLenses)
+import qualified Data.Set as S (union)
 
+import Drasil.Database (HasChunkRefs(..))
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Sentence (Sentence)
 
@@ -25,6 +27,11 @@ data ReasonableValue = RV { _reasV     :: Expr
                           , _rationale :: Maybe Sentence
                           }
 makeLenses ''ReasonableValue
+
+-- | Both the value and its rationale can mention other chunks.
+instance HasChunkRefs ReasonableValue where
+  chunkRefs (RV val why) = chunkRefs val `S.union` chunkRefs why
+  {-# INLINABLE chunkRefs #-}
 
 reasonableValue :: Expr -> Maybe Sentence -> ReasonableValue
 reasonableValue = RV

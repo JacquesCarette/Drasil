@@ -21,7 +21,10 @@ data RelationConcept = RC { _conc :: ConceptChunk
 makeLenses ''RelationConcept
 
 instance HasChunkRefs RelationConcept where
-  chunkRefs r = chunkRefs (r ^. conc)
+  chunkRefs r = mconcat
+    [ chunkRefs (r ^. conc)
+    , chunkRefs (r ^. rel)
+    ]
   {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'RelationConcept'.

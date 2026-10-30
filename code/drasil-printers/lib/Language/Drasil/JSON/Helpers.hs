@@ -12,10 +12,9 @@ module Language.Drasil.JSON.Helpers (
 
 import Prelude hiding ((<>))
 import qualified Prelude as P ((<>))
-import qualified Prelude
 import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, render)
 import Data.Text (Text)
-import qualified Data.Text as T (lines, pack)
+import qualified Data.Text as T (pack)
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
 
@@ -23,6 +22,7 @@ import Drasil.Data.Formats.JSON (JSON(..))
 import Language.Drasil.Document (MaxWidthPercent)
 
 import Drasil.Printers.Common hiding (wrap)
+import qualified Language.Drasil.JSON.Cell as Cell
 import Language.Drasil.Printing.Helpers (bslash)
 
 data Variation = Class | Id
@@ -124,33 +124,11 @@ stripnewLine s = hcat (text <$> splitOn "\n" s)
 
 -- | Construct a Jupyter markdown cell with the given content.
 markdownCell :: Doc -> JSON
-markdownCell d =
-  JObject
-  [ ("cell_type", "markdown"),
-    ("metadata", JObject []),
-    ("source", formatSource d)
-  ]
+markdownCell = Cell.markdownCellFromText . T.pack . render
 
 -- | Construct a Jupyter code cell with the given content.
 codeCell :: Doc -> JSON
-codeCell d =
-  JObject
-  [ ("cell_type", "code"),
-    ("execution_count", JNull),
-    ("metadata", JObject []),
-    ("outputs", JArray []),
-    ("source", formatSource d)
-  ]
-
--- | Renders a Doc to a JSON array for using in a Juptyer cell's
--- 'source' attribute.
-formatSource :: Doc -> JSON
-formatSource d =
-  let
-    d' = render d
-    t = T.pack d'
-    t' = T.lines t
-  in JArray $ JString . (Prelude.<> "\n") <$> t'
+codeCell = Cell.codeCellFromText . T.pack . render
 
 -- | Generate the metadata necessary for a notebook document.
 makeMetadata :: [(Text, JSON)]

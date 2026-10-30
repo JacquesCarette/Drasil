@@ -3,7 +3,7 @@
 module Spec.Drasil.Data.Formats.HTML (htmlTests) where
 
 import Drasil.Data.Formats.HTML (
-    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), HLevel(..), CustomTag(..),
+    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), HeadingLevel(..), CustomTag(..),
     Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..), renderHTML, renderHTMLFragment, defaultHTMLRO,
     bold, emphasis, subscript, superscript, figureImage, customTag,
     HTMLRenderOptions(..)

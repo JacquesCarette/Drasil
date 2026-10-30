@@ -4,7 +4,7 @@ module Drasil.Data.Formats.HTML.Core
   ( -- * HTML
     -- ** AST
     HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), Attr(..),
-    Format(..), HLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
+    Format(..), HeadingLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
     -- * Smart Constructors
     attr, id_, class_, rawText, rawText', customTag,
     bold, bold_, emphasis, emphasis_, subscript, subscript_, superscript, superscript_,
@@ -40,7 +40,7 @@ data HTMLBody
   = Div [Attr] [HTMLBody]
   | Paragraph [Attr] [HTMLBody]
   | TextFormat Format [Attr] [HTMLBody]
-  | Heading HLevel [Attr] [HTMLBody]
+  | Heading HeadingLevel [Attr] [HTMLBody]
   | List ListType [Attr] [LItem]
   | Section [Attr] [HTMLBody]
   | Table [Attr] [Row]
@@ -73,13 +73,13 @@ data Format = Bold | Emphasis | Subscript | Superscript | Span
   deriving (Show, Eq)
 
 -- | Heading level
-data HLevel = H1 | H2 | H3 | H4 | H5 | H6
+data HeadingLevel = H1 | H2 | H3 | H4 | H5 | H6
   deriving (Show, Eq, Enum, Bounded)
 
 -- * Conversions
 
 -- | Converts a 0-indexed integer to a heading level (capped at H6).
-toHLevel :: Int -> HLevel
+toHLevel :: Int -> HeadingLevel
 toHLevel 0 = H1
 toHLevel 1 = H2
 toHLevel 2 = H3

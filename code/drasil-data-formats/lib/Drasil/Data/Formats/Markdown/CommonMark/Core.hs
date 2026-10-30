@@ -5,8 +5,7 @@ module Drasil.Data.Formats.Markdown.CommonMark.Core
     Block(..),
     ListItem(..),
     Inline(..),
-    HeadingLevel,
-    HTML.HLevel(..),
+    HeadingLevel(..),
     URL,
     Source,
     -- * Smart constructors
@@ -16,6 +15,7 @@ where
 
 import Data.Text (Text)
 import Data.Text qualified as T
+import Drasil.Data.Formats.HTML.Core (HeadingLevel(..))
 import Drasil.Data.Formats.HTML.Core qualified as HTML
 
 -- | A complete CommonMark document.
@@ -133,9 +133,6 @@ singleLineElement attrs contents = all singleLineAttr attrs && all singleLineHTM
 
 singleLineAttr :: HTML.Attr -> Bool
 singleLineAttr (HTML.Attr key value) = all singleLineText [key, value]
-
--- | A valid CommonMark heading level.
-type HeadingLevel = HTML.HLevel
 
 -- | Destination of a link.
 type URL = Text

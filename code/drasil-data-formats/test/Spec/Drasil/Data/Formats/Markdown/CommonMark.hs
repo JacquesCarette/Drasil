@@ -7,7 +7,7 @@ import Data.Text qualified as T
 import Drasil.Data.Formats.HTML qualified as HTML
 import Drasil.Data.Formats.Markdown.CommonMark
   ( Block (..), CodeFenceStyle (..), CommonMark (..), CommonMarkRenderOptions (..),
-    EmphasisDelimiter (..), HeadingLevel, HLevel (..), Inline (..), ListItem (..),
+    EmphasisDelimiter (..), HeadingLevel (..), Inline (..), ListItem (..),
     defaultCommonMarkRO, mkHeading, renderCommonMark )
 import Drasil.TestingKit.Golden (file, goldenTest, goldenTestingGroup, ps)
 import Prettyprinter (LayoutOptions (..), PageWidth (..), defaultLayoutOptions, group, layoutPretty)

@@ -18,7 +18,7 @@ import Drasil.Data.Formats.HTML.Core
     CustomTag (..),
     DItem (..),
     Format (..),
-    HLevel (..),
+    HeadingLevel (..),
     HTML (..),
     HTMLBody (..),
     HTMLHead (..),
@@ -126,7 +126,7 @@ fmtTag Superscript = "sup"
 fmtTag Span = "span"
 
 -- | Internal: gets tag from heading level
-headTag :: HLevel -> Text
+headTag :: HeadingLevel -> Text
 headTag H1 = "h1"
 headTag H2 = "h2"
 headTag H3 = "h3"

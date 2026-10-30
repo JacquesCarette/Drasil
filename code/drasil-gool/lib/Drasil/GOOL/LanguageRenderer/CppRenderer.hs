@@ -35,9 +35,9 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(..),
-  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
+  StatementTerm(..), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
+  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
+  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, value, function, visibility, parameter, method,
   blockComment', InternalBinderElim(binderElim), RenderValue(call),
@@ -511,6 +511,8 @@ instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) Statement where
 instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) Statement where
   statement s = RC.statement $ pfst s
   preStatement s = preStatement $ pfst s
+
+instance (Pair p) => StatementTerm (p CppSrcCode CppHdrCode) Statement where
   statementTerm s = statementTerm $ pfst s
 
 instance (Pair p) => EmptyStatement (p CppSrcCode CppHdrCode) Statement where
@@ -1431,6 +1433,8 @@ instance RenderStatement CppSrcCode Statement where
 instance StatementElim CppSrcCode Statement where
   statement = C.statement
   preStatement = fst . unCPPSC
+
+instance StatementTerm CppSrcCode Statement where
   statementTerm = snd . unCPPSC
 
 instance EmptyStatement CppSrcCode Statement where
@@ -2090,6 +2094,8 @@ instance RenderStatement CppHdrCode Statement where
 instance StatementElim CppHdrCode Statement where
   statement = C.statement
   preStatement = fst . unCPPHC
+
+instance StatementTerm CppHdrCode Statement where
   statementTerm = snd . unCPPHC
 
 instance EmptyStatement CppHdrCode Statement where

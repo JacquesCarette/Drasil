@@ -148,7 +148,7 @@ listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
 -- Statements --
 
-statement :: (RC.StatementElim r stmt) => r stmt -> Doc
+statement :: (RC.StatementElim r stmt, RC.StatementTerm r stmt) => r stmt -> Doc
 statement st = RC.preStatement st <> getTerm (RC.statementTerm st)
 
 increment

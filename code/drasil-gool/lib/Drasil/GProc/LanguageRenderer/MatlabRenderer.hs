@@ -28,10 +28,10 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalVarElim(variableBind), RenderValue(..), ValueElim(..),
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim,
-  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..), InternalBinderElim(..))
+  RenderStatement(..), StatementElim(..), StatementTerm(..),
+  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
   bOp, variable, value, valueInt, function, visibility, parameter, method,
   blockComment')
@@ -428,6 +428,8 @@ instance RenderStatement MatlabCode Statement where
 instance StatementElim MatlabCode Statement where
   statement = C.statement
   preStatement = fst . unMLC
+
+instance StatementTerm MatlabCode Statement where
   statementTerm = snd . unMLC
 
 instance EmptyStatement MatlabCode Statement where

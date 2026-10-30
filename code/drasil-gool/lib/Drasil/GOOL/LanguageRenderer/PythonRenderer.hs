@@ -51,9 +51,9 @@ import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
   argv, printLabel, listSep, piLabel, access, functionDox, binderList,
   parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
-  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
-  classVarAccess, castObj, instanceLevel, break, continue, addComments,
-  commentedMod, commentedItem, var)
+  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, body, classVarAccess,
+  castObj, instanceLevel, break, continue, addComments, commentedMod,
+  commentedItem, var)
 import Drasil.GOOL.Renderers (renderType)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec, multPrec, andPrec,
@@ -80,7 +80,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
   ParamData(..), pd, ProgData(..), progD, TypeData(..), ValData(..), vd,
   VarData(..), vard, BinderD(..), bindFormD, AttachmentTag(..),
-  AttachmentData(..), ad, FileData, ScopeData, Statement)
+  AttachmentData(..), ad, FileData, ScopeData)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -106,6 +106,8 @@ import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
 pyExt :: String
 pyExt = "py"
+
+type Statement = Doc
 
 newtype PythonCode a = PC {unPC :: a}
 
@@ -487,18 +489,17 @@ instance InternalControlStmt PythonCode Statement Value where
 
 instance RenderStatement PythonCode Statement where
   loopStmt = G.loopStmt
-  stmtFromData d t = toState $ toCode (d, t)
+  stmtFromData d _ = toState $ toCode d
 
 instance StatementElim PythonCode Statement where
   statement = preStatement
-  preStatement = fst . unPC
-  statementTerm = snd . unPC
+  preStatement = unPC
 
 instance EmptyStatement PythonCode Statement where
   emptyStmt = G.emptyStmt
 
 instance MultiStatement PythonCode Statement where
-  multi = onStateList (onCodeList R.multiStmt)
+  multi = onStateList (onCodeList vcat)
 
 instance ValueStatement PythonCode Statement Value where
   valStmt = G.valStmt Empty

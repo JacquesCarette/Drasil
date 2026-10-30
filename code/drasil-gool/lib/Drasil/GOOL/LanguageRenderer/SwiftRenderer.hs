@@ -55,7 +55,7 @@ import Drasil.Shared.LanguageRenderer (blockCmtStart, blockCmtEnd, docCmtStart,
   catchLabel, throwLabel, throwsLabel, importLabel, listSep', printLabel,
   listSep, piLabel, access, tuple, ClassDocRenderer, parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log, exp,
-  sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', multiStmt, body,
+  sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', body,
   classVarAccess, func, castObj, classLevel, instanceLevel, break, continue,
   private, blockCmt, docCmt, addComments, commentedMod, commentedItem, switch)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
@@ -92,7 +92,7 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
   FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
-  ScopeData, BinderD(..), bindFormD, FileData, Statement)
+  ScopeData, BinderD(..), bindFormD, FileData)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -117,6 +117,8 @@ import qualified Text.PrettyPrint.HughesPJ as D (float)
 
 swiftExt :: String
 swiftExt = "swift"
+
+type Statement = Doc
 
 newtype SwiftCode a = SC {unSC :: a} deriving Eq
 
@@ -495,18 +497,17 @@ instance InternalControlStmt SwiftCode Statement Value where
 
 instance RenderStatement SwiftCode Statement where
   loopStmt = G.loopStmt
-  stmtFromData d t = toState $ toCode (d, t)
+  stmtFromData d _ = toState $ toCode d
 
 instance StatementElim SwiftCode Statement where
   statement = preStatement
-  preStatement = fst . unSC
-  statementTerm = snd . unSC
+  preStatement = unSC
 
 instance EmptyStatement SwiftCode Statement where
   emptyStmt = G.emptyStmt
 
 instance MultiStatement SwiftCode Statement where
-  multi = onStateList (onCodeList R.multiStmt)
+  multi = onStateList (onCodeList vcat)
 
 instance ValueStatement SwiftCode Statement Value where
   valStmt = G.valStmt Empty

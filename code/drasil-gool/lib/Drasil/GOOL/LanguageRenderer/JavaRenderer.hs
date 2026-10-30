@@ -34,10 +34,10 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim,
-  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..), InternalBinderElim(..))
+  RenderStatement(..), StatementElim(..), StatementTerm(..),
+  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
   bOp, variable, value, function, visibility, parameter, method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
@@ -514,6 +514,8 @@ instance RenderStatement JavaCode Statement where
 instance StatementElim JavaCode Statement where
   statement = C.statement
   preStatement = fst . unJC
+
+instance StatementTerm JavaCode Statement where
   statementTerm = snd . unJC
 
 instance EmptyStatement JavaCode Statement where

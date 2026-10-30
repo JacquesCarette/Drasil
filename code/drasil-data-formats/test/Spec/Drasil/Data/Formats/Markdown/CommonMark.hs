@@ -95,8 +95,8 @@ commonMarkTests = testGroup "Drasil.Data.Formats.Markdown.CommonMark"
         testCase "plain whitespace and soft-break-only paragraphs are omitted" $
           renderText (CommonMark [p "  ", p "\t",
             Paragraph [Plain "\r\n", SoftBreak, Plain "\t "]]) @?= "",
-        testCase "nonbreaking spaces retain a paragraph" $
-          renderText (CommonMark [p "\x00A0"]) @?= "\x00A0",
+        testCase "nonbreaking-space-only paragraphs are omitted" $
+          renderText (CommonMark [p "\x00A0"]) @?= "",
         testCase "code HTML and hard breaks retain whitespace paragraphs" $
           renderText (CommonMark [Paragraph [CodeSpan " "],
             Paragraph [HTMLInline (HTML.RawText " ")], Paragraph [HardBreak]])
@@ -124,9 +124,9 @@ commonMarkTests = testGroup "Drasil.Data.Formats.Markdown.CommonMark"
         testCase "heading trimming preserves code span padding" $
           renderText (CommonMark [heading H1 [Plain " ", CodeSpan " x ", Plain " "]])
             @?= "# ```  x  ```",
-        testCase "heading trimming preserves nonbreaking spaces" $
+        testCase "heading trimming removes edge nonbreaking spaces" $
           renderText (CommonMark [heading H1 [Plain "\x00A0x\x00A0"]])
-            @?= "# \x00A0x\x00A0"
+            @?= "# x"
       ]
   ]
 

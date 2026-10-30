@@ -7,29 +7,11 @@ module Drasil.Data.Formats.Markdown.CommonMark.Render
     CommonMarkRenderOptions (..),
     defaultCommonMarkRO,
     renderCommonMark,
-    RenderedLines,
-    normalizeLineEndings,
-    emptyInlineLines,
-    singletonLine,
-    appendRenderedLines,
-    wrapRenderedLines,
-    addToFirstLine,
-    addToLastLine,
-    textToRenderedLines,
-    docToRenderedLines,
-    prefixBlockQuote,
-    separateRenderedBlocks,
-    concatenateRenderedLines,
-    renderedLinesToDoc,
-    renderInlines,
-    renderCodeSpan,
-    renderCodeFence,
   )
 where
 
 import Data.Char (isAlphaNum, isAscii, isPunctuation, isSpace, isSymbol, ord)
-import Data.List (intercalate, unsnoc)
-import Data.Maybe (listToMaybe)
+import Data.Maybe (listToMaybe, mapMaybe)
 import Data.Text (Text)
 import Data.Text qualified as T
 import Data.Tuple (swap)
@@ -95,47 +77,44 @@ defaultCommonMarkRO =
 -- their text is interpreted as HTML rather than Markdown.
 -- At paragraph boundaries, source line breaks are omitted and hard breaks use
 -- inline HTML. Headings are validated by @mkHeading@ before rendering; their
--- leading and trailing spaces and tabs follow CommonMark's trimming rules.
+-- leading and trailing whitespace is stripped.
 renderCommonMark :: CommonMarkRenderOptions -> CommonMark -> Doc ann
-renderCommonMark opt (CommonMark blocks) = renderedLinesToDoc (renderBlocks opt blocks)
+renderCommonMark opt (CommonMark blocks) = renderBlocks opt blocks
 
-renderBlocks :: CommonMarkRenderOptions -> [Block] -> RenderedLines ann
+renderBlocks :: CommonMarkRenderOptions -> [Block] -> Doc ann
 renderBlocks opt = snd . renderBlocksWithFirst opt
 
--- Retain the first visible source block alongside the shared rendered results,
--- so list items can inspect their opening syntax without rendering it twice.
-renderBlocksWithFirst :: CommonMarkRenderOptions -> [Block] -> (Maybe Block, RenderedLines ann)
+-- Inspect the first visible source block without rendering it a second time.
+renderBlocksWithFirst :: CommonMarkRenderOptions -> [Block] -> (Maybe Block, Doc ann)
 renderBlocksWithFirst opt blocks =
-  (fst <$> listToMaybe rendered, separateRenderedBlocks (separateLists rendered))
+  (fst <$> listToMaybe rendered, separateBlocks (separateLists rendered))
   where
-    rendered = filter present (fmap render blocks)
-    render block = (block, renderBlock opt block)
-    present (_, RenderedLines ls) = not (null ls)
+    rendered = mapMaybe render blocks
+    render block = fmap (block,) (renderBlock opt block)
     separateLists [] = []
     separateLists [(_, contents)] = [contents]
     separateLists ((block, contents) : remaining@((next, _) : _)) =
-      contents : [singletonLine "<!-- -->" | sameList block next] <> separateLists remaining
+      contents : ["<!-- -->" | sameList block next] <> separateLists remaining
     sameList (OrderedList _) (OrderedList _) = True
     sameList (UnorderedList _) (UnorderedList _) = True
     sameList _ _ = False
 
-renderBlock :: CommonMarkRenderOptions -> Block -> RenderedLines ann
+renderBlock :: CommonMarkRenderOptions -> Block -> Maybe (Doc ann)
 renderBlock opt (Heading level contents) =
-  singletonLine (pretty marker <> if T.null text then mempty else " " <> pretty text)
+  Just (pretty marker <> if T.null text then mempty else " " <> pretty text)
   where
     marker = T.replicate (fromEnum level + 1) "#"
-    -- Inline HTML can introduce layout newlines even when its contents have none.
-    text = T.dropAround (\c -> c == ' ' || c == '\t') $
-      T.replace "\n" " " (renderInlineTextWithBreaks opt id "\n" "\\\n" contents)
+    -- Inline HTML can introduce layout newlines even in a validated heading.
+    text = T.strip $ T.replace "\n" " " $ docText (renderInlinesWith opt id contents)
 renderBlock opt (Paragraph contents)
-  | all paragraphWhitespace (normalizeInlines contents) = RenderedLines []
-  | otherwise = nonemptyText $ T.intercalate "\n" $
-      protectStart <$> trimLines (T.splitOn "\n" (renderParagraphText opt contents))
+  | all paragraphWhitespace (normalizeInlines contents) || null rendered = Nothing
+  | otherwise = Just (linesToDoc rendered)
   where
+    rendered = protectStart <$> trimLines (T.splitOn "\n" (docText (renderParagraph opt contents)))
     trimLines = reverse . dropWhile T.null . reverse . dropWhile T.null
     protectStart original = case T.uncons unindented of
       -- A comment can interrupt a paragraph even when another tag follows it.
-      Just ('<', _) | "<!--" `T.isPrefixOf` unindented -> indentation <> "<span></span>" <> unindented
+      Just ('<', _) | T.isPrefixOf "<!--" unindented -> indentation <> "<span></span>" <> unindented
       -- A standalone inline tag must not open a CommonMark HTML block.
       Just ('<', _) | not (T.null tagEnd) && T.null (T.strip (T.drop 1 tagEnd)) ->
         line <> "<!-- -->"
@@ -144,23 +123,28 @@ renderBlock opt (Paragraph contents)
         line = protectCodeIndentation original
         (indentation, unindented) = T.span (== ' ') line
         (_, tagEnd) = T.breakOn ">" unindented
-renderBlock opt (BlockQuote blocks) = prefixBlockQuote (renderBlocks opt blocks)
-renderBlock opt (CodeBlock info contents) = renderCodeFence (codeFenceStyle opt) info contents
-renderBlock opt (OrderedList items) = renderList opt [T.pack (show n) <> "." | n <- [1 :: Int ..]] items
-renderBlock opt (UnorderedList items) = renderList opt (repeat "-") items
-renderBlock _ ThematicBreak = singletonLine "---"
+renderBlock opt (BlockQuote blocks) = Just (prefixBlockQuote (renderBlocks opt blocks))
+renderBlock opt (CodeBlock info contents) = Just (renderCodeFence (codeFenceStyle opt) info contents)
+renderBlock opt (OrderedList items)
+  | null items = Nothing
+  | otherwise = Just (renderList opt [T.pack (show n) <> "." | n <- [1 :: Int ..]] items)
+renderBlock opt (UnorderedList items)
+  | null items = Nothing
+  | otherwise = Just (renderList opt (repeat "-") items)
+renderBlock _ ThematicBreak = Just "---"
 renderBlock opt (HTMLBlock bodies)
-  | null nonemptyBodies = RenderedLines []
-  | otherwise = nonemptyText (protectHTMLBlankLines rendered)
+  | null nonemptyBodies = Nothing
+  | otherwise = Just (textToDoc (protectHTMLBlankLines rendered))
   where
-    nonemptyBodies = filter notEmpty bodies
-    notEmpty (HTML.RawText t) = not (T.null t)
-    notEmpty _ = True
+    nonemptyBodies = filter nonemptyHTML bodies
     blockBodies = case nonemptyBodies of
       first : _ | startsHTMLBlock first -> nonemptyBodies
       _ -> [HTML.Div [] nonemptyBodies]
-    rendered = renderStrict (layoutPretty defaultLayoutOptions
-      (HTML.renderHTMLFragment (htmlRenderOptions opt) blockBodies))
+    rendered = docText (HTML.renderHTMLFragment (htmlRenderOptions opt) blockBodies)
+
+nonemptyHTML :: HTML.HTMLBody -> Bool
+nonemptyHTML (HTML.RawText text) = not (T.null text)
+nonemptyHTML _ = True
 
 -- These tags establish raw HTML block context until the next blank line.
 -- Inline tags, comments and custom tags need a wrapper for following text.
@@ -184,42 +168,36 @@ protectHTMLBlankLines input
   | T.null input = input
   | otherwise = T.intercalate "\n" (protect <$> T.splitOn "\n" (normalizeLineEndings input))
   where
-    protect line | T.all (`elem` [' ', '\t']) line = line <> "<!-- -->"
+    protect line | T.all (\c -> c == ' ' || c == '\t') line = line <> "<!-- -->"
                  | otherwise = line
 
-nonemptyText :: Text -> RenderedLines ann
-nonemptyText text
-  | T.null text = RenderedLines []
-  | otherwise = textToRenderedLines text
-
-renderList :: CommonMarkRenderOptions -> [Text] -> [ListItem] -> RenderedLines ann
-renderList opt markers = separateRenderedBlocks . zipWith renderItem markers
+renderList :: CommonMarkRenderOptions -> [Text] -> [ListItem] -> Doc ann
+renderList opt markers = separateBlocks . zipWith renderItem markers
   where
     -- A marker-only line avoids thematic-break priority for @- ---@ and
     -- for nested empty unordered lists such as @- - -@.
     startsWithDashes ThematicBreak = True
     startsWithDashes (UnorderedList _) = True
     startsWithDashes _ = False
-    renderItem marker (ListItem blocks) =
-      case renderedLines contents of
-        [] -> singletonLine (pretty marker)
-        ls@(PhysicalLine _ first : rest)
-          | any startsWithDashes firstBlock -> RenderedLines
-              (contentPhysicalLine (pretty marker) : fmap indentLine ls)
-          | otherwise -> RenderedLines
-              (contentPhysicalLine (pretty marker <> " " <> first) : fmap indentLine rest)
+    renderItem marker (ListItem blocks) = case firstBlock of
+      Nothing -> pretty marker
+      Just first -> linesToDoc $ case T.splitOn "\n" (docText contents) of
+        [] -> [marker]
+        ls@(opening : rest)
+          | startsWithDashes first -> marker : fmap indentLine ls
+          | otherwise -> (marker <> " " <> opening) : fmap indentLine rest
       where
         (firstBlock, contents) = renderBlocksWithFirst opt blocks
-        padding = pretty (T.replicate (T.length marker + 1) " ")
-        indentLine (PhysicalLine True _) = blankPhysicalLine
-        indentLine (PhysicalLine False line) = contentPhysicalLine (padding <> line)
+        padding = T.replicate (T.length marker + 1) " "
+        indentLine line | T.null line = ""
+                        | otherwise = padding <> line
 
 -- A final backslash-newline is not a CommonMark hard break at a block boundary.
 -- Render only boundary hard breaks with HTML; interior breaks keep their usual
 -- Markdown syntax. Empty inline nodes must not hide those boundaries.
-renderParagraphText :: CommonMarkRenderOptions -> [Inline] -> Text
-renderParagraphText opt contents =
-  prefix <> renderInlineText opt middle <> suffix
+renderParagraph :: CommonMarkRenderOptions -> [Inline] -> Doc ann
+renderParagraph opt contents =
+  mconcat prefix <> renderInlines opt middle <> mconcat suffix
   where
     nodes = normalizeInlines contents
     (prefix, afterStart) = leading nodes
@@ -228,169 +206,126 @@ renderParagraphText opt contents =
     leading (SoftBreak : remaining) = leading remaining
     leading (HardBreak : remaining) =
       let (breaks, rest) = leading remaining
-      in ("<br />" <> breaks, if all paragraphWhitespace rest then [] else rest)
+      in ("<br />" : breaks, if all paragraphWhitespace rest then [] else rest)
     leading (node@Plain{} : remaining)
       | paragraphWhitespace node =
           let (breaks, rest) = leading remaining
-          in if T.null breaks then ("", node : rest) else (breaks, rest)
-    leading remaining = ("", remaining)
+          in if null breaks then ([], node : rest) else (breaks, rest)
+    leading remaining = ([], remaining)
 
 paragraphWhitespace :: Inline -> Bool
-paragraphWhitespace (Plain text) = T.all (`elem` [' ', '\t', '\r', '\n']) text
+paragraphWhitespace (Plain text) = T.all isSpace text
 paragraphWhitespace SoftBreak = True
 paragraphWhitespace _ = False
 
--- True marks a syntactically empty line, which must not acquire indentation.
-data PhysicalLine ann = PhysicalLine Bool (Doc ann)
-
--- | Physical lines retained until the final prettyprinter layout.
-newtype RenderedLines ann = RenderedLines { renderedLines :: [PhysicalLine ann] }
-
--- | Replace CRLF and CR with LF without changing the number of lines.
 normalizeLineEndings :: Text -> Text
 normalizeLineEndings = T.replace "\r" "\n" . T.replace "\r\n" "\n"
 
--- | An empty line ready to receive inline content.
-emptyInlineLines :: RenderedLines ann
-emptyInlineLines = RenderedLines [blankPhysicalLine]
+-- Fixed physical lines must survive an enclosing prettyprinter 'group'.
+linesToDoc :: [Text] -> Doc ann
+linesToDoc = concatWith (surround hardline) . fmap pretty
 
-blankPhysicalLine :: PhysicalLine ann
-blankPhysicalLine = PhysicalLine True mempty
+textToDoc :: Text -> Doc ann
+textToDoc = linesToDoc . T.splitOn "\n" . normalizeLineEndings
 
-contentPhysicalLine :: Doc ann -> PhysicalLine ann
-contentPhysicalLine = PhysicalLine False
+-- Materialize only at boundaries that inspect or prefix physical source lines.
+docText :: Doc ann -> Text
+docText = renderStrict . layoutPretty defaultLayoutOptions
 
-textPhysicalLine :: Text -> PhysicalLine ann
-textPhysicalLine contents = PhysicalLine (T.null contents) (pretty contents)
-
--- | Wrap a single-line document as physical content.
-singletonLine :: Doc ann -> RenderedLines ann
-singletonLine = RenderedLines . pure . contentPhysicalLine
-
--- | Join inline pieces, merging only their touching boundary lines.
-appendRenderedLines :: RenderedLines ann -> RenderedLines ann -> RenderedLines ann
-appendRenderedLines (RenderedLines leftLines) (RenderedLines rightLines) =
-  RenderedLines $ case (unsnoc leftLines, rightLines) of
-    (Nothing, _) -> rightLines
-    (_, []) -> leftLines
-    (Just (leftRest, leftLast), rightFirst : rightRest) ->
-      leftRest <> (combinePhysicalLines leftLast rightFirst : rightRest)
-
-combinePhysicalLines :: PhysicalLine ann -> PhysicalLine ann -> PhysicalLine ann
-combinePhysicalLines (PhysicalLine leftBlank leftDoc) (PhysicalLine rightBlank rightDoc) =
-  PhysicalLine (leftBlank && rightBlank) (leftDoc <> rightDoc)
-
--- | Add a marker before the first line and after the last line.
-wrapRenderedLines :: Doc ann -> RenderedLines ann -> RenderedLines ann
-wrapRenderedLines marker = addToLastLine marker . addToFirstLine marker
-
--- | Add a prefix to the first line, creating a line if needed.
-addToFirstLine :: Doc ann -> RenderedLines ann -> RenderedLines ann
-addToFirstLine prefix =
-  appendRenderedLines (singletonLine prefix)
-
--- | Add a suffix to the last line, creating a line if needed.
-addToLastLine :: Doc ann -> RenderedLines ann -> RenderedLines ann
-addToLastLine suffix body =
-  appendRenderedLines body (singletonLine suffix)
-
--- | Split normalized text into physical lines, preserving empty lines.
-textToRenderedLines :: Text -> RenderedLines ann
-textToRenderedLines =
-  RenderedLines . fmap textPhysicalLine . T.splitOn "\n" . normalizeLineEndings
-
--- | Lay out an HTML fragment and retain its physical lines.
-docToRenderedLines :: Doc ann -> RenderedLines otherAnn
-docToRenderedLines = textToRenderedLines . renderStrict . layoutPretty defaultLayoutOptions
-
--- | Prefix every physical line; empty lines receive a bare @>@.
-prefixBlockQuote :: RenderedLines ann -> RenderedLines ann
-prefixBlockQuote (RenderedLines []) = singletonLine ">"
-prefixBlockQuote (RenderedLines physicalLines) =
-  RenderedLines (prefixLine <$> physicalLines)
+-- A quote needs a marker on every line, including blank and embedded HTML lines.
+prefixBlockQuote :: Doc ann -> Doc ann
+prefixBlockQuote = linesToDoc . fmap prefixLine . T.splitOn "\n" . docText
   where
-    prefixLine (PhysicalLine True _) = contentPhysicalLine ">"
-    prefixLine (PhysicalLine False contents) = contentPhysicalLine ("> " <> contents)
+    prefixLine line | T.null line = ">"
+                    | otherwise = "> " <> line
 
--- | Separate nonempty block results by one blank line; skip absent blocks.
-separateRenderedBlocks :: [RenderedLines ann] -> RenderedLines ann
-separateRenderedBlocks =
-  RenderedLines . intercalate [blankPhysicalLine]
-    . filter (not . null) . fmap renderedLines
+separateBlocks :: [Doc ann] -> Doc ann
+separateBlocks = concatWith (surround (hardline <> hardline))
 
--- | Join line sequences without inserting separators.
-concatenateRenderedLines :: [RenderedLines ann] -> RenderedLines ann
-concatenateRenderedLines = RenderedLines . concatMap renderedLines
+renderInlines :: CommonMarkRenderOptions -> [Inline] -> Doc ann
+renderInlines opt = renderInlinesWith opt
+  (protectLeadingWhitespace . protectTrailingWhitespace)
 
--- | Join physical lines with hard breaks that cannot flatten into spaces.
-renderedLinesToDoc :: RenderedLines ann -> Doc ann
-renderedLinesToDoc (RenderedLines physicalLines) =
-  concatWith (surround hardline) (physicalLineDoc <$> physicalLines)
-
-physicalLineDoc :: PhysicalLine ann -> Doc ann
-physicalLineDoc (PhysicalLine _ contents) = contents
-
--- | Render a sequence within a paragraph or heading, without adding separators.
--- Callers must supply valid inline contents: no blank lines, block HTML or
--- nested links. Breaks at block boundaries are handled by the block renderer.
-renderInlines :: CommonMarkRenderOptions -> [Inline] -> RenderedLines ann
-renderInlines opt = textToRenderedLines . renderInlineText opt
-
-renderInlineText :: CommonMarkRenderOptions -> [Inline] -> Text
-renderInlineText opt = renderInlineTextWithBreaks opt
-  (protectLeadingWhitespace . protectTrailingWhitespace) "\n" "\\\n"
-
-renderInlineTextWithBreaks :: CommonMarkRenderOptions -> (Text -> Text) -> Text -> Text -> [Inline] -> Text
-renderInlineTextWithBreaks opt protectHTMLEdges softBreak hardBreak = T.concat . go Nothing False . normalizeInlines
+renderInlinesWith :: CommonMarkRenderOptions -> (Text -> Text) -> [Inline] -> Doc ann
+renderInlinesWith opt protectHTMLEdges = mconcat . go Nothing False . normalizeInlines
   where
     go _ _ [] = []
     go previous startsLine (node : remaining) =
-      let next = listToMaybe remaining
-          rendered = renderNode previous node next
-          contents = if startsLine then protectCodeIndentation rendered else rendered
-          following = go (Just node) ("\n" `T.isSuffixOf` contents) remaining
-          -- A newline can come from a break node, literal text or inline HTML.
-          -- Trailing spaces must not turn any such newline into a hard break.
-          protected = case following of
-            first : _ | "\n" `T.isPrefixOf` first -> protectTrailingSpaces contents
-            _ -> contents
-      in protected : following
-    renderNode _ (Plain t) _ = escapePlain (normalizeLineEndings t)
-    renderNode before (Emphasis ch) after =
+      renderNode previous startsLine node (listToMaybe remaining) :
+        go (Just node) (endsWithNewline node) remaining
+    prepareText startsLine next =
+      protectNextBreak next . if startsLine then protectCodeIndentation else id
+    protectNextBreak next
+      | any startsWithNewline next = protectTrailingSpaces
+      | otherwise = id
+    renderNode _ startsLine (Plain text) next =
+      textToDoc (prepareText startsLine next (escapePlain (normalizeLineEndings text)))
+    renderNode before _ (Emphasis ch) after =
       emphasized "em" (emphasisDelimiter opt) 1 before ch after
-    renderNode before (Strong ch) after =
+    renderNode before _ (Strong ch) after =
       emphasized "strong" (strongDelimiter opt) 2 before ch after
-    renderNode before (CodeSpan t) after
+    renderNode before _ (CodeSpan text) after
       | any adjacentCode [before, after] =
-          "<code>" <> protectLeadingWhitespace (protectTrailingWhitespace
-            (renderInlineHTML opt (HTML.RawText (normalizeCodeSpan t)))) <> "</code>"
-      | otherwise = renderCodeSpan t
-    renderNode _ (Link url ch) _ = link "" url ch
-    renderNode _ (Image source ch) _ = link "!" source ch
-    renderNode _ SoftBreak _ = softBreak
-    renderNode _ HardBreak _ = hardBreak
-    renderNode _ (HTMLInline body) _ = protectHTMLEdges (renderInlineHTML opt body)
+          "<code>" <> textToDoc (protectLeadingWhitespace (protectTrailingWhitespace
+            (renderInlineHTML opt (HTML.RawText (normalizeCodeSpan text))))) <> "</code>"
+      | otherwise = renderCodeSpan text
+    renderNode _ _ (Link url ch) _ = link "" url ch
+    renderNode _ _ (Image source ch) _ = link "!" source ch
+    renderNode _ _ SoftBreak _ = hardline
+    renderNode _ _ HardBreak _ = "\\" <> hardline
+    renderNode _ startsLine (HTMLInline body) next =
+      textToDoc (prepareText startsLine next (protectHTMLEdges (renderInlineHTML opt body)))
     link prefix destination ch =
-      prefix <> "[" <> renderInlineTextWithBreaks opt protectHTMLEdges softBreak hardBreak ch <> "](<" <>
-        escapeDestination destination <> ">)"
+      prefix <> "[" <> renderInlinesWith opt protectHTMLEdges ch <> "](<" <>
+        pretty (escapeDestination destination) <> ">)"
     -- Only use delimiter syntax where its boundaries are unambiguous.
     -- HTML handles whitespace, punctuation, nesting and touching emphasis.
     emphasized tag delimiter count before ch after
-      | Just t <- plainContents ch,
-        Just (first, _) <- T.uncons t, Just (_, lastChar) <- T.unsnoc t,
+      | Just text <- plainContents ch,
+        Just (first, _) <- T.uncons text, Just (_, lastChar) <- T.unsnoc text,
         isAlphaNum first && isAlphaNum lastChar,
         safeNeighbor delimiter T.unsnoc before,
         safeNeighbor delimiter (fmap swap . T.uncons) after =
-          let marker = T.replicate count (delimiterText delimiter)
+          let marker = pretty (T.replicate count (delimiterText delimiter))
           in marker <> contents <> marker
       | otherwise = "<" <> tag <> ">" <> guardLine <> contents <> "</" <> tag <> ">"
       where
-        contents = renderInlineTextWithBreaks opt protectHTMLEdges softBreak hardBreak ch
-        -- A tag-only opening line would start an HTML block in CommonMark.
-        (opening, rest) = T.breakOn "\n" contents
-        guardLine
-          | not (T.null rest) && T.all (`elem` [' ', '\t']) opening = "<!-- -->"
-          | otherwise = ""
+        contents = renderInlinesWith opt protectHTMLEdges ch
+        guardLine | openingNeedsGuard (normalizeInlines ch) = "<!-- -->"
+                  | otherwise = mempty
+    -- Only literal text and a soft break can leave the opening tag alone on
+    -- its line. Inspect those leaves without laying out the composed inlines.
+    openingNeedsGuard [] = False
+    openingNeedsGuard (SoftBreak : _) = True
+    openingNeedsGuard (Plain text : rest) =
+      checkOpening (protectNextBreak (listToMaybe rest) (escapePlain (normalizeLineEndings text))) rest
+    openingNeedsGuard (HTMLInline body@HTML.RawText{} : rest) =
+      checkOpening (protectNextBreak (listToMaybe rest) (protectHTMLEdges (renderInlineHTML opt body))) rest
+    openingNeedsGuard _ = False
+    checkOpening text remaining =
+      let (opening, rest) = T.breakOn "\n" text
+      in T.all (\c -> c == ' ' || c == '\t') opening &&
+        (not (T.null rest) || openingNeedsGuard remaining)
+
+-- Formatting and link delimiters enclose their contents, so only these leaves
+-- can put an adjacent node at the beginning or end of a physical source line.
+startsWithNewline :: Inline -> Bool
+startsWithNewline SoftBreak = True
+startsWithNewline (Plain text) = any (isLineEnding . fst) (T.uncons text)
+startsWithNewline (HTMLInline (HTML.RawText text)) =
+  any (isLineEnding . fst) (T.uncons text)
+startsWithNewline _ = False
+
+endsWithNewline :: Inline -> Bool
+endsWithNewline SoftBreak = True
+endsWithNewline HardBreak = True
+endsWithNewline (Plain text) = any (isLineEnding . snd) (T.unsnoc text)
+endsWithNewline (HTMLInline (HTML.RawText text)) =
+  any (isLineEnding . snd) (T.unsnoc text)
+endsWithNewline _ = False
+
+isLineEnding :: Char -> Bool
+isLineEnding c = c == '\r' || c == '\n'
 
 -- Ignore absent text when inspecting neighbors, and join adjacent literal text
 -- before normalizing line endings (a CRLF pair may span two Plain nodes).
@@ -507,14 +442,14 @@ normalizeCodeSpan = T.replace "\n" " " . normalizeLineEndings
 
 -- | Delimit literal inline code, preserving spaces and embedded backticks.
 -- Line endings become spaces as in CommonMark; an empty span uses HTML.
-renderCodeSpan :: Text -> Text
+renderCodeSpan :: Text -> Doc ann
 renderCodeSpan input
   | T.null contents = "<code></code>"
-  | otherwise = marker <> padding <> contents <> padding <> marker
+  | otherwise = pretty marker <> padding <> pretty contents <> padding <> pretty marker
   where
     contents = normalizeCodeSpan input
     marker = T.replicate (longestRun '`' contents + 1) "`"
-    padding = if needsCodeSpanPadding contents then " " else ""
+    padding = if needsCodeSpanPadding contents then " " else mempty
 
 -- When both ends contain an ASCII space, CommonMark strips one from each end
 -- unless the content is all spaces. Padding preserves those spaces and separates
@@ -531,8 +466,8 @@ codeSpanPaddingRegex = makeRegex ("^`|`$|^ .*[^ ].* $" :: Text)
 -- newline when needed. Collapse info-string whitespace to keep it on one line.
 -- Use tildes if the info string contains a backtick.
 -- See <https://spec.commonmark.org/0.31.2/#fenced-code-blocks>.
-renderCodeFence :: CodeFenceStyle -> Maybe Text -> Text -> RenderedLines ann
-renderCodeFence style info input = textToRenderedLines
+renderCodeFence :: CodeFenceStyle -> Maybe Text -> Text -> Doc ann
+renderCodeFence style info input = textToDoc
   (fence <> infoPrefix <> escapeHTMLText (T.replace "\\" "\\\\" infoText) <> "\n" <> contents <> finalBreak <> fence)
   where
     contents = normalizeLineEndings input

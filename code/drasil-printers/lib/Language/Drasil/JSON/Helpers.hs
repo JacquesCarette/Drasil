@@ -3,7 +3,7 @@
 -- | Defines helper functions for creating jupyter notebooks.
 module Language.Drasil.JSON.Helpers (
   -- * Jupyter-related
-  markdownCell, codeCell, makeMetadata,
+  markdownCell, codeCell, notebookMetadata,
   -- * HTML Tag Wrappers
   tr, td, th, bold, em, li, pa, ba, table,
   refwrap, refID, reflink, reflinkInfo, reflinkURI, image, h, mkDiv,
@@ -12,10 +12,8 @@ module Language.Drasil.JSON.Helpers (
 
 import Prelude hiding ((<>))
 import qualified Prelude as P ((<>))
-import qualified Prelude
 import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, render)
-import Data.Text (Text)
-import qualified Data.Text as T (lines, pack)
+import qualified Data.Text as T (pack)
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
 
@@ -23,6 +21,7 @@ import Drasil.Data.Formats.JSON (JSON(..))
 import Language.Drasil.Document (MaxWidthPercent)
 
 import Drasil.Printers.Common hiding (wrap)
+import qualified Drasil.Jupyter as Jupyter (Cell(..), Metadata)
 import Language.Drasil.Printing.Helpers (bslash)
 
 data Variation = Class | Id
@@ -123,61 +122,33 @@ stripnewLine :: String -> Doc
 stripnewLine s = hcat (text <$> splitOn "\n" s)
 
 -- | Construct a Jupyter markdown cell with the given content.
-markdownCell :: Doc -> JSON
-markdownCell d =
-  JObject
-  [ ("cell_type", "markdown"),
-    ("metadata", JObject []),
-    ("source", formatSource d)
-  ]
+markdownCell :: Doc -> Jupyter.Cell
+markdownCell = Jupyter.MarkdownCell [] . T.pack . render
 
 -- | Construct a Jupyter code cell with the given content.
-codeCell :: Doc -> JSON
-codeCell d =
-  JObject
-  [ ("cell_type", "code"),
-    ("execution_count", JNull),
-    ("metadata", JObject []),
-    ("outputs", JArray []),
-    ("source", formatSource d)
-  ]
+codeCell :: Doc -> Jupyter.Cell
+codeCell = Jupyter.CodeCell [] . T.pack . render
 
--- | Renders a Doc to a JSON array for using in a Juptyer cell's
--- 'source' attribute.
-formatSource :: Doc -> JSON
-formatSource d =
-  let
-    d' = render d
-    t = T.pack d'
-    t' = T.lines t
-  in JArray $ JString . (Prelude.<> "\n") <$> t'
-
--- | Generate the metadata necessary for a notebook document.
-makeMetadata :: [(Text, JSON)]
-makeMetadata =
-  [ ("metadata",
+-- | Preserve the Python metadata used by the current notebook generators.
+notebookMetadata :: Jupyter.Metadata
+notebookMetadata =
+  [ ("kernelspec",
       JObject
-      [ ("kernelspec",
-          JObject
-          [ ("display_name", "Python 3"),
-            ("language", "python"),
-            ("name", "python3")
-          ]
-        ),
-        ("language_info",
-          JObject
-          [ ("codemirror_mode",
-              JObject [("name", "ipython"), ("version", JNumber 3)]),
-            ("file_extension", ".py"),
-            ("mimetype", "text/x-python"),
-            ("name", "python"),
-            ("nbconvert_exporter", "python"),
-            ("pygments_lexer", "ipython3"),
-            ("version", "3.9.1")
-          ]
-        )
+      [ ("display_name", "Python 3"),
+        ("language", "python"),
+        ("name", "python3")
       ]
     ),
-    ("nbformat", JNumber 4),
-    ("nbformat_minor", JNumber 4)
+    ("language_info",
+      JObject
+      [ ("codemirror_mode",
+          JObject [("name", "ipython"), ("version", JNumber 3)]),
+        ("file_extension", ".py"),
+        ("mimetype", "text/x-python"),
+        ("name", "python"),
+        ("nbconvert_exporter", "python"),
+        ("pygments_lexer", "ipython3"),
+        ("version", "3.9.1")
+      ]
+    )
   ]

@@ -1,0 +1,31 @@
+spec-version: 0.36.0
+name:         drasil-jupyter
+version:      0.0.1
+author:       "Joe Z. Zhang"
+maintainer:   "Jacques Carette"
+synopsis:     A representation and renderer for generated Jupyter notebooks
+github:       JacquesCarette/Drasil
+homepage:     https://jacquescarette.github.io/Drasil/
+description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+language: GHC2024
+default-extensions:
+- StrictData
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- drasil-data-formats
+- prettyprinter
+- text
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+- -Wmissing-export-lists
+
+library:
+  source-dirs: lib
+  exposed-modules:
+  - Drasil.Jupyter

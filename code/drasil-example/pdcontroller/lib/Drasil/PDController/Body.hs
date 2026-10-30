@@ -16,8 +16,8 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pidC, termDefs, defs,
-  pdControllerCI, proportionalCI, piCI, pidCI)
+import Drasil.PDController.Concepts (acronyms, pidC, termDefs,
+  pdControllerCI, proportionalCI, piCI, pidCI, simulationTime, stepTime, ccLaplaceTransform)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
@@ -32,7 +32,7 @@ import Drasil.PDController.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
-  inpConstrained, pidConstants)
+  inpConstrained, pidConstants, propGain, derGain, setPoint, processVariable, absTol, relTol)
 import Drasil.PDController.ODEs (pidODEInfo)
 
 naveen :: Person
@@ -63,7 +63,7 @@ mkSRS
               -- extends `termDefs` with non-unique chunks containing
               -- alternative definitions for use in the `Terminology and
               -- Definitions` section.
-              [TermsAndDefs Nothing defs,
+              [TermsAndDefs Nothing (termDefs <> [simulationTime, cw processVariable, cw setPoint, cw propGain, cw derGain, ccLaplaceTransform, stepTime, cw absTol, cw relTol]),
                PhySysDesc sysParts sysFigure [],
                Goals sysGoalInput],
           SSDSolChSpec $

@@ -150,7 +150,7 @@ instance FileSym JavaCode FileData ModData where
 
   docMod = CP.doxMod jExt
 
-instance RenderFile JavaCode FileData ModData where
+instance RenderFile JavaCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -679,7 +679,7 @@ instance OOMethodSym JavaCode MethodData Doc Doc ParamData Body Variable Value T
   inOutMethod n s p = jInOut (method n s p)
   docInOutMethod n s p = jDocInOut (inOutMethod n s p)
 
-instance RenderMethod JavaCode MethodData where
+instance RenderMethod JavaCode MethodData Statement where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
@@ -718,7 +718,7 @@ instance ClassSym JavaCode Class StateVar MethodData where
 
   docClass = CP.doxClass
 
-instance RenderClass JavaCode Class StateVar MethodData Doc where
+instance RenderClass JavaCode Class StateVar MethodData Doc Statement where
   intClass = CP.intClass R.class'
   commentedClass = G.commentedClass
 
@@ -735,12 +735,12 @@ instance RenderMod JavaCode ModData where
 instance ModuleElim JavaCode ModData where
   module' = modDoc . unJC
 
-instance BlockCommentSym JavaCode where
+instance BlockCommentSym JavaCode Statement where
   blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
     blockCmtEnd)
 
-instance BlockCommentElim JavaCode where
+instance BlockCommentElim JavaCode Statement where
   blockComment' = unJC
 
 instance HasException JavaCode where
@@ -1116,7 +1116,7 @@ jInOut f ins outs both b = f (returnTp rets)
         rets = both P.<> outs
 
 jDocInOut
-  :: (BlockCommentSym r, RenderMethod r mthd)
+  :: (BlockCommentSym r stmt, RenderMethod r mthd stmt)
   => ([VS (r Variable)] -> [VS (r Variable)] -> [VS (r Variable)] -> MS (r Body) -> MS (r mthd))
   -> String
   -> [(String, VS (r Variable))]
@@ -1136,7 +1136,7 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (fst <$> bs P.<> is)
           fmap fst os
 
 jExtraClass
-  :: (RenderClass r cls stvr mthd vis, RenderVisibility r vis, Monad r)
+  :: (RenderClass r cls stvr mthd vis stmt, RenderVisibility r vis, Monad r)
   => Label
   -> Maybe Label
   -> [CSStateVar r stvr]

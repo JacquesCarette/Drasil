@@ -28,13 +28,13 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalVarElim(variableBind), RenderValue(..), ValueElim(..),
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
-  VisibilityElim, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
+  RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim,
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
-  bOp, variable, value, valueInt, function, statement, visibility, parameter,
-  method, blockComment')
+  bOp, variable, value, valueInt, function, visibility, parameter, method,
+  blockComment')
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
@@ -45,17 +45,16 @@ import qualified Drasil.Shared.LanguageRenderer as R (commentedMod,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, break, continue)
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
-  comment, param, docFunc, var, multiBody, block, multiBlock, stmt, loopStmt,
-  negateOp, plusOp, minusOp, multOp, divideOp, equalOp, greaterOp,
-  greaterEqualOp, lessOp, lessEqualOp, csc, sec, cot, valueOf, litChar,
-  litDouble, litInt, litString, valStmt, emptyStmt, assign,
-  funcAppMixedArgs, call, print, ifCond, tryCatch, listAccess, smartAdd, local,
-  lambda)
+  comment, param, docFunc, var, multiBody, block, multiBlock, loopStmt, negateOp,
+  plusOp, minusOp, multOp, divideOp, equalOp, greaterOp, greaterEqualOp, lessOp,
+  lessEqualOp, csc, sec, cot, valueOf, litChar, litDouble, litInt, litString,
+  valStmt, emptyStmt, assign, funcAppMixedArgs, call, print, ifCond, tryCatch,
+  listAccess, smartAdd, local, lambda)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt',
   listDecDef, argExists, multiReturn, litSet)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue,
-  litFalse, while)
+  litFalse, while, statement)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
   extVar, funcType, listSize, forEach')
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
@@ -423,12 +422,12 @@ instance InternalControlStmt MatlabCode Statement Value where
   multiReturn = CP.multiReturn id
 
 instance RenderStatement MatlabCode Statement where
-  stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim MatlabCode Statement where
-  statement = fst . unMLC
+  statement = C.statement
+  preStatement = fst . unMLC
   statementTerm = snd . unMLC
 
 instance EmptyStatement MatlabCode Statement where
@@ -518,10 +517,10 @@ instance ControlStatement MatlabCode Body Statement Variable Value where
     u <- updateS
     bd <- b
     mkStmtNoEnd (vcat [
-      RC.statement i <> text ";",
+      statement i,
       text "while" <+> RC.value c,
       indent (RC.body bd),
-      indent (RC.statement u <> text ";"),
+      indent (statement u),
       mlEnd])
   forRange i initv finalv stepv = forEach i (mlRange initv finalv stepv)
   forEach = CS.forEach' mlForEach

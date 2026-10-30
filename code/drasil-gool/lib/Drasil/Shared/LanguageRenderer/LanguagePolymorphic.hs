@@ -6,7 +6,7 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, newObjMixedArgs, lambda,
-  objAccess, objMethodCall, func, get, set, listAccess, getFunc, setFunc, stmt,
+  objAccess, objMethodCall, func, get, set, listAccess, getFunc, setFunc,
   loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
   returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
   method, getMethod, setMethod, initStmts, function, docFuncRepr, docFunc,
@@ -33,7 +33,7 @@ import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
   FunctionElim(functionType), RenderStatement(stmtFromData),
-  StatementElim(statementTerm), MethodTypeSym(mType), RenderParam(paramFromData),
+  StatementElim, MethodTypeSym(mType), RenderParam(paramFromData),
   RenderMethod(commentedFunc), BlockCommentSym(..), ValueElim (value),
   RenderVariable)
 import qualified Drasil.Shared.RendererClassesCommon as RC
@@ -75,9 +75,9 @@ multiBody bs = onStateList (toCode . vibcat) $ onStateValue RC.body <$> bs
 -- Blocks --
 
 block
-  :: (Monad r, RenderStatement r stmt, StatementElim r stmt)
+  :: (Monad r, StatementElim r stmt)
   => [MS (r stmt)] -> MS (r Doc)
-block sts = onStateList (toCode . R.block . fmap RC.statement) (RC.stmt <$> sts)
+block = onStateList (toCode . R.block . fmap RC.statement)
 
 multiBlock :: (RC.BlockElim r block, Monad r) => [MS (r block)] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ onStateValue RC.block <$> bs
@@ -411,17 +411,10 @@ setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
 
 -- Statements --
 
-stmt
-  :: (RenderStatement r stmt, StatementElim r stmt)
-  => MS (r stmt) -> MS (r stmt)
-stmt s' = do
-  s <- s'
-  mkStmtNoEnd (RC.statement s <> R.getTerm (statementTerm s))
-
 loopStmt
   :: (RenderStatement r stmt, StatementElim r stmt)
   => MS (r stmt) -> MS (r stmt)
-loopStmt = RC.stmt . setEmpty
+loopStmt = setEmpty
 
 emptyStmt :: (RenderStatement r stmt) => MS (r stmt)
 emptyStmt = mkStmtNoEnd empty
@@ -798,4 +791,4 @@ fileFromData f fpath mdl' = do
 -- Helper functions
 
 setEmpty :: (RenderStatement r stmt, StatementElim r stmt) => MS (r stmt) -> MS (r stmt)
-setEmpty s' = s' >>= mkStmtNoEnd . RC.statement
+setEmpty s' = s' >>= mkStmtNoEnd . RC.preStatement

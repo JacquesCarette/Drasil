@@ -177,13 +177,15 @@ class InternalControlStmt r stmt val | r -> stmt val where
   multiReturn :: [VS (r val)] -> MS (r stmt)
 
 class RenderStatement r stmt | r -> stmt where
-  stmt     :: MS (r stmt) -> MS (r stmt)
   loopStmt :: MS (r stmt) -> MS (r stmt)
 
   stmtFromData :: Doc -> Terminator -> MS (r stmt)
 
 class StatementElim r stmt | r -> stmt where
+  -- | Render a stmt to Doc
   statement :: r stmt -> Doc
+  -- | Render a stmt with no additional syntax (e.g. `;`)
+  preStatement :: r stmt -> Doc
   statementTerm :: r stmt -> Terminator
 
 class RenderVisibility r vis | r -> vis where

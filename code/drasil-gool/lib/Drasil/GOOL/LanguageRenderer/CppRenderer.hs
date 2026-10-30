@@ -34,13 +34,14 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalVarElim(variableBind), InternalBinderElim(..), RenderValue(..),
   ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
+  InternalControlStmt(..), RenderStatement(..), StatementElim(..),
   RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment', InternalBinderElim(binderElim), RenderValue(call))
+  uOp, bOp, variable, value, function, visibility, parameter, method,
+  blockComment', InternalBinderElim(binderElim), RenderValue(call),
+  StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, ParentSpec, RenderClass(..), ClassElim,
@@ -67,9 +68,9 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
   funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAccess, getFunc,
-  setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
-  param, method, getMethod, setMethod, function, buildClass, implementingClass,
+  setFunc, loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
   smartAdd)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
@@ -81,9 +82,10 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   listAppend, innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
-  increment1, decrement1, varDec, setType, varDecDef, listDec, extObjDecNew,
-  switch, for, while, multiAssignError, multiReturnError, multiTypeError)
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
+  increment, increment1, decrement1, varDec, setType, varDecDef, listDec,
+  extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
+  multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
@@ -503,12 +505,12 @@ instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) Statement Val
   multiReturn = pair1List multiReturn multiReturn . fmap (zoom lensMStoVS)
 
 instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) Statement where
-  stmt = pair1 stmt stmt
   loopStmt = pair1 loopStmt loopStmt
   stmtFromData d t = on2StateValues pair (stmtFromData d t) (stmtFromData d t)
 
 instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) Statement where
   statement s = RC.statement $ pfst s
+  preStatement s = preStatement $ pfst s
   statementTerm s = statementTerm $ pfst s
 
 instance (Pair p) => EmptyStatement (p CppSrcCode CppHdrCode) Statement where
@@ -1423,12 +1425,12 @@ instance InternalControlStmt CppSrcCode Statement Value where
   multiReturn _ = error $ C.multiReturnError cppName
 
 instance RenderStatement CppSrcCode Statement where
-  stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppSrcCode Statement where
-  statement = fst . unCPPSC
+  statement = C.statement
+  preStatement = fst . unCPPSC
   statementTerm = snd . unCPPSC
 
 instance EmptyStatement CppSrcCode Statement where
@@ -2082,12 +2084,12 @@ instance InternalControlStmt CppHdrCode Statement Value where
   multiReturn _ = emptyStmt
 
 instance RenderStatement CppHdrCode Statement where
-  stmt = G.stmt
   loopStmt _ = emptyStmt
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppHdrCode Statement where
-  statement = fst . unCPPHC
+  statement = C.statement
+  preStatement = fst . unCPPHC
   statementTerm = snd . unCPPHC
 
 instance EmptyStatement CppHdrCode Statement where
@@ -2274,9 +2276,9 @@ instance MethodElim CppHdrCode MethodData where
 
 instance StateVarSym CppHdrCode StateVarData AttachmentData (Doc, VisibilityTag) Variable Value where
   stateVar s p v = do
-    dec <- zoom lensCStoMS $ stmt $ C.varDec classLevel instanceLevel empty v local
+    dec <- zoom lensCStoMS $ C.varDec classLevel instanceLevel empty v local
     pure $ on2CodeValues svd (onCodeValue snd s)
-      (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec))
+      (toCode $ R.stateVar empty (RC.perm p) (statement dec))
   stateVarDef s p vr vl = do
     d <- cpphStateVarDef empty p vr vl
     pure $ pure $ svd (snd $ unCPPHC s) d
@@ -2599,7 +2601,7 @@ cppListDecDef
 cppListDecDef f v scp vls = do
   vdc <- varDec v scp
   vs <- zoom lensMStoVS $ sequence vls
-  mkStmt (RC.statement vdc <> f vs)
+  mkStmt (preStatement vdc <> f vs)
 
 cpphtop :: ModData -> Doc
 cpphtop m = vcat [
@@ -2886,7 +2888,7 @@ cpphStateVarDef
   -> VS (CppHdrCode Variable)
   -> VS (CppHdrCode Value) -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
-  RC.statement) (zoom lensCStoMS $ stmt $ onAttachment (binding p)
+  statement) (zoom lensCStoMS $ onAttachment (binding p)
   (varDec vr local) (varDecDef vr local vl))
 
 cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode StateVarData] ->

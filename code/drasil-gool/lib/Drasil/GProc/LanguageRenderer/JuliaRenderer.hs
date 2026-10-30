@@ -30,13 +30,13 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalVarElim(variableBind), RenderValue(..), ValueElim(..),
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
-  VisibilityElim, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
+  RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim,
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  uOp, bOp, variable, value, valueInt, function, statement, visibility,
-  parameter, method, blockComment')
+  uOp, bOp, variable, value, valueInt, function, visibility, parameter, method,
+  blockComment')
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
@@ -55,9 +55,9 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
-  listAccess, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt,
-  print, comment, valStmt, returnStmt, param, docFunc, throw, arg, argsList,
-  ifCond, smartAdd, local, var, smartSub)
+  listAccess, tryCatch, csc, multiBody, sec, cot, loopStmt, emptyStmt, print,
+  comment, valStmt, returnStmt, param, docFunc, throw, arg, argsList, ifCond,
+  smartAdd, local, var, smartSub)
 import Drasil.GProc.Renderers (renderType)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
@@ -450,12 +450,12 @@ instance InternalControlStmt JuliaCode Statement Value where
   multiReturn = CP.multiReturn id
 
 instance RenderStatement JuliaCode Statement where
-  stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JuliaCode Statement where
-  statement = fst . unJLC
+  statement = preStatement
+  preStatement = fst . unJLC
   statementTerm = snd . unJLC
 
 instance EmptyStatement JuliaCode Statement where

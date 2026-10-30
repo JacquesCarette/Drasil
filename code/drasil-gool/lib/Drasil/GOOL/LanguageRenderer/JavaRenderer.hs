@@ -34,13 +34,12 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
-  VisibilityElim, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
+  RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim,
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
-  bOp, variable, value, function, statement, visibility, parameter, method,
-  blockComment')
+  bOp, variable, value, function, visibility, parameter, method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
@@ -68,7 +67,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  listAccess, getFunc, setFunc, loopStmt, emptyStmt, assign, subAssign,
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
   implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
@@ -77,9 +76,10 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
-  increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for,
-  while, multiAssignError, multiReturnError, multiTypeError, setType)
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
+  increment, increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew,
+  switch, for, while, multiAssignError, multiReturnError, multiTypeError,
+  setType)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -508,12 +508,12 @@ instance InternalControlStmt JavaCode Statement Value where
   multiReturn _ = error $ C.multiReturnError jName
 
 instance RenderStatement JavaCode Statement where
-  stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JavaCode Statement where
-  statement = fst . unJC
+  statement = C.statement
+  preStatement = fst . unJC
   statementTerm = snd . unJC
 
 instance EmptyStatement JavaCode Statement where

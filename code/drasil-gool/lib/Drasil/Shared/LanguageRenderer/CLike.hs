@@ -2,8 +2,8 @@
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, listSize',
-  increment, increment1, decrement1, varDec, varDecDef, setDecDef, listDec,
-  extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
+  statement, increment, increment1, decrement1, varDec, varDecDef, setDecDef,
+  listDec, extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
   multiTypeError
 ) where
 
@@ -24,7 +24,7 @@ import qualified Drasil.GOOL.RendererClassesOO as RO
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData,
   TypeData)
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
-import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
+import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing, getTerm)
 import qualified Drasil.Shared.LanguageRenderer as R
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStmt,
   mkStmtNoEnd, mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
@@ -148,6 +148,9 @@ listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
 -- Statements --
 
+statement :: (RC.StatementElim r stmt) => r stmt -> Doc
+statement st = RC.preStatement st <> getTerm (RC.statementTerm st)
+
 increment
   :: (InternalVarElim r var, RC.RenderStatement r stmt, ValueElim r val)
   => VS (r var) -> VS (r val) -> MS (r stmt)
@@ -205,7 +208,7 @@ varDecDef t vr scp vl' = do
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt
-  stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
+  stmtCtor t (RC.preStatement vd <+> equals <+> RC.value vl)
 
 setDecDef
   :: ( IC.DeclStatement r bod stmt var scope val
@@ -219,7 +222,7 @@ setDecDef t vr scp vl' = do
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt
-  stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
+  stmtCtor t (RC.preStatement vd <+> equals <+> RC.value vl)
 
 listDec
   ::
@@ -231,7 +234,7 @@ listDec
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
-  mkStmt (RC.statement vd <> f sz)
+  mkStmt (RC.preStatement vd <> f sz)
 
 extObjDecNew
   ::
@@ -258,7 +261,7 @@ switch
   -> MS (r bod)
   -> MS (r stmt)
 switch f st v cs bod = do
-  s <- RC.stmt st
+  s <- st
   val <- zoom lensMStoVS v
   vals <- mapM (zoom lensMStoVS . fst) cs
   bods <- mapM snd cs
@@ -284,8 +287,8 @@ for bStart bEnd sInit vGuard sUpdate b = do
   upd <- RC.loopStmt sUpdate
   bod <- b
   mkStmtNoEnd $ vcat [
-    forLabel <+> parens (RC.statement initl <> semi <+> RC.value guard <>
-      semi <+> RC.statement upd) <+> bStart,
+    forLabel <+> parens (RC.preStatement initl <> semi <+> RC.value guard <>
+      semi <+> RC.preStatement upd) <+> bStart,
     indent $ RC.body bod,
     bEnd]
 

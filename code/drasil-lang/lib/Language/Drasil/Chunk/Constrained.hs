@@ -7,6 +7,7 @@ module Language.Drasil.Chunk.Constrained (
   cnstrw', constrained', constrainedNRV', constrainedWithRationale, cuc', cuc'', cucNoUnit') where
 
 import Control.Lens ((^.), makeLenses, view)
+import qualified Data.Set as S (unions)
 
 import Drasil.Database (HasUID(..), HasChunkRefs(..), UID, mkUid)
 
@@ -38,7 +39,7 @@ data ConstrConcept = ConstrConcept { _uu         :: UID
 makeLenses ''ConstrConcept
 
 instance HasChunkRefs ConstrConcept where
-  chunkRefs c = chunkRefs (c ^. defq)
+  chunkRefs (ConstrConcept _ dq cs rv) = S.unions [chunkRefs dq, chunkRefs cs, chunkRefs rv]
   {-# INLINABLE chunkRefs #-}
 
 -- | Finds 'UID' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.

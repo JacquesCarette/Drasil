@@ -11,34 +11,27 @@ module Language.Drasil.CodeSpec (
   -- * ODEs
   getODE, mapODE,
   -- * Hacks
-  asVC, funcUID, getDerivedInputs, getConstraints, constraintvars
+  asVC, funcUID, getConstraints, constraintvars
 ) where
 
 import Prelude hiding (const)
-import Control.Lens ((^.), makeClassy, set)
-import Data.List (nub, (\\))
+import Control.Lens ((^.), makeClassy)
+import Data.List (nub)
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
-import qualified Data.List.NonEmpty as NE
 
 import Drasil.FileHandling.Legacy (RelativeFile)
 import Language.Drasil hiding (None)
-import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll, mkUid)
-import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
-import qualified Drasil.SRS as S
-import Drasil.System (HasSystemMeta(..), systemdb, HasProjectName(..), SystemMeta)
-import Drasil.SRS (HasSmithEtAlSRS(..))
-import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
-import Data.List.Extras (subsetOf)
+import Drasil.Database (ChunkDB, UID, HasUID(..), mkUid)
+import Drasil.Code.CodeExpr.Development (eNamesRI, eDep)
+import Drasil.System (HasSystemMeta(..), HasProjectName(..), SystemMeta)
 
 import Drasil.Code.CodeVar (CodeVarChunk, quantvar)
-import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
-import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..),
-  odeLibReqs, odeInfoReqs)
-import Language.Drasil.Chunk.CodeBase (codevars, varResolve)
+import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, odeDef)
+import Language.Drasil.Choices (ODE(..), ExtLib(..))
+import Language.Drasil.Chunk.CodeBase (varResolve)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..))
-import Language.Drasil.ICOSolutionSearch (Def, solveExecOrder)
 
 -- | Program input.
 type Input = CodeVarChunk
@@ -66,7 +59,7 @@ data CodeSpec = CS {
   _configFiles :: [RelativeFile],
   -- | Mathematical definitions, ordered so that they form a path from inputs to
   -- outputs.
-  _execOrder :: [Def],
+  _execOrder :: [CodeDefinition],
   -- | Map from 'UID's to constraints for all constrained chunks used in the problem.
   _cMap :: ConstraintCEMap,
   -- | List of all constants used in the problem.
@@ -100,47 +93,42 @@ mapODE :: Maybe ODE -> [CodeDefinition]
 mapODE Nothing = []
 mapODE (Just ode) = odeDef <$> odeInfo ode
 
--- | Creates a 'CodeSpec' using the provided 'System', 'Choices', and 'Mod's.
-mkCodeSpec :: S.SmithEtAlSRS -> Choices -> CodeSpec
-mkCodeSpec si@S.ICO{ S._inputs = ins
-                    , S._outputs = outs
-                    , S._constraints = cs
-                    , S._constants = cnsts } chs =
-  let els = extLibs chs
-      libReqs = concatMap odeLibReqs els
-      infoReqs = concatMap odeInfoReqs els
-      db = insertAll (libReqs <> infoReqs) $ si ^. systemdb
-      sysMeta = set systemdb db $ si ^. systemMeta
-      ddefs = si ^. dataDefns
-      inputs' = quantvar <$> NE.toList ins
-      const' = qtov <$> filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
-        cnsts
-      derived = qtov <$> getDerivedInputs ddefs inputs' const' db
-      rels = (fmap qtoc (getEqModQdsFromIm (si ^. instModels) <> mapMaybe qdEFromDD ddefs) \\ derived)
-        <> mapODE (getODE $ extLibs chs)
-        <> fmap qtoc (handWiredDefs chs)
-      -- TODO: When we have better DEModels, we should be deriving our ODE information
-      --       directly from the instance models (ims) instead of directly from the choices.
-      outs' = quantvar <$> NE.toList outs
-      allInputs = inputs' <> fmap quantvar derived
-      exOrder = solveExecOrder rels (allInputs <> fmap quantvar cnsts) outs' db
-  in CS {
-        _csSysMeta = sysMeta,
-        -- FIXME: This _should_ be different in at least one way. The SM from
-        -- the SRS _should_ reference "defining an SRS that ...". This SM should
-        -- reference said SRS, saying "building a software design satisfying
-        -- said SRS."
-        _inputs = allInputs,
-        _extInputs = inputs',
-        _derivedInputs = derived,
-        _outputs = outs',
-        _configFiles = defaultConfigFiles chs,
-        _execOrder = exOrder,
-        _cMap = constraintMap cs,
-        _constDefns = const',
-        _constMap = assocToMap const',
-        _mods = extraMods chs
-      }
+-- | Creates a 'CodeSpec'. The full input list (explicit inputs, then derived
+-- inputs) and the constant map are derived from the arguments. *Nothing is
+-- checked* (yet), but code generation assumes that the arguments meet the
+-- conditions noted.
+mkCodeSpec
+  :: SystemMeta       -- ^ System metadata. Its 'ChunkDB' must contain every
+                      --   chunk the other arguments refer to, plus 'codeDQDs'
+                      --   and the chunks the chosen external libraries need
+                      --   ('odeInfoReqs' and 'odeLibReqs').
+  -> [Input]          -- ^ Explicit inputs (values to be supplied by a file).
+  -> [Derived]        -- ^ Derived inputs, each depending only on explicit
+                      --   inputs and/or constants.
+  -> [Output]         -- ^ All outputs.
+  -> [RelativeFile]   -- ^ Files that must be in the same directory for running
+                      --   the executable.
+  -> [CodeDefinition] -- ^ Mathematical definitions, ordered so that they form a
+                      --   path from inputs to outputs: each depends only on
+                      --   inputs, constants, and earlier definitions.
+  -> ConstraintCEMap  -- ^ Map from 'UID's to constraints for all constrained
+                      --   chunks used in the problem.
+  -> [Const]          -- ^ All constants used in the problem.
+  -> [Mod]            -- ^ Additional code modules required in the generated code.
+  -> CodeSpec
+mkCodeSpec sysMeta ins derived outs cfgs exOrder cmap cnsts ms = CS {
+    _csSysMeta = sysMeta,
+    _inputs = ins <> fmap quantvar derived,
+    _extInputs = ins,
+    _derivedInputs = derived,
+    _outputs = outs,
+    _configFiles = cfgs,
+    _execOrder = exOrder,
+    _cMap = cmap,
+    _constDefns = cnsts,
+    _constMap = assocToMap cnsts,
+    _mods = ms
+  }
 
 -- medium hacks ---
 
@@ -154,15 +142,6 @@ asVC (FData (FuncData n d _))     = quantNoUnit (mkUid n) (nounPhraseSP n) (S d)
 -- | Get a 'UID' of a chunk corresponding to a 'Func'.
 funcUID :: Func -> UID
 funcUID f = asVC f ^. uid
-
--- | Determines the derived inputs, which can be immediately calculated from the
--- knowns (inputs and constants). If there are DDs, the derived inputs will
--- come from those. If there are none, then the 'QDefinition's are used instead.
-getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
-  ChunkDB -> [SimpleQDef]
-getDerivedInputs ddefs ins cnsts db =
-  filter ((`subsetOf` refSet) . flip codevars db . expr . (^. defnExpr)) (mapMaybe qdEFromDD ddefs)
-  where refSet = ins <> fmap quantvar cnsts
 
 -- | Get a list of 'Constraint's for a list of 'CodeChunk's.
 getConstraints :: (HasUID c) => ConstraintCEMap -> [c] -> [ConstraintCE]

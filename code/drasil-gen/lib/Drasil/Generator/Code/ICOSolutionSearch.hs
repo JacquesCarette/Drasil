@@ -1,16 +1,15 @@
-module Language.Drasil.ICOSolutionSearch (
-    Def, Known, Need, solveExecOrder
+-- | FIXME: This entire module can and should be generalized.
+module Drasil.Generator.Code.ICOSolutionSearch (
+    solveExecOrder
 ) where
 
 import Control.Lens ((^.))
 import Data.List ((\\), intercalate, partition)
-
-import Drasil.Database (ChunkDB, showUID, HasUID)
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Data.List.Extras (subsetOf)
 
 import Drasil.Code.CodeVar (DefiningCodeExpr(..), CodeVarChunk, quantvar)
-import Language.Drasil.Chunk.CodeBase (codevars')
+import Drasil.Database (ChunkDB, showUID, HasUID)
+import Language.Drasil.Code (CodeDefinition, auxExprs, codevars')
 
 -- | Mathematical definition.
 type Def = CodeDefinition

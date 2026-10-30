@@ -13,6 +13,9 @@ default-extensions:
 - StrictData
 
 extra-source-files:
+- test/golden/csv/*.csv
+- test/golden/html/*.html
+- test/golden/json/*.json
 - test/golden/markdown/commonmark/*.md
 
 dependencies:

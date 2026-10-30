@@ -36,8 +36,11 @@ instance HasUID (DefiningExpr e) where uid = deUid
 
 instance Definition (DefiningExpr e) where defn = rvDesc
 
-instance HasChunkRefs (DefiningExpr e) where
-  chunkRefs de = chunkRefs (de ^. rvDesc)
+instance HasChunkRefs e => HasChunkRefs (DefiningExpr e) where
+  chunkRefs de = mconcat
+    [ chunkRefs (de ^. rvDesc)
+    , chunkRefs (de ^. expr)
+    ]
   {-# INLINABLE chunkRefs #-}
 
 -- | 'MultiDefn's are 'QDefinition' factories, used for showing one or more
@@ -55,7 +58,7 @@ data MultiDefn e = MultiDefn{
 
 makeLenses ''MultiDefn
 
-instance HasChunkRefs (MultiDefn e) where
+instance HasChunkRefs e => HasChunkRefs (MultiDefn e) where
   chunkRefs md = mconcat
     [ chunkRefs (md ^. qd)
     , chunkRefs (md ^. rDesc)
@@ -65,8 +68,8 @@ instance HasChunkRefs (MultiDefn e) where
 
 instance HasUID           (MultiDefn e) where uid     = rUid
 instance HasSymbol        (MultiDefn e) where symbol  = symbol . (^. qd)
-instance NamedIdea        (MultiDefn e) where term    = qd . term
-instance Idea             (MultiDefn e) where getA    = getA . (^. qd)
+instance HasChunkRefs e => NamedIdea (MultiDefn e) where term = qd . term
+instance HasChunkRefs e => Idea      (MultiDefn e) where getA = getA . (^. qd)
 instance HasSpace         (MultiDefn e) where typ     = qd . typ
 instance Definition       (MultiDefn e) where defn    = rDesc
 instance MayHaveUnit      (MultiDefn e) where getUnit = getUnit . view qd
@@ -75,7 +78,7 @@ instance RequiresChecking (MultiDefn Expr) Expr Space where
 
 -- | The complete Relation of a MultiDefn is defined as the quantity and the
 --   related expressions being equal (e.g., `q $= a $= b $= ... $= z`)
-instance Express e => Express (MultiDefn e) where
+instance (Express e, HasChunkRefs e) => Express (MultiDefn e) where
   express q = equiv $ sy q : NE.toList (express . (^. expr) <$> (q ^. rvs))
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment.
@@ -102,7 +105,7 @@ multiDefnGenQD :: MultiDefn e -> DefiningExpr e -> QDefinition e
 multiDefnGenQD md de =
   mkQDefSt
     (md ^. qd . uid)
-    (md ^. term)
+    (md ^. qd . term)
     (md ^. defn)
     (symbol md)
     (md ^. typ)

@@ -24,8 +24,15 @@ data CodeDefinition = CD { _cchunk   :: CodeChunk
                          }
 makeLenses ''CodeDefinition
 
+-- The definition type is only a tag (plain definition or ODE), so it has
+-- nothing to report.
 instance HasChunkRefs CodeDefinition where
-  chunkRefs cd = chunkRefs (cd ^. cchunk)
+  chunkRefs (CD codeChk bodyExpr otherExprs _tag) =
+    mconcat
+      [ chunkRefs codeChk
+      , chunkRefs bodyExpr
+      , chunkRefs otherExprs
+      ]
   {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeDefinition'.

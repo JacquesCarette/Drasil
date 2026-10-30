@@ -40,16 +40,21 @@ data InstanceModel = IM {
 }
 makeLenses ''InstanceModel
 
+-- The reference address (the String field) is not a chunk reference, so it is
+-- the only field left out.
 instance HasChunkRefs InstanceModel where
-  chunkRefs imd = mconcat
-    [ chunkRefs (imd ^. mk)
-    , chunkRefs (fst <$> (imd ^. imInputs))
-    , chunkRefs (imd ^. imOutput . _1)
-    , chunkRefs (imd ^. rf)
-    , chunkRefs (imd ^. deri)
-    , chunkRefs (lb imd)
-    , chunkRefs (imd ^. notes)
-    ]
+  chunkRefs (IM modelKind inps (outQty, outBounds) srcs derivOpt shortNm _addr extraNotes) =
+    mconcat
+      [ chunkRefs modelKind
+      , chunkRefs (fst <$> inps)
+      , chunkRefs (snd <$> inps)
+      , chunkRefs outQty
+      , chunkRefs outBounds
+      , chunkRefs srcs
+      , chunkRefs derivOpt
+      , chunkRefs shortNm
+      , chunkRefs extraNotes
+      ]
   {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of an 'InstanceModel'.

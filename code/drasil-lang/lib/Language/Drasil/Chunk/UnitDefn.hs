@@ -17,6 +17,7 @@ module Language.Drasil.Chunk.UnitDefn (
 
 import Control.Lens ((^.), makeLenses, view)
 import Control.Arrow (second)
+import qualified Data.Set as S
 
 import Drasil.Database (HasChunkRefs(..), UID, HasUID(..), mkUid, nsUid)
 
@@ -42,7 +43,11 @@ data UnitDefn = UD { _vc :: ConceptChunk
 makeLenses ''UnitDefn
 
 instance HasChunkRefs UnitDefn where
-  chunkRefs ud = chunkRefs (ud ^. vc)
+  chunkRefs ud = S.unions [
+      chunkRefs $ ud ^. vc,
+      chunkRefs $ ud ^. cas,
+      S.fromList $ ud ^. cu
+    ]
   {-# INLINABLE chunkRefs #-}
 
 -- | Finds 'UID' of the 'ConceptChunk' used to make the 'UnitDefn'.

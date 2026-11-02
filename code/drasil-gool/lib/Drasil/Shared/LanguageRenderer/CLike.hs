@@ -17,7 +17,8 @@ import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (extNewObj, objMethodCallNoParams, ($->))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
-  RenderValue(valFromData), ValueElim(valuePrec), ScopeElim(scopeData))
+  RenderValue(valFromData), ValueElim(valuePrec), ScopeElim(scopeData),
+  stmtFromData)
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import Drasil.GOOL.Renderers (renderType)
 import qualified Drasil.GOOL.RendererClassesOO as RO
@@ -26,8 +27,8 @@ import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData,
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing, getTerm)
 import qualified Drasil.Shared.LanguageRenderer as R
-import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStmt,
-  mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
+import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStateVal,
+  mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import Drasil.Shared.State (MS, VS, lensMStoVS, lensVStoMS, addLibImportVS,
   getClassName, useVarName, setVarScope)
 
@@ -157,21 +158,21 @@ increment
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
-  mkStmt $ R.addAssign vr v
+  stmtFromData (R.addAssign vr v) Semi
 
 increment1
   :: (InternalVarElim r var, RC.RenderStatement r stmt)
   => VS (r var) -> MS (r stmt)
 increment1 vr' = do
   vr <- zoom lensMStoVS vr'
-  (mkStmt . R.increment) vr
+  stmtFromData (R.increment vr) Semi
 
 decrement1
   :: (InternalVarElim r var, RC.RenderStatement r stmt)
   => VS (r var) -> MS (r stmt)
 decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
-  (mkStmt . R.decrement) vr
+  stmtFromData (R.decrement vr) Semi
 
 varDec
   :: ( InternalVarElim r var
@@ -187,9 +188,9 @@ varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
-  mkStmt (RO.perm (bind $ variableBind v)
+  stmtFromData (RO.perm (bind $ variableBind v)
     <+> renderType (variableType v) <+> (ptrdoc (getCodeType (variableType v)) <>
-    RC.variable v))
+    RC.variable v)) Semi
   where bind ClassLevel = s
         bind InstanceLevel = d
         ptrdoc (List _) = pdoc
@@ -206,7 +207,7 @@ varDecDef
 varDecDef t vr scp vl' = do
   vd <- IC.varDec vr scp
   vl <- zoom lensMStoVS vl'
-  RC.stmtFromData (RC.preStatement vd <+> equals <+> RC.value vl) t
+  stmtFromData (RC.preStatement vd <+> equals <+> RC.value vl) t
 
 setDecDef
   :: ( IC.DeclStatement r bod stmt var scope val
@@ -218,7 +219,7 @@ setDecDef
 setDecDef t vr scp vl' = do
   vd <- IC.setDec vr scp
   vl <- zoom lensMStoVS vl'
-  RC.stmtFromData (RC.preStatement vd <+> equals <+> RC.value vl) t
+  stmtFromData (RC.preStatement vd <+> equals <+> RC.value vl) t
 
 listDec
   ::
@@ -230,7 +231,7 @@ listDec
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
-  mkStmt (RC.preStatement vd <> f sz)
+  stmtFromData (RC.preStatement vd <> f sz) Semi
 
 extObjDecNew
   ::
@@ -262,7 +263,7 @@ switch f st v cs bod = do
   vals <- mapM (zoom lensMStoVS . fst) cs
   bods <- mapM snd cs
   dflt <- bod
-  mkStmt $ R.switch f s val dflt (zip vals bods)
+  stmtFromData (R.switch f s val dflt (zip vals bods)) Semi
 
 for
   :: ( RC.BodyElim r bod
@@ -282,7 +283,7 @@ for bStart bEnd sInit vGuard sUpdate b = do
   guard <- zoom lensMStoVS vGuard
   upd <- RC.loopStmt sUpdate
   bod <- b
-  RC.stmtFromData (vcat [
+  stmtFromData (vcat [
     forLabel <+> parens (RC.preStatement initl <> semi <+> RC.value guard <>
       semi <+> RC.preStatement upd) <+> bStart,
     indent $ RC.body bod,

@@ -45,8 +45,8 @@ import Drasil.Shared.LanguageRenderer (listAccessFunc, array', new', args, array
   classDox, moduleDox, variableList, valueList, intValue)
 import Drasil.GOOL.Renderers (renderType)
 import qualified Drasil.Shared.LanguageRenderer as R
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStateVal,
-  mkStateVar, typeFromData, mkVar)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkStateVar,
+  typeFromData, mkVar)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
@@ -224,7 +224,7 @@ printSt
 printSt va' vb' = do
   va <- zoom lensMStoVS va'
   vb <- zoom lensMStoVS vb'
-  mkStmt (R.print va vb)
+  stmtFromData (R.print va vb) Semi
 
 arrayDec
   :: ( TypeSym r TypeData
@@ -243,8 +243,8 @@ arrayDec n vr scp = do
   modify $ setVarScope (variableName v) (scopeData scp)
   let tp = variableType v
   innerTp <- zoom lensMStoVS $ innerType $ pure tp
-  mkStmt $ renderType tp <+> RC.variable v <+> equals <+> new' <+>
-    renderType innerTp <> brackets (RC.value sz)
+  stmtFromData (renderType tp <+> RC.variable v <+> equals <+> new' <+>
+    renderType innerTp <> brackets (RC.value sz)) Semi
 
 arrayDecDef
   :: ( IC.DeclStatement r bod stmt var scope val
@@ -256,7 +256,7 @@ arrayDecDef
 arrayDecDef v' scp vals' = do
   vs <- mapM (zoom lensMStoVS) vals'
   vd <- IC.varDec v' scp
-  mkStmt (RC.preStatement vd <+> equals <+> braces (valueList vs))
+  stmtFromData (RC.preStatement vd <+> equals <+> braces (valueList vs)) Semi
 
 openFileA
   ::
@@ -449,7 +449,7 @@ setDec
 setDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
-  mkStmt (RC.preStatement vd <> f sz)
+  stmtFromData (RC.preStatement vd <> f sz) Semi
 
 setMethodCall
   :: (TypeSym r typ, ValueSym r val typ, IG.InternalValueExp r var val typ)

@@ -68,7 +68,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, multPrec, unExpr, unExpr', binExpr, binExpr', mkStateVal, mkVal,
-  mkStateVar, mkStmtNoEnd, compEqualPrec, typeUnExpr, typeBinExpr)
+  mkStateVar, compEqualPrec, typeUnExpr, typeBinExpr)
 import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue, binderList)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
@@ -502,8 +502,8 @@ instance CommentStatement MatlabCode Statement where
   comment = G.comment mlCmtStart
 
 instance ControlStatement MatlabCode Body Statement Variable Value where
-  break = mkStmtNoEnd R.break
-  continue = mkStmtNoEnd R.continue
+  break = stmtFromData R.break Empty
+  continue = stmtFromData R.continue Empty
   -- MATLAB has no `return <expr>`: a function returns by assigning its named
   -- output, so a return becomes `result = <value>;`.
   returnStmt v' = do
@@ -518,12 +518,12 @@ instance ControlStatement MatlabCode Body Statement Variable Value where
     c <- zoom lensMStoVS cond
     u <- updateS
     bd <- b
-    mkStmtNoEnd (vcat [
+    stmtFromData (vcat [
       statement i,
       text "while" <+> RC.value c,
       indent (RC.body bd),
       indent (statement u),
-      mlEnd])
+      mlEnd]) Empty
   forRange i initv finalv stepv = forEach i (mlRange initv finalv stepv)
   forEach = CS.forEach' mlForEach
   while = C.while id empty mlEnd

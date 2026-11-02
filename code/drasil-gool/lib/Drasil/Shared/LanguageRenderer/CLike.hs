@@ -27,7 +27,7 @@ import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing, getTerm)
 import qualified Drasil.Shared.LanguageRenderer as R
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStmt,
-  mkStmtNoEnd, mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
+  mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import Drasil.Shared.State (MS, VS, lensMStoVS, lensVStoMS, addLibImportVS,
   getClassName, useVarName, setVarScope)
 
@@ -206,9 +206,7 @@ varDecDef
 varDecDef t vr scp vl' = do
   vd <- IC.varDec vr scp
   vl <- zoom lensMStoVS vl'
-  let stmtCtor Empty = mkStmtNoEnd
-      stmtCtor Semi = mkStmt
-  stmtCtor t (RC.preStatement vd <+> equals <+> RC.value vl)
+  RC.stmtFromData (RC.preStatement vd <+> equals <+> RC.value vl) t
 
 setDecDef
   :: ( IC.DeclStatement r bod stmt var scope val
@@ -220,9 +218,7 @@ setDecDef
 setDecDef t vr scp vl' = do
   vd <- IC.setDec vr scp
   vl <- zoom lensMStoVS vl'
-  let stmtCtor Empty = mkStmtNoEnd
-      stmtCtor Semi = mkStmt
-  stmtCtor t (RC.preStatement vd <+> equals <+> RC.value vl)
+  RC.stmtFromData (RC.preStatement vd <+> equals <+> RC.value vl) t
 
 listDec
   ::
@@ -286,11 +282,11 @@ for bStart bEnd sInit vGuard sUpdate b = do
   guard <- zoom lensMStoVS vGuard
   upd <- RC.loopStmt sUpdate
   bod <- b
-  mkStmtNoEnd $ vcat [
+  RC.stmtFromData (vcat [
     forLabel <+> parens (RC.preStatement initl <> semi <+> RC.value guard <>
       semi <+> RC.preStatement upd) <+> bStart,
     indent $ RC.body bod,
-    bEnd]
+    bEnd]) Empty
 
 -- Doc function parameter is applied to the render of the while-condition
 while
@@ -299,9 +295,9 @@ while
 while f bStart bEnd v' b'= do
   v <- zoom lensMStoVS v'
   b <- b'
-  mkStmtNoEnd (vcat [whileLabel <+> f (RC.value v) <+> bStart,
+  RC.stmtFromData (vcat [whileLabel <+> f (RC.value v) <+> bStart,
     indent $ RC.body b,
-    bEnd])
+    bEnd]) Empty
 
 -- Error Messages --
 

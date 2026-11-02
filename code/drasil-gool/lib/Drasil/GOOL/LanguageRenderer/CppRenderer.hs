@@ -59,9 +59,9 @@ import qualified Drasil.Shared.LanguageRenderer as R (this', this, sqrt, fabs,
   body, stateVar, constVar, cast, castObj, classLevel, instanceLevel,
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkVal, mkStateVar, mkVar, typeFromData, VSOp, mkOp, unOpPrec,
-  powerPrec, unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
+  mkStateVar, mkVar, typeFromData, VSOp, mkOp, unOpPrec, powerPrec, unExpr,
+  unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
@@ -1567,7 +1567,7 @@ instance ControlStatement CppSrcCode Body Statement Variable Value where
 
   ifExists _ ifBody _ = do
     ifb <- ifBody
-    mkStmtNoEnd (RC.body ifb) -- All variables are initialized in C++
+    stmtFromData (RC.body ifb) Empty -- All variables are initialized in C++
 
   for = C.for bodyStart bodyEnd
   forRange = M.forRange
@@ -1580,7 +1580,7 @@ instance ControlStatement CppSrcCode Body Statement Variable Value where
     addCAssertImport $ do
       cond <- zoom lensMStoVS condition
       errMsg <- zoom lensMStoVS errorMessage
-      mkStmtNoEnd (cppAssert cond errMsg)
+      stmtFromData (cppAssert cond errMsg) Empty
 
 instance ObserverPattern CppSrcCode Statement TypeData where
   notifyObservers = M.notifyObservers
@@ -2043,7 +2043,7 @@ instance List CppHdrCode Value where
 instance ListStatement CppHdrCode Statement Value where
   listAdd _ _ _ = mkStmt empty
   listAppend _ _ = mkStmt empty
-  listSet _ _ _ = mkStmtNoEnd empty
+  listSet _ _ _ = stmtFromData empty Empty
 
 instance Set CppHdrCode Value where
   contains _ _ = mkStateVal void empty
@@ -2874,11 +2874,11 @@ cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
   b <- b'
-  mkStmtNoEnd $ vcat [
+  stmtFromData (vcat [
     forEachLabel <+> parens ((text cppConst <+> renderType (variableType e) <+> text "&") <> RC.variable e <+>
       inLbl <+> RC.value v) <+> bStart,
     indent $ RC.body b,
-    bEnd]
+    bEnd]) Empty
 
 cppLitSet
   :: (RenderValue r var val typ, ValueElim r val)

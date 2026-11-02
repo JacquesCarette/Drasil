@@ -1,9 +1,9 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module Drasil.Shared.LanguageRenderer.Constructors (
-  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar,
-  typeFromData, VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec,
-  powerPrec, andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr,
-  binExpr, binExpr', binExprNumDbl', typeBinExpr
+  mkStmt, mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar, typeFromData, VSOp,
+  mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec, andPrec,
+  orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, binExpr',
+  binExprNumDbl', typeBinExpr
 ) where
 
 import Drasil.Shared.InterfaceCommon (TypeSym(..), ValueSym(..), getCodeType,
@@ -28,10 +28,6 @@ import Control.Monad (join)
 -- | Constructs a statement terminated by a semi-colon
 mkStmt :: (RenderStatement r stmt) => Doc -> MS (r stmt)
 mkStmt = flip stmtFromData Semi
-
--- | Constructs a statement without a termination character
-mkStmtNoEnd :: (RenderStatement r stmt) => Doc -> MS (r stmt)
-mkStmtNoEnd = flip stmtFromData Empty
 
 -- Values --
 

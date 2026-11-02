@@ -33,7 +33,7 @@ import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderBody(..),
   RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
-  BlockCommentSym(..), ScopeElim(scopeData))
+  BlockCommentSym(..), ScopeElim(scopeData), stmtFromData)
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   onStateList)
@@ -45,13 +45,13 @@ import Drasil.Shared.LanguageRenderer (listAccessFunc, array', new', args, array
   classDox, moduleDox, variableList, valueList, intValue)
 import Drasil.GOOL.Renderers (renderType)
 import qualified Drasil.Shared.LanguageRenderer as R
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkStateVar, typeFromData, mkVar)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStateVal,
+  mkStateVar, typeFromData, mkVar)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
 import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd,
-  TypeData, FuncData)
+  TypeData, FuncData, Terminator(..))
 import Drasil.Shared.State (MS, VS, FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
@@ -291,11 +291,11 @@ forEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
   b <- b'
-  mkStmtNoEnd $ vcat [
+  stmtFromData (vcat [
     forEachLabel <+> parens (renderType (variableType e) <+> RC.variable e <+>
       inLbl <+> RC.value v) <+> bStart,
     indent $ RC.body b,
-    bEnd]
+    bEnd]) Empty
 
 mainDesc, argsDesc :: String
 mainDesc = "Controls the flow of the program"
@@ -611,7 +611,7 @@ funcDecDef v scp ps b = do
   f <- function (variableName vr) private (pure $ variableType vr)
     (IC.param <$> ps) b
   modify (L.set currParameters (s ^. currParameters))
-  mkStmtNoEnd $ RC.method f
+  stmtFromData (RC.method f) Empty
 
 inOutCall
   ::

@@ -15,15 +15,14 @@ import Drasil.Shared.InterfaceCommon (Body, MixedCall, ValueSym, TypeSym(int),
   EmptyStatement, AssignStatement, ValueExpression)
 import Drasil.Shared.RendererClassesCommon (scopeData, call,
   RenderFunction(funcFromData), RenderVariable, RenderValue, ValueElim,
-  RenderStatement, ScopeElim, InternalVarElim)
+  RenderStatement, ScopeElim, InternalVarElim, stmtFromData)
 import Drasil.Shared.LanguageRenderer (access, intValue)
 import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc,
   addAssign)
-import Drasil.Shared.LanguageRenderer.Constructors(mkStmtNoEnd, mkStateVar,
-  typeFromData)
+import Drasil.Shared.LanguageRenderer.Constructors(mkStateVar, typeFromData)
 import Drasil.Shared.State (MS, VS, lensMStoVS, useVarName, setVarScope)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.Shared.AST (ScopeData, TypeData, FuncData)
+import Drasil.Shared.AST (ScopeData, TypeData, FuncData, Terminator(..))
 
 -- Swift and Julia --
 
@@ -81,7 +80,7 @@ forEach' f i' v' b' = do
   i <- zoom lensMStoVS i'
   v <- zoom lensMStoVS v'
   b <- b'
-  mkStmtNoEnd (f i v b)
+  stmtFromData (f i v b) Empty
 
 -- Python and Julia --
 
@@ -110,7 +109,7 @@ increment
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
-  mkStmtNoEnd $ R.addAssign vr v
+  stmtFromData (R.addAssign vr v) Empty
 
 -- Python, Julia, and MATLAB --
 

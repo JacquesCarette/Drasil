@@ -56,9 +56,9 @@ import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
   printFile, classVarAccess, cast, castObj, classLevel,
   instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
   commentedMod, commentedItem)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
-  mkStateVal, mkVal, typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr',
-  unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
+  typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl,
+  typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, obj, csc, sec, cot, negateOp, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
@@ -601,7 +601,7 @@ instance ControlStatement CSharpCode Body Statement Variable Value where
     modify (addLangImport csDiagnostics)
     cond <- zoom lensMStoVS condition
     errMsg <- zoom lensMStoVS errorMessage
-    mkStmtNoEnd (csAssert cond errMsg)
+    stmtFromData (csAssert cond errMsg) Empty
 
 instance ObserverPattern CSharpCode Statement TypeData where
   notifyObservers = M.notifyObservers

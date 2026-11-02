@@ -58,9 +58,9 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log, exp
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', body,
   classVarAccess, func, castObj, classLevel, instanceLevel, break, continue,
   private, blockCmt, docCmt, addComments, commentedMod, commentedItem, switch)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
-  mkVal, typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr,
-  binExpr, binExpr', typeBinExpr, typeFromData)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
+  typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr, binExpr,
+  binExpr', typeBinExpr, typeFromData)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, obj, csc, sec, cot, negateOp, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
@@ -531,7 +531,7 @@ instance DeclStatement SwiftCode Body Statement Variable ScopeData Value where
   constDecDef vr scp vl' = do
     vdec <- swiftVarDec swiftConst vr scp
     vl <- zoom lensMStoVS vl'
-    mkStmtNoEnd $ RC.preStatement vdec <+> equals <+> RC.value vl
+    stmtFromData (RC.preStatement vdec <+> equals <+> RC.value vl) Empty
   funcDecDef = CP.funcDecDef
 
 instance OODeclStatement SwiftCode Statement Variable ScopeData Value where
@@ -583,7 +583,7 @@ instance ReadFile SwiftCode Statement Variable Value where
     modify incrementLine
     slc <- listSlice swiftLineVar (listAccess swiftContentsVal (litInt li))
       (Just $ litInt wi) Nothing Nothing
-    multi [varDec swiftLineVar scp, mkStmtNoEnd $ RC.block slc,
+    multi [varDec swiftLineVar scp, stmtFromData (RC.block slc) Empty,
       v &= swiftJoinedFunc ' ' swiftLineVal]
   discardFileLine _ = modify incrementLine >> emptyStmt
   getFileInputAll _ v = do
@@ -592,7 +592,7 @@ instance ReadFile SwiftCode Statement Variable Value where
         l_var = var "l" (listType string)
     slc <- listSlice swiftContentsVar swiftContentsVal
       (Just $ litInt (li+1)) Nothing Nothing
-    multi [mkStmtNoEnd $ RC.block slc,
+    multi [stmtFromData (RC.block slc) Empty,
       v &= swiftMapFunc swiftContentsVal
         (lambda [l_binder] (swiftJoinedFunc ' ' (valueOf l_var)))]
 
@@ -613,8 +613,8 @@ instance CommentStatement SwiftCode Statement where
   comment = G.comment commentStart
 
 instance ControlStatement SwiftCode Body Statement Variable Value where
-  break = mkStmtNoEnd R.break
-  continue = mkStmtNoEnd R.continue
+  break = stmtFromData R.break Empty
+  continue = stmtFromData R.continue Empty
 
   returnStmt = G.returnStmt Empty
 
@@ -629,7 +629,7 @@ instance ControlStatement SwiftCode Body Statement Variable Value where
     vals <- mapM (zoom lensMStoVS . fst) cs
     bods <- mapM snd cs
     dflt <- bod
-    mkStmtNoEnd $ R.switch (space <>) st vl dflt (zip vals bods)
+    stmtFromData (R.switch (space <>) st vl dflt (zip vals bods)) Empty
 
   ifExists = M.ifExists
 
@@ -643,7 +643,7 @@ instance ControlStatement SwiftCode Body Statement Variable Value where
   assert condition errorMessage = do
     cond <- zoom lensMStoVS condition
     errMsg <- zoom lensMStoVS errorMessage
-    mkStmtNoEnd (swiftAssert cond errMsg)
+    stmtFromData (swiftAssert cond errMsg) Empty
 
 instance ObserverPattern SwiftCode Statement TypeData where
   notifyObservers = M.notifyObservers'
@@ -1210,8 +1210,8 @@ swiftVarDec dec v' scp = do
   let bind ClassLevel = classLevel :: SwiftCode Doc
       bind InstanceLevel = instanceLevel :: SwiftCode Doc
       p = bind $ variableBind v
-  mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
-    <+> renderType (variableType v))
+  stmtFromData (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
+    <+> renderType (variableType v)) Empty
 
 swiftSetDec
   :: Doc
@@ -1226,8 +1226,8 @@ swiftSetDec dec v' scp = do
   let bind ClassLevel = classLevel :: SwiftCode Doc
       bind InstanceLevel = instanceLevel :: SwiftCode Doc
       p = bind $ variableBind v
-  mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
-    <+> text (swiftSet P.<> "<" P.<> getTypeString innerTp P.<> ">"))
+  stmtFromData (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
+    <+> text (swiftSet P.<> "<" P.<> getTypeString innerTp P.<> ">")) Empty
 
 swiftThrowDoc :: (ValueElim r val) => r val -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg

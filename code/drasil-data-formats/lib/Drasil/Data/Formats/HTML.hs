@@ -5,4 +5,4 @@ module Drasil.Data.Formats.HTML
 where
 
 import Drasil.Data.Formats.HTML.Core
-import Drasil.Data.Formats.HTML.Render
+import Drasil.Data.Formats.HTML.Render hiding (escapeHTMLText)

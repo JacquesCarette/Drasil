@@ -18,20 +18,20 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderMethod(..))
 class (CommonRenderSym r mthd vis param bod block stmt var scope val binder typ,
   ParameterSym r param var, VisibilitySym r vis,
   MethodSym r mthd vis param bod var typ, IP.ModuleSym r mod mthd,
-  IP.FileSym r file mod, RenderFile r file mod, RenderMod r mod,
-  ModuleElim r mod, RenderMethod r mthd,
+  IP.FileSym r file mod, RenderFile r file mod stmt, RenderMod r mod,
+  ModuleElim r mod, RenderMethod r mthd stmt,
   ProcRenderMethod r mthd vis param bod typ
   ) => ProcRenderSym r file mod mthd vis param bod block stmt var scope val binder typ
 -- Procedural-Only Typeclasses --
 
-class RenderFile r file mod | r -> file mod where
+class RenderFile r file mod stmt | r -> file mod stmt where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
   top :: r mod -> r Block
   bottom :: r Block
 
-  commentedMod :: FS (r file) -> FS (r Doc) -> FS (r file)
+  commentedMod :: FS (r file) -> FS (r stmt) -> FS (r file)
 
   fileFromData :: FilePath -> FS (r mod) -> FS (r file)
 

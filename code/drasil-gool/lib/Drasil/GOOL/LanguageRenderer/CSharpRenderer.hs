@@ -149,7 +149,7 @@ instance FileSym CSharpCode FileData ModData where
 
   docMod = CP.doxMod csExt
 
-instance RenderFile CSharpCode FileData ModData where
+instance RenderFile CSharpCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -657,7 +657,7 @@ instance OOMethodSym CSharpCode MethodData Doc Doc ParamData Body Variable Value
   inOutMethod n s p = csInOut (method n s p)
   docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-instance RenderMethod CSharpCode MethodData where
+instance RenderMethod CSharpCode MethodData Statement where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
@@ -690,7 +690,7 @@ instance ClassSym CSharpCode Class StateVar MethodData where
 
   docClass = CP.doxClass
 
-instance RenderClass CSharpCode Class StateVar MethodData Doc where
+instance RenderClass CSharpCode Class StateVar MethodData Doc Statement where
   intClass = CP.intClass R.class'
   commentedClass = G.commentedClass
 
@@ -707,12 +707,12 @@ instance RenderMod CSharpCode ModData where
 instance ModuleElim CSharpCode ModData where
   module' = modDoc . unCSC
 
-instance BlockCommentSym CSharpCode where
+instance BlockCommentSym CSharpCode Statement where
   blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
     blockCmtEnd)
 
-instance BlockCommentElim CSharpCode where
+instance BlockCommentElim CSharpCode Statement where
   blockComment' = unCSC
 
 addSystemImport :: VS a -> VS a

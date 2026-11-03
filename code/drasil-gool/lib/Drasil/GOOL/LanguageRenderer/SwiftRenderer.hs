@@ -153,7 +153,7 @@ instance FileSym SwiftCode FileData ModData where
 
   docMod = G.docMod CP.modDoc' swiftExt
 
-instance RenderFile SwiftCode FileData ModData where
+instance RenderFile SwiftCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -700,7 +700,7 @@ instance OOMethodSym SwiftCode MethodData Doc Doc ParamData Body Variable Value 
   inOutMethod n s p = CP.inOutFunc (method n s p)
   docInOutMethod n s p = CP.docInOutFunc' CP.functionDoc (inOutMethod n s p)
 
-instance RenderMethod SwiftCode MethodData where
+instance RenderMethod SwiftCode MethodData Statement where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
@@ -731,7 +731,7 @@ instance ClassSym SwiftCode Class StateVar MethodData where
 
   docClass = G.docClass swiftClassDoc
 
-instance RenderClass SwiftCode Class StateVar MethodData Doc where
+instance RenderClass SwiftCode Class StateVar MethodData Doc Statement where
   intClass = CP.intClass R.class'
   commentedClass = G.commentedClass
 
@@ -763,12 +763,12 @@ instance RenderMod SwiftCode ModData where
 instance ModuleElim SwiftCode ModData where
   module' = modDoc . unSC
 
-instance BlockCommentSym SwiftCode where
+instance BlockCommentSym SwiftCode Statement where
   blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
     blockCmtEnd)
 
-instance BlockCommentElim SwiftCode where
+instance BlockCommentElim SwiftCode Statement where
   blockComment' = unSC
 
 addMathImport :: VS a -> VS a

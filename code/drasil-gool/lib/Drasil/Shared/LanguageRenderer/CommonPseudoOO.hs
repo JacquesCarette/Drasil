@@ -101,17 +101,17 @@ constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (RG.construct c) ps (RC.multiBody [initStmts is, b]))
 
 doxFunc
-  :: (BlockCommentSym r, RenderMethod r mthd)
+  :: (BlockCommentSym r stmt, RenderMethod r mthd stmt)
   => String -> [String] -> Maybe String -> MS (r mthd) -> MS (r mthd)
 doxFunc = docFunc functionDox
 
 doxClass
-  :: (BlockCommentSym r, RG.RenderClass r cls stvr mthd vis)
+  :: (BlockCommentSym r stmt, RG.RenderClass r cls stvr mthd vis stmt)
   => String -> CS (r cls) -> CS (r cls)
 doxClass = docClass classDox
 
 doxMod
-  :: (BlockCommentSym r, RG.RenderFile r file mod)
+  :: (BlockCommentSym r stmt, RG.RenderFile r file mod stmt)
   => String
   -> String
   -> String
@@ -379,7 +379,7 @@ string :: (Monad r) => VS (r TypeData)
 string = typeFromData String stringRender (text stringRender)
 
 docInOutFunc
-  :: (BlockCommentSym r, RenderMethod r mthd)
+  :: (BlockCommentSym r stmt, RenderMethod r mthd stmt)
   => ([VS (r var)] -> [VS (r var)] -> [VS (r var)] -> MS (r bod) -> MS (r mthd))
   -> String
   -> [(String, VS (r var))]
@@ -501,7 +501,7 @@ litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
 -- Python, C#, C++, and Swift--
 
 extraClass
-  :: (RG.RenderClass r cls stvr mthd vis, VisibilitySym r vis)
+  :: (RG.RenderClass r cls stvr mthd vis stmt, VisibilitySym r vis)
   => (Maybe Label -> r ParentSpec)
   -> Label
   -> Maybe Label
@@ -636,7 +636,11 @@ forLoopError l = "Classic for loops not available in " P.<> l P.<> ", use " P.<>
   "forRange, forEach, or while instead"
 
 mainBody
-  :: (RC.BodyElim r bod, RC.RenderMethod r mthd) => MS (r bod) -> MS (r mthd)
+  ::
+    ( RC.BodyElim r bod
+    , RC.RenderMethod r mthd stmt
+    )
+  => MS (r bod) -> MS (r mthd)
 mainBody b = do
   modify setCurrMain
   bod <- b
@@ -672,7 +676,7 @@ inOutFunc f ins outs both b = f
   where rets = both P.<> outs
 
 docInOutFunc'
-  :: (BlockCommentSym r, RenderMethod r mthd)
+  :: (BlockCommentSym r stmt, RenderMethod r mthd stmt)
   => FuncDocRenderer
   -> ([VS (r var)] -> [VS (r var)] -> [VS (r var)] -> MS (r bod) -> MS (r mthd))
   -> String

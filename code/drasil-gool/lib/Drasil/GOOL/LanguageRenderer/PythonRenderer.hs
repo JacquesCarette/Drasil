@@ -49,7 +49,7 @@ import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
 import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
   argv, printLabel, listSep, piLabel, access, functionDox, binderList,
-  parameterList)
+  parameterList, mkComment)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, body, classVarAccess,
   castObj, instanceLevel, break, continue, addComments, commentedMod,
@@ -142,7 +142,7 @@ instance FileSym PythonCode FileData ModData where
 
   docMod = CP.doxMod pyExt
 
-instance RenderFile PythonCode FileData ModData where
+instance RenderFile PythonCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -664,7 +664,7 @@ instance OOMethodSym PythonCode MethodData AttachmentData Doc ParamData Body Var
   inOutMethod n s p = CP.inOutFunc (method n s p)
   docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
 
-instance RenderMethod PythonCode MethodData where
+instance RenderMethod PythonCode MethodData Statement where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
@@ -710,7 +710,7 @@ instance ClassSym PythonCode Class StateVar MethodData where
 
   docClass = CP.doxClass
 
-instance RenderClass PythonCode Class StateVar MethodData Doc where
+instance RenderClass PythonCode Class StateVar MethodData Doc Statement where
   intClass = CP.intClass pyClass
   commentedClass = G.commentedClass
 
@@ -739,12 +739,11 @@ instance RenderMod PythonCode ModData where
 instance ModuleElim PythonCode ModData where
   module' = modDoc . unPC
 
-instance BlockCommentSym PythonCode where
-  blockComment lns = toCode $ pyBlockComment lns pyCommentStart
-  docComment = onStateValue (\lns -> toCode $ pyDocComment lns pyDocCommentStart
-    pyCommentStart)
+instance BlockCommentSym PythonCode Statement where
+  blockComment lns = toCode $ pyBlockComment lns
+  docComment = onStateValue (toCode . pyDocComment)
 
-instance BlockCommentElim PythonCode where
+instance BlockCommentElim PythonCode Statement where
   blockComment' = unPC
 
 -- convenience
@@ -1075,13 +1074,13 @@ pyInherit n = toCode $ maybe empty (parens . text) n
 pyImplements :: (Monad r) => [Label] -> r ParentSpec
 pyImplements is = toCode $ parens (text $ intercalate listSep is)
 
-pyBlockComment :: [String] -> Doc -> Doc
-pyBlockComment lns cmt = vcat $ (<+>) cmt . text <$> lns
+pyBlockComment :: [String] -> Statement
+pyBlockComment lns = mkComment $ vcat $ (<+>) pyCommentStart . text <$> lns
 
-pyDocComment :: [String] -> Doc -> Doc -> Doc
-pyDocComment [] _ _ = empty
-pyDocComment (l:lns) start mid = vcat $ start <+> text l : fmap ((<+>) mid .
-  text) lns
+pyDocComment :: [String] -> Statement
+pyDocComment [] = mkComment empty
+pyDocComment (l:lns) = mkComment $ vcat $
+  pyDocCommentStart <+> text l : fmap ((<+>) pyCommentStart . text) lns
 
 toConstName :: String -> String
 toConstName (s:s':ss) = if isLower s && isUpper s'

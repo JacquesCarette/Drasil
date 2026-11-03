@@ -43,9 +43,11 @@ makeLenses ''Section
 instance HasUID        Section where uid = lab . uid
 
 instance HasChunkRefs Section where
-  chunkRefs sec = Set.unions
-    [ chunkRefs (tle sec)
-    , chunkRefs (sec ^. lab)
+  chunkRefs (Section ttl intro subs reference) = Set.unions
+    [ chunkRefs ttl
+    , chunkRefs intro
+    , chunkRefs subs
+    , chunkRefs reference
     ]
   {-# INLINABLE chunkRefs #-}
 -- | 'Section's are equal if 'UID's are equal.

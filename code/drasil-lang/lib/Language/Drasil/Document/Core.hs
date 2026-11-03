@@ -8,6 +8,7 @@ module Language.Drasil.Document.Core (
 ) where
 
 import Control.Lens ((^.), makeLenses, Lens', set, view)
+import qualified Data.Set as S
 
 import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 
@@ -103,8 +104,70 @@ class HasContents c where
   -- | Provides a 'Lens' to the 'RawContent'.
   accessContents :: Lens' c RawContent
 
+-- | Neither case has references of its own, but listing both constructors
+-- means a new one fails to compile until someone decides what it refers to.
+instance HasChunkRefs HasCaption where
+  chunkRefs NoCaption   = S.empty
+  chunkRefs WithCaption = S.empty
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs ItemType where
+  chunkRefs (Flat sent)         = chunkRefs sent
+  chunkRefs (Nested hdr nested) = chunkRefs hdr `S.union` chunkRefs nested
+  {-# INLINABLE chunkRefs #-}
+
+-- | References from the (item, optional tag) pairs of bulleted/numbered lists.
+bulletRefs :: [(ItemType, Maybe String)] -> S.Set UID
+bulletRefs = S.unions . fmap (\(itm, tag) -> chunkRefs itm `S.union` chunkRefs tag)
+
+-- | References from the (title, item, optional tag) triples of the other lists.
+titledRefs :: [ListTuple] -> S.Set UID
+titledRefs = S.unions . fmap (\(ttl, itm, tag) -> S.unions [chunkRefs ttl, chunkRefs itm, chunkRefs tag])
+
+instance HasChunkRefs ListType where
+  chunkRefs (Bullet items)       = bulletRefs items
+  chunkRefs (Numeric items)      = bulletRefs items
+  chunkRefs (Simple tuples)      = titledRefs tuples
+  chunkRefs (Desc tuples)        = titledRefs tuples
+  chunkRefs (Definitions tuples) = titledRefs tuples
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs RawContent where
+  chunkRefs (Table hdr rows caption showCap) =
+    S.unions [chunkRefs hdr, chunkRefs rows, chunkRefs caption, chunkRefs showCap]
+  chunkRefs (Para sents)           = chunkRefs sents
+  chunkRefs (EqnBlock me)          = chunkRefs me
+  chunkRefs (DerivBlock hdr steps) = chunkRefs hdr `S.union` chunkRefs steps
+  chunkRefs (Enumeration lst)      = chunkRefs lst
+  chunkRefs (Defini defs)          =
+    S.unions [chunkRefs nm `S.union` chunkRefs body | (nm, body) <- defs]
+  chunkRefs (Figure lbl path width capt) =
+    S.unions [chunkRefs lbl, chunkRefs path, chunkRefs width, chunkRefs capt]
+  chunkRefs (Bib cites)            = chunkRefs cites
+  chunkRefs (Graph pts w h lbl)    =
+    S.unions [ S.unions [chunkRefs a `S.union` chunkRefs b | (a, b) <- pts]
+             , chunkRefs w
+             , chunkRefs h
+             , chunkRefs lbl
+             ]
+  chunkRefs (CodeBlock ex)         = chunkRefs ex
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs UnlabelledContent where
+  chunkRefs (UnlblC rc) = chunkRefs rc
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs Contents where
+  chunkRefs (UlC unlabelled) = chunkRefs unlabelled
+  chunkRefs (LlC labelled)   = chunkRefs labelled
+  {-# INLINABLE chunkRefs #-}
+
 instance HasChunkRefs LabelledContent where
-  chunkRefs l = chunkRefs (l ^. ref)
+  chunkRefs (LblC owner reference rc) = S.unions
+    [ chunkRefs owner -- empty on purpose: the UID is this content's own, not a reference
+    , chunkRefs reference
+    , chunkRefs rc
+    ]
   {-# INLINABLE chunkRefs #-}
 
 -- | Finds 'UID' of the 'LabelledContent'.

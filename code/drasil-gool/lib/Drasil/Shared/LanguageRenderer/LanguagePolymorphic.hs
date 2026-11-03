@@ -609,7 +609,7 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
           indent $ RC.body bd,
           bEnd]) $+$ ifEnd) eBody
     in sequence (ifSect c : fmap elseIfSect cs P.<> [elseSect])
-      >>= (\ds -> stmtFromData (vcat ds) Empty)
+      >>= (\stmtDocs -> stmtFromData (vcat stmtDocs) Empty)
 
 tryCatch :: (RenderStatement r stmt) => (r bod -> r bod -> Doc) ->
   MS (r bod) -> MS (r bod) -> MS (r stmt)
@@ -790,4 +790,4 @@ fileFromData f fpath mdl' = do
 -- Helper functions
 
 setEmpty :: (RenderStatement r stmt, StatementElim r stmt) => MS (r stmt) -> MS (r stmt)
-setEmpty s' = s' >>= (\d -> stmtFromData (RC.preStatement d) Empty)
+setEmpty s' = s' >>= (\s -> stmtFromData (RC.preStatement s) Empty)

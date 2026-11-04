@@ -12,8 +12,8 @@ module Drasil.Shared.LanguageRenderer (
 
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile,
-  stateVar, constVar, stateVarList, switch, assign, addAssign, subAssign,
-  increment, decrement, getTerm, return', comment, var, extVar, arg,
+  stateVar, constVar, stateVarList, switch, forEach, assign, addAssign,
+  subAssign, increment, decrement, getTerm, return', comment, var, extVar, arg,
   classVarAccess, instanceVarAccess, unOpDocD, unOpDocD', binOpDocD, binOpDocD',
   func, cast, listAccessFunc, objAccess, castObj, break, continue, classLevel,
   instanceLevel, private, public, blockCmt, docCmt, commentedItem, addComments,
@@ -233,6 +233,13 @@ switch f st v defBody cs =
         vmap caseDoc cs,
         defaultSection],
       rbrace]
+
+forEach :: Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+forEach forEachLabel inLbl vTp vr iterator bod = vcat
+  [ forEachLabel <+> parens (vTp <+> vr <+> inLbl <+> iterator) <+> bodyStart
+  , indent bod
+  , bodyEnd
+  ]
 
 -- Statements --
 

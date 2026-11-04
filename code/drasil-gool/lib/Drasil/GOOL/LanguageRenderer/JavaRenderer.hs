@@ -56,7 +56,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class',
   multiStmt, body, printFile, classVarAccess, cast, castObj,
   classLevel, instanceLevel, break, continue, private, public, blockCmt, docCmt,
-  addComments, commentedMod, commentedItem)
+  addComments, commentedMod, commentedItem, print, forEach)
 import Drasil.GOOL.Renderers (renderType, renderParam, renderListDec)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl,
@@ -502,7 +502,10 @@ instance InternalAssignStmt JavaCode Statement Variable Value where
   multiAssign _ _ = error $ C.multiAssignError jName
 
 instance InternalIOStmt JavaCode Statement Value where
-  printSt _ _ = CP.printSt
+  printSt _ _ va' vb' = do
+    va <- zoom lensMStoVS va'
+    vb <- zoom lensMStoVS vb'
+    stmtFromData (R.print va vb) Semi
 
 instance InternalControlStmt JavaCode Statement Value where
   multiReturn _ = error $ C.multiReturnError jName
@@ -617,7 +620,18 @@ instance ControlStatement JavaCode Body Statement Variable Value where
 
   for = C.for bodyStart bodyEnd
   forRange = M.forRange
-  forEach = CP.forEach bodyStart bodyEnd forLabel colon
+  forEach vr' iterator' bod' = do
+    vr <- zoom lensMStoVS vr'
+    iterator <- zoom lensMStoVS iterator'
+    bod <- bod'
+    stmtFromData
+      (R.forEach
+        forLabel colon
+        (renderType (variableType vr))
+        (RC.variable vr)
+        (RC.value iterator)
+        (RC.body bod)
+      ) Empty
   while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch jTryCatch

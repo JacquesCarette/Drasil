@@ -55,7 +55,7 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
   printFile, classVarAccess, cast, castObj, classLevel,
   instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
-  commentedMod, commentedItem)
+  commentedMod, commentedItem, print, forEach)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl,
   typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
@@ -73,10 +73,10 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
-  docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, forEach, global,
+  docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, global,
   implements, indexOf, indexToInt, inherit, int, intClass, intToIndex,
   listDecDef, listSet, mainFunction, notNull, openFileA, openFileR, openFileW,
-  pi, printSt, setMethodCall, stateVar, stateVarDef, string)
+  pi, setMethodCall, stateVar, stateVarDef, string)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   classMethodCall, listAppend, listAdd, innerType)
 
@@ -477,7 +477,10 @@ instance InternalAssignStmt CSharpCode Statement Variable Value where
   multiAssign _ _ = error $ C.multiAssignError csName
 
 instance InternalIOStmt CSharpCode Statement Value where
-  printSt _ _ = CP.printSt
+  printSt _ _ va' vb' = do
+    va <- zoom lensMStoVS va'
+    vb <- zoom lensMStoVS vb'
+    stmtFromData (R.print va vb) Semi
 
 instance InternalControlStmt CSharpCode Statement Value where
   multiReturn _ = error $ C.multiReturnError csName
@@ -592,7 +595,18 @@ instance ControlStatement CSharpCode Body Statement Variable Value where
 
   for = C.for bodyStart bodyEnd
   forRange = M.forRange
-  forEach = CP.forEach bodyStart bodyEnd csForEach inLabel
+  forEach vr' iterator' bod' = do
+    vr <- zoom lensMStoVS vr'
+    iterator <- zoom lensMStoVS iterator'
+    bod <- bod'
+    stmtFromData
+      (R.forEach
+        csForEach inLabel
+        (renderType (variableType vr))
+        (RC.variable vr)
+        (RC.value iterator)
+        (RC.body bod)
+      ) Empty
   while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch csTryCatch

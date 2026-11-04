@@ -19,6 +19,7 @@ import Drasil.Shared.Helpers (getInnerType)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 
+-- TODO [Brandon Bosman, 11/04/2026]: Split up
 constDecDef
   :: ( InternalVarElim r var
      , RenderStatement r stmt

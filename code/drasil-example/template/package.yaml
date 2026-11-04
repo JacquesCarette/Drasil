@@ -15,13 +15,12 @@ default-extensions:
 ghc-options:
 - -Wall
 - -Wredundant-constraints
+- -Wunused-packages
 
 extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- lens
-- directory
 - drasil-gen
 
 library:

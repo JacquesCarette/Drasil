@@ -15,33 +15,19 @@ ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 
 extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- containers
-- lens
-- split
-- directory
-- prettyprinter
 - drasil-gen
 - drasil-lang
-- sglpend
-- dblpend
-- gamephysics
-- glassbr
-- hghc
-- swhsnopcm
-- pdcontroller
-- projectile
-- ssp
-- swhs
-- bss
-- template
 
 library:
   dependencies:
+  - lens
+  - prettyprinter
   - drasil-code
   - drasil-data
   - drasil-database
@@ -51,6 +37,17 @@ library:
   - drasil-srs
   - drasil-system
   - drasil-data-formats
+  - sglpend
+  - dblpend
+  - gamephysics
+  - glassbr
+  - hghc
+  - swhsnopcm
+  - pdcontroller
+  - projectile
+  - ssp
+  - swhs
+  - bss
   source-dirs: lib
 
 executables:

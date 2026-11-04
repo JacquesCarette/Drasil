@@ -526,7 +526,12 @@ instance ControlStatement MatlabCode Body Statement Variable Value where
       mlEnd]) Empty
   forRange i initv finalv stepv = forEach i (mlRange initv finalv stepv)
   forEach = CS.forEach' mlForEach
-  while = C.while id empty mlEnd
+  while val' bod' = do
+    val <- zoom lensMStoVS val'
+    bod <- bod'
+    stmtFromData
+      (C.while id empty mlEnd (RC.value val) (RC.body bod))
+      Empty
   tryCatch = G.tryCatch mlTryCatch
   assert cond errMsg = valStmt $ funcApp "assert" void [cond, errMsg]
 

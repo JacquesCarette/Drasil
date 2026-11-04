@@ -636,7 +636,12 @@ instance ControlStatement SwiftCode Body Statement Variable Value where
   for _ _ _ _ = error $ CP.forLoopError swiftName
   forRange i initv finalv stepv = forEach i (swiftStrideFunc initv finalv stepv)
   forEach = CS.forEach' swiftForEach
-  while = C.while id bodyStart bodyEnd
+  while val' bod' = do
+    val <- zoom lensMStoVS val'
+    bod <- bod'
+    stmtFromData
+      (C.while id bodyStart bodyEnd (RC.value val) (RC.body bod))
+      Empty
 
   tryCatch = G.tryCatch swiftTryCatch
 

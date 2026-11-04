@@ -538,7 +538,12 @@ instance ControlStatement JuliaCode Body Statement Variable Value where
   for _ _ _ _ = error $ CP.forLoopError jlName
   forRange i initv finalv stepv = forEach i (jlRange initv finalv stepv)
   forEach = CS.forEach' jlForEach
-  while = C.while id empty jlEnd
+  while val' bod' = do
+    val <- zoom lensMStoVS val'
+    bod <- bod'
+    stmtFromData
+      (C.while id empty jlEnd (RC.value val) (RC.body bod))
+      Empty
   tryCatch = G.tryCatch jlTryCatch
   assert condition errorMessage = do
     cond <- zoom lensMStoVS condition

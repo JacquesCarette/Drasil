@@ -58,7 +58,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (this', this, sqrt, fabs,
   log10, log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, multiStmt,
   body, stateVar, constVar, cast, castObj, classLevel, instanceLevel,
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
-  commentedItem)
+  commentedItem, addAssign, increment, decrement, switch)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   mkStateVar, mkVar, typeFromData, VSOp, mkOp, unOpPrec, powerPrec, unExpr,
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
@@ -82,10 +82,9 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   listAppend, innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
-  increment, increment1, decrement1, varDec, setType, varDecDef, listDec,
-  extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
-  multiTypeError)
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement, varDec,
+  setType, varDecDef, listDec, extObjDecNew, for, while, multiAssignError,
+  multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
@@ -1447,9 +1446,16 @@ instance ValueStatement CppSrcCode Statement Value where
 instance AssignStatement CppSrcCode Statement Variable Value where
   assign = G.assign Semi
   (&-=) = G.subAssign Semi
-  (&+=) = C.increment
-  (&++) = C.increment1
-  (&--) = C.decrement1
+  (&+=) vr' v'= do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.addAssign vr v) Semi
+  (&++) vr' = do
+    vr <- zoom lensMStoVS vr'
+    stmtFromData (R.increment vr) Semi
+  (&--) vr' = do
+    vr <- zoom lensMStoVS vr'
+    stmtFromData (R.decrement vr) Semi
 
 instance DeclStatement CppSrcCode Body Statement Variable ScopeData Value where
   -- TODO [Brandon Bosman, 05/29/2026]: consider re-enabling `varDec` for arrays
@@ -1563,16 +1569,38 @@ instance ControlStatement CppSrcCode Body Statement Variable Value where
   throw = G.throw cppThrowDoc Semi
 
   ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
-  switch = C.switch parens break
+  switch val' cases' dflt' = do
+    brk <- break
+    val <- zoom lensMStoVS val'
+    vals <- mapM (zoom lensMStoVS . fst) cases'
+    bods <- mapM snd cases'
+    dflt <- dflt'
+    stmtFromData (R.switch parens brk val dflt (zip vals bods)) Semi
 
   ifExists _ ifBody _ = do
     ifb <- ifBody
     stmtFromData (RC.body ifb) Empty -- All variables are initialized in C++
 
-  for = C.for bodyStart bodyEnd
+  for initial' vGuard' update' bod' = do
+    initial <- loopStmt initial'
+    vGuard <- zoom lensMStoVS vGuard'
+    update <- loopStmt update'
+    bod <- bod'
+    stmtFromData
+      (C.for
+       (preStatement initial)
+       (RC.value vGuard)
+       (preStatement update)
+       (RC.body bod)
+      ) Empty
   forRange = M.forRange
   forEach = cppForEach bodyStart bodyEnd (text cppFor) (text cppIn)
-  while = C.while parens bodyStart bodyEnd
+  while val' bod' = do
+    val <- zoom lensMStoVS val'
+    bod <- bod'
+    stmtFromData
+      (C.while parens bodyStart bodyEnd (RC.value val) (RC.body bod))
+      Empty
 
   tryCatch = G.tryCatch cppTryCatch
 

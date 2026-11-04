@@ -55,7 +55,8 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
   printFile, classVarAccess, cast, castObj, classLevel,
   instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
-  commentedMod, commentedItem, print, forEach)
+  commentedMod, commentedItem, print, forEach, addAssign, increment, decrement,
+  switch)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl,
   typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
@@ -83,9 +84,8 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize',
-  statement, increment, increment1, decrement1, varDec, varDecDef, listDec,
-  extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
-  multiTypeError)
+  statement, varDec, varDecDef, listDec, extObjDecNew, for, while,
+  multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -508,9 +508,16 @@ instance ValueStatement CSharpCode Statement Value where
 instance AssignStatement CSharpCode Statement Variable Value where
   assign = G.assign Semi
   (&-=) = G.subAssign Semi
-  (&+=) = C.increment
-  (&++) = C.increment1
-  (&--) = C.decrement1
+  (&+=) vr' v'= do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.addAssign vr v) Semi
+  (&++) vr' = do
+    vr <- zoom lensMStoVS vr'
+    stmtFromData (R.increment vr) Semi
+  (&--) vr' = do
+    vr <- zoom lensMStoVS vr'
+    stmtFromData (R.decrement vr) Semi
 
 instance DeclStatement CSharpCode Body Statement Variable ScopeData Value where
   varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $
@@ -589,11 +596,28 @@ instance ControlStatement CSharpCode Body Statement Variable Value where
     G.throw csThrowDoc Semi msg
 
   ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
-  switch = C.switch parens break
+  switch val' cases' dflt' = do
+    brk <- break
+    val <- zoom lensMStoVS val'
+    vals <- mapM (zoom lensMStoVS . fst) cases'
+    bods <- mapM snd cases'
+    dflt <- dflt'
+    stmtFromData (R.switch parens brk val dflt (zip vals bods)) Semi
 
   ifExists = M.ifExists
 
-  for = C.for bodyStart bodyEnd
+  for initial' guard' update' bod' = do
+    initial <- loopStmt initial'
+    guard <- zoom lensMStoVS guard'
+    update <- loopStmt update'
+    bod <- bod'
+    stmtFromData
+      (C.for
+       (preStatement initial)
+       (RC.value guard)
+       (preStatement update)
+       (RC.body bod)
+      ) Empty
   forRange = M.forRange
   forEach vr' iterator' bod' = do
     vr <- zoom lensMStoVS vr'
@@ -607,7 +631,12 @@ instance ControlStatement CSharpCode Body Statement Variable Value where
         (RC.value iterator)
         (RC.body bod)
       ) Empty
-  while = C.while parens bodyStart bodyEnd
+  while val' bod' = do
+    val <- zoom lensMStoVS val'
+    bod <- bod'
+    stmtFromData
+      (C.while parens bodyStart bodyEnd (RC.value val) (RC.body bod))
+      Empty
 
   tryCatch = G.tryCatch csTryCatch
 

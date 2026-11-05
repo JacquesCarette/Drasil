@@ -20,9 +20,9 @@ import Drasil.Data.Formats.HTML (defaultHTMLRO)
 import Drasil.System (systemdb)
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.SRS.DocDecl (SRSDecl)
+import Drasil.SRS.DocDecl (SRSDecl, DocSection(TraceabilitySec))
 import Drasil.SRS.DocumentLanguage (mkDoc)
-import Drasil.SRS.DocumentLanguage.TraceabilityGraph (mkGraphInfo)
+import Drasil.SRS.DocumentLanguage.TraceabilityGraph (mkGraphInfo, emptyGraphInfo)
 import Drasil.SRS.Generator.Formats (Filename, Format(..))
 import Drasil.SRS.Generator.TraceabilityGraphs (outputDot)
 import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
@@ -32,7 +32,7 @@ import Drasil.SRS.TypeCheck (typeCheckSI)
 genSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> [FileLayout]
 genSmithEtAlSrs syst srsDecl srsFileName =
   [ srsLayout,
-    traceyLayout
+    outputDot traceyLayout
   ]
   where
     (srsDoc, syst') = mkDoc syst srsDecl S.forT'
@@ -47,7 +47,12 @@ genSmithEtAlSrs syst srsDecl srsFileName =
                     prntDoc srsDoc pinfo srsFileName x
           )
           [HTML, TeX, Jupyter, MDBook]
-    traceyLayout = outputDot (mkGraphInfo syst')
+    -- Documents without a traceability section get empty traceability graphs.
+    traceyLayout
+      | any isTraceSec srsDecl = mkGraphInfo syst'
+      | otherwise = emptyGraphInfo
+    isTraceSec (TraceabilitySec _) = True
+    isTraceSec _                   = False
 
 -- | Internal: Render an SRS in a specified 'Format' and lay out artifacts into
 -- a `[FileLayout]`.

@@ -57,8 +57,9 @@ data InclUnits = IncludeUnits -- ^ In description field (for other symbols).
 
 -- * Types
 
--- | Helper type that takes a set of 'UID's and a 'ChunkDB'.
-type TraceViewCat = [UID] -> SmithEtAlSRS -> [UID]
+-- | A category of traceable items (e.g., assumptions), selecting the 'UID's of
+-- its members from 'SmithEtAlSRS'. FIXME: This is hacky.
+type TraceViewCat = SmithEtAlSRS -> [UID]
 
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a 'RelationConcept' (called automatically by 'SCSSub' program).

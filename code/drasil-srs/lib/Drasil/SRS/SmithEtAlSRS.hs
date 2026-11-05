@@ -12,23 +12,19 @@ module Drasil.SRS.SmithEtAlSRS (
   -- ** Lenses
   HasSmithEtAlSRS(..),
   -- ** Constructors
-  mkSmithEtAlICO,
-  -- ** Traceability
-  refbyLookup, traceLookup
+  mkSmithEtAlICO
 ) where
 
-import Control.Lens (makeClassy, (^.))
+import Control.Lens (makeClassy)
 import qualified Data.List.NonEmpty as NE
-import Data.Maybe (fromMaybe)
 
-import Drasil.Database (UID, HasUID(..), ChunkDB, dependencies, dependants)
+import Drasil.Database (HasUID(..), ChunkDB)
 import Language.Drasil (Quantity, MayHaveUnit, Concept, People, Constrained,
   ConstQDef, DefinedQuantityDict)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 
 import Drasil.System (SystemMeta, Background, HasSystemMeta(..), mkSystemMeta,
   Motivation, Purpose, Scope, ProjectName, HasProjectName(..))
-import Data.Set (toList)
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
@@ -70,11 +66,3 @@ mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,
 mkSmithEtAlICO pn ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs db
   = ICO (mkSystemMeta pn ppl prps bkgrd scp motive db) tms gds dds ims hs is js
       cqds qs
-
--- | Find what chunks reference a specific chunk.
-refbyLookup :: UID -> SmithEtAlSRS -> [UID]
-refbyLookup u = fromMaybe [] . dependants u . (^. systemdb)
-
--- | Find what chunks a specific one references.
-traceLookup :: UID -> SmithEtAlSRS -> [UID]
-traceLookup u = foldMap toList . dependencies u . (^. systemdb)

@@ -6,14 +6,16 @@ module Drasil.SRS.DocumentLanguage.TraceabilityMatrix (
 
 -- General Haskell
 import Control.Lens ((^.))
+import Data.Maybe (fromMaybe)
+import qualified Data.Set as S
 
 -- General Drasil
-import Drasil.Database (UID, HasUID(..))
+import Drasil.Database (UID, HasUID(..), dependencies)
 import Drasil.Database.SearchTools (defResolve', findAllConcInsts, DomDefn(domain))
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.System (systemdb)
-import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, traceLookup)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 -- Vocabulary
@@ -57,7 +59,8 @@ traceMHeader us c = (`helpToRefField` (c ^. systemdb)) <$> us
 -- | Helper that makes the columns of a traceability matrix: for each row, the
 -- column 'UID's (in column order) that the row references.
 traceMColumns :: [UID] -> [UID] -> SmithEtAlSRS -> [[UID]]
-traceMColumns cols rows c = (\deps -> filter (`elem` deps) cols) . (`traceLookup` c) <$> rows
+traceMColumns cols rows c = (\refs -> filter (`S.member` refs) cols) . rowRefs <$> rows
+  where rowRefs r = fromMaybe S.empty $ dependencies r (c ^. systemdb)
 
 -- | Helper that makes references of the form "@reference@ shows the dependencies of @something@".
 tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence

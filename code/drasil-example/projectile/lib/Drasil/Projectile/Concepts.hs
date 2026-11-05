@@ -1,7 +1,6 @@
 module Drasil.Projectile.Concepts (
   launcher, projectile, target, projMotion, defs, rectVel, ideaDicts,
-  flightDur, offset, landPos, launAngleTerm, launAngleDef, launSpeed, targPos,
-  projSpeedTerm, projSpeedDef, projPosTerm, projPosDef
+  flightDur, offset, landPos, launAngleTerm, launAngleDef, launSpeed, targPos
 ) where
 
 import Drasil.Database (mkUid)
@@ -11,10 +10,9 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Documentation (constant)
 import Data.Drasil.Concepts.Math (angle)
-import Data.Drasil.Concepts.Physics (oneD, position, speed, motion, distance, iSpeed, time,
-  rectilinear, velocity, acceleration)
+import Data.Drasil.Concepts.Physics (position, speed, motion, distance, iSpeed, time,
+  rectilinear, velocity)
 
 ideaDicts :: [IdeaDict]
 ideaDicts = [projMotion, launch, rectVel]
@@ -40,17 +38,6 @@ projectile = cncpt''' (mkUid "projectile")      (nounPhraseSP "projectile")
   (S "the object to be launched at the target")
 target     = cncpt''' (mkUid "target")          (nounPhraseSP "target")
   (S "where the projectile should be launched to")
-projSpeedTerm :: NP
-projSpeedTerm = nounPhraseSP "1D speed"
-
-projSpeedDef :: Sentence
-projSpeedDef = short oneD +:+ phrase speed +:+ S "under" +:+ phrase constant +:+ phrase acceleration
-
-projPosTerm :: NP
-projPosTerm = nounPhraseSP "1D position"
-
-projPosDef :: Sentence
-projPosDef = short oneD +:+ phrase position +:+ S "under" +:+ phrase constant +:+ phrase speed
 landPos    = cncpt''' (mkUid "landingposition") (compoundPhrase (nounPhraseSP "landing") (position ^. term))
   (foldlSent_ [D.toSent (phraseNP (the distance)) `S.fromThe` phrase launcher
     `S.toThe` S "final", D.toSent $ phraseNP (position `ofThe` projectile)])

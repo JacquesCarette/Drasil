@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 -- | Defines helper functions for creating jupyter notebooks.
 module Language.Drasil.JSON.Helpers (
   -- * Jupyter-related
@@ -17,12 +15,11 @@ import qualified Data.Text as T (pack)
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
 
-import Drasil.Data.Formats.JSON (JSON(..))
 import Language.Drasil.Document (MaxWidthPercent)
 
 import Drasil.Printers.Common hiding (wrap)
 import qualified Drasil.Jupyter as Jupyter
-  ( Cell(..), NotebookMetadata(..), KernelSpec(..), LanguageInfo(..) )
+  ( Cell(..), NotebookMetadata, defaultPython39Metadata )
 import Language.Drasil.Printing.Helpers (bslash)
 
 data Variation = Class | Id
@@ -132,16 +129,4 @@ codeCell = Jupyter.CodeCell [] . T.pack . render
 
 -- | Preserve the Python metadata used by the current notebook generators.
 notebookMetadata :: Jupyter.NotebookMetadata
-notebookMetadata = Jupyter.NotebookMetadata
-  { Jupyter.notebookKernel = Jupyter.KernelSpec "Python 3" "python" "python3"
-  , Jupyter.notebookLanguage = Jupyter.LanguageInfo
-      { Jupyter.languageName = "python"
-      , Jupyter.languageCodeMirrorMode =
-          JObject [("name", "ipython"), ("version", JNumber 3)]
-      , Jupyter.languageFileExtension = ".py"
-      , Jupyter.languageMimeType = "text/x-python"
-      , Jupyter.languageExporter = "python"
-      , Jupyter.languageLexer = "ipython3"
-      , Jupyter.languageVersion = "3.9.1"
-      }
-  }
+notebookMetadata = Jupyter.defaultPython39Metadata

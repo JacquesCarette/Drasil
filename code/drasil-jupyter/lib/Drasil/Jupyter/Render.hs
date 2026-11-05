@@ -1,23 +1,22 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Drasil.Jupyter.Render
-  ( SourceFormat(..), NotebookRenderOptions(..), defaultNotebookRenderOptions
+  ( CellSourceRenderStyle(..), NotebookRenderOptions(..), defaultNotebookRenderOptions
   , notebookToJSON, renderNotebook
   ) where
 
 import Data.Text (Text)
-import qualified Data.Text as T (concat, lines)
+import qualified Data.Text as T (lines)
 import Prettyprinter (Doc)
 import Drasil.Data.Formats.JSON
   ( JSON(..), JSONRenderOptions, renderJSON )
 import Drasil.Jupyter.Core
   ( Notebook(..), Cell(..), NotebookMetadata(..), KernelSpec(..), LanguageInfo(..) )
 
--- | JSON representation of cell source. Both forms append LF to each
--- LF-separated line, including an unterminated last line; empty source stays empty.
-data SourceFormat
-  = SourceLines -- ^ One string per line, for readable diffs.
-  | SourceString -- ^ One string containing the whole cell.
+-- | JSON representation of cell source.
+data CellSourceRenderStyle
+  = ListOfLines -- ^ One string per line, with a trailing LF.
+  | SingleString -- ^ One string containing the whole cell.
   deriving (Eq, Show)
 
 -- | Notebook format options, separate from JSON layout options.
@@ -25,12 +24,12 @@ data SourceFormat
 data NotebookRenderOptions = NotebookRenderOptions
   { notebookFormat :: Int
   , notebookFormatMinor :: Int
-  , sourceFormat :: SourceFormat
+  , sourceFormat :: CellSourceRenderStyle
   } deriving (Eq, Show)
 
--- | Preserve the format version and source layout used by the current generators.
+-- | Use notebook format 4.4 and a single string per cell by default.
 defaultNotebookRenderOptions :: NotebookRenderOptions
-defaultNotebookRenderOptions = NotebookRenderOptions 4 4 SourceLines
+defaultNotebookRenderOptions = NotebookRenderOptions 4 4 SingleString
 
 -- | Encode a new notebook using the selected version and source representation.
 notebookToJSON :: NotebookRenderOptions -> Notebook -> JSON
@@ -70,7 +69,7 @@ languageToJSON language = JObject
   ]
 
 -- | Encode a new cell; code is unexecuted and has no outputs.
-cellToJSON :: SourceFormat -> Cell -> JSON
+cellToJSON :: CellSourceRenderStyle -> Cell -> JSON
 cellToJSON format (MarkdownCell metadata source) = JObject
   [ ("cell_type", "markdown")
   , ("metadata", JObject metadata)
@@ -84,11 +83,10 @@ cellToJSON format (CodeCell metadata source) = JObject
   , ("source", formatSource format source)
   ]
 
--- | Both representations preserve the existing source convention: split at LF
--- and append LF to each resulting line, including an unterminated last line.
-formatSource :: SourceFormat -> Text -> JSON
+-- | Line lists append LF to each line; single strings preserve the source verbatim.
+formatSource :: CellSourceRenderStyle -> Text -> JSON
 formatSource format source = case format of
-  SourceLines -> JArray $ JString <$> sourceLines
-  SourceString -> JString $ T.concat sourceLines
+  ListOfLines -> JArray $ JString <$> sourceLines
+  SingleString -> JString source
   where
     sourceLines = (<> "\n") <$> T.lines source

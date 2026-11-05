@@ -2,7 +2,7 @@
 -- | Data table generator. Uses information from SourceCodeReader.hs
 -- to organize all types, classes, and instances in Drasil.
 -- Generates a .csv file and an HTML table with this information.
-module ClassInstDepGen (main) where
+module Main (main) where
 
 import Data.List ((\\), intercalate, nub, partition)
 import System.IO (hClose, hPutStr, hPutStrLn, openFile, IOMode(..))

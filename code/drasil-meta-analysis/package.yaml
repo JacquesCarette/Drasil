@@ -32,13 +32,13 @@ library:
 
 executables:
   classinstdepgen:
-    main: ClassInstDepGen
+    main: Main
     source-dirs: app/classinstdepgen
     dependencies:
     - drasil-meta-analysis
 
   typedepgen:
-    main: TypeDepGen
+    main: Main
     source-dirs: app/typedepgen
     dependencies:
     - drasil-meta-analysis

@@ -1,6 +1,6 @@
 -- FIXME: use real parser (Low Priority; see line 189)
 -- | Creates graphs showing the dependency of one type upon another.
-module TypeDepGen (main) where
+module Main (main) where
 
 import Data.List ( (\\) )
 import System.IO (hClose, hPutStrLn, openFile, Handle, IOMode(..))

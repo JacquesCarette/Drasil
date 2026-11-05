@@ -29,4 +29,4 @@ root-modules = [
     "^Drasil\\.Data\\.Formats\\.",
 ]
 
-unused-types = false
+unused-types = true

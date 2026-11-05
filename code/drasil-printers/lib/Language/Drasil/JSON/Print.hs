@@ -12,7 +12,8 @@ import Numeric (showEFloat)
 import qualified Prettyprinter as PNew (Doc)
 
 import Drasil.Data.Formats.JSON (JSONRenderOptions, JSONStyle(..), jsonRenderOpts)
-import qualified Drasil.Jupyter as Jupyter (Notebook(..), Cell, renderNotebook)
+import qualified Drasil.Jupyter as Jupyter
+  ( Notebook(..), Cell, renderNotebook, defaultNotebookRenderOptions )
 import Language.Drasil (checkValidStr, Special(Circle))
 import Language.Drasil.Document (MaxWidthPercent)
 
@@ -39,7 +40,7 @@ genJupyterLessonPlan (Document t a c) =
   let
     titleCell = markdownCell (vcat [text "# " <> pSpec t, text "## " <> pSpec a])
     cells = titleCell : concatMap printLO' c
-  in Jupyter.renderNotebook pretty $ Jupyter.Notebook notebookMetadata cells
+  in Jupyter.renderNotebook Jupyter.defaultNotebookRenderOptions pretty $ Jupyter.Notebook notebookMetadata cells
 
 -- | Build an SRS document in JSON format.
 genJupyterSRS :: Document -> PNew.Doc ann
@@ -47,7 +48,7 @@ genJupyterSRS (Document t a c) =
   let
     titleCell = markdownCell (vcat [text "# " <> pSpec t, text "## " <> pSpec a])
     cells = titleCell : [markdownCell (print c)]
-  in Jupyter.renderNotebook pretty $ Jupyter.Notebook notebookMetadata cells
+  in Jupyter.renderNotebook Jupyter.defaultNotebookRenderOptions pretty $ Jupyter.Notebook notebookMetadata cells
 
 -- | Helper for rendering a D from Latex print
 printMath :: D -> Doc

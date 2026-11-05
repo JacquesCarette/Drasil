@@ -21,7 +21,8 @@ import Drasil.Data.Formats.JSON (JSON(..))
 import Language.Drasil.Document (MaxWidthPercent)
 
 import Drasil.Printers.Common hiding (wrap)
-import qualified Drasil.Jupyter as Jupyter (Cell(..), Metadata)
+import qualified Drasil.Jupyter as Jupyter
+  ( Cell(..), NotebookMetadata(..), KernelSpec(..), LanguageInfo(..) )
 import Language.Drasil.Printing.Helpers (bslash)
 
 data Variation = Class | Id
@@ -130,25 +131,17 @@ codeCell :: Doc -> Jupyter.Cell
 codeCell = Jupyter.CodeCell [] . T.pack . render
 
 -- | Preserve the Python metadata used by the current notebook generators.
-notebookMetadata :: Jupyter.Metadata
-notebookMetadata =
-  [ ("kernelspec",
-      JObject
-      [ ("display_name", "Python 3"),
-        ("language", "python"),
-        ("name", "python3")
-      ]
-    ),
-    ("language_info",
-      JObject
-      [ ("codemirror_mode",
-          JObject [("name", "ipython"), ("version", JNumber 3)]),
-        ("file_extension", ".py"),
-        ("mimetype", "text/x-python"),
-        ("name", "python"),
-        ("nbconvert_exporter", "python"),
-        ("pygments_lexer", "ipython3"),
-        ("version", "3.9.1")
-      ]
-    )
-  ]
+notebookMetadata :: Jupyter.NotebookMetadata
+notebookMetadata = Jupyter.NotebookMetadata
+  { Jupyter.notebookKernel = Jupyter.KernelSpec "Python 3" "python" "python3"
+  , Jupyter.notebookLanguage = Jupyter.LanguageInfo
+      { Jupyter.languageName = "python"
+      , Jupyter.languageCodeMirrorMode =
+          JObject [("name", "ipython"), ("version", JNumber 3)]
+      , Jupyter.languageFileExtension = ".py"
+      , Jupyter.languageMimeType = "text/x-python"
+      , Jupyter.languageExporter = "python"
+      , Jupyter.languageLexer = "ipython3"
+      , Jupyter.languageVersion = "3.9.1"
+      }
+  }

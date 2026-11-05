@@ -1,18 +1,43 @@
 module Drasil.Jupyter.Core
   ( Notebook(..), Cell(..), Metadata
+  , NotebookMetadata(..), KernelSpec(..), LanguageInfo(..)
   ) where
 
 import Data.Text (Text)
 import Drasil.Data.Formats.JSON (JSON)
 
--- | Notebook or cell metadata stored as JSON object entries.
+-- | Cell metadata stored as JSON object entries.
 type Metadata = [(Text, JSON)]
 
 -- | A new notebook containing ordered cells and document metadata.
 data Notebook = Notebook
-  Metadata -- ^ Notebook-level metadata.
+  NotebookMetadata -- ^ Notebook-level metadata.
   [Cell] -- ^ Cells in document order.
   deriving (Eq, Show)
+
+-- | Notebook kernel and language information.
+data NotebookMetadata = NotebookMetadata
+  { notebookKernel :: KernelSpec
+  , notebookLanguage :: LanguageInfo
+  } deriving (Eq, Show)
+
+-- | The kernel used to execute a notebook.
+data KernelSpec = KernelSpec
+  { kernelDisplayName :: Text
+  , kernelLanguage :: Text
+  , kernelName :: Text
+  } deriving (Eq, Show)
+
+-- | Notebook language information.
+data LanguageInfo = LanguageInfo
+  { languageName :: Text
+  , languageCodeMirrorMode :: JSON
+  , languageFileExtension :: Text
+  , languageMimeType :: Text
+  , languageExporter :: Text
+  , languageLexer :: Text
+  , languageVersion :: Text
+  } deriving (Eq, Show)
 
 -- | A Markdown cell or an unexecuted code cell.
 data Cell

@@ -1,8 +1,8 @@
 spec-version: 0.36.0
 name:         drasil-jupyter
 version:      0.0.1
-author:       "Joe Z. Zhang"
-maintainer:   "Jacques Carette"
+author:       "Joe Z. Zhang, Jacques Carette, Spencer Smith"
+maintainer:   "Jacques Carette, Spencer Smith"
 synopsis:     A representation and renderer for generated Jupyter notebooks
 github:       JacquesCarette/Drasil
 homepage:     https://jacquescarette.github.io/Drasil/

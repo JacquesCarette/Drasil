@@ -80,23 +80,21 @@ import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 mkDoc :: SmithEtAlSRS -> SRSDecl -> (Sentence -> Sentence -> Sentence) -> (Document, SmithEtAlSRS)
 mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
-      -- /Pre-generate/ the SRS artifact. It is missing content involving
-      -- 'Reference's and 'LabelledContent' for potential traceability graphs as
-      -- well as 'Citation's.
-      sections = mkSections si dd Nothing
-      -- Extract all referenced 'Citations' from the pre-generated artifact.
-      refdCites = extractSectionsBib (si ^. systemdb) sections
       -- Injects "traceability" maps into the 'ChunkDB' and adds missing
       -- 'LabelledContent' (the generated traceability-related tables).
       si' = insertTraceChunks dd si
+      -- /Pre-generate/ the SRS artifact. It is only missing its bibliography
+      -- ('Citation's).
+      sections = mkSections si' dd Nothing
+      -- Extract all referenced 'Citations' from the pre-generated artifact.
+      refdCites = extractSectionsBib (si' ^. systemdb) sections
       -- Now, the /real generation/ of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
       heading = titleize srs `headingComb` projTitleS (si ^. projectName)
       authorsList = foldlList Comma List $ S . fullName <$> si ^. authors
       toc = findToC srsDecl
-      dd' = mkDocDesc si' srsDecl
-      sections' = mkSections si' dd' (Just refdCites)
+      sections' = mkSections si' dd (Just refdCites)
   in (Document heading authorsList toc sections', si')
 
 -- * Functions to Fill 'ChunkDB'

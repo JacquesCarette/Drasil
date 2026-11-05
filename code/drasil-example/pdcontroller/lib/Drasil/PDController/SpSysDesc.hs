@@ -8,6 +8,7 @@ import Language.Drasil.Document (ConceptInstance, cic)
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 
 import Drasil.PDController.Concepts
+import Drasil.PDController.Unitals (propGain, derGain, setPoint, processVariable)
 
 -- Introduction of the Problem Description section derives from purpose in
 -- System (purp in Body.hs)

@@ -172,3 +172,4 @@ getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 constraintvars :: ConstraintCE -> ChunkDB -> [CodeVarChunk]
 constraintvars (Range _ ri) m = fmap (varResolve m) $ nub $ eNamesRI ri
 constraintvars (Elem _ ri)  m = varResolve m <$> eDep ri
+constraintvars (Eqn _ e)  m = varResolve m <$> eDep e

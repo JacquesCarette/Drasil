@@ -107,6 +107,8 @@ instance HasChunkRefs DifferentialModel where
     [ chunkRefs (dm ^. indepVar)
     , chunkRefs (dm ^. depVar)
     , chunkRefs (dm ^. dmconc)
+    , chunkRefs (dm ^. coefficients)
+    , chunkRefs (dm ^. dmConstants)
     ]
   {-# INLINABLE chunkRefs #-}
 

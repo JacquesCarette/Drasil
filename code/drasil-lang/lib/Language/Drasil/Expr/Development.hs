@@ -12,5 +12,5 @@ module Language.Drasil.Expr.Development (
 ) where
 
 import Language.Drasil.Expr.Lang
-import Language.Drasil.Expr.Extract (eDep, eNames, eNames', eNamesRI)
+import Language.Drasil.Expr.Extract (eDep)
 import Language.Drasil.Expr.Precedence (precA, precB, precC, eprec)

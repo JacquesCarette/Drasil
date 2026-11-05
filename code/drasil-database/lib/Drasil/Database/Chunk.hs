@@ -17,6 +17,7 @@ module Drasil.Database.Chunk (
 ) where
 
 import Control.Lens ((^.), to, Getter)
+import Data.List.NonEmpty (NonEmpty)
 import qualified Data.Set as S
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, cast, typeOf, typeRep)
 import GHC.Generics (Generic (Rep, from), M1 (..), K1 (..), type (:*:) (..),
@@ -110,6 +111,10 @@ instance {-# OVERLAPPING #-} HasChunkRefs String where
   {-# INLINABLE chunkRefs #-}
 
 instance HasChunkRefs a => HasChunkRefs [a] where
+  chunkRefs = S.unions . fmap chunkRefs
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs a => HasChunkRefs (NonEmpty a) where
   chunkRefs = S.unions . fmap chunkRefs
   {-# INLINABLE chunkRefs #-}
 

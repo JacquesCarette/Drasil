@@ -12,10 +12,12 @@ defaults:
   run:
     shell: bash
     working-directory: code
+env:
+  CI_IMAGE: &ci-image ubuntu-26.04
 jobs:
   build:
     name: "Build & Test"
-    runs-on: ubuntu-latest
+    runs-on: *ci-image
     outputs:
       tex: ${{ steps.changes.outputs.tex}}
       mdbook: ${{ steps.changes.outputs.mdbook }}
@@ -54,7 +56,7 @@ jobs:
         with:
           path: |
             ~/.stack
-          key: ${{ runner.os }}-stack-${{ hashFiles('code/stack.yaml') }}
+          key: ${{ env.CI_IMAGE }}-stack-${{ hashFiles('code/stack.yaml') }}
 
       - name: "Restore stack work cache"
         uses: actions/cache/restore@v6
@@ -64,9 +66,9 @@ jobs:
             code/**/.stack-work
             code/**/.hie
           # We don't expect a hit on this key, but having a key is mandatory
-          key: ${{ runner.os }}-stack-work--${{ github.sha }}
+          key: ${{ env.CI_IMAGE }}-stack-work--${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-stack-work--
+            ${{ env.CI_IMAGE }}-stack-work--
 
       - name: "Install dependencies"
         run: make stackArgs="--no-terminal" deps
@@ -102,7 +104,7 @@ jobs:
 
   haddock:
     name: Haddock
-    runs-on: ubuntu-latest
+    runs-on: *ci-image
     steps:
       - uses: actions/checkout@v7
 
@@ -111,7 +113,7 @@ jobs:
         with:
           path: |
             ~/.stack
-          key: ${{ runner.os }}-stack-${{ hashFiles('code/stack.yaml') }}
+          key: ${{ env.CI_IMAGE }}-stack-${{ hashFiles('code/stack.yaml') }}
 
       - name: "Restore stack work cache"
         uses: actions/cache/restore@v6
@@ -121,9 +123,9 @@ jobs:
             code/**/.stack-work
             code/**/.hie
           # We don't expect a hit on this key, but having a key is mandatory
-          key: ${{ runner.os }}-stack-work-haddock--${{ github.sha }}
+          key: ${{ env.CI_IMAGE }}-stack-work-haddock--${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-stack-work-haddock--
+            ${{ env.CI_IMAGE }}-stack-work-haddock--
 
       - name: "Generate Haddock docs (as test)"
         run: make docs
@@ -131,7 +133,7 @@ jobs:
   gooltest:
     name: "Compile GOOL"
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: *ci-image
     if: ${{ needs.build.outputs.gencode == 'true' }}
     env:
       SKIP_GEN: 1
@@ -167,7 +169,7 @@ jobs:
   latex:
     name: LaTeX
     needs: build
-    runs-on: ubuntu-26.04 # Ubuntu 26 has newer TeX packages that are significantly faster
+    runs-on: *ci-image
     if: ${{ needs.build.outputs.tex == 'true' }}
     env:
       SKIP_GEN: 1
@@ -194,7 +196,7 @@ jobs:
   mdbook:
     name: mdBook
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: *ci-image
     if: ${{ needs.build.outputs.mdbook == 'true' }}
     env:
       SKIP_GEN: 1
@@ -232,7 +234,7 @@ jobs:
   jupyter:
     name: Jupyter
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: *ci-image
     if: ${{ needs.build.outputs.jupyter == 'true' }}
     env:
       SKIP_GEN: 1

@@ -7,9 +7,9 @@ module Drasil.Shared.RendererClassesCommon (
   InternalBinderElim(..), RenderValue(..), ValueElim(..), InternalListFunc(..),
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(..), RenderVisibility(..), VisibilityElim(..), MethodTypeSym(..),
-  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..),
-  BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
+  StatementElim(..), StatementTerm(..), RenderVisibility(..), VisibilityElim(..),
+  MethodTypeSym(..), RenderParam(..), ParamElim(..), RenderMethod(..),
+  MethodElim(..), BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, MixedCall, TypeSym(..),
@@ -177,13 +177,18 @@ class InternalControlStmt r stmt val | r -> stmt val where
   multiReturn :: [VS (r val)] -> MS (r stmt)
 
 class RenderStatement r stmt | r -> stmt where
-  stmt     :: MS (r stmt) -> MS (r stmt)
   loopStmt :: MS (r stmt) -> MS (r stmt)
 
   stmtFromData :: Doc -> Terminator -> MS (r stmt)
 
 class StatementElim r stmt | r -> stmt where
+  -- | Render a stmt to Doc
   statement :: r stmt -> Doc
+  -- | Render a stmt with no additional syntax (e.g. `;`)
+  preStatement :: r stmt -> Doc
+
+-- Only to be used by languages that use (Doc, Terminator) for stmt representation
+class StatementTerm r stmt | r -> stmt where
   statementTerm :: r stmt -> Terminator
 
 class RenderVisibility r vis | r -> vis where

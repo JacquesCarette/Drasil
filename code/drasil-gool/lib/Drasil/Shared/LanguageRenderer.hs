@@ -38,7 +38,7 @@ import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod,
 import Drasil.Shared.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 import Drasil.Shared.State (VS)
 
-import Data.List (last, intercalate)
+import Data.List (intercalate)
 import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,
   atan,floor,mod,(<>))
 import qualified Prelude as P ((<>))
@@ -176,13 +176,8 @@ class' n p s vs fs = vcat [
 -- Groupings --
 
 multiStmt :: [Statement] -> Statement
-multiStmt sts = (vcat (applyEnd statements), needsEnd statements)
-  where applyEnd [] = []
-        applyEnd [(s, _)] = [s]
-        applyEnd ((s, t):ss) = (s <> getTerm t) : applyEnd ss
-        needsEnd [] = Empty
-        needsEnd ss = snd (last ss)
-        statements = filter notNullStatement sts
+multiStmt sts = (vcat (fmap statement statements), Empty)
+  where statements = filter notNullStatement sts
         notNullStatement s = not (isEmpty (fst s))
 
 block :: [Doc] -> Doc
@@ -264,8 +259,8 @@ return' vs = returnLabel <+> valueList vs
 comment :: Label -> Doc -> Doc
 comment cmt cStart = cStart <+> text cmt
 
-statement :: Statement -> Statement
-statement (s, t) = (s <> getTerm t, Empty)
+statement :: Statement -> Doc
+statement (s, t) = s <> getTerm t
 
 getTerm :: Terminator -> Doc
 getTerm Semi = semi
@@ -421,11 +416,11 @@ namedArgList sep = hicat listSep' . fmap (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 
 prependToBody :: Statement -> Doc -> Doc
-prependToBody s b = vcat [fst $ statement s, maybeBlank, b]
+prependToBody s b = vcat [statement s, maybeBlank, b]
   where maybeBlank = emptyIfEmpty (fst s) (emptyIfEmpty b blank)
 
 appendToBody :: Doc -> Statement -> Doc
-appendToBody b s = vcat [b, maybeBlank, fst $ statement s]
+appendToBody b s = vcat [b, maybeBlank, statement s]
   where maybeBlank = emptyIfEmpty b (emptyIfEmpty (fst s) blank)
 
 surroundBody :: Statement -> Doc -> Statement -> Doc

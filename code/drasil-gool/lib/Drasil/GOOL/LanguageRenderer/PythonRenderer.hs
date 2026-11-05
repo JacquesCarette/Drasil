@@ -33,12 +33,12 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
-  VisibilityElim, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
+  RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim,
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  uOp, bOp, variable, value, function, statement, visibility, parameter, method,
+  uOp, bOp, variable, value, function, visibility, parameter, method,
   blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
@@ -51,9 +51,9 @@ import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
   argv, printLabel, listSep, piLabel, access, functionDox, binderList,
   parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
-  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
-  classVarAccess, castObj, instanceLevel, break, continue, addComments,
-  commentedMod, commentedItem, var)
+  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, body, classVarAccess,
+  castObj, instanceLevel, break, continue, addComments, commentedMod,
+  commentedItem, var)
 import Drasil.GOOL.Renderers (renderType)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec, multPrec, andPrec,
@@ -65,11 +65,11 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, local, smartAdd)
+  listAccess, getFunc, setFunc, loopStmt, emptyStmt, assign, subAssign,
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
+  implementingClass, commentedClass, modFromData, fileDoc, fileFromData, local,
+  smartAdd)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
@@ -80,7 +80,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
   ParamData(..), pd, ProgData(..), progD, TypeData(..), ValData(..), vd,
   VarData(..), vard, BinderD(..), bindFormD, AttachmentTag(..),
-  AttachmentData(..), ad, FileData, ScopeData, Statement)
+  AttachmentData(..), ad, FileData, ScopeData)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -106,6 +106,8 @@ import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
 pyExt :: String
 pyExt = "py"
+
+type Statement = Doc
 
 newtype PythonCode a = PC {unPC :: a}
 
@@ -486,19 +488,18 @@ instance InternalControlStmt PythonCode Statement Value where
   multiReturn = CP.multiReturn id
 
 instance RenderStatement PythonCode Statement where
-  stmt = G.stmt
   loopStmt = G.loopStmt
-  stmtFromData d t = toState $ toCode (d, t)
+  stmtFromData d _ = toState $ toCode d
 
 instance StatementElim PythonCode Statement where
-  statement = fst . unPC
-  statementTerm = snd . unPC
+  statement = preStatement
+  preStatement = unPC
 
 instance EmptyStatement PythonCode Statement where
   emptyStmt = G.emptyStmt
 
 instance MultiStatement PythonCode Statement where
-  multi = onStateList (onCodeList R.multiStmt)
+  multi = onStateList (onCodeList vcat)
 
 instance ValueStatement PythonCode Statement Value where
   valStmt = G.valStmt Empty

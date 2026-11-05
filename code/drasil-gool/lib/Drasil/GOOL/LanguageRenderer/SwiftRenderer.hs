@@ -36,13 +36,13 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
-  VisibilityElim, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
+  RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim,
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  uOp, bOp, variable, binderElim, value, function, statement, visibility,
-  parameter, method, blockComment', stmt)
+  uOp, bOp, variable, binderElim, value, function, preStatement, visibility,
+  parameter, method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
@@ -55,7 +55,7 @@ import Drasil.Shared.LanguageRenderer (blockCmtStart, blockCmtEnd, docCmtStart,
   catchLabel, throwLabel, throwsLabel, importLabel, listSep', printLabel,
   listSep, piLabel, access, tuple, ClassDocRenderer, parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log, exp,
-  sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', multiStmt, body,
+  sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', body,
   classVarAccess, func, castObj, classLevel, instanceLevel, break, continue,
   private, blockCmt, docCmt, addComments, commentedMod, commentedItem, switch)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
@@ -67,7 +67,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  listAccess, getFunc, setFunc, loopStmt, emptyStmt, assign, subAssign,
   objDecNew, print, returnStmt, valStmt, comment, throw, ifCond, tryCatch,
   construct, param, method, getMethod, setMethod, initStmts, function, docFunc,
   buildClass, implementingClass, docClass, commentedClass, modFromData, docMod,
@@ -92,7 +92,7 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
   FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
-  ScopeData, BinderD(..), bindFormD, FileData, Statement)
+  ScopeData, BinderD(..), bindFormD, FileData)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -117,6 +117,8 @@ import qualified Text.PrettyPrint.HughesPJ as D (float)
 
 swiftExt :: String
 swiftExt = "swift"
+
+type Statement = Doc
 
 newtype SwiftCode a = SC {unSC :: a} deriving Eq
 
@@ -494,19 +496,18 @@ instance InternalControlStmt SwiftCode Statement Value where
   multiReturn = CP.multiReturn parens
 
 instance RenderStatement SwiftCode Statement where
-  stmt = G.stmt
   loopStmt = G.loopStmt
-  stmtFromData d t = toState $ toCode (d, t)
+  stmtFromData d _ = toState $ toCode d
 
 instance StatementElim SwiftCode Statement where
-  statement = fst . unSC
-  statementTerm = snd . unSC
+  statement = preStatement
+  preStatement = unSC
 
 instance EmptyStatement SwiftCode Statement where
   emptyStmt = G.emptyStmt
 
 instance MultiStatement SwiftCode Statement where
-  multi = onStateList (onCodeList R.multiStmt)
+  multi = onStateList (onCodeList vcat)
 
 instance ValueStatement SwiftCode Statement Value where
   valStmt = G.valStmt Empty
@@ -530,7 +531,7 @@ instance DeclStatement SwiftCode Body Statement Variable ScopeData Value where
   constDecDef vr scp vl' = do
     vdec <- swiftVarDec swiftConst vr scp
     vl <- zoom lensMStoVS vl'
-    mkStmtNoEnd $ RC.statement vdec <+> equals <+> RC.value vl
+    mkStmtNoEnd $ RC.preStatement vdec <+> equals <+> RC.value vl
   funcDecDef = CP.funcDecDef
 
 instance OODeclStatement SwiftCode Statement Variable ScopeData Value where
@@ -623,7 +624,7 @@ instance ControlStatement SwiftCode Body Statement Variable Value where
 
   ifCond = G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
   switch v cs bod = do
-    st <- RC.stmt emptyStmt
+    st <- emptyStmt
     vl <- zoom lensMStoVS v
     vals <- mapM (zoom lensMStoVS . fst) cs
     bods <- mapM snd cs

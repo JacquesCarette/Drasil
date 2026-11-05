@@ -11,7 +11,7 @@ module Language.Drasil.CodeSpec (
   -- * ODEs
   getODE, mapODE,
   -- * Hacks
-  asVC, funcUID, getDerivedInputs, getConstraints, constraintvars
+  asVC, getDerivedInputs, getConstraints, constraintvars
 ) where
 
 import Prelude hiding (const)
@@ -150,10 +150,6 @@ asVC :: Func -> DefinedQuantityDict
 asVC (FDef (FuncDef n d _ _ _ _)) = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (variable n) Real
 asVC (FDef (CtorDef n d _ _ _))   = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (variable n) Real
 asVC (FData (FuncData n d _))     = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (variable n) Real
-
--- | Get a 'UID' of a chunk corresponding to a 'Func'.
-funcUID :: Func -> UID
-funcUID f = asVC f ^. uid
 
 -- | Determines the derived inputs, which can be immediately calculated from the
 -- knowns (inputs and constants). If there are DDs, the derived inputs will

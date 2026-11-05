@@ -43,7 +43,7 @@ waterMassNotes :: Sentence
 waterMassNotes = foldlSent [ch wVol, S "is defined in", refS waterVolume]
 
 waterMass :: DataDefinition
-waterMass = ddENoRefs waterMassQD Nothing "waterMass" []
+waterMass = ddENoRefs waterMassQD Nothing "waterMass" [waterMassNotes]
 
 ----
 
@@ -86,7 +86,7 @@ balanceDecayRateNotes = foldlSent [ch wMass, S "is defined in",
 
 balanceDecayRate :: DataDefinition
 balanceDecayRate = ddE balanceDecayRateQD [dRef koothoor2013]
-  Nothing "balanceDecayRate" []
+  Nothing "balanceDecayRate" [balanceDecayRateNotes]
 
 ----
 

@@ -29,14 +29,9 @@ assumptions = [assumpTEO, assumpHTCC, assumpCWTAT, assumpDWCoW, assumpSHECoW,
   assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpCTNTD, assumpWAL, assumpPIT,
   assumpNIHGBW, assumpAPT, assumpVCN]
 
-assumpS3, assumpS4, assumpS5, assumpS9_npcm, assumpS12, assumpS13 :: Sentence
+assumpS4, assumpS5, assumpS9_npcm, assumpS12, assumpS13 :: Sentence
 assumpDWCoW, assumpSHECoW, assumpCTNTD, assumpNIHGBW, assumpAPT,
   assumpWAL :: ConceptInstance
-
-assumpS3 =
-  foldlSent [D.toSent (atStartNP (NP.the (water `inThe` tank))),
-  S "is fully mixed" `sC` S "so the", phrase tempW `S.isThe`
-  S "same throughout the entire", phrase tank]
 
 assumpS4 =
   foldlSent [D.toSent (atStartNP (the wDensity)), S "has no spatial variation; that is"

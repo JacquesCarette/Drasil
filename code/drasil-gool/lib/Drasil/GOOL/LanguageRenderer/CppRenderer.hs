@@ -58,7 +58,8 @@ import qualified Drasil.Shared.LanguageRenderer as R (this', this, sqrt, fabs,
   log10, log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, multiStmt,
   body, stateVar, constVar, cast, castObj, classLevel, instanceLevel,
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
-  commentedItem, addAssign, increment, decrement, switch)
+  commentedItem, addAssign, increment, decrement, switch, assign, subAssign,
+  return', comment)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   mkStateVar, mkVar, typeFromData, VSOp, mkOp, unOpPrec, powerPrec, unExpr,
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
@@ -68,11 +69,9 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
   funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAccess, getFunc,
-  setFunc, loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
-  method, getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
-  smartAdd)
+  setFunc, objDecNew, print, closeFile, ifCond, construct, param, method,
+  getMethod, setMethod, function, buildClass, implementingClass, commentedClass,
+  modFromData, fileDoc, fileFromData, defaultOptSpace, local, smartAdd)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
@@ -1426,7 +1425,9 @@ instance InternalControlStmt CppSrcCode Statement Value where
   multiReturn _ = error $ C.multiReturnError cppName
 
 instance RenderStatement CppSrcCode Statement where
-  loopStmt = G.loopStmt
+  loopStmt s' = do
+    s <- s'
+    stmtFromData (preStatement s) Empty
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppSrcCode Statement where
@@ -1437,15 +1438,23 @@ instance StatementTerm CppSrcCode Statement where
   statementTerm = snd . unCPPSC
 
 instance EmptyStatement CppSrcCode Statement where
-  emptyStmt = G.emptyStmt
+  emptyStmt = stmtFromData empty Empty
 instance MultiStatement CppSrcCode Statement where
   multi = onStateList (onCodeList R.multiStmt)
 instance ValueStatement CppSrcCode Statement Value where
-  valStmt = G.valStmt Semi
+  valStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (RC.value v) Semi
 
 instance AssignStatement CppSrcCode Statement Variable Value where
-  assign = G.assign Semi
-  (&-=) = G.subAssign Semi
+  assign vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.assign vr v) Semi
+  (&-=) vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.subAssign vr v) Semi
   (&+=) vr' v'= do
     vr <- zoom lensMStoVS vr'
     v <- zoom lensMStoVS v'
@@ -1558,15 +1567,19 @@ instance OOFuncAppStatement CppSrcCode Statement Variable Value where
   selfInOutCall = cppInOutCall selfMethodCall
 
 instance CommentStatement CppSrcCode Statement where
-  comment = G.comment commentStart
+  comment c = stmtFromData (R.comment c commentStart) Empty
 
 instance ControlStatement CppSrcCode Body Statement Variable Value where
   break = stmtFromData R.break Semi
   continue = stmtFromData R.continue Semi
 
-  returnStmt = G.returnStmt Semi
+  returnStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.return' [v]) Semi
 
-  throw = G.throw cppThrowDoc Semi
+  throw msg' = do
+    msg <- zoom lensMStoVS (litString msg')
+    stmtFromData (cppThrowDoc msg) Semi
 
   ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
   switch val' cases' dflt' = do
@@ -1602,7 +1615,10 @@ instance ControlStatement CppSrcCode Body Statement Variable Value where
       (C.while parens bodyStart bodyEnd (RC.value val) (RC.body bod))
       Empty
 
-  tryCatch = G.tryCatch cppTryCatch
+  tryCatch try' catch' = do
+    try <- try'
+    catch <- catch'
+    stmtFromData (cppTryCatch try catch) Empty
 
   assert condition errorMessage = do
     addCAssertImport $ do
@@ -2127,7 +2143,7 @@ instance StatementTerm CppHdrCode Statement where
   statementTerm = snd . unCPPHC
 
 instance EmptyStatement CppHdrCode Statement where
-  emptyStmt = G.emptyStmt
+  emptyStmt = stmtFromData empty Empty
 
 instance MultiStatement CppHdrCode Statement where
   multi _ = emptyStmt
@@ -2746,7 +2762,7 @@ cppPrint newLn pf vl = do
         end = if newLn then addIOStreamImport (pure $ streamL <+> text endl)
           else pure empty
 
-cppThrowDoc :: (ValueElim r val) => r val -> Doc
+cppThrowDoc :: CppSrcCode Value -> Doc
 cppThrowDoc errMsg = throwLabel <> parens (RC.value errMsg)
 
 cppTryCatch :: (BodyElim r bod) => r bod -> r bod -> Doc

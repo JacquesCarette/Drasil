@@ -56,7 +56,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
   printFile, classVarAccess, cast, castObj, classLevel,
   instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
   commentedMod, commentedItem, print, forEach, addAssign, increment, decrement,
-  switch)
+  switch, assign, subAssign, return', comment)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl,
   typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
@@ -66,11 +66,10 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, getFunc, setFunc, loopStmt, emptyStmt, assign, subAssign,
-  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
-  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
-  defaultOptSpace, local, smartAdd)
+  listAccess, getFunc, setFunc, objDecNew, print, closeFile, ifCond, construct,
+  param, method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
+  smartAdd)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
@@ -486,7 +485,9 @@ instance InternalControlStmt CSharpCode Statement Value where
   multiReturn _ = error $ C.multiReturnError csName
 
 instance RenderStatement CSharpCode Statement where
-  loopStmt = G.loopStmt
+  loopStmt s' = do
+    s <- s'
+    stmtFromData (preStatement s) Empty
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CSharpCode Statement where
@@ -497,17 +498,25 @@ instance StatementTerm CSharpCode Statement where
   statementTerm = snd . unCSC
 
 instance EmptyStatement CSharpCode Statement where
-  emptyStmt = G.emptyStmt
+  emptyStmt = stmtFromData empty Empty
 
 instance MultiStatement CSharpCode Statement where
   multi = onStateList (onCodeList R.multiStmt)
 
 instance ValueStatement CSharpCode Statement Value where
-  valStmt = G.valStmt Semi
+  valStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (RC.value v) Semi
 
 instance AssignStatement CSharpCode Statement Variable Value where
-  assign = G.assign Semi
-  (&-=) = G.subAssign Semi
+  assign vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.assign vr v) Semi
+  (&-=) vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.subAssign vr v) Semi
   (&+=) vr' v'= do
     vr <- zoom lensMStoVS vr'
     v <- zoom lensMStoVS v'
@@ -583,17 +592,20 @@ instance OOFuncAppStatement CSharpCode Statement Variable Value where
   selfInOutCall = csInOutCall selfMethodCall
 
 instance CommentStatement CSharpCode Statement where
-  comment = G.comment commentStart
+  comment c = stmtFromData (R.comment c commentStart) Empty
 
 instance ControlStatement CSharpCode Body Statement Variable Value where
   break =  stmtFromData R.break Semi
   continue =  stmtFromData R.continue Semi
 
-  returnStmt = G.returnStmt Semi
+  returnStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.return' [v]) Semi
 
-  throw msg = do
+  throw msg' = do
     modify (addLangImport csSystem)
-    G.throw csThrowDoc Semi msg
+    msg <- zoom lensMStoVS (litString msg')
+    stmtFromData (csThrowDoc msg) Semi
 
   ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
   switch val' cases' dflt' = do
@@ -638,7 +650,10 @@ instance ControlStatement CSharpCode Body Statement Variable Value where
       (C.while parens bodyStart bodyEnd (RC.value val) (RC.body bod))
       Empty
 
-  tryCatch = G.tryCatch csTryCatch
+  tryCatch try' catch' = do
+    try <- try'
+    catch <- catch'
+    stmtFromData (csTryCatch try catch) Empty
 
   assert condition errorMessage = do
     modify (addLangImport csDiagnostics)

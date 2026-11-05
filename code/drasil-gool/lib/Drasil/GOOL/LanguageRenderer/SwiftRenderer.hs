@@ -57,7 +57,8 @@ import Drasil.Shared.LanguageRenderer (blockCmtStart, blockCmtEnd, docCmtStart,
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', body,
   classVarAccess, func, castObj, classLevel, instanceLevel, break, continue,
-  private, blockCmt, docCmt, addComments, commentedMod, commentedItem, switch)
+  private, blockCmt, docCmt, addComments, commentedMod, commentedItem, switch,
+  assign, subAssign, return', comment)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr, binExpr,
   binExpr', typeBinExpr, typeFromData)
@@ -67,11 +68,10 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, getFunc, setFunc, loopStmt, emptyStmt, assign, subAssign,
-  objDecNew, print, returnStmt, valStmt, comment, throw, ifCond, tryCatch,
-  construct, param, method, getMethod, setMethod, initStmts, function, docFunc,
-  buildClass, implementingClass, docClass, commentedClass, modFromData, docMod,
-  fileDoc, fileFromData, defaultOptSpace, local, smartAdd)
+  listAccess, getFunc, setFunc, objDecNew, print, ifCond, construct, param,
+  method, getMethod, setMethod, initStmts, function, docFunc, buildClass,
+  implementingClass, docClass, commentedClass, modFromData, docMod, fileDoc,
+  fileFromData, defaultOptSpace, local, smartAdd)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   classVarAccess, intClass, buildModule, modDoc', contains, bindingError,
@@ -88,7 +88,7 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   notifyObservers', makeSetterVal, arrayDecAsList)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
   listAppend, innerType)
-import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
+import Drasil.Shared.AST (Terminator(Empty), VisibilityTag(..), qualName,
   FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
@@ -496,7 +496,9 @@ instance InternalControlStmt SwiftCode Statement Value where
   multiReturn = CP.multiReturn parens
 
 instance RenderStatement SwiftCode Statement where
-  loopStmt = G.loopStmt
+  loopStmt s' = do
+    s <- s'
+    stmtFromData (preStatement s) Empty
   stmtFromData d _ = toState $ toCode d
 
 instance StatementElim SwiftCode Statement where
@@ -504,17 +506,25 @@ instance StatementElim SwiftCode Statement where
   preStatement = unSC
 
 instance EmptyStatement SwiftCode Statement where
-  emptyStmt = G.emptyStmt
+  emptyStmt = stmtFromData empty Empty
 
 instance MultiStatement SwiftCode Statement where
   multi = onStateList (onCodeList vcat)
 
 instance ValueStatement SwiftCode Statement Value where
-  valStmt = G.valStmt Empty
+  valStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (RC.value v) Empty
 
 instance AssignStatement SwiftCode Statement Variable Value where
-  assign = G.assign Empty
-  (&-=) = G.subAssign Empty
+  assign vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.assign vr v) Empty
+  (&-=) vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.subAssign vr v) Empty
   (&+=) = CS.increment
   (&++) = M.increment1
   (&--) = M.decrement1
@@ -610,17 +620,20 @@ instance OOFuncAppStatement SwiftCode Statement Variable Value where
   selfInOutCall = CP.inOutCall selfMethodCall
 
 instance CommentStatement SwiftCode Statement where
-  comment = G.comment commentStart
+  comment c = stmtFromData (R.comment c commentStart) Empty
 
 instance ControlStatement SwiftCode Body Statement Variable Value where
   break = stmtFromData R.break Empty
   continue = stmtFromData R.continue Empty
 
-  returnStmt = G.returnStmt Empty
+  returnStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.return' [v]) Empty
 
-  throw msg = do
+  throw msg' = do
     modify setThrowUsed
-    G.throw swiftThrowDoc Empty msg
+    msg <- zoom lensMStoVS (litString msg')
+    stmtFromData (swiftThrowDoc msg) Empty
 
   ifCond = G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
   switch v cs bod = do
@@ -643,7 +656,10 @@ instance ControlStatement SwiftCode Body Statement Variable Value where
       (C.while id bodyStart bodyEnd (RC.value val) (RC.body bod))
       Empty
 
-  tryCatch = G.tryCatch swiftTryCatch
+  tryCatch try' catch' = do
+    try <- try'
+    catch <- catch'
+    stmtFromData (swiftTryCatch try catch) Empty
 
   assert condition errorMessage = do
     cond <- zoom lensMStoVS condition
@@ -1234,7 +1250,7 @@ swiftSetDec dec v' scp = do
   stmtFromData (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> text (swiftSet P.<> "<" P.<> getTypeString innerTp P.<> ">")) Empty
 
-swiftThrowDoc :: (ValueElim r val) => r val -> Doc
+swiftThrowDoc :: SwiftCode Value -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
 swiftForEach

@@ -57,7 +57,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   multiStmt, body, printFile, classVarAccess, cast, castObj,
   classLevel, instanceLevel, break, continue, private, public, blockCmt, docCmt,
   addComments, commentedMod, commentedItem, print, forEach, addAssign, increment,
-  decrement, switch)
+  decrement, switch, assign, subAssign, return', comment)
 import Drasil.GOOL.Renderers (renderType, renderParam, renderListDec)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl,
@@ -68,11 +68,10 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, getFunc, setFunc, loopStmt, emptyStmt, assign, subAssign,
-  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
-  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
-  defaultOptSpace, local, smartAdd)
+  listAccess, getFunc, setFunc, objDecNew, print, closeFile, ifCond, construct,
+  param, method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
+  smartAdd)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
@@ -511,7 +510,9 @@ instance InternalControlStmt JavaCode Statement Value where
   multiReturn _ = error $ C.multiReturnError jName
 
 instance RenderStatement JavaCode Statement where
-  loopStmt = G.loopStmt
+  loopStmt s' = do
+    s <- s'
+    stmtFromData (preStatement s) Empty
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JavaCode Statement where
@@ -522,17 +523,25 @@ instance StatementTerm JavaCode Statement where
   statementTerm = snd . unJC
 
 instance EmptyStatement JavaCode Statement where
-  emptyStmt = G.emptyStmt
+  emptyStmt = stmtFromData empty Empty
 
 instance MultiStatement JavaCode Statement where
   multi = onStateList (onCodeList R.multiStmt)
 
 instance ValueStatement JavaCode Statement Value where
-  valStmt = G.valStmt Semi
+  valStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (RC.value v) Semi
 
 instance AssignStatement JavaCode Statement Variable Value where
-  assign = G.assign Semi
-  (&-=) = G.subAssign Semi
+  assign vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.assign vr v) Semi
+  (&-=) vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.subAssign vr v) Semi
   (&+=) vr' v'= do
     vr <- zoom lensMStoVS vr'
     v <- zoom lensMStoVS v'
@@ -610,15 +619,19 @@ instance OOFuncAppStatement JavaCode Statement Variable Value where
   selfInOutCall = jInOutCall selfMethodCall
 
 instance CommentStatement JavaCode Statement where
-  comment = G.comment commentStart
+  comment c = stmtFromData (R.comment c commentStart) Empty
 
 instance ControlStatement JavaCode Body Statement Variable Value where
   break = stmtFromData R.break Semi
   continue = stmtFromData R.continue Semi
 
-  returnStmt = G.returnStmt Semi
+  returnStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.return' [v]) Semi
 
-  throw = G.throw jThrowDoc Semi
+  throw msg' = do
+    msg <- zoom lensMStoVS (litString msg')
+    stmtFromData (jThrowDoc msg) Semi
 
   ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
   switch val' cases' dflt' = do
@@ -662,9 +675,11 @@ instance ControlStatement JavaCode Body Statement Variable Value where
     stmtFromData
       (C.while parens bodyStart bodyEnd (RC.value val) (RC.body bod))
       Empty
-    --C.while parens bodyStart bodyEnd
 
-  tryCatch = G.tryCatch jTryCatch
+  tryCatch try' catch' = do
+    try <- try'
+    catch <- catch'
+    stmtFromData (jTryCatch try catch) Empty
 
   assert condition errorMessage = do
     cond <- zoom lensMStoVS condition
@@ -1008,7 +1023,7 @@ jFuncDecDef v scp ps bod = do
     parens (variableList pms) <+> jLambdaSep <+> bodyStart $$ indent (RC.body b)
     $$ bodyEnd) Semi
 
-jThrowDoc :: (ValueElim r val) => r val -> Doc
+jThrowDoc :: JavaCode Value -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 

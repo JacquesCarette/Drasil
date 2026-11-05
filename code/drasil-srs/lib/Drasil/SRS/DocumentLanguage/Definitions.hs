@@ -129,7 +129,6 @@ helpToRefField trg db
   | (Just c) <- find trg db :: Maybe GenDefn         = refS c
   | (Just c) <- find trg db :: Maybe TheoryModel     = refS c
   | (Just c) <- find trg db :: Maybe ConceptInstance = refS c
-  | (Just _) <- find trg db :: Maybe Citation        = EmptyS
   | otherwise = error $ show trg <> "Caught."
 
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.

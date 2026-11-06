@@ -55,20 +55,21 @@ tunit' t = TUnits' t tOfUnitDesc
 -- | Table of units with SI name in the description column.
 tunitNone t = TUnits' t tOfUnitNone
 
--- | Table of units introduction builder. Used by 'mkRefSec'.
-tuIntro :: [TUIntro] -> Contents
-tuIntro [] = mkParagraph $ emptySectSentPlu [unit_]
-tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
+-- | Table of units introduction builder. Takes the table it introduces.
+-- Used by 'mkRefSec'.
+tuIntro :: [TUIntro] -> LabelledContent -> Contents
+tuIntro [] _ = mkParagraph $ emptySectSentPlu [unit_]
+tuIntro x tbl = mkParagraph $ foldr ((+:+) . tuI tbl) EmptyS x
 
 -- | Table of units introduction writer. Translates a 'TUIntro' to a 'Sentence'.
-tuI :: TUIntro -> Sentence
-tuI System  =
+tuI :: LabelledContent -> TUIntro -> Sentence
+tuI _ System  =
   S "The unit system used throughout is SI (Système International d'Unités)."
-tuI TUPurpose =
-  S "For each unit" `sC` S "the" +:+ namedRef unitTableRef (titleize' tOfUnit) +:+
+tuI tbl TUPurpose =
+  S "For each unit" `sC` S "the" +:+ namedRef tbl (titleize' tOfUnit) +:+
     S "lists" +:+. foldlList Comma List [S "the" +:+ phrase symbol_,
     S "a" +:+ phrase description, S "the SI name"]
-tuI Derived =
+tuI _ Derived =
   S "In addition to the basic units, several derived units are also used."
 
 -- | Default table of units intro that contains the system, derivation, and purpose.

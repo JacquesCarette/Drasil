@@ -191,15 +191,13 @@ mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (mkSubRef <$> l)
 
     mkSubRef :: RefTab -> Section
     mkSubRef TUnits = mkSubRef $ TUnits' defaultTUI tOfUnitSIName
-    mkSubRef (TUnits' con f) =
-        SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
-    mkSubRef (TSymb con) =
-      SRS.tOfSymb
-      [tsIntro con,
-                LlC $ table Equational (sortBySymbol
-                $ filter (`hasStageSymbol` Equational)
-                (nub $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) db))
-                atStart] []
+    mkSubRef (TUnits' con f) = SRS.tOfUnit [tuIntro con tbl, LlC tbl] []
+      where tbl = f (nub $ sortBy compUnitDefn $ extractUnits dd db)
+    mkSubRef (TSymb con) = SRS.tOfSymb [tsIntro con tbl, LlC tbl] []
+      where tbl = table Equational (sortBySymbol
+              $ filter (`hasStageSymbol` Equational)
+              (nub $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) db))
+              atStart
     mkSubRef (TSymb' f con) =
       mkTSymb (resolveAllVars (getDocDesc dd) (egetDocDesc dd) db) f con
 
@@ -226,12 +224,11 @@ collectDocumentAbbreviations rms renderedSecs cdb =
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
   [e] -> LFunc -> [TSIntro] -> Section
-mkTSymb v f c = SRS.tOfSymb [tsIntro c,
-  LlC $ table Equational
-    (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
-    (lf f)]
-    []
-  where lf Term = atStart
+mkTSymb v f c = SRS.tOfSymb [tsIntro c tbl, LlC tbl] []
+  where tbl = table Equational
+          (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
+          (lf f)
+        lf Term = atStart
         lf Defn = capSent . (^. defn)
         lf (TermExcept cs) = \x -> if (x ^. uid) `elem` fmap (^. uid) cs then
           capSent (x ^. defn) else atStart x --Compare chunk uids, since we don't

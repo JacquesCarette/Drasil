@@ -4,19 +4,18 @@
 -}
 module Drasil.Database.SearchTools (
   -- * Types
-  TermAbbr, DomDefn,
+  TermAbbr,
   -- * Field Accessors
-  longForm, shortForm, domain, definition,
+  longForm, shortForm,
   -- * Resolvers
   termResolve, termResolve',
-  defResolve, defResolve',
   refResolve,
-  findAllConcInsts
+  findAllConcInstsUnder
 ) where
 
 import Control.Lens ((^.))
 
-import Drasil.Database (ChunkDB, UID, find, findAll)
+import Drasil.Database (ChunkDB, UID, find, findAll, findOrErr)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.System (ProjectName, HasProjectName(..))
@@ -52,22 +51,6 @@ termResolve f db trg
 termResolve' :: ChunkDB -> UID -> TermAbbr
 termResolve' = termResolve TermAbbr
 
-data DomDefn = DomDefn { domain :: [UID], definition :: Sentence }
-
--- | Looks up a 'UID' in the 'ChunkDB' for a chunk's definition concept domain
--- and definition. If nothing is found, an error is thrown.
-defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
-defResolve f db trg
-  | (Just c) <- find trg db :: Maybe ConceptChunk        = go f c
-  | (Just c) <- find trg db :: Maybe ConceptInstance     = go f c
-  | otherwise = error $ "Definition: `" <> show trg <> "` not found in ConceptMap"
-  where
-    go :: (Concept c, ConceptDomain c) => ([UID] -> Sentence -> r) -> c -> r
-    go f' c = f' (cdom c) (c ^. defn)
-
-defResolve' :: ChunkDB -> UID -> DomDefn
-defResolve' = defResolve DomDefn
-
 -- | Looks up a 'UID' in a 'ChunkDB' with a /referrable/ handle.
 refResolve :: ChunkDB -> UID -> Reference
 refResolve db trg
@@ -84,5 +67,15 @@ refResolve db trg
   | (Just c) <- find trg db :: Maybe Reference           = c
   | otherwise = error $ "Reference for `" <> show trg <> "` not found."
 
-findAllConcInsts :: ChunkDB -> [ConceptInstance]
-findAllConcInsts = findAll
+-- | Find all 'ConceptInstance's whose domain is the given one, or is nested
+-- (through parent domains, which are always 'ConceptChunk's) under it.
+findAllConcInstsUnder :: UID -> ChunkDB -> [ConceptInstance]
+findAllConcInstsUnder dom db = filter (isUnder . sDom . cdom) $ findAll db
+  where
+    isUnder :: UID -> Bool
+    isUnder curr
+      | curr == dom = True
+      -- Check parent domain: MUST be a ConceptChunk as per current design.
+      | otherwise = case cdom (findOrErr curr db :: ConceptChunk) of
+          [] -> False
+          ds -> isUnder (sDom ds)

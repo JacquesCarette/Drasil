@@ -16,7 +16,8 @@ import Control.Lens((^.))
 -- Generic Drasil
 import Language.Drasil hiding (sec)
 import Language.Drasil.Document
-import Drasil.Database (HasUID(..), findAll)
+import Drasil.Database (HasUID(..))
+import Drasil.Database.SearchTools (findAllConcInstsUnder)
 import Drasil.System (systemdb)
 import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
 
@@ -152,5 +153,4 @@ mkDocDesc sys = fmap sec where
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
 
   fromConcInsDB :: Concept c => c -> [ConceptInstance]
-  fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid)
-    $ findAll $ sys ^. systemdb
+  fromConcInsDB c = findAllConcInstsUnder (c ^. uid) (sys ^. systemdb)

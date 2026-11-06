@@ -18,10 +18,11 @@ module Language.Drasil.Sentence (
 
 import Data.Char (toUpper)
 
-import Drasil.Database (HasChunkRefs(..), UID, IsChunk, UIDRef, hide, raw,
-  declareHasChunkRefs, Generically(..))
+import Drasil.Database (HasChunkRefs(..), UID, IsChunk, TypeableChunk, UIDRef,
+  hide, raw, declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.Chunk.NamedIdea (Idea)
+import Language.Drasil.Document.Labels (HasRefAddress)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ModelExpr.Extract (meDep)
@@ -88,14 +89,10 @@ data Sentence where
   P     :: Symbol -> Sentence       -- should not be used in examples?
   -- | Lifts an expression into a Sentence.
   E     :: ModelExpr -> Sentence
-  -- | Takes a 'UID' to a reference, a display name ('Sentence'), and any
-  -- additional reference display information ('RefInfo'). Resolves the
-  -- reference later (similar to Ch).
-  --
-  -- FIXME: Attempting to convert this 'UID' into a 'UIDRef' creates a mess of a
-  -- cyclic dependency between `Language.Drasil.Document.Reference`,
-  -- `Language.Drasil.ShortName`, and this file.
-  Ref   :: UID -> Sentence -> RefInfo -> Sentence
+  -- | Takes a typed reference to a referable chunk, a display name
+  -- ('Sentence'), and any additional reference display information
+  -- ('RefInfo'). Resolves the reference later (similar to 'SyCh').
+  Ref   :: (TypeableChunk t, HasRefAddress t, HasShortName t) => UIDRef t -> Sentence -> RefInfo -> Sentence
   -- | Adds quotation marks around a Sentence.
   Quote :: Sentence -> Sentence
   -- | Used for a % symbol.
@@ -242,7 +239,7 @@ lnames NP {}       = Set.empty
 lnames S {}        = Set.empty
 lnames Percent     = Set.empty
 lnames P {}        = Set.empty
-lnames (Ref a _ _) = Set.singleton a
+lnames (Ref a _ _) = Set.singleton (raw a)
 lnames ((:+:) a b) = lnames a `Set.union` lnames b
 lnames Quote {}    = Set.empty
 lnames E {}        = Set.empty

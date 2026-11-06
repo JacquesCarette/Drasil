@@ -48,4 +48,4 @@ dRef r = dRefInfo r None
 
 -- | Translate a 'DecRef' into a human-readable 'Sentence'.
 decRefS :: DecRef -> Sentence
-decRefS (DR r i) = Ref (raw r) EmptyS i
+decRefS (DR r i) = Ref r EmptyS i

@@ -1,7 +1,9 @@
 digraph "allvsall" {
     "instance:assumpCTNOD" -> "instance:assumpSITWP";
+    "dataDefn:wMass" -> "dataDefn:wVol";
     "dataDefn:wVol" -> "instance:assumpVCN";
     "dataDefn:wVol" -> "dataDefn:tankVol";
+    "dataDefn:tauW" -> "dataDefn:wMass";
     "dataDefn:meltFrac" -> "dataDefn:htFusion";
     "theory:consThermECS" -> "instance:assumpTEO";
     "theory:sensHeat" -> "theory:latentHtETM";

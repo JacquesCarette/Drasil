@@ -7,6 +7,8 @@ module Language.Drasil.Sentence (
   Sentence(..),
   -- ** Context Types
   SentenceStyle(..), RefInfo(..), TermCapitalization(..),
+  -- ** Short Names
+  ShortName, HasShortName(..), shortname', getSentSN,
   -- * Functions
   (+:+), (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
@@ -50,6 +52,16 @@ data RefInfo = None
              | RefNote String
 
 declareHasChunkRefs ''RefInfo
+
+-- | Used for holding the short form of a name (as a 'Sentence' with a wrapper).
+newtype ShortName = ShortNm Sentence
+
+-- | A 'ShortName' is the text to be displayed for a link.
+--
+--   Used for referencing within a document that can include symbols and whatnot if required.
+--   Visible in the typeset documents (pdf).
+class HasShortName  s where
+  shortname :: s -> ShortName
 
 -- | For writing 'Sentence's via combining smaller elements.
 -- 'Sentence's are made up of some known vocabulary of things:
@@ -96,6 +108,14 @@ data Sentence where
 instance IsString Sentence where
   fromString [] = EmptyS
   fromString ss = S ss
+
+-- | Pulls the short form (as a 'Sentence') out of a 'ShortName'.
+getSentSN :: ShortName -> Sentence
+getSentSN (ShortNm s) = s
+
+-- | Smart constructor for making a 'Sentence' into a 'ShortName'.
+shortname' :: Sentence -> ShortName
+shortname' = ShortNm
 
 -- | Sentences can be concatenated.
 instance Semigroup Sentence where
@@ -231,4 +251,8 @@ lnames EmptyS      = Set.empty
 
 instance HasChunkRefs Sentence where
   chunkRefs s = Set.unions [lnames s, sdep s, shortdep s]
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs ShortName where
+  chunkRefs = chunkRefs . getSentSN
   {-# INLINABLE chunkRefs #-}

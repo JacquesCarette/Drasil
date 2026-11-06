@@ -72,7 +72,7 @@ webSys Notebook{} _ = error "DrasilWebsite expects a `Document`"
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
 sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspaceSetupWiki contribGuideWiki workflowWiki
-  createProjWiki debuggingWiki, aboutSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl)
+  createProjWiki debuggingWiki, aboutSec caseStudySec (docsSec $ docsRt fl) (analysisSec (analysisRt fl)
   (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef infoEncodingWiki chunksWiki recipesWiki
   paperGOOL papersWiki icsePositionPaper danPoster wellUnderstoodPaper, exampleSec (repoRt fl) (exRt fl), caseStudySec, docsSec (docsRt fl),
   analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl, footer fl]

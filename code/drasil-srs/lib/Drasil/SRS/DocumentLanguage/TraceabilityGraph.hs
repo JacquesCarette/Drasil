@@ -39,11 +39,11 @@ import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
 traceMGF [] [] [] = SRS.traceyMandG [mkParagraph $ emptySectSentPlu [traceyMatrix, traceyGraph]]
 traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents
-  <> fmap UlC (traceGIntro traceGUIDs (trailing <> [allvsallDesc])) <> traceGCon)
+  <> fmap UlC (traceGIntro genTraceGraphLabCons (trailing <> [allvsallDesc])) <> traceGCon)
 
 -- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
 -- and wraps in 'Contents'. Usually references the five graphs as defined in 'GraphInfo'.
-traceGIntro :: [UID] -> [Sentence] -> [UnlabelledContent]
+traceGIntro :: [LabelledContent] -> [Sentence] -> [UnlabelledContent]
 traceGIntro refs trailings = [ulcc $ Para [foldlSent
         [phrase purpose `S.the_ofTheC` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
@@ -146,10 +146,9 @@ traceGHeader f c = (`checkUID` (c ^. systemdb)) <$> f c
 traceGRowHeader :: ([UID] -> [UID]) -> SmithEtAlSRS -> [UID]
 traceGRowHeader f = traceGHeader (traceMReferrers f)
 
--- FIXME: Should take a Reference instead of just a Reference UID
--- | Helper that makes references of the form "@reference@ shows the dependencies of @something@". Only takes a reference `UID` instead of a `Reference`.
-graphShows :: UID -> Sentence -> Sentence
-graphShows r end = refS (makeFigRef' r) +:+ S "shows the" +:+ plural dependency `S.of_` (end !.)
+-- | Helper that makes references of the form "@graph@ shows the dependencies of @something@".
+graphShows :: LabelledContent -> Sentence -> Sentence
+graphShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.of_` (end !.)
 
 -- * Functions to Create a Traceability Graphs
 --

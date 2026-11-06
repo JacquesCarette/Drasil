@@ -56,7 +56,7 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue,
   litFalse, while, statement)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
-  extVar, funcType, listSize, forEach')
+  extVar, funcType, listSize)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   increment1, decrement1, listSlice, stringListVals, stringListLists)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
@@ -532,7 +532,11 @@ instance ControlStatement MatlabCode Body Statement Variable Value where
       indent (statement u),
       mlEnd]) Empty
   forRange i initv finalv stepv = forEach i (mlRange initv finalv stepv)
-  forEach = CS.forEach' mlForEach
+  forEach i' v' b' = do
+    i <- zoom lensMStoVS i'
+    v <- zoom lensMStoVS v'
+    b <- b'
+    stmtFromData (mlForEach i v b) Empty
   while val' bod' = do
     val <- zoom lensMStoVS val'
     bod <- bod'

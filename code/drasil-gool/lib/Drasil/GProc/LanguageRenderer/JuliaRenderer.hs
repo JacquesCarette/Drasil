@@ -544,7 +544,11 @@ instance ControlStatement JuliaCode Body Statement Variable Value where
   ifExists = M.ifExists
   for _ _ _ _ = error $ CP.forLoopError jlName
   forRange i initv finalv stepv = forEach i (jlRange initv finalv stepv)
-  forEach = CS.forEach' jlForEach
+  forEach i' v' b' = do
+    i <- zoom lensMStoVS i'
+    v <- zoom lensMStoVS v'
+    b <- b'
+    stmtFromData (jlForEach i v b) Empty
   while val' bod' = do
     val <- zoom lensMStoVS val'
     bod <- bod'

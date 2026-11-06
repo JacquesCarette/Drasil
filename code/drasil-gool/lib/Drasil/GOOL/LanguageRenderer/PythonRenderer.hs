@@ -53,7 +53,7 @@ import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, body, classVarAccess,
   castObj, instanceLevel, break, continue, addComments, commentedMod,
-  commentedItem, var, assign, subAssign, return', comment)
+  commentedItem, var, assign, subAssign, return', comment, addAssign)
 import Drasil.GOOL.Renderers (renderType)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec,
@@ -515,7 +515,10 @@ instance AssignStatement PythonCode Statement Variable Value where
     vr <- zoom lensMStoVS vr'
     v <- zoom lensMStoVS v'
     stmtFromData (R.subAssign vr v) Empty
-  (&+=) = CS.increment
+  (&+=) vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.addAssign vr v) Empty
   (&++) = M.increment1
   (&--) = M.decrement1
 
@@ -609,7 +612,11 @@ instance ControlStatement PythonCode Body Statement Variable Value where
 
   for _ _ _ _ = error $ CP.forLoopError pyName
   forRange i initv finalv stepv = forEach i (range initv finalv stepv)
-  forEach = CS.forEach' pyForEach
+  forEach i' v' b' = do
+    i <- zoom lensMStoVS i'
+    v <- zoom lensMStoVS v'
+    b <- b'
+    stmtFromData (pyForEach i v b) Empty
   while v' b' = do
     v <- zoom lensMStoVS v'
     b <- b'

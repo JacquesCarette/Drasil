@@ -58,7 +58,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log, exp
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', body,
   classVarAccess, func, castObj, classLevel, instanceLevel, break, continue,
   private, blockCmt, docCmt, addComments, commentedMod, commentedItem, switch,
-  assign, subAssign, return', comment)
+  assign, subAssign, return', comment, addAssign)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr, binExpr,
   binExpr', typeBinExpr, typeFromData)
@@ -525,7 +525,10 @@ instance AssignStatement SwiftCode Statement Variable Value where
     vr <- zoom lensMStoVS vr'
     v <- zoom lensMStoVS v'
     stmtFromData (R.subAssign vr v) Empty
-  (&+=) = CS.increment
+  (&+=) vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.addAssign vr v) Empty
   (&++) = M.increment1
   (&--) = M.decrement1
 
@@ -648,7 +651,11 @@ instance ControlStatement SwiftCode Body Statement Variable Value where
 
   for _ _ _ _ = error $ CP.forLoopError swiftName
   forRange i initv finalv stepv = forEach i (swiftStrideFunc initv finalv stepv)
-  forEach = CS.forEach' swiftForEach
+  forEach i' v' b' = do
+    i <- zoom lensMStoVS i'
+    v <- zoom lensMStoVS v'
+    b <- b'
+    stmtFromData (swiftForEach i v b) Empty
   while val' bod' = do
     val <- zoom lensMStoVS val'
     bod <- bod'

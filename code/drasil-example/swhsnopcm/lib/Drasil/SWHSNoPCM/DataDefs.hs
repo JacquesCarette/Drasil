@@ -1,18 +1,14 @@
 module Drasil.SWHSNoPCM.DataDefs (
-  qDefs, dataDefs, waterVolumeQD, waterVolumeEqn, waterVolumeNotes, waterVolume
-) where --exports all of it
+  dataDefs, waterVolumeQD, waterVolumeEqn, waterVolumeNotes, waterVolume
+) where
 
 import Language.Drasil
 import Language.Drasil.Document
 import Theory.Drasil (DataDefinition, ddENoRefs)
 
 import Drasil.SWHS.Assumptions (assumpVCN)
-import Drasil.SWHS.DataDefs (balanceDecayRate, balanceDecayRateQD, tankVolume,
-  tankVolumeQD, waterMass, waterMassQD)
+import Drasil.SWHS.DataDefs (balanceDecayRate, tankVolume, waterMass)
 import Drasil.SWHS.Unitals (tankVol, wVol)
-
-qDefs :: [SimpleQDef]
-qDefs = [waterMassQD, waterVolumeQD, tankVolumeQD, balanceDecayRateQD]
 
 dataDefs :: [DataDefinition]
 dataDefs = [waterMass, waterVolume, tankVolume, balanceDecayRate]

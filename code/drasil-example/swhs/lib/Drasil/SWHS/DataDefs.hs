@@ -1,4 +1,4 @@
-module Drasil.SWHS.DataDefs (module Drasil.SWHS.DataDefs) where --exports all of it
+module Drasil.SWHS.DataDefs (module Drasil.SWHS.DataDefs) where
 
 import Language.Drasil
 import Language.Drasil.Document
@@ -23,11 +23,6 @@ import Drasil.SWHS.References (bueche1986, lightstone2012)
 import Drasil.SWHS.Unitals (aspectRatio, coilHTC, coilSA, diam, eta, htCapLP,
   htCapSP, htCapW, htFusion, latentEP, meltFrac, pcmHTC, pcmMass, pcmSA, pcmVol,
   tankLength, tankVol, tauLP, tauSP, tauW, wDensity, wMass, wVol)
-
-qDefs :: [SimpleQDef]
-qDefs = [waterMassQD, waterVolumeQD, tankVolumeQD, balanceDecayRateQD,
-  balanceDecayTimeQD, balanceSolidPCMQD, balanceLiquidPCMQD, ddHtFusionQD,
-  ddMeltFracQD, aspRatQD]
 
 dataDefs :: [DataDefinition]
 dataDefs = [waterMass, waterVolume, tankVolume, balanceDecayRate,

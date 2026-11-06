@@ -120,6 +120,7 @@ arrayElem arr' i' = do
       vRender = RC.value arr <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
+-- TODO [Brandon Bosman, 11/06/2026]: Split this up
 funcDecDef
   :: (RP.ProcRenderSym r file mod mthd vis param bod block stmt var ScopeData val binder typ)
   => VS (r var)

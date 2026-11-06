@@ -1,12 +1,32 @@
 roots = [
+    # Program entries
     "Main.main",
-    "^Paths_.*",
     "ClassInstDepGen.main",
-    "TypeDepGen.main"
+    "TypeDepGen.main",
+    # .hie files don't record expressions from TH splices/quasi-quoters
+    "^Drasil\\.Database\\.TH\\.declareHasChunkRefs$",
+    "^Drasil\\.FileHandling\\.FilePath\\.ps$",
 ]
 
 type-class-roots = false
 
-root-instances = [{ class = "\\.IsString$" },{ class = "\\.IsList$" }]
+root-instances = [
+    # Common typeclasses
+    { class = "\\.(Eq|Show|Ord|Enum|Bounded)$" },
+    # Overloading-related typeclasses
+    { class = "\\.(IsString|IsList)$" },
+    # Metaprogramming-related
+    { class = "\\.(Generic|Lift)$" },
+    # DB-related
+    { class = "\\.(HasChunkRefs|HasUID)$" },
+]
 
-unused-types = false
+root-modules = [
+    # drasil-data
+    "^Data\\.Drasil\\.",
+    # drasil-data-formats and -database are internal libraries, strongly de-coupled from the rest
+    "^Drasil\\.Database\\.",
+    "^Drasil\\.Data\\.Formats\\.",
+]
+
+unused-types = true

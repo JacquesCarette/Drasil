@@ -2,7 +2,7 @@
 -- | Document Description Language.
 module Language.Drasil.Document.Sections (
   section, fig, figNoCap, figWithWidth, figNoCapWithWidth, Section(..),
-  SecCons(..) , llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn',
+  llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn',
   ulcc, Document(..), mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..),
   checkToC, makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI,
   makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI'
@@ -24,13 +24,8 @@ import Language.Drasil.Sentence (Sentence(..))
 
 -- * Section Types
 
--- | Section Contents are split into subsections or contents, where contents
--- are standard layout objects (see 'Contents').
-data SecCons = Sub Section
-             | Con Contents
-
--- | Sections have a title ('Sentence'), a list of contents ('SecCons')
--- and a shortname ('Reference').
+-- | Sections have a title ('Sentence'), introductory contents ('Contents'),
+-- a list of subsections ('Section') and a shortname ('Reference').
 data Section = Section
              { tle  :: Title
              , prelimCont :: [Contents]
@@ -43,9 +38,11 @@ makeLenses ''Section
 instance HasUID        Section where uid = lab . uid
 
 instance HasChunkRefs Section where
-  chunkRefs sec = Set.unions
-    [ chunkRefs (tle sec)
-    , chunkRefs (sec ^. lab)
+  chunkRefs (Section ttl intro subs reference) = Set.unions
+    [ chunkRefs ttl
+    , chunkRefs intro
+    , chunkRefs subs
+    , chunkRefs reference
     ]
   {-# INLINABLE chunkRefs #-}
 -- | 'Section's are equal if 'UID's are equal.

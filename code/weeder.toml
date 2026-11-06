@@ -1,4 +1,9 @@
-roots = ["Main.main","^Paths_.*"]
+roots = [
+    "Main.main",
+    "^Paths_.*",
+    "ClassInstDepGen.main",
+    "TypeDepGen.main"
+]
 
 type-class-roots = false
 

@@ -11,12 +11,12 @@ import Drasil.Shared.InterfaceCommon (Label,
 import qualified Drasil.Shared.InterfaceCommon as IC
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import qualified Drasil.GProc.RendererClassesProc as RP
-import Drasil.Shared.AST (isSource, ScopeData)
+import Drasil.Shared.AST (isSource, ScopeData, Terminator(..))
 import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (modDoc')
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVar)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStateVar)
 import Drasil.Shared.State (MS, VS, FS, lensFStoGS, lensFStoMS, lensMStoVS,
   getModuleName, setModuleName, setMainMod, currFileType, currMain, addFile,
   useVarName, currParameters, setVarScope)
@@ -135,7 +135,7 @@ funcDecDef v scp ps b = do
   f <- IC.function (variableName vr) private (pure $ variableType vr)
     (IC.param <$> ps) b
   modify (L.set currParameters (s ^. currParameters))
-  mkStmtNoEnd $ RC.method f
+  RC.stmtFromData (RC.method f) Empty
 
 function
   :: (RC.MethodTypeSym r typ, RP.ProcRenderMethod r mthd vis param bod typ)

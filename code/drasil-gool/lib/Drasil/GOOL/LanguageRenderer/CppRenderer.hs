@@ -59,9 +59,9 @@ import qualified Drasil.Shared.LanguageRenderer as R (this', this, sqrt, fabs,
   body, stateVar, constVar, cast, castObj, classLevel, instanceLevel,
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkVal, mkStateVar, mkVar, typeFromData, VSOp, mkOp, unOpPrec,
-  powerPrec, unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
+  mkStateVar, mkVar, typeFromData, VSOp, mkOp, unOpPrec, powerPrec, unExpr,
+  unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
@@ -1468,11 +1468,11 @@ instance DeclStatement CppSrcCode Body Statement Variable ScopeData Value where
     decBase <- arrayDecBase vr scp
     let sz' = litInt n :: VS (CppSrcCode Value)
     sz <- zoom lensMStoVS sz'
-    mkStmt $ decBase <> parens (RC.value sz)
+    stmtFromData (decBase <> parens (RC.value sz)) Semi
   arrayDecDef vr scp vals = do
     decBase <- arrayDecBase vr scp
     vs <- mapM (zoom lensMStoVS) vals
-    mkStmt $ decBase <+> braces (valueList vs)
+    stmtFromData (decBase <+> braces (valueList vs)) Semi
   constDecDef = CG.constDecDef
   funcDecDef = cppFuncDecDef
 
@@ -1555,8 +1555,8 @@ instance CommentStatement CppSrcCode Statement where
   comment = G.comment commentStart
 
 instance ControlStatement CppSrcCode Body Statement Variable Value where
-  break = mkStmt R.break
-  continue = mkStmt R.continue
+  break = stmtFromData R.break Semi
+  continue = stmtFromData R.continue Semi
 
   returnStmt = G.returnStmt Semi
 
@@ -1567,7 +1567,7 @@ instance ControlStatement CppSrcCode Body Statement Variable Value where
 
   ifExists _ ifBody _ = do
     ifb <- ifBody
-    mkStmtNoEnd (RC.body ifb) -- All variables are initialized in C++
+    stmtFromData (RC.body ifb) Empty -- All variables are initialized in C++
 
   for = C.for bodyStart bodyEnd
   forRange = M.forRange
@@ -1580,7 +1580,7 @@ instance ControlStatement CppSrcCode Body Statement Variable Value where
     addCAssertImport $ do
       cond <- zoom lensMStoVS condition
       errMsg <- zoom lensMStoVS errorMessage
-      mkStmtNoEnd (cppAssert cond errMsg)
+      stmtFromData (cppAssert cond errMsg) Empty
 
 instance ObserverPattern CppSrcCode Statement TypeData where
   notifyObservers = M.notifyObservers
@@ -2041,9 +2041,9 @@ instance List CppHdrCode Value where
   indexOf _ _ = mkStateVal void empty
 
 instance ListStatement CppHdrCode Statement Value where
-  listAdd _ _ _ = mkStmt empty
-  listAppend _ _ = mkStmt empty
-  listSet _ _ _ = mkStmtNoEnd empty
+  listAdd _ _ _ = stmtFromData empty Semi
+  listAppend _ _ = stmtFromData empty Semi
+  listSet _ _ _ = stmtFromData empty Empty
 
 instance Set CppHdrCode Value where
   contains _ _ = mkStateVal void empty
@@ -2607,7 +2607,7 @@ cppListDecDef
 cppListDecDef f v scp vls = do
   vdc <- varDec v scp
   vs <- zoom lensMStoVS $ sequence vls
-  mkStmt (preStatement vdc <> f vs)
+  stmtFromData (preStatement vdc <> f vs) Semi
 
 cpphtop :: ModData -> Doc
 cpphtop m = vcat [
@@ -2701,10 +2701,10 @@ cppFuncDecDef v scp ps bod = do
   modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
-  mkStmt $ renderType (variableType vr) <+> RC.variable vr <+> equals <+>
+  stmtFromData (renderType (variableType vr) <+> RC.variable vr <+> equals <+>
     cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>) (renderType .
     variableType <$> pms) (RC.variable <$> pms)) <+>  bodyStart $$
-    indent (RC.body b) $$ bodyEnd
+    indent (RC.body b) $$ bodyEnd) Semi
 
 cppPrint
   :: (RenderStatement r stmt, ValueElim r val)
@@ -2713,7 +2713,7 @@ cppPrint newLn pf vl = do
   e <- zoom lensMStoVS end
   printFn <- zoom lensMStoVS pf
   v <- zoom lensMStoVS vl
-  mkStmt $ RC.value printFn <+> streamL <+> pars v (RC.value v) <+> e
+  stmtFromData (RC.value printFn <+> streamL <+> pars v (RC.value v) <+> e) Semi
   where pars v = if any (< 9) (valuePrec v) then parens else id
         end = if newLn then addIOStreamImport (pure $ streamL <+> text endl)
           else pure empty
@@ -2745,7 +2745,7 @@ cppInput
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ do
   v <- zoom lensMStoVS vr
   inFn <- zoom lensMStoVS i
-  multi [mkStmt (RC.value inFn <+> streamR <+> RC.variable v),
+  multi [stmtFromData (RC.value inFn <+> streamR <+> RC.variable v) Semi,
     valStmt $ ignoreFunc '\n' i]
 
 cppOpenFile
@@ -2874,11 +2874,11 @@ cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
   b <- b'
-  mkStmtNoEnd $ vcat [
+  stmtFromData (vcat [
     forEachLabel <+> parens ((text cppConst <+> renderType (variableType e) <+> text "&") <> RC.variable e <+>
       inLbl <+> RC.value v) <+> bStart,
     indent $ RC.body b,
-    bEnd]
+    bEnd]) Empty
 
 cppLitSet
   :: (RenderValue r var val typ, ValueElim r val)

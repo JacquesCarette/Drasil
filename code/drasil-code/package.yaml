@@ -20,24 +20,24 @@ extra-source-files: []
 dependencies:
 - base >= 4.7 && < 5
 - lens
-- containers
-- pretty
 - mtl
-- directory
 - filepath
-- split
 - drasil-file-handling
 - drasil-gool
 - drasil-metadata
-- deriving-compat
 
 ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 
 library:
   dependencies:
+  - containers
+  - pretty
+  - split
+  - deriving-compat
   - drasil-database
   - drasil-lang
   - drasil-makefile

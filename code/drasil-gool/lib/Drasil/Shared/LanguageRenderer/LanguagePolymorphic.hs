@@ -32,16 +32,15 @@ import Drasil.GOOL.InterfaceGOOL (Initializers, CSStateVar, newObj,
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
-  FunctionElim(functionType), RenderStatement(stmtFromData),
-  StatementElim, MethodTypeSym(mType), RenderParam(paramFromData),
-  RenderMethod(commentedFunc), BlockCommentSym(..), ValueElim (value),
-  RenderVariable)
+  FunctionElim(functionType), RenderStatement(stmtFromData), StatementElim,
+  MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
+  BlockCommentSym(..), ValueElim (value), RenderVariable)
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(commentedMod),
   OORenderMethod(intMethod), RenderClass, RenderMod(updateModuleDoc), ParentSpec)
 import qualified Drasil.GOOL.RendererClassesOO as RO
-import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource,
-  ScopeTag(Local), ScopeData, sd, TypeData(..), FuncData)
+import Drasil.Shared.AST (AttachmentTag(..), isSource, ScopeTag(Local),
+  ScopeData, sd, TypeData(..), FuncData, Terminator(..))
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getNestDegree,
   on2StateWrapped)
@@ -49,8 +48,8 @@ import Drasil.Shared.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt,
   FuncDocRenderer, ClassDocRenderer, ModuleDocRenderer, getterName, setterName,
   valueList, namedArgList)
 import qualified Drasil.Shared.LanguageRenderer as R
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
-  mkVal, mkStateVar, mkVar, mkClassVar, VSOp, unOpPrec, compEqualPrec, compPrec,
+import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
+  mkStateVar, mkVar, mkClassVar, VSOp, unOpPrec, compEqualPrec, compPrec,
   addPrec, multPrec, typeFromData)
 import Drasil.Shared.State (VS, FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
@@ -417,7 +416,7 @@ loopStmt
 loopStmt = setEmpty
 
 emptyStmt :: (RenderStatement r stmt) => MS (r stmt)
-emptyStmt = mkStmtNoEnd empty
+emptyStmt = stmtFromData empty Empty
 
 assign
   :: (InternalVarElim r var, RenderStatement r stmt, ValueElim r val)
@@ -560,7 +559,7 @@ valStmt t v' = do
   stmtFromData (RC.value v) t
 
 comment :: (RenderStatement r stmt) => Doc -> Label -> MS (r stmt)
-comment cs c = mkStmtNoEnd (R.comment c cs)
+comment cs c = stmtFromData (R.comment c cs) Empty
 
 throw
   :: (IC.Literal r val typ, RenderStatement r stmt)
@@ -610,11 +609,11 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
           indent $ RC.body bd,
           bEnd]) $+$ ifEnd) eBody
     in sequence (ifSect c : fmap elseIfSect cs P.<> [elseSect])
-      >>= (mkStmtNoEnd . vcat)
+      >>= (\stmtDocs -> stmtFromData (vcat stmtDocs) Empty)
 
 tryCatch :: (RenderStatement r stmt) => (r bod -> r bod -> Doc) ->
   MS (r bod) -> MS (r bod) -> MS (r stmt)
-tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
+tryCatch f = on2StateWrapped (\tb1 tb2 -> stmtFromData (f tb1 tb2) Empty)
 
 -- Methods --
 
@@ -791,4 +790,4 @@ fileFromData f fpath mdl' = do
 -- Helper functions
 
 setEmpty :: (RenderStatement r stmt, StatementElim r stmt) => MS (r stmt) -> MS (r stmt)
-setEmpty s' = s' >>= mkStmtNoEnd . RC.preStatement
+setEmpty s' = s' >>= (\s -> stmtFromData (RC.preStatement s) Empty)

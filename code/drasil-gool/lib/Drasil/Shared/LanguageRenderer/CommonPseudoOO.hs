@@ -33,7 +33,7 @@ import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderBody(..),
   RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
-  BlockCommentSym(..), ScopeElim(scopeData))
+  BlockCommentSym(..), ScopeElim(scopeData), stmtFromData)
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   onStateList)
@@ -45,13 +45,13 @@ import Drasil.Shared.LanguageRenderer (listAccessFunc, array', new', args, array
   classDox, moduleDox, variableList, valueList, intValue)
 import Drasil.GOOL.Renderers (renderType)
 import qualified Drasil.Shared.LanguageRenderer as R
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkStateVar, typeFromData, mkVar)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkStateVar,
+  typeFromData, mkVar)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
 import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd,
-  TypeData, FuncData)
+  TypeData, FuncData, Terminator(..))
 import Drasil.Shared.State (MS, VS, FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
@@ -224,7 +224,7 @@ printSt
 printSt va' vb' = do
   va <- zoom lensMStoVS va'
   vb <- zoom lensMStoVS vb'
-  mkStmt (R.print va vb)
+  stmtFromData (R.print va vb) Semi
 
 arrayDec
   :: ( TypeSym r TypeData
@@ -243,8 +243,8 @@ arrayDec n vr scp = do
   modify $ setVarScope (variableName v) (scopeData scp)
   let tp = variableType v
   innerTp <- zoom lensMStoVS $ innerType $ pure tp
-  mkStmt $ renderType tp <+> RC.variable v <+> equals <+> new' <+>
-    renderType innerTp <> brackets (RC.value sz)
+  stmtFromData (renderType tp <+> RC.variable v <+> equals <+> new' <+>
+    renderType innerTp <> brackets (RC.value sz)) Semi
 
 arrayDecDef
   :: ( IC.DeclStatement r bod stmt var scope val
@@ -256,7 +256,7 @@ arrayDecDef
 arrayDecDef v' scp vals' = do
   vs <- mapM (zoom lensMStoVS) vals'
   vd <- IC.varDec v' scp
-  mkStmt (RC.preStatement vd <+> equals <+> braces (valueList vs))
+  stmtFromData (RC.preStatement vd <+> equals <+> braces (valueList vs)) Semi
 
 openFileA
   ::
@@ -291,11 +291,11 @@ forEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
   b <- b'
-  mkStmtNoEnd $ vcat [
+  stmtFromData (vcat [
     forEachLabel <+> parens (renderType (variableType e) <+> RC.variable e <+>
       inLbl <+> RC.value v) <+> bStart,
     indent $ RC.body b,
-    bEnd]
+    bEnd]) Empty
 
 mainDesc, argsDesc :: String
 mainDesc = "Controls the flow of the program"
@@ -449,7 +449,7 @@ setDec
 setDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
-  mkStmt (RC.preStatement vd <> f sz)
+  stmtFromData (RC.preStatement vd <> f sz) Semi
 
 setMethodCall
   :: (TypeSym r typ, ValueSym r val typ, IG.InternalValueExp r var val typ)
@@ -611,7 +611,7 @@ funcDecDef v scp ps b = do
   f <- function (variableName vr) private (pure $ variableType vr)
     (IC.param <$> ps) b
   modify (L.set currParameters (s ^. currParameters))
-  mkStmtNoEnd $ RC.method f
+  stmtFromData (RC.method f) Empty
 
 inOutCall
   ::

@@ -55,9 +55,9 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   castObj, instanceLevel, break, continue, addComments, commentedMod,
   commentedItem, var)
 import Drasil.GOOL.Renderers (renderType)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
-  mkVal, mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec, multPrec, andPrec,
-  orPrec, inPrec, unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar,
+import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
+  mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec,
+  inPrec, unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar,
   typeFromData)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
@@ -583,8 +583,8 @@ instance CommentStatement PythonCode Statement where
   comment = G.comment pyCommentStart
 
 instance ControlStatement PythonCode Body Statement Variable Value where
-  break = mkStmtNoEnd R.break
-  continue = mkStmtNoEnd R.continue
+  break = stmtFromData R.break Empty
+  continue = stmtFromData R.continue Empty
 
   returnStmt = G.returnStmt Empty
 
@@ -601,14 +601,14 @@ instance ControlStatement PythonCode Body Statement Variable Value where
   while v' b' = do
     v <- zoom lensMStoVS v'
     b <- b'
-    mkStmtNoEnd (pyWhile v b)
+    stmtFromData (pyWhile v b) Empty
 
   tryCatch = G.tryCatch pyTryCatch
 
   assert condition errorMessage = do
       cond <- zoom lensMStoVS condition
       errMsg <- zoom lensMStoVS errorMessage
-      mkStmtNoEnd (pyAssert cond errMsg)
+      stmtFromData (pyAssert cond errMsg) Empty
 
 instance ObserverPattern PythonCode Statement TypeData where
   notifyObservers = M.notifyObservers'
@@ -943,7 +943,7 @@ pyPrint newLn f' p' v' = do
                RC.value s
         fl = emptyIfEmpty (RC.value f) $ listSep' <> text "file" <> equals
                <> RC.value f
-    mkStmtNoEnd $ RC.value prf <> parens (RC.value v <> nl <> fl)
+    stmtFromData (RC.value prf <> parens (RC.value v <> nl <> fl)) Empty
 
 pyOut
   ::

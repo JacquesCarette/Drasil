@@ -56,9 +56,9 @@ import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
   printFile, classVarAccess, cast, castObj, classLevel,
   instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
   commentedMod, commentedItem)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
-  mkStateVal, mkVal, typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr',
-  unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
+  typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl,
+  typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, obj, csc, sec, cot, negateOp, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
@@ -576,8 +576,8 @@ instance CommentStatement CSharpCode Statement where
   comment = G.comment commentStart
 
 instance ControlStatement CSharpCode Body Statement Variable Value where
-  break =  mkStmt R.break
-  continue =  mkStmt R.continue
+  break =  stmtFromData R.break Semi
+  continue =  stmtFromData R.continue Semi
 
   returnStmt = G.returnStmt Semi
 
@@ -601,7 +601,7 @@ instance ControlStatement CSharpCode Body Statement Variable Value where
     modify (addLangImport csDiagnostics)
     cond <- zoom lensMStoVS condition
     errMsg <- zoom lensMStoVS errorMessage
-    mkStmtNoEnd (csAssert cond errMsg)
+    stmtFromData (csAssert cond errMsg) Empty
 
 instance ObserverPattern CSharpCode Statement TypeData where
   notifyObservers = M.notifyObservers
@@ -854,9 +854,9 @@ csFuncDecDef v scp ps bod = do
     (pure $ variableType vr)
   b <- bod
   modify (addLangImport csSystem)
-  mkStmt $ renderType t <+> text (variableName vr) <+> equals <+>
+  stmtFromData (renderType t <+> text (variableName vr) <+> equals <+>
     parens (variableList pms) <+> csLambdaSep <+> bodyStart $$
-    indent (RC.body b) $$ bodyEnd
+    indent (RC.body b) $$ bodyEnd) Semi
 
 csThrowDoc :: CSharpCode Value -> Doc
 csThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>

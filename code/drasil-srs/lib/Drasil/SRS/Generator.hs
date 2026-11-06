@@ -51,8 +51,8 @@ genSmithEtAlSrs syst srsDecl srsFileName =
     traceyLayout
       | any isTraceSec srsDecl = mkGraphInfo syst'
       | otherwise = emptyGraphInfo
-    isTraceSec (TraceabilitySec _) = True
-    isTraceSec _                   = False
+    isTraceSec TraceabilitySec = True
+    isTraceSec _               = False
 
 -- | Internal: Render an SRS in a specified 'Format' and lay out artifacts into
 -- a `[FileLayout]`.

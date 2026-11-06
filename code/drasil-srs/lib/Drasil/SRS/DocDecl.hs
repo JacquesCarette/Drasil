@@ -28,6 +28,7 @@ import Drasil.Metadata.Documentation (assumpDom, funcReqDom, goalStmtDom,
 -- Other docLang
 import Drasil.SRS.DocumentLanguage.Core (DocDesc)
 import Drasil.SRS.DocumentLanguage.Definitions (Fields)
+import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard)
 import qualified Drasil.SRS.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   IntroSec(..), StkhldrSec(..), GSDSec(..), SSDSec(..), SSDSub(..),
   ProblemDescription(..), PDSub(..), SolChSpec(..), SCSSub(..), ReqrmntSec(..),
@@ -49,7 +50,7 @@ data DocSection = TableOfContents                       -- ^ Table of Contents
                 | ReqrmntSec ReqrmntSec                 -- ^ Requirements.
                 | LCsSec                                -- ^ Likely Changes.
                 | UCsSec                                -- ^ Unlikely Changes.
-                | TraceabilitySec DL.TraceabilitySec    -- ^ Traceability.
+                | TraceabilitySec                       -- ^ Traceability.
                 | AuxConstntSec DL.AuxConstntSec        -- ^ Auxiliary Constants.
                 | Bibliography                          -- ^ Bibliography.
                 | AppndxSec DL.AppndxSec                -- ^ Appendix.
@@ -124,7 +125,7 @@ mkDocDesc sys = fmap sec where
   sec (ReqrmntSec (ReqsProg r)) = DL.ReqrmntSec $ DL.ReqsProg $ reqSec <$> r
   sec LCsSec = DL.LCsSec $ DL.LCsProg $ fromConcInsDB likeChgDom
   sec UCsSec = DL.UCsSec $ DL.UCsProg $ fromConcInsDB unlikeChgDom
-  sec (TraceabilitySec t) = DL.TraceabilitySec t
+  sec TraceabilitySec = DL.TraceabilitySec $ DL.TraceabilityProg $ traceMatStandard sys
   sec (AuxConstntSec a) = DL.AuxConstntSec a
   sec Bibliography = DL.Bibliography
   sec (AppndxSec a) = DL.AppndxSec a

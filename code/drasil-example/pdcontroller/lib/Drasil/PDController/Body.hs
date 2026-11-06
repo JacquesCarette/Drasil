@@ -78,7 +78,7 @@ mkSRS
                Constraints EmptyS inputsUC]],
 
      ReqrmntSec $ ReqsProg [FReqsSub funcReqsTables, NonFReqsSub], LCsSec,
-     TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
+     TraceabilitySec, Bibliography]
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

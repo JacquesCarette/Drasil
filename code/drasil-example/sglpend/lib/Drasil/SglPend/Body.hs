@@ -74,7 +74,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     [ FReqsSub funcReqsTables
     , NonFReqsSub
     ],
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+  TraceabilitySec,
   AuxConstntSec $
      AuxConsProg [],  -- Adds Auxilliary constraint section
   Bibliography                    -- Adds reference section

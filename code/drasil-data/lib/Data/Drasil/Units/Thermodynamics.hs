@@ -25,3 +25,6 @@ heatTransferCoef = compoundUnit "heat transfer coefficient" (cn' "heat transfer 
 volHtGenU :: UnitDefn
 volHtGenU = compoundUnit "volHtGenU" (cn "volumetric heat generation")
   "the rate of heat energy generation per unit volume" (watt /: m_3)
+
+thermoUnits :: [UnitDefn]
+thermoUnits = [heatCapacity, heatCapSpec, thermalFlux, heatTransferCoef, volHtGenU]

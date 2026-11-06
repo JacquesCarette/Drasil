@@ -4,6 +4,7 @@ module Drasil.Projectile.Unitals (
   launAngleUnc, launSpeedUnc, targPosUnc, landPosUnc, offsetUnc, flightDurUnc
 ) where
 
+import Control.Lens ((^.))
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
@@ -30,12 +31,14 @@ outputs :: NE.NonEmpty DefinedQuantityDict
 outputs = dqdWr <$> offset :| [flightDur]
 
 projSpeed :: DefinedQuantityDict
-projSpeed = quant (mkUid "projSpeed") (nounPhraseSP "1D speed")
+projSpeed = quant (mkUid "projSpeed")
+  (compoundPhrase (nounPhraseSP (abrv oneD)) (speed ^. term))
   (short oneD +:+ phrase speed +:+ S "under" +:+ phrase constant +:+ phrase acceleration)
   (Concat [lV, label "(", lT, label ")"]) Real velU
 
 projPos :: DefinedQuantityDict
-projPos = quant (mkUid "projPos") (nounPhraseSP "1D position")
+projPos = quant (mkUid "projPos")
+  (compoundPhrase (nounPhraseSP (abrv oneD)) (position ^. term))
   (short oneD +:+ phrase position +:+ S "under" +:+ phrase constant +:+ phrase speed)
   (Concat [lP, label "(", lT, label ")"]) Real metre
 

@@ -27,7 +27,7 @@ import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
   OOValueExpression(..), objMethodCall, selfMethodCall, newObj,
   InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..))
+  OOMethodSym(..), attachmentTag)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -71,12 +71,12 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   listAccess, getFunc, setFunc, objDecNew, print, closeFile, ifCond, construct,
   param, method, getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
-  smartAdd)
+  smartAdd, varDecInit)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement, varDec,
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
   varDecDef, listDec, extObjDecNew, for, while, multiAssignError,
   multiReturnError, multiTypeError, setType)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
@@ -554,7 +554,12 @@ instance AssignStatement JavaCode Statement Variable Value where
     stmtFromData (R.decrement vr) Semi
 
 instance DeclStatement JavaCode Body Statement Variable ScopeData Value where
-  varDec = C.varDec classLevel instanceLevel empty
+  varDec v' scp = do
+    v <- zoom lensMStoVS v'
+    G.varDecInit v scp
+    stmtFromData
+      (unJC (attachmentTag (variableBind v)) <+> renderType (variableType v) <+> RC.variable v)
+      Semi
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef

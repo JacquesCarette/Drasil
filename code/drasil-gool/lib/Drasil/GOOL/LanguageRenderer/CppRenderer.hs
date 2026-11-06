@@ -26,7 +26,7 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, Class, ProgramSym(..),
   SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueExpression(..),
   selfMethodCall, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..), convTypeOO)
+  StrategyPattern(..), OOMethodSym(..), convTypeOO, attachmentTag)
 import Drasil.GOOL.Renderers (renderType, renderParam,)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
@@ -71,7 +71,8 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAccess, getFunc,
   setFunc, objDecNew, print, closeFile, ifCond, construct, param, method,
   getMethod, setMethod, function, buildClass, implementingClass, commentedClass,
-  modFromData, fileDoc, fileFromData, defaultOptSpace, local, smartAdd)
+  modFromData, fileDoc, fileFromData, defaultOptSpace, local, smartAdd,
+  varDecInit)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
@@ -81,7 +82,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   listAppend, innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement, varDec,
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
   setType, varDecDef, listDec, extObjDecNew, for, while, multiAssignError,
   multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
@@ -1468,12 +1469,16 @@ instance AssignStatement CppSrcCode Statement Variable Value where
 
 instance DeclStatement CppSrcCode Body Statement Variable ScopeData Value where
   -- TODO [Brandon Bosman, 05/29/2026]: consider re-enabling `varDec` for arrays
-  varDec vr scp = do
-    vr' <- zoom lensMStoVS vr
-    let tp = (cType . unCPPSC . variableType) vr'
+  varDec v' scp = do
+    v <- zoom lensMStoVS v'
+    let tp = (cType . unCPPSC . variableType) v
     case tp of
       (Array _) -> error "Can't use `varDec` for C++ arrays; use `arrayDec`"
-      _         -> C.varDec classLevel instanceLevel empty vr scp
+      _         -> do
+        G.varDecInit v scp
+        stmtFromData
+          (attachmentDoc (unCPPSC (attachmentTag (variableBind v))) <+> renderType (variableType v) <+> RC.variable v)
+          Semi
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef
@@ -2159,12 +2164,16 @@ instance AssignStatement CppHdrCode Statement Variable Value where
   (&--) _ = emptyStmt
 
 instance DeclStatement CppHdrCode Body Statement Variable ScopeData Value where
-  varDec vr scp = do
-    vr' <- zoom lensMStoVS vr
-    let tp = (cType . unCPPHC . variableType) vr'
+  varDec v' scp = do
+    v <- zoom lensMStoVS v'
+    let tp = (cType . unCPPHC . variableType) v
     case tp of
       (Array _) -> error "Can't use `varDec` for C++ arrays; use `arrayDec`"
-      _         -> C.varDec classLevel instanceLevel empty vr scp
+      _         -> do
+        G.varDecInit v scp
+        stmtFromData
+          (attachmentDoc (unCPPHC (attachmentTag (variableBind v))) <+> renderType (variableType v) <+> RC.variable v)
+          Semi
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef
@@ -2326,7 +2335,7 @@ instance MethodElim CppHdrCode MethodData where
 
 instance StateVarSym CppHdrCode StateVarData AttachmentData (Doc, VisibilityTag) Variable Value where
   stateVar s p v = do
-    dec <- zoom lensCStoMS $ C.varDec classLevel instanceLevel empty v local
+    dec <- zoom lensCStoMS $ varDec v local
     pure $ on2CodeValues svd (onCodeValue snd s)
       (toCode $ R.stateVar empty (RC.perm p) (statement dec))
   stateVarDef s p vr vl = do

@@ -27,7 +27,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, Class, StateVar, ProgramSym(..),
   selfMethodCall, newObj, InternalValueExp(..), objMethodCall,
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+  StrategyPattern(..), OOMethodSym(..), attachmentTag)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -69,7 +69,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   listAccess, getFunc, setFunc, objDecNew, print, closeFile, ifCond, construct,
   param, method, getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
-  smartAdd)
+  smartAdd, varDecInit)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
@@ -83,8 +83,8 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize',
-  statement, varDec, varDecDef, listDec, extObjDecNew, for, while,
-  multiAssignError, multiReturnError, multiTypeError)
+  statement, varDecDef, listDec, extObjDecNew, for, while, multiAssignError,
+  multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -529,8 +529,13 @@ instance AssignStatement CSharpCode Statement Variable Value where
     stmtFromData (R.decrement vr) Semi
 
 instance DeclStatement CSharpCode Body Statement Variable ScopeData Value where
-  varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $
-    C.varDec classLevel instanceLevel empty v scp)
+  varDec v' scp = do
+    v <- zoom lensMStoVS v'
+    G.varDecInit v scp
+    csVarDec (variableBind v) $
+      stmtFromData
+        (unCSC (attachmentTag (variableBind v)) <+> renderType (variableType v) <+> RC.variable v)
+        Semi
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef

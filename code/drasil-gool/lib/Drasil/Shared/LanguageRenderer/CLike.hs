@@ -2,8 +2,8 @@
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, listSize',
-  statement, varDecDef, setDecDef, listDec, extObjDecNew, for, while,
-  multiAssignError, multiReturnError, multiTypeError
+  statement, setDecDef, listDec, extObjDecNew, for, while, multiAssignError,
+  multiReturnError, multiTypeError
 ) where
 
 import Drasil.FileHandling.Legacy (indent)
@@ -147,19 +147,6 @@ listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
 statement :: (RC.StatementElim r stmt, RC.StatementTerm r stmt) => r stmt -> Doc
 statement st = RC.preStatement st <> getTerm (RC.statementTerm st)
-
--- TODO [Brandon Bosman, 11/04/2026]: Split this up
-varDecDef
-  :: ( IC.DeclStatement r bod stmt var scope val
-     , RC.RenderStatement r stmt
-     , RC.StatementElim r stmt
-     , ValueElim r val
-     )
-  => Terminator -> VS (r var) -> r scope -> VS (r val) -> MS (r stmt)
-varDecDef t vr scp vl' = do
-  vd <- IC.varDec vr scp
-  vl <- zoom lensMStoVS vl'
-  stmtFromData (RC.preStatement vd <+> equals <+> RC.value vl) t
 
 -- TODO [Brandon Bosman, 11/04/2026]: Split this up
 setDecDef

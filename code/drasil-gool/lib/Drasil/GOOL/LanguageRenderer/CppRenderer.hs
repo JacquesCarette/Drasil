@@ -83,8 +83,8 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
-  setType, varDecDef, listDec, extObjDecNew, for, while, multiAssignError,
-  multiReturnError, multiTypeError)
+  setType, listDec, extObjDecNew, for, while, multiAssignError, multiReturnError,
+  multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
@@ -1479,7 +1479,10 @@ instance DeclStatement CppSrcCode Body Statement Variable ScopeData Value where
         stmtFromData
           (attachmentDoc (unCPPSC (attachmentTag (variableBind v))) <+> renderType (variableType v) <+> RC.variable v)
           Semi
-  varDecDef = C.varDecDef Semi
+  varDecDef vr scp vl' = do
+    vDec <- varDec vr scp
+    vl <- zoom lensMStoVS vl'
+    stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Semi
   setDec = varDec
   setDecDef = varDecDef
   listDec n = C.listDec cppListDecDoc (litInt n)
@@ -2174,7 +2177,10 @@ instance DeclStatement CppHdrCode Body Statement Variable ScopeData Value where
         stmtFromData
           (attachmentDoc (unCPPHC (attachmentTag (variableBind v))) <+> renderType (variableType v) <+> RC.variable v)
           Semi
-  varDecDef = C.varDecDef Semi
+  varDecDef vr scp vl' = do
+    vDec <- varDec vr scp
+    vl <- zoom lensMStoVS vl'
+    stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Semi
   setDec = varDec
   setDecDef = varDecDef
   listDec _ _ _ = emptyStmt

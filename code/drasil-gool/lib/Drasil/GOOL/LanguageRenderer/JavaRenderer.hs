@@ -77,8 +77,8 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
-  varDecDef, listDec, extObjDecNew, for, while, multiAssignError,
-  multiReturnError, multiTypeError, setType)
+  listDec, extObjDecNew, for, while, multiAssignError, multiReturnError,
+  multiTypeError, setType)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -560,7 +560,10 @@ instance DeclStatement JavaCode Body Statement Variable ScopeData Value where
     stmtFromData
       (unJC (attachmentTag (variableBind v)) <+> renderType (variableType v) <+> RC.variable v)
       Semi
-  varDecDef = C.varDecDef Semi
+  varDecDef vr scp vl' = do
+    vDec <- varDec vr scp
+    vl <- zoom lensMStoVS vl'
+    stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Semi
   setDec = varDec
   setDecDef = varDecDef
   listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (renderListDec v')

@@ -19,7 +19,7 @@ import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..), ProgData,
 import Drasil.GProc (unJLC, unMLC, ProcProg, NativeVector)
 import Language.Drasil (Space(..), Expr)
 import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
-  generator, readWithDataDesc, sampleInputDD, mkCodeSpec,
+  generator, readWithDataDesc, sampleInputDD,
   Architecture(impType, modularity),
   Choices(Choices, maps, lang, architecture, optFeats, dataInfo),
   ConstantRepr(..), ConstantStructure(..),
@@ -32,6 +32,8 @@ import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
   PackageData, SoftwareDossierSym)
 import Drasil.SRS (SmithEtAlSRS)
 import Drasil.System (HasProjectName(..))
+
+import Drasil.Generator.Code.CodeSpec (srs2CodeSpec)
 
 -- | Generate an ICO-style executable software artifact.
 genCode :: SmithEtAlSRS -> Choices -> IO FileLayout
@@ -80,7 +82,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
       pure $ generateCodeProc lng unProgRepr unPackRepr $ generator lng time samples chs spec
 
     spec :: CodeSpec
-    spec = mkCodeSpec syst chs
+    spec = srs2CodeSpec syst chs
 
     readSampleData :: IO [Expr]
     readSampleData =

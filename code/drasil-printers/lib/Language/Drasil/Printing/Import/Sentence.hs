@@ -5,14 +5,14 @@ import Control.Lens ((^.))
 import Data.Char (toUpper)
 import Data.Maybe (fromMaybe)
 
-import Drasil.Database (UID)
-import Drasil.Database.SearchTools (termResolve', TermAbbr(..), refResolve)
+import Drasil.Database (UID, UIDRef, TypeableChunk, raw, findOrErr)
+import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 import Language.Drasil (Sentence(..), NP, NounPhrase(..), (+:+), sParen,
   atStartNP, atStartNP', titleizeNP, titleizeNP', foldNums, checkValidStr,
   SentenceStyle(..), TermCapitalization(..), RefInfo(..))
 import Language.Drasil.Development (toSent)
-import Language.Drasil.Document (Reference(..), IRefProg(..), LblType(..),
-  ShortName, getSentSN)
+import Language.Drasil.Document (IRefProg(..), LblType(..), ShortName,
+  getSentSN, HasRefAddress(..), HasShortName(..))
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, sysdb)
 import Language.Drasil.Printing.Import.ExprCommon (lookupSymb)
@@ -41,27 +41,27 @@ spec sm (Ch ShortStyle caps s)  = P.Tooltip (spec sm $ lookupT
 
 spec sm (Ch TermStyle caps s)   = spec sm $ lookupT sm s caps
 spec sm (Ch PluralTerm caps s) = spec sm $ lookupP sm s caps
-spec sm (Ref u EmptyS notes)    =
-  case refResolve (sm ^. sysdb) u of
-    (Reference _ (RP rp ra) sn) ->
-      P.Ref P.Internal ra (spec sm $ renderShortName sm rp sn)
-    (Reference _ (Citation ra) _) ->
-      P.Ref (P.Cite2 (spec sm (renderCitInfo notes)))    ra (spec sm $ S ra)
-    (Reference _ (URI ra) sn) ->
-      P.Ref P.External    ra (spec sm $ getSentSN sn)
-spec sm (Ref u dName notes) =
-  case refResolve (sm ^. sysdb) u of
-    (Reference _ (RP _ ra) _) ->
-      P.Ref P.Internal ra (spec sm dName)
-    (Reference _ (Citation ra) _) ->
-      P.Ref (P.Cite2 (spec sm (renderCitInfo notes)))   ra (spec sm dName)
-    (Reference _ (URI ra) _) ->
-      P.Ref P.External    ra (spec sm dName)
+spec sm (Ref u dName notes)     = specRef sm u dName notes
 spec sm (Quote q)          = P.Quote $ spec sm q
 spec _  EmptyS             = P.EmptyS
 spec sm (E e)              = P.E $ modelExpr e sm
 
 -- * Helpers
+
+-- | Renders a reference to a chunk, found in the 'ChunkDB' by its typed
+-- 'UIDRef'. Displays the given name, or a default one if it is empty.
+specRef :: forall t. (TypeableChunk t, HasRefAddress t, HasShortName t) =>
+  PrintingInformation -> UIDRef t -> Sentence -> RefInfo -> P.Spec
+specRef sm u dName notes = case getRefAdd c of
+    RP rp ra    -> P.Ref P.Internal ra $ spec sm $ named $ renderShortName sm rp sn
+    Citation ra -> P.Ref (P.Cite2 $ spec sm $ renderCitInfo notes) ra $ spec sm $ named $ S ra
+    URI ra      -> P.Ref P.External ra $ spec sm $ named $ getSentSN sn
+  where
+    c = findOrErr (raw u) (sm ^. sysdb) :: t
+    sn = shortname c
+    named d = case dName of
+      EmptyS -> d
+      _      -> dName
 
 -- | Renders the shortname of a reference/domain.
 renderShortName :: PrintingInformation -> IRefProg -> ShortName -> Sentence

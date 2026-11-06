@@ -49,4 +49,4 @@ dRef r = dRefInfo r None
 -- | Wraps a reference to the decorated chunk, along with its extra
 -- information, into a 'Sentence'.
 decRefS :: DecRef -> Sentence
-decRefS (DR r i) = Ref (raw r) EmptyS i
+decRefS (DR r i) = Ref r EmptyS i

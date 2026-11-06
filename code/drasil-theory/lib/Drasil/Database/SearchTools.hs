@@ -10,7 +10,6 @@ module Drasil.Database.SearchTools (
   -- * Resolvers
   termResolve, termResolve',
   defResolve, defResolve',
-  refResolve,
   findAllConcInsts
 ) where
 
@@ -67,22 +66,6 @@ defResolve f db trg
 
 defResolve' :: ChunkDB -> UID -> DomDefn
 defResolve' = defResolve DomDefn
-
--- | Looks up a 'UID' in a 'ChunkDB' with a /referrable/ handle.
-refResolve :: ChunkDB -> UID -> Reference
-refResolve db trg
-  | (Just c) <- find trg db :: Maybe DataDefinition      = ref c
-  | (Just c) <- find trg db :: Maybe InstanceModel       = ref c
-  | (Just c) <- find trg db :: Maybe GenDefn             = ref c
-  | (Just c) <- find trg db :: Maybe TheoryModel         = ref c
-  | (Just c) <- find trg db :: Maybe ConceptInstance     = ref c
-  | (Just c) <- find trg db :: Maybe LabelledContent     = ref c
-  | (Just c) <- find trg db :: Maybe Citation            = ref c
-  | (Just c) <- find trg db :: Maybe Section             = ref c
-  -- FIXME: When URIs are made not-`Reference`-types, we can (should) remove the
-  -- below `Just` case.
-  | (Just c) <- find trg db :: Maybe Reference           = c
-  | otherwise = error $ "Reference for `" <> show trg <> "` not found."
 
 findAllConcInsts :: ChunkDB -> [ConceptInstance]
 findAllConcInsts = findAll

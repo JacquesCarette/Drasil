@@ -25,10 +25,8 @@ module Drasil.SRS (
   -- Drasil.DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..), ddefn,
   -- ** Traceability
-  -- Drasil.DocumentLanguage.TraceabilityGraph
-  mkGraphInfo, traceyGraphGetRefs,
   -- Drasil.Sections.TraceabilityMandGs
-  traceMatStandard, traceMatOtherReq,
+  traceMatStandard,
   -- ** Auxiliary Constants
   -- Drasil.Sections.AuxiliaryConstants
   tableOfConstants,
@@ -62,7 +60,6 @@ import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   TSIntro(..), TUIntro(..), PurposeDescription(..))
 import Drasil.SRS.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
-import Drasil.SRS.DocumentLanguage.TraceabilityGraph (mkGraphInfo, traceyGraphGetRefs)
 import Drasil.SRS.Sections.AuxiliaryConstants (tableOfConstants)
 import Drasil.SRS.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing)
 import Drasil.SRS.Sections.Requirements (mkInputPropsTable,
@@ -71,7 +68,7 @@ import Drasil.SRS.Sections.Requirements (mkInputPropsTable,
 import Drasil.SRS.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)
 import Drasil.SRS.Sections.TableOfSymbols (tsymb, tsymb'')
 import Drasil.SRS.Sections.TableOfUnits (unitTableRef, tunit, tunit',tunitNone)
-import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
+import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard)
 
 import Drasil.SRS.Generator
 import Drasil.SRS.Generator.Formats

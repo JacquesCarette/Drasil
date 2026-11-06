@@ -22,8 +22,8 @@ import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (annealedGl, aspectRatioCon, fTemperedGl, glTyFac,
   hStrengthGl, loadResis, loadShareFac, nonFactoredL, stdOffDist, loadDurFac, blast,
-  blastResisGla, blastTy, bomb, capacity, demandq, eqTNTChar, explosion, glassGeo,
-  glassWL, glBreakage, lateral, lite, load, longDurLoad, modE, notSafe,
+  blastResisGla, blastTy, bomb, demandq, eqTNTChar, explosion, glassGeo,
+  glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe,
   safeMessage, shortDurLoad, specA, specDeLoad, glassType)
 import Drasil.GlassBR.Units (sFlawPU)
 
@@ -221,14 +221,16 @@ tmDemand    = dqd load (variable "Load") Real pascal --correct Space used?
 
 lRe         = dqd loadResis (variable "LR") Real pascal --correct Space used?
 
-tmLRe       = dqd capacity (variable "capacity") Real pascal --correct Space used?
+tmLRe       = quant (mkUid "capacity") (nounPhraseSP "capacity or load resistance")
+  (S "load resistance calculated") (variable "capacity") Real pascal --correct Space used?
 
 nonFactorL  = dqd nonFactoredL (variable "NFL") Real pascal --correct Space used?
 
 eqTNTWeight = dqd eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real
   kilogram
 
-modElas     = dqd modE cE Real pascal
+modElas     = quant (mkUid "modElas") (nounPhraseSP "modulus of elasticity of glass")
+  (S "the ratio of tensile stress to tensile strain of glass") cE Real pascal
 
 minThick    = quant (mkUid "minThick") (nounPhraseSP "minimum thickness")
   (S "minimum thickness of the glass plate") lH Real metre

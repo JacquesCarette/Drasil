@@ -6,8 +6,8 @@ module Drasil.GlassBR.Concepts (
   -- * ConceptChunks
   annealedGl, aspectRatioCon, fTemperedGl, glTyFac, hStrengthGl, loadDurFac,
   loadResis, loadShareFac, nonFactoredL, stdOffDist, blast, blastResisGla,
-  blastTy, bomb, capacity, demandq, eqTNTChar, explosion, glassGeo, glassTy,
-  glassWL, glBreakage, lateral, lite, load, longDurLoad, modE, notSafe, probBreak,
+  blastTy, bomb, demandq, eqTNTChar, explosion, glassGeo, glassTy,
+  glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe, probBreak,
   safeMessage, shortDurLoad, specA, specDeLoad,
 
   -- * CIs
@@ -50,8 +50,8 @@ glaPlane   = compoundNC glass plane
 responseTy = compoundNC response type_
 
 annealedGl, aspectRatioCon, fTemperedGl, glTyFac, hStrengthGl, loadDurFac, loadResis, loadShareFac,
-  nonFactoredL, stdOffDist, blast, blastResisGla, blastTy, bomb, capacity, demandq, eqTNTChar, explosion,
-  glassGeo, glassTy, glassWL, glBreakage, lateral, lite, load, longDurLoad, modE, notSafe, probBreak,
+  nonFactoredL, stdOffDist, blast, blastResisGla, blastTy, bomb, demandq, eqTNTChar, explosion,
+  glassGeo, glassTy, glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe, probBreak,
   safeMessage, shortDurLoad, specA, specDeLoad :: ConceptChunk
 
 annealedGl  = cncpt'' (mkUid "annealedGl")
@@ -135,8 +135,6 @@ blastTy       = cncpt''' (mkUid "blastTy")       (cn'          "blast type")
   (S "the blast type input includes parameters like weight of charge, TNT equivalent factor, and stand off distance from the point of explosion")
 bomb          = cncpt''' (mkUid "bomb")          (cn'          "bomb")
   (S "a container filled with a destructive substance designed to exlode on impact or via detonation")
-capacity      = cncpt''' (mkUid "capacity")      (nounPhraseSP "capacity or load resistance")
-  (S "load resistance calculated")
 demandq       = cncpt''' (mkUid "demandq")       (nounPhraseSP "applied load (demand)")
   (S "3 second duration equivalent pressure")
 eqTNTChar     = cncpt''' (mkUid "eqTNTChar")     (nounPhraseSP "equivalent TNT charge mass")
@@ -160,8 +158,6 @@ load          = cncpt''' (mkUid "load")          (nounPhraseSP "applied load (de
   (S "a uniformly distributed lateral pressure")
 longDurLoad   = cncpt''' (mkUid "longDurLoad")   (nounPhraseSP "long duration load")
   (S "any load lasting approximately 30 days")
-modE          = cncpt''' (mkUid "modElas")       (nounPhraseSP "modulus of elasticity of glass")
-  (S "the ratio of tensile stress to tensile strain of glass")
 notSafe       = cncpt''' (mkUid "notSafe")       (nounPhraseSP "not safe")
   (S "For the given input parameters, the glass is NOT considered safe.")
 probBreak     = cncpt''' (mkUid "probBr")        (nounPhraseSP "probability of breakage")

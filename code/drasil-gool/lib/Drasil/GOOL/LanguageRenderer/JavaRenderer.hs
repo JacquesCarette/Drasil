@@ -58,7 +58,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   classLevel, instanceLevel, break, continue, private, public, blockCmt, docCmt,
   addComments, commentedMod, commentedItem)
 import Drasil.GOOL.Renderers (renderType, renderParam, renderListDec)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
+import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl,
   typeUnExpr, binExpr, binExprNumDbl', typeBinExpr, typeFromData)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
@@ -587,7 +587,7 @@ instance StringStatement JavaCode Statement Variable Value where
     modify (addLangImport $ utilImport jArrays)
     ss <- zoom lensMStoVS $
       jStringSplit vnew (jAsListFunc string [s $. jSplitFunc d])
-    mkStmt ss
+    stmtFromData ss Semi
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
@@ -603,8 +603,8 @@ instance CommentStatement JavaCode Statement where
   comment = G.comment commentStart
 
 instance ControlStatement JavaCode Body Statement Variable Value where
-  break = mkStmt R.break
-  continue = mkStmt R.continue
+  break = stmtFromData R.break Semi
+  continue = stmtFromData R.continue Semi
 
   returnStmt = G.returnStmt Semi
 
@@ -625,7 +625,7 @@ instance ControlStatement JavaCode Body Statement Variable Value where
   assert condition errorMessage = do
     cond <- zoom lensMStoVS condition
     errMsg <- zoom lensMStoVS errorMessage
-    mkStmt (jAssert cond errMsg)
+    stmtFromData (jAssert cond errMsg) Semi
 
 instance ObserverPattern JavaCode Statement TypeData where
   notifyObservers = M.notifyObservers
@@ -945,8 +945,8 @@ jConstDecDef v' scp def' = do
   def <- zoom lensMStoVS def'
   modify $ useVarName $ variableName v
   modify $ setVarScope (variableName v) (scopeData scp)
-  mkStmt $ jFinal <+> renderType (variableType v) <+>
-    RC.variable v <+> equals <+> RC.value def
+  stmtFromData (jFinal <+> renderType (variableType v) <+>
+    RC.variable v <+> equals <+> RC.value def) Semi
 
 jFuncDecDef
   :: VS (JavaCode Variable)
@@ -960,9 +960,9 @@ jFuncDecDef v scp ps bod = do
   modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
-  mkStmt $ renderType (variableType vr) <+> RC.variable vr <+> equals <+>
+  stmtFromData (renderType (variableType vr) <+> RC.variable vr <+> equals <+>
     parens (variableList pms) <+> jLambdaSep <+> bodyStart $$ indent (RC.body b)
-    $$ bodyEnd
+    $$ bodyEnd) Semi
 
 jThrowDoc :: (ValueElim r val) => r val -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>

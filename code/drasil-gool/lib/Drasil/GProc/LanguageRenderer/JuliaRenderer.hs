@@ -49,7 +49,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
   subAssign, addAssign)
 import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
-  typeBinExpr, mkStmtNoEnd, typeFromData)
+  typeBinExpr, typeFromData)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
@@ -528,8 +528,8 @@ instance CommentStatement JuliaCode Statement where
   comment = G.comment jlCmtStart
 
 instance ControlStatement JuliaCode Body Statement Variable Value where
-  break = mkStmtNoEnd R.break
-  continue = mkStmtNoEnd R.continue
+  break = stmtFromData R.break Empty
+  continue = stmtFromData R.continue Empty
   returnStmt = G.returnStmt Empty
   throw = G.throw jlThrow Empty
   ifCond = G.ifCond id empty jlSpace elseIfLabel empty jlEnd
@@ -543,7 +543,7 @@ instance ControlStatement JuliaCode Body Statement Variable Value where
   assert condition errorMessage = do
     cond <- zoom lensMStoVS condition
     errMsg <- zoom lensMStoVS errorMessage
-    mkStmtNoEnd (jlAssert cond errMsg)
+    stmtFromData (jlAssert cond errMsg) Empty
 
 instance VisibilitySym JuliaCode Doc where
 
@@ -674,7 +674,7 @@ jlAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
-  mkStmtNoEnd $ jlGlobalDec scpData <+> R.assign vr v
+  stmtFromData (jlGlobalDec scpData <+> R.assign vr v) Empty
 
 jlSubAssign
   :: VS (JuliaCode Variable)
@@ -684,7 +684,7 @@ jlSubAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
-  mkStmtNoEnd $ jlGlobalDec scpData <+> R.subAssign vr v
+  stmtFromData (jlGlobalDec scpData <+> R.subAssign vr v) Empty
 
 jlIncrement
   :: VS (JuliaCode Variable)
@@ -694,7 +694,7 @@ jlIncrement vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
-  mkStmtNoEnd $ jlGlobalDec scpData <+> R.addAssign vr v
+  stmtFromData (jlGlobalDec scpData <+> R.addAssign vr v) Empty
 
 jlGlobalDec :: ScopeData -> Doc
 jlGlobalDec scp = if scopeTag scp == Global then jlGlobal else empty
@@ -714,7 +714,7 @@ jlConstDecDef v' scp def' = do
   modify $ useVarName $ variableName v
   modify $ setVarScope (variableName v) scpData
   let decDoc = if scopeTag scpData == Global then R.constDec' else empty
-  mkStmtNoEnd $ decDoc <+> RC.variable v <+> equals <+> RC.value def
+  stmtFromData (decDoc <+> RC.variable v <+> equals <+> RC.value def) Empty
 
 -- List API
 jlListSize, jlListAdd, jlListAppend, jlListAbsdex :: Label
@@ -1013,7 +1013,7 @@ jlPrint _ f' p' v' = do
   prf <- zoom lensMStoVS p' -- The print function to use
   v <- zoom lensMStoVS v' -- The value to print
   let fl = emptyIfEmpty (RC.value f) $ RC.value f <> listSep'
-  mkStmtNoEnd $ RC.value prf <> parens (fl <> RC.value v)
+  stmtFromData (RC.value prf <> parens (fl <> RC.value v)) Empty
 
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut

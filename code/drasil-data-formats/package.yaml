@@ -16,7 +16,6 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- prettyprinter
 - scientific
 - text
 - containers
@@ -25,8 +24,11 @@ ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 
 library:
+  dependencies:
+  - prettyprinter
   source-dirs: lib
   exposed-modules:
   - Drasil.Data.Formats.CSV

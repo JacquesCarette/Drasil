@@ -16,7 +16,6 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- Decimal
 - lens
 - containers
 - pretty
@@ -38,6 +37,7 @@ ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 
 library:
   source-dirs: lib

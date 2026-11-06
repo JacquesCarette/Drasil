@@ -25,6 +25,7 @@ dependencies:
 ghc-options:
 - -Wall
 - -Wredundant-constraints
+- -Wunused-packages
 
 library:
   source-dirs: lib

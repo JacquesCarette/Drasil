@@ -80,7 +80,7 @@ mkSRS = [TableOfContents,
     ],
   LCsSec,
   UCsSec,
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+  TraceabilitySec,
   AuxConstntSec $
      AuxConsProg constants,
   Bibliography]

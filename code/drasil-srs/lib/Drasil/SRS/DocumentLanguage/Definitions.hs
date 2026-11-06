@@ -135,7 +135,7 @@ helpToRefField trg db
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.
 helperSources :: [DecRef] -> [Contents]
 helperSources [] = [mkParagraph $ S "--"]
-helperSources rs  = [mkParagraph $ foldlList Comma List $ (\r -> Ref (r ^. uid) EmptyS $ refInfo r) <$> rs]
+helperSources rs  = [mkParagraph $ foldlList Comma List $ decRefS <$> rs]
 
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
 mkDDField :: DataDefinition -> SmithEtAlSRS -> Field -> ModRow -> ModRow

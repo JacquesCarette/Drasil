@@ -8,9 +8,9 @@ module Language.Drasil.Development (
   -- * NounPhrase.Core
   , NPStruct
   -- Sentence.Extract
-  , sdep, shortdep, lnames, lnames'
+  , sdep, shortdep, lnames
 ) where
 
 import Language.Drasil.Development.Sentence (toSent)
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NounPhrase(..), NPStruct)
-import Language.Drasil.Sentence (sdep, shortdep, lnames, lnames')
+import Language.Drasil.Sentence (sdep, shortdep, lnames)

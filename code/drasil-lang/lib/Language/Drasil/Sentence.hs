@@ -11,7 +11,7 @@ module Language.Drasil.Sentence (
   (+:+), (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
   sentenceTerm,
-  sdep, shortdep, lnames, lnames'
+  sdep, shortdep, lnames
 ) where
 
 import Data.Char (toUpper)
@@ -228,11 +228,6 @@ lnames Quote {}    = Set.empty
 lnames E {}        = Set.empty
 lnames EmptyS      = Set.empty
 {-# INLINE lnames #-}
-
--- | Get /reference/ 'UID's from 'Sentence's.
-lnames' :: [Sentence] -> [UID]
-lnames' = concatMap (Set.toList . lnames)
-{-# INLINE lnames' #-}
 
 instance HasChunkRefs Sentence where
   chunkRefs s = Set.unions [lnames s, sdep s, shortdep s]

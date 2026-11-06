@@ -7,7 +7,7 @@ module Drasil.Database.ChunkDB (
   findUnused,
   find, findOrErr,
   findAll, findAll',
-  dependants, dependantsOrErr, allDependants,
+  dependencies, dependants, dependantsOrErr, allDependants,
   findTypeOf,
   insert, insertAll,
   -- * Temporary functions
@@ -97,6 +97,12 @@ findAll cdb = foldMap (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
 -- rather than the chunks themselves.
 findAll' :: TypeRep -> ChunkDB -> [UID]
 findAll' tr cdb = foldMap (fmap (^. uid)) $ M.lookup tr (chunkTypeTable cdb)
+
+-- | Find all dependencies of a specific chunk.
+dependencies :: UID -> ChunkDB -> Maybe (S.Set UID)
+dependencies u cdb = do
+  (c, _) <- M.lookup u (chunkTable cdb)
+  Just $ chunkRefs c
 
 -- | Find all chunks that depend on a specific one.
 dependants :: UID -> ChunkDB -> Maybe [UID]

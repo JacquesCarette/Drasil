@@ -1,6 +1,7 @@
 -- | Defines functions to create traceability graphs in SRS documents.
 module Drasil.SRS.DocumentLanguage.TraceabilityGraph
-  (traceMGF, traceyGraphGetRefs, genTraceGraphLabCons, mkGraphInfo, resourcePath) where
+  (traceMGF, traceyGraphGetRefs, genTraceGraphLabCons, mkGraphInfo,
+  emptyGraphInfo, resourcePath) where
 
 -- Haskell stuff
 import Control.Lens ((^.))
@@ -23,8 +24,8 @@ import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..))
 
 -- from docLang itself, i.e. other Document information
 import Drasil.SRS.DocumentLanguage.Definitions (TraceViewCat)
-import Drasil.SRS.DocumentLanguage.TraceabilityMatrix (traceMReferees, traceMReferrers,
-  traceMColumns, layoutUIDs, traceMIntro)
+import Drasil.SRS.DocumentLanguage.TraceabilityMatrix (traceMColumns, layoutUIDs,
+  traceMIntro)
 import qualified Drasil.SRS.Concepts as SRS
 import Drasil.SRS.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
@@ -73,6 +74,18 @@ mkGraphInfo si = GI {
     , edgesAllvsAll = mkGraphEdges [tvAssumps, tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvGoals, tvChanges] [tvAssumps, tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvGoals, tvChanges] si
 }
 
+-- | Traceability graph information without any nodes or edges, for documents
+-- without a traceability section.
+emptyGraphInfo :: GraphInfo
+emptyGraphInfo = GI
+  { assumpNF = noNodes, ddNF = noNodes, gdNF = noNodes, tmNF = noNodes
+  , imNF = noNodes, reqNF = noNodes, gsNF = noNodes, chgNF = noNodes
+  , edgesAvsA = [], edgesAvsAll = [], edgesRefvsRef = [], edgesAllvsR = []
+  , edgesAllvsAll = []
+  }
+  where
+    noNodes = NF {nodeUIDs = [], nodeLabels = [], nfLabel = "", nfColour = ""}
+
 -- * Helper Functions
 
 -- | Gets the node family of a graph based on the given section
@@ -85,17 +98,16 @@ mkGraphNodes entry si col = NF {nodeUIDs = nodeContents,
         checkNodeContents :: [UID] -> String
         checkNodeContents [] = ""
         checkNodeContents (x:_) = checkUIDAbbrev s x
-        nodeContents = traceMReferees entryF si
-        entryF = layoutUIDs [entry] si
+        nodeContents = entry si
         s = si ^. systemdb
 
 -- | Creates the graph edges based on the relation of the first list of sections to the second.
 -- Also needs the system information. Return value is of the form (Section, [Dependencies]).
 mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> SmithEtAlSRS -> [(UID, [UID])]
-mkGraphEdges cols rows si = makeTGraph (traceGRowHeader rowf si) (traceMColumns colf rowf si) $ traceMReferees colf si
+mkGraphEdges cols rows si = makeTGraph (traceGRowHeader rowUIDs si) (traceMColumns colUIDs rowUIDs si) colUIDs
     where
-        colf = layoutUIDs cols si
-        rowf = layoutUIDs rows si
+        colUIDs = layoutUIDs cols si
+        rowUIDs = layoutUIDs rows si
 
 -- | Helper for making graph edges. Taken from Utils.Drasil's traceability matrix relation finder.
 -- But, instead of marking "X" on two related ideas, it makes them an edge.
@@ -135,16 +147,10 @@ checkUIDRefAdd s t
     <> "` is neither a DD/IM/GD/TM/ConceptInstance or non-existent. It should "
     <> "not have been attempted to be displayed in a traceability graph."
 
--- | Helper that finds the header of a traceability matrix.
--- However, here we use this to get a list of 'UID's for a traceability graph instead.
-traceGHeader :: (SmithEtAlSRS -> [UID]) -> SmithEtAlSRS -> [UID]
-traceGHeader f c = (`checkUID` (c ^. systemdb)) <$> f c
-
--- | Helper that finds the headers of the traceability matrix rows.
--- However, here we use this to get a list of 'UID's for a traceability graph instead.
+-- | Helper that checks the row 'UID's of a traceability graph are registered.
 -- This is then used to create the graph edges.
-traceGRowHeader :: ([UID] -> [UID]) -> SmithEtAlSRS -> [UID]
-traceGRowHeader f = traceGHeader (traceMReferrers f)
+traceGRowHeader :: [UID] -> SmithEtAlSRS -> [UID]
+traceGRowHeader us c = (`checkUID` (c ^. systemdb)) <$> us
 
 -- FIXME: Should take a Reference instead of just a Reference UID
 -- | Helper that makes references of the form "@reference@ shows the dependencies of @something@". Only takes a reference `UID` instead of a `Reference`.

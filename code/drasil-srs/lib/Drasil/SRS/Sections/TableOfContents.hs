@@ -88,108 +88,112 @@ mkHeaderItem hdr itm = Nested hdr $ Bullet $ (\x -> (Flat x, Nothing)) <$> itm
 mkHeaderItem' :: Sentence -> [ItemType] -> ItemType
 mkHeaderItem' hdr itm = Nested hdr $ Bullet $ (, Nothing) <$> itm
 
+-- | Links to the standard SRS section made by the given section constructor.
+secRef :: ([Contents] -> [Section] -> Section) -> Sentence -> Sentence
+secRef mkSec = namedRef (mkSec [] [])
+
 -- | Helper for creating the 'Table of Contents' section ToC entry
 mktToCSec :: ItemType
-mktToCSec = Flat $ namedRef SRS.tOfContLabel $ titleize' tOfCont
+mktToCSec = Flat $ secRef SRS.tOfCont $ titleize' tOfCont
 
 -- | Helper for creating the 'Reference Material' section ToC entry
 mktRefSec :: RefSec -> ItemType
 mktRefSec (RefProg _ l) =
-  mkHeaderItem (namedRef SRS.refMatLabel $ titleize refMat) $ mktSubRef <$> l
+  mkHeaderItem (secRef SRS.refMat $ titleize refMat) $ mktSubRef <$> l
   where
     mktSubRef :: RefTab -> Sentence
-    mktSubRef TUnits        = namedRef SRS.tOfUnitLabel   $ titleize' Doc.tOfUnit
-    mktSubRef (TUnits' _ _) = namedRef SRS.tOfUnitLabel   $ titleize' Doc.tOfUnit
-    mktSubRef (TSymb _)     = namedRef SRS.tOfSymbLabel   $ titleize' Doc.tOfSymb
-    mktSubRef (TSymb' _ _)  = namedRef SRS.tOfSymbLabel   $ titleize' Doc.tOfSymb
-    mktSubRef TAandA        = namedRef SRS.tOfAbbAccLabel $ titleize' Doc.abbAcc
+    mktSubRef TUnits        = secRef SRS.tOfUnit   $ titleize' Doc.tOfUnit
+    mktSubRef (TUnits' _ _) = secRef SRS.tOfUnit   $ titleize' Doc.tOfUnit
+    mktSubRef (TSymb _)     = secRef SRS.tOfSymb   $ titleize' Doc.tOfSymb
+    mktSubRef (TSymb' _ _)  = secRef SRS.tOfSymb   $ titleize' Doc.tOfSymb
+    mktSubRef TAandA        = secRef SRS.tOfAbbAcc $ titleize' Doc.abbAcc
 
 -- | Helper for creating the 'Introduction' section ToC entry
 mktIntroSec :: IntroSec -> ItemType
 mktIntroSec (IntroProg _ _ l) =
-  mkHeaderItem (namedRef SRS.introLabel $ titleize Doc.introduction) $ mktSubIntro <$> l
+  mkHeaderItem (secRef SRS.intro $ titleize Doc.introduction) $ mktSubIntro <$> l
   where
     mktSubIntro :: IntroSub -> Sentence
-    mktSubIntro (IPurpose _) = namedRef SRS.docPurposeLabel  $ titleize Doc.prpsOfDoc
-    mktSubIntro (IScope _)   = namedRef SRS.reqsScopeLabel   $ titleize' Doc.scpOfReq
-    mktSubIntro IChar {}     = namedRef SRS.readerCharsLabel $ titleize' Doc.charOfIR
-    mktSubIntro IOrgSec {}   = namedRef SRS.docOrgLabel      $ titleize Doc.orgOfDoc
+    mktSubIntro (IPurpose _) = secRef SRS.prpsOfDoc $ titleize Doc.prpsOfDoc
+    mktSubIntro (IScope _)   = secRef SRS.scpOfReq  $ titleize' Doc.scpOfReq
+    mktSubIntro IChar {}     = secRef SRS.charOfIR  $ titleize' Doc.charOfIR
+    mktSubIntro IOrgSec {}   = secRef SRS.orgOfDoc  $ titleize Doc.orgOfDoc
 
 -- | Helper for creating the 'Stakeholders' section ToC entry
 mktStkhldrSec:: StkhldrSec -> ItemType
 mktStkhldrSec (StkhldrProg l) =
-  mkHeaderItem (namedRef SRS.stakeholderLabel $ titleize' Doc.stakeholder) $ mktSub <$> l
+  mkHeaderItem (secRef SRS.stakeholder $ titleize' Doc.stakeholder) $ mktSub <$> l
   where
     mktSub :: StkhldrSub -> Sentence
-    mktSub (Client _) = namedRef SRS.customerLabel $ D.toSent $ titleizeNP $ the Doc.customer
-    mktSub Cstmr      = namedRef SRS.clientLabel   $ D.toSent $ titleizeNP $ the Doc.client
+    mktSub (Client _) = secRef SRS.theCustomer $ D.toSent $ titleizeNP $ the Doc.customer
+    mktSub Cstmr      = secRef SRS.theClient   $ D.toSent $ titleizeNP $ the Doc.client
 
 -- | Helper for creating the 'General System Description' section ToC entry
 mktGSDSec :: GSDSec -> ItemType
 mktGSDSec (GSDProg l) =
-  mkHeaderItem (namedRef SRS.genSysDescLabel $ titleize Doc.generalSystemDescription) $ mktSub <$> l
+  mkHeaderItem (secRef SRS.genSysDes $ titleize Doc.generalSystemDescription) $ mktSub <$> l
   where
     mktSub :: GSDSub -> Sentence
-    mktSub (SysCntxt _)   = namedRef SRS.sysContextLabel     $ titleize  Doc.sysCont
-    mktSub (UsrChars _)   = namedRef SRS.userCharsLabel      $ titleize' Doc.userCharacteristic
-    mktSub (SystCons _ _) = namedRef SRS.sysConstraintsLabel $ titleize' Doc.systemConstraint
+    mktSub (SysCntxt _)   = secRef SRS.sysCont  $ titleize  Doc.sysCont
+    mktSub (UsrChars _)   = secRef SRS.userChar $ titleize' Doc.userCharacteristic
+    mktSub (SystCons _ _) = secRef SRS.sysCon   $ titleize' Doc.systemConstraint
 
 -- | Helper for creating the 'Specific System Description' section ToC entry
 mktSSDSec :: SSDSec -> ItemType
 mktSSDSec (SSDProg l) =
-  mkHeaderItem' (namedRef SRS.specSystDescLabel $ titleize Doc.specificsystemdescription) $ mktSubSSD <$> l
+  mkHeaderItem' (secRef SRS.specSysDes $ titleize Doc.specificsystemdescription) $ mktSubSSD <$> l
   where
     mktSubSSD :: SSDSub -> ItemType
-    mktSubSSD (SSDProblem (PDProg _ _ sl1)) = mkHeaderItem (namedRef SRS.probDescLabel $ titleize Doc.problemDescription) $ mktSubPD <$> sl1
-    mktSubSSD (SSDSolChSpec (SCSProg sl2))  = mkHeaderItem (namedRef SRS.solCharSpecLabel $ titleize Doc.solutionCharSpec) $ mktSubSCS <$> sl2
+    mktSubSSD (SSDProblem (PDProg _ _ sl1)) = mkHeaderItem (secRef SRS.probDesc $ titleize Doc.problemDescription) $ mktSubPD <$> sl1
+    mktSubSSD (SSDSolChSpec (SCSProg sl2))  = mkHeaderItem (secRef SRS.solCharSpec $ titleize Doc.solutionCharSpec) $ mktSubSCS <$> sl2
 
     mktSubPD :: PDSub -> Sentence
-    mktSubPD (TermsAndDefs _ _) = namedRef SRS.termDefsLabel $ titleize' Doc.termAndDef
-    mktSubPD PhySysDesc {}      = namedRef SRS.physSystLabel $ titleize  Doc.physSyst
-    mktSubPD (Goals _ _)        = namedRef SRS.goalStmtLabel $ titleize' Doc.goalStmt
+    mktSubPD (TermsAndDefs _ _) = secRef SRS.termAndDefn $ titleize' Doc.termAndDef
+    mktSubPD PhySysDesc {}      = secRef SRS.physSyst $ titleize  Doc.physSyst
+    mktSubPD (Goals _ _)        = secRef SRS.goalStmt $ titleize' Doc.goalStmt
 
     mktSubSCS :: SCSSub -> Sentence
-    mktSubSCS (Assumptions _)      = namedRef SRS.assumptLabel     $ titleize' Doc.assumption
-    mktSubSCS TMs {}               = namedRef SRS.thModelLabel     $ titleize' thModel
-    mktSubSCS GDs {}               = namedRef SRS.genDefnLabel     $ titleize' genDefn
-    mktSubSCS DDs {}               = namedRef SRS.dataDefnLabel    $ titleize' dataDefn
-    mktSubSCS IMs {}               = namedRef SRS.inModelLabel     $ titleize' inModel
-    mktSubSCS (Constraints _ _)    = namedRef SRS.datConLabel      $ titleize' Doc.datumConstraint
-    mktSubSCS (CorrSolnPpties _ _) = namedRef SRS.corSolPropsLabel $ titleize' Doc.propOfCorSol
+    mktSubSCS (Assumptions _)      = secRef SRS.assumpt    $ titleize' Doc.assumption
+    mktSubSCS TMs {}               = secRef SRS.thModel    $ titleize' thModel
+    mktSubSCS GDs {}               = secRef SRS.genDefn    $ titleize' genDefn
+    mktSubSCS DDs {}               = secRef SRS.dataDefn   $ titleize' dataDefn
+    mktSubSCS IMs {}               = secRef SRS.inModel    $ titleize' inModel
+    mktSubSCS (Constraints _ _)    = secRef SRS.datCon     $ titleize' Doc.datumConstraint
+    mktSubSCS (CorrSolnPpties _ _) = secRef SRS.propCorSol $ titleize' Doc.propOfCorSol
 
 -- | Helper for creating the 'Requirements' section ToC entry
 mktReqrmntSec :: ReqrmntSec -> ItemType
 mktReqrmntSec (ReqsProg l) =
-  mkHeaderItem (namedRef SRS.requirementsLabel $ titleize' requirement) $ mktSubs <$> l
+  mkHeaderItem (secRef SRS.require $ titleize' requirement) $ mktSubs <$> l
   where
     mktSubs :: ReqsSub -> Sentence
-    mktSubs (FReqsSub _ _)  = namedRef SRS.funcReqLabel    $ titleize' Doc.functionalRequirement
-    mktSubs (NonFReqsSub _) = namedRef SRS.nonfuncReqLabel $ titleize' Doc.nonfunctionalRequirement
+    mktSubs (FReqsSub _ _)  = secRef SRS.funcReq    $ titleize' Doc.functionalRequirement
+    mktSubs (NonFReqsSub _) = secRef SRS.nonfuncReq $ titleize' Doc.nonfunctionalRequirement
 
 -- | Helper for creating the 'Likely Changes' section ToC entry
 mktLCsSec :: LCsSec -> ItemType
-mktLCsSec (LCsProg _) = Flat $ namedRef SRS.likeChgLabel $ titleize' Doc.likelyChg
+mktLCsSec (LCsProg _) = Flat $ secRef SRS.likeChg $ titleize' Doc.likelyChg
 
 -- | Helper for creating the 'Unlikely Changes' section ToC entry
 mktUCsSec :: UCsSec -> ItemType
-mktUCsSec (UCsProg _) = Flat $ namedRef SRS.unlikeChgLabel $ titleize' Doc.unlikelyChg
+mktUCsSec (UCsProg _) = Flat $ secRef SRS.unlikeChg $ titleize' Doc.unlikelyChg
 
 -- | Helper for creating the 'Traceability Matrices and Graphs' section ToC entry
 mktTraceabilitySec :: TraceabilitySec -> ItemType
-mktTraceabilitySec (TraceabilityProg _) = Flat $ namedRef SRS.traceMatricesLabel $ titleize' Doc.traceyMandG
+mktTraceabilitySec (TraceabilityProg _) = Flat $ secRef SRS.traceyMandG $ titleize' Doc.traceyMandG
 
 -- | Helper for creating the 'Values of Auxiliary Constants' section ToC entry
 mktAuxConsSec :: AuxConstntSec -> ItemType
-mktAuxConsSec (AuxConsProg _) = Flat $ namedRef SRS.valsOfAuxConsLabel $ titleize  Doc.consVals
+mktAuxConsSec (AuxConsProg _) = Flat $ secRef SRS.valsOfAuxCons $ titleize  Doc.consVals
 
 -- | Helper for creating the 'References' section ToC entry
 mktBib :: ItemType
-mktBib = Flat $ namedRef SRS.referenceLabel $ titleize' Doc.reference
+mktBib = Flat $ secRef SRS.reference $ titleize' Doc.reference
 
 -- | Helper for creating the 'Appendix' section ToC entry
 mktAppndxSec :: AppndxSec -> ItemType
-mktAppndxSec (AppndxProg _) = Flat $ namedRef SRS.appendixLabel $ titleize  Doc.appendix
+mktAppndxSec (AppndxProg _) = Flat $ secRef SRS.appendix $ titleize  Doc.appendix
 
 -- | Helper for creating the 'Off-The-Shelf Solutions' section ToC entry
 mktOffShelfSolnSec :: OffShelfSolnsSec -> ItemType
-mktOffShelfSolnSec (OffShelfSolnsProg _) = Flat $ namedRef SRS.offShelfSolnsLabel $ titleize' Doc.offShelfSolution
+mktOffShelfSolnSec (OffShelfSolnsProg _) = Flat $ secRef SRS.offShelfSol $ titleize' Doc.offShelfSolution

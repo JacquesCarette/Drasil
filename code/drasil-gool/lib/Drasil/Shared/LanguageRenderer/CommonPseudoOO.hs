@@ -2,20 +2,19 @@
 module Drasil.Shared.LanguageRenderer.CommonPseudoOO (
   int, constructor, doxFunc, doxClass, doxMod, modDoc', functionDoc, extVar,
   classVarAccess, indexOf, contains, containsInt, discardFileLine, intClass,
-  funcType, buildModule, arrayType, pi, printSt, arrayDec, arrayDecDef,
-  openFileA, forEach, docMain, mainFunction, buildModule', call', listSizeFunc,
-  listAccessFunc', string, docInOutFunc, bindingError, extFuncAppMixedArgs,
-  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, litSet,
-  litSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR,
-  openFileW, stateVar, self, multiAssign, multiReturn, listDec, funcDecDef,
-  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, floatRender,
-  float, stringRender', string', inherit, implements, listSize, listSet,
-  setDecDef, setDec, intToIndex, indexToInt, intToIndex', indexToInt', varDecDef,
+  funcType, buildModule, arrayType, pi, arrayDec, arrayDecDef, openFileA,
+  docMain, mainFunction, buildModule', call', listSizeFunc, listAccessFunc',
+  string, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef,
+  destructorError, stateVarDef, constVar, litArray, litSet, litSetFunc,
+  extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
+  stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
+  forLoopError, mainBody, inOutFunc, docInOutFunc', bool, floatRender, float,
+  stringRender', string', inherit, implements, listSize, listSet, setDecDef,
+  setDec, intToIndex, indexToInt, intToIndex', indexToInt', varDecDef,
   openFileR', openFileW', openFileA', argExists, global, setMethodCall
 ) where
 
 import Utils.Drasil (stringList)
-import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 
@@ -218,14 +217,7 @@ arrayType t' = do
 pi :: (RC.RenderValue r var val typ, TypeSym r typ) => VS (r val)
 pi = mkStateVal IC.double (text $ mathFunc "PI")
 
-printSt
-  :: (RC.RenderStatement r stmt, RC.ValueElim r val)
-  => VS (r val) -> VS (r val) -> MS (r stmt)
-printSt va' vb' = do
-  va <- zoom lensMStoVS va'
-  vb <- zoom lensMStoVS vb'
-  stmtFromData (R.print va vb) Semi
-
+-- TODO [Brandon Bosman, 11/04/2026]: Split this up
 arrayDec
   :: ( TypeSym r TypeData
      , ScopeElim r ScopeData
@@ -246,6 +238,7 @@ arrayDec n vr scp = do
   stmtFromData (renderType tp <+> RC.variable v <+> equals <+> new' <+>
     renderType innerTp <> brackets (RC.value sz)) Semi
 
+-- TODO [Brandon Bosman, 11/04/2026]: Split this up
 arrayDecDef
   :: ( IC.DeclStatement r bod stmt var scope val
      , RC.RenderStatement r stmt
@@ -269,33 +262,6 @@ openFileA
   -> VS (r val)
   -> MS (r stmt)
 openFileA f vr vl = vr &= f vl outfile IC.litTrue
-
-forEach
-  ::
-    ( RC.BodyElim r bod
-    , InternalVarElim r var
-    , RC.RenderStatement r stmt
-    , UnRepr r TypeData
-    , RC.ValueElim r val
-    , VariableElim r var TypeData
-    )
-  => Doc
-  -> Doc
-  -> Doc
-  -> Doc
-  -> VS (r var)
-  -> VS (r val)
-  -> MS (r bod)
-  -> MS (r stmt)
-forEach bStart bEnd forEachLabel inLbl e' v' b' = do
-  e <- zoom lensMStoVS e'
-  v <- zoom lensMStoVS v'
-  b <- b'
-  stmtFromData (vcat [
-    forEachLabel <+> parens (renderType (variableType e) <+> RC.variable e <+>
-      inLbl <+> RC.value v) <+> bStart,
-    indent $ RC.body b,
-    bEnd]) Empty
 
 mainDesc, argsDesc :: String
 mainDesc = "Controls the flow of the program"
@@ -435,6 +401,7 @@ setDecDef v scp vals = do
   let st = IC.litSet (innerType $ pure $ variableType vr) vals
   IC.varDecDef (pure vr) scp st
 
+-- TODO [Brandon Bosman, 11/04/2026]: Split this up
 setDec
   ::
     ( IC.DeclStatement r bod stmt var scope val
@@ -596,6 +563,7 @@ listDec
   => VS (r var) -> r scope -> MS (r stmt)
 listDec v scp = listDecDef v scp []
 
+-- TODO [Brandon Bosman, 11/04/2026]: Split this up
 funcDecDef
   :: (OORenderSym r file mod cls stvr mthd attch vis param bod block stmt var ScopeData val binder typ)
   => VS (r var)

@@ -55,7 +55,8 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
   printFile, classVarAccess, cast, castObj, classLevel,
   instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
-  commentedMod, commentedItem)
+  commentedMod, commentedItem, print, forEach, addAssign, increment, decrement,
+  switch, assign, subAssign, return', comment)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl,
   typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
@@ -65,27 +66,25 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, getFunc, setFunc, loopStmt, emptyStmt, assign, subAssign,
-  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
-  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
-  defaultOptSpace, local, smartAdd)
+  listAccess, getFunc, setFunc, objDecNew, print, closeFile, ifCond, construct,
+  param, method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
+  smartAdd)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
-  docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, forEach, global,
+  docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, global,
   implements, indexOf, indexToInt, inherit, int, intClass, intToIndex,
   listDecDef, listSet, mainFunction, notNull, openFileA, openFileR, openFileW,
-  pi, printSt, setMethodCall, stateVar, stateVarDef, string)
+  pi, setMethodCall, stateVar, stateVarDef, string)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   classMethodCall, listAppend, listAdd, innerType)
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize',
-  statement, increment, increment1, decrement1, varDec, varDecDef, listDec,
-  extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
-  multiTypeError)
+  statement, varDec, varDecDef, listDec, extObjDecNew, for, while,
+  multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -477,13 +476,18 @@ instance InternalAssignStmt CSharpCode Statement Variable Value where
   multiAssign _ _ = error $ C.multiAssignError csName
 
 instance InternalIOStmt CSharpCode Statement Value where
-  printSt _ _ = CP.printSt
+  printSt _ _ va' vb' = do
+    va <- zoom lensMStoVS va'
+    vb <- zoom lensMStoVS vb'
+    stmtFromData (R.print va vb) Semi
 
 instance InternalControlStmt CSharpCode Statement Value where
   multiReturn _ = error $ C.multiReturnError csName
 
 instance RenderStatement CSharpCode Statement where
-  loopStmt = G.loopStmt
+  loopStmt s' = do
+    s <- s'
+    stmtFromData (preStatement s) Empty
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CSharpCode Statement where
@@ -494,20 +498,35 @@ instance StatementTerm CSharpCode Statement where
   statementTerm = snd . unCSC
 
 instance EmptyStatement CSharpCode Statement where
-  emptyStmt = G.emptyStmt
+  emptyStmt = stmtFromData empty Empty
 
 instance MultiStatement CSharpCode Statement where
   multi = onStateList (onCodeList R.multiStmt)
 
 instance ValueStatement CSharpCode Statement Value where
-  valStmt = G.valStmt Semi
+  valStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (RC.value v) Semi
 
 instance AssignStatement CSharpCode Statement Variable Value where
-  assign = G.assign Semi
-  (&-=) = G.subAssign Semi
-  (&+=) = C.increment
-  (&++) = C.increment1
-  (&--) = C.decrement1
+  assign vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.assign vr v) Semi
+  (&-=) vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.subAssign vr v) Semi
+  (&+=) vr' v'= do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.addAssign vr v) Semi
+  (&++) vr' = do
+    vr <- zoom lensMStoVS vr'
+    stmtFromData (R.increment vr) Semi
+  (&--) vr' = do
+    vr <- zoom lensMStoVS vr'
+    stmtFromData (R.decrement vr) Semi
 
 instance DeclStatement CSharpCode Body Statement Variable ScopeData Value where
   varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $
@@ -573,29 +592,68 @@ instance OOFuncAppStatement CSharpCode Statement Variable Value where
   selfInOutCall = csInOutCall selfMethodCall
 
 instance CommentStatement CSharpCode Statement where
-  comment = G.comment commentStart
+  comment c = stmtFromData (R.comment c commentStart) Empty
 
 instance ControlStatement CSharpCode Body Statement Variable Value where
   break =  stmtFromData R.break Semi
   continue =  stmtFromData R.continue Semi
 
-  returnStmt = G.returnStmt Semi
+  returnStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.return' [v]) Semi
 
-  throw msg = do
+  throw msg' = do
     modify (addLangImport csSystem)
-    G.throw csThrowDoc Semi msg
+    msg <- zoom lensMStoVS (litString msg')
+    stmtFromData (csThrowDoc msg) Semi
 
   ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
-  switch = C.switch parens break
+  switch val' cases' dflt' = do
+    brk <- break
+    val <- zoom lensMStoVS val'
+    vals <- mapM (zoom lensMStoVS . fst) cases'
+    bods <- mapM snd cases'
+    dflt <- dflt'
+    stmtFromData (R.switch parens brk val dflt (zip vals bods)) Semi
 
   ifExists = M.ifExists
 
-  for = C.for bodyStart bodyEnd
+  for initial' guard' update' bod' = do
+    initial <- loopStmt initial'
+    guard <- zoom lensMStoVS guard'
+    update <- loopStmt update'
+    bod <- bod'
+    stmtFromData
+      (C.for
+       (preStatement initial)
+       (RC.value guard)
+       (preStatement update)
+       (RC.body bod)
+      ) Empty
   forRange = M.forRange
-  forEach = CP.forEach bodyStart bodyEnd csForEach inLabel
-  while = C.while parens bodyStart bodyEnd
+  forEach vr' iterator' bod' = do
+    vr <- zoom lensMStoVS vr'
+    iterator <- zoom lensMStoVS iterator'
+    bod <- bod'
+    stmtFromData
+      (R.forEach
+        csForEach inLabel
+        (renderType (variableType vr))
+        (RC.variable vr)
+        (RC.value iterator)
+        (RC.body bod)
+      ) Empty
+  while val' bod' = do
+    val <- zoom lensMStoVS val'
+    bod <- bod'
+    stmtFromData
+      (C.while parens bodyStart bodyEnd (RC.value val) (RC.body bod))
+      Empty
 
-  tryCatch = G.tryCatch csTryCatch
+  tryCatch try' catch' = do
+    try <- try'
+    catch <- catch'
+    stmtFromData (csTryCatch try catch) Empty
 
   assert condition errorMessage = do
     modify (addLangImport csDiagnostics)

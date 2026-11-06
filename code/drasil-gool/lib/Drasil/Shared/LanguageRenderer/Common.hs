@@ -1,28 +1,27 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.Shared.LanguageRenderer.Common (
   boolRender, bool, extVar, funcType, extFuncAppMixedArgs, listAccessFunc,
-  forEach', varDecDef, listSize, increment
+  varDecDef, listSize
 ) where
 
 import Prelude hiding (print, pi, (<>))
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
-import Text.PrettyPrint.HughesPJ (text, empty, Doc)
+import Text.PrettyPrint.HughesPJ (text, empty)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Body, MixedCall, ValueSym, TypeSym(int),
+import Drasil.Shared.InterfaceCommon (MixedCall, ValueSym, TypeSym(int),
   VariableElim(variableName), Label, Library, funcApp, getCodeType,
   EmptyStatement, AssignStatement, ValueExpression)
 import Drasil.Shared.RendererClassesCommon (scopeData, call,
   RenderFunction(funcFromData), RenderVariable, RenderValue, ValueElim,
-  RenderStatement, ScopeElim, InternalVarElim, stmtFromData)
+  ScopeElim)
 import Drasil.Shared.LanguageRenderer (access, intValue)
-import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc,
-  addAssign)
+import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc)
 import Drasil.Shared.LanguageRenderer.Constructors(mkStateVar, typeFromData)
 import Drasil.Shared.State (MS, VS, lensMStoVS, useVarName, setVarScope)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.Shared.AST (ScopeData, TypeData, FuncData, Terminator(..))
+import Drasil.Shared.AST (ScopeData, TypeData, FuncData)
 
 -- Swift and Julia --
 
@@ -67,21 +66,6 @@ listAccessFunc
   => VS (r typ) -> VS (r val) -> VS (r FuncData)
 listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
--- Python, Swift, and Julia --
-
-forEach'
-  :: (RenderStatement r stmt)
-  => (r var -> r val -> r Body -> Doc)
-  -> VS (r var)
-  -> VS (r val)
-  -> MS (r Body)
-  -> MS (r stmt)
-forEach' f i' v' b' = do
-  i <- zoom lensMStoVS i'
-  v <- zoom lensMStoVS v'
-  b <- b'
-  stmtFromData (f i v b) Empty
-
 -- Python and Julia --
 
 varDecDef
@@ -100,16 +84,6 @@ varDecDef v scp e = do
   where
     def Nothing = IC.emptyStmt
     def (Just d) = IC.assign v d
-
--- Python and Swift --
-
-increment
-  :: (InternalVarElim r var, RenderStatement r stmt, ValueElim r val)
-  => VS (r var) -> VS (r val) -> MS (r stmt)
-increment vr' v'= do
-  vr <- zoom lensMStoVS vr'
-  v <- zoom lensMStoVS v'
-  stmtFromData (R.addAssign vr v) Empty
 
 -- Python, Julia, and MATLAB --
 

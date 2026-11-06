@@ -7,11 +7,10 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, newObjMixedArgs, lambda,
   objAccess, objMethodCall, func, get, set, listAccess, getFunc, setFunc,
-  loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
-  method, getMethod, setMethod, initStmts, function, docFuncRepr, docFunc,
-  buildClass, implementingClass, docClass, commentedClass, modFromData, fileDoc,
-  docMod, OptionalSpace(..), defaultOptSpace, smartAdd, smartSub
+  objDecNew, print, closeFile, ifCond, construct, param, method, getMethod,
+  setMethod, initStmts, function, docFuncRepr, docFunc, buildClass,
+  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod,
+  OptionalSpace(..), defaultOptSpace, smartAdd, smartSub
 ) where
 
 import Drasil.FileHandling.Legacy (indent)
@@ -410,30 +409,6 @@ setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
 
 -- Statements --
 
-loopStmt
-  :: (RenderStatement r stmt, StatementElim r stmt)
-  => MS (r stmt) -> MS (r stmt)
-loopStmt = setEmpty
-
-emptyStmt :: (RenderStatement r stmt) => MS (r stmt)
-emptyStmt = stmtFromData empty Empty
-
-assign
-  :: (InternalVarElim r var, RenderStatement r stmt, ValueElim r val)
-  => Terminator -> VS (r var) -> VS (r val) -> MS (r stmt)
-assign t vr' v' = do
-  vr <- zoom lensMStoVS vr'
-  v <- zoom lensMStoVS v'
-  stmtFromData (R.assign vr v) t
-
-subAssign
-  :: (InternalVarElim r var, RenderStatement r stmt, ValueElim r val)
-  => Terminator -> VS (r var) -> VS (r val) -> MS (r stmt)
-subAssign t vr' v' = do
-  vr <- zoom lensMStoVS vr'
-  v <- zoom lensMStoVS v'
-  stmtFromData (R.subAssign vr v) t
-
 objDecNew
   ::
     ( IC.DeclStatement r bod stmt var scope val
@@ -544,30 +519,6 @@ closeFile
   => Label -> VS (r val) -> MS (r stmt)
 closeFile n f = IC.valStmt $ objMethodCallNoParams IC.void f n
 
-returnStmt
-  :: (RenderStatement r stmt, ValueElim r val)
-  => Terminator -> VS (r val) -> MS (r stmt)
-returnStmt t v' = do
-  v <- zoom lensMStoVS v'
-  stmtFromData (R.return' [v]) t
-
-valStmt
-  :: (RenderStatement r stmt, ValueElim r val)
-  => Terminator -> VS (r val) -> MS (r stmt)
-valStmt t v' = do
-  v <- zoom lensMStoVS v'
-  stmtFromData (RC.value v) t
-
-comment :: (RenderStatement r stmt) => Doc -> Label -> MS (r stmt)
-comment cs c = stmtFromData (R.comment c cs) Empty
-
-throw
-  :: (IC.Literal r val typ, RenderStatement r stmt)
-  => (r val -> Doc) -> Terminator -> Label -> MS (r stmt)
-throw f t l = do
-  msg <- zoom lensMStoVS (IC.litString l)
-  stmtFromData (f msg) t
-
 newtype OptionalSpace = OSpace {oSpace :: Doc}
 
 defaultOptSpace :: OptionalSpace
@@ -578,6 +529,7 @@ optSpaceDoc OSpace {oSpace = sp} = sp
 
 -- ControlStatements --
 
+-- TODO [Brandon Bosman, 11/05/2026]: Split this up
 -- 1st parameter is a Doc function to use on the render of each condition (i.e. parens)
 -- 2nd parameter is the syntax for starting a block in an if-condition
 -- 3rd parameter is the keyword for an else-if statement
@@ -610,10 +562,6 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
           bEnd]) $+$ ifEnd) eBody
     in sequence (ifSect c : fmap elseIfSect cs P.<> [elseSect])
       >>= (\stmtDocs -> stmtFromData (vcat stmtDocs) Empty)
-
-tryCatch :: (RenderStatement r stmt) => (r bod -> r bod -> Doc) ->
-  MS (r bod) -> MS (r bod) -> MS (r stmt)
-tryCatch f = on2StateWrapped (\tb1 tb2 -> stmtFromData (f tb1 tb2) Empty)
 
 -- Methods --
 
@@ -786,8 +734,3 @@ fileFromData f fpath mdl' = do
         then over lensFStoGS (setMainMod fpath) s
         else s)
   pure $ f fpath mdl
-
--- Helper functions
-
-setEmpty :: (RenderStatement r stmt, StatementElim r stmt) => MS (r stmt) -> MS (r stmt)
-setEmpty s' = s' >>= (\s -> stmtFromData (RC.preStatement s) Empty)

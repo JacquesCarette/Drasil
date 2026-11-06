@@ -106,11 +106,6 @@ class HasContents c where
 
 -- | Neither case has references of its own, but listing both constructors
 -- means a new one fails to compile until someone decides what it refers to.
-instance HasChunkRefs HasCaption where
-  chunkRefs NoCaption   = S.empty
-  chunkRefs WithCaption = S.empty
-  {-# INLINABLE chunkRefs #-}
-
 instance HasChunkRefs ItemType where
   chunkRefs (Flat sent)         = chunkRefs sent
   chunkRefs (Nested hdr nested) = chunkRefs hdr `S.union` chunkRefs nested
@@ -133,21 +128,19 @@ instance HasChunkRefs ListType where
   {-# INLINABLE chunkRefs #-}
 
 instance HasChunkRefs RawContent where
-  chunkRefs (Table hdr rows caption showCap) =
-    S.unions [chunkRefs hdr, chunkRefs rows, chunkRefs caption, chunkRefs showCap]
+  chunkRefs (Table hdr rows caption _) =  -- last field: caption on/off flag, no refs
+    S.unions [chunkRefs hdr, chunkRefs rows, chunkRefs caption]
   chunkRefs (Para sents)           = chunkRefs sents
   chunkRefs (EqnBlock me)          = chunkRefs me
   chunkRefs (DerivBlock hdr steps) = chunkRefs hdr `S.union` chunkRefs steps
   chunkRefs (Enumeration lst)      = chunkRefs lst
   chunkRefs (Defini defs)          =
     S.unions [chunkRefs nm `S.union` chunkRefs body | (nm, body) <- defs]
-  chunkRefs (Figure lbl path width capt) =
-    S.unions [chunkRefs lbl, chunkRefs path, chunkRefs width, chunkRefs capt]
+  chunkRefs (Figure lbl path _ _) =  -- last two: max width % and caption flag, no refs
+    S.unions [chunkRefs lbl, chunkRefs path]
   chunkRefs (Bib cites)            = chunkRefs cites
-  chunkRefs (Graph pts w h lbl)    =
+  chunkRefs (Graph pts _ _ lbl)    =  -- width and height: plain numbers
     S.unions [ S.unions [chunkRefs a `S.union` chunkRefs b | (a, b) <- pts]
-             , chunkRefs w
-             , chunkRefs h
              , chunkRefs lbl
              ]
   chunkRefs (CodeBlock ex)         = chunkRefs ex

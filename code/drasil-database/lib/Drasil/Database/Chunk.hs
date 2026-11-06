@@ -95,10 +95,6 @@ instance HasChunkRefs Double where
   chunkRefs _ = S.empty
   {-# INLINABLE chunkRefs #-}
 
-instance HasChunkRefs Float where
-  chunkRefs _ = S.empty
-  {-# INLINABLE chunkRefs #-}
-
 instance HasChunkRefs Bool where
   chunkRefs _ = S.empty
   {-# INLINABLE chunkRefs #-}

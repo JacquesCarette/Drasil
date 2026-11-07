@@ -53,11 +53,11 @@ import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, body, classVarAccess,
   castObj, instanceLevel, break, continue, addComments, commentedMod,
-  commentedItem, var)
+  commentedItem, var, assign, subAssign, return', comment, addAssign)
 import Drasil.GOOL.Renderers (renderType)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
-  mkVal, mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec, multPrec, andPrec,
-  orPrec, inPrec, unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar,
+import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
+  mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec,
+  inPrec, unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar,
   typeFromData)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
@@ -65,19 +65,17 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, getFunc, setFunc, loopStmt, emptyStmt, assign, subAssign,
-  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
-  implementingClass, commentedClass, modFromData, fileDoc, fileFromData, local,
-  smartAdd)
+  listAccess, getFunc, setFunc, objDecNew, print, closeFile, ifCond, construct,
+  param, method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, local, smartAdd)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
   notifyObservers', arrayDecAsList)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
   listAppend, listAdd, innerType)
-import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
-  ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
+import Drasil.Shared.AST (Terminator(Empty), FileType(..), fileD, FuncData(..),
+  fd, ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
   ParamData(..), pd, ProgData(..), progD, TypeData(..), ValData(..), vd,
   VarData(..), vard, BinderD(..), bindFormD, AttachmentTag(..),
   AttachmentData(..), ad, FileData, ScopeData)
@@ -488,7 +486,9 @@ instance InternalControlStmt PythonCode Statement Value where
   multiReturn = CP.multiReturn id
 
 instance RenderStatement PythonCode Statement where
-  loopStmt = G.loopStmt
+  loopStmt s' = do
+    s <- s'
+    stmtFromData (preStatement s) Empty
   stmtFromData d _ = toState $ toCode d
 
 instance StatementElim PythonCode Statement where
@@ -496,18 +496,29 @@ instance StatementElim PythonCode Statement where
   preStatement = unPC
 
 instance EmptyStatement PythonCode Statement where
-  emptyStmt = G.emptyStmt
+  emptyStmt = stmtFromData empty Empty
 
 instance MultiStatement PythonCode Statement where
   multi = onStateList (onCodeList vcat)
 
 instance ValueStatement PythonCode Statement Value where
-  valStmt = G.valStmt Empty
+  valStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (RC.value v) Empty
 
 instance AssignStatement PythonCode Statement Variable Value where
-  assign = G.assign Empty
-  (&-=) = G.subAssign Empty
-  (&+=) = CS.increment
+  assign vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.assign vr v) Empty
+  (&-=) vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.subAssign vr v) Empty
+  (&+=) vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.addAssign vr v) Empty
   (&++) = M.increment1
   (&--) = M.decrement1
 
@@ -580,15 +591,19 @@ instance OOFuncAppStatement PythonCode Statement Variable Value where
   selfInOutCall = CP.inOutCall selfMethodCall
 
 instance CommentStatement PythonCode Statement where
-  comment = G.comment pyCommentStart
+  comment c = stmtFromData (R.comment c pyCommentStart) Empty
 
 instance ControlStatement PythonCode Body Statement Variable Value where
-  break = mkStmtNoEnd R.break
-  continue = mkStmtNoEnd R.continue
+  break = stmtFromData R.break Empty
+  continue = stmtFromData R.continue Empty
 
-  returnStmt = G.returnStmt Empty
+  returnStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.return' [v]) Empty
 
-  throw = G.throw pyThrow Empty
+  throw msg' = do
+    msg <- zoom lensMStoVS (litString msg')
+    stmtFromData (pyThrow msg) Empty
 
   ifCond = G.ifCond id pyBodyStart pySpace pyElseIf pyBodyEnd empty
   switch = switchAsIf
@@ -597,18 +612,25 @@ instance ControlStatement PythonCode Body Statement Variable Value where
 
   for _ _ _ _ = error $ CP.forLoopError pyName
   forRange i initv finalv stepv = forEach i (range initv finalv stepv)
-  forEach = CS.forEach' pyForEach
+  forEach i' v' b' = do
+    i <- zoom lensMStoVS i'
+    v <- zoom lensMStoVS v'
+    b <- b'
+    stmtFromData (pyForEach i v b) Empty
   while v' b' = do
     v <- zoom lensMStoVS v'
     b <- b'
-    mkStmtNoEnd (pyWhile v b)
+    stmtFromData (pyWhile v b) Empty
 
-  tryCatch = G.tryCatch pyTryCatch
+  tryCatch try' catch' = do
+    try <- try'
+    catch <- catch'
+    stmtFromData (pyTryCatch try catch) Empty
 
   assert condition errorMessage = do
       cond <- zoom lensMStoVS condition
       errMsg <- zoom lensMStoVS errorMessage
-      mkStmtNoEnd (pyAssert cond errMsg)
+      stmtFromData (pyAssert cond errMsg) Empty
 
 instance ObserverPattern PythonCode Statement TypeData where
   notifyObservers = M.notifyObservers'
@@ -943,7 +965,7 @@ pyPrint newLn f' p' v' = do
                RC.value s
         fl = emptyIfEmpty (RC.value f) $ listSep' <> text "file" <> equals
                <> RC.value f
-    mkStmtNoEnd $ RC.value prf <> parens (RC.value v <> nl <> fl)
+    stmtFromData (RC.value prf <> parens (RC.value v <> nl <> fl)) Empty
 
 pyOut
   ::
@@ -985,7 +1007,7 @@ pyInput inSrc v = v &= (v >>= pyInput' . getCodeType . variableType)
         pyInput' Char = inSrc
         pyInput' _ = error "Attempt to read a value of unreadable type"
 
-pyThrow :: (ValueElim r val) => r val -> Doc
+pyThrow :: PythonCode Value -> Doc
 pyThrow errMsg = pyRaise <+> exceptionObj' <> parens (RC.value errMsg)
 
 pyForEach

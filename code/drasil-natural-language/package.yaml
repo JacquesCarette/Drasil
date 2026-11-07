@@ -22,6 +22,7 @@ ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 
 library:
   source-dirs: lib

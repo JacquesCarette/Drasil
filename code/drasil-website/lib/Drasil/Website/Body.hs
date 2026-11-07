@@ -4,7 +4,11 @@ module Drasil.Website.Body (
   gitHubRef, sections, websiteTitle,
 ) where
 
-import Drasil.Database (ChunkDB, mkUid, insertAll)
+import Control.Lens ((^.))
+import Data.List (partition)
+import qualified Data.Set as Set
+
+import Drasil.Database (ChunkDB, mkUid, insertAll, HasChunkRefs(..), HasUID(..))
 import Drasil.Generator (withCommonKnowledge)
 import Drasil.System (mkSystemMeta, ProjectName, mkCommonProjName)
 import Drasil.Website.Core (DrasilWebsite, mkDrasilWebsite)
@@ -63,11 +67,30 @@ webSys :: Document -> FolderLocation -> DrasilWebsite
 webSys d@(Document _ _ _ ss) fl = mkDrasilWebsite meta d
   where
     meta = mkSystemMeta projName [] [] [] [] [] db'
+    -- Insert in dependency order: the links and tables that sections point to
+    -- must already be in the database before the sections themselves.
     db' = insertAll allExampleProjNames
-        $ insertAll (allRefs fl)
+        $ insertAll (linksFirst ss)
         $ insertAll (websiteLCs fl)
-        $ insertAll ss symbMap
+        $ insertAll (allRefs fl) symbMap
 webSys Notebook{} _ = error "DrasilWebsite expects a `Document`"
+
+-- | Orders sections so that each one comes after the sections it links to.
+-- The database needs a chunk's dependencies to be inserted before the chunk
+-- itself, and the page order does not promise that (e.g., 'aboutSec' links to
+-- sections that appear after it). Sections that do not depend on each other
+-- keep their page order.
+linksFirst :: [Section] -> [Section]
+linksFirst = go []
+  where
+    go placed [] = placed
+    go placed waiting
+      | null ready = error "linksFirst: the sections link to each other in a cycle"
+      | otherwise  = go (placed <> ready) blocked
+      where
+        waitingIds       = Set.fromList [s ^. uid | s <- waiting]
+        isReady s        = Set.null (chunkRefs s `Set.intersection` waitingIds)
+        (ready, blocked) = partition isReady waiting
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]

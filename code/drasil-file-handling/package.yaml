@@ -18,14 +18,9 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- containers
-- directory
 - filepath
 - pretty
 - prettyprinter
-- template-haskell
-- file-io >= 0.1.6
-- os-string
 - text
 - bytestring
 
@@ -33,9 +28,15 @@ ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 - -threaded
 
 library:
+  dependencies:
+  - containers
+  - directory
+  - template-haskell
+  - file-io >= 0.1.6
   source-dirs: lib
   exposed-modules:
   - Drasil.FileHandling

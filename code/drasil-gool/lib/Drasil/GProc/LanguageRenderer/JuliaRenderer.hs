@@ -46,18 +46,17 @@ import Drasil.Shared.LanguageRenderer (printLabel, listSep, listSep',
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, body, addComments, blockCmt,
   docCmt, commentedMod, commentedItem, break, continue, constDec', assign,
-  subAssign, addAssign)
+  subAssign, addAssign, return', comment)
 import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
-  typeBinExpr, mkStmtNoEnd, typeFromData)
+  typeBinExpr, typeFromData)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
-  listAccess, tryCatch, csc, multiBody, sec, cot, loopStmt, emptyStmt, print,
-  comment, valStmt, returnStmt, param, docFunc, throw, arg, argsList, ifCond,
-  smartAdd, local, var, smartSub)
+  listAccess, csc, multiBody, sec, cot, print, param, docFunc, arg, argsList,
+  ifCond, smartAdd, local, var, smartSub)
 import Drasil.GProc.Renderers (renderType)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
@@ -75,7 +74,7 @@ import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   innerType, arrayElem, funcDecDef, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists, arrayDecAsList)
-import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..),
+import Drasil.Shared.AST (Terminator(Empty), FileType(..), fileD, FuncData(..),
   ModData(..), md, updateMod, MethodData(..), mthd, OpData(..), ParamData(..),
   ProgData(..), TypeData(..), ValData(..), vd, VarData(..), vard, progD, fd, pd,
   updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD, FileData)
@@ -451,7 +450,9 @@ instance InternalControlStmt JuliaCode Statement Value where
   multiReturn = CP.multiReturn id
 
 instance RenderStatement JuliaCode Statement where
-  loopStmt = G.loopStmt
+  loopStmt s' = do
+    s <- s'
+    stmtFromData (preStatement s) Empty
   stmtFromData d _ = toState $ toCode d
 
 instance StatementElim JuliaCode Statement where
@@ -459,13 +460,15 @@ instance StatementElim JuliaCode Statement where
   preStatement = unJLC
 
 instance EmptyStatement JuliaCode Statement where
-  emptyStmt = G.emptyStmt
+  emptyStmt = stmtFromData empty Empty
 
 instance MultiStatement JuliaCode Statement where
   multi = onStateList (onCodeList vcat)
 
 instance ValueStatement JuliaCode Statement Value where
-  valStmt = G.valStmt Empty
+  valStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (RC.value v) Empty
 
 instance AssignStatement JuliaCode Statement Variable Value where
   assign = jlAssign
@@ -525,25 +528,41 @@ instance FuncAppStatement JuliaCode Statement Variable Value where
   extInOutCall m = CP.inOutCall (extFuncApp m)
 
 instance CommentStatement JuliaCode Statement where
-  comment = G.comment jlCmtStart
+  comment c = stmtFromData (R.comment c jlCmtStart) Empty
 
 instance ControlStatement JuliaCode Body Statement Variable Value where
-  break = mkStmtNoEnd R.break
-  continue = mkStmtNoEnd R.continue
-  returnStmt = G.returnStmt Empty
-  throw = G.throw jlThrow Empty
+  break = stmtFromData R.break Empty
+  continue = stmtFromData R.continue Empty
+  returnStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.return' [v]) Empty
+  throw msg' = do
+    msg <- zoom lensMStoVS (litString msg')
+    stmtFromData (jlThrow msg) Empty
   ifCond = G.ifCond id empty jlSpace elseIfLabel empty jlEnd
   switch = switchAsIf
   ifExists = M.ifExists
   for _ _ _ _ = error $ CP.forLoopError jlName
   forRange i initv finalv stepv = forEach i (jlRange initv finalv stepv)
-  forEach = CS.forEach' jlForEach
-  while = C.while id empty jlEnd
-  tryCatch = G.tryCatch jlTryCatch
+  forEach i' v' b' = do
+    i <- zoom lensMStoVS i'
+    v <- zoom lensMStoVS v'
+    b <- b'
+    stmtFromData (jlForEach i v b) Empty
+  while val' bod' = do
+    val <- zoom lensMStoVS val'
+    bod <- bod'
+    stmtFromData
+      (C.while id empty jlEnd (RC.value val) (RC.body bod))
+      Empty
+  tryCatch try' catch' = do
+    try <- try'
+    catch <- catch'
+    stmtFromData (jlTryCatch try catch) Empty
   assert condition errorMessage = do
     cond <- zoom lensMStoVS condition
     errMsg <- zoom lensMStoVS errorMessage
-    mkStmtNoEnd (jlAssert cond errMsg)
+    stmtFromData (jlAssert cond errMsg) Empty
 
 instance VisibilitySym JuliaCode Doc where
 
@@ -674,7 +693,7 @@ jlAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
-  mkStmtNoEnd $ jlGlobalDec scpData <+> R.assign vr v
+  stmtFromData (jlGlobalDec scpData <+> R.assign vr v) Empty
 
 jlSubAssign
   :: VS (JuliaCode Variable)
@@ -684,7 +703,7 @@ jlSubAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
-  mkStmtNoEnd $ jlGlobalDec scpData <+> R.subAssign vr v
+  stmtFromData (jlGlobalDec scpData <+> R.subAssign vr v) Empty
 
 jlIncrement
   :: VS (JuliaCode Variable)
@@ -694,7 +713,7 @@ jlIncrement vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
-  mkStmtNoEnd $ jlGlobalDec scpData <+> R.addAssign vr v
+  stmtFromData (jlGlobalDec scpData <+> R.addAssign vr v) Empty
 
 jlGlobalDec :: ScopeData -> Doc
 jlGlobalDec scp = if scopeTag scp == Global then jlGlobal else empty
@@ -714,7 +733,7 @@ jlConstDecDef v' scp def' = do
   modify $ useVarName $ variableName v
   modify $ setVarScope (variableName v) scpData
   let decDoc = if scopeTag scpData == Global then R.constDec' else empty
-  mkStmtNoEnd $ decDoc <+> RC.variable v <+> equals <+> RC.value def
+  stmtFromData (decDoc <+> RC.variable v <+> equals <+> RC.value def) Empty
 
 -- List API
 jlListSize, jlListAdd, jlListAppend, jlListAbsdex :: Label
@@ -916,7 +935,7 @@ jlLambda
 jlLambda ps ex = binderList ps <+> arrow <+> RC.value ex
 
 -- Exceptions
-jlThrow :: (ValueElim r val) => r val -> Doc
+jlThrow :: JuliaCode Value -> Doc
 jlThrow errMsg = jlThrowLabel <> parens (RC.value errMsg)
 
 jlTryCatch :: (BodyElim r bod) => r bod -> r bod -> Doc
@@ -1013,7 +1032,7 @@ jlPrint _ f' p' v' = do
   prf <- zoom lensMStoVS p' -- The print function to use
   v <- zoom lensMStoVS v' -- The value to print
   let fl = emptyIfEmpty (RC.value f) $ RC.value f <> listSep'
-  mkStmtNoEnd $ RC.value prf <> parens (fl <> RC.value v)
+  stmtFromData (RC.value prf <> parens (fl <> RC.value v)) Empty
 
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut

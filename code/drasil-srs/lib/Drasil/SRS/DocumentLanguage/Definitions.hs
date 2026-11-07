@@ -12,13 +12,12 @@ module Drasil.SRS.DocumentLanguage.Definitions (
 
 import Control.Lens ((^.))
 import Data.Foldable (Foldable(..))
-import Data.List (nub)
-import Data.Maybe (mapMaybe)
+import Data.Maybe (isJust, mapMaybe)
 
 -- rest of Drasil
-import Drasil.Database (ChunkDB, UID, HasUID(..), find)
+import Drasil.Database (ChunkDB, UID, HasUID(..), find, dependantsOrErr)
 import Drasil.System (systemdb)
-import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, refbyLookup)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
 import Language.Drasil
 import Language.Drasil.Document
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,
@@ -57,8 +56,9 @@ data InclUnits = IncludeUnits -- ^ In description field (for other symbols).
 
 -- * Types
 
--- | Helper type that takes a set of 'UID's and a 'ChunkDB'.
-type TraceViewCat = [UID] -> SmithEtAlSRS -> [UID]
+-- | A category of traceable items (e.g., assumptions), selecting the 'UID's of
+-- its members from 'SmithEtAlSRS'. FIXME: This is hacky.
+type TraceViewCat = SmithEtAlSRS -> [UID]
 
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a 'RelationConcept' (called automatically by 'SCSSub' program).
@@ -117,8 +117,15 @@ mkTMField _ _ l _ = error $ "Label " <> show l <> " not supported " <>
 
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
 helperRefs :: HasUID t => t -> SmithEtAlSRS -> Sentence
-helperRefs t s = foldlList Comma List $ fmap (`helpToRefField` (s ^. systemdb)) $ nub $
-  refbyLookup (t ^. uid) s
+helperRefs t s = foldlList Comma List $
+  (`helpToRefField` cdb) <$> filter (not . isDocContent cdb) (dependantsOrErr (t ^. uid) cdb)
+  where cdb = s ^. systemdb
+
+-- | Tables, figures and sections can mention a model without being something
+-- that it is "referenced by", so they are left out of that list.
+isDocContent :: ChunkDB -> UID -> Bool
+isDocContent cdb u = isJust (find u cdb :: Maybe LabelledContent)
+                  || isJust (find u cdb :: Maybe Section)
 
 -- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of
 -- the possible data sets contained in the 'SmithEtAlSRS' database.
@@ -129,7 +136,6 @@ helpToRefField trg db
   | (Just c) <- find trg db :: Maybe GenDefn         = refS c
   | (Just c) <- find trg db :: Maybe TheoryModel     = refS c
   | (Just c) <- find trg db :: Maybe ConceptInstance = refS c
-  | (Just _) <- find trg db :: Maybe Citation        = EmptyS
   | otherwise = error $ show trg <> "Caught."
 
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.

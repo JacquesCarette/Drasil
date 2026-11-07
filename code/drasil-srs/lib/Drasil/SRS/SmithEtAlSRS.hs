@@ -12,17 +12,13 @@ module Drasil.SRS.SmithEtAlSRS (
   -- ** Lenses
   HasSmithEtAlSRS(..),
   -- ** Constructors
-  mkSmithEtAlICO,
-  -- ** Hacks
-  refbyLookup, traceLookup
+  mkSmithEtAlICO
 ) where
 
-import Control.Lens (makeClassy, (^.))
+import Control.Lens (makeClassy)
 import qualified Data.List.NonEmpty as NE
-import qualified Data.Map.Strict as M
-import Data.Maybe (fromMaybe)
 
-import Drasil.Database (UID, HasUID(..), ChunkDB)
+import Drasil.Database (HasUID(..), ChunkDB)
 import Language.Drasil (Quantity, MayHaveUnit, Concept, People, Constrained,
   ConstQDef, DefinedQuantityDict)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
@@ -49,9 +45,6 @@ data SmithEtAlSRS where
   -- SRS. Why is this here? For type-checking the SRS later. Should
   -- type-checking be done on the SRS level? No. This is a temporary hack.
   , _quantities   :: [DefinedQuantityDict]
-  -- FIXME: Hacks to be removed once 'Reference's are rebuilt.
-  , _refbyTable   :: M.Map UID [UID]
-  , _traceTable   :: M.Map UID [UID]
   } -> SmithEtAlSRS
 
 makeClassy ''SmithEtAlSRS
@@ -72,12 +65,4 @@ mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,
     ChunkDB -> SmithEtAlSRS
 mkSmithEtAlICO pn ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs db
   = ICO (mkSystemMeta pn ppl prps bkgrd scp motive db) tms gds dds ims hs is js
-      cqds qs mempty mempty
-
--- | Find what chunks reference a specific chunk.
-refbyLookup :: UID -> SmithEtAlSRS -> [UID]
-refbyLookup u = fromMaybe [] . M.lookup u . (^. refbyTable)
-
--- | Find what chunks a specific one references.
-traceLookup :: UID -> SmithEtAlSRS -> [UID]
-traceLookup u = fromMaybe [] . M.lookup u . (^. traceTable)
+      cqds qs

@@ -17,20 +17,21 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- bytestring
-- directory
 - filepath
-- file-io >= 0.1.6
-- template-haskell
-- text
 
 ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 
 library:
   dependencies:
+  - bytestring
+  - directory
+  - file-io >= 0.1.6
+  - template-haskell
+  - text
   - drasil-file-handling
   source-dirs: lib
   exposed-modules:
@@ -42,8 +43,5 @@ tests:
     main: Main.hs
     dependencies:
     - drasil-assets
-    - drasil-file-handling
     - drasil-testing-kit
     - tasty
-    - tasty-hunit
-    - prettyprinter

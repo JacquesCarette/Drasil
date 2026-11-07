@@ -9,17 +9,17 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), TypeElim(..), NamedArgs,
 import Drasil.GOOL.InterfaceGOOL (objMethodCall, convTypeOO, InternalValueExp,
   OOTypeSym)
 import Drasil.Shared.RendererClassesCommon (ScopeElim(..), RenderValue(..),
-  InternalVarElim, RenderStatement, ValueElim)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt)
+  InternalVarElim, RenderStatement, ValueElim, stmtFromData)
 import Drasil.Shared.LanguageRenderer (dot)
 import Drasil.GOOL.Renderers (renderType, renderConstDecDef)
-import Drasil.Shared.AST (TypeData, ScopeData)
+import Drasil.Shared.AST (TypeData, ScopeData, Terminator(..))
 import Drasil.Shared.State (MS, VS, lensMStoVS, useVarName, setVarScope)
 import Drasil.Shared.Helpers (getInnerType)
 
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 
+-- TODO [Brandon Bosman, 11/04/2026]: Split up
 constDecDef
   :: ( InternalVarElim r var
      , RenderStatement r stmt
@@ -34,7 +34,7 @@ constDecDef vr' scp v'= do
   v <- zoom lensMStoVS v'
   modify $ useVarName $ variableName vr
   modify $ setVarScope (variableName vr) (scopeData scp)
-  mkStmt (renderConstDecDef vr v)
+  stmtFromData (renderConstDecDef vr v) Semi
 
 classMethodCall
   :: (RenderValue r var val TypeData, UnRepr r TypeData)

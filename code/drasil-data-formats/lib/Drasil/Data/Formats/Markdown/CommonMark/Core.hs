@@ -99,40 +99,40 @@ mkHeading :: HeadingLevel -- ^ Heading level.
           -> [Inline] -- ^ Single-line heading contents.
           -> Either String Block
 mkHeading level contents
-  | all singleLineInline contents = Right (Heading level contents)
+  | all isSingleLineInline contents = Right (Heading level contents)
   | otherwise = Left "Headings require inline content without line breaks."
 
-singleLineInline :: Inline -> Bool
-singleLineInline (Plain text) = singleLineText text
-singleLineInline (Emphasis contents) = all singleLineInline contents
-singleLineInline (Strong contents) = all singleLineInline contents
-singleLineInline (CodeSpan text) = singleLineText text
-singleLineInline (Link url contents) = singleLineText url && all singleLineInline contents
-singleLineInline (Image source contents) = singleLineText source && all singleLineInline contents
-singleLineInline SoftBreak = False
-singleLineInline HardBreak = False
-singleLineInline (HTMLInline body) = singleLineHTML body
+isSingleLineInline :: Inline -> Bool
+isSingleLineInline (Plain text) = isSingleLineText text
+isSingleLineInline (Emphasis contents) = all isSingleLineInline contents
+isSingleLineInline (Strong contents) = all isSingleLineInline contents
+isSingleLineInline (CodeSpan text) = isSingleLineText text
+isSingleLineInline (Link url contents) = isSingleLineText url && all isSingleLineInline contents
+isSingleLineInline (Image source contents) = isSingleLineText source && all isSingleLineInline contents
+isSingleLineInline SoftBreak = False
+isSingleLineInline HardBreak = False
+isSingleLineInline (HTMLInline body) = isSingleLineHtml body
 
-singleLineText :: Text -> Bool
-singleLineText = not . T.any (`elem` ['\r', '\n'])
+isSingleLineText :: Text -> Bool
+isSingleLineText = not . T.any (`elem` ['\r', '\n'])
 
-singleLineHTML :: HTML.HTMLBody -> Bool
-singleLineHTML (HTML.RawText text) = singleLineText text
-singleLineHTML (HTML.TextFormat _ attrs contents) = singleLineElement attrs contents
-singleLineHTML (HTML.Anchor url attrs contents) =
-  singleLineText url && singleLineElement attrs contents
-singleLineHTML (HTML.Img source alt attrs) =
-  all singleLineText [source, alt] && all singleLineAttr attrs
-singleLineHTML (HTML.Custom (HTML.CT tag) attrs contents) =
-  singleLineText tag && T.toCaseFold tag /= T.pack "br" && singleLineElement attrs contents
-singleLineHTML (HTML.Comment text) = singleLineText text
-singleLineHTML _ = False
+isSingleLineHtml :: HTML.HTMLBody -> Bool
+isSingleLineHtml (HTML.RawText text) = isSingleLineText text
+isSingleLineHtml (HTML.TextFormat _ attrs contents) = isSingleLineElement attrs contents
+isSingleLineHtml (HTML.Anchor url attrs contents) =
+  isSingleLineText url && isSingleLineElement attrs contents
+isSingleLineHtml (HTML.Img source alt attrs) =
+  all isSingleLineText [source, alt] && all isSingleLineAttr attrs
+isSingleLineHtml (HTML.Custom (HTML.CT tag) attrs contents) =
+  isSingleLineText tag && T.toCaseFold tag /= T.pack "br" && isSingleLineElement attrs contents
+isSingleLineHtml (HTML.Comment text) = isSingleLineText text
+isSingleLineHtml _ = False
 
-singleLineElement :: [HTML.Attr] -> [HTML.HTMLBody] -> Bool
-singleLineElement attrs contents = all singleLineAttr attrs && all singleLineHTML contents
+isSingleLineElement :: [HTML.Attr] -> [HTML.HTMLBody] -> Bool
+isSingleLineElement attrs contents = all isSingleLineAttr attrs && all isSingleLineHtml contents
 
-singleLineAttr :: HTML.Attr -> Bool
-singleLineAttr (HTML.Attr key value) = all singleLineText [key, value]
+isSingleLineAttr :: HTML.Attr -> Bool
+isSingleLineAttr (HTML.Attr key value) = all isSingleLineText [key, value]
 
 -- | Destination of a link.
 type URL = Text

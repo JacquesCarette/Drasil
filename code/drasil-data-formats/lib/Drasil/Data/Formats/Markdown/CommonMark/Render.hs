@@ -11,6 +11,7 @@ module Drasil.Data.Formats.Markdown.CommonMark.Render
 where
 
 import Data.Char (isAlphaNum, isAscii, isPunctuation, isSpace, isSymbol, ord)
+import Data.List (intercalate)
 import Data.Maybe (listToMaybe, mapMaybe)
 import Data.Text (Text)
 import Data.Text qualified as T
@@ -79,13 +80,13 @@ defaultCommonMarkRO =
 -- inline HTML. Headings are validated by @mkHeading@ before rendering; their
 -- leading and trailing whitespace is stripped.
 renderCommonMark :: CommonMarkRenderOptions -> CommonMark -> Doc ann
-renderCommonMark opt (CommonMark blocks) = renderBlocks opt blocks
+renderCommonMark opt (CommonMark blocks) = linesToDoc (renderBlocks opt blocks)
 
-renderBlocks :: CommonMarkRenderOptions -> [Block] -> Doc ann
+renderBlocks :: CommonMarkRenderOptions -> [Block] -> [Text]
 renderBlocks opt = snd . renderBlocksWithFirst opt
 
 -- Inspect the first visible source block without rendering it a second time.
-renderBlocksWithFirst :: CommonMarkRenderOptions -> [Block] -> (Maybe Block, Doc ann)
+renderBlocksWithFirst :: CommonMarkRenderOptions -> [Block] -> (Maybe Block, [Text])
 renderBlocksWithFirst opt blocks =
   (fst <$> listToMaybe rendered, separateBlocks (separateLists rendered))
   where
@@ -94,23 +95,23 @@ renderBlocksWithFirst opt blocks =
     separateLists [] = []
     separateLists [(_, contents)] = [contents]
     separateLists ((block, contents) : remaining@((next, _) : _)) =
-      contents : ["<!-- -->" | sameList block next] <> separateLists remaining
+      contents : [["<!-- -->"] | sameList block next] <> separateLists remaining
     sameList (OrderedList _) (OrderedList _) = True
     sameList (UnorderedList _) (UnorderedList _) = True
     sameList _ _ = False
 
-renderBlock :: CommonMarkRenderOptions -> Block -> Maybe (Doc ann)
+renderBlock :: CommonMarkRenderOptions -> Block -> Maybe [Text]
 renderBlock opt (Heading level contents) =
-  Just (pretty marker <> if T.null text then mempty else " " <> pretty text)
+  Just [marker <> if T.null text then mempty else " " <> text]
   where
     marker = T.replicate (fromEnum level + 1) "#"
     -- Inline HTML can introduce layout newlines even in a validated heading.
-    text = T.strip $ T.replace "\n" " " $ docText (renderInlinesWith opt id contents)
+    text = T.strip $ T.replace "\n" " " $ renderInlinesWith opt id contents
 renderBlock opt (Paragraph contents)
   | all paragraphWhitespace (normalizeInlines contents) || null rendered = Nothing
-  | otherwise = Just (linesToDoc rendered)
+  | otherwise = Just rendered
   where
-    rendered = protectStart <$> trimLines (T.splitOn "\n" (docText (renderParagraph opt contents)))
+    rendered = protectStart <$> trimLines (T.splitOn "\n" (renderParagraph opt contents))
     trimLines = reverse . dropWhile T.null . reverse . dropWhile T.null
     protectStart original = case T.uncons unindented of
       -- A comment can interrupt a paragraph even when another tag follows it.
@@ -131,16 +132,16 @@ renderBlock opt (OrderedList items)
 renderBlock opt (UnorderedList items)
   | null items = Nothing
   | otherwise = Just (renderList opt (repeat "-") items)
-renderBlock _ ThematicBreak = Just "---"
+renderBlock _ ThematicBreak = Just ["---"]
 renderBlock opt (HTMLBlock bodies)
   | null nonemptyBodies = Nothing
-  | otherwise = Just (textToDoc (protectHTMLBlankLines rendered))
+  | otherwise = Just (protectHTMLBlankLines rendered)
   where
     nonemptyBodies = filter nonemptyHTML bodies
     blockBodies = case nonemptyBodies of
       first : _ | startsHTMLBlock first -> nonemptyBodies
       _ -> [HTML.Div [] nonemptyBodies]
-    rendered = docText (HTML.renderHTMLFragment (htmlRenderOptions opt) blockBodies)
+    rendered = renderHTMLText opt blockBodies
 
 nonemptyHTML :: HTML.HTMLBody -> Bool
 nonemptyHTML (HTML.RawText text) = not (T.null text)
@@ -163,15 +164,15 @@ startsHTMLBlock _ = False
 -- A comment prevents a blank line from ending an ordinary CommonMark HTML
 -- block. Custom raw-text elements should be supplied without blank lines:
 -- comments inside their literal contents would change that text.
-protectHTMLBlankLines :: Text -> Text
+protectHTMLBlankLines :: Text -> [Text]
 protectHTMLBlankLines input
-  | T.null input = input
-  | otherwise = T.intercalate "\n" (protect <$> T.splitOn "\n" (normalizeLineEndings input))
+  | T.null input = [input]
+  | otherwise = protect <$> T.splitOn "\n" (normalizeLineEndings input)
   where
     protect line | T.all (\c -> c == ' ' || c == '\t') line = line <> "<!-- -->"
                  | otherwise = line
 
-renderList :: CommonMarkRenderOptions -> [Text] -> [ListItem] -> Doc ann
+renderList :: CommonMarkRenderOptions -> [Text] -> [ListItem] -> [Text]
 renderList opt markers = separateBlocks . zipWith renderItem markers
   where
     -- A marker-only line avoids thematic-break priority for @- ---@ and
@@ -180,8 +181,8 @@ renderList opt markers = separateBlocks . zipWith renderItem markers
     startsWithDashes (UnorderedList _) = True
     startsWithDashes _ = False
     renderItem marker (ListItem blocks) = case firstBlock of
-      Nothing -> pretty marker
-      Just first -> linesToDoc $ case T.splitOn "\n" (docText contents) of
+      Nothing -> [marker]
+      Just first -> case contents of
         [] -> [marker]
         ls@(opening : rest)
           | startsWithDashes first -> marker : fmap indentLine ls
@@ -195,7 +196,7 @@ renderList opt markers = separateBlocks . zipWith renderItem markers
 -- A final backslash-newline is not a CommonMark hard break at a block boundary.
 -- Render only boundary hard breaks with HTML; interior breaks keep their usual
 -- Markdown syntax. Empty inline nodes must not hide those boundaries.
-renderParagraph :: CommonMarkRenderOptions -> [Inline] -> Doc ann
+renderParagraph :: CommonMarkRenderOptions -> [Inline] -> Text
 renderParagraph opt contents =
   mconcat prefix <> renderInlines opt middle <> mconcat suffix
   where
@@ -225,28 +226,32 @@ normalizeLineEndings = T.replace "\r" "\n" . T.replace "\r\n" "\n"
 linesToDoc :: [Text] -> Doc ann
 linesToDoc = concatWith (surround hardline) . fmap pretty
 
-textToDoc :: Text -> Doc ann
-textToDoc = linesToDoc . T.splitOn "\n" . normalizeLineEndings
-
--- Materialize only at boundaries that inspect or prefix physical source lines.
-docText :: Doc ann -> Text
-docText = renderStrict . layoutPretty defaultLayoutOptions
+-- Only the external HTML renderer introduces layout decisions before the final
+-- CommonMark document. Materialize that output once at this format boundary.
+renderHTMLText :: CommonMarkRenderOptions -> [HTML.HTMLBody] -> Text
+renderHTMLText opt = renderStrict . layoutPretty defaultLayoutOptions .
+  HTML.renderHTMLFragment (htmlRenderOptions opt)
 
 -- A quote needs a marker on every line, including blank and embedded HTML lines.
-prefixBlockQuote :: Doc ann -> Doc ann
-prefixBlockQuote = linesToDoc . fmap prefixLine . T.splitOn "\n" . docText
+prefixBlockQuote :: [Text] -> [Text]
+prefixBlockQuote [] = [">"]
+prefixBlockQuote ls = fmap prefixLine ls
   where
     prefixLine line | T.null line = ">"
                     | otherwise = "> " <> line
 
-separateBlocks :: [Doc ann] -> Doc ann
-separateBlocks = concatWith (surround (hardline <> hardline))
+separateBlocks :: [[Text]] -> [Text]
+separateBlocks = intercalate [""]
 
-renderInlines :: CommonMarkRenderOptions -> [Inline] -> Doc ann
+renderInlines :: CommonMarkRenderOptions -> [Inline] -> Text
 renderInlines opt = renderInlinesWith opt
   (protectLeadingWhitespace . protectTrailingWhitespace)
 
-renderInlinesWith :: CommonMarkRenderOptions -> (Text -> Text) -> [Inline] -> Doc ann
+-- Compose inline nodes without block separators. Inspect neighbours to avoid
+-- accidental delimiter runs or hard breaks. The supplied function controls
+-- whitespace protection at embedded HTML edges; headings use id and trim
+-- their final contents at block level.
+renderInlinesWith :: CommonMarkRenderOptions -> (Text -> Text) -> [Inline] -> Text
 renderInlinesWith opt protectHTMLEdges = mconcat . go Nothing False . normalizeInlines
   where
     go _ _ [] = []
@@ -259,38 +264,41 @@ renderInlinesWith opt protectHTMLEdges = mconcat . go Nothing False . normalizeI
       | any startsWithNewline next = protectTrailingSpaces
       | otherwise = id
     renderNode _ startsLine (Plain text) next =
-      textToDoc (prepareText startsLine next (escapePlain (normalizeLineEndings text)))
+      prepareText startsLine next (escapePlain (normalizeLineEndings text))
     renderNode before _ (Emphasis ch) after =
       emphasized "em" (emphasisDelimiter opt) 1 before ch after
     renderNode before _ (Strong ch) after =
       emphasized "strong" (strongDelimiter opt) 2 before ch after
     renderNode before _ (CodeSpan text) after
       | any adjacentCode [before, after] =
-          "<code>" <> textToDoc (protectLeadingWhitespace (protectTrailingWhitespace
-            (renderInlineHTML opt (HTML.RawText (normalizeCodeSpan text))))) <> "</code>"
+          "<code>" <> protectLeadingWhitespace (protectTrailingWhitespace
+            (renderInlineHTML opt (HTML.RawText (normalizeCodeSpan text)))) <> "</code>"
       | otherwise = renderCodeSpan text
     renderNode _ _ (Link url ch) _ = link "" url ch
     renderNode _ _ (Image source ch) _ = link "!" source ch
-    renderNode _ _ SoftBreak _ = hardline
-    renderNode _ _ HardBreak _ = "\\" <> hardline
+    renderNode _ _ SoftBreak _ = "\n"
+    renderNode _ _ HardBreak _ = "\\\n"
     renderNode _ startsLine (HTMLInline body) next =
-      textToDoc (prepareText startsLine next (protectHTMLEdges (renderInlineHTML opt body)))
+      prepareText startsLine next (protectHTMLEdges (renderInlineHTML opt body))
     link prefix destination ch =
       prefix <> "[" <> renderInlinesWith opt protectHTMLEdges ch <> "](<" <>
-        pretty (escapeDestination destination) <> ">)"
-    -- Only use delimiter syntax where its boundaries are unambiguous.
-    -- HTML handles whitespace, punctuation, nesting and touching emphasis.
+        escapeDestination destination <> ">)"
+    -- Use Markdown delimiters only for literal contents whose edges and
+    -- neighbours pass these conservative checks. Otherwise HTML keeps formatting
+    -- boundaries explicit, including nested and adjacent emphasis. For example,
+    -- adjacent Emphasis nodes for "a" and "b" emit <em>a</em><em>b</em>.
     emphasized tag delimiter count before ch after
       | Just text <- plainContents ch,
         Just (first, _) <- T.uncons text, Just (_, lastChar) <- T.unsnoc text,
         isAlphaNum first && isAlphaNum lastChar,
         safeNeighbor delimiter T.unsnoc before,
         safeNeighbor delimiter (fmap swap . T.uncons) after =
-          let marker = pretty (T.replicate count (delimiterText delimiter))
+          let marker = T.replicate count (delimiterText delimiter)
           in marker <> contents <> marker
       | otherwise = "<" <> tag <> ">" <> guardLine <> contents <> "</" <> tag <> ">"
       where
         contents = renderInlinesWith opt protectHTMLEdges ch
+        -- Keep a tag-only opening line from starting an HTML block.
         guardLine | openingNeedsGuard (normalizeInlines ch) = "<!-- -->"
                   | otherwise = mempty
     -- Only literal text and a soft break can leave the opening tag alone on
@@ -382,7 +390,11 @@ escapeDestination = T.concatMap escapeChar
           in "%" <> T.justifyRight 2 '0' digits
       | otherwise = T.singleton c
 
--- Prevent paragraph text from becoming an indented code block.
+-- Four columns of indentation can start an indented code block. Encode the
+-- first leading space or tab as a character reference so paragraph text is
+-- not parsed as code: "    x" becomes "&#32;   x". One to three leading
+-- spaces need no such guard.
+-- See <https://spec.commonmark.org/0.31.2/#indented-code-blocks>.
 protectCodeIndentation :: Text -> Text
 protectCodeIndentation text
   | T.length indentation >= 4 || T.any (== '\t') indentation = protectLeadingWhitespace text
@@ -420,8 +432,7 @@ renderInlineHTML :: CommonMarkRenderOptions -> HTML.HTMLBody -> Text
 renderInlineHTML opt body = guardOpeningLine rendered
   where
     rendered = protectLineIndentation protectLeadingWhitespace $ T.replace " \n" "&#32;\n" $ normalizeLineEndings $
-      renderStrict (layoutPretty defaultLayoutOptions
-        (HTML.renderHTMLFragment (htmlRenderOptions opt) [protectText body]))
+      renderHTMLText opt [protectText body]
     protectText (HTML.RawText t) = HTML.RawText (T.concatMap escapeChar t)
     protectText (HTML.TextFormat fmt attrs ch) = HTML.TextFormat fmt attrs (protectText <$> ch)
     protectText (HTML.Anchor url attrs ch) = HTML.Anchor url attrs (protectText <$> ch)
@@ -442,10 +453,10 @@ normalizeCodeSpan = T.replace "\n" " " . normalizeLineEndings
 
 -- | Delimit literal inline code, preserving spaces and embedded backticks.
 -- Line endings become spaces as in CommonMark; an empty span uses HTML.
-renderCodeSpan :: Text -> Doc ann
+renderCodeSpan :: Text -> Text
 renderCodeSpan input
   | T.null contents = "<code></code>"
-  | otherwise = pretty marker <> padding <> pretty contents <> padding <> pretty marker
+  | otherwise = marker <> padding <> contents <> padding <> marker
   where
     contents = normalizeCodeSpan input
     marker = T.replicate (longestRun '`' contents + 1) "`"
@@ -458,6 +469,9 @@ renderCodeSpan input
 needsCodeSpanPadding :: Text -> Bool
 needsCodeSpanPadding = matchTest codeSpanPaddingRegex
 
+-- The final alternative matches spaces at both ends with a non-space inside.
+-- For " x ", add one space at each end because CommonMark removes one from
+-- each side; all-space contents are exempt from that rule.
 codeSpanPaddingRegex :: Regex
 codeSpanPaddingRegex = makeRegex ("^`|`$|^ .*[^ ].* $" :: Text)
 
@@ -466,8 +480,8 @@ codeSpanPaddingRegex = makeRegex ("^`|`$|^ .*[^ ].* $" :: Text)
 -- newline when needed. Collapse info-string whitespace to keep it on one line.
 -- Use tildes if the info string contains a backtick.
 -- See <https://spec.commonmark.org/0.31.2/#fenced-code-blocks>.
-renderCodeFence :: CodeFenceStyle -> Maybe Text -> Text -> Doc ann
-renderCodeFence style info input = textToDoc
+renderCodeFence :: CodeFenceStyle -> Maybe Text -> Text -> [Text]
+renderCodeFence style info input = T.splitOn "\n"
   (fence <> infoPrefix <> escapeHTMLText (T.replace "\\" "\\\\" infoText) <> "\n" <> contents <> finalBreak <> fence)
   where
     contents = normalizeLineEndings input

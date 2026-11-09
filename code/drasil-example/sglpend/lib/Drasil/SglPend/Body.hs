@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)
-import Data.Drasil.Concepts.Physics (motion, pendulum, angular, displacement, iPos, gravitationalConst, gravity, rigidBody, weight, shm)
+import Data.Drasil.Concepts.Physics (motion, pendulum, angular, displacement, iPos, gravity, rigidBody, shm)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Theories.Physics (newtonSLR)
 
@@ -93,7 +93,7 @@ purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pen
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   physicalcon <> [angular, displacement, iPos, pendulum, motion,
-  gravitationalConst, gravity, rigidBody, weight, shm] <> defs
+  gravity, rigidBody, shm] <> defs
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName allRefs symbols ideaDicts []

@@ -22,13 +22,13 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity,
-  rectilinear, twoD, motion, distance, collision, positionVec)
+  rectilinear, twoD, motion, distance, collision)
 import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
   gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
-  position, scalarPos, time, velocity, xAccel, xConstAccel, xPos,
+  position, positionVec, scalarPos, time, velocity, xAccel, xConstAccel, xPos,
   xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel, constAccelV)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
@@ -150,8 +150,7 @@ tMods = [accelerationTM, velocityTM]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  [mass] <> defs <> [distance, motion, gravity, collision, rectilinear,
-  positionVec]
+  [mass] <> defs <> [distance, motion, gravity, collision, rectilinear]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName allRefs symbols ideaDicts []
@@ -262,7 +261,7 @@ symbols = pi_ : unitalQuants <> [dqdWr gravitationalAccelConst] <>
   [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
-  constAccelV, projPos, projSpeed]
+  constAccelV, positionVec, projPos, projSpeed]
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst]

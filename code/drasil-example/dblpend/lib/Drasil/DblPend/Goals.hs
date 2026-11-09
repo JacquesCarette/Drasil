@@ -9,7 +9,8 @@ import Language.Drasil.Document (ConceptInstance, cic)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (mass, len)
-import Data.Drasil.Concepts.Physics (gravitationalConst, motion)
+import Data.Drasil.Concepts.Physics (motion)
+import Data.Drasil.Quantities.Physics (gravitationalConst)
 import Data.Drasil.Concepts.Math (iAngle)
 import Drasil.DblPend.Concepts (rod)
 

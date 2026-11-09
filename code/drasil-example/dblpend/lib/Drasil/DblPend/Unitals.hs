@@ -22,7 +22,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,
-  angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, time)
+  angularVelocity, angularAccel, gravitationalAccel, gravitationalConst, tension, acceleration, time)
 import Data.Drasil.Concepts.Math as CM (angle, xDir, yDir)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
@@ -52,7 +52,7 @@ unitalChunks = [len,
   xForce_1, xForce_2, yForce_1, yForce_2,
   yAccel_1, xAccel_2, yAccel_2, angularAccel_1, angularAccel_2, tension_1,
   tension_2, QPP.mass, QP.force, QP.gravitationalAccel, QP.acceleration,
-  QP.time, QP.velocity, QP.position]
+  QP.time, QP.velocity, QP.position, QP.angularVelocity, QP.angularAccel, QP.gravitationalConst]
 
 lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2,

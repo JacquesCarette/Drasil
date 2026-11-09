@@ -29,7 +29,7 @@ import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   system, user, analysis)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
 import Data.Drasil.Concepts.Math (cartesian, ode, graph)
-import Data.Drasil.Concepts.Physics (gravity, pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
+import Data.Drasil.Concepts.Physics (gravity, pendulum, twoD, motion, angular)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
@@ -116,8 +116,7 @@ background = foldlSent_ [D.toSent $ phraseNP (a_ pendulum), S "consists" `S.of_`
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  physicalcon <> [angAccel, angular, angVelo, pendulum, motion,
-  gravitationalConst, gravity] <> defs
+  physicalcon <> [angular, pendulum, motion, gravity] <> defs
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName allRefs symbols ideaDicts [] conceptChunks []

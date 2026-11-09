@@ -5,9 +5,8 @@ import Language.Drasil
 import Language.Drasil.ShortHands (cE, cS, cP, cK, lSigma, lNu)
 
 import Drasil.Database (mkUid)
-import Data.Drasil.Concepts.SolidMechanics as CSM (elastMod, mobShear, nrmStrss,
-    shearRes, stffness)
-import qualified Data.Drasil.Concepts.Physics as CP (strain)
+import Data.Drasil.Concepts.SolidMechanics as CSM (mobShear, shearRes)
+import qualified Data.Drasil.Concepts.Physics as CP (strain, stress)
 import Data.Drasil.SI_Units (newton, pascal)
 import Data.Drasil.Units.SolidMechanics (stiffnessU)
 
@@ -15,11 +14,18 @@ import Data.Drasil.Units.SolidMechanics (stiffnessU)
 
 elastMod, mobShear, nrmStrss, shearRes, stffness :: DefinedQuantityDict
 
-elastMod = dqd CSM.elastMod cE     Real pascal
+elastMod = quant (mkUid "elastMod") (cn "elastic modulus")
+  (S "the ratio of the" +:+ phrase CP.stress +:+
+  S "exerted on a body to the resulting" +:+ phrase CP.strain)
+  cE Real pascal
 mobShear = dqd CSM.mobShear cS     Real newton
 shearRes = dqd CSM.shearRes cP     Real newton
-stffness = dqd CSM.stffness cK     Real stiffnessU
-nrmStrss = dqd CSM.nrmStrss lSigma Real pascal
+stffness = quant (mkUid "stffness") (cn "stiffness")
+  (S "the extent a body resists" +:+ phrase CP.strain)
+  cK Real stiffnessU
+nrmStrss = quant (mkUid "nrmStrss") (cn "normal stress")
+  (S "the" +:+ phrase CP.stress +:+ S "exerted perpendicular to the plane of the object")
+  lSigma Real pascal
 
 -- * Without Units
 

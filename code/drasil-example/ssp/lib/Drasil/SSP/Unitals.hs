@@ -30,6 +30,7 @@ import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
 import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
   force, gravitationalAccel, height, moment2D, pressure, subX, subY, subZ,
   supMax, supMin, torque, weight, positionVec, time)
+import Data.Drasil.Quantities.SolidMechanics (elastMod, nrmStrss, stffness)
 
 symbols :: [DefinedQuantityDict]
 symbols = dqdWr coords : NE.toList inputs <> fmap dqdWr (NE.toList outputs)
@@ -205,7 +206,7 @@ units = [accel, genericMass, genericF, genericA, genericM, genericV,
   porePressure, sliceHght, sliceHghtW, fx, fy, fn, ft, nrmForceSum, watForceSum,
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totNormStress, tangStress,
   effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm, posVec,
-  time, surface, len]
+  time, surface, len, elastMod, nrmStrss, stffness]
 
 accel, genericMass, genericF, genericA, genericM, genericV, genericW,
   genericSpWght, gravAccel, dens, genericH, genericP, genericR, genericT,

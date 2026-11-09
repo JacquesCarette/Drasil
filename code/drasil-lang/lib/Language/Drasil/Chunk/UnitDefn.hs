@@ -12,7 +12,7 @@ module Language.Drasil.Chunk.UnitDefn (
   -- * Unit Combinators ('UnitEquation's)
   (^:), (/:), (*:), (*$), (/$), (^$),
   -- * Helpers
-  fromUDefn, getCu, compUnitDefn, unitSymbol
+  fromUDefn, compUnitDefn, unitSymbol
 ) where
 
 import Control.Lens ((^.), makeLenses, view)
@@ -77,10 +77,6 @@ instance HasUnitSymbol UnitEquation where usymb u = u ^. us
 unitSymbol :: UnitDefn -> UnitSymbol
 unitSymbol = (^. cas)
 
--- | Get a list of 'UID' of the units that make up the 'UnitEquation'.
-getCu :: UnitEquation -> [UID]
-getCu = view contributingUnit
-
 -- | Create a base unit (one not defined in terms of any other unit, e.g. m, kg)
 -- from a 'UID' string, term, definition, and its symbol.
 baseUnit :: String -> NP -> String -> Symbol -> UnitDefn
@@ -94,7 +90,7 @@ derivedUnit :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
 derivedUnit idStr trm dsc sym ueq =
   UD (cncpt''' (unitUid idStr) trm (S dsc))
      (DerivedSI (US [(sym,1)]) (usymb ueq) (USynonym $ usymb ueq))
-     (getCu ueq)
+     (ueq ^. contributingUnit)
 
 -- | Create a derived unit that is a scaled version of another unit
 -- from a 'UID' string, term, definition, its symbol, the scaling factor,
@@ -121,7 +117,7 @@ compoundUnit :: String -> NP -> String -> UnitEquation -> UnitDefn
 compoundUnit idStr trm dsc ueq =
   UD (cncpt''' (unitUid idStr) trm (S dsc))
      (Defined (usymb ueq) (USynonym $ usymb ueq))
-     (getCu ueq)
+     (ueq ^. contributingUnit)
 
 -- | Create a defined unit that is a scaled version of another unit
 -- (e.g. millimetre = 0.001 × metre) from a 'UID' string, term, definition,
@@ -169,19 +165,19 @@ u1 *: u2 = let US l1 = usymb u1
 (*$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 *$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (u1 ^. uid : getCu u2) (US $ l1 <> l2)
+  UE (u1 ^. uid : u2 ^. contributingUnit) (US $ l1 <> l2)
 
 -- | Combinator for dividing a unit and a symbol.
 (/$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 /$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (u1 ^. uid : getCu u2) (US $ l1 <> fmap (second negate) l2)
+  UE (u1 ^. uid : u2 ^. contributingUnit) (US $ l1 <> fmap (second negate) l2)
 
 -- | Combinator for mulitiplying two unit equations.
 (^$) :: UnitEquation -> UnitEquation -> UnitEquation
 u1 ^$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE (getCu u1 <> getCu u2) (US $ l1 <> l2)
+  UE (u1 ^. contributingUnit <> u2 ^. contributingUnit) (US $ l1 <> l2)
 
 -- | We don't want an Ord on units, but this still allows us to compare them.
 compUnitDefn :: UnitDefn -> UnitDefn -> Ordering

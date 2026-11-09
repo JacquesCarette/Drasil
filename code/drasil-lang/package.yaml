@@ -19,10 +19,8 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- aeson
 - lens
 - split
-- text
 - Decimal
 - unicode-names >= 3.2.0.0
 - drasil-database
@@ -34,6 +32,7 @@ ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 
 library:
   source-dirs: lib

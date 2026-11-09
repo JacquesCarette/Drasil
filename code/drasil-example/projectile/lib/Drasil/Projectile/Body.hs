@@ -41,7 +41,6 @@ import Drasil.Projectile.Changes (likelyChgs)
 import Drasil.Projectile.Concepts (launcher, projectile, target, defs,
   ideaDicts)
 import Drasil.Projectile.DataDefs (dataDefs)
-import Drasil.Projectile.Expressions (equations)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
@@ -132,7 +131,7 @@ si = mkSmithEtAlICO projName
   symbMap
 
 labelledContent' :: [LabelledContent]
-labelledContent' = labelledContent <> funcReqsTables <> equations
+labelledContent' = labelledContent <> funcReqsTables
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]

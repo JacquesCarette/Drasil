@@ -16,18 +16,20 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- containers
 - directory
-- filepath
-- split
-- text
 
 ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 
 library:
+  dependencies:
+  - containers
+  - filepath
+  - split
+  - text
   source-dirs: lib
 
 executables:
@@ -35,6 +37,8 @@ executables:
     main: ClassInstDepGen
     source-dirs: app/classinstdepgen
     dependencies:
+    - containers
+    - split
     - drasil-meta-analysis
 
   typedepgen:

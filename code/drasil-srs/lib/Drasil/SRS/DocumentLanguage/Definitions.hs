@@ -12,7 +12,7 @@ module Drasil.SRS.DocumentLanguage.Definitions (
 
 import Control.Lens ((^.))
 import Data.Foldable (Foldable(..))
-import Data.Maybe (mapMaybe)
+import Data.Maybe (isJust, mapMaybe)
 
 -- rest of Drasil
 import Drasil.Database (ChunkDB, UID, HasUID(..), find, dependantsOrErr)
@@ -117,8 +117,15 @@ mkTMField _ _ l _ = error $ "Label " <> show l <> " not supported " <>
 
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
 helperRefs :: HasUID t => t -> SmithEtAlSRS -> Sentence
-helperRefs t s = foldlList Comma List $ (`helpToRefField` db) <$> dependantsOrErr (t ^. uid) db
-  where db = s ^. systemdb
+helperRefs t s = foldlList Comma List $
+  (`helpToRefField` cdb) <$> filter (not . isDocContent cdb) (dependantsOrErr (t ^. uid) cdb)
+  where cdb = s ^. systemdb
+
+-- | Tables, figures and sections can mention a model without being something
+-- that it is "referenced by", so they are left out of that list.
+isDocContent :: ChunkDB -> UID -> Bool
+isDocContent cdb u = isJust (find u cdb :: Maybe LabelledContent)
+                  || isJust (find u cdb :: Maybe Section)
 
 -- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of
 -- the possible data sets contained in the 'SmithEtAlSRS' database.

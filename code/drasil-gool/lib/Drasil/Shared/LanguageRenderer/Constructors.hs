@@ -1,37 +1,26 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module Drasil.Shared.LanguageRenderer.Constructors (
-  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar,
-  typeFromData, VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec,
-  powerPrec, andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr,
-  binExpr, binExpr', binExprNumDbl', typeBinExpr
+  mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar, typeFromData, VSOp, mkOp,
+  unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec, andPrec,
+  orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, binExpr',
+  binExprNumDbl', typeBinExpr
 ) where
 
 import Drasil.Shared.InterfaceCommon (TypeSym(..), ValueSym(..), getCodeType,
   TypeElim)
 import Drasil.Shared.RendererClassesCommon (VSUnOp, VSBinOp,
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..),
-  ValueElim(valuePrec), RenderStatement(..))
+  ValueElim(valuePrec))
 import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
-import Drasil.Shared.AST (Terminator(..), AttachmentTag(..), OpData, od,
-  TypeData, td)
+import Drasil.Shared.AST (AttachmentTag(..), OpData, od, TypeData, td)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.Helpers (toCode, toState, on2StateValues)
-import Drasil.Shared.State (MS, VS)
+import Drasil.Shared.State (VS)
 
 import Text.PrettyPrint.HughesPJ (Doc, parens, text)
 import Data.Composition ((.:))
 import Control.Monad (join)
-
--- Statements
-
--- | Constructs a statement terminated by a semi-colon
-mkStmt :: (RenderStatement r stmt) => Doc -> MS (r stmt)
-mkStmt = flip stmtFromData Semi
-
--- | Constructs a statement without a termination character
-mkStmtNoEnd :: (RenderStatement r stmt) => Doc -> MS (r stmt)
-mkStmtNoEnd = flip stmtFromData Empty
 
 -- Values --
 

@@ -16,15 +16,13 @@ ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 
 extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- lens
-- directory
 - drasil-gen
-- dblpend
 
 library:
   dependencies:
@@ -36,6 +34,7 @@ library:
   - drasil-system
   - drasil-theory
   - drasil-utils
+  - dblpend
   source-dirs: lib
 
 executables:

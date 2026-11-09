@@ -56,9 +56,10 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class',
   multiStmt, body, printFile, classVarAccess, cast, castObj,
   classLevel, instanceLevel, break, continue, private, public, blockCmt, docCmt,
-  addComments, commentedMod, commentedItem)
+  addComments, commentedMod, commentedItem, print, forEach, addAssign, increment,
+  decrement, switch, assign, subAssign, return', comment)
 import Drasil.GOOL.Renderers (renderType, renderParam, renderListDec)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
+import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl,
   typeUnExpr, binExpr, binExprNumDbl', typeBinExpr, typeFromData)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
@@ -67,19 +68,17 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, getFunc, setFunc, loopStmt, emptyStmt, assign, subAssign,
-  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
-  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
-  defaultOptSpace, local, smartAdd)
+  listAccess, getFunc, setFunc, objDecNew, print, closeFile, ifCond, construct,
+  param, method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
+  smartAdd)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
-  increment, increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew,
-  switch, for, while, multiAssignError, multiReturnError, multiTypeError,
-  setType)
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement, varDec,
+  varDecDef, listDec, extObjDecNew, for, while, multiAssignError,
+  multiReturnError, multiTypeError, setType)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -502,13 +501,18 @@ instance InternalAssignStmt JavaCode Statement Variable Value where
   multiAssign _ _ = error $ C.multiAssignError jName
 
 instance InternalIOStmt JavaCode Statement Value where
-  printSt _ _ = CP.printSt
+  printSt _ _ va' vb' = do
+    va <- zoom lensMStoVS va'
+    vb <- zoom lensMStoVS vb'
+    stmtFromData (R.print va vb) Semi
 
 instance InternalControlStmt JavaCode Statement Value where
   multiReturn _ = error $ C.multiReturnError jName
 
 instance RenderStatement JavaCode Statement where
-  loopStmt = G.loopStmt
+  loopStmt s' = do
+    s <- s'
+    stmtFromData (preStatement s) Empty
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JavaCode Statement where
@@ -519,20 +523,35 @@ instance StatementTerm JavaCode Statement where
   statementTerm = snd . unJC
 
 instance EmptyStatement JavaCode Statement where
-  emptyStmt = G.emptyStmt
+  emptyStmt = stmtFromData empty Empty
 
 instance MultiStatement JavaCode Statement where
   multi = onStateList (onCodeList R.multiStmt)
 
 instance ValueStatement JavaCode Statement Value where
-  valStmt = G.valStmt Semi
+  valStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (RC.value v) Semi
 
 instance AssignStatement JavaCode Statement Variable Value where
-  assign = G.assign Semi
-  (&-=) = G.subAssign Semi
-  (&+=) = C.increment
-  (&++) = C.increment1
-  (&--) = C.decrement1
+  assign vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.assign vr v) Semi
+  (&-=) vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.subAssign vr v) Semi
+  (&+=) vr' v'= do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.addAssign vr v) Semi
+  (&++) vr' = do
+    vr <- zoom lensMStoVS vr'
+    stmtFromData (R.increment vr) Semi
+  (&--) vr' = do
+    vr <- zoom lensMStoVS vr'
+    stmtFromData (R.decrement vr) Semi
 
 instance DeclStatement JavaCode Body Statement Variable ScopeData Value where
   varDec = C.varDec classLevel instanceLevel empty
@@ -587,7 +606,7 @@ instance StringStatement JavaCode Statement Variable Value where
     modify (addLangImport $ utilImport jArrays)
     ss <- zoom lensMStoVS $
       jStringSplit vnew (jAsListFunc string [s $. jSplitFunc d])
-    mkStmt ss
+    stmtFromData ss Semi
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
@@ -600,32 +619,72 @@ instance OOFuncAppStatement JavaCode Statement Variable Value where
   selfInOutCall = jInOutCall selfMethodCall
 
 instance CommentStatement JavaCode Statement where
-  comment = G.comment commentStart
+  comment c = stmtFromData (R.comment c commentStart) Empty
 
 instance ControlStatement JavaCode Body Statement Variable Value where
-  break = mkStmt R.break
-  continue = mkStmt R.continue
+  break = stmtFromData R.break Semi
+  continue = stmtFromData R.continue Semi
 
-  returnStmt = G.returnStmt Semi
+  returnStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.return' [v]) Semi
 
-  throw = G.throw jThrowDoc Semi
+  throw msg' = do
+    msg <- zoom lensMStoVS (litString msg')
+    stmtFromData (jThrowDoc msg) Semi
 
   ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
-  switch  = C.switch parens break
+  switch val' cases' dflt' = do
+    brk <- break
+    val <- zoom lensMStoVS val'
+    vals <- mapM (zoom lensMStoVS . fst) cases'
+    bods <- mapM snd cases'
+    dflt <- dflt'
+    stmtFromData (R.switch parens brk val dflt (zip vals bods)) Semi
 
   ifExists = M.ifExists
 
-  for = C.for bodyStart bodyEnd
+  for initial' guard' update' bod' = do
+    initial <- loopStmt initial'
+    guard <- zoom lensMStoVS guard'
+    update <- loopStmt update'
+    bod <- bod'
+    stmtFromData
+      (C.for
+       (preStatement initial)
+       (RC.value guard)
+       (preStatement update)
+       (RC.body bod)
+      ) Empty
   forRange = M.forRange
-  forEach = CP.forEach bodyStart bodyEnd forLabel colon
-  while = C.while parens bodyStart bodyEnd
+  forEach vr' iterator' bod' = do
+    vr <- zoom lensMStoVS vr'
+    iterator <- zoom lensMStoVS iterator'
+    bod <- bod'
+    stmtFromData
+      (R.forEach
+        forLabel colon
+        (renderType (variableType vr))
+        (RC.variable vr)
+        (RC.value iterator)
+        (RC.body bod)
+      ) Empty
+  while val' bod' = do
+    val <- zoom lensMStoVS val'
+    bod <- bod'
+    stmtFromData
+      (C.while parens bodyStart bodyEnd (RC.value val) (RC.body bod))
+      Empty
 
-  tryCatch = G.tryCatch jTryCatch
+  tryCatch try' catch' = do
+    try <- try'
+    catch <- catch'
+    stmtFromData (jTryCatch try catch) Empty
 
   assert condition errorMessage = do
     cond <- zoom lensMStoVS condition
     errMsg <- zoom lensMStoVS errorMessage
-    mkStmt (jAssert cond errMsg)
+    stmtFromData (jAssert cond errMsg) Semi
 
 instance ObserverPattern JavaCode Statement TypeData where
   notifyObservers = M.notifyObservers
@@ -945,8 +1004,8 @@ jConstDecDef v' scp def' = do
   def <- zoom lensMStoVS def'
   modify $ useVarName $ variableName v
   modify $ setVarScope (variableName v) (scopeData scp)
-  mkStmt $ jFinal <+> renderType (variableType v) <+>
-    RC.variable v <+> equals <+> RC.value def
+  stmtFromData (jFinal <+> renderType (variableType v) <+>
+    RC.variable v <+> equals <+> RC.value def) Semi
 
 jFuncDecDef
   :: VS (JavaCode Variable)
@@ -960,11 +1019,11 @@ jFuncDecDef v scp ps bod = do
   modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
-  mkStmt $ renderType (variableType vr) <+> RC.variable vr <+> equals <+>
+  stmtFromData (renderType (variableType vr) <+> RC.variable vr <+> equals <+>
     parens (variableList pms) <+> jLambdaSep <+> bodyStart $$ indent (RC.body b)
-    $$ bodyEnd
+    $$ bodyEnd) Semi
 
-jThrowDoc :: (ValueElim r val) => r val -> Doc
+jThrowDoc :: JavaCode Value -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 

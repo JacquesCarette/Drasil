@@ -2,9 +2,8 @@
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, listSize',
-  statement, increment, increment1, decrement1, varDec, varDecDef, setDecDef,
-  listDec, extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
-  multiTypeError
+  statement, varDec, varDecDef, setDecDef, listDec, extObjDecNew, for, while,
+  multiAssignError, multiReturnError, multiTypeError
 ) where
 
 import Drasil.FileHandling.Legacy (indent)
@@ -17,7 +16,8 @@ import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (extNewObj, objMethodCallNoParams, ($->))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
-  RenderValue(valFromData), ValueElim(valuePrec), ScopeElim(scopeData))
+  RenderValue(valFromData), ValueElim(valuePrec), ScopeElim(scopeData),
+  stmtFromData)
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import Drasil.GOOL.Renderers (renderType)
 import qualified Drasil.GOOL.RendererClassesOO as RO
@@ -26,8 +26,8 @@ import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData,
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing, getTerm)
 import qualified Drasil.Shared.LanguageRenderer as R
-import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStmt,
-  mkStmtNoEnd, mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
+import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStateVal,
+  mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import Drasil.Shared.State (MS, VS, lensMStoVS, lensVStoMS, addLibImportVS,
   getClassName, useVarName, setVarScope)
 
@@ -151,28 +151,7 @@ listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 statement :: (RC.StatementElim r stmt, RC.StatementTerm r stmt) => r stmt -> Doc
 statement st = RC.preStatement st <> getTerm (RC.statementTerm st)
 
-increment
-  :: (InternalVarElim r var, RC.RenderStatement r stmt, ValueElim r val)
-  => VS (r var) -> VS (r val) -> MS (r stmt)
-increment vr' v'= do
-  vr <- zoom lensMStoVS vr'
-  v <- zoom lensMStoVS v'
-  mkStmt $ R.addAssign vr v
-
-increment1
-  :: (InternalVarElim r var, RC.RenderStatement r stmt)
-  => VS (r var) -> MS (r stmt)
-increment1 vr' = do
-  vr <- zoom lensMStoVS vr'
-  (mkStmt . R.increment) vr
-
-decrement1
-  :: (InternalVarElim r var, RC.RenderStatement r stmt)
-  => VS (r var) -> MS (r stmt)
-decrement1 vr' = do
-  vr <- zoom lensMStoVS vr'
-  (mkStmt . R.decrement) vr
-
+-- TODO [Brandon Bosman, 11/04/2026]: Split this up
 varDec
   :: ( InternalVarElim r var
      , RO.PermElim r attch
@@ -187,15 +166,16 @@ varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
-  mkStmt (RO.perm (bind $ variableBind v)
+  stmtFromData (RO.perm (bind $ variableBind v)
     <+> renderType (variableType v) <+> (ptrdoc (getCodeType (variableType v)) <>
-    RC.variable v))
+    RC.variable v)) Semi
   where bind ClassLevel = s
         bind InstanceLevel = d
         ptrdoc (List _) = pdoc
         ptrdoc (Set _) = pdoc
         ptrdoc _ = empty
 
+-- TODO [Brandon Bosman, 11/04/2026]: Split this up
 varDecDef
   :: ( IC.DeclStatement r bod stmt var scope val
      , RC.RenderStatement r stmt
@@ -206,10 +186,9 @@ varDecDef
 varDecDef t vr scp vl' = do
   vd <- IC.varDec vr scp
   vl <- zoom lensMStoVS vl'
-  let stmtCtor Empty = mkStmtNoEnd
-      stmtCtor Semi = mkStmt
-  stmtCtor t (RC.preStatement vd <+> equals <+> RC.value vl)
+  stmtFromData (RC.preStatement vd <+> equals <+> RC.value vl) t
 
+-- TODO [Brandon Bosman, 11/04/2026]: Split this up
 setDecDef
   :: ( IC.DeclStatement r bod stmt var scope val
      , RC.RenderStatement r stmt
@@ -220,10 +199,9 @@ setDecDef
 setDecDef t vr scp vl' = do
   vd <- IC.setDec vr scp
   vl <- zoom lensMStoVS vl'
-  let stmtCtor Empty = mkStmtNoEnd
-      stmtCtor Semi = mkStmt
-  stmtCtor t (RC.preStatement vd <+> equals <+> RC.value vl)
+  stmtFromData (RC.preStatement vd <+> equals <+> RC.value vl) t
 
+-- TODO [Brandon Bosman, 11/04/2026]: Split this up
 listDec
   ::
     ( IC.DeclStatement r bod stmt var scope val
@@ -234,7 +212,7 @@ listDec
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
-  mkStmt (RC.preStatement vd <> f sz)
+  stmtFromData (RC.preStatement vd <> f sz) Semi
 
 extObjDecNew
   ::
@@ -246,62 +224,19 @@ extObjDecNew
 extObjDecNew l v scp vs = IC.varDecDef v scp
   (extNewObj l (onStateValue variableType v) vs)
 
--- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)
--- 2nd parameter is a statement to end every case with
-switch
-  :: ( RC.BodyElim r bod
-     , RC.RenderStatement r stmt
-     , RC.StatementElim r stmt
-     , ValueElim r val
-     )
-  => (Doc -> Doc)
-  -> MS (r stmt)
-  -> VS (r val)
-  -> [(VS (r val), MS (r bod))]
-  -> MS (r bod)
-  -> MS (r stmt)
-switch f st v cs bod = do
-  s <- st
-  val <- zoom lensMStoVS v
-  vals <- mapM (zoom lensMStoVS . fst) cs
-  bods <- mapM snd cs
-  dflt <- bod
-  mkStmt $ R.switch f s val dflt (zip vals bods)
+for :: Doc -> Doc -> Doc -> Doc -> Doc
+for initial guard update bod = vcat
+  [ forLabel <+> parens (initial <> semi <+> guard <> semi <+> update) <+> R.bodyStart
+  , indent bod
+  , R.bodyEnd
+  ]
 
-for
-  :: ( RC.BodyElim r bod
-     , RC.RenderStatement r stmt
-     , RC.StatementElim r stmt
-     , ValueElim r val
-     )
-  => Doc
-  -> Doc
-  -> MS (r stmt)
-  -> VS (r val)
-  -> MS (r stmt)
-  -> MS (r bod)
-  -> MS (r stmt)
-for bStart bEnd sInit vGuard sUpdate b = do
-  initl <- RC.loopStmt sInit
-  guard <- zoom lensMStoVS vGuard
-  upd <- RC.loopStmt sUpdate
-  bod <- b
-  mkStmtNoEnd $ vcat [
-    forLabel <+> parens (RC.preStatement initl <> semi <+> RC.value guard <>
-      semi <+> RC.preStatement upd) <+> bStart,
-    indent $ RC.body bod,
-    bEnd]
-
--- Doc function parameter is applied to the render of the while-condition
-while
-  :: (RC.BodyElim r bod, RC.RenderStatement r stmt, ValueElim r val)
-  => (Doc -> Doc) -> Doc -> Doc -> VS (r val) -> MS (r bod) -> MS (r stmt)
-while f bStart bEnd v' b'= do
-  v <- zoom lensMStoVS v'
-  b <- b'
-  mkStmtNoEnd (vcat [whileLabel <+> f (RC.value v) <+> bStart,
-    indent $ RC.body b,
-    bEnd])
+while :: (Doc -> Doc) -> Doc -> Doc -> Doc -> Doc -> Doc
+while f bStart bEnd val bod = vcat
+  [ whileLabel <+> f val <+> bStart
+  , indent bod
+  , bEnd
+  ]
 
 -- Error Messages --
 

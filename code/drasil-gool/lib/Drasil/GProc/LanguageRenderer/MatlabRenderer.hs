@@ -42,21 +42,21 @@ import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   innerType)
 import qualified Drasil.Shared.LanguageRenderer as R (commentedMod,
   commentedItem, parameterList, body, addComments, multiStmt, sqrt, abs, log10,
-  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, break, continue)
+  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, break, continue,
+  assign, comment)
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
-  comment, param, docFunc, var, multiBody, block, multiBlock, loopStmt, negateOp,
-  plusOp, minusOp, multOp, divideOp, equalOp, greaterOp, greaterEqualOp, lessOp,
-  lessEqualOp, csc, sec, cot, valueOf, litChar, litDouble, litInt, litString,
-  valStmt, emptyStmt, assign, funcAppMixedArgs, call, print, ifCond, tryCatch,
-  listAccess, smartAdd, local, lambda)
+  param, docFunc, var, multiBody, block, multiBlock, negateOp, plusOp, minusOp,
+  multOp, divideOp, equalOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, csc,
+  sec, cot, valueOf, litChar, litDouble, litInt, litString, funcAppMixedArgs,
+  call, print, ifCond, listAccess, smartAdd, local, lambda)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt',
   listDecDef, argExists, multiReturn, litSet)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue,
   litFalse, while, statement)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
-  extVar, funcType, listSize, forEach')
+  extVar, funcType, listSize)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   increment1, decrement1, listSlice, stringListVals, stringListLists)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
@@ -68,7 +68,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, multPrec, unExpr, unExpr', binExpr, binExpr', mkStateVal, mkVal,
-  mkStateVar, mkStmtNoEnd, compEqualPrec, typeUnExpr, typeBinExpr)
+  mkStateVar, compEqualPrec, typeUnExpr, typeBinExpr)
 import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue, binderList)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
@@ -422,7 +422,9 @@ instance InternalControlStmt MatlabCode Statement Value where
   multiReturn = CP.multiReturn id
 
 instance RenderStatement MatlabCode Statement where
-  loopStmt = G.loopStmt
+  loopStmt s' = do
+    s <- s'
+    stmtFromData (preStatement s) Empty
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim MatlabCode Statement where
@@ -433,16 +435,21 @@ instance StatementTerm MatlabCode Statement where
   statementTerm = snd . unMLC
 
 instance EmptyStatement MatlabCode Statement where
-  emptyStmt = G.emptyStmt
+  emptyStmt = stmtFromData empty Empty
 
 instance MultiStatement MatlabCode Statement where
   multi = onStateList (onCodeList R.multiStmt)
 
 instance ValueStatement MatlabCode Statement Value where
-  valStmt = G.valStmt Semi
+  valStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (RC.value v) Semi
 
 instance AssignStatement MatlabCode Statement Variable Value where
-  assign = G.assign Semi
+  assign vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.assign vr v) Semi
   (&-=) vr v = vr &= (valueOf vr #- v)
   (&+=) vr v = vr &= G.smartAdd (valueOf vr) v
   (&++) = M.increment1
@@ -499,11 +506,11 @@ instance FuncAppStatement MatlabCode Statement Variable Value where
   extInOutCall m = CP.inOutCall (extFuncApp m)
 
 instance CommentStatement MatlabCode Statement where
-  comment = G.comment mlCmtStart
+  comment c = stmtFromData (R.comment c mlCmtStart) Empty
 
 instance ControlStatement MatlabCode Body Statement Variable Value where
-  break = mkStmtNoEnd R.break
-  continue = mkStmtNoEnd R.continue
+  break = stmtFromData R.break Empty
+  continue = stmtFromData R.continue Empty
   -- MATLAB has no `return <expr>`: a function returns by assigning its named
   -- output, so a return becomes `result = <value>;`.
   returnStmt v' = do
@@ -518,16 +525,28 @@ instance ControlStatement MatlabCode Body Statement Variable Value where
     c <- zoom lensMStoVS cond
     u <- updateS
     bd <- b
-    mkStmtNoEnd (vcat [
+    stmtFromData (vcat [
       statement i,
       text "while" <+> RC.value c,
       indent (RC.body bd),
       indent (statement u),
-      mlEnd])
+      mlEnd]) Empty
   forRange i initv finalv stepv = forEach i (mlRange initv finalv stepv)
-  forEach = CS.forEach' mlForEach
-  while = C.while id empty mlEnd
-  tryCatch = G.tryCatch mlTryCatch
+  forEach i' v' b' = do
+    i <- zoom lensMStoVS i'
+    v <- zoom lensMStoVS v'
+    b <- b'
+    stmtFromData (mlForEach i v b) Empty
+  while val' bod' = do
+    val <- zoom lensMStoVS val'
+    bod <- bod'
+    stmtFromData
+      (C.while id empty mlEnd (RC.value val) (RC.body bod))
+      Empty
+  tryCatch try' catch' = do
+    try <- try'
+    catch <- catch'
+    stmtFromData (mlTryCatch try catch) Empty
   assert cond errMsg = valStmt $ funcApp "assert" void [cond, errMsg]
 
 instance VisibilitySym MatlabCode Doc where

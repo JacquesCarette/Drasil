@@ -1,19 +1,19 @@
 module Drasil.GlassBR.References (
   citations,
-  astm2009, astm2012, astm2016, beasonEtAl1998
+  astm2009, astm2012, astm2016, beasonEtAl1998, glassBROriginal
 ) where
 
 import Language.Drasil
 import Language.Drasil.Document
 
 import Data.Drasil.Citations (campidelli, parnasClements1986)
-import Data.Drasil.People (jmBracci, tlKohutek, wlBeason)
+import Data.Drasil.People (jmBracci, nikitha, spencerSmith, tlKohutek, wlBeason)
 
-astm2009, astm2016, astm2012, beasonEtAl1998 :: Citation
+astm2009, astm2016, astm2012, beasonEtAl1998, glassBROriginal :: Citation
 
 citations :: BibRef
 citations = [campidelli, astm2009, astm2016, astm2012, beasonEtAl1998,
-             parnasClements1986]
+             parnasClements1986, glassBROriginal]
 
 astm2009 = cMisc [author [mononym "ASTM"],
   title "Standard Practice for Determining Load Resistance of Glass in Buildings",
@@ -45,3 +45,11 @@ beasonEtAl1998 = cMisc
   month Feb, year 1998,
   howPublishedU "https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)"]
   "beasonEtAl1998"
+
+-- | The original, manually created version of GlassBR.
+glassBROriginal = cMisc
+  [ author [nikitha, spencerSmith]
+  , title "Software Requirements Specification for GlassBR"
+  , howPublishedU "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass"
+  ]
+  "glassBROriginal"

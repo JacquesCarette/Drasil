@@ -36,7 +36,7 @@ import Theory.Drasil (TheoryModel)
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Body (charsOfReader, dataContMid, motivation,
-  introStart, externalLinkRef, physSyst1, physSyst2, sysCntxtDesc,
+  introStart, physSyst1, physSyst2, sysCntxtDesc,
   systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (coil, sWHT, tank, transient, water, con, phsChgMtrl)
@@ -60,7 +60,7 @@ import Drasil.SWHSNoPCM.MetaConcepts (projName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
-import Drasil.SWHSNoPCM.References (citations)
+import Drasil.SWHSNoPCM.References (citations, swhsNoPCMOriginal)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
 import Drasil.SWHS.MetaConcepts (swhs)
 
@@ -163,15 +163,11 @@ conceptChunks =
   <> [CP.energy, CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
+symbMap = withCommonKnowledge projName uriReferences symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent <> funcReqsTables
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = [externalLinkRef, externalLinkRef'] <> uriReferences
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -183,12 +179,7 @@ introStartNoPCM = projTitleS projName +:+ S "provide a novel way of storing" +:+
 
 extraInfoSent = foldlSent [S "The", phrase program,
   S "is based on the original, manually created version of",
-  namedRef externalLinkRef' (S "SWHSNoPCM")]
-
-externalLinkRef' :: Reference
-externalLinkRef' = makeURI "SWHSNoPCM_SRSLink"
-  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/noPCM"
-  (shortname' $ S "SWHSNoPCM_SRSLink")
+  S "SWHSNoPCM", refS swhsNoPCMOriginal]
 
 -----------------------------------
 --Section 2.1 : PURPOSE OF DOCUMENT

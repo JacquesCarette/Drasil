@@ -16,7 +16,7 @@ henryFrankis, daAruliah, gWilson,
   jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo,
   mCampidelli, dmWiess, sPalmer, scottSmith, bKarchewski, rHuston,
   hJosephs, nrMorgenstern, vePrice, samCrawford, rcHibbeler, olu, rodPierce,
-  dong :: Person
+  dong, naveen, zhiZhang :: Person
 
 daAruliah     = personWM  "D"         ["A"]           "Aruliah"
 wlBeason      = personWM  "W"         ["Lynn"]        "Beason"
@@ -57,6 +57,7 @@ brooks        = person    "Brooks"                    "MacLachlan"
 luthfi        = person    "Luthfi"                    "Mawarid"
 imMitchell    = personWM  "Ian"       ["M"]           "Mitchell"
 nrMorgenstern = personWM  "N"         ["R"]           "Morgenstern"
+naveen        = person    "Naveen Ganesh"             "Muralidharan"
 sPalmer       = person    "Steven"                    "Palmer"
 rodPierce     = person    "Rod"                       "Pierce"
 mdPlumblet    = personWM  "Mark"      ["D"]           "Plumblet"
@@ -76,6 +77,7 @@ dmWiess       = personWM  ""          []              "Wiess"
 gWilson       = person    "Greg"                      "Wilson"
 pWilson       = person    "Paul"                      "Wilson" -- Best Practices for Scientific Computing 2013
 tltZhan       = personWM  "Tony"      ["L","T"]       "Zhan"
+zhiZhang      = person    "Zhi"                       "Zhang"
 dyZhu         = personWM' "D"         ["Y"]           "Zhu"
 
 -- Right now, we have to say this is a 'Person', even though it clearly isn't

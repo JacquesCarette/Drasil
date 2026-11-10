@@ -1,14 +1,14 @@
 module Drasil.DblPend.Body (
-  mkSRS, si, justification, externalLinkRef, charsOfReader,
+  mkSRS, si, justification, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro, tMods
 ) where
 
 import Drasil.Database (ChunkDB)
 import Language.Drasil
-import Language.Drasil.Document (makeURI, ulcc, Section, Contents(..),
-  LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
-  foldlSPCol, bulletNested, bulletFlat, ConceptInstance, shortname')
+import Language.Drasil.Document (ulcc, Section, Contents(..),
+  LabelledContent, RawContent(..), namedRef, refS, foldlSP,
+  foldlSPCol, bulletNested, bulletFlat, ConceptInstance)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
 import Drasil.SRS hiding (constants, genDefns)
@@ -45,7 +45,7 @@ import Drasil.DblPend.MetaConcepts (projName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs, funcReqsTables)
-import Drasil.DblPend.References (citations)
+import Drasil.DblPend.References (citations, dblPendOriginal)
 import Drasil.System (projTitleS, projAbrvS, ProjectName)
 
 mkSRS :: SRSDecl
@@ -120,15 +120,11 @@ conceptChunks =
   gravitationalConst, gravity] <> defs
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbols ideaDicts [] conceptChunks []
+symbMap = withCommonKnowledge projName [] symbols ideaDicts [] conceptChunks []
   dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent <> funcReqsTables
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = [externalLinkRef]
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -150,12 +146,8 @@ justification projN = foldlSent
    (S "to exhibit its chaotic characteristics" !.),
     S "The document describes the program called", projTitleS projN,
     S ", which is based on the original, manually created version of" +:+
-    namedRef externalLinkRef (S "Double Pendulum")]
+    S "Double Pendulum" +:+ refS dblPendOriginal]
 
-externalLinkRef :: Reference
-externalLinkRef = makeURI "DblPendSRSLink"
-  "https://github.com/Zhang-Zhi-ZZ/CAS741Project/tree/master/Double%20Pendulum"
-  (shortname' $ S "DblPendSRSLink")
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------

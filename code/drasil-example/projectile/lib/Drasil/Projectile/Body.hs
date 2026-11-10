@@ -46,7 +46,7 @@ import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.LabelledContent (figLaunch, sysCtxFig1, labelledContent)
 import Drasil.Projectile.MetaConcepts (projName)
-import Drasil.Projectile.References (citations)
+import Drasil.Projectile.References (citations, projectileOriginal)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.Projectile.Unitals
 
@@ -106,15 +106,10 @@ justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:
   S "include" +:+. foldlList Comma List projectileExamples,
   S "The document describes the program called", projTitleS projName,
   S ", which is based" `S.onThe` S "original, manually created version of" +:+
-  namedRef externalLinkRef (S "Projectile")]
+  S "Projectile" +:+ refS projectileOriginal]
 scope = foldlSent_ [D.toSent $ phraseNP (NP.the (analysis `ofA` twoD)),
   sParen (short twoD), D.toSent $ phraseNP (combineNINI projectile motion), phrase problem,
   S "with", phrase constAccel]
-
-externalLinkRef :: Reference
-externalLinkRef = makeURI "projectileSRSLink"
-  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile"
-  (shortname' $ S "projectileSRSLink")
 
 projectileExamples :: [Sentence]
 projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles" `sC`
@@ -154,13 +149,9 @@ conceptChunks =
   positionVec]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbols ideaDicts []
+symbMap = withCommonKnowledge projName [] symbols ideaDicts []
   conceptChunks [] dataDefs iMods genDefns tMods concIns citations
   labelledContent'
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = [externalLinkRef]
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

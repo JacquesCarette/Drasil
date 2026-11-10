@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Physics (motion, pendulum, angular, displacement, iP
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Theories.Physics (newtonSLR)
 
-import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
+import Drasil.DblPend.Body (justification, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro)
 import qualified Drasil.DblPend.Body as DPD (tMods)
@@ -96,15 +96,11 @@ conceptChunks =
   gravitationalConst, gravity, rigidBody, weight, shm] <> defs
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbols ideaDicts []
+symbMap = withCommonKnowledge projName [] symbols ideaDicts []
   conceptChunks [] dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent <> funcReqsTables
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = [externalLinkRef]
 
 concIns :: [ConceptInstance]
 concIns = assumpSingle <> goals <> funcReqs <> nonFuncReqs

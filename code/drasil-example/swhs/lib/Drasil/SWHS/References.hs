@@ -1,13 +1,13 @@
 module Drasil.SWHS.References (
   citations, uriReferences, consThemESrc, sensHtESrc, latHtESrc,
-  bueche1986, lightstone2012, incroperaEtAl2007
+  bueche1986, lightstone2012, incroperaEtAl2007, swhsOriginal
 ) where
 
 import Language.Drasil
 import Language.Drasil.Document
 
 import Data.Drasil.People (jBueche, fIncropera, dDewitt, tBergman, aLavine,
-  mLightstone)
+  mLightstone, brooks, spencerSmith, thulasi)
 
 import Data.Drasil.Citations (parnasClements1986)
 
@@ -16,9 +16,9 @@ import Data.Drasil.Citations (parnasClements1986)
 ----------------------------
 citations :: BibRef
 citations = [bueche1986, incroperaEtAl2007, lightstone2012,
-             parnasClements1986]
+             parnasClements1986, swhsOriginal]
 
-bueche1986, incroperaEtAl2007, lightstone2012 :: Citation
+bueche1986, incroperaEtAl2007, lightstone2012, swhsOriginal :: Citation
 
 bueche1986 = cBookA [jBueche]
   "Introduction to Physics for Scientists"
@@ -38,6 +38,14 @@ lightstone2012 = cMisc [
   year 2012,
   note "From Marilyn Lightstone's Personal Notes"]
   "lightstone2012"
+
+-- | The original, manually created version of SWHS.
+swhsOriginal = cMisc
+  [ author [thulasi, brooks, spencerSmith]
+  , title "Software Requirements Specification for Solar Water Heating Systems Incorporating Phase Change Material"
+  , howPublishedU "https://github.com/smiths/swhs/tree/master"
+  ]
+  "swhsOriginal"
 
 uriReferences :: [Reference]
 uriReferences = [consThemESrc, latHtESrc, sensHtESrc]

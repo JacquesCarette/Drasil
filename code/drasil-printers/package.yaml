@@ -24,7 +24,6 @@ dependencies:
 - filepath
 - directory
 - drasil-data-formats
-- drasil-jupyter
 - drasil-database
 - drasil-file-handling
 - drasil-lang

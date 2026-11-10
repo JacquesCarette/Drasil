@@ -12,7 +12,7 @@ import Numeric (showEFloat)
 import qualified Prettyprinter as PNew (Doc)
 
 import Drasil.Data.Formats.JSON (JSONRenderOptions, JSONStyle(..), jsonRenderOpts)
-import qualified Drasil.Jupyter as Jupyter
+import qualified Drasil.Data.Formats.Jupyter as Jupyter
   ( Notebook(..), Cell, renderNotebook, defaultNotebookRenderOptions )
 import Language.Drasil (checkValidStr, Special(Circle))
 import Language.Drasil.Document (MaxWidthPercent)

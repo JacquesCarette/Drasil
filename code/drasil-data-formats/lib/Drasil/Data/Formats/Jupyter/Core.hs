@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Drasil.Jupyter.Core
+module Drasil.Data.Formats.Jupyter.Core
   ( Notebook(..), Cell(..), Metadata
   , NotebookMetadata(..), KernelSpec(..), LanguageInfo(..)
   , defaultPython39Metadata

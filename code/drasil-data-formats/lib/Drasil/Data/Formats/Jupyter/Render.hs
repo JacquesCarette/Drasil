@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Drasil.Jupyter.Render
+module Drasil.Data.Formats.Jupyter.Render
   ( CellSourceRenderStyle(..), NotebookRenderOptions(..), defaultNotebookRenderOptions
   , notebookToJSON, renderNotebook
   ) where
@@ -10,7 +10,7 @@ import qualified Data.Text as T (lines)
 import Prettyprinter (Doc)
 import Drasil.Data.Formats.JSON
   ( JSON(..), JSONRenderOptions, renderJSON )
-import Drasil.Jupyter.Core
+import Drasil.Data.Formats.Jupyter.Core
   ( Notebook(..), Cell(..), NotebookMetadata(..), KernelSpec(..), LanguageInfo(..) )
 
 -- | JSON representation of cell source.
@@ -27,9 +27,9 @@ data NotebookRenderOptions = NotebookRenderOptions
   , sourceFormat :: CellSourceRenderStyle
   } deriving (Eq, Show)
 
--- | Use notebook format 4.4 and a single string per cell by default.
+-- | Use notebook format 4.4 and a list of lines per cell by default.
 defaultNotebookRenderOptions :: NotebookRenderOptions
-defaultNotebookRenderOptions = NotebookRenderOptions 4 4 SingleString
+defaultNotebookRenderOptions = NotebookRenderOptions 4 4 ListOfLines
 
 -- | Encode a new notebook using the selected version and source representation.
 notebookToJSON :: NotebookRenderOptions -> Notebook -> JSON

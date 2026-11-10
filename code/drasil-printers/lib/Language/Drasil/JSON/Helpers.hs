@@ -18,7 +18,7 @@ import Data.List.Split (splitOn)
 import Language.Drasil.Document (MaxWidthPercent)
 
 import Drasil.Printers.Common hiding (wrap)
-import qualified Drasil.Jupyter as Jupyter
+import qualified Drasil.Data.Formats.Jupyter as Jupyter
   ( Cell(..), NotebookMetadata, defaultPython39Metadata )
 import Language.Drasil.Printing.Helpers (bslash)
 

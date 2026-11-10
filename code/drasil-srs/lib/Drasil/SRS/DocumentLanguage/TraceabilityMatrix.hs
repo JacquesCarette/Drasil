@@ -1,21 +1,21 @@
 -- | Defines functions to create traceability matrices in SRS documents.
 module Drasil.SRS.DocumentLanguage.TraceabilityMatrix (
-  generateTraceTableView, traceMHeader, layoutUIDs, traceMReferees,
-  traceMReferrers, traceMColumns, traceMIntro, traceView, traceViewCC
+  generateTraceTableView, layoutUIDs, traceMColumns, traceMIntro, traceView,
+  traceViewCC
 ) where
 
 -- General Haskell
 import Control.Lens ((^.))
-import Data.Containers.ListUtils (nubOrd)
-import qualified Data.Map as Map
+import Data.Maybe (fromMaybe)
+import qualified Data.Set as S
 
 -- General Drasil
-import Drasil.Database (UID, HasUID(..))
+import Drasil.Database (UID, HasUID(..), dependencies)
 import Drasil.Database.SearchTools (defResolve', findAllConcInsts, DomDefn(domain))
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.System (systemdb)
-import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, traceLookup, refbyTable, traceTable)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 -- Vocabulary
@@ -43,50 +43,36 @@ traceMIntro refs trailings = UlC $ ulcc $ Para [foldlSent [phrase purpose
 -- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'System'.
 generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> SmithEtAlSRS -> LabelledContent
 generateTraceTableView u desc cols rows c = llccTab' u $ Table
-  (EmptyS : traceMColHeader colf c)
-  (makeTMatrix (traceMRowHeader rowf c) (traceMColumns colf rowf c) $ traceMReferees colf c)
+  (EmptyS : traceMHeader colUIDs c)
+  (makeTMatrix (traceMHeader rowUIDs c) (traceMColumns colUIDs rowUIDs c) colUIDs)
   (showingCxnBw traceyMatrix desc) True
     where
-    colf = layoutUIDs cols c
-    rowf = layoutUIDs rows c
+    colUIDs = layoutUIDs cols c
+    rowUIDs = layoutUIDs rows c
 
 -- * Helper Functions
 
--- | Helper that finds the traceability matrix references (things being referenced).
-traceMReferees :: ([UID] -> [UID]) -> SmithEtAlSRS -> [UID]
-traceMReferees f = f . nubOrd . Map.keys . (^. refbyTable)
-
--- | Helper that finds the traceability matrix references (things that are referring to other things).
-traceMReferrers :: ([UID] -> [UID]) -> SmithEtAlSRS -> [UID]
-traceMReferrers f = f . nubOrd . concat . Map.elems . (^. refbyTable)
-
 -- | Helper that finds the header of a traceability matrix.
-traceMHeader :: (SmithEtAlSRS -> [UID]) -> SmithEtAlSRS -> [Sentence]
-traceMHeader f c = (`helpToRefField` (c ^. systemdb)) <$> f c
+traceMHeader :: [UID] -> SmithEtAlSRS -> [Sentence]
+traceMHeader us c = (`helpToRefField` (c ^. systemdb)) <$> us
 
--- | Helper that finds the headers of the traceability matrix columns.
-traceMColHeader :: ([UID] -> [UID]) -> SmithEtAlSRS -> [Sentence]
-traceMColHeader f = traceMHeader (traceMReferees f)
-
--- | Helper that finds the headers of the traceability matrix rows.
-traceMRowHeader :: ([UID] -> [UID]) -> SmithEtAlSRS -> [Sentence]
-traceMRowHeader f = traceMHeader (traceMReferrers f)
-
--- | Helper that makes the columns of a traceability matrix.
-traceMColumns :: ([UID] -> [UID]) -> ([UID] -> [UID]) -> SmithEtAlSRS -> [[UID]]
-traceMColumns fc fr c = (\u -> filter (`elem` u) $ fc u) . flip traceLookup c <$> traceMReferrers fr c
+-- | Helper that makes the columns of a traceability matrix: for each row, the
+-- column 'UID's (in column order) that the row references.
+traceMColumns :: [UID] -> [UID] -> SmithEtAlSRS -> [[UID]]
+traceMColumns cols rows c = (\refs -> filter (`S.member` refs) cols) . rowRefs <$> rows
+  where rowRefs r = fromMaybe S.empty $ dependencies r (c ^. systemdb)
 
 -- | Helper that makes references of the form "@reference@ shows the dependencies of @something@".
 tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence
 tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.ofThe` (end !.)
 
 -- | Helper that finds the layout 'UID's of a traceability matrix.
-layoutUIDs :: [TraceViewCat] -> SmithEtAlSRS -> [UID] -> [UID]
-layoutUIDs a c e = concatMap (filter (`elem` (Map.keys $ c ^. traceTable)) . (\ x -> x e c)) a
+layoutUIDs :: [TraceViewCat] -> SmithEtAlSRS -> [UID]
+layoutUIDs cats c = concatMap ($ c) cats
 
 -- | Helper that filters a traceability matrix given a predicate and a 'ChunkDB' lens field.
 traceViewFilt :: HasUID a => (a -> Bool) -> (SmithEtAlSRS -> [a]) -> TraceViewCat
-traceViewFilt f table _ = fmap (^. uid) . filter f . table
+traceViewFilt f table = fmap (^. uid) . filter f . table
 
 -- | Helper that is similar to 'traceViewFilt', but the filter is always 'True'.
 traceView :: HasUID a => (SmithEtAlSRS -> [a]) -> TraceViewCat
@@ -94,7 +80,7 @@ traceView = traceViewFilt (const True)
 
 -- | Turns a 'Concept' into a 'TraceViewCat' via its domain.
 traceViewCC :: Concept c => c -> TraceViewCat
-traceViewCC dom u s = traceViewFilt (isDomUnder (dom ^. uid) . sDom . cdom) (findAllConcInsts . (^. systemdb)) u s
+traceViewCC dom s = traceViewFilt (isDomUnder (dom ^. uid) . sDom . cdom) (findAllConcInsts . (^. systemdb)) s
   where
     isDomUnder :: UID -> UID -> Bool
     isDomUnder filtDom curr

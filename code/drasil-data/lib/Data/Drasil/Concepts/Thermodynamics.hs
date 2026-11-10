@@ -16,7 +16,7 @@ thermocon = [boiling, degree_', enerSrc, heat, heatTrans, htTransTheo,
   thermalConduction, thermalConductor, thermalEnergy]
 
 boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans, htFlux,
-  htTransTheo, latentHeat, lawConsEnergy, lawConvCooling, meltPt, melting,
+  htTransTheo, latentHeat, lawConsEnergy, lawConvCooling, melting,
   phaseChange, sensHeat, temp, thermalAnalysis, thermalConduction,
   thermalConductor, thermalEnergy :: ConceptChunk
 
@@ -49,8 +49,6 @@ lawConvCooling    = cncpt''' (mkUid "lawConvCooling")    (nounPhraseSP "Newton's
                       (S "Newton's law of convective cooling")
 melting           = cncpt''' (mkUid "melting")           (cn "melting")
                       (S "the phase change from solid to liquid")
-meltPt            = cncpt''' (mkUid "meltPt")            (cn' "melting point temperature")
-                      (S "the temperature at which a substance changes from solid to liquid")
 phaseChange       = cncpt''' (mkUid "phaseChange")       (cn' "phase change")
                       (S "a change of state")
 sensHeat          = cncpt''' (mkUid "sensHeat")          (cn' "sensible heat")

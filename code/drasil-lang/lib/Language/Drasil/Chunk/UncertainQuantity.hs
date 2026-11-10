@@ -10,6 +10,7 @@ module Language.Drasil.Chunk.UncertainQuantity (
   uqDirect) where
 
 import Control.Lens ((^.), makeLenses, view)
+import qualified Data.Set as S (unions)
 
 import Drasil.Database (HasUID(..), HasChunkRefs(..), UID)
 
@@ -41,7 +42,7 @@ data UncertQ = UQ { _uu         :: UID
 makeLenses ''UncertQ
 
 instance HasChunkRefs UncertQ where
-  chunkRefs c = chunkRefs (c ^. defq)
+  chunkRefs (UQ _ dq cs rv uncV) = S.unions [chunkRefs dq, chunkRefs cs, chunkRefs rv, chunkRefs uncV]
   {-# INLINABLE chunkRefs #-}
 
 -- | Equal if 'UID's are equal.

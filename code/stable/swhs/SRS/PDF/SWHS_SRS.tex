@@ -781,10 +781,13 @@ Description & \begin{symbDescription}
               \item{${ρ_{\text{W}}}$ is the density of water ($\frac{\text{kg}}{\text{m}^{3}}$)}
               \end{symbDescription}
 \\ \midrule
+Notes & ${V_{\text{W}}}$ is defined in \hyperref[DD:waterVolume_pcm]{DD:waterVolume\_pcm}.
+        
+\\ \midrule
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[findMass]{FR:Find-Mass}
+RefBy & \hyperref[findMass]{FR:Find-Mass} and \hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}
         
 \\ \bottomrule
 \end{tabular}
@@ -823,7 +826,7 @@ Notes & Based on \hyperref[assumpVCN]{A:Volume-Coil-Negligible}. ${V_{\text{tank
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[findMass]{FR:Find-Mass}
+RefBy & \hyperref[findMass]{FR:Find-Mass} and \hyperref[DD:waterMass]{DD:waterMass}
         
 \\ \bottomrule
 \end{tabular}
@@ -894,6 +897,9 @@ Description & \begin{symbDescription}
               \item{${h_{\text{C}}}$ is the convective heat transfer coefficient between coil and water ($\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$)}
               \item{${A_{\text{C}}}$ is the heating coil surface area (${\text{m}^{2}}$)}
               \end{symbDescription}
+\\ \midrule
+Notes & ${m_{\text{W}}}$ is defined in \hyperref[DD:waterMass]{DD:waterMass}.
+        
 \\ \midrule
 Source & \cite{koothoor2013}
          
@@ -1768,13 +1774,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 {colspec={l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[DD:waterMass]{DD:waterMass}} & \textbf{\hyperref[DD:waterVolume_pcm]{DD:waterVolume\_pcm}} & \textbf{\hyperref[DD:tankVolume]{DD:tankVolume}} & \textbf{\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD:htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD:meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM:consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM:sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM:latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM:nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD:rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}} & \textbf{\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM:heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM:heatEInPCM}}
 \\
-\hyperref[DD:waterMass]{DD:waterMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:waterMass]{DD:waterMass} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:waterVolume_pcm]{DD:waterVolume\_pcm} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:tankVolume]{DD:tankVolume} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:balanceDecayTime]{DD:balanceDecayTime} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

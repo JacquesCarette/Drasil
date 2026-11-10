@@ -16,23 +16,22 @@ ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 
 extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- lens
-- directory
 - drasil-gen
 - drasil-lang
 - drasil-lesson-plan
-- projectile
 
 library:
   dependencies:
   - drasil-data
   - drasil-database
   - drasil-system
+  - projectile
   source-dirs: lib
 
 executables:

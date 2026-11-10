@@ -30,6 +30,3 @@ README.md
 SRSDocument.hs
   - Re-export DocLang functions for easy use in examples.
 
-TraceTable.hs
-  - Defines a DLPlate for tracability between pieces of information.
-

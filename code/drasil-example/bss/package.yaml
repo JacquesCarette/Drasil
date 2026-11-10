@@ -15,13 +15,12 @@ ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 
 extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- lens
-- directory
 - drasil-gen
 
 library:

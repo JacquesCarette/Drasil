@@ -6,8 +6,7 @@ module Drasil.SRS.DocumentLanguage.Core (
   TraceabilitySec(..), AuxConstntSec(..), AppndxSec(..), OffShelfSolnsSec(..),
   DerivationDisplay(..), Emphasis(..), GSDSub(..), IntroSub(..), LFunc(..),
   Literature(..), RefTab(..), StkhldrSub(..), TConvention(..), TSIntro(..),
-  TUIntro(..), TraceConfig(..), DLPlate(..), getTraceConfigUID,
-  PurposeDescription(..)
+  TUIntro(..), TraceConfig(..), DLPlate(..), PurposeDescription(..)
 ) where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
@@ -232,9 +231,6 @@ newtype TraceabilitySec = TraceabilityProg [TraceConfig]
 
 -- | Traceability Matices and Graphs configurations.
 data TraceConfig = TraceConfig UID [Sentence] Sentence [TraceViewCat] [TraceViewCat]
-
-getTraceConfigUID :: TraceConfig -> UID
-getTraceConfigUID (TraceConfig a _ _ _ _) = a
 
 -- ** Off-The-Shelf Solutions Section
 

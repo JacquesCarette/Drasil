@@ -84,7 +84,7 @@ equationalConstraints :: String -> NP -> ConstraintSet e -> ModelKind e
 equationalConstraints u n qs = MK (EquationalConstraints qs) (mkUid u) n
 
 -- | Smart constructor for 'EquationalConstraints', deriving UID+Term from the 'ConstraintSet'
-equationalConstraints' :: ConstraintSet e -> ModelKind e
+equationalConstraints' :: HasChunkRefs e => ConstraintSet e -> ModelKind e
 equationalConstraints' qs = MK (EquationalConstraints qs) (modelNs $ qs ^. uid) (qs ^. term)
 
 -- | Smart constructor for 'EquationalModel's
@@ -92,11 +92,11 @@ equationalModel :: String -> NP -> QDefinition e -> ModelKind e
 equationalModel u n qd = MK (EquationalModel qd) (mkUid' u) n
 
 -- | Smart constructor for 'EquationalModel's, deriving UID+Term from the 'QDefinition'
-equationalModel' :: QDefinition e -> ModelKind e
+equationalModel' :: HasChunkRefs e => QDefinition e -> ModelKind e
 equationalModel' qd = MK (EquationalModel qd) (modelNs $ qd ^. uid) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving Term from the 'QDefinition'
-equationalModelU :: String -> QDefinition e -> ModelKind e
+equationalModelU :: HasChunkRefs e => String -> QDefinition e -> ModelKind e
 equationalModelU u qd = MK (EquationalModel qd) (mkUid' u) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving UID from the 'QDefinition'
@@ -108,11 +108,11 @@ equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
 equationalRealm u n md = MK (EquationalRealm md) (mkUid' u) n
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID+Term from the 'MultiDefn'
-equationalRealm' :: MultiDefn e -> ModelKind e
+equationalRealm' :: HasChunkRefs e => MultiDefn e -> ModelKind e
 equationalRealm' md = MK (EquationalRealm md) (modelNs $ md ^. uid) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's
-equationalRealmU :: String -> MultiDefn e -> ModelKind e
+equationalRealmU :: HasChunkRefs e => String -> MultiDefn e -> ModelKind e
 equationalRealmU u md = MK (EquationalRealm md) (mkUid' u) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID from the 'MultiDefn'
@@ -127,7 +127,7 @@ othModel u n rc = MK (OthModel rc) (mkUid' u) n
 othModel' :: RelationConcept -> ModelKind e
 othModel' rc = MK (OthModel rc) (modelNs $ rc ^. uid) (rc ^. term)
 
-instance HasChunkRefs (ModelKinds e) where
+instance HasChunkRefs e => HasChunkRefs (ModelKinds e) where
   chunkRefs (NewDEModel dm)            = chunkRefs dm
   chunkRefs (DEModel rc)               = chunkRefs rc
   chunkRefs (EquationalConstraints cs) = chunkRefs cs
@@ -139,13 +139,13 @@ instance HasChunkRefs (ModelKinds e) where
 -- | Finds the 'UID' of the 'ModelKinds'.
 instance HasUID        (ModelKinds e) where uid     = getterMk uid uid uid uid uid
 -- | Finds the term ('NP') of the 'ModelKinds'.
-instance NamedIdea     (ModelKinds e) where term    = lensMk term term term term term
+instance HasChunkRefs e => NamedIdea (ModelKinds e) where term = lensMk term term term term term
 -- | Finds the idea of the 'ModelKinds'.
-instance Idea          (ModelKinds e) where getA    = elimMk (to getA) (to getA) (to getA) (to getA) (to getA)
+instance HasChunkRefs e => Idea      (ModelKinds e) where getA = elimMk (to getA) (to getA) (to getA) (to getA) (to getA)
 -- | Finds the definition of the 'ModelKinds'.
 instance Definition    (ModelKinds e) where defn    = lensMk defn defn defn defn defn
 -- | Rewrites the underlying model using 'ModelExpr'
-instance Express e => Express (ModelKinds e) where
+instance (Express e, HasChunkRefs e) => Express (ModelKinds e) where
   mexpress = elimMk (to mexpress) (to mexpress) (to mexpress) (to mexpress) (to mexpress)
 -- | Expose all expressions that need to be type-checked for theories that need
 --   expose 'Expr's.
@@ -160,7 +160,7 @@ instance RequiresChecking (ModelKinds Expr) Expr Space where
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed
 -- OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
-instance HasChunkRefs (ModelKind e) where
+instance HasChunkRefs e => HasChunkRefs (ModelKind e) where
   chunkRefs mkd = mconcat
     [ chunkRefs (mkd ^. mk)
     , chunkRefs (mkd ^. mkTerm)
@@ -170,13 +170,13 @@ instance HasChunkRefs (ModelKind e) where
 -- | Finds the 'UID' of the 'ModelKind'.
 instance HasUID        (ModelKind e) where uid     = mkUID
 -- | Finds the term ('NP') of the 'ModelKind'.
-instance NamedIdea     (ModelKind e) where term    = mkTerm
+instance HasChunkRefs e => NamedIdea (ModelKind e) where term = mkTerm
 -- | Finds the idea of the 'ModelKind'.
-instance Idea          (ModelKind e) where getA    = getA . (^. mk)
+instance HasChunkRefs e => Idea      (ModelKind e) where getA = getA . (^. mk)
 -- | Finds the definition of the 'ModelKind'.
 instance Definition    (ModelKind e) where defn    = mk . defn
 -- | Rewrites the underlying model using 'ModelExpr'
-instance Express e => Express (ModelKind e) where
+instance (Express e, HasChunkRefs e) => Express (ModelKind e) where
   mexpress = mexpress . (^. mk)
 -- | Expose all expressions that need to be type-checked for theories that need
 --   expose 'Expr's.

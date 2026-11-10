@@ -11,7 +11,7 @@ module Language.Drasil.CodeSpec (
   -- * ODEs
   getODE, mapODE,
   -- * Hacks
-  asVC, funcUID, getConstraints, constraintvars
+  asVC, getConstraints, constraintvars
 ) where
 
 import Prelude hiding (const)
@@ -139,10 +139,6 @@ asVC (FDef (FuncDef n d _ _ _ _)) = quantNoUnit (mkUid n) (nounPhraseSP n) (S d)
 asVC (FDef (CtorDef n d _ _ _))   = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (variable n) Real
 asVC (FData (FuncData n d _))     = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (variable n) Real
 
--- | Get a 'UID' of a chunk corresponding to a 'Func'.
-funcUID :: Func -> UID
-funcUID f = asVC f ^. uid
-
 -- | Get a list of 'Constraint's for a list of 'CodeChunk's.
 getConstraints :: (HasUID c) => ConstraintCEMap -> [c] -> [ConstraintCE]
 getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
@@ -151,3 +147,4 @@ getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 constraintvars :: ConstraintCE -> ChunkDB -> [CodeVarChunk]
 constraintvars (Range _ ri) m = fmap (varResolve m) $ nub $ eNamesRI ri
 constraintvars (Elem _ ri)  m = varResolve m <$> eDep ri
+constraintvars (Eqn _ e)  m = varResolve m <$> eDep e

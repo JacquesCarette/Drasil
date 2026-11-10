@@ -17,11 +17,7 @@ dependencies:
 - base >= 4.7 && < 5
 - aeson
 - aeson-pretty
-- bytestring
-- filepath
-- pretty
 - containers
-- directory
 - time
 - drasil-code
 - drasil-data
@@ -29,9 +25,7 @@ dependencies:
 - drasil-file-handling
 - drasil-gool
 - drasil-lang
-- drasil-makefile
 - drasil-metadata
-- drasil-printers
 - drasil-srs
 - drasil-system
 - drasil-theory
@@ -42,6 +36,7 @@ ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -Wunused-packages
 
 library:
   source-dirs: lib

@@ -443,7 +443,7 @@ momntArm = quant (mkUid "r") (cn' "length of the moment arm")
 
 unitless :: [DefinedQuantityDict]
 unitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction,
-  mobShrC, shrResC, index, pi_, varblV, fsMin, unitVectj]
+  mobShrC, shrResC, index, pi_, varblV, fsMin, dqdWr unitVectj]
 
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict

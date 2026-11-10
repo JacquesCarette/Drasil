@@ -34,13 +34,14 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalVarElim(variableBind), InternalBinderElim(..), RenderValue(..),
   ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
+  InternalControlStmt(..), RenderStatement(..), StatementElim(..),
+  StatementTerm(..), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
+  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
+  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment', InternalBinderElim(binderElim), RenderValue(call))
+  uOp, bOp, variable, value, function, visibility, parameter, method,
+  blockComment', InternalBinderElim(binderElim), RenderValue(call),
+  StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, ParentSpec, RenderClass(..), ClassElim,
@@ -57,21 +58,20 @@ import qualified Drasil.Shared.LanguageRenderer as R (this', this, sqrt, fabs,
   log10, log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, multiStmt,
   body, stateVar, constVar, cast, castObj, classLevel, instanceLevel,
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
-  commentedItem)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkVal, mkStateVar, mkVar, typeFromData, VSOp, mkOp, unOpPrec,
-  powerPrec, unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
+  commentedItem, addAssign, increment, decrement, switch, assign, subAssign,
+  return', comment)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
+  mkStateVar, mkVar, typeFromData, VSOp, mkOp, unOpPrec, powerPrec, unExpr,
+  unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
   funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAccess, getFunc,
-  setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
-  param, method, getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
-  smartAdd)
+  setFunc, objDecNew, print, closeFile, ifCond, construct, param, method,
+  getMethod, setMethod, function, buildClass, implementingClass, commentedClass,
+  modFromData, fileDoc, fileFromData, defaultOptSpace, local, smartAdd)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
@@ -81,9 +81,9 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   listAppend, innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
-  increment1, decrement1, varDec, setType, varDecDef, listDec, extObjDecNew,
-  switch, for, while, multiAssignError, multiReturnError, multiTypeError)
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement, varDec,
+  setType, varDecDef, listDec, extObjDecNew, for, while, multiAssignError,
+  multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
@@ -503,12 +503,14 @@ instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) Statement Val
   multiReturn = pair1List multiReturn multiReturn . fmap (zoom lensMStoVS)
 
 instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) Statement where
-  stmt = pair1 stmt stmt
   loopStmt = pair1 loopStmt loopStmt
   stmtFromData d t = on2StateValues pair (stmtFromData d t) (stmtFromData d t)
 
 instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) Statement where
   statement s = RC.statement $ pfst s
+  preStatement s = preStatement $ pfst s
+
+instance (Pair p) => StatementTerm (p CppSrcCode CppHdrCode) Statement where
   statementTerm s = statementTerm $ pfst s
 
 instance (Pair p) => EmptyStatement (p CppSrcCode CppHdrCode) Statement where
@@ -1423,27 +1425,46 @@ instance InternalControlStmt CppSrcCode Statement Value where
   multiReturn _ = error $ C.multiReturnError cppName
 
 instance RenderStatement CppSrcCode Statement where
-  stmt = G.stmt
-  loopStmt = G.loopStmt
+  loopStmt s' = do
+    s <- s'
+    stmtFromData (preStatement s) Empty
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppSrcCode Statement where
-  statement = fst . unCPPSC
+  statement = C.statement
+  preStatement = fst . unCPPSC
+
+instance StatementTerm CppSrcCode Statement where
   statementTerm = snd . unCPPSC
 
 instance EmptyStatement CppSrcCode Statement where
-  emptyStmt = G.emptyStmt
+  emptyStmt = stmtFromData empty Empty
 instance MultiStatement CppSrcCode Statement where
   multi = onStateList (onCodeList R.multiStmt)
 instance ValueStatement CppSrcCode Statement Value where
-  valStmt = G.valStmt Semi
+  valStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (RC.value v) Semi
 
 instance AssignStatement CppSrcCode Statement Variable Value where
-  assign = G.assign Semi
-  (&-=) = G.subAssign Semi
-  (&+=) = C.increment
-  (&++) = C.increment1
-  (&--) = C.decrement1
+  assign vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.assign vr v) Semi
+  (&-=) vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.subAssign vr v) Semi
+  (&+=) vr' v'= do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.addAssign vr v) Semi
+  (&++) vr' = do
+    vr <- zoom lensMStoVS vr'
+    stmtFromData (R.increment vr) Semi
+  (&--) vr' = do
+    vr <- zoom lensMStoVS vr'
+    stmtFromData (R.decrement vr) Semi
 
 instance DeclStatement CppSrcCode Body Statement Variable ScopeData Value where
   -- TODO [Brandon Bosman, 05/29/2026]: consider re-enabling `varDec` for arrays
@@ -1462,11 +1483,11 @@ instance DeclStatement CppSrcCode Body Statement Variable ScopeData Value where
     decBase <- arrayDecBase vr scp
     let sz' = litInt n :: VS (CppSrcCode Value)
     sz <- zoom lensMStoVS sz'
-    mkStmt $ decBase <> parens (RC.value sz)
+    stmtFromData (decBase <> parens (RC.value sz)) Semi
   arrayDecDef vr scp vals = do
     decBase <- arrayDecBase vr scp
     vs <- mapM (zoom lensMStoVS) vals
-    mkStmt $ decBase <+> braces (valueList vs)
+    stmtFromData (decBase <+> braces (valueList vs)) Semi
   constDecDef = CG.constDecDef
   funcDecDef = cppFuncDecDef
 
@@ -1546,35 +1567,64 @@ instance OOFuncAppStatement CppSrcCode Statement Variable Value where
   selfInOutCall = cppInOutCall selfMethodCall
 
 instance CommentStatement CppSrcCode Statement where
-  comment = G.comment commentStart
+  comment c = stmtFromData (R.comment c commentStart) Empty
 
 instance ControlStatement CppSrcCode Body Statement Variable Value where
-  break = mkStmt R.break
-  continue = mkStmt R.continue
+  break = stmtFromData R.break Semi
+  continue = stmtFromData R.continue Semi
 
-  returnStmt = G.returnStmt Semi
+  returnStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (R.return' [v]) Semi
 
-  throw = G.throw cppThrowDoc Semi
+  throw msg' = do
+    msg <- zoom lensMStoVS (litString msg')
+    stmtFromData (cppThrowDoc msg) Semi
 
   ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
-  switch = C.switch parens break
+  switch val' cases' dflt' = do
+    brk <- break
+    val <- zoom lensMStoVS val'
+    vals <- mapM (zoom lensMStoVS . fst) cases'
+    bods <- mapM snd cases'
+    dflt <- dflt'
+    stmtFromData (R.switch parens brk val dflt (zip vals bods)) Semi
 
   ifExists _ ifBody _ = do
     ifb <- ifBody
-    mkStmtNoEnd (RC.body ifb) -- All variables are initialized in C++
+    stmtFromData (RC.body ifb) Empty -- All variables are initialized in C++
 
-  for = C.for bodyStart bodyEnd
+  for initial' vGuard' update' bod' = do
+    initial <- loopStmt initial'
+    vGuard <- zoom lensMStoVS vGuard'
+    update <- loopStmt update'
+    bod <- bod'
+    stmtFromData
+      (C.for
+       (preStatement initial)
+       (RC.value vGuard)
+       (preStatement update)
+       (RC.body bod)
+      ) Empty
   forRange = M.forRange
   forEach = cppForEach bodyStart bodyEnd (text cppFor) (text cppIn)
-  while = C.while parens bodyStart bodyEnd
+  while val' bod' = do
+    val <- zoom lensMStoVS val'
+    bod <- bod'
+    stmtFromData
+      (C.while parens bodyStart bodyEnd (RC.value val) (RC.body bod))
+      Empty
 
-  tryCatch = G.tryCatch cppTryCatch
+  tryCatch try' catch' = do
+    try <- try'
+    catch <- catch'
+    stmtFromData (cppTryCatch try catch) Empty
 
   assert condition errorMessage = do
     addCAssertImport $ do
       cond <- zoom lensMStoVS condition
       errMsg <- zoom lensMStoVS errorMessage
-      mkStmtNoEnd (cppAssert cond errMsg)
+      stmtFromData (cppAssert cond errMsg) Empty
 
 instance ObserverPattern CppSrcCode Statement TypeData where
   notifyObservers = M.notifyObservers
@@ -2035,9 +2085,9 @@ instance List CppHdrCode Value where
   indexOf _ _ = mkStateVal void empty
 
 instance ListStatement CppHdrCode Statement Value where
-  listAdd _ _ _ = mkStmt empty
-  listAppend _ _ = mkStmt empty
-  listSet _ _ _ = mkStmtNoEnd empty
+  listAdd _ _ _ = stmtFromData empty Semi
+  listAppend _ _ = stmtFromData empty Semi
+  listSet _ _ _ = stmtFromData empty Empty
 
 instance Set CppHdrCode Value where
   contains _ _ = mkStateVal void empty
@@ -2082,16 +2132,18 @@ instance InternalControlStmt CppHdrCode Statement Value where
   multiReturn _ = emptyStmt
 
 instance RenderStatement CppHdrCode Statement where
-  stmt = G.stmt
   loopStmt _ = emptyStmt
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppHdrCode Statement where
-  statement = fst . unCPPHC
+  statement = C.statement
+  preStatement = fst . unCPPHC
+
+instance StatementTerm CppHdrCode Statement where
   statementTerm = snd . unCPPHC
 
 instance EmptyStatement CppHdrCode Statement where
-  emptyStmt = G.emptyStmt
+  emptyStmt = stmtFromData empty Empty
 
 instance MultiStatement CppHdrCode Statement where
   multi _ = emptyStmt
@@ -2274,9 +2326,9 @@ instance MethodElim CppHdrCode MethodData where
 
 instance StateVarSym CppHdrCode StateVarData AttachmentData (Doc, VisibilityTag) Variable Value where
   stateVar s p v = do
-    dec <- zoom lensCStoMS $ stmt $ C.varDec classLevel instanceLevel empty v local
+    dec <- zoom lensCStoMS $ C.varDec classLevel instanceLevel empty v local
     pure $ on2CodeValues svd (onCodeValue snd s)
-      (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec))
+      (toCode $ R.stateVar empty (RC.perm p) (statement dec))
   stateVarDef s p vr vl = do
     d <- cpphStateVarDef empty p vr vl
     pure $ pure $ svd (snd $ unCPPHC s) d
@@ -2599,7 +2651,7 @@ cppListDecDef
 cppListDecDef f v scp vls = do
   vdc <- varDec v scp
   vs <- zoom lensMStoVS $ sequence vls
-  mkStmt (RC.statement vdc <> f vs)
+  stmtFromData (preStatement vdc <> f vs) Semi
 
 cpphtop :: ModData -> Doc
 cpphtop m = vcat [
@@ -2693,10 +2745,10 @@ cppFuncDecDef v scp ps bod = do
   modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
-  mkStmt $ renderType (variableType vr) <+> RC.variable vr <+> equals <+>
+  stmtFromData (renderType (variableType vr) <+> RC.variable vr <+> equals <+>
     cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>) (renderType .
     variableType <$> pms) (RC.variable <$> pms)) <+>  bodyStart $$
-    indent (RC.body b) $$ bodyEnd
+    indent (RC.body b) $$ bodyEnd) Semi
 
 cppPrint
   :: (RenderStatement r stmt, ValueElim r val)
@@ -2705,12 +2757,12 @@ cppPrint newLn pf vl = do
   e <- zoom lensMStoVS end
   printFn <- zoom lensMStoVS pf
   v <- zoom lensMStoVS vl
-  mkStmt $ RC.value printFn <+> streamL <+> pars v (RC.value v) <+> e
+  stmtFromData (RC.value printFn <+> streamL <+> pars v (RC.value v) <+> e) Semi
   where pars v = if any (< 9) (valuePrec v) then parens else id
         end = if newLn then addIOStreamImport (pure $ streamL <+> text endl)
           else pure empty
 
-cppThrowDoc :: (ValueElim r val) => r val -> Doc
+cppThrowDoc :: CppSrcCode Value -> Doc
 cppThrowDoc errMsg = throwLabel <> parens (RC.value errMsg)
 
 cppTryCatch :: (BodyElim r bod) => r bod -> r bod -> Doc
@@ -2737,7 +2789,7 @@ cppInput
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ do
   v <- zoom lensMStoVS vr
   inFn <- zoom lensMStoVS i
-  multi [mkStmt (RC.value inFn <+> streamR <+> RC.variable v),
+  multi [stmtFromData (RC.value inFn <+> streamR <+> RC.variable v) Semi,
     valStmt $ ignoreFunc '\n' i]
 
 cppOpenFile
@@ -2866,11 +2918,11 @@ cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
   b <- b'
-  mkStmtNoEnd $ vcat [
+  stmtFromData (vcat [
     forEachLabel <+> parens ((text cppConst <+> renderType (variableType e) <+> text "&") <> RC.variable e <+>
       inLbl <+> RC.value v) <+> bStart,
     indent $ RC.body b,
-    bEnd]
+    bEnd]) Empty
 
 cppLitSet
   :: (RenderValue r var val typ, ValueElim r val)
@@ -2886,7 +2938,7 @@ cpphStateVarDef
   -> VS (CppHdrCode Variable)
   -> VS (CppHdrCode Value) -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
-  RC.statement) (zoom lensCStoMS $ stmt $ onAttachment (binding p)
+  statement) (zoom lensCStoMS $ onAttachment (binding p)
   (varDec vr local) (varDecDef vr local vl))
 
 cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode StateVarData] ->

@@ -1,6 +1,8 @@
 digraph "allvsall" {
+    "dataDefn:wMass" -> "dataDefn:wVol";
     "dataDefn:wVol" -> "instance:assumpVCN";
     "dataDefn:wVol" -> "dataDefn:tankVol";
+    "dataDefn:tauW" -> "dataDefn:wMass";
     "theory:consThermECS" -> "instance:assumpTEO";
     "theory:sensHeat" -> "instance:assumpWAL";
     "theory:nwtnCoolingTM" -> "instance:assumpHTCC";

@@ -51,16 +51,17 @@ data QDefinition e = QD { _uu :: UID
                         }
 makeLenses ''QDefinition
 
-instance HasChunkRefs (QDefinition e) where
+instance HasChunkRefs e => HasChunkRefs (QDefinition e) where
   chunkRefs q = Set.unions
     [ chunkRefs (q ^. qua)
     , Set.fromList (q ^. inputs)
+    , chunkRefs (q ^. expr)
     ]
   {-# INLINABLE chunkRefs #-}
 
 instance HasUID          (QDefinition e) where uid = uu
-instance NamedIdea       (QDefinition e) where term = qua . term
-instance Idea            (QDefinition e) where getA = getA . (^. qua)
+instance HasChunkRefs e => NamedIdea (QDefinition e) where term = qua . term
+instance HasChunkRefs e => Idea      (QDefinition e) where getA = getA . (^. qua)
 instance DefinesQuantity (QDefinition e) where defLhs = qua
 instance HasSpace        (QDefinition e) where typ = qua . typ
 instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qua)
@@ -68,7 +69,7 @@ instance Definition      (QDefinition e) where defn = qua . defn
 instance Eq              (QDefinition e) where a == b = a ^. uid == b ^. uid
 instance MayHaveUnit     (QDefinition e) where getUnit = getUnit . view qua
 instance DefiningExpr     QDefinition    where defnExpr = expr
-instance Express e => Express (QDefinition e) where
+instance (Express e, HasChunkRefs e) => Express (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where
       f = case q ^. inputs of

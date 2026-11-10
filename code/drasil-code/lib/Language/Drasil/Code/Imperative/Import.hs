@@ -622,6 +622,7 @@ convCall c x ns f libf = do
 renderC :: (IsChunk c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
 renderC s (Range _ rr)         = renderRealInt s rr
 renderC s (Elem _ rr)          = renderSet s rr
+renderC _ (Eqn _ e)           = e
 
 -- | Converts an interval ('RealInterval') to a 'CodeExpr'.
 renderRealInt :: (IsChunk c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr

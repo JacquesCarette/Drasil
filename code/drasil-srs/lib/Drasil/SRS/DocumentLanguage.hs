@@ -12,7 +12,6 @@ import Data.Either (rights)
 import Data.Function (on)
 import Data.List (nub, sortBy, (\\))
 import Data.Maybe (maybeToList, isJust, fromMaybe)
-import qualified Data.Map as Map (keys)
 import qualified Data.Set as Set
 
 -- General Drasil
@@ -21,11 +20,11 @@ import Language.Drasil.Document
 import Language.Drasil.Display (compsy)
 import Language.Drasil.Development (shortdep)
 
-import Drasil.Database (ChunkDB, insertAll, UID, HasUID(..), invert)
+import Drasil.Database (ChunkDB, insertAll, UID, HasUID(..))
 import Drasil.Database.SearchTools (TermAbbr, shortForm, termResolve')
 
 import Drasil.System (HasSystemMeta(..), HasProjectName(..), projTitleS, ProjectName)
-import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
 import Drasil.SRS.GetChunks (resolveAllVars)
 
 -- Vocabulary
@@ -46,7 +45,6 @@ import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
 import Drasil.SRS.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
 import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc, extractUnits)
-import Drasil.SRS.TraceTable (generateTraceMap)
 
 import Drasil.SRS.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.SRS.Sections.TableOfContents (toToC)
@@ -69,7 +67,7 @@ import qualified Drasil.SRS.Sections.SpecificSystemDescription as SSD (assumpF,
 import qualified Drasil.SRS.Sections.Stakeholders as Stk (stakeholderIntro,
   tClientF, tCustomerF)
 import qualified Drasil.SRS.DocumentLanguage.TraceabilityMatrix as TM (
-  generateTraceTableView, traceMHeader, layoutUIDs)
+  generateTraceTableView, layoutUIDs)
 import qualified Drasil.SRS.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.SRS.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
 import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard)
@@ -82,56 +80,43 @@ import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 mkDoc :: SmithEtAlSRS -> SRSDecl -> (Sentence -> Sentence -> Sentence) -> (Document, SmithEtAlSRS)
 mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
-      -- /Pre-generate/ the SRS artifact. It is missing content involving
-      -- 'Reference's and 'LabelledContent' for potential traceability graphs as
-      -- well as 'Citation's.
-      sections = mkSections si dd Nothing
-      -- Extract all referenced 'Citations' from the pre-generated artifact.
-      refdCites = extractSectionsBib (si ^. systemdb) sections
       -- Injects "traceability" maps into the 'ChunkDB' and adds missing
       -- 'LabelledContent' (the generated traceability-related tables).
-      si' = buildTraceMaps dd si
+      si' = insertTraceChunks dd si
+      -- /Pre-generate/ the SRS artifact. It is only missing its bibliography
+      -- ('Citation's).
+      sections = mkSections si' dd Nothing
+      -- Extract all referenced 'Citations' from the pre-generated artifact.
+      refdCites = extractSectionsBib (si' ^. systemdb) sections
       -- Now, the /real generation/ of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
       heading = titleize srs `headingComb` projTitleS (si ^. projectName)
       authorsList = foldlList Comma List $ S . fullName <$> si ^. authors
       toc = findToC srsDecl
-      dd' = mkDocDesc si' srsDecl
-      sections' = mkSections si' dd' (Just refdCites)
+      sections' = mkSections si' dd (Just refdCites)
   in (Document heading authorsList toc sections', si')
 
 -- * Functions to Fill 'ChunkDB'
 
--- FIXME: None of these 'fill$x$InTheCDB' should exist here. Generating new
--- chunks and inserting them into the ChunkDB is not an issue, but:
--- - The traceability-stuff should be internal to ChunkDB.
--- - The References and LabelledContent entirely need to be rebuilt. Some will
---   be chunks that are manually written, others will not be chunks.
-
--- | If a traceability section is present in the document description, builds
--- the "trace" (refers to) and "refBy" (referenced by) maps, placing them in the
--- output 'System', and generating corresponding 'LabelledContent' chunks for
--- the traceability graphs to be used in the SRS.
-buildTraceMaps :: DocDesc -> SmithEtAlSRS -> SmithEtAlSRS
-buildTraceMaps sd si
+-- | If a traceability section is present in the document description, generates
+-- the 'LabelledContent' chunks for the traceability matrices and graphs (and
+-- the 'Reference's to the graphs) to be used in the SRS, placing them in the
+-- 'ChunkDB' of the output 'SmithEtAlSRS'. FIXME: Hacky. This should be done
+-- on-the-fly.
+insertTraceChunks :: DocDesc -> SmithEtAlSRS -> SmithEtAlSRS
+insertTraceChunks sd si
   | containsTraceSec sd =
     let db = si ^. systemdb
         -- Generate a copy to the /future/ SVG-based 'LabelledContent's
         -- containing the traceability graphs.
         tglcs = genTraceGraphLabCons
-        -- Generates the traceability map from the 'DocDesc' for use in the
-        -- later generation pipeline that produces the ".dot" files for which
-        -- the main Drasil Makefile converts to SVGs (via `make tracegraphs`).
-        tdb = generateTraceMap sd
         traceMats = (\(TraceConfig u _ desc cols rows) ->
           TM.generateTraceTableView u desc cols rows si) <$> traceMatStandard si
         db' = insertAll tglcs
             $ insertAll traceMats
             $ insertAll traceyGraphGetRefs db
-    in set systemdb db'
-     $ set traceTable tdb
-     $ set refbyTable (invert tdb) si
+    in set systemdb db' si
   | otherwise = si
   where
     containsTraceSec :: DocDesc -> Bool
@@ -367,13 +352,9 @@ mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   where
     trace = (\(TraceConfig u _ desc cols rows) ->
       TM.generateTraceTableView u desc cols rows si) <$> fProgs
-    notNull xs = not (null (header (TM.layoutUIDs xs si) si))
+    notNull xs = not (null (TM.layoutUIDs xs si))
     fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
       notNull rows && notNull cols) progs
-
--- | Helper to get headers of rows and columns
-header :: ([UID] -> [UID]) -> SmithEtAlSRS -> [Sentence]
-header f = TM.traceMHeader (f . Map.keys . (^. refbyTable))
 
 -- ** Off the Shelf Solutions
 

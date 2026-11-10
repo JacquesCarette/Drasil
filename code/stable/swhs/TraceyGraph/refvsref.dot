@@ -1,5 +1,7 @@
 digraph "refvsref" {
+    "dataDefn:wMass" -> "dataDefn:wVol";
     "dataDefn:wVol" -> "dataDefn:tankVol";
+    "dataDefn:tauW" -> "dataDefn:wMass";
     "dataDefn:meltFrac" -> "dataDefn:htFusion";
     "theory:sensHeat" -> "theory:latentHtETM";
     "theory:latentHtETM" -> "dataDefn:meltFrac";

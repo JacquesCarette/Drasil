@@ -1,5 +1,6 @@
 module Language.Drasil.Literal.Lang (Literal(..)) where
 
+import Drasil.Database (HasChunkRefs(..))
 import Language.Drasil.Space (Space (..))
 import Language.Drasil.WellTyped (Typed(..), TypingContext, TypeError,
   typeCheckByInfer)
@@ -11,6 +12,11 @@ data Literal where
     ExactDbl :: Integer -> Literal
     Perc     :: Integer -> Integer -> Literal
     deriving Eq
+
+-- | A 'Literal' is a constant value, so it never refers to any chunk.
+instance HasChunkRefs Literal where
+  chunkRefs _ = mempty
+  {-# INLINABLE chunkRefs #-}
 
 instance Typed Literal Space where
   infer :: TypingContext Space -> Literal -> Either TypeError Space

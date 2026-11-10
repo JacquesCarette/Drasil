@@ -15,13 +15,13 @@ import Data.Drasil.SI_Units (metre, m_2, radian)
 -- * May Not Have Units
 
 mathquants :: [DefinedQuantityDict]
-mathquants = [gradient, normalVect, unitVect, perpVect,
+mathquants = [gradient, normalVect, dqdWr unitVect, perpVect,
   pi_, posInf, negInf, euclidNorm]
 
 mathunitals :: [DefinedQuantityDict]
 mathunitals = [area, diameter, surface, surArea, orientation]
 
-gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect,
+gradient, normalVect, unitVectBase, unitVectjBase, euclidNorm, perpVect,
   pi_, posInf, negInf, uNormalVect :: DefinedQuantityDict
 
 gradient    = quantNoUnit' (mkUid "gradient")      (cn' "gradient")
@@ -33,10 +33,10 @@ normalVect  = quantNoUnit' (mkUid "normal vector") (combineNINI normal vector)
 uNormalVect = quantNoUnit' (mkUid "normal vector") (combineNINI normal vector)
   (S "unit outward normal vector for a surface")
   (const $ vec $ hat lN) Real
-unitVect    = quantNoUnit' (mkUid "unit_vect")     (combineNINI unit_ vector)
+unitVectBase  = quantNoUnit' (mkUid "unit_vect")     (combineNINI unit_ vector)
   (S "a vector that has a magnitude of one")
   (const $ vec $ hat lI) Real
-unitVectj   = quantNoUnit' (mkUid "unit_vect")     (combineNINI unit_ vector)
+unitVectjBase = quantNoUnit' (mkUid "unit_vect")     (combineNINI unit_ vector)
   (S "a vector that has a magnitude of one")
   (const $ vec $ hat lJ) Real
 perpVect    = quantNoUnit' (mkUid "perp_vect")     (combineNINI perp vector)
@@ -55,6 +55,14 @@ euclidNorm  = quantNoUnit' (mkUid "euclidNorm")    (combineNINI euclidSpace CM.n
   (S "euclidean norm")
   (const $ Atop Magnitude $ vec lD) Real
 
+-- | The unit vectors, with the axiom that their magnitude is one attached.
+unitVect, unitVectj :: ConstrConcept
+unitVect  = withMagnitudeOne unitVectBase
+unitVectj = withMagnitudeOne unitVectjBase
+
+-- | Attaches the constraint |v| = 1 to a vector quantity.
+withMagnitudeOne :: DefinedQuantityDict -> ConstrConcept
+withMagnitudeOne v = constrainedNRV' v [physEqn $ norm (sy v) $= exactDbl 1]
 -- * With Units
 
 area, diameter, surface, surArea, orientation :: DefinedQuantityDict

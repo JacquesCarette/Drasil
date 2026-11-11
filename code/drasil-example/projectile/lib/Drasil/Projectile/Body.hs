@@ -92,7 +92,7 @@ mkSRS = [TableOfContents,
       , NonFReqsSub
       ],
   LCsSec,
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+  TraceabilitySec,
   AuxConstntSec $
     AuxConsProg constants,
   Bibliography

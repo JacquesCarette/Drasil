@@ -92,7 +92,7 @@ mkSRS = [TableOfContents,
   ],
   LCsSec,
   UCsSec,
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+  TraceabilitySec,
   AuxConstntSec $ AuxConsProg auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]

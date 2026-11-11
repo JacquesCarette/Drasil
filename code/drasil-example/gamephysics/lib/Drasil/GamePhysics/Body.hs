@@ -79,7 +79,7 @@ mkSRS = [TableOfContents,
     LCsSec,
     UCsSec,
     OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
-    TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+    TraceabilitySec,
     AuxConstntSec $ AuxConsProg [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]

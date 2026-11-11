@@ -70,7 +70,6 @@ import qualified Drasil.SRS.DocumentLanguage.TraceabilityMatrix as TM (
   generateTraceTableView, layoutUIDs)
 import qualified Drasil.SRS.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.SRS.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
-import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Function
@@ -112,7 +111,7 @@ insertTraceChunks sd si
         -- containing the traceability graphs.
         tglcs = genTraceGraphLabCons
         traceMats = (\(TraceConfig u _ desc cols rows) ->
-          TM.generateTraceTableView u desc cols rows si) <$> traceMatStandard si
+          TM.generateTraceTableView u desc cols rows si) <$> traceConfigs sd
         db' = insertAll tglcs
             $ insertAll traceMats
             $ insertAll traceyGraphGetRefs db
@@ -123,6 +122,11 @@ insertTraceChunks sd si
     containsTraceSec ((TraceabilitySec _):_) = True
     containsTraceSec (_:ss)                = containsTraceSec ss
     containsTraceSec []                    = False
+
+    traceConfigs :: DocDesc -> [TraceConfig]
+    traceConfigs ((TraceabilitySec (TraceabilityProg ps)):_) = ps
+    traceConfigs (_:ss)                                     = traceConfigs ss
+    traceConfigs []                                         = []
 
 -- * Section Creator Functions
 

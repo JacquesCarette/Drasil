@@ -6,8 +6,8 @@ module Language.Drasil.Chunk.DefinedQuantity (
   -- * Type classes
   DefinesQuantity(defLhs),
   -- * Constructors
-  quant, quant', quantAU, quantNoUnit, quantNoUnit',
-  dqd, dqd', dqdNoUnit, dqdWr,
+  quant, quant', quantAU, quantNoUnit, quantNoUnit', quantNoUnitAU,
+  dqd, dqd', dqdWr,
   implVar, implVar', implVarAU, implVarAU'
 ) where
 
@@ -149,16 +149,28 @@ quantNoUnit' ::
   Space -> DefinedQuantityDict
 quantNoUnit' u trm def s sp = DQD u (cncpt''' u trm def) s sp Nothing
 
-{-# DEPRECATED dqd, dqd', dqdNoUnit
-  "Smart constructors allow externally-known chunk nesting; use one of `quant, quant', quantNoUnit, quantNoUnit'` instead." #-}
+-- | Construct a 'DefinedQuantityDict' (/without/ a unit and /with/ an optional abbreviation)
+quantNoUnitAU ::
+  -- | The 'UID'.
+  UID ->
+  -- | The quantity being defined.
+  NP ->
+  -- | The definition of the quantity.
+  Sentence ->
+  -- | The (optional) abbreviation for the quantity.
+  Maybe String ->
+  -- | The 'Symbol' used for the quantity.
+  Symbol ->
+  -- | The 'Space' of the quantity.
+  Space -> DefinedQuantityDict
+quantNoUnitAU u trm def a s sp = quantAU u trm def a (const s) sp Nothing
+
+{-# DEPRECATED dqd, dqd'
+  "Smart constructors allow externally-known chunk nesting; use one of `quant, quant', quantNoUnit, quantNoUnit', quantNoUnitAU` instead." #-}
 
 -- | Smart constructor that creates a DefinedQuantityDict with a 'ConceptChunk', a 'Symbol' independent of 'Stage', a 'Space', and a unit.
 dqd :: ConceptChunk -> Symbol -> Space -> UnitDefn -> DefinedQuantityDict
 dqd c s sp = DQD (c ^. uid) c (const s) sp . Just
-
--- | Similar to 'dqd', but without any units.
-dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
-dqdNoUnit c s sp = DQD (c ^. uid) c (const s) sp Nothing
 
 -- | Similar to 'dqd', but the 'Symbol' is now dependent on the 'Stage'.
 dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict

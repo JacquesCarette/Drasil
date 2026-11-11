@@ -86,7 +86,8 @@ plateWidth = uqc "plateWidth" (nounPhraseSP "plate width (short dimension)")
   [ physRange $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen),
     sfwrRange $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
-aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (variable "AR") Real)
+aspectRatio = uq (constrained' (quantNoUnitAU (mkUid "aR") (aspectRatioCon ^. term)
+  (aspectRatioCon ^. defn) (Just "AR") (variable "AR") Real)
   [ physRange $ UpFrom (Inc, exactDbl 1),
     sfwrRange $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
@@ -271,7 +272,8 @@ gTF, loadSF, loadDF :: DefinedQuantityDict
 dimlessLoad = quantNoUnit (mkUid "dimlessLoad") (nounPhraseSP "dimensionless load")
   (S "the dimensionless load") (hat lQ) Real
 
-gTF = dqdNoUnit glTyFac (variable "GTF") Integer
+gTF = quantNoUnitAU (mkUid "glassTypeFac") (glTyFac ^. term) (glTyFac ^. defn)
+  (Just "GTF") (variable "GTF") Integer
 
 isSafePb   = quantNoUnit (mkUid "isSafePb") (nounPhraseSP "probability of glass breakage safety requirement")
   (S "the probability of glass breakage safety requirement") (variable "isSafePb") Boolean
@@ -287,8 +289,10 @@ interpY = quantNoUnit (mkUid "interpY") (nounPhraseSP "interpY")
 interpZ = quantNoUnit (mkUid "interpZ") (nounPhraseSP "interpZ")
   (S "interpolated z") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
-loadDF = dqdNoUnit loadDurFac (variable "LDF") Real
-loadSF = dqdNoUnit loadShareFac (variable "LSF") Real
+loadDF = quantNoUnitAU (mkUid "loadDurFactor") (loadDurFac ^. term) (loadDurFac ^. defn)
+  (Just "LDF") (variable "LDF") Real
+loadSF = quantNoUnitAU (mkUid "lShareFac") (loadShareFac ^. term) (loadShareFac ^. defn)
+  (Just "LSF") (variable "LSF") Real
 
 riskFun = quantNoUnit (mkUid "riskFun") (nounPhraseSP "risk of failure")
   (S "the percentage risk of the glass slab failing to resist the blast") cB Real

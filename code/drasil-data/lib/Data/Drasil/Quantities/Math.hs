@@ -7,8 +7,7 @@ import Drasil.Database (mkUid)
 import Language.Drasil.Display (Symbol(Atop), Decoration(Magnitude))
 import Language.Drasil.ShortHands
 
-import qualified Data.Drasil.Concepts.Math as CM (area, diameter, norm, orient,
-    surArea, surface)
+import qualified Data.Drasil.Concepts.Math as CM (area, norm, surArea, surface)
 import Data.Drasil.Concepts.Math (euclidSpace, normal, perp, unit_, vector)
 import Data.Drasil.SI_Units (metre, m_2, radian)
 
@@ -68,10 +67,13 @@ withMagnitudeOne v = constrainedNRV' v [physEqn $ norm (sy v) $= exactDbl 1]
 area, diameter, surface, surArea, orientation :: DefinedQuantityDict
 
 area        = dqd CM.area     cA   Real m_2
-diameter    = dqd CM.diameter lD   Real metre
+diameter    = quant (mkUid "diameter") (cn' "diameter")
+  (S ("Any straight line segment that passes through the center of the circle" <>
+      "and whose endpoints lie on the circle.")) lD Real metre
 surface     = dqd CM.surface  cS   Real m_2
 surArea     = dqd CM.surArea  cA   Real m_2
-orientation = dqd CM.orient   lPhi Real radian
+orientation = quant (mkUid "orientation") (cn' "orientation")
+  (S "the relative physical position or direction of something") lPhi Real radian
 
 -- * Constants
 

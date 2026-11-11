@@ -32,9 +32,9 @@ mathcon' = [de, leftSide, ode, pde, rightSide]
 
 -- * Mathematical Concepts
 
-amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint, diameter,
+amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint,
   direction, euclidSpace, laplaceTransform, law, line, matrix, norm, normal,
-  number, orient, origin, perp, positive, negative, point, probability,
+  number, origin, perp, positive, negative, point, probability,
   rOfChng, rate, rightHand, shape, surArea, surface, vector, xAxis, xCoord, xComp, xDir,
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
@@ -52,8 +52,6 @@ change       = cncpt''' (mkUid "change")        (cn' "change")           (D.S "D
 component    = cncpt''' (mkUid "mathComponent") (nounPhrase "component" "components") (D.S ("The scalar quantity defining the contribution " <>
                                                                         "of a vector in one of the coordinate directions"))
 constraint   = cncpt''' (mkUid "mathConstraint") (cn' "constraint")      (D.S "A condition that the solution must satisfy")
-diameter     = cncpt''' (mkUid "diameter")       (cn' "diameter")        (D.S ("Any straight line segment that passes through the center of the circle" <>
-                                                                         "and whose endpoints lie on the circle."))
 direction    = cncpt''' (mkUid "direction")      (cn' "direction")       (D.S "'which way' a vector points, extending from the tail to the tip")
 euclidSpace  = cncpt''' (mkUid "euclidSpace")    (cn' "Euclidean")       (D.S ("Denoting the system of geometry corresponding to the geometry of ordinary" <>
                                                                          "experience"))
@@ -66,7 +64,6 @@ matrix       = cncpt''' (mkUid "matrix") (cnICES "matrix")               (D.S ("
 norm         = cncpt''' (mkUid "norm")         (cn' "norm")              (D.S "the positive length or size of a vector")
 normal       = cncpt''' (mkUid "normal")       (cn' "normal" )           (D.S "an object that is perpendicular to a given object")
 number       = cncpt''' (mkUid "number")       (cn' "number")            (D.S "a mathematical object used to count, measure, and label")
-orient       = cncpt''' (mkUid "orientation")  (cn' "orientation")       (D.S "the relative physical position or direction of something")
 origin       = cncpt''' (mkUid "origin")       (cn' "origin")            (D.S "a fixed point of reference for the geometry of the surrounding space")
 perp         = cncpt''' (mkUid "perp")         (cn' "perpendicular")     (D.S "At right angles")
 positive     = cncpt''' (mkUid "positive")     (cn' "positive")          (D.S "greater than zero")

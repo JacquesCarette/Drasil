@@ -69,8 +69,6 @@ instance Definition         InstanceModel where defn = mk . defn
 instance Express            InstanceModel where express = express . (^. mk)
 -- | Finds the derivation of the 'InstanceModel'. May contain Nothing.
 instance MayHaveDerivation  InstanceModel where derivations = deri
-{--- | Finds 'Reference's contained in the 'InstanceModel'.
-instance HasReference       InstanceModel where getReferences = rf-}
 -- | Finds 'DecRef's contained in the 'InstanceModel'.
 instance HasDecRef          InstanceModel where getDecRefs = rf
 -- | Finds the 'ShortName' of the 'InstanceModel'.

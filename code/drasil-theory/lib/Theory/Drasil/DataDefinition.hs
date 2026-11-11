@@ -74,8 +74,6 @@ instance HasOutput          DataDefinition where
   out_constraints = to (const [])
 -- | Converts the defining expression of a 'DataDefinition where' into the model expression language.
 instance Express            DataDefinition where express = either express express . qdFromDD
-{-- Finds 'Reference's contained in the 'DataDefinition where'.
-instance HasReference       DataDefinition where getReferences = rf-}
 -- | Finds 'DecRef's contained in the 'DataDefinition where'.
 instance HasDecRef          DataDefinition where getDecRefs = ddPkt pktDR
 -- | Equal if 'UID's are equal.

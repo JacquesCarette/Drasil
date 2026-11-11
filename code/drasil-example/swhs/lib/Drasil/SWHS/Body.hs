@@ -1,6 +1,6 @@
 module Drasil.SWHS.Body (
   mkSRS, si, charsOfReader, dataContMid, motivation, introStart,
-  externalLinkRef, physSyst1, physSyst2, sysCntxtDesc, systContRespBullets,
+  physSyst1, physSyst2, sysCntxtDesc, systContRespBullets,
   sysCntxtRespIntro, userChars
 ) where
 
@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
 import Data.Drasil.Concepts.Education (calculus, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
+import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy)
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans, htFlux,
@@ -47,7 +47,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHS.MetaConcepts (projName, swhs)
-import Drasil.SWHS.References (citations, uriReferences)
+import Drasil.SWHS.References (citations, swhsOriginal, uriReferences)
 import Drasil.SWHS.Requirements (funcReqs, nfRequirements,
   verifyEnergyOutput, funcReqsTables)
 import Drasil.SWHS.TMods (tMods)
@@ -81,18 +81,14 @@ cis = [phsChgMtrl]
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   thermocon <> softwarecon <> physicalcon <> con <> [CP.energy,
-  CP.mechEnergy, CP.pressure]
+  CP.mechEnergy]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis conceptChunks []
+symbMap = withCommonKnowledge projName uriReferences symbols ideaDicts cis conceptChunks []
   SWHS.dataDefs insModel genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent <> funcReqsTables
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = externalLinkRef : uriReferences
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -134,7 +130,7 @@ mkSRS = [TableOfContents,
   ],
   LCsSec,
   UCsSec,
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+  TraceabilitySec,
   AuxConstntSec $ AuxConsProg specParamValList,
   Bibliography]
 
@@ -180,12 +176,7 @@ introStartSWHS = foldlSent [atStart' swhs, sParen (short swhs),
 
 extraInfoSent = foldlSent [S "The", phrase program,
   S "is based on the original, manually created version of",
-  namedRef externalLinkRef (S "SWHS")]
-
-externalLinkRef :: Reference
-externalLinkRef = makeURI "SWHS_SRSLink"
-  "https://github.com/smiths/swhs/tree/master"
-  (shortname' $ S "SWHS_SRSLink")
+  S "SWHS", refS swhsOriginal]
 
 -------------------------------
 -- 2.1 : Purpose of Document --

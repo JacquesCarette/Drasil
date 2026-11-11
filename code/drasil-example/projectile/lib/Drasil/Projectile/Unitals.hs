@@ -4,6 +4,7 @@ module Drasil.Projectile.Unitals (
   launAngleUnc, launSpeedUnc, targPosUnc, landPosUnc, offsetUnc, flightDurUnc
 ) where
 
+import Control.Lens ((^.))
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
@@ -12,6 +13,8 @@ import Drasil.Database (mkUid)
 import Language.Drasil.Display (Symbol(Concat))
 import Language.Drasil.ShortHands (lD, lTheta, lV, lP, lT)
 
+import Data.Drasil.Concepts.Documentation (constant)
+import Data.Drasil.Concepts.Physics (oneD, position, speed, acceleration)
 import Data.Drasil.Quantities.Math (pi_)
 
 import Data.Drasil.Constraints (gtZeroConstr)
@@ -19,7 +22,7 @@ import Data.Drasil.SI_Units (radian, metre, second)
 import Data.Drasil.Units.Physics (velU)
 
 import qualified Drasil.Projectile.Concepts as C (flightDur, offset,
-  flightDur, landPos, launAngleTerm, launAngleDef, launSpeed, offset, targPos, projSpeed, projPos)
+  flightDur, landPos, launAngleTerm, launAngleDef, launSpeed, offset, targPos)
 
 inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = dqdWr <$> launSpeed :| [launAngle, targPos]
@@ -28,10 +31,16 @@ outputs :: NE.NonEmpty DefinedQuantityDict
 outputs = dqdWr <$> offset :| [flightDur]
 
 projSpeed :: DefinedQuantityDict
-projSpeed = dqd C.projSpeed (Concat [lV, label "(", lT, label ")"]) Real velU
+projSpeed = quant (mkUid "projSpeed")
+  (compoundPhrase (nounPhraseSP (abrv oneD)) (speed ^. term))
+  (short oneD +:+ phrase speed +:+ S "under" +:+ phrase constant +:+ phrase acceleration)
+  (Concat [lV, label "(", lT, label ")"]) Real velU
 
 projPos :: DefinedQuantityDict
-projPos = dqd C.projPos (Concat [lP, label "(", lT, label ")"]) Real metre
+projPos = quant (mkUid "projPos")
+  (compoundPhrase (nounPhraseSP (abrv oneD)) (position ^. term))
+  (short oneD +:+ phrase position +:+ S "under" +:+ phrase constant +:+ phrase speed)
+  (Concat [lP, label "(", lT, label ")"]) Real metre
 
 ---
 landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc,

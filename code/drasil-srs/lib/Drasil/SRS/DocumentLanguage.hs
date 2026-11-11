@@ -70,7 +70,6 @@ import qualified Drasil.SRS.DocumentLanguage.TraceabilityMatrix as TM (
   generateTraceTableView, layoutUIDs)
 import qualified Drasil.SRS.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.SRS.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
-import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Function
@@ -112,7 +111,7 @@ insertTraceChunks sd si
         -- containing the traceability graphs.
         tglcs = genTraceGraphLabCons
         traceMats = (\(TraceConfig u _ desc cols rows) ->
-          TM.generateTraceTableView u desc cols rows si) <$> traceMatStandard si
+          TM.generateTraceTableView u desc cols rows si) <$> traceConfigs sd
         db' = insertAll tglcs
             $ insertAll traceMats
             $ insertAll traceyGraphGetRefs db
@@ -124,12 +123,23 @@ insertTraceChunks sd si
     containsTraceSec (_:ss)                = containsTraceSec ss
     containsTraceSec []                    = False
 
+    traceConfigs :: DocDesc -> [TraceConfig]
+    traceConfigs ((TraceabilitySec (TraceabilityProg ps)):_) = ps
+    traceConfigs (_:ss)                                     = traceConfigs ss
+    traceConfigs []                                         = []
+
 -- * Section Creator Functions
 
 -- | Helper for creating the different document sections.
 mkSections :: SmithEtAlSRS -> DocDesc -> Maybe BibRef -> [Section]
-mkSections si dd mbib = either renderRefSec id <$> partialRender
+mkSections si dd mbib = secs
   where
+    -- The finished sections. The table of contents is built from them, itself
+    -- included, which works because it only reads their titles, labels and
+    -- subsections.
+    secs :: [Section]
+    secs = either renderRefSec id <$> partialRender
+
     delayRenderRefSec :: DocSection -> Either RefSec Section
     delayRenderRefSec (RefSec rs) = Left rs
     delayRenderRefSec x           = Right (render x)
@@ -144,7 +154,7 @@ mkSections si dd mbib = either renderRefSec id <$> partialRender
     renderRefSec rs = mkRefSec si dd rs nonRefSecs
 
     render :: DocSection -> Section
-    render TableOfContents      = mkToC dd
+    render TableOfContents      = mkToC secs
     render (IntroSec is)        = mkIntroSec si is
     render (StkhldrSec sts)     = mkStkhldrSec (si ^. projName) sts
     render (SSDSec ss)          = mkSSDSec si ss
@@ -162,9 +172,10 @@ mkSections si dd mbib = either renderRefSec id <$> partialRender
 
 -- ** Table of Contents
 
--- | Helper for making the Table of Contents section.
-mkToC :: DocDesc -> Section
-mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ (, Nothing) . toToC <$> dd] []
+-- | Helper for making the Table of Contents section, listing the given
+-- sections.
+mkToC :: [Section] -> Section
+mkToC secs = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ (, Nothing) . toToC <$> secs] []
   where
     intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
 

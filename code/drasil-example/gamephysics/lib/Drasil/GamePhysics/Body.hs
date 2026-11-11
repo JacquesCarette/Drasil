@@ -38,7 +38,8 @@ import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.LabelledContent (labelledContent, sysCtxFig1)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
 import Drasil.GamePhysics.MetaConcepts (projName)
-import Drasil.GamePhysics.References (citations, uriReferences)
+import Drasil.GamePhysics.References (citations, gamePhysicsOriginal,
+  uriReferences)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbols, outputConstraints,
@@ -79,7 +80,7 @@ mkSRS = [TableOfContents,
     LCsSec,
     UCsSec,
     OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
-    TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+    TraceabilitySec,
     AuxConstntSec $ AuxConsProg [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
@@ -120,7 +121,7 @@ symbMap = withCommonKnowledge projName allRefs symbols [] cis conceptChunks []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef, pymunk] <> uriReferences <> offShelfSolRefs
+allRefs = [pymunk] <> uriReferences <> offShelfSolRefs
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because
@@ -146,12 +147,8 @@ para1_introduction_intro = foldlSent
   S "to better quality" +:+. plural product_ ,
   S "The document describes the program",
   S " based on the original, manually created version of" +:+
-  namedRef externalLinkRef (S "GamePhysics")]
+  S "GamePhysics" +:+ refS gamePhysicsOriginal]
 
-externalLinkRef :: Reference
-externalLinkRef = makeURI "GamePhysicsSRSLink"
-  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/gamephys"
-  (shortname' $ S "GamePhysicsSRSLink")
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------

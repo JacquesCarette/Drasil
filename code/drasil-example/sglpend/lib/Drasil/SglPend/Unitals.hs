@@ -16,7 +16,7 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, newton, radian)
 import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, force, velocity,
-  angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, yAccel,
+  angularVelocity, angularAccel, gravitationalAccel, gravitationalConst, weight, tension, acceleration, yAccel,
   xAccel, yVel, xVel, iyPos, yPos, time, torque, momentOfInertia, angularDisplacement,
   angularFrequency, frequency, period)
 import Data.Drasil.Concepts.Physics (pendulum)
@@ -39,7 +39,7 @@ unitalChunks = [QPP.len, QP.force, QP.ixPos, QP.xPos, QP.yPos,
    QP.angularVelocity, QP.gravitationalAccel, QP.tension, QP.acceleration,
    QP.yAccel, QP.xAccel, QP.yVel, QP.xVel, QP.iyPos, QP.time, QP.velocity, QP.position, QP.torque,
    QP.momentOfInertia, QP.angularDisplacement, xForce, yForce,
-   QP.angularFrequency, QP.frequency, QP.period]
+   QP.angularFrequency, QP.frequency, QP.period, QP.gravitationalConst, QP.weight]
 
 lenRod, xForce, yForce, pendDisplacementAngle, initialPendAngle :: DefinedQuantityDict
 

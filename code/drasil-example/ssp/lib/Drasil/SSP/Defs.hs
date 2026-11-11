@@ -20,7 +20,8 @@ import Data.Drasil.Concepts.Education (mechanics)
 import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (threeD, force, stress)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, len)
-import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,shearRes)
+import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearRes)
+import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 defs :: [IdeaDict]
 defs = [factor, soil, intrslce, layer, slip, slope, slice, morPrice,

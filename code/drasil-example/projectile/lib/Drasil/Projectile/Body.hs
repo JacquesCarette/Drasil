@@ -22,13 +22,13 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity,
-  rectilinear, twoD, motion, distance, collision, positionVec)
+  rectilinear, twoD, motion, distance, collision)
 import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
   gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
-  position, scalarPos, time, velocity, xAccel, xConstAccel, xPos,
+  position, positionVec, scalarPos, time, velocity, xAccel, xConstAccel, xPos,
   xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel, constAccelV)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
@@ -46,7 +46,7 @@ import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.LabelledContent (figLaunch, sysCtxFig1, labelledContent)
 import Drasil.Projectile.MetaConcepts (projName)
-import Drasil.Projectile.References (citations)
+import Drasil.Projectile.References (citations, projectileOriginal)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.Projectile.Unitals
 
@@ -92,7 +92,7 @@ mkSRS = [TableOfContents,
       , NonFReqsSub
       ],
   LCsSec,
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+  TraceabilitySec,
   AuxConstntSec $
     AuxConsProg constants,
   Bibliography
@@ -106,15 +106,10 @@ justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:
   S "include" +:+. foldlList Comma List projectileExamples,
   S "The document describes the program called", projTitleS projName,
   S ", which is based" `S.onThe` S "original, manually created version of" +:+
-  namedRef externalLinkRef (S "Projectile")]
+  S "Projectile" +:+ refS projectileOriginal]
 scope = foldlSent_ [D.toSent $ phraseNP (NP.the (analysis `ofA` twoD)),
   sParen (short twoD), D.toSent $ phraseNP (combineNINI projectile motion), phrase problem,
   S "with", phrase constAccel]
-
-externalLinkRef :: Reference
-externalLinkRef = makeURI "projectileSRSLink"
-  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile"
-  (shortname' $ S "projectileSRSLink")
 
 projectileExamples :: [Sentence]
 projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles" `sC`
@@ -150,17 +145,12 @@ tMods = [accelerationTM, velocityTM]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  [mass] <> defs <> [distance, motion, gravity, collision, rectilinear,
-  positionVec]
+  [mass] <> defs <> [distance, motion, gravity, collision, rectilinear]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbols ideaDicts []
+symbMap = withCommonKnowledge projName [] symbols ideaDicts []
   conceptChunks [] dataDefs iMods genDefns tMods concIns citations
   labelledContent'
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = [externalLinkRef]
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -262,7 +252,7 @@ symbols = pi_ : unitalQuants <> [dqdWr gravitationalAccelConst] <>
   [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
-  constAccelV, projPos, projSpeed]
+  constAccelV, positionVec, projPos, projSpeed]
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst]

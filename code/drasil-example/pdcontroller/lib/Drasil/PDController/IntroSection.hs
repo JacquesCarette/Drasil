@@ -1,5 +1,5 @@
 module Drasil.PDController.IntroSection (
-  introPara, introPurposeOfDoc, externalLinkRef, introUserChar1, introUserChar2,
+  introPara, introPurposeOfDoc, introUserChar1, introUserChar2,
   introscopeOfReq, scope
 ) where
 
@@ -10,6 +10,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.PDController.Concepts
+import Drasil.PDController.References (pdControllerOriginal)
 
 introPara, introPurposeOfDoc, introscopeOfReq :: Sentence
 introPara = foldlSent [
@@ -21,13 +22,8 @@ introPara = foldlSent [
   S "Therefore, a simulation" `S.ofThe` phrase pidC, S "with a",
   phrase secondOrderSystem,
   S "is created in this project based" `S.onThe` S "original, manually created version of" +:+
-  namedRef externalLinkRef (S "PD Controller"),
+  S "PD Controller" +:+ refS pdControllerOriginal,
   S "that can be used to tune the gain constants"]
-
-externalLinkRef :: Reference
-externalLinkRef = makeURI "PD_Controller_SRSLink"
-  "https://github.com/muralidn/CAS741-Fall20/tree/master"
-  (shortname' $ S "PD_Controller_SRSLink")
 
 introscopeOfReq
   = foldlSent_

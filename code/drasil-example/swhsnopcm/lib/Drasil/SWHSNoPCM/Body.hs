@@ -17,18 +17,18 @@ import Data.Drasil.People (thulasi)
 import Data.Drasil.Concepts.Documentation as Doc (material_)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
+import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy)
 import Data.Drasil.Concepts.Software (softwarecon, program)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
-  temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat)
+  temp, thermalAnalysis, thermalConduction, thermocon)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heatCapSpec, htFlux, sensHeat, meltPt)
+  heatCapSpec, htFlux, sensHeat, meltPt, boilPt, latentHeat)
 import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect, surArea, area)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
-import Data.Drasil.Quantities.Physics (time, energy)
+import Data.Drasil.Quantities.Physics (time, energy, pressure)
 
 import Theory.Drasil (TheoryModel)
 
@@ -36,7 +36,7 @@ import Theory.Drasil (TheoryModel)
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Body (charsOfReader, dataContMid, motivation,
-  introStart, externalLinkRef, physSyst1, physSyst2, sysCntxtDesc,
+  introStart, physSyst1, physSyst2, sysCntxtDesc,
   systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (coil, sWHT, tank, transient, water, con, phsChgMtrl)
@@ -60,7 +60,7 @@ import Drasil.SWHSNoPCM.MetaConcepts (projName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
-import Drasil.SWHSNoPCM.References (citations)
+import Drasil.SWHSNoPCM.References (citations, swhsNoPCMOriginal)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
 import Drasil.SWHS.MetaConcepts (swhs)
 
@@ -77,7 +77,7 @@ concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
 
 symbolConcepts :: [DefinedQuantityDict]
 symbolConcepts = [density, mass, time, vol,
-  QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat, QT.meltPt]
+  QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat, QT.meltPt, QT.boilPt, QT.latentHeat, pressure]
 
 -------------------
 --INPUT INFORMATION
@@ -128,7 +128,7 @@ mkSRS = [TableOfContents,
   ],
   LCsSec,
   UCsSec,
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+  TraceabilitySec,
   AuxConstntSec $ AuxConsProg specParamValList,
   Bibliography]
 
@@ -159,19 +159,15 @@ cis = [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  softwarecon <> thermocon <> con <> physicalcon <> [boilPt, latentHeat]
-  <> [CP.energy, CP.mechEnergy, CP.pressure]
+  softwarecon <> thermocon <> con <> physicalcon
+  <> [CP.energy, CP.mechEnergy]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
+symbMap = withCommonKnowledge projName uriReferences symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent <> funcReqsTables
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = [externalLinkRef, externalLinkRef'] <> uriReferences
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -183,12 +179,7 @@ introStartNoPCM = projTitleS projName +:+ S "provide a novel way of storing" +:+
 
 extraInfoSent = foldlSent [S "The", phrase program,
   S "is based on the original, manually created version of",
-  namedRef externalLinkRef' (S "SWHSNoPCM")]
-
-externalLinkRef' :: Reference
-externalLinkRef' = makeURI "SWHSNoPCM_SRSLink"
-  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/noPCM"
-  (shortname' $ S "SWHSNoPCM_SRSLink")
+  S "SWHSNoPCM", refS swhsNoPCMOriginal]
 
 -----------------------------------
 --Section 2.1 : PURPOSE OF DOCUMENT

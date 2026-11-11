@@ -11,7 +11,7 @@ import qualified Data.Set as S
 
 -- General Drasil
 import Drasil.Database (UID, HasUID(..), dependencies)
-import Drasil.Database.SearchTools (defResolve', findAllConcInsts, DomDefn(domain))
+import Drasil.Database.SearchTools (findAllConcInstsUnder)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.System (systemdb)
@@ -70,22 +70,10 @@ tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.ofThe` (end
 layoutUIDs :: [TraceViewCat] -> SmithEtAlSRS -> [UID]
 layoutUIDs cats c = concatMap ($ c) cats
 
--- | Helper that filters a traceability matrix given a predicate and a 'ChunkDB' lens field.
-traceViewFilt :: HasUID a => (a -> Bool) -> (SmithEtAlSRS -> [a]) -> TraceViewCat
-traceViewFilt f table = fmap (^. uid) . filter f . table
-
--- | Helper that is similar to 'traceViewFilt', but the filter is always 'True'.
+-- | Helper that finds the 'UID's of a traceability category's items.
 traceView :: HasUID a => (SmithEtAlSRS -> [a]) -> TraceViewCat
-traceView = traceViewFilt (const True)
+traceView items = fmap (^. uid) . items
 
 -- | Turns a 'Concept' into a 'TraceViewCat' via its domain.
 traceViewCC :: Concept c => c -> TraceViewCat
-traceViewCC dom s = traceViewFilt (isDomUnder (dom ^. uid) . sDom . cdom) (findAllConcInsts . (^. systemdb)) s
-  where
-    isDomUnder :: UID -> UID -> Bool
-    isDomUnder filtDom curr
-      | filtDom == curr = True
-      | not $ null $ getDom curr = isDomUnder filtDom (sDom $ getDom curr)
-      | otherwise = False
-    getDom :: UID -> [UID]
-    getDom curr = domain $ defResolve' (s ^. systemdb) curr
+traceViewCC dom = traceView (findAllConcInstsUnder (dom ^. uid) . (^. systemdb))

@@ -11,11 +11,11 @@ import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)
-import Data.Drasil.Concepts.Physics (motion, pendulum, angular, displacement, iPos, gravitationalConst, gravity, rigidBody, weight, shm)
+import Data.Drasil.Concepts.Physics (motion, pendulum, angular, displacement, iPos, gravity, rigidBody, shm)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Theories.Physics (newtonSLR)
 
-import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
+import Drasil.DblPend.Body (justification, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro)
 import qualified Drasil.DblPend.Body as DPD (tMods)
@@ -74,7 +74,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     [ FReqsSub funcReqsTables
     , NonFReqsSub
     ],
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+  TraceabilitySec,
   AuxConstntSec $
      AuxConsProg [],  -- Adds Auxilliary constraint section
   Bibliography                    -- Adds reference section
@@ -93,18 +93,14 @@ purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pen
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   physicalcon <> [angular, displacement, iPos, pendulum, motion,
-  gravitationalConst, gravity, rigidBody, weight, shm] <> defs
+  gravity, rigidBody, shm] <> defs
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbols ideaDicts []
+symbMap = withCommonKnowledge projName [] symbols ideaDicts []
   conceptChunks [] dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent <> funcReqsTables
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = [externalLinkRef]
 
 concIns :: [ConceptInstance]
 concIns = assumpSingle <> goals <> funcReqs <> nonFuncReqs

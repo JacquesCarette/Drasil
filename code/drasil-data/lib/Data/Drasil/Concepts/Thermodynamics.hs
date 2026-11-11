@@ -15,8 +15,8 @@ thermocon = [boiling, degree_', enerSrc, heat, heatTrans, htTransTheo,
   lawConsEnergy, lawConvCooling, melting, phaseChange, thermalAnalysis,
   thermalConduction, thermalConductor, thermalEnergy]
 
-boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans, htFlux,
-  htTransTheo, latentHeat, lawConsEnergy, lawConvCooling, melting,
+boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans, htFlux,
+  htTransTheo, lawConsEnergy, lawConvCooling, melting,
   phaseChange, sensHeat, temp, thermalAnalysis, thermalConduction,
   thermalConductor, thermalEnergy :: ConceptChunk
 
@@ -24,8 +24,6 @@ boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans, htFlux,
 --    Same for "Melting"
 boiling           = cncpt''' (mkUid "boiling")           (cn "boiling")
                       (S "the phase change from liquid to vapour")
-boilPt            = cncpt''' (mkUid "boilPt")            (cn' "boiling point temperature")
-                      (S "the temperature at which a substance changes from liquid to vapour")
 degree_'          = cncpt''' (mkUid "thermo_degree")     (cn' "degree")
                       (S "a measure of the warmth or coldness of an object or substance")
 heat              = cncpt''' (mkUid "heat")              (cn "heat")
@@ -40,9 +38,6 @@ heatCapSpec       = cncpt''' (mkUid "heatCapSpec")       (cnIES "specific heat c
 htFlux            = cncpt''' (mkUid "htFlux")            (cn'' "heat flux")
                       (S ("the rate of thermal energy transfer through a given " <>
                       "surface per unit time"))
-latentHeat        = cncpt''' (mkUid "latentHeat")        (cn' "latent heat")
-                      (S ("the heat required to convert a solid into a liquid or " <>
-                      "vapor, or a liquid into a vapor, without change of temperature"))
 lawConsEnergy     = cncpt''' (mkUid "lawConsEnergy")     (nounPhraseSP "law of conservation of energy")
                       (S "the law that energy is conserved")
 lawConvCooling    = cncpt''' (mkUid "lawConvCooling")    (nounPhraseSP "Newton's law of cooling")

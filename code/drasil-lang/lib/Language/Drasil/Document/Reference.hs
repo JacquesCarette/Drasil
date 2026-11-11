@@ -4,13 +4,11 @@
 module Language.Drasil.Document.Reference (
   -- * Type
   Reference(Reference),
-  -- * Class
-  HasReference(..),
   -- * Constructors
   ref, refS, namedRef, complexRef, namedComplexRef
 ) where
 
-import Control.Lens ((^.), makeLenses, Lens')
+import Control.Lens ((^.), makeLenses)
 
 import Drasil.Database (UID, HasUID(..), IsChunk, declareHasChunkRefs, Generically(..))
 
@@ -25,12 +23,6 @@ data Reference = Reference
   ,  ra :: LblType
   ,  sn :: ShortName}
 makeLenses ''Reference
-
--- | A class that contains a list of 'Reference's.
-class HasReference c where
-  -- | Provides a 'Lens' to the 'Reference's.
-  getReferences :: Lens' c [Reference]
-
 declareHasChunkRefs ''Reference
 
 -- | Equal if 'UID's are equal.

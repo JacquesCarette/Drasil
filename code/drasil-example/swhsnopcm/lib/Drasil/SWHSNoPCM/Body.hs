@@ -17,18 +17,18 @@ import Data.Drasil.People (thulasi)
 import Data.Drasil.Concepts.Documentation as Doc (material_)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
+import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy)
 import Data.Drasil.Concepts.Software (softwarecon, program)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
-  temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat)
+  temp, thermalAnalysis, thermalConduction, thermocon)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heatCapSpec, htFlux, sensHeat, meltPt)
+  heatCapSpec, htFlux, sensHeat, meltPt, boilPt, latentHeat)
 import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect, surArea, area)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
-import Data.Drasil.Quantities.Physics (time, energy)
+import Data.Drasil.Quantities.Physics (time, energy, pressure)
 
 import Theory.Drasil (TheoryModel)
 
@@ -77,7 +77,7 @@ concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
 
 symbolConcepts :: [DefinedQuantityDict]
 symbolConcepts = [density, mass, time, vol,
-  QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat, QT.meltPt]
+  QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat, QT.meltPt, QT.boilPt, QT.latentHeat, pressure]
 
 -------------------
 --INPUT INFORMATION
@@ -159,8 +159,8 @@ cis = [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  softwarecon <> thermocon <> con <> physicalcon <> [boilPt, latentHeat]
-  <> [CP.energy, CP.mechEnergy, CP.pressure]
+  softwarecon <> thermocon <> con <> physicalcon
+  <> [CP.energy, CP.mechEnergy]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs

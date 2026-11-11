@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
 import Data.Drasil.Concepts.Education (calculus, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
+import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy)
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans, htFlux,
@@ -81,7 +81,7 @@ cis = [phsChgMtrl]
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   thermocon <> softwarecon <> physicalcon <> con <> [CP.energy,
-  CP.mechEnergy, CP.pressure]
+  CP.mechEnergy]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis conceptChunks []

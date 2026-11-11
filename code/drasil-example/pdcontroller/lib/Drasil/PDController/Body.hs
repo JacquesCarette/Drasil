@@ -8,6 +8,7 @@ import Drasil.Generator (withCommonKnowledge)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Math (ode)
+import Data.Drasil.People (naveen)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
@@ -25,7 +26,7 @@ import Drasil.PDController.MetaConcepts (projName)
 import Drasil.PDController.GenSysDesc
        (gsdSysContextList, gsdSysContextP1, gsdSysContextP2, gsduserCharacteristics)
 import Drasil.PDController.IModel (instanceModels, imPD)
-import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc, externalLinkRef,
+import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc,
        introUserChar1, introUserChar2, introscopeOfReq, scope)
 import Drasil.PDController.References (citations)
 import Drasil.PDController.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
@@ -34,9 +35,6 @@ import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
   inpConstrained, pidConstants, propGain, derGain, setPoint, processVariable, absTol, relTol)
 import Drasil.PDController.ODEs (pidODEInfo)
-
-naveen :: Person
-naveen = person "Naveen Ganesh" "Muralidharan"
 
 mkSRS :: SRSDecl
 mkSRS
@@ -118,16 +116,12 @@ allSymbols = physicscon <> symbols <>
   [mass, posInf, negInf]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs allSymbols [] acronyms
+symbMap = withCommonKnowledge projName [] allSymbols [] acronyms
   conceptChunks [] dataDefinitions instanceModels genDefns theoreticalModels
   conceptInstances citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent <> funcReqsTables
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = [externalLinkRef]
 
 conceptInstances :: [ConceptInstance]
 conceptInstances = assumptions <> goals <> funcReqs <> nonfuncReqs <> likelyChgs

@@ -5,9 +5,9 @@ import Prelude hiding (sin, cos, tan)
 
 import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (variable)
-import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
+import Language.Drasil.Document (fig, llccFig, ulcc, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
-  foldlSPCol, bulletNested, bulletFlat, ConceptInstance, shortname')
+  foldlSPCol, bulletNested, bulletFlat, ConceptInstance)
 import qualified Language.Drasil.Development as D
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
@@ -48,7 +48,7 @@ import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (goals)
 import Drasil.SSP.MetaConcepts (projName)
 import Drasil.SSP.IMods (instModIntro, iMods)
-import Drasil.SSP.References (citations, morgenstern1965)
+import Drasil.SSP.References (citations, sspOriginal, morgenstern1965)
 import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
 import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
@@ -139,7 +139,7 @@ symbMap = withCommonKnowledge projName allRefs symbols ideaDicts [] conceptChunk
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef, weightSrc, hsPressureSrc]
+allRefs = [weightSrc, hsPressureSrc]
 
 -- SECTION 1 --
 --automatically generated in mkSRS -
@@ -177,12 +177,7 @@ startIntro = foldlSent [D.toSent (atStartNP (a_ slope)), S "of geological",
 
 extraInfoSent = foldlSent [S "The", phrase program,
   S "is based on the original, manually created version of",
-  namedRef externalLinkRef (S "SSP")]
-
-externalLinkRef :: Reference
-externalLinkRef = makeURI "SSP"
-  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp"
-  (shortname' $ S "SSP")
+  S "SSP", refS sspOriginal]
 
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in IPurpose

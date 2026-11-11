@@ -1,6 +1,6 @@
 module Drasil.SWHS.Body (
   mkSRS, si, charsOfReader, dataContMid, motivation, introStart,
-  externalLinkRef, physSyst1, physSyst2, sysCntxtDesc, systContRespBullets,
+  physSyst1, physSyst2, sysCntxtDesc, systContRespBullets,
   sysCntxtRespIntro, userChars
 ) where
 
@@ -47,7 +47,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHS.MetaConcepts (projName, swhs)
-import Drasil.SWHS.References (citations, uriReferences)
+import Drasil.SWHS.References (citations, swhsOriginal, uriReferences)
 import Drasil.SWHS.Requirements (funcReqs, nfRequirements,
   verifyEnergyOutput, funcReqsTables)
 import Drasil.SWHS.TMods (tMods)
@@ -84,15 +84,11 @@ conceptChunks =
   CP.mechEnergy]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis conceptChunks []
+symbMap = withCommonKnowledge projName uriReferences symbols ideaDicts cis conceptChunks []
   SWHS.dataDefs insModel genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent <> funcReqsTables
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = externalLinkRef : uriReferences
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -180,12 +176,7 @@ introStartSWHS = foldlSent [atStart' swhs, sParen (short swhs),
 
 extraInfoSent = foldlSent [S "The", phrase program,
   S "is based on the original, manually created version of",
-  namedRef externalLinkRef (S "SWHS")]
-
-externalLinkRef :: Reference
-externalLinkRef = makeURI "SWHS_SRSLink"
-  "https://github.com/smiths/swhs/tree/master"
-  (shortname' $ S "SWHS_SRSLink")
+  S "SWHS", refS swhsOriginal]
 
 -------------------------------
 -- 2.1 : Purpose of Document --

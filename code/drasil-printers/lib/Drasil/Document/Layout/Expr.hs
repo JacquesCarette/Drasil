@@ -1,6 +1,8 @@
 module Drasil.Document.Layout.Expr (
   -- * Types
-  Expr(..), Ops(..)
+  Expr(..), Ops(..),
+  -- * Smart constructors
+  parens, addExprFilter
 ) where
 
 import Drasil.Document.Layout.Typography
@@ -34,3 +36,15 @@ data Expr
   | Div    Expr Expr -- ^ Fractions are a layout thing.
   | Sqrt   Expr      -- ^ Roots are also a layout thing. Just sqrt for now.
   | Spc    Spacing -- ^ Holds the 'Spacing'.
+
+-- | Surrounds an expression with parentheses.
+parens :: Expr -> Expr
+parens = Fenced Paren Paren
+
+-- | Puts an addition operator between each pair of terms, except before a
+-- negated term, which already starts with a negation operator.
+addExprFilter :: [Expr] -> [Expr]
+addExprFilter [] = []
+addExprFilter [x] = [x]
+addExprFilter (x1 : Row [MO Neg, x2] : xs) = x1 : addExprFilter (Row [MO Neg, x2] : xs)
+addExprFilter (x : xs) = x : MO Add : addExprFilter xs

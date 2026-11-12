@@ -13,9 +13,10 @@ import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocConcatOper(..), eprec, precA, precB, precC)
 import Language.Drasil.Literal.Development (Literal(..))
 
+import Drasil.Document.Layout (addExprFilter, parens)
 import qualified Drasil.Document.Layout.Development as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
-import Language.Drasil.Printing.Import.ExprCommon (lookupC', parens)
+import Language.Drasil.Printing.Import.ExprCommon (lookupC')
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Symbol (symbol)
 
@@ -168,13 +169,6 @@ assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ expr' sm prec <$> e
 -- | Helper for rendering printable expressions.
 addExpr :: [Expr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 addExpr exprs o sm = addExprFilter (expr' sm (precA o) <$> exprs)
-
--- | Add add symbol only when the second Expr is not negation
-addExprFilter :: [P.Expr] -> [P.Expr]
-addExprFilter [] = []
-addExprFilter [x] = [x]
-addExprFilter (x1:P.Row[P.MO P.Neg, x2]:xs) = x1 : addExprFilter (P.Row[P.MO P.Neg, x2] : xs)
-addExprFilter (x:xs) = x : P.MO P.Add : addExprFilter xs
 
 -- | Helper for rendering printable expressions.
 mulExpr ::  [Expr] -> AssocArithOper -> PrintingInformation -> [P.Expr]

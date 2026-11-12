@@ -19,14 +19,12 @@ import Drasil.Data.Formats.CSV (DoubleQuotationPolicy(..), csvRenderOpts,
 import Drasil.FileHandling (FileLayout, file, directory, ps)
 
 import Drasil.Printers.Common
-import Drasil.Document.Layout.AST (ItemType(..), ListType(..), Spec(..),
+import Drasil.Document.Layout.Development (ItemType(..), ListType(..), Spec(..),
   Expr(..), Label, Spacing(Thin), Fonts(..), OverSymb(Hat), Fence(Abs),
-  Ops(..), LinkType(..))
-import Drasil.Document.Layout.Citation (BibRef)
+  Ops(..), LinkType(..), BibRef, Project(Project),
+  LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.Printing.Helpers (pipe, bslash, unders,
   hat, hyph, dot, ($^$), vsep)
-import Drasil.Document.Layout.LayoutObj (Project(Project),
-  LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.Markdown.Citation (BibFormatter(..), renderCite)
 import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
   reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, centeredDiv,

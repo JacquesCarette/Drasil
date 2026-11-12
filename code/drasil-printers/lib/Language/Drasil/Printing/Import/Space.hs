@@ -3,7 +3,7 @@ module Language.Drasil.Printing.Import.Space (space) where
 
 import Language.Drasil (Space(..))
 
-import qualified Drasil.Document.Layout.AST as P
+import qualified Drasil.Document.Layout.Development as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import Data.List (intersperse)

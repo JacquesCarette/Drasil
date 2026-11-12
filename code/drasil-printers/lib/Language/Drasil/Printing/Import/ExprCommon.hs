@@ -13,7 +13,7 @@ import Drasil.Database (UID, ChunkDB, findOrErr, UIDRef, IsChunk, raw)
 import Language.Drasil (Stage(..), codeSymb, eqSymb, Symbol, HasSymbol,
   DefinedQuantityDict)
 
-import qualified Drasil.Document.Layout.AST as P
+import qualified Drasil.Document.Layout.Development as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, stg, sysdb)
 
 -- * Expr-related

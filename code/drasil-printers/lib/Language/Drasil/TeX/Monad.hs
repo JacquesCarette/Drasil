@@ -5,13 +5,13 @@ module Language.Drasil.TeX.Monad (
   MathContext(..), PrintLaTeX(..), D, Latex(..),
   -- * Functions
   switch, toMath, toText, getCtx, (%%), ($+$), vcat, vpunctuate,
-  hpunctuate, nest, lub
+  hpunctuate, nest, lub, special
 ) where
 
 import Prelude hiding (print)
 import qualified Text.PrettyPrint as TP
 
-import Language.Drasil (RenderSpecial(..), Special(..))
+import Drasil.Document.Layout.Development (Special(..))
 
 import Drasil.Printers.Common
 
@@ -137,6 +137,6 @@ lub _    _    = Text -- Text is top-most
 newtype Latex = L { unPL :: String }
 
 -- | Renders special characters.
-instance RenderSpecial Latex where
-  special Circle       = L "{}^{\\circ}"
-  -- special Partial      = L "\\partial{}"
+special :: Special -> Latex
+special Circle       = L "{}^{\\circ}"
+-- special Partial      = L "\\partial{}"

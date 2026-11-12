@@ -5,6 +5,7 @@ import Data.Bifunctor (second)
 import Data.List (partition)
 
 import Language.Drasil (USymb(..))
+import qualified Language.Drasil as L (Special(..))
 import Language.Drasil.ShortHands (cDelta)
 import Language.Drasil.Display (Decoration(..), Symbol(..))
 import qualified Drasil.Document.Layout.Development as P
@@ -14,7 +15,7 @@ symbol :: Symbol -> P.Expr
 symbol (Variable s) = P.Ident s
 symbol (Label    s) = P.Label s
 symbol (Integ    n) = P.Int (toInteger n)
-symbol (Special  s) = P.Spec s
+symbol (Special  s) = P.Spec $ laySpecial s
 --symbol (Greek g)    = P.Gr g
 symbol (Concat  sl) = P.Row $ symbol <$> sl
 --
@@ -26,6 +27,10 @@ symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol Corners{}                = error "rendering of Corners (general)"
 symbol (Atop f s)               = sFormat f s
 symbol Empty                    = P.Row []
+
+-- | Converts a special character into the layout language's.
+laySpecial :: L.Special -> P.Special
+laySpecial L.Circle = P.Circle
 
 -- | Helper that adds decoration to symbols (for vectors, derivatives, etc.).
 sFormat :: Decoration -> Symbol -> P.Expr

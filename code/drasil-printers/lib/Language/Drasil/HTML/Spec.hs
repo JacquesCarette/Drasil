@@ -7,7 +7,7 @@ module Language.Drasil.HTML.Spec (
 import qualified Data.Text as T (pack, show)
 import Data.Text (Text)
 
-import Language.Drasil (Special (..))
+import Drasil.Document.Layout.Development (Special(..))
 import qualified Drasil.Document.Layout.Development as AST
 import Drasil.Data.Formats.HTML (attr, bold_, emphasis_, rawText',
   subscript_, superscript_, HTMLBody(..), span_)

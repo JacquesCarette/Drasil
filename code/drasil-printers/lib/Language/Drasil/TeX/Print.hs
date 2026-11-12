@@ -26,7 +26,8 @@ import Drasil.Document.Layout.Development (Spec (Tooltip), ItemType(Nested, Flat
   HP(Verb, URL), CiteField(HowPublished,
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
-  Author, Address), Citation(Cite), BibRef,
+  Author, Address), Citation(Cite), BibRef, CitationKind(..), Month(..),
+  People, Person(rendPersLFM), MaxWidthPercent,
   Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.Import.Symbol (symbol)
 import qualified Language.Drasil.Printing.Import.Sentence as I (spec)
@@ -39,7 +40,8 @@ import Language.Drasil.TeX.Helpers (author, bold, caption, center, centering,
   mkMinipage, newline, newpage, quote, sec, snref, superscript,
   symbDescription, texSym, title, toEqn)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (%%), ($+$),
-  hpunctuate, lub, runPrint, switch, toMath, toText, unPL, vcat, vpunctuate)
+  hpunctuate, lub, runPrint, special, switch, toMath, toText, unPL, vcat,
+  vpunctuate)
 import Language.Drasil.TeX.Preamble (genPreamble)
 
 -- | Generates a LaTeX document.
@@ -113,7 +115,7 @@ pExpr (Set l)        = foldl1 (<>) (pExpr <$> l)
 pExpr (Ident s@[_])  = pure . text . escapeIdentSymbols $ s
 pExpr (Ident s)      = commandD "mathit" (pure . text . escapeIdentSymbols $ s)
 pExpr (Label s)      = command "text" s
-pExpr (Spec s)       = pure . text $ unPL $ L.special s
+pExpr (Spec s)       = pure . text $ unPL $ special s
 --pExpr (Gr g)         = unPL $ greek g
 pExpr (Sub e)        = pure unders <> brace (pExpr e)
 pExpr (Sup e)        = pure hat    <> brace (pExpr e)
@@ -286,7 +288,7 @@ spec (S s)  = either error (pure . text . concatMap escapeChars) $ L.checkValidS
     escapeChars '&' = "\\&"
     escapeChars c = [c]
 spec (Tooltip _ s) = spec s
-spec (Sp s) = pure $ text $ unPL $ L.special s
+spec (Sp s) = pure $ text $ unPL $ special s
 spec (Ref Internal r sn) = snref r (spec sn)
 spec (Ref (Cite2 n) r _) = cite r (info n)
   where
@@ -423,7 +425,7 @@ defItem = fmap (\(x,y,l) -> item $ mlref l <> spec (x :+: S " is the " :+: d_ite
 -----------------------------------------------------------------
 
 -- | Prints figures. Takes in a label and caption along with information for 'includegraphics'.
-makeFigure :: D -> D -> String -> L.MaxWidthPercent -> D
+makeFigure :: D -> D -> String -> MaxWidthPercent -> D
 makeFigure r c f wp =
   figure (center (
   vcat [
@@ -474,20 +476,20 @@ renderF sm (Cite cid refType fields) = pure (text (showT refType)) <>
   brace (hpunctuate (text ",\n") $ pure (text cid) : fmap (showBibTeX sm) fields)
 
 -- | Renders different kinds of citation mediums.
-showT :: L.CitationKind -> String
-showT L.Article       = "@article"
-showT L.Book          = "@book"
-showT L.Booklet       = "@booklet"
-showT L.InBook        = "@inbook"
-showT L.InCollection  = "@incollection"
-showT L.InProceedings = "@inproceedings"
-showT L.Manual        = "@manual"
-showT L.MThesis       = "@mastersthesis"
-showT L.Misc          = "@misc"
-showT L.PhDThesis     = "@phdthesis"
-showT L.Proceedings   = "@proceedings"
-showT L.TechReport    = "@techreport"
-showT L.Unpublished   = "@unpublished"
+showT :: CitationKind -> String
+showT Article       = "@article"
+showT Book          = "@book"
+showT Booklet       = "@booklet"
+showT InBook        = "@inbook"
+showT InCollection  = "@incollection"
+showT InProceedings = "@inproceedings"
+showT Manual        = "@manual"
+showT MThesis       = "@mastersthesis"
+showT Misc          = "@misc"
+showT PhDThesis     = "@phdthesis"
+showT Proceedings   = "@proceedings"
+showT TechReport    = "@techreport"
+showT Unpublished   = "@unpublished"
 
 -- | Renders different citation fields.
 showBibTeX :: PrintingInformation -> CiteField -> D
@@ -541,25 +543,25 @@ showFieldCom   :: String -> String -> Spec -> D
 showFieldCom s = wrapField (Command s)
 
 -- | Helper that renders people for citations.
-rendPeople :: PrintingInformation -> L.People -> Spec
+rendPeople :: PrintingInformation -> People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
 rendPeople sm people = I.spec sm $
-  foldl1 (\x y -> x L.+:+ L.S "and" L.+:+ y) $ L.S . L.rendPersLFM <$> people
+  foldl1 (\x y -> x L.+:+ L.S "and" L.+:+ y) $ L.S . rendPersLFM <$> people
 
 -- | Helper that renders months for citations.
-bibTeXMonth :: L.Month -> Spec
-bibTeXMonth L.Jan = S "jan"
-bibTeXMonth L.Feb = S "feb"
-bibTeXMonth L.Mar = S "mar"
-bibTeXMonth L.Apr = S "apr"
-bibTeXMonth L.May = S "may"
-bibTeXMonth L.Jun = S "jun"
-bibTeXMonth L.Jul = S "jul"
-bibTeXMonth L.Aug = S "aug"
-bibTeXMonth L.Sep = S "sep"
-bibTeXMonth L.Oct = S "oct"
-bibTeXMonth L.Nov = S "nov"
-bibTeXMonth L.Dec = S "dec"
+bibTeXMonth :: Month -> Spec
+bibTeXMonth Jan = S "jan"
+bibTeXMonth Feb = S "feb"
+bibTeXMonth Mar = S "mar"
+bibTeXMonth Apr = S "apr"
+bibTeXMonth May = S "may"
+bibTeXMonth Jun = S "jun"
+bibTeXMonth Jul = S "jul"
+bibTeXMonth Aug = S "aug"
+bibTeXMonth Sep = S "sep"
+bibTeXMonth Oct = S "oct"
+bibTeXMonth Nov = S "nov"
+bibTeXMonth Dec = S "dec"
 
 -- | Helper that lifts something showable into a 'Spec'.
 wrapS :: Show a => a -> Spec

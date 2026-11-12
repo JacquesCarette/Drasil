@@ -12,15 +12,14 @@ import Numeric (showEFloat)
 import qualified Prettyprinter as PNew (Doc)
 
 import Drasil.Data.Formats.JSON (JSONRenderOptions, JSONStyle(..), jsonRenderOpts)
-import qualified Drasil.Data.Formats.Jupyter as Jupyter
-  ( Notebook(..), Cell, renderNotebook, defaultNotebookRenderOptions )
-import Language.Drasil (checkValidStr, Special(Circle))
-import Language.Drasil.Document (MaxWidthPercent)
+import qualified Drasil.Data.Formats.Jupyter as Jupyter (Notebook(..), Cell,
+  renderNotebook, defaultNotebookRenderOptions)
+import Language.Drasil (checkValidStr)
 
 import Drasil.Printers.Common
 import Drasil.Document.Layout.Development (ItemType(..), ListType(..), Spec(..),
   Expr(..), Label, Fonts(Bold), OverSymb(Hat), Fence(..), Ops(..), LinkType(..),
-  BibRef, Document(Document), LayoutObj(..))
+  Special(Circle), BibRef, Document(Document), LayoutObj(..), MaxWidthPercent)
 import Language.Drasil.Printing.Helpers (unders, hat)
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))

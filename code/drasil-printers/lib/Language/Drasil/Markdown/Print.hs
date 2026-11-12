@@ -13,7 +13,7 @@ import qualified Prettyprinter as PNew (Doc)
 import System.FilePath (takeFileName)
 import Text.PrettyPrint hiding (Str)
 
-import Language.Drasil (Special(Circle), checkValidStr)
+import Language.Drasil (checkValidStr)
 import Drasil.Data.Formats.CSV (DoubleQuotationPolicy(..), csvRenderOpts,
   mkCSV, renderCSV)
 import Drasil.FileHandling (FileLayout, file, directory, ps)
@@ -21,7 +21,7 @@ import Drasil.FileHandling (FileLayout, file, directory, ps)
 import Drasil.Printers.Common
 import Drasil.Document.Layout.Development (ItemType(..), ListType(..), Spec(..),
   Expr(..), Label, Spacing(Thin), Fonts(..), OverSymb(Hat), Fence(Abs),
-  Ops(..), LinkType(..), BibRef, Project(Project),
+  Ops(..), LinkType(..), Special(Circle), BibRef, Project(Project),
   LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.Printing.Helpers (pipe, bslash, unders,
   hat, hyph, dot, ($^$), vsep)

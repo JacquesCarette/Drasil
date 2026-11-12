@@ -5,9 +5,8 @@ module Drasil.Document.Layout.Spec (
   Label, Title
 ) where
 
-import Language.Drasil (Special)
-
 import Drasil.Document.Layout.Expr (Expr)
+import Drasil.Document.Layout.Typography (Special)
 
 -- | A Label is just a 'Spec' (sentence).
 type Label = Spec

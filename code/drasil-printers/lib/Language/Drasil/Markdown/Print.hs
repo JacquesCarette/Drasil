@@ -217,16 +217,17 @@ lnl = text "\\\\\\\\"
 
 -- | Renders Markdown table, called by 'printLO'
 makeTable :: RefMap -> [[Spec]] -> Doc -> Bool -> Doc -> Doc
-makeTable _  [] _ _ _  = error "No table to print"
-makeTable rm ls r b t  =
-  divTag r $^$
-  makeHeaderCols (head matrix) sizes $$
-  makeRows (tail matrix) sizes $^$
-  capt
-    where
-      matrix = mkDocMatrix rm ls
-      sizes = columnSize matrix
-      capt = if b then bold (caption t) else empty
+makeTable rm ls r b t = case matrix of
+    []         -> error "No table to print"
+    hdr : rows ->
+      divTag r $^$
+      makeHeaderCols hdr sizes $$
+      makeRows rows sizes $^$
+      capt
+  where
+    matrix = mkDocMatrix rm ls
+    sizes = columnSize matrix
+    capt = if b then bold (caption t) else empty
 
 -- | Helper for creating a Doc matrix
 mkDocMatrix :: RefMap -> [[Spec]] -> [[Doc]]

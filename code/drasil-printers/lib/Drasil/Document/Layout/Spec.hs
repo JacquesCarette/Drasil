@@ -5,6 +5,8 @@ module Drasil.Document.Layout.Spec (
   Label, Title
 ) where
 
+import Data.String (IsString(..))
+
 import Drasil.Document.Layout.Expr (Expr)
 import Drasil.Document.Layout.Typography (Special)
 
@@ -28,3 +30,6 @@ data Spec = E Expr                   -- ^ Holds an expression.
           | Ref LinkType String Spec -- ^ Holds the actual reference of form 'LinkType', reference address, and display name
           | EmptyS                   -- ^ Empty sentence.
           | Quote Spec               -- ^ Quotes are different in different languages.
+
+instance IsString Spec where
+  fromString = S

@@ -7,7 +7,7 @@ module Drasil.Document.Layout.Citation (
 import Language.Drasil (People, Month)
 import Language.Drasil.Document (EntryID, CitationKind)
 
-import Drasil.Document.Layout.AST (Spec)
+import Drasil.Document.Layout.Spec (Spec)
 
 -- | A collection of citations.
 type BibRef = [Citation]

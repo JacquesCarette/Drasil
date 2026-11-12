@@ -1,7 +1,8 @@
 -- | Defines types similar to content types in "Language.Drasil" but better suited for printing.
 module Drasil.Document.Layout.LayoutObj (
   -- * Types
-  Document(..), Project(..), File(..), LayoutObj(..),
+  Document(..), Project(..), File(..), LayoutObj(..), ListType(..),
+  ItemType(..),
   -- * Type Aliases
   Author, Contents, Items, Tags, Depth, Width, Height, Filepath, Filename,
   Caption, RefMap
@@ -11,8 +12,8 @@ import Data.Map (Map)
 
 import Language.Drasil.Document (MaxWidthPercent)
 
-import Drasil.Document.Layout.AST (ListType, Spec, Title, Label)
 import Drasil.Document.Layout.Citation (BibRef)
+import Drasil.Document.Layout.Spec (Spec, Title, Label)
 
 -- | A document must contain a title, author, and contents (as 'LayoutObj's).
 data Document = Document Title Author [LayoutObj]
@@ -57,3 +58,15 @@ data LayoutObj =
    | Cell [LayoutObj]
    -- this shouldn't be here, it should have been expanded.
    | Bib BibRef                                                      -- ^ Bibliography section.
+
+-- | Different types of lists that contain an 'ItemType' and may contain a label and a title.
+-- May be ordered, unordered, simple, descriptive, or for definitions. More suitable to printing.
+data ListType = Ordered     [(ItemType, Maybe Label)]
+              | Unordered   [(ItemType, Maybe Label)]
+              | Simple      [(Title, ItemType, Maybe Label)]
+              | Desc        [(Title, ItemType, Maybe Label)]
+              | Definitions [(Title, ItemType, Maybe Label)]
+
+-- | A list may contain an element or another list. More suitable to printing.
+data ItemType = Flat Spec
+              | Nested Spec ListType

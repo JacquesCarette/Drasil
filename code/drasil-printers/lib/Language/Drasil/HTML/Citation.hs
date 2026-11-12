@@ -18,8 +18,8 @@ import Drasil.Data.Formats.HTML (HTMLBody(..), DItem(..), bold_, emphasis_,
 
 import Drasil.Printers.Common (paren)
 import Language.Drasil.HTML.Spec (specToHTML, printSpec)
-import Language.Drasil.Printing.AST (Spec(S))
-import Language.Drasil.Printing.Citation (CiteField(..), HP(..), Citation(..), BibRef)
+import Drasil.Document.Layout.AST (Spec(S))
+import Drasil.Document.Layout.Citation (CiteField(..), HP(..), Citation(..), BibRef)
 import Language.Drasil.Printing.Helpers (sufxer, sufxPrint)
 
 -- | Internal: Wrap an HTMLBody with text on both sides.

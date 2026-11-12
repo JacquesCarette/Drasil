@@ -3,7 +3,7 @@ module Language.Drasil.Printing.Import.Literal (literal) where
 import Language.Drasil (dbl)
 import Language.Drasil.Literal.Development (Literal(..))
 
-import qualified Language.Drasil.Printing.AST as P
+import qualified Drasil.Document.Layout.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
   Notation(..), notation)
 

@@ -7,7 +7,7 @@ import Data.List (partition)
 import Language.Drasil (USymb(..))
 import Language.Drasil.ShortHands (cDelta)
 import Language.Drasil.Display (Decoration(..), Symbol(..))
-import qualified Language.Drasil.Printing.AST as P
+import qualified Drasil.Document.Layout.AST as P
 
 -- | Converts a symbol into an expression.
 symbol :: Symbol -> P.Expr

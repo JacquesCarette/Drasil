@@ -13,7 +13,7 @@ import Language.Drasil (Sentence(..), NP, NounPhrase(..), (+:+), sParen,
 import Language.Drasil.Development (toSent)
 import Language.Drasil.Document (Reference(..), IRefProg(..), LblType(..),
   ShortName, getSentSN)
-import qualified Language.Drasil.Printing.AST as P
+import qualified Drasil.Document.Layout.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, sysdb)
 import Language.Drasil.Printing.Import.ExprCommon (lookupSymb)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)

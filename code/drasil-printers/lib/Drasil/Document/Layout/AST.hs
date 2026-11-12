@@ -1,5 +1,5 @@
 -- | Defines types similar to those in "Drasil.Language", but better suited to printing.
-module Language.Drasil.Printing.AST (
+module Drasil.Document.Layout.AST (
   -- * Types
   Expr(..), Spec(..), Ops(..), Fence(..), OverSymb(..), Fonts(..), Spacing(..),
   LinkType(..), ListType(..), ItemType(..),

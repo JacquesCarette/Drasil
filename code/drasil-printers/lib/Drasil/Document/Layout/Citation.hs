@@ -1,5 +1,5 @@
 -- | Defines types used for printing citations.
-module Language.Drasil.Printing.Citation (
+module Drasil.Document.Layout.Citation (
   -- * Types
   BibRef, Citation(..), CiteField(..), HP(..)
 ) where
@@ -7,7 +7,7 @@ module Language.Drasil.Printing.Citation (
 import Language.Drasil (People, Month)
 import Language.Drasil.Document (EntryID, CitationKind)
 
-import Language.Drasil.Printing.AST (Spec)
+import Drasil.Document.Layout.AST (Spec)
 
 -- | A collection of citations.
 type BibRef = [Citation]

@@ -1,5 +1,5 @@
 -- | Defines types similar to content types in "Language.Drasil" but better suited for printing.
-module Language.Drasil.Printing.LayoutObj (
+module Drasil.Document.Layout.LayoutObj (
   -- * Types
   Document(..), Project(..), File(..), LayoutObj(..),
   -- * Type Aliases
@@ -11,8 +11,8 @@ import Data.Map (Map)
 
 import Language.Drasil.Document (MaxWidthPercent)
 
-import Language.Drasil.Printing.AST (ListType, Spec, Title, Label)
-import Language.Drasil.Printing.Citation (BibRef)
+import Drasil.Document.Layout.AST (ListType, Spec, Title, Label)
+import Drasil.Document.Layout.Citation (BibRef)
 
 -- | A document must contain a title, author, and contents (as 'LayoutObj's).
 data Document = Document Title Author [LayoutObj]

@@ -38,6 +38,6 @@ demandVsSDFig = llccFig "demandVSsod" $ fig ((demandq ^. defn) +:+
 
 dimlessloadVsARFig = llccFig "dimlessloadVSaspect" $ fig (S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
-  `S.versus` titleize aspectRatio +:+ sParen (short aspectRatio)
+  `S.versus` titleize aspectRatio +:+ sParen (ch aspectRatio)
   `S.versus` atStart stressDistFac +:+ sParen (ch stressDistFac))
   (resourcePath <> "ASTM_F2248-09_BeasonEtAl.png")

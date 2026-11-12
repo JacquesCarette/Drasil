@@ -4,7 +4,7 @@ module Drasil.GlassBR.Concepts (
   ptOfExplsn, con', iGlass, lGlass,
 
   -- * ConceptChunks
-  annealedGl, aspectRatioCon, fTemperedGl, glTyFac, hStrengthGl, loadDurFac,
+  annealedGl, aspectRatioCon, fTemperedGl, glTyFac, hStrengthGl,
   loadResis, loadShareFac, nonFactoredL, stdOffDist, blast, blastResisGla,
   blastTy, bomb, demandq, eqTNTChar, explosion, glassGeo, glassTy,
   glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe, probBreak,
@@ -49,7 +49,7 @@ ptOfExplsn = idea' (mkUid "ptOfExplsn") (cn'          "point of explosion")
 glaPlane   = compoundNC glass plane
 responseTy = compoundNC response type_
 
-annealedGl, aspectRatioCon, fTemperedGl, glTyFac, hStrengthGl, loadDurFac, loadResis, loadShareFac,
+annealedGl, aspectRatioCon, fTemperedGl, glTyFac, hStrengthGl, loadResis, loadShareFac,
   nonFactoredL, stdOffDist, blast, blastResisGla, blastTy, bomb, demandq, eqTNTChar, explosion,
   glassGeo, glassTy, glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe, probBreak,
   safeMessage, shortDurLoad, specA, specDeLoad :: ConceptChunk
@@ -60,7 +60,7 @@ annealedGl  = cncpt'' (mkUid "annealedGl")
   S "the residual surface stresses are almost zero, as defined in"+:+ refS astm2016)
   "AN"
 
-aspectRatioCon = cncpt'' (mkUid "aR")
+aspectRatioCon = cncpt''' (mkUid "aR")
   (nounPhraseSP "aspect ratio")
   (S $ "the ratio of the long dimension of the glass to the short dimension of " <>
     "the glass. For glass supported on four sides, the aspect ratio is " <>
@@ -68,7 +68,6 @@ aspectRatioCon = cncpt'' (mkUid "aR")
     "sides, the ratio of the length of one of the supported edges " <>
     "perpendicular to the free edge, to the length of the free edge, is " <>
     "equal to or greater than 0.5")
-  "AR"
 
 fTemperedGl = cncpt'' (mkUid "fullyTGl")
   (nounPhraseSP "fully tempered")
@@ -78,13 +77,12 @@ fTemperedGl = cncpt'' (mkUid "fullyTGl")
   S "compression not less than 67 MPa (9700 psi), as defined in", refS astm2012])
   "FT"
 
-glTyFac     = cncpt'' (mkUid "glassTypeFac")
+glTyFac     = cncpt''' (mkUid "glassTypeFac")
   (nounPhraseSP "glass type factor")
   (foldlSent_ [S "a multiplying factor for adjusting the", short loadResis,
   S "of different glass type, that is,", foldlList Comma Options glassTypeAbbrs
   `sC` S "in monolithic glass" `sC` short lGlass, sParen (titleize lGlass) `sC`
    S "or", short iGlass, sParen (titleize iGlass), S "constructions"])
-  "GTF"
 
 hStrengthGl = cncpt'' (mkUid "heatSGl")
   (nounPhraseSP "heat strengthened")
@@ -94,11 +92,6 @@ hStrengthGl = cncpt'' (mkUid "heatSGl")
   S "52 MPa (7500 psi), as defined in", refS astm2012])
   "HS"
 
-loadDurFac  = cncpt'' (mkUid "loadDurFactor")
-  (nounPhraseSP "load duration factor")
-  (S "factor related to the effect of sustained loading on glass strength")
-  "LDF"
-
 loadResis   = cncpt'' (mkUid "lResistance")
   (nounPhraseSP "load resistance")
   (foldlSent_ [S "the uniform lateral load that a glass construction can sustain",
@@ -106,13 +99,12 @@ loadResis   = cncpt'' (mkUid "lResistance")
   complexRef astm2009 $ Page [1, 53]])
   "LR"
 
-loadShareFac = cncpt'' (mkUid "lShareFac")
+loadShareFac = cncpt''' (mkUid "lShareFac")
   (nounPhraseSP "load share factor")
   (foldlSent_ [S "a multiplying factor derived from the load sharing between the",
   S "double glazing, of equal or different thicknesses and types (including the",
   S "layered behaviour of", short lGlass, S "under long duration",
   S "loads), in a sealed", short iGlass, S "unit"])
-  "LSF"
 
 nonFactoredL = cncpt'' (mkUid "nFL")
   (nounPhraseSP "non-factored load")

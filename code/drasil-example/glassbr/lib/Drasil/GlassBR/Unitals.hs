@@ -21,7 +21,7 @@ import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (annealedGl, aspectRatioCon, fTemperedGl, glTyFac,
-  hStrengthGl, loadResis, loadShareFac, nonFactoredL, stdOffDist, loadDurFac, blast,
+  hStrengthGl, loadResis, loadShareFac, nonFactoredL, stdOffDist, blast,
   blastResisGla, blastTy, bomb, demandq, eqTNTChar, explosion, glassGeo,
   glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe,
   safeMessage, shortDurLoad, specA, specDeLoad, glassType)
@@ -86,8 +86,8 @@ plateWidth = uqc "plateWidth" (nounPhraseSP "plate width (short dimension)")
   [ physRange $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen),
     sfwrRange $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
-aspectRatio = uq (constrained' (quantNoUnitAU (mkUid "aR") (aspectRatioCon ^. term)
-  (aspectRatioCon ^. defn) (Just "AR") (variable "AR") Real)
+aspectRatio = uq (constrained' (quantNoUnit (mkUid "aR") (aspectRatioCon ^. term)
+  (aspectRatioCon ^. defn) (variable "AR") Real)
   [ physRange $ UpFrom (Inc, exactDbl 1),
     sfwrRange $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
@@ -274,8 +274,8 @@ gTF, loadSF, loadDF :: DefinedQuantityDict
 dimlessLoad = quantNoUnit (mkUid "dimlessLoad") (nounPhraseSP "dimensionless load")
   (S "the dimensionless load") (hat lQ) Real
 
-gTF = quantNoUnitAU (mkUid "glassTypeFac") (glTyFac ^. term) (glTyFac ^. defn)
-  (Just "GTF") (variable "GTF") Integer
+gTF = quantNoUnit (mkUid "glassTypeFac") (glTyFac ^. term) (glTyFac ^. defn)
+  (variable "GTF") Integer
 
 isSafePb   = quantNoUnit (mkUid "isSafePb") (nounPhraseSP "probability of glass breakage safety requirement")
   (S "the probability of glass breakage safety requirement") (variable "isSafePb") Boolean
@@ -291,10 +291,11 @@ interpY = quantNoUnit (mkUid "interpY") (nounPhraseSP "interpY")
 interpZ = quantNoUnit (mkUid "interpZ") (nounPhraseSP "interpZ")
   (S "interpolated z") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
-loadDF = quantNoUnitAU (mkUid "loadDurFactor") (loadDurFac ^. term) (loadDurFac ^. defn)
-  (Just "LDF") (variable "LDF") Real
-loadSF = quantNoUnitAU (mkUid "lShareFac") (loadShareFac ^. term) (loadShareFac ^. defn)
-  (Just "LSF") (variable "LSF") Real
+loadDF = quantNoUnit (mkUid "loadDurFactor") (nounPhraseSP "load duration factor")
+  (S "factor related to the effect of sustained loading on glass strength")
+  (variable "LDF") Real
+loadSF = quantNoUnit (mkUid "lShareFac") (loadShareFac ^. term) (loadShareFac ^. defn)
+  (variable "LSF") Real
 
 riskFun = quantNoUnit (mkUid "riskFun") (nounPhraseSP "risk of failure")
   (S "the percentage risk of the glass slab failing to resist the blast") cB Real
@@ -339,8 +340,8 @@ sdVector = sdx :| [sdy, sdz]
 termsWithDefsOnly, termsWithAccDefn, loadTypes, glassTypes :: [ConceptChunk]
 
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
-termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
-termsWithAccDefn  = [stdOffDist, loadShareFac, glTyFac, aspectRatioCon]
+termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar, loadShareFac, glTyFac, aspectRatioCon]
+termsWithAccDefn  = [stdOffDist]
 loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad, specDeLoad, longDurLoad]
 
 --Defined for DataDefs.hs and this file only--

@@ -6,7 +6,7 @@ import Text.PrettyPrint.HughesPJ (text)
 
 import Drasil.Printers.Common (dollar, brak)
 import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
-import Drasil.Document.Layout.LayoutObj (LayoutObj(..))
+import Drasil.Document.Layout.Development (LayoutObj(..))
 import Language.Drasil.TeX.Monad (D, vcat, (%%), nest)
 import Language.Drasil.TeX.Helpers (docclass, command, command1o, command2, command3,
   usepackage, lbrace, rbrace)

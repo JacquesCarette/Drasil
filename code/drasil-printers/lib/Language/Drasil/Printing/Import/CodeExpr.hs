@@ -11,7 +11,7 @@ import Language.Drasil (DomainDesc(..), Inclusive(..), RTopology(..),
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development (Literal(..))
 
-import qualified Drasil.Document.Layout.AST as P
+import qualified Drasil.Document.Layout.Development as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.ExprCommon (lookupC', parens)
 import Language.Drasil.Printing.Import.Literal (literal)

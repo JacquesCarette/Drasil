@@ -16,20 +16,20 @@ import qualified Language.Drasil.Display as LD
 
 import Drasil.Printers.Common (brace, brak, paren, dquote)
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
-import Drasil.Document.Layout.AST (Spec (Tooltip), ItemType(Nested, Flat),
+import Drasil.Document.Layout.Development (Spec (Tooltip), ItemType(Nested, Flat),
   ListType(Ordered, Unordered, Desc, Definitions, Simple),
   Spec(Quote, EmptyS, Ref, S, Sp, E, (:+:)),
   Fence(Norm, Abs, Curly, Paren), Expr,
   Ops(..), Spacing(Thin), Fonts(Emph, Bold),
   Expr(..), OverSymb(Hat), Label,
-  LinkType(Internal, Cite2, External))
-import Drasil.Document.Layout.Citation (HP(Verb, URL), CiteField(HowPublished,
+  LinkType(Internal, Cite2, External),
+  HP(Verb, URL), CiteField(HowPublished,
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
-  Author, Address), Citation(Cite), BibRef)
+  Author, Address), Citation(Cite), BibRef,
+  Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.Import.Symbol (symbol)
 import qualified Language.Drasil.Printing.Import.Sentence as I (spec)
-import Drasil.Document.Layout.LayoutObj (Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.TeX.Helpers (author, bold, caption, center, centering,

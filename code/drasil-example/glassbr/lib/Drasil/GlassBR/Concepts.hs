@@ -4,8 +4,8 @@ module Drasil.GlassBR.Concepts (
   ptOfExplsn, con', iGlass, lGlass,
 
   -- * ConceptChunks
-  annealedGl, aspectRatioCon, fTemperedGl, glTyFac, hStrengthGl,
-  loadResis, loadShareFac, nonFactoredL, stdOffDist, blast, blastResisGla,
+  annealedGl, fTemperedGl, hStrengthGl,
+  loadResis, nonFactoredL, stdOffDist, blast, blastResisGla,
   blastTy, bomb, demandq, eqTNTChar, explosion, glassGeo, glassTy,
   glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe, probBreak,
   safeMessage, shortDurLoad, specA, specDeLoad,
@@ -49,7 +49,7 @@ ptOfExplsn = idea' (mkUid "ptOfExplsn") (cn'          "point of explosion")
 glaPlane   = compoundNC glass plane
 responseTy = compoundNC response type_
 
-annealedGl, aspectRatioCon, fTemperedGl, glTyFac, hStrengthGl, loadResis, loadShareFac,
+annealedGl, fTemperedGl, hStrengthGl, loadResis,
   nonFactoredL, stdOffDist, blast, blastResisGla, blastTy, bomb, demandq, eqTNTChar, explosion,
   glassGeo, glassTy, glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe, probBreak,
   safeMessage, shortDurLoad, specA, specDeLoad :: ConceptChunk
@@ -60,15 +60,6 @@ annealedGl  = cncpt'' (mkUid "annealedGl")
   S "the residual surface stresses are almost zero, as defined in"+:+ refS astm2016)
   "AN"
 
-aspectRatioCon = cncpt''' (mkUid "aR")
-  (nounPhraseSP "aspect ratio")
-  (S $ "the ratio of the long dimension of the glass to the short dimension of " <>
-    "the glass. For glass supported on four sides, the aspect ratio is " <>
-    "always equal to or greater than 1.0. For glass supported on three " <>
-    "sides, the ratio of the length of one of the supported edges " <>
-    "perpendicular to the free edge, to the length of the free edge, is " <>
-    "equal to or greater than 0.5")
-
 fTemperedGl = cncpt'' (mkUid "fullyTGl")
   (nounPhraseSP "fully tempered")
   (foldlSent_ [S "a flat, monolithic, glass lite of uniform thickness that has",
@@ -76,13 +67,6 @@ fTemperedGl = cncpt'' (mkUid "fullyTGl")
   S "surface compression is not less than 69 MPa (10 000 psi) or the edge",
   S "compression not less than 67 MPa (9700 psi), as defined in", refS astm2012])
   "FT"
-
-glTyFac     = cncpt''' (mkUid "glassTypeFac")
-  (nounPhraseSP "glass type factor")
-  (foldlSent_ [S "a multiplying factor for adjusting the", short loadResis,
-  S "of different glass type, that is,", foldlList Comma Options glassTypeAbbrs
-  `sC` S "in monolithic glass" `sC` short lGlass, sParen (titleize lGlass) `sC`
-   S "or", short iGlass, sParen (titleize iGlass), S "constructions"])
 
 hStrengthGl = cncpt'' (mkUid "heatSGl")
   (nounPhraseSP "heat strengthened")
@@ -98,13 +82,6 @@ loadResis   = cncpt'' (mkUid "lResistance")
   S "based upon a given probability of breakage and load duration as defined in",
   complexRef astm2009 $ Page [1, 53]])
   "LR"
-
-loadShareFac = cncpt''' (mkUid "lShareFac")
-  (nounPhraseSP "load share factor")
-  (foldlSent_ [S "a multiplying factor derived from the load sharing between the",
-  S "double glazing, of equal or different thicknesses and types (including the",
-  S "layered behaviour of", short lGlass, S "under long duration",
-  S "loads), in a sealed", short iGlass, S "unit"])
 
 nonFactoredL = cncpt'' (mkUid "nFL")
   (nounPhraseSP "non-factored load")
@@ -164,9 +141,6 @@ specA         = cncpt''' (mkUid "specA")         (nounPhraseSP "specifying autho
   (S "the design professional responsible for interpreting applicable regulations of authorities having jurisdiction and considering appropriate site specific factors to determine the appropriate values used to calculate the specified design load, and furnishing other information required to perform this practice")
 specDeLoad    = cncpt''' (mkUid "specDeLoad")    (nounPhraseSP "specified design load")
   (S "the magnitude in Pa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority")
-
-glassTypeAbbrs :: [Sentence]
-glassTypeAbbrs = short <$> [annealedGl, fTemperedGl, hStrengthGl]
 
 annealed, fullyT, heatS :: CI
 annealed      = commonIdea (mkUid "annealed")      (nounPhraseSP "annealed")                "AN"       [glass]

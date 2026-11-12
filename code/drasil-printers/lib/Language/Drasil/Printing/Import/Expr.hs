@@ -13,7 +13,7 @@ import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocConcatOper(..), eprec, precA, precB, precC)
 import Language.Drasil.Literal.Development (Literal(..))
 
-import qualified Language.Drasil.Printing.AST as P
+import qualified Drasil.Document.Layout.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.ExprCommon (lookupC', parens)
 import Language.Drasil.Printing.Import.Literal (literal)

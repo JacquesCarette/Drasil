@@ -15,9 +15,9 @@ import Language.Drasil.Printing.Import.Citation (layCite)
 import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.Sentence (spec)
-import qualified Language.Drasil.Printing.AST as P
-import qualified Language.Drasil.Printing.Citation as P
-import qualified Language.Drasil.Printing.LayoutObj as T
+import qualified Drasil.Document.Layout.AST as P
+import qualified Drasil.Document.Layout.Citation as P
+import qualified Drasil.Document.Layout.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 -- * Main Function

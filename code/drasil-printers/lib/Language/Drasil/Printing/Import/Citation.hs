@@ -5,8 +5,8 @@ import Control.Lens ((^.))
 import Drasil.Database (showUID)
 import Language.Drasil.Document (Citation, CiteField(..), HP(..), citeKind, HasFields(..))
 
-import qualified Language.Drasil.Printing.AST as P
-import qualified Language.Drasil.Printing.Citation as P
+import qualified Drasil.Document.Layout.AST as P
+import qualified Drasil.Document.Layout.Citation as P
 
 -- | For importing a bibliography.
 layCite :: Citation -> P.Citation

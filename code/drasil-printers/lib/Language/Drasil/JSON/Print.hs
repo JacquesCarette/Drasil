@@ -17,10 +17,10 @@ import Language.Drasil (checkValidStr, Special(Circle))
 import Language.Drasil.Document (MaxWidthPercent)
 
 import Drasil.Printers.Common
-import Language.Drasil.Printing.AST (ItemType(..), ListType(..), Spec(..),
+import Drasil.Document.Layout.AST (ItemType(..), ListType(..), Spec(..),
   Expr(..), Label, Fonts(Bold), OverSymb(Hat), Fence(..), Ops(..), LinkType(..))
-import Language.Drasil.Printing.Citation (BibRef)
-import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
+import Drasil.Document.Layout.Citation (BibRef)
+import Drasil.Document.Layout.LayoutObj (Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.Helpers (unders, hat)
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))

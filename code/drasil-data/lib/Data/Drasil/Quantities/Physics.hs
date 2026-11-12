@@ -4,14 +4,17 @@ module Data.Drasil.Quantities.Physics where
 import Language.Drasil
 import Language.Drasil.Display (Symbol(Concat, Atop), Decoration(Delta))
 import Language.Drasil.ShortHands
-import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
-  angDisp, angVelo, chgInVelocity, constAccel, constAccelV, displacement,
-  distance, energy, fSpeed, fVel, force, frequency, gravitationalAccel, gravitationalConst,
+import qualified Language.Drasil.Sentence.Combinators as S
+import Language.Drasil.Chunk.Concept.NamedCombinators (combineNINI)
+import Data.Drasil.Concepts.Math (cartesian, point)
+import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angular,
+  angDisp, chgInVelocity, constAccel, constAccelV, displacement,
+  distance, energy, fSpeed, fVel, force, frequency, gravitationalAccel,
   gravitationalMagnitude, height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV,
   ixPos, ixVel, iyPos, iyVel, kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position,
-  potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque,
-  velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angFreq, period,
+  potEnergy, scalarAccel, scalarPos, speed, time, torque,
+  velocity, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
+  yPos, yVel, momentum, moment, moment2D, fOfGravity, tension, angFreq, period,
   frequency, chgMomentum)
 import Drasil.Database (mkUid)
 
@@ -49,10 +52,14 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   period, frequency, chgMomentum :: DefinedQuantityDict
 
 acceleration           = dqd CP.acceleration           (Concat [vec lA, label "(", lT, label ")"]) (Vect Real) accelU
-angularAccel           = dqd CP.angAccel               lAlpha                                      Real        angAccelU
+angularAccel           = quant (mkUid "angularAcceleration") (combineNINI CP.angular CP.acceleration)
+                          (S "the rate of change of angular velocity")
+                          lAlpha Real angAccelU
 angularDisplacement    = dqd CP.angDisp                lTheta                                      Real        radian
 angularFrequency       = dqd CP.angFreq                cOmega                                      Real        second
-angularVelocity        = dqd CP.angVelo                lOmega                                      Real        angVelU
+angularVelocity        = quant (mkUid "angularVelocity") (combineNINI CP.angular CP.velocity)
+                          (S "the rate of change of angular position of a rotating body")
+                          lOmega Real angVelU
 chgInVelocity          = dqd CP.chgInVelocity          (Atop Delta $ vec lV)                       Real        velU
 constAccel             = dqd CP.constAccel             (sup lA lC)                                 Real        accelU
 displacement           = dqd CP.displacement           (vec lU)                                    Real        metre
@@ -61,7 +68,9 @@ energy                 = dqd CP.energy                 cE                       
 force                  = dqd CP.force                  (vec cF)                                    (Vect Real) newton
 frequency              = dqd CP.frequency              lF                                          Real        hertz
 gravitationalAccel     = dqd CP.gravitationalAccel     (vec lG)                                    Real        accelU
-gravitationalConst     = dqd CP.gravitationalConst     cG                                          Real        gravConstU
+gravitationalConst     = quant (mkUid "gravitationalConst") (cn "gravitational constant")
+                           (S "the empirical physical constant used to show the force between two objects caused by gravity")
+                           cG Real gravConstU
 gravitationalMagnitude = dqd CP.gravitationalMagnitude lG                                          Real        accelU
 height                 = dqd CP.height                 lH                                          Real        metre
 impulseS               = dqd CP.impulseS               lJ                                          Real        impulseU
@@ -78,9 +87,14 @@ moment2D               = dqd CP.moment2D               cM                       
 -- FIXME: moment2D should eventually be a specialization of moment, not separately defined
 period                 = dqd CP.period                 cT                                          Real        second
 position               = dqd CP.position               (Concat [vec lP, label "(", lT, label ")"]) Real        metre
-positionVec            = dqd CP.positionVec            (vec lR)                                    Real        metre
+positionVec            = quant (mkUid "positionVec") (cn' "position vector")
+                           (S "a vector from the origin" `S.ofThe` phrase cartesian +:+ S "defined"
+                              `S.toThe` phrase point +:+ S "where the" +:+ phrase CP.force +:+ S "is applied")
+                           (vec lR) Real metre
 potEnergy              = dqd CP.potEnergy              (cP <> cE)                                  Real        joule
-pressure               = dqd CP.pressure               lP                                          Real        pascal
+pressure               = quant (mkUid "pressure") (cn' "pressure")
+                           (S "a" +:+ phrase CP.force +:+ S "exerted over an area")
+                           lP Real pascal
 speed                  = dqd CP.speed                  lV                                          Real        velU
 scalarAccel            = dqd CP.scalarAccel            lA                                          Real        accelU
 scalarPos              = dqd CP.scalarPos              lP                                          Real        metre
@@ -88,7 +102,9 @@ tension                = dqd CP.tension                (vec cT)                 
 time                   = dqd CP.time                   lT                                          Real        second
 torque                 = dqd CP.torque                 (vec lTau)                                  Real        torqueU
 velocity               = dqd CP.velocity               (Concat [vec lV, label "(", lT, label ")"]) (Vect Real) velU
-weight                 = dqd CP.weight                 cW                                          Real        newton
+weight                 = quant (mkUid "weight") (cn' "weight")
+                           (S "the gravitational force acting on an object")
+                           cW Real newton
 fOfGravity             = dqd CP.fOfGravity             (sub (vec cF) (vec lG))                     Real        newton
 
 -- Variants of distance, speed, and scalar acceleration

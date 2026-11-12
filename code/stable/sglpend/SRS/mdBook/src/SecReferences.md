@@ -35,3 +35,7 @@
 <div id="velocityWiki"></div>
 
 [9]: Wikipedia Contributors. *Velocity*. June, 2019. <https://en.wikipedia.org/wiki/Velocity>.
+
+<div id="dblPendOriginal"></div>
+
+[10]: Zhang, Zhi. *Software Requirements Specification for Double Pendulum*. <https://github.com/Zhang-Zhi-ZZ/CAS741Project>.

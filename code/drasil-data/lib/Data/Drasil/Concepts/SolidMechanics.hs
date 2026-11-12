@@ -3,21 +3,15 @@ module Data.Drasil.Concepts.SolidMechanics where
 
 import Drasil.Database (mkUid)
 import Language.Drasil
-import Data.Drasil.Concepts.Physics (force, strain, stress)
+import Data.Drasil.Concepts.Physics (force)
 
 --FIXME: add "shear stress" and "shear strain" when we have adjectives
 --       to make a combined "mobilized shear force" for example
 -- | Collects all solid mechanics-related concepts.
 solidcon :: [ConceptChunk]
-solidcon = [elastMod, mobShear, normForce, nrmStrss, shearForce,
-  shearRes, stffness]
+solidcon = [mobShear, normForce, shearForce, shearRes]
 
-elastMod, mobShear, normForce, nrmStrss, shearForce,
-  shearRes, stffness :: ConceptChunk
-
-elastMod   = cncpt''' (mkUid "elastMod") (cn "elastic modulus")
-  (S "the ratio of the" +:+ phrase stress +:+
-  S "exerted on a body to the resulting" +:+ phrase strain)
+mobShear, normForce, shearForce, shearRes :: ConceptChunk
 
 mobShear   = cncpt''' (mkUid "mobShear") (cn "mobilized shear force")
   (S "the" +:+ phrase shearForce +:+ S "in the direction of potential motion" `sC`
@@ -26,15 +20,9 @@ mobShear   = cncpt''' (mkUid "mobShear") (cn "mobilized shear force")
 normForce  = cncpt''' (mkUid "normForce") (cn' "normal force")
   (S "a" +:+ phrase force +:+ S "applied perpendicular to the plane of the material")
 
-nrmStrss   = cncpt''' (mkUid "nrmStrss") (cn "normal stress")
-  (S "the" +:+ phrase stress +:+  S "exerted perpendicular to the plane of the object")
-
 shearRes   = cncpt''' (mkUid "shearRes") (cn "resistive shear force")
   (S "the" +:+ phrase shearForce +:+ S "in the direction opposite to the direction" +:+
   S "of potential motion, thus hindering motion along the plane")
 
 shearForce = cncpt''' (mkUid "shearForce") (cn' "shear force")
   (S "a" +:+ phrase force +:+ S "applied parallel to the plane of the material")
-
-stffness   = cncpt''' (mkUid "stffness") (cn "stiffness")
-  (S "the extent a body resists" +:+ phrase strain)

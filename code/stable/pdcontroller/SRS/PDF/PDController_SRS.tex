@@ -152,7 +152,7 @@ Uncert. & Typical Uncertainty
 \end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
-Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore, a simulation of the PD Controller with a Second Order System is created in this project based on the original, manually created version of \hyperref{https://github.com/muralidn/CAS741-Fall20/tree/master}{}{}{PD Controller} that can be used to tune the gain constants.
+Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore, a simulation of the PD Controller with a Second Order System is created in this project based on the original, manually created version of PD Controller \cite{pdControllerOriginal} that can be used to tune the gain constants.
 
 The following section provides an overview of the software requirements specification (SRS) for PDController. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
@@ -930,6 +930,10 @@ title={A Document Driven Approach to Certifying Scientific Computing Software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
+@misc{pdControllerOriginal,
+author={Muralidharan, Naveen Ganesh},
+title={Software Requirements Specification for PD Controller: Simulation of a PID control loop},
+howpublished={\url{https://github.com/muralidn/CAS741-Fall20/tree/master}}}
 @article{smithKoothoor2016,
 author={Smith, W. Spencer and Koothoor, Nirmitha},
 title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},

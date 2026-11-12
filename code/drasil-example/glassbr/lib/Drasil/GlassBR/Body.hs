@@ -40,7 +40,8 @@ import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (projName)
 import Drasil.GlassBR.ModuleDefs (implVars)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations,
+  glassBROriginal)
 import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
@@ -92,7 +93,7 @@ mkSRS = [TableOfContents,
   ],
   LCsSec,
   UCsSec,
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+  TraceabilitySec,
   AuxConstntSec $ AuxConsProg auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
@@ -114,15 +115,11 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts <> softwarecon <> physicalcon
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbolsWCodeSymbols ideaDicts cis'
+symbMap = withCommonKnowledge projName [] symbolsWCodeSymbols ideaDicts cis'
   conceptChunks units GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]
 symbolsWCodeSymbols = implVars <> symbols
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = [externalLinkRef]
 
 concIns :: [ConceptInstance]
 concIns = assumptions <> goals <> likelyChgs <> unlikelyChgs <> funcReqs <> nonfuncReqs
@@ -173,12 +170,7 @@ startIntro prgm _ = foldlSent [
   S "from a small fertilizer truck bomb." +:+
   S "The document describes the program called", projAbrvS projName,
   S ", which is based" `S.onThe` S "original" `sC` S "manually created version of" +:+
-  namedRef externalLinkRef (S "GlassBR")]
-
-externalLinkRef :: Reference
-externalLinkRef = makeURI "glassBRSRSLink"
-  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass"
-  (shortname' $ S "glassBRSRSLink")
+  S "GlassBR" +:+ refS glassBROriginal]
 
 undIR, appStanddIR :: [Sentence]
 undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,

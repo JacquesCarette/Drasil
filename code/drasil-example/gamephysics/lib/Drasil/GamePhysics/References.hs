@@ -1,21 +1,30 @@
 module Drasil.GamePhysics.References (
-  citations, uriReferences, chaslesWiki, accelGravitySrc, impulseSrc
+  citations, uriReferences, chaslesWiki, accelGravitySrc, impulseSrc,
+  gamePhysicsOriginal
 ) where
 
 import Language.Drasil
 import Language.Drasil.Document
 
 import Data.Drasil.Citations (parnasClements1986, dampingSource, hibbeler2004)
-import Data.Drasil.People (dParnas, wikiAuthors)
+import Data.Drasil.People (alex, dParnas, luthfi, olu, wikiAuthors)
 import qualified Language.Drasil.Sentence.Combinators as S
 
-chaslesWiki, parnas1978 :: Citation
+chaslesWiki, gamePhysicsOriginal, parnas1978 :: Citation
 
 citations :: BibRef
 citations = [parnas1978, chaslesWiki, parnasClements1986,
-  dampingSource, hibbeler2004]
+  dampingSource, hibbeler2004, gamePhysicsOriginal]
 
 --FIXME: check for references made within document
+
+-- | The original, manually created version of GamePhysics.
+gamePhysicsOriginal = cMisc
+  [ author [alex, luthfi, olu]
+  , title "Software Requirements Specification for TamiasMini2D"
+  , howPublishedU "https://github.com/smiths/caseStudies/blob/master/CaseStudies/gamephys"
+  ]
+  "gamePhysicsOriginal"
 
 chaslesWiki = cMisc [author [wikiAuthors],
   title "Chasles' theorem (kinematics)",

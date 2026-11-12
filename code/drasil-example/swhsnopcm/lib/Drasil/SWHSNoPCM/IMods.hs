@@ -7,8 +7,9 @@ import Data.Drasil.Citations (koothoor2013)
 import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
-import Data.Drasil.Concepts.Thermodynamics (melting, boilPt)
+import Data.Drasil.Concepts.Thermodynamics (melting)
 import Data.Drasil.Quantities.Physics (energy, time)
+import Data.Drasil.Quantities.Thermodynamics (boilPt)
 import Language.Drasil
 import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators

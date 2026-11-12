@@ -17,16 +17,12 @@ module Drasil.SRS (
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
   RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
-  TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
-  PurposeDescription(..),
+  TConvention(..), TSIntro(..), TUIntro(..), PurposeDescription(..),
   -- *** Functions
   -- * Subsection Functions
   -- ** Definitions and Models
   -- Drasil.DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..), ddefn,
-  -- ** Traceability
-  -- Drasil.Sections.TraceabilityMandGs
-  traceMatStandard,
   -- ** Auxiliary Constants
   -- Drasil.Sections.AuxiliaryConstants
   tableOfConstants,
@@ -56,8 +52,8 @@ import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
-  StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
-  TSIntro(..), TUIntro(..), PurposeDescription(..))
+  StkhldrSub(Client, Cstmr), TConvention(..), TSIntro(..), TUIntro(..),
+  PurposeDescription(..))
 import Drasil.SRS.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
 import Drasil.SRS.Sections.AuxiliaryConstants (tableOfConstants)
@@ -68,7 +64,6 @@ import Drasil.SRS.Sections.Requirements (mkInputPropsTable,
 import Drasil.SRS.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)
 import Drasil.SRS.Sections.TableOfSymbols (tsymb, tsymb'')
 import Drasil.SRS.Sections.TableOfUnits (unitTableRef, tunit, tunit',tunitNone)
-import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard)
 
 import Drasil.SRS.Generator
 import Drasil.SRS.Generator.Formats

@@ -10,7 +10,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.Metadata.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
-import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir, point, axis, cartesian)
+import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir, point, axis)
 import Control.Lens((^.)) --need for parametrization hack
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.Citations (dampingSource)
@@ -18,17 +18,17 @@ import Data.Drasil.Concepts.Education (mechanics)
 
 -- | Collects all physics-related concepts.
 physicCon :: [ConceptChunk]
-physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity,
+physicCon = [acceleration, angDisp, angFreq, angular, chgInVelocity,
   cohesion, collision, compression, constAccel, constAccelV, damping, dampingCoeff,
   displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
-  friction, gravity, gravitationalAccel, gravitationalConst, gravitationalMagnitude, height,
+  friction, gravity, gravitationalAccel, gravitationalMagnitude, height,
   iPos, iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos,
   iyVel, joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
-  momentOfInertia, position, potEnergy, pressure, rectilinear,
+  momentOfInertia, position, potEnergy, rectilinear,
   rigidBody, scalarAccel, scalarPos, shm, space, speed, stiffCoeff, strain, stress, tension,
-  time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
+  time, torque, velocity, xAccel, xConstAccel, xDist, xPos, xVel,
   yAccel, yConstAccel, yDist, yPos, yVel, momentum, chgMomentum, moment, moment2D, fOfGravity,
-  positionVec, pendulum, body, kinematics, frequency, period, motion, horizontalMotion, verticalMotion]
+  pendulum, body, kinematics, frequency, period, motion, horizontalMotion, verticalMotion]
 
 -- | Collects all physics-related common ideas (like a concept, but with no definition).
 physicCon' :: [CI]
@@ -40,16 +40,16 @@ physicCon' = [oneD, twoD, threeD]
 --
 -- In alphabetical order.
 
-acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohesion,
+acceleration, angDisp, angFreq, angular, chgInVelocity, cohesion,
   collision, compression, constAccel, constAccelV, damping, dampingCoeff, displacement,
   distance, elasticity, energy, fSpeed, fVel, fbd, force, friction, gravity,
-  gravitationalAccel, gravitationalConst, gravitationalMagnitude, height, iPos, iSpeed,
+  gravitationalAccel, gravitationalMagnitude, height, iPos, iSpeed,
   iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, iyVel, joint,
   kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
-  potEnergy, pressure, rectilinear, rigidBody, scalarAccel, scalarPos, shm,
-  space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity, weight,
+  potEnergy, rectilinear, rigidBody, scalarAccel, scalarPos, shm,
+  space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum, moment, moment2D, fOfGravity, positionVec, pendulum, body,
+  yPos, yVel, momentum, moment, moment2D, fOfGravity, pendulum, body,
   kinematics, frequency, period, motion, horizontalMotion, verticalMotion, chgMomentum :: ConceptChunk
 
 oneD, twoD, threeD :: CI
@@ -102,8 +102,6 @@ gravity = cncpt''' (mkUid "gravity") (cn "gravity")
   (S "the force that attracts one physical body with mass to another")
 gravitationalAccel = cncpt''' (mkUid "gravitationalAccel") (cn "gravitational acceleration")
   (S "the approximate acceleration due to gravity on Earth at sea level")
-gravitationalConst = cncpt''' (mkUid "gravitationalConst") (cn "gravitational constant")
-  (S "the empirical physical constant used to show the force between two objects caused by gravity")
 gravitationalMagnitude = cncpt''' (mkUid "gravitationalMagnitude") (cn "magnitude of gravitational acceleration")
   (S "the magnitude of the approximate acceleration due to gravity on Earth at sea level")
 height = cncpt''' (mkUid "height") (cn' "height")
@@ -140,13 +138,8 @@ pendulum = cncpt''' (mkUid "pendulum") (cn "pendulum")
        `S.of_` phrase gravity)
 position = cncpt''' (mkUid "position") (cn' "position")
   (S "an object's location relative to a reference point")
-positionVec = cncpt''' (mkUid "positionVec") (cn' "position vector")
-   (S "a vector from the origin" `S.ofThe` phrase cartesian +:+ S "defined"
-    `S.toThe` phrase point +:+ S "where the" +:+ phrase force +:+ S "is applied")
 potEnergy = cncpt''' (mkUid "potEnergy") (cn "potential energy")
   (S "measure" `S.the_ofThe` phrase energy +:+ S "held by an object because of its" +:+ phrase position)
-pressure = cncpt''' (mkUid "pressure") (cn' "pressure")
-  (S "a" +:+ phrase force +:+ S "exerted over an area")
 rectilinear = cncpt''' (mkUid "rectilinear") (cn "rectilinear")
   (S "occurring in one dimension")
 rigidBody = cncpt''' (mkUid "rigidBody") (cnIES "rigid body")
@@ -181,8 +174,6 @@ velocity = cncpt''' (mkUid "velocity") (cnIES "velocity")
   (S "the rate of change of a body's" +:+ phrase position)
 verticalMotion = cncpt''' (mkUid "verticalMotion") (cn "vertical motion")
   (S " the movement of the object against the gravitational pull")
-weight = cncpt''' (mkUid "weight") (cn' "weight")
-  (S "the gravitational force acting on an object")
 
 -- Some variants of distance, speed, velocity, and scalar acceleration
 -- FIXME: Complete all variants?
@@ -223,10 +214,6 @@ yConstAccel = cncpt''' (mkUid "yConstAccel") (yComp `of_` constAccel) (S "The" +
 --FIXME: should use compoundPhrase instead? Or better yet, use combineNINI instead of interacting with the terms directly?
 angDisp = cncpt''' (mkUid "angularDisplacement") (combineNINI angular displacement)
   (S "the angle through which an object moves on a circular path")
-angVelo = cncpt''' (mkUid "angularVelocity") (combineNINI angular velocity)
-  (S "the rate of change of angular position of a rotating body")
-angAccel = cncpt''' (mkUid "angularAcceleration") (combineNINI angular acceleration)
-  (S "the rate of change of angular velocity")
 constAccel = cncpt''' (mkUid "constantAcceleration") (cn "constant acceleration")
   (S "a one-dimensional acceleration that is constant")
 linDisp = cncpt''' (mkUid "linearDisplacement") (combineNINI linear displacement)

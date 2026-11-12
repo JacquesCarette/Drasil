@@ -8,8 +8,8 @@ import qualified Data.List.NonEmpty as NE
 import Data.Drasil.Concepts.Math (xComp, yComp, equation, component, direction, angle)
 import Data.Drasil.Quantities.Physics (velocity, acceleration, force,
     momentOfInertia, torque, angularDisplacement, angularFrequency,
-    frequency, period, xAccel, xVel, yAccel, yVel)
-import Data.Drasil.Concepts.Physics (pendulum, weight, shm)
+    frequency, period, weight, xAccel, xVel, yAccel, yVel)
+import Data.Drasil.Concepts.Physics (pendulum, shm)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
 import Data.Drasil.Theories.Physics (newtonSLR)
 

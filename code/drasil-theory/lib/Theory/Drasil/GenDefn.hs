@@ -43,8 +43,6 @@ instance Definition         GenDefn where defn        = mk . defn
 instance Express            GenDefn where express     = express . (^. mk)
 -- | Finds the derivation of the 'GenDefn'. May contain Nothing.
 instance MayHaveDerivation  GenDefn where derivations = deri
-{-- | Finds 'Reference's contained in the 'GenDefn'.
-instance HasReference       GenDefn where getReferences = rf-}
 -- | Finds 'DecRef's contained in the 'GenDefn'.
 instance HasDecRef          GenDefn where getDecRefs  = rf
 -- | Finds the 'ShortName' of the 'GenDefn'.

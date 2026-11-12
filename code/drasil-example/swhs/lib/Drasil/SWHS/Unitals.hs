@@ -10,7 +10,7 @@ import Data.Drasil.Concepts.Documentation (simulation)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Quantities.Math (gradient, pi_, surArea, surface, uNormalVect, area)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
-import Data.Drasil.Quantities.Physics (subMax, subMin, supMax, supMin, time)
+import Data.Drasil.Quantities.Physics (pressure, subMax, subMin, supMax, supMin, time)
 import Data.Drasil.Quantities.Thermodynamics (sensHeat, temp, meltPt,
   htFlux, latentHeat, boilPt, heatCapSpec)
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
@@ -35,7 +35,7 @@ symbols = pi_ : units <> unitless <> fmap dqdWr constrained
 
 units :: [DefinedQuantityDict]
 units = [surArea, area, sensHeat, htFlux, latentHeat, temp, boilPt, meltPt,
-  vol, density, mass, time]
+  vol, density, mass, time, pressure]
 
 unitalChuncks :: [DefinedQuantityDict]
 unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,

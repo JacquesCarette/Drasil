@@ -1,22 +1,24 @@
 module Drasil.SSP.References (
   citations,
-  morgenstern1965, chen2005, fredlund1977, karchewski2012, huston2008, li2010
+  morgenstern1965, chen2005, fredlund1977, karchewski2012, huston2008, li2010,
+  sspOriginal
 ) where
 
 import Language.Drasil
 import Language.Drasil.Document
 
 import Data.Drasil.Citations (jnlCGJ, parnasClements1986, hibbeler2004)
-import Data.Drasil.People (bKarchewski, cfLee, dgFredlund, dStolle, dyZhu,
-  grChen, jKrahn, pGuo, pjCleall, qhQian, ssLing, tltZhan, yCLi, ymChen,
-  rHuston, hJosephs, nrMorgenstern, vePrice)
+import Data.Drasil.People (bKarchewski, brooks, cfLee, dgFredlund, dStolle,
+  dyZhu, grChen, henryFrankis, jKrahn, pGuo, pjCleall, qhQian, ssLing, tltZhan,
+  yCLi, ymChen, rHuston, hJosephs, nrMorgenstern, vePrice)
 
 citations :: BibRef
 citations = [chen2005, parnasClements1986, fredlund1977,
-             li2010, karchewski2012, huston2008, morgenstern1965, hibbeler2004]
+             li2010, karchewski2012, huston2008, morgenstern1965, hibbeler2004,
+             sspOriginal]
 
 chen2005, fredlund1977, li2010, karchewski2012, huston2008,
-  morgenstern1965 :: Citation
+  morgenstern1965, sspOriginal :: Citation
 --See Language.Drasil.People for all person constructors
 chen2005 = cArticle [qhQian, dyZhu, cfLee, grChen]
   "A concise algorithm for computing the factor of safety using the morgenstern price method"
@@ -47,3 +49,11 @@ morgenstern1965 = cArticle [nrMorgenstern, vePrice]
   "The analysis of the stability of general slip surfaces"
   "Géotechnique" 1965 [month Jan, pages [79..93], number 15]
   "morgenstern1965"
+
+-- | The original, manually created version of SSP.
+sspOriginal = cMisc
+  [ author [henryFrankis, brooks]
+  , title "Software Requirements Specification for SSP: Slope Stability Analysis Program"
+  , howPublishedU "https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp"
+  ]
+  "sspOriginal"

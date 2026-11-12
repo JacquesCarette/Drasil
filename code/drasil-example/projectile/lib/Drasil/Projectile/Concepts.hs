@@ -1,6 +1,6 @@
 module Drasil.Projectile.Concepts (
   launcher, projectile, target, projMotion, defs, rectVel, ideaDicts,
-  flightDur, offset, landPos, launAngleTerm, launAngleDef, launSpeed, targPos, projSpeed, projPos
+  flightDur, offset, landPos, launAngleTerm, launAngleDef, launSpeed, targPos
 ) where
 
 import Drasil.Database (mkUid)
@@ -10,10 +10,9 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Documentation (constant)
 import Data.Drasil.Concepts.Math (angle)
-import Data.Drasil.Concepts.Physics (oneD, position, speed, motion, distance, iSpeed, time,
-  rectilinear, velocity, acceleration)
+import Data.Drasil.Concepts.Physics (position, speed, motion, distance, iSpeed, time,
+  rectilinear, velocity)
 
 ideaDicts :: [IdeaDict]
 ideaDicts = [projMotion, launch, rectVel]
@@ -31,7 +30,7 @@ projMotion = compoundNC projectile motion
 defs :: [ConceptChunk]
 defs = [launcher, projectile, target]
 
-launcher, projectile, target, projSpeed, projPos, landPos, launSpeed,
+launcher, projectile, target, landPos, launSpeed,
   offset, targPos, flightDur :: ConceptChunk
 launcher   = cncpt''' (mkUid "launcher")        (nounPhraseSP "launcher")
   (S "where the projectile is launched from and the device that does the launching")
@@ -39,10 +38,6 @@ projectile = cncpt''' (mkUid "projectile")      (nounPhraseSP "projectile")
   (S "the object to be launched at the target")
 target     = cncpt''' (mkUid "target")          (nounPhraseSP "target")
   (S "where the projectile should be launched to")
-projSpeed  = cncpt''' (mkUid "projSpeed")       (nounPhraseSP "1D speed")
-  (short oneD +:+ phrase speed +:+ S "under" +:+ phrase constant +:+ phrase acceleration)
-projPos    = cncpt''' (mkUid "projPos")         (nounPhraseSP "1D position")
-  (short oneD +:+ phrase position +:+ S "under" +:+ phrase constant +:+ phrase speed)
 landPos    = cncpt''' (mkUid "landingposition") (compoundPhrase (nounPhraseSP "landing") (position ^. term))
   (foldlSent_ [D.toSent (phraseNP (the distance)) `S.fromThe` phrase launcher
     `S.toThe` S "final", D.toSent $ phraseNP (position `ofThe` projectile)])

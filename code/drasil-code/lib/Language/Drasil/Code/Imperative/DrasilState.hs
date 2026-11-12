@@ -30,7 +30,7 @@ import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging,
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
-  CodeSpec, HasCodeSpec(..), getConstraints)
+  CodeSpec, HasCodeSpec(..), getConstraints, HasAbstractICOProgram(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
@@ -178,6 +178,9 @@ instance HasSystemMeta DrasilState where
 
 instance HasProjectName DrasilState where
   projectName = systemMeta . projectName
+
+instance HasAbstractICOProgram DrasilState where
+  abstractICOProgram = dsCodeSpec . abstractICOProgram
 
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.

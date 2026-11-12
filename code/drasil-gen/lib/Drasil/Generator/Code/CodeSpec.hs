@@ -19,7 +19,7 @@ import Language.Drasil (SimpleQDef, DefiningExpr(defnExpr))
 import Language.Drasil.Code (Choices(extLibs, maps, handWiredDefs,
   defaultConfigFiles, extraMods), Maps(conceptMatch), CodeSpec, Input, Const,
   mkCodeSpec, getODE, mapODE, quantvar, qtov, qtoc, constraintMap, codevars,
-  odeInfoReqs, odeLibReqs)
+  odeInfoReqs, odeLibReqs, mkAbstractICOProgram)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 
 import Drasil.Generator.Code.ICOSolutionSearch (solveExecOrder)
@@ -52,8 +52,8 @@ srs2CodeSpec si@S.ICO{ S._inputs = ins
       outs' = quantvar <$> NE.toList outs
       allInputs = inputs' <> fmap quantvar derived
       exOrder = solveExecOrder rels (allInputs <> fmap quantvar cnsts) outs' db
-  in mkCodeSpec sysMeta inputs' derived outs' (defaultConfigFiles chs) exOrder
-       (constraintMap cs) const' (extraMods chs)
+      aicop = mkAbstractICOProgram inputs' derived outs' exOrder (constraintMap cs) const'
+  in mkCodeSpec sysMeta aicop (defaultConfigFiles chs) (extraMods chs)
 
 -- | Determines the derived inputs: the data definitions that can be calculated
 -- immediately from the knowns (inputs and constants). Only data definitions

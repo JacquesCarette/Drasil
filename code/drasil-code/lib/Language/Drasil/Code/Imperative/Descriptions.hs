@@ -23,7 +23,7 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName, HasChoices(..))
 import Language.Drasil.Choices (ImplementationType(..), Structure(..),
   InternalConcept(..))
-import Language.Drasil.CodeSpec (HasCodeSpec(..))
+import Language.Drasil.CodeSpec (HasAbstractICOProgram (..))
 import Language.Drasil.Mod (Description)
 import Language.Drasil.Printers (oneLineSentenceDoc)
 

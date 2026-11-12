@@ -27,7 +27,7 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   LogConfig(logging), Logging(LogVar), Maps(spaceMatch), Modularity(..),
   OptionalFeatures(logConfig), SpaceMatch, Structure(..),
   Lang(Julia, Java, Python, CSharp, Cpp, Swift, Matlab),
-  HasCodeSpec(extInputs), CodeSpec, SomeProgGenerator(..))
+  HasAbstractICOProgram(extInputs), CodeSpec, SomeProgGenerator(..))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
   PackageData, SoftwareDossierSym)
 import Drasil.SRS (SmithEtAlSRS)

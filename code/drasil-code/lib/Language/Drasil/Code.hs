@@ -70,7 +70,8 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
   makeOptFeats, ExtLib(..), odeInfoReqs, odeLibReqs)
 import Language.Drasil.CodeSpec (CodeSpec, HasCodeSpec(..), Input, Const,
-  mkCodeSpec, getODE, mapODE, asVC)
+  mkCodeSpec, getODE, mapODE, asVC, AbstractICOProgram, mkAbstractICOProgram,
+  HasAbstractICOProgram(..))
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..),
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
 import Language.Drasil.Chunk.Code (ccObjVar)

@@ -3,11 +3,11 @@
 module Language.Drasil.CodeSpec (
   -- * Types
   Input, Output, Const, Derived, ConstantMap,
-  CodeSpec,
+  AbstractICOProgram, CodeSpec,
   -- * Typeclasses
-  HasCodeSpec(..),
+  HasAbstractICOProgram(..), HasCodeSpec(..),
   -- * Constructors
-  mkCodeSpec,
+  mkAbstractICOProgram, mkCodeSpec,
   -- * ODEs
   getODE, mapODE,
   -- * Hacks
@@ -44,32 +44,59 @@ type Derived = CodeDefinition
 -- | Maps constants to their respective 'CodeDefinition'.
 type ConstantMap = Map.Map UID CodeDefinition
 
+data AbstractICOProgram
+  = AICOP
+  { _inputs :: [Input]             -- ^ All inputs.
+  , _extInputs :: [Input]          -- ^ Explicit inputs (values to be supplied
+                                   --   by a file).
+  , _derivedInputs :: [Derived]    -- ^ Derived inputs (each calculated from
+                                   --   explicit inputs in a single step).
+  , _outputs :: [Output]           -- ^ All outputs.
+  , _cMap :: ConstraintCEMap       -- ^ Map from 'UID's to constraints for all
+                                   -- constrained chunks used in the problem.
+  , _execOrder :: [CodeDefinition] -- ^ Mathematical definitions, ordered so
+                                   --   that they form a path from inputs to
+                                   --   outputs.
+  , _constDefns :: [Const]         -- ^ List of all constants used in the problem.
+  }
+makeClassy ''AbstractICOProgram
+
+mkAbstractICOProgram
+  :: [Input]          -- ^ Explicit inputs (values to be supplied by a file).
+  -> [Derived]        -- ^ Derived inputs, each depending only on explicit
+                      --   inputs and/or constants.
+  -> [Output]         -- ^ All outputs.
+  -> [CodeDefinition] -- ^ Mathematical definitions, ordered so that they form a
+                      --   path from inputs to outputs: each depends only on
+                      --   inputs, constants, and earlier definitions.
+  -> ConstraintCEMap  -- ^ Map from 'UID's to constraints for all constrained
+                      --   chunks used in the problem.
+  -> [Const]          -- ^ All constants used in the problem.
+  -> AbstractICOProgram
+mkAbstractICOProgram ins derived outs exOrder cmap cnsts
+  = AICOP
+  { _inputs = ins <> (quantvar <$> derived)
+  , _extInputs = ins
+  , _derivedInputs = derived
+  , _outputs = outs
+  , _execOrder = exOrder
+  , _cMap = cmap
+  , _constDefns = cnsts
+  }
+
 -- | Code Specification. Holds system information and options.
-data CodeSpec = CS {
-  _csSysMeta :: SystemMeta,
-  -- | All inputs.
-  _inputs :: [Input],
-  -- | Explicit inputs (values to be supplied by a file).
-  _extInputs :: [Input],
-  -- | Derived inputs (each calculated from explicit inputs in a single step).
-  _derivedInputs :: [Derived],
-  -- | All outputs.
-  _outputs :: [Output],
-  -- | List of files that must be in same directory for running the executable.
-  _configFiles :: [RelativeFile],
-  -- | Mathematical definitions, ordered so that they form a path from inputs to
-  -- outputs.
-  _execOrder :: [CodeDefinition],
-  -- | Map from 'UID's to constraints for all constrained chunks used in the problem.
-  _cMap :: ConstraintCEMap,
-  -- | List of all constants used in the problem.
-  _constDefns :: [Const],
-  -- | Map containing all constants used in the problem.
-  _constMap :: ConstantMap,
-  -- | Additional modules required in the generated code, which Drasil cannot yet
-  -- automatically define.
-  _mods :: [Mod]  -- medium hack
-}
+data CodeSpec
+  = CS
+  { _csSysMeta :: SystemMeta
+  , _absICOProg :: AbstractICOProgram -- ^ The abstract ICO problem.
+  , _configFiles :: [RelativeFile] -- ^ List of files that must be in same
+                                   --   directory for running the executable.
+  , _constMap :: ConstantMap       -- ^ Map containing all constants used in
+                                   --   the problem.
+  , _mods :: [Mod]                 -- ^ Additional modules required in the
+                                   --   generated code, which Drasil cannot
+                                   --   yet automatically define.
+  }
 makeClassy ''CodeSpec
 
 instance HasSystemMeta CodeSpec where
@@ -77,6 +104,9 @@ instance HasSystemMeta CodeSpec where
 
 instance HasProjectName CodeSpec where
   projectName = systemMeta . projectName
+
+instance HasAbstractICOProgram CodeSpec where
+  abstractICOProgram = absICOProg
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a
@@ -102,32 +132,18 @@ mkCodeSpec
                       --   chunk the other arguments refer to, plus 'codeDQDs'
                       --   and the chunks the chosen external libraries need
                       --   ('odeInfoReqs' and 'odeLibReqs').
-  -> [Input]          -- ^ Explicit inputs (values to be supplied by a file).
-  -> [Derived]        -- ^ Derived inputs, each depending only on explicit
-                      --   inputs and/or constants.
-  -> [Output]         -- ^ All outputs.
+  -> AbstractICOProgram -- ^ The abstract ICO program to refine.
   -> [RelativeFile]   -- ^ Files that must be in the same directory for running
                       --   the executable.
-  -> [CodeDefinition] -- ^ Mathematical definitions, ordered so that they form a
-                      --   path from inputs to outputs: each depends only on
-                      --   inputs, constants, and earlier definitions.
-  -> ConstraintCEMap  -- ^ Map from 'UID's to constraints for all constrained
-                      --   chunks used in the problem.
-  -> [Const]          -- ^ All constants used in the problem.
   -> [Mod]            -- ^ Additional code modules required in the generated code.
   -> CodeSpec
-mkCodeSpec sysMeta ins derived outs cfgs exOrder cmap cnsts ms = CS {
-    _csSysMeta = sysMeta,
-    _inputs = ins <> fmap quantvar derived,
-    _extInputs = ins,
-    _derivedInputs = derived,
-    _outputs = outs,
-    _configFiles = cfgs,
-    _execOrder = exOrder,
-    _cMap = cmap,
-    _constDefns = cnsts,
-    _constMap = assocToMap cnsts,
-    _mods = ms
+mkCodeSpec sysMeta aicop cfgs ms
+  = CS
+  { _csSysMeta = sysMeta
+  , _absICOProg = aicop
+  , _configFiles = cfgs
+  , _constMap = assocToMap $ aicop ^. constDefns
+  , _mods = ms
   }
 
 -- medium hacks ---

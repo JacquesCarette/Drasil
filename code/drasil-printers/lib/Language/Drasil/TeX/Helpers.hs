@@ -29,7 +29,7 @@ import Data.List (isSuffixOf)
 import Text.PrettyPrint (text, Doc)
 import qualified Text.PrettyPrint as TP
 
-import Language.Drasil.Document (MaxWidthPercent)
+import Drasil.Document.Layout.Development (MaxWidthPercent)
 
 import Drasil.Printers.Common hiding (quote)
 import Language.Drasil.Config (numberedSections, hyperSettings)

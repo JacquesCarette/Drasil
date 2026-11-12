@@ -20,7 +20,7 @@ import Data.List (intersperse)
 import Data.List.Split (splitOn)
 
 import Drasil.Data.Formats.JSON (JSON(..))
-import Language.Drasil.Document (MaxWidthPercent)
+import Drasil.Document.Layout.Development (MaxWidthPercent)
 
 import Drasil.Printers.Common hiding (wrap)
 import Language.Drasil.Printing.Helpers (bslash)

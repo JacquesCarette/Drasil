@@ -5,12 +5,10 @@ module Drasil.Document.Layout.LayoutObj (
   ItemType(..),
   -- * Type Aliases
   Author, Contents, Items, Tags, Depth, Width, Height, Filepath, Filename,
-  Caption, RefMap
+  Caption, RefMap, MaxWidthPercent
 ) where
 
 import Data.Map (Map)
-
-import Language.Drasil.Document (MaxWidthPercent)
 
 import Drasil.Document.Layout.Citation (BibRef)
 import Drasil.Document.Layout.Spec (Spec, Title, Label)
@@ -43,6 +41,11 @@ type Filename = String
 type Caption  = Spec
 -- | A mapping of refs to the file that contains them.
 type RefMap   = Map String Filename
+-- | MaxWidthPercent should be kept in the range 1-100.
+-- Values outside this range may have unexpected results.
+-- Used for specifying max figure width as
+-- @pagewidth*MaxWidthPercent/100@.
+type MaxWidthPercent = Float
 
 data LayoutObj =
      Table Tags [[Spec]] Label Bool Caption                          -- ^ Holds all information needed for a table.

@@ -16,12 +16,12 @@ import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), comma, double,
   empty, hcat, hsep, integer, punctuate, space, text,
   vcat, render)
 
-import Language.Drasil (Special(..), Symbol, USymb(..), codeSymb)
+import Language.Drasil (Symbol, USymb(..), codeSymb)
 import qualified Language.Drasil as L (HasSymbol(..), Sentence, Expr)
 
 import Drasil.Printers.Common
 import Drasil.Document.Layout.Development (Expr(..), Spec(..), Ops(..), Fence(..),
-  OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
+  OverSymb(..), Fonts(..), Spacing(..), LinkType(..), Special(..))
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.Expr (expr)
 import Language.Drasil.Printing.Import.Sentence (spec)

@@ -3,8 +3,6 @@ module Drasil.Document.Layout.Expr (
   Expr(..), Ops(..)
 ) where
 
-import Language.Drasil (Special)
-
 import Drasil.Document.Layout.Typography
 
 -- | Different operators.

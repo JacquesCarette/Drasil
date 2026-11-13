@@ -17,11 +17,11 @@ import Data.Drasil.Concepts.Math (calculation, surface, shape)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass,
-  loadShareFac, plane, responseTy, explosion, lateral)
+  plane, responseTy, explosion, lateral)
 import Drasil.GlassBR.MetaConcepts (projName)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constantK, constantLoadDur, constantLoadSF,
-  constantM, constantModElas, loadDF, loadDur)
+  constantM, constantModElas, loadDF, loadSF, loadDur)
 
 assumptions :: [ConceptInstance]
 assumptions = [assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC,
@@ -73,7 +73,7 @@ standardValuesDesc q = foldlSent [D.toSent $ atStartNP' (the value), S "provided
 
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [atStart glass, S "under consideration is assumed to be a single",
-  S "lite; hence, the", phrase value `S.of_` short loadShareFac, S "is equal to 1 for all",
+  S "lite; hence, the", phrase value `S.of_` ch loadSF, S "is equal to 1 for all",
   plural calculation `S.in_` projAbrvS projName]
 
 boundaryConditionsDesc :: Sentence

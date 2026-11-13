@@ -20,7 +20,7 @@ standardValues: The values provided in [Sec:Values of Auxiliary Constants](./Sec
 
 <div id="assumpGL"></div>
 
-glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: [LC:Accomodate-More-than-Single-Lite](./SecLCs.md#accMoreThanSingleLite).)
+glassLite: Glass under consideration is assumed to be a single lite; hence, the value of \\(\mathit{LSF}\\) is equal to 1 for all calculations in GlassBR. (RefBy: [LC:Accomodate-More-than-Single-Lite](./SecLCs.md#accMoreThanSingleLite).)
 
 <div id="assumpBC"></div>
 

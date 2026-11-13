@@ -6,19 +6,16 @@
 |:-----------|:----------------------------------|
 |A           |Assumption                         |
 |AN          |Annealed                           |
-|AR          |Aspect Ratio                       |
 |DD          |Data Definition                    |
 |FT          |Fully Tempered                     |
 |GD          |General Definition                 |
 |GS          |Goal Statement                     |
-|GTF         |Glass Type Factor                  |
 |HS          |Heat Strengthened                  |
 |IG          |Insulating Glass                   |
 |IM          |Instance Model                     |
 |LC          |Likely Change                      |
 |LG          |Laminated Glass                    |
 |LR          |Load Resistance                    |
-|LSF         |Load Share Factor                  |
 |NFL         |Non-Factored Load                  |
 |PS          |Physical System Description        |
 |R           |Requirement                        |

@@ -12,8 +12,8 @@ This appendix holds the graphs ([Fig:demandVSsod](./SecAppendix.md#Figure:demand
 
 <div id="Figure:dimlessloadVSaspect" align="center" >
 
-![Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\\(J\\))](./assets/ASTM_F2248-09_BeasonEtAl.png)
+![Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (\\(\mathit{AR}\\)) versus Stress distribution factor (Function) (\\(J\\))](./assets/ASTM_F2248-09_BeasonEtAl.png)
 
-**Figure: Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\\(J\\))**
+**Figure: Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (\\(\mathit{AR}\\)) versus Stress distribution factor (Function) (\\(J\\))**
 
 </div>

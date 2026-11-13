@@ -20,8 +20,8 @@ import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
-import Drasil.GlassBR.Concepts (annealedGl, aspectRatioCon, fTemperedGl, glTyFac,
-  hStrengthGl, loadResis, loadShareFac, nonFactoredL, stdOffDist, loadDurFac, blast,
+import Drasil.GlassBR.Concepts (annealedGl, fTemperedGl, hStrengthGl, iGlass, lGlass,
+  loadResis, nonFactoredL, stdOffDist, blast,
   blastResisGla, blastTy, bomb, demandq, eqTNTChar, explosion, glassGeo,
   glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe,
   safeMessage, shortDurLoad, specA, specDeLoad, glassType)
@@ -86,7 +86,14 @@ plateWidth = uqc "plateWidth" (nounPhraseSP "plate width (short dimension)")
   [ physRange $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen),
     sfwrRange $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
-aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (variable "AR") Real)
+aspectRatio = uq (constrained' (quantNoUnit (mkUid "aR") (nounPhraseSP "aspect ratio")
+  (S $ "the ratio of the long dimension of the glass to the short dimension of " <>
+    "the glass. For glass supported on four sides, the aspect ratio is " <>
+    "always equal to or greater than 1.0. For glass supported on three " <>
+    "sides, the ratio of the length of one of the supported edges " <>
+    "perpendicular to the free edge, to the length of the free edge, is " <>
+    "equal to or greater than 0.5")
+  (variable "AR") Real)
   [ physRange $ UpFrom (Inc, exactDbl 1),
     sfwrRange $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
@@ -273,7 +280,13 @@ gTF, loadSF, loadDF :: DefinedQuantityDict
 dimlessLoad = quantNoUnit (mkUid "dimlessLoad") (nounPhraseSP "dimensionless load")
   (S "the dimensionless load") (hat lQ) Real
 
-gTF = dqdNoUnit glTyFac (variable "GTF") Integer
+gTF = quantNoUnit (mkUid "glassTypeFac") (nounPhraseSP "glass type factor")
+  (foldlSent_ [S "a multiplying factor for adjusting the", short loadResis,
+  S "of different glass type, that is,",
+  foldlList Comma Options (short <$> [annealedGl, fTemperedGl, hStrengthGl])
+  `sC` S "in monolithic glass" `sC` short lGlass, sParen (titleize lGlass) `sC`
+   S "or", short iGlass, sParen (titleize iGlass), S "constructions"])
+  (variable "GTF") Integer
 
 isSafePb   = quantNoUnit (mkUid "isSafePb") (nounPhraseSP "probability of glass breakage safety requirement")
   (S "the probability of glass breakage safety requirement") (variable "isSafePb") Boolean
@@ -289,8 +302,15 @@ interpY = quantNoUnit (mkUid "interpY") (nounPhraseSP "interpY")
 interpZ = quantNoUnit (mkUid "interpZ") (nounPhraseSP "interpZ")
   (S "interpolated z") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
-loadDF = dqdNoUnit loadDurFac (variable "LDF") Real
-loadSF = dqdNoUnit loadShareFac (variable "LSF") Real
+loadDF = quantNoUnit (mkUid "loadDurFactor") (nounPhraseSP "load duration factor")
+  (S "factor related to the effect of sustained loading on glass strength")
+  (variable "LDF") Real
+loadSF = quantNoUnit (mkUid "lShareFac") (nounPhraseSP "load share factor")
+  (foldlSent_ [S "a multiplying factor derived from the load sharing between the",
+  S "double glazing, of equal or different thicknesses and types (including the",
+  S "layered behaviour of", short lGlass, S "under long duration",
+  S "loads), in a sealed", short iGlass, S "unit"])
+  (variable "LSF") Real
 
 riskFun = quantNoUnit (mkUid "riskFun") (nounPhraseSP "risk of failure")
   (S "the percentage risk of the glass slab failing to resist the blast") cB Real
@@ -336,7 +356,7 @@ termsWithDefsOnly, termsWithAccDefn, loadTypes, glassTypes :: [ConceptChunk]
 
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
-termsWithAccDefn  = [stdOffDist, loadShareFac, glTyFac, aspectRatioCon]
+termsWithAccDefn  = [stdOffDist]
 loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad, specDeLoad, longDurLoad]
 
 --Defined for DataDefs.hs and this file only--

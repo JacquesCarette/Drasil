@@ -46,7 +46,8 @@ import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
   specParamVals, glassTypes, lateralLoad, loadTypes, pbTol, probBr, stressDistFac,
-  termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
+  termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols,
+  loadSF, gTF, aspectRatio)
 import Drasil.GlassBR.Units (units)
 
 si :: SmithEtAlSRS
@@ -139,6 +140,7 @@ termsAndDescBullets = UlC $ ulcc $ Enumeration$
       <> termsAndDescBulletsGlTySubSec
       <> termsAndDescBulletsLoadSubSec
       <> fmap tAndDWAcc termsWithAccDefn
+      <> [tAndDOnly loadSF, tAndDOnly gTF, tAndDOnly aspectRatio]
       <> [tAndDWSym probBreak probBr]
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 

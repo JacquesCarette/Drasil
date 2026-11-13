@@ -63,19 +63,19 @@ tsymb' = TSymb' Defn
 tsymb'' :: [TSIntro] -> LFunc -> RefTab
 tsymb'' intro lfunc = TSymb' lfunc intro
 
--- | Table of symbols introduction builder. Used by 'mkRefSec'.
-tsIntro :: [TSIntro] -> Contents
-tsIntro [] = mkParagraph $ emptySectSentPlu [symbol_]
-tsIntro x = mkParagraph $ foldr ((+:+) . tsI) EmptyS x
-
--- | Table of symbols intro writer. Translates a 'TSIntro' to a list in a 'Sentence'.
-tsI :: TSIntro -> Sentence
-tsI (TypogConvention ts) = typogConvention ts
-tsI SymbOrder = S "The symbols are listed in alphabetical order."
-tsI (SymbConvention ls) = symbConvention ls
-tsI TSPurpose = S "The symbols used in this document are summarized in the" +:+
-  namedRef symbTableRef (titleize' tOfSymb) +:+. S "along with their units"
-tsI VectorUnits = S "For vector quantities, the units shown are for each component of the vector."
+-- | Table of symbols introduction builder. Takes the table it introduces.
+-- Used by 'mkRefSec'.
+tsIntro :: [TSIntro] -> LabelledContent -> Contents
+tsIntro [] _ = mkParagraph $ emptySectSentPlu [symbol_]
+tsIntro x tbl = mkParagraph $ foldr ((+:+) . tsI) EmptyS x
+  where
+    tsI :: TSIntro -> Sentence
+    tsI (TypogConvention ts) = typogConvention ts
+    tsI SymbOrder = S "The symbols are listed in alphabetical order."
+    tsI (SymbConvention ls) = symbConvention ls
+    tsI TSPurpose = S "The symbols used in this document are summarized in the" +:+
+      namedRef tbl (titleize' tOfSymb) +:+. S "along with their units"
+    tsI VectorUnits = S "For vector quantities, the units shown are for each component of the vector."
 
 -- | Typographic convention writer. Translates a list of typographic conventions ('TConvention's)
 -- to a 'Sentence'.

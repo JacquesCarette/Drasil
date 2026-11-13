@@ -11,12 +11,12 @@ wikiSentence :: Sentence
 wikiSentence = S "wiki page"
 
 -- | Creates the about section.
-aboutSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference ->
+aboutSec :: Section -> Section -> Section -> Reference -> Reference -> Reference -> Reference -> Reference ->
   Reference -> Reference -> Reference -> Reference -> Reference -> Section
-aboutSec csRef docRef analysisSecRef repoRef wikiRef infoEncodingWiki chunksWiki recipesWiki paperGOOL papersWiki
+aboutSec csSec docSec analysisSec repoRef wikiRef infoEncodingWiki chunksWiki recipesWiki paperGOOL papersWiki
   icsePositionPaper danPoster wellUnderstoodPaper =
   section (S "About") -- Title
-  (fmap mkParagraph [aboutParagraph1 repoRef wikiRef, aboutParagraph2 csRef docRef analysisSecRef, aboutParagraph3]
+  (fmap mkParagraph [aboutParagraph1 repoRef wikiRef, aboutParagraph2 csSec docSec analysisSec, aboutParagraph3]
   <> [currentlyGeneratedArtifacts] <> [mkParagraph aboutParagraph4] <> [futureGeneratedArtifacts] <> fmap mkParagraph
   [aboutParagraph5 infoEncodingWiki, aboutParagraph6 chunksWiki, aboutParagraph7 recipesWiki, aboutParagraph8 paperGOOL,
   aboutParagraph9 papersWiki icsePositionPaper danPoster wellUnderstoodPaper]) -- Contents
@@ -33,9 +33,9 @@ aboutParagraph1 repoRef wikiRef = S "Drasil is a framework for generating all of
   (namedRef wikiRef (S "GitHub Wiki") !.)
 
 -- | Paragraph to describe the layout of the rest of the Drasil website.
-aboutParagraph2 :: Reference -> Reference -> Reference -> Sentence
-aboutParagraph2 caseStudySecRef docsRef analysisSecRef = S "This webpage is designed to contain the most up-to-date" +:+
-  foldlList Comma List (zipWith (\x y -> namedRef x (S y)) [caseStudySecRef, docsRef, analysisSecRef] ["case study artifacts",
+aboutParagraph2 :: Section -> Section -> Section -> Sentence
+aboutParagraph2 caseStudySec docsSec analysisSec = S "This webpage is designed to contain the most up-to-date" +:+
+  foldlList Comma List (zipWith (\x y -> namedRef x (S y)) [caseStudySec, docsSec, analysisSec] ["case study artifacts",
   "Haddock documentation", "Drasil analysis"]) +:+ S "from the Drasil repository. \
   \The case study artifacts include the Software Requirements Specification (SRS) for each case study, \
   \which specifies what the program sets out to achieve. \

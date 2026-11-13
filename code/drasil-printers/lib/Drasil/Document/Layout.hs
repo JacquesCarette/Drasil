@@ -9,4 +9,4 @@ module Drasil.Document.Layout (
 ) where
 
 import Drasil.Document.Layout.Expr (parens, addExprFilter)
-import Drasil.Document.Layout.LayoutObj (mkProject)
+import Drasil.Document.Layout.Document (mkProject)

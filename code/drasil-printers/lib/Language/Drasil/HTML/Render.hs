@@ -12,8 +12,7 @@ import Drasil.Data.Formats.HTML
 import Language.Drasil.HTML.Citation (printBib)
 import Language.Drasil.HTML.MathJax (mathJax3Url, mathJaxScript, blockEqn)
 import Language.Drasil.HTML.Spec (printSpec, specToHTML)
-import qualified Language.Drasil.Printing.AST as AST
-import qualified Language.Drasil.Printing.LayoutObj as AST
+import qualified Drasil.Document.Layout.Development as AST
 import qualified Language.Drasil.TeX.Print as TeX (spec, printMath)
 
 -- | Options for converting layout objects ('LayoutObj's) into HTML AST

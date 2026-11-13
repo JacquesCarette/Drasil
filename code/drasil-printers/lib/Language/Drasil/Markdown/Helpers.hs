@@ -13,7 +13,7 @@ import System.FilePath (takeFileName)
 import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), hcat, nest)
 
 import Language.Drasil.Printing.Helpers (ast, ($^$), vsep)
-import Language.Drasil.Printing.LayoutObj (RefMap)
+import Drasil.Document.Layout.Development (RefMap)
 import Drasil.Printers.Common
 
 -- | HTML attribute selector.

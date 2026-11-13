@@ -13,20 +13,18 @@ import qualified Prettyprinter as PNew (Doc)
 import System.FilePath (takeFileName)
 import Text.PrettyPrint hiding (Str)
 
-import Language.Drasil (Special(Circle), checkValidStr)
+import Language.Drasil (checkValidStr)
 import Drasil.Data.Formats.CSV (DoubleQuotationPolicy(..), csvRenderOpts,
   mkCSV, renderCSV)
 import Drasil.FileHandling (FileLayout, file, directory, ps)
 
 import Drasil.Printers.Common
-import Language.Drasil.Printing.AST (ItemType(..), ListType(..), Spec(..),
+import Drasil.Document.Layout.Development (ItemType(..), ListType(..), Spec(..),
   Expr(..), Label, Spacing(Thin), Fonts(..), OverSymb(Hat), Fence(Abs),
-  Ops(..), LinkType(..))
-import Language.Drasil.Printing.Citation (BibRef)
+  Ops(..), LinkType(..), Special(Circle), BibRef, Project(Project),
+  LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.Printing.Helpers (pipe, bslash, unders,
   hat, hyph, dot, ($^$), vsep)
-import Language.Drasil.Printing.LayoutObj (Project(Project),
-  LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.Markdown.Citation (BibFormatter(..), renderCite)
 import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
   reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, centeredDiv,
@@ -219,16 +217,17 @@ lnl = text "\\\\\\\\"
 
 -- | Renders Markdown table, called by 'printLO'
 makeTable :: RefMap -> [[Spec]] -> Doc -> Bool -> Doc -> Doc
-makeTable _  [] _ _ _  = error "No table to print"
-makeTable rm ls r b t  =
-  divTag r $^$
-  makeHeaderCols (head matrix) sizes $$
-  makeRows (tail matrix) sizes $^$
-  capt
-    where
-      matrix = mkDocMatrix rm ls
-      sizes = columnSize matrix
-      capt = if b then bold (caption t) else empty
+makeTable rm ls r b t = case matrix of
+    []         -> error "No table to print"
+    hdr : rows ->
+      divTag r $^$
+      makeHeaderCols hdr sizes $$
+      makeRows rows sizes $^$
+      capt
+  where
+    matrix = mkDocMatrix rm ls
+    sizes = columnSize matrix
+    capt = if b then bold (caption t) else empty
 
 -- | Helper for creating a Doc matrix
 mkDocMatrix :: RefMap -> [[Spec]] -> [[Doc]]

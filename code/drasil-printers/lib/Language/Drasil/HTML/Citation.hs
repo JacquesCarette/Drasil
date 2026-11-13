@@ -9,17 +9,15 @@ import qualified Data.Text as T (pack, show)
 import Data.List (sortBy)
 import Utils.Drasil (foldlList)
 
-import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
-  rendPersLFM'', numList)
+import Language.Drasil (numList)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
-import Language.Drasil.Document (CitationKind(..))
 import Drasil.Data.Formats.HTML (HTMLBody(..), DItem(..), bold_, emphasis_,
   rawText, rawText', id_, class_)
 
 import Drasil.Printers.Common (paren)
 import Language.Drasil.HTML.Spec (specToHTML, printSpec)
-import Language.Drasil.Printing.AST (Spec(S))
-import Language.Drasil.Printing.Citation (CiteField(..), HP(..), Citation(..), BibRef)
+import Drasil.Document.Layout.Development (Spec(S), CiteField(..), HP(..),
+  Citation(..), BibRef, CitationKind(..), People, Person(..))
 import Language.Drasil.Printing.Helpers (sufxer, sufxPrint)
 
 -- | Internal: Wrap an HTMLBody with text on both sides.

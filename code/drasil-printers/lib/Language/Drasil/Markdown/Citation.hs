@@ -13,15 +13,13 @@ import Text.PrettyPrint (Doc, text, (<>), hsep)
 import Utils.Drasil (foldlList)
 
 import Drasil.Printers.Common
-import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
-  rendPersLFM'', numList)
-import Language.Drasil.Document (CitationKind(..))
+import Language.Drasil (numList)
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
-import Language.Drasil.Printing.AST (Spec(S, Ref), LinkType(External))
-import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author,
+import Drasil.Document.Layout.Development (Spec(S, Ref), LinkType(External),
+  CiteField(Year, Number, Volume, Title, Author,
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb),
-  Citation(Cite))
+  Citation(Cite), CitationKind(..), People, Person(..))
 import Language.Drasil.Printing.Helpers (comm, dot, sufxer, sufxPrint)
 
 -- | Data type that carries functions that vary for bib printing

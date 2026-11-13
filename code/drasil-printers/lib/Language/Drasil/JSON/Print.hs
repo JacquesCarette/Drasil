@@ -13,14 +13,12 @@ import qualified Prettyprinter as PNew (Doc)
 
 import Drasil.Data.Formats.JSON (JSON(..), JSONRenderOptions, JSONStyle(..),
   jsonRenderOpts, renderJSON)
-import Language.Drasil (checkValidStr, Special(Circle))
-import Language.Drasil.Document (MaxWidthPercent)
+import Language.Drasil (checkValidStr)
 
 import Drasil.Printers.Common
-import Language.Drasil.Printing.AST (ItemType(..), ListType(..), Spec(..),
-  Expr(..), Label, Fonts(Bold), OverSymb(Hat), Fence(..), Ops(..), LinkType(..))
-import Language.Drasil.Printing.Citation (BibRef)
-import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
+import Drasil.Document.Layout.Development (ItemType(..), ListType(..), Spec(..),
+  Expr(..), Label, Fonts(Bold), OverSymb(Hat), Fence(..), Ops(..), LinkType(..),
+  Special(Circle), BibRef, Document(Document), LayoutObj(..), MaxWidthPercent)
 import Language.Drasil.Printing.Helpers (unders, hat)
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))

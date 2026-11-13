@@ -5,7 +5,6 @@ module Language.Drasil.Printing.Import.Document (
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
-import Data.Map (fromList)
 
 import Language.Drasil (foldlSent_)
 import Language.Drasil.Document
@@ -15,9 +14,9 @@ import Language.Drasil.Printing.Import.Citation (layCite)
 import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.Sentence (spec)
-import qualified Language.Drasil.Printing.AST as P
-import qualified Language.Drasil.Printing.Citation as P
-import qualified Language.Drasil.Printing.LayoutObj as T
+import Drasil.Document.Layout (mkProject)
+import qualified Drasil.Document.Layout.Development as P
+import qualified Drasil.Document.Layout.Development as T
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 -- * Main Function
@@ -33,10 +32,7 @@ makeDocument sm (Notebook titleLb authorName sections) =
 makeProject :: PrintingInformation -> Document -> T.Project
 makeProject _ Notebook {} = error "Unsupported format: Notebook"
 makeProject sm (Document titleLb authorName _ sections) =
-  T.Project (spec sm titleLb) (spec sm authorName) refMap files
-  where
-    files   = createFiles sm sections
-    refMap = fromList $ concatMap createRefMap' files
+  mkProject (spec sm titleLb) (spec sm authorName) (createFiles sm sections)
 
 -- * Helpers
 
@@ -45,36 +41,6 @@ createFiles :: PrintingInformation -> [Section] -> [T.File]
 createFiles sm secs = file sm <$> secs'
   where
     secs' = concatMap (extractSubS 0) secs
-
--- | Helper function for creating a RefMap for a Document.
-createRefMap' :: T.File -> [(String, T.Filename)]
-createRefMap' (T.File _ l _ c) = concatMap (createRefMap l) c
-
--- | Helper function for creating a RefMap for a LayoutObj
-createRefMap :: T.Filename -> T.LayoutObj -> [(String, T.Filename)]
-createRefMap fn (T.Header _ _ l)     = createRef fn l
-createRefMap fn (T.HDiv   _ _ l)     = createRef fn l
-createRefMap fn (T.Table  _ _ l _ _) = createRef fn l
-createRefMap fn (T.Definition _ l)   = createRef fn l
-createRefMap fn (T.List t)           = pass t
-  where
-    pass (P.Ordered ls)     = process  ls
-    pass (P.Unordered ls)   = process  ls
-    pass (P.Simple ls)      = process' ls
-    pass (P.Desc ls)        = process' ls
-    pass (P.Definitions ls) = process' ls
-    process  = concatMap (\(_, l)    -> foldMap (createRef fn) l)
-    process' = concatMap (\(_, _, l) -> foldMap (createRef fn) l)
-createRefMap fn (T.Figure l _ _ _)   = createRef fn l
-createRefMap fn (T.Bib ls)           = bibRefs <$> ls
-  where
-    bibRefs (P.Cite l _ _) = (l, fn)
-createRefMap _ _                     = []
-
--- | Helper function for mapping a Label to a Filename
-createRef :: T.Filename -> P.Label -> [(String, T.Filename)]
-createRef fn (P.S l) = [(l, fn)]
-createRef _   _      = []
 
 -- | Helper function for creating sections as layout objects.
 createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]

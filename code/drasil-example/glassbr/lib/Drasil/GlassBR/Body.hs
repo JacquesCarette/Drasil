@@ -137,10 +137,10 @@ termsAndDescBullets = UlC $ ulcc $ Enumeration$
   Numeric $
     noRefs $
       fmap tAndDOnly termsWithDefsOnly
-      <> [tAndDOnly loadSF, tAndDOnly gTF, tAndDOnly aspectRatio]
       <> termsAndDescBulletsGlTySubSec
       <> termsAndDescBulletsLoadSubSec
       <> fmap tAndDWAcc termsWithAccDefn
+      <> [tAndDOnly loadSF, tAndDOnly gTF, tAndDOnly aspectRatio]
       <> [tAndDWSym probBreak probBr]
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 

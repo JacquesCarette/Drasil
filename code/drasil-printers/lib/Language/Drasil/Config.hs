@@ -1,10 +1,10 @@
 -- | Global configuration for output.
 -- This should be deprecated in the future as Recipes evolve.
-module Language.Drasil.Config(
+module Language.Drasil.Config (
   -- * Printer Configurations
-  numberedSections,hyperSettings,fontSize,bibFname,
+  numberedSections, hyperSettings, fontSize, bibFname,
   -- * Bibliography
-  StyleGuide(..),bibStyleH,bibStyleT,colAwidth,colBwidth,
+  StyleGuide(..), bibStyleH, bibStyleT, colAwidth, colBwidth,
 ) where
 
 -- | TeX font size.
@@ -15,13 +15,7 @@ fontSize = 12
 numberedSections :: Bool
 numberedSections = True
 
---TeX Document Parameter Defaults (can be modified to affect all documents OR
-  -- you can create your own parameter function and replace the one above.
---defaultSRSparams :: SRSParams
---defaultSRSparams = SRSParams
---  (DocClass  Nothing "article")
---  (UsePackages ["fullpage","booktabs","longtable","listings","graphics","hyperref","caption",
---  "amsmath"])
+-- * TeX Document Parameter Defaults
 
 -- | TeX Only - column width for data definitions
 -- (fraction of LaTeX textwidth).

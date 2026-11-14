@@ -19,7 +19,7 @@ import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..), ProgData,
 import Drasil.GProc (unJLC, unMLC, ProcProg, NativeVector)
 import Language.Drasil (Space(..), Expr)
 import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
-  generator, readWithDataDesc, sampleInputDD, mkCodeSpec,
+  generator, readWithDataDesc, sampleInputDD,
   Architecture(impType, modularity),
   Choices(Choices, maps, lang, architecture, optFeats, dataInfo),
   ConstantRepr(..), ConstantStructure(..),
@@ -27,66 +27,72 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   LogConfig(logging), Logging(LogVar), Maps(spaceMatch), Modularity(..),
   OptionalFeatures(logConfig), SpaceMatch, Structure(..),
   Lang(Julia, Java, Python, CSharp, Cpp, Swift, Matlab),
-  HasCodeSpec(extInputs), CodeSpec, SomeProgGenerator(..))
+  HasAbstractICOProgram(extInputs), CodeSpec, SomeProgGenerator(..))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
   PackageData, SoftwareDossierSym)
 import Drasil.SRS (SmithEtAlSRS)
 import Drasil.System (HasProjectName(..))
 
+import Drasil.Generator.Code.CodeSpec (srs2CodeSpec)
+
+genLangCode :: Lang -> Choices -> CodeSpec -> IO FileLayout
+genLangCode Java = genCall Java unJC unJP
+genLangCode Python = genCall Python unPC unPP
+genLangCode CSharp = genCall CSharp unCSC unCSP
+genLangCode Cpp = genCall Cpp unCPPC unCPPP
+genLangCode Swift = genCall Swift unSC unSP
+genLangCode Julia = genCallProc Julia unJLC unJLP
+genLangCode Matlab = genCallProc Matlab unMLC unMLP
+
+genCall
+  ::
+    ( OOProg progRepr prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
+    , SoftwareDossierSym packRepr
+    , Monad packRepr
+    )
+  => Lang
+  -> (progRepr prg -> ProgData)
+  -> (packRepr PackageData -> PackageData)
+  -> Choices
+  -> CodeSpec
+  -> IO FileLayout
+genCall lng unProgRepr unPackRepr chs spec = do
+  time <- showGregorian . utctDay <$> getCurrentTime
+  samples <- readSampleData chs spec
+  let loggingOpts = logging $ logConfig $ optFeats chs
+  let realUnProgRepr = if LogVar `elem` loggingOpts then SomeProgGenerator (unProgRepr . unLC) else SomeProgGenerator unProgRepr
+  pure $ generateCode lng realUnProgRepr unPackRepr $ generator lng time samples chs spec
+
+genCallProc
+  ::
+    ( ProcProg progRepr prg file mod mthd vis param bod block stmt var scope val binder typ
+    , NativeVector progRepr val typ
+    , SoftwareDossierSym packRepr
+    , Monad packRepr
+    )
+  => Lang
+  -> (progRepr prg -> ProgData)
+  -> (packRepr PackageData -> PackageData)
+  -> Choices
+  -> CodeSpec
+  -> IO FileLayout
+genCallProc lng unProgRepr unPackRepr chs spec = do
+  time <- showGregorian . utctDay <$> getCurrentTime
+  samples <- readSampleData chs spec
+  pure $ generateCodeProc lng unProgRepr unPackRepr $ generator lng time samples chs spec
+
+readSampleData :: Choices -> CodeSpec -> IO [Expr]
+readSampleData chs spec =
+  case getSampleData chs of
+    Just sd -> readWithDataDesc sd $ sampleInputDD (spec ^. extInputs)
+    Nothing -> pure []
+
 -- | Generate an ICO-style executable software artifact.
 genCode :: SmithEtAlSRS -> Choices -> IO FileLayout
-genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
+genCode syst chs = directory [ps|src|] <$> traverse (\l -> genLangCode l chs spec) (lang chs)
   where
-    genLangCode :: Lang -> IO FileLayout
-    genLangCode Java = genCall Java unJC unJP
-    genLangCode Python = genCall Python unPC unPP
-    genLangCode CSharp = genCall CSharp unCSC unCSP
-    genLangCode Cpp = genCall Cpp unCPPC unCPPP
-    genLangCode Swift = genCall Swift unSC unSP
-    genLangCode Julia = genCallProc Julia unJLC unJLP
-    genLangCode Matlab = genCallProc Matlab unMLC unMLP
-
-    genCall
-      ::
-        ( OOProg progRepr prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
-        , SoftwareDossierSym packRepr
-        , Monad packRepr
-        )
-      => Lang
-      -> (progRepr prg -> ProgData)
-      -> (packRepr PackageData -> PackageData)
-      -> IO FileLayout
-    genCall lng unProgRepr unPackRepr = do
-      time <- showGregorian . utctDay <$> getCurrentTime
-      samples <- readSampleData
-      let loggingOpts = logging $ logConfig $ optFeats chs
-      let realUnProgRepr = if LogVar `elem` loggingOpts then SomeProgGenerator (unProgRepr . unLC) else SomeProgGenerator unProgRepr
-      pure $ generateCode lng realUnProgRepr unPackRepr $ generator lng time samples chs spec
-
-    genCallProc
-      ::
-        ( ProcProg progRepr prg file mod mthd vis param bod block stmt var scope val binder typ
-        , NativeVector progRepr val typ
-        , SoftwareDossierSym packRepr
-        , Monad packRepr
-        )
-      => Lang
-      -> (progRepr prg -> ProgData)
-      -> (packRepr PackageData -> PackageData)
-      -> IO FileLayout
-    genCallProc lng unProgRepr unPackRepr = do
-      time <- showGregorian . utctDay <$> getCurrentTime
-      samples <- readSampleData
-      pure $ generateCodeProc lng unProgRepr unPackRepr $ generator lng time samples chs spec
-
     spec :: CodeSpec
-    spec = mkCodeSpec syst chs
-
-    readSampleData :: IO [Expr]
-    readSampleData =
-      case getSampleData chs of
-        Just sd -> readWithDataDesc sd $ sampleInputDD (spec ^. extInputs)
-        Nothing -> pure []
+    spec = srs2CodeSpec syst chs
 
 genCodeZoo :: SmithEtAlSRS -> [Choices] -> IO [FileLayout]
 genCodeZoo syst = mapM $ \chcs -> do

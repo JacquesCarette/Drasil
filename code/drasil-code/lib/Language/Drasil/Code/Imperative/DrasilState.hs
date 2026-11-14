@@ -30,8 +30,8 @@ import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging,
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
-  CodeSpec, HasCodeSpec(..), getConstraints)
-import Language.Drasil.ICOSolutionSearch (Def)
+  CodeSpec, HasCodeSpec(..), getConstraints, HasAbstractICOProgram(..))
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
 
@@ -178,6 +178,9 @@ instance HasSystemMeta DrasilState where
 
 instance HasProjectName DrasilState where
   projectName = systemMeta . projectName
+
+instance HasAbstractICOProgram DrasilState where
+  abstractICOProgram = dsCodeSpec . abstractICOProgram
 
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.
@@ -360,7 +363,7 @@ getInputFormatCls chs _ = ifCls (inputStructure $ dataInfo chs)
 -- | Gets exported calculations.
 -- Functions are exported by module named after program if 'Unmodular'.
 -- Function is exported by Calculations module if program is 'Modular'.
-getExpCalcs :: Name -> Choices -> [Def] -> [ModExp]
+getExpCalcs :: Name -> Choices -> [CodeDefinition] -> [ModExp]
 getExpCalcs n chs = fmap (\d -> (codeName d, calMod))
   where calMod = cMod $ modularity $ architecture chs
         cMod Unmodular = n

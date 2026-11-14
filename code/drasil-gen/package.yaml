@@ -17,6 +17,7 @@ dependencies:
 - base >= 4.7 && < 5
 - aeson
 - aeson-pretty
+- containers
 - time
 - drasil-code
 - drasil-data
@@ -28,6 +29,7 @@ dependencies:
 - drasil-srs
 - drasil-system
 - drasil-theory
+- drasil-utils
 - lens
 
 ghc-options:

@@ -5,7 +5,7 @@ module Drasil.GlassBR.Concepts (
 
   -- * ConceptChunks
   annealedGl, fTemperedGl, hStrengthGl,
-  loadResis, nonFactoredL, stdOffDist, blast, blastResisGla,
+  blast, blastResisGla,
   blastTy, bomb, demandq, eqTNTChar, explosion, glassGeo, glassTy,
   glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe, probBreak,
   safeMessage, shortDurLoad, specA, specDeLoad,
@@ -23,7 +23,7 @@ import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
 
 import Data.Drasil.Concepts.Documentation (response, type_)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
+import Drasil.GlassBR.References (astm2012, astm2016)
 
 con' :: [IdeaDict]
 con' = [iGlass, lGlass, beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
@@ -49,8 +49,8 @@ ptOfExplsn = idea' (mkUid "ptOfExplsn") (cn'          "point of explosion")
 glaPlane   = compoundNC glass plane
 responseTy = compoundNC response type_
 
-annealedGl, fTemperedGl, hStrengthGl, loadResis,
-  nonFactoredL, stdOffDist, blast, blastResisGla, blastTy, bomb, demandq, eqTNTChar, explosion,
+annealedGl, fTemperedGl, hStrengthGl,
+  blast, blastResisGla, blastTy, bomb, demandq, eqTNTChar, explosion,
   glassGeo, glassTy, glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe, probBreak,
   safeMessage, shortDurLoad, specA, specDeLoad :: ConceptChunk
 
@@ -75,26 +75,6 @@ hStrengthGl = cncpt'' (mkUid "heatSGl")
   S "surface compression is not less than 24 MPa (3500psi) or greater than",
   S "52 MPa (7500 psi), as defined in", refS astm2012])
   "HS"
-
-loadResis   = cncpt'' (mkUid "lResistance")
-  (nounPhraseSP "load resistance")
-  (foldlSent_ [S "the uniform lateral load that a glass construction can sustain",
-  S "based upon a given probability of breakage and load duration as defined in",
-  complexRef astm2009 $ Page [1, 53]])
-  "LR"
-
-nonFactoredL = cncpt'' (mkUid "nFL")
-  (nounPhraseSP "non-factored load")
-  (foldlSent_ [S "three second duration uniform load associated with a",
-  S "probability of breakage less than or equal to 8", plural lite,
-  S "per 1000 for monolithic", short annealedGl, S "glass"])
-  "NFL"
-
-stdOffDist    = cncpt'' (mkUid "stdOffDist")
-  (nounPhraseSP "stand off distance")
-  (S "the distance from the glazing surface to the centroid of a hemispherical" +:+
-   S "high explosive charge")
-  "SD"
 
 blast         = cncpt''' (mkUid "blast")         (cn'          "blast")
   (S "any kind of man-made explosion")

@@ -15,13 +15,10 @@
 |IM          |Instance Model                     |
 |LC          |Likely Change                      |
 |LG          |Laminated Glass                    |
-|LR          |Load Resistance                    |
-|NFL         |Non-Factored Load                  |
 |PS          |Physical System Description        |
 |R           |Requirement                        |
 |RefBy       |Referenced by                      |
 |Refname     |Reference Name                     |
-|SD          |Stand Off Distance                 |
 |SRS         |Software Requirements Specification|
 |TM          |Theoretical Model                  |
 |UC          |Unlikely Change                    |

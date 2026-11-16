@@ -12,7 +12,8 @@ language: GHC2024
 default-extensions:
 - StrictData
 
-extra-source-files: []
+extra-source-files:
+- test/golden/jupyter/*.ipynb
 
 dependencies:
 - base >= 4.7 && < 5

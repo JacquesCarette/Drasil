@@ -10,7 +10,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.Metadata.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
-import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir, point, axis)
+import Data.Drasil.Concepts.Math (point, axis)
 import Control.Lens((^.)) --need for parametrization hack
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.Citations (dampingSource)
@@ -22,12 +22,11 @@ physicCon = [acceleration, angDisp, angFreq, angular, chgInVelocity,
   cohesion, collision, compression, constAccel, constAccelV, damping, dampingCoeff,
   displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
   friction, gravity, gravitationalAccel, gravitationalMagnitude, height,
-  iPos, iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos,
-  iyVel, joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
+  iPos, iSpeed, iVel, impulseS, impulseV, isotropy,
+  joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
   momentOfInertia, position, potEnergy, rectilinear,
   rigidBody, scalarAccel, scalarPos, shm, space, speed, stiffCoeff, strain, stress, tension,
-  time, torque, velocity, xAccel, xConstAccel, xDist, xPos, xVel,
-  yAccel, yConstAccel, yDist, yPos, yVel, momentum, chgMomentum, moment, moment2D, fOfGravity,
+  time, torque, velocity, momentum, chgMomentum, moment, moment2D, fOfGravity,
   pendulum, body, kinematics, frequency, period, motion, horizontalMotion, verticalMotion]
 
 -- | Collects all physics-related common ideas (like a concept, but with no definition).
@@ -44,12 +43,11 @@ acceleration, angDisp, angFreq, angular, chgInVelocity, cohesion,
   collision, compression, constAccel, constAccelV, damping, dampingCoeff, displacement,
   distance, elasticity, energy, fSpeed, fVel, fbd, force, friction, gravity,
   gravitationalAccel, gravitationalMagnitude, height, iPos, iSpeed,
-  iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, iyVel, joint,
+  iVel, impulseS, impulseV, isotropy, joint,
   kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
   potEnergy, rectilinear, rigidBody, scalarAccel, scalarPos, shm,
   space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity,
-  xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum, moment, moment2D, fOfGravity, pendulum, body,
+  momentum, moment, moment2D, fOfGravity, pendulum, body,
   kinematics, frequency, period, motion, horizontalMotion, verticalMotion, chgMomentum :: ConceptChunk
 
 oneD, twoD, threeD :: CI
@@ -179,36 +177,15 @@ verticalMotion = cncpt''' (mkUid "verticalMotion") (cn "vertical motion")
 -- FIXME: Complete all variants?
 -- FIXME: Pull out commonalities?
 
-xDist = cncpt''' (mkUid "xDist") (distance `inThe` xDir) (titleize distance `S.inThe` phrase xDir)
-yDist = cncpt''' (mkUid "yDist") (distance `inThe` yDir) (titleize distance `S.inThe` phrase yDir)
-
 iPos = cncpt''' (mkUid "iPos") (cn "initial position") (S "The" +:+ phrase position +:+ S "at the body's initial point")
-xPos = cncpt''' (mkUid "xPos") (xComp `of_` position) (S "The" +:+ NP (xComp `of_` position))
-yPos = cncpt''' (mkUid "yPos") (yComp `of_` position) (S "The" +:+ NP (yComp `of_` position))
-
-ixPos = cncpt''' (mkUid "ixPos") (xComp `of_` iPos) (S "The" +:+ NP (xComp `of_` iPos))
-iyPos = cncpt''' (mkUid "iyPos") (yComp `of_` iPos) (S "The" +:+ NP (yComp `of_` iPos))
 
 fSpeed = cncpt''' (mkUid "fSpeed") (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
 iSpeed = cncpt''' (mkUid "iSpeed") (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
 
-ixSpeed = cncpt''' (mkUid "ixSpeed") (xComp `of_` iSpeed) (S "The" +:+ NP (xComp `of_` iSpeed))
-iySpeed = cncpt''' (mkUid "iySpeed") (yComp `of_` iSpeed) (S "The" +:+ NP (yComp `of_` iSpeed))
-
 fVel = cncpt''' (mkUid "fVel") (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
 iVel = cncpt''' (mkUid "iVel") (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
-xVel = cncpt''' (mkUid "xVel") (xComp `of_` velocity) (S "The" +:+ NP (xComp `of_` velocity))
-yVel = cncpt''' (mkUid "yVel") (yComp `of_` velocity) (S "The" +:+ NP (yComp `of_` velocity))
-
-ixVel = cncpt''' (mkUid "ixVel") (xComp `of_` iVel) (S "The" +:+ NP (xComp `of_` iVel))
-iyVel = cncpt''' (mkUid "iyVel") (yComp `of_` iVel) (S "The" +:+ NP (yComp `of_` iVel))
-
-xAccel = cncpt''' (mkUid "xScalAcc") (xComp `of_` acceleration) (S "The" +:+ NP (xComp `of_` acceleration))
-yAccel = cncpt''' (mkUid "yScalAcc") (yComp `of_` acceleration) (S "The" +:+ NP (yComp `of_` acceleration))
 
 constAccelV = cncpt''' (mkUid "constAccelV") (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
-xConstAccel = cncpt''' (mkUid "xConstAccel") (xComp `of_` constAccel) (S "The" +:+ NP (xComp `of_` constAccel))
-yConstAccel = cncpt''' (mkUid "yConstAccel") (yComp `of_` constAccel) (S "The" +:+ NP (yComp `of_` constAccel))
 
 --FIXME: COMBINATION HACK (for all below)
 --FIXME: should use compoundPhrase instead? Or better yet, use combineNINI instead of interacting with the terms directly?

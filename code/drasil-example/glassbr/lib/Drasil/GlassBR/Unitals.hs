@@ -5,8 +5,8 @@ import Drasil.NaturalLanguage.English.NounPhrase.Combinators (parensNP)
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Drasil.Database(mkUid)
-import Drasil.GlassBR.References (astm2016)
-import Language.Drasil.Document (refS)
+import Drasil.GlassBR.References (astm2009, astm2016)
+import Language.Drasil.Document (refS, complexRef)
 
 import Prelude hiding (log)
 import Control.Lens ((^.))
@@ -21,8 +21,7 @@ import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (annealedGl, fTemperedGl, hStrengthGl, iGlass, lGlass,
-  loadResis, nonFactoredL, stdOffDist, blast,
-  blastResisGla, blastTy, bomb, demandq, eqTNTChar, explosion, glassGeo,
+  blast, blastResisGla, blastTy, bomb, demandq, eqTNTChar, explosion, glassGeo,
   glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe,
   safeMessage, shortDurLoad, specA, specDeLoad, glassType)
 import Drasil.GlassBR.Units (sFlawPU)
@@ -113,7 +112,10 @@ tNT = uq (constrained' (quantNoUnit (mkUid "tNT") (nounPhraseSP "TNT equivalent 
   (variable "TNT") Real)
   [ gtZeroConstr ] (exactDbl 1)) defaultUncrt
 
-standOffDist = uq (constrained' (dqd stdOffDist (variable "SD") Real metre)
+standOffDist = uq (constrained' (quant (mkUid "stdOffDist") (nounPhraseSP "stand off distance")
+  (S "the distance from the glazing surface to the centroid of a hemispherical" +:+
+   S "high explosive charge")
+  (variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
@@ -226,12 +228,20 @@ demand      = dqd demandq lQ Real pascal --correct Space used?
 
 tmDemand    = dqd load (variable "Load") Real pascal --correct Space used?
 
-lRe         = dqd loadResis (variable "LR") Real pascal --correct Space used?
+lRe         = quant (mkUid "lResistance") (nounPhraseSP "load resistance")
+  (foldlSent_ [S "the uniform lateral load that a glass construction can sustain",
+  S "based upon a given probability of breakage and load duration as defined in",
+  complexRef astm2009 $ Page [1, 53]])
+  (variable "LR") Real pascal --correct Space used?
 
 tmLRe       = quant (mkUid "capacity") (nounPhraseSP "capacity or load resistance")
   (S "load resistance calculated") (variable "capacity") Real pascal --correct Space used?
 
-nonFactorL  = dqd nonFactoredL (variable "NFL") Real pascal --correct Space used?
+nonFactorL  = quant (mkUid "nFL") (nounPhraseSP "non-factored load")
+  (foldlSent_ [S "three second duration uniform load associated with a",
+  S "probability of breakage less than or equal to 8", plural lite,
+  S "per 1000 for monolithic", short annealedGl, S "glass"])
+  (variable "NFL") Real pascal --correct Space used?
 
 eqTNTWeight = dqd eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real
   kilogram
@@ -281,7 +291,7 @@ dimlessLoad = quantNoUnit (mkUid "dimlessLoad") (nounPhraseSP "dimensionless loa
   (S "the dimensionless load") (hat lQ) Real
 
 gTF = quantNoUnit (mkUid "glassTypeFac") (nounPhraseSP "glass type factor")
-  (foldlSent_ [S "a multiplying factor for adjusting the", short loadResis,
+  (foldlSent_ [S "a multiplying factor for adjusting the", phrase lRe,
   S "of different glass type, that is,",
   foldlList Comma Options (short <$> [annealedGl, fTemperedGl, hStrengthGl])
   `sC` S "in monolithic glass" `sC` short lGlass, sParen (titleize lGlass) `sC`
@@ -352,12 +362,11 @@ sdVector = sdx :| [sdy, sdz]
 
 --
 --Pulled to be used in "Terms And Definitions" Section--
-termsWithDefsOnly, termsWithAccDefn, loadTypes, glassTypes :: [ConceptChunk]
+termsWithDefsOnly, loadTypes, glassTypes :: [ConceptChunk]
 
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
-termsWithAccDefn  = [stdOffDist]
-loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad, specDeLoad, longDurLoad]
+loadTypes = [glassWL, shortDurLoad, specDeLoad, longDurLoad]
 
 --Defined for DataDefs.hs and this file only--
 actualThicknesses :: [Double]

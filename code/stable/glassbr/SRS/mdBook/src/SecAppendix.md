@@ -4,9 +4,9 @@ This appendix holds the graphs ([Fig:demandVSsod](./SecAppendix.md#Figure:demand
 
 <div id="Figure:demandVSsod" align="center" >
 
-![3 second duration equivalent pressure (\\(q\\)) versus Stand off distance (SD) versus Charge weight (\\(w\\))](./assets/ASTM_F2248-09.png)
+![3 second duration equivalent pressure (\\(q\\)) versus Stand off distance (\\(\mathit{SD}\\)) versus Charge weight (\\(w\\))](./assets/ASTM_F2248-09.png)
 
-**Figure: 3 second duration equivalent pressure (\\(q\\)) versus Stand off distance (SD) versus Charge weight (\\(w\\))**
+**Figure: 3 second duration equivalent pressure (\\(q\\)) versus Stand off distance (\\(\mathit{SD}\\)) versus Charge weight (\\(w\\))**
 
 </div>
 

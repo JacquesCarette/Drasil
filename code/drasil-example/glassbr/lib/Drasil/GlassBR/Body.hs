@@ -33,7 +33,7 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab, ptOfExplsn, con',
   glass, blast, blastTy, bomb, explosion, glassTy, glBreakage, load, probBreak,
-  stdOffDist, cis')
+  cis')
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
@@ -46,8 +46,8 @@ import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
   specParamVals, glassTypes, lateralLoad, loadTypes, pbTol, probBr, stressDistFac,
-  termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols,
-  loadSF, gTF, aspectRatio)
+  termsWithDefsOnly, concepts, dataConstraints, symbols,
+  loadSF, gTF, aspectRatio, standOffDist, lRe, nonFactorL)
 import Drasil.GlassBR.Units (units)
 
 si :: SmithEtAlSRS
@@ -139,8 +139,7 @@ termsAndDescBullets = UlC $ ulcc $ Enumeration$
       fmap tAndDOnly termsWithDefsOnly
       <> termsAndDescBulletsGlTySubSec
       <> termsAndDescBulletsLoadSubSec
-      <> fmap tAndDWAcc termsWithAccDefn
-      <> [tAndDOnly loadSF, tAndDOnly gTF, tAndDOnly aspectRatio]
+      <> [tAndDOnly standOffDist, tAndDOnly loadSF, tAndDOnly gTF, tAndDOnly aspectRatio]
       <> [tAndDWSym probBreak probBr]
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 
@@ -150,9 +149,7 @@ termsAndDescBulletsGlTySubSec = [Nested (EmptyS +: titleize glassTy) $
   Bullet $ noRefs $ tAndDWAcc <$> glassTypes]
 
 termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` capSent (load ^. defn) !.) $
-  Bullet $ noRefs $ fmap tAndDWAcc (take 2 loadTypes)
-  <>
-  fmap tAndDOnly (drop 2 loadTypes)]
+  Bullet $ noRefs $ [tAndDOnly lRe, tAndDOnly nonFactorL] <> fmap tAndDOnly loadTypes]
 
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [ConstQDef]
@@ -278,7 +275,7 @@ termsAndDesc = termDefnF' (Just (S "All of the" +:+ plural term_ +:+
 physSystParts :: [Sentence]
 physSystParts = [(D.toSent (atStartNP (the glaSlab))!.),
   foldlSent [(D.toSent (atStartNP (the ptOfExplsn)) !.), S "Where the", phrase bomb `sC`
-  S "or", (blast ^. defn) `sC` (S "is located" !.), D.toSent (atStartNP (the stdOffDist)) `S.isThe`
+  S "or", (blast ^. defn) `sC` (S "is located" !.), D.toSent (atStartNP (the standOffDist)) `S.isThe`
   phrase distance, S "between the", phrase ptOfExplsn `S.and_` D.toSent (phraseNP (the glass))]]
 
 {--Goal Statements--}

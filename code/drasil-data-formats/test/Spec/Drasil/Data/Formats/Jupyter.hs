@@ -2,18 +2,17 @@
 
 module Spec.Drasil.Data.Formats.Jupyter (jupyterTests) where
 
-import Drasil.Data.Formats.JSON (JSON(..), JSONStyle(..), jsonRenderOpts)
+import Drasil.Data.Formats.JSON (JSON(..), objectField, pretty)
 import Drasil.Data.Formats.Jupyter (Cell(..), CellSourceRenderStyle(..),
   KernelSpec(..), LanguageInfo(..), Notebook(..), NotebookMetadata(..),
   NotebookRenderOptions(..), defaultNotebookRenderOptions,
   defaultPython39Metadata, notebookToJSON, renderNotebook)
 
-import Data.Text (Text)
 import Drasil.FileHandling (file, ps)
 import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
 import System.OsPath (osp)
 import Test.Tasty (TestTree, testGroup)
-import Test.Tasty.HUnit (testCase, (@?=))
+import Test.Tasty.HUnit (assertFailure, testCase, (@?=))
 
 jupyterTests :: TestTree
 jupyterTests =
@@ -77,19 +76,18 @@ notebookToJSONTests =
               ]
         cellMetadata (CodeCell metadata "iterations = 100")
           @?= Just (JObject metadata),
-      testCase "selected notebook minor version" $ do
-        let options = defaultNotebookRenderOptions { notebookFormatMinor = 5 }
-        objectField "nbformat_minor" (notebookToJSON options exampleNotebook)
-          @?= Just (JNumber 5)
+      testCase "selected notebook format 4.4" $ do
+        let options = defaultNotebookRenderOptions { notebookFormatMinor = 4 }
+            notebookJSON = notebookToJSON options exampleNotebook
+        objectField "nbformat_minor" notebookJSON @?= Just (JNumber 4)
+        case objectField "cells" notebookJSON of
+          Just (JArray cells) -> map (objectField "id") cells @?= [Nothing, Nothing]
+          _ -> assertFailure "Expected a cells array"
     ]
   where
     metadataJSON = objectField "metadata" $
       notebookToJSON defaultNotebookRenderOptions $
         Notebook customMetadata [MarkdownCell [] "# Report"]
-
-objectField :: Text -> JSON -> Maybe JSON
-objectField key (JObject fields) = lookup key fields
-objectField _ _ = Nothing
 
 cellMetadata :: Cell -> Maybe JSON
 cellMetadata cell = do
@@ -108,10 +106,10 @@ renderNotebookTests =
       [ goldenTest "ListOfLines" $
           file [ps|list_of_lines.ipynb|] $
             renderNotebook defaultNotebookRenderOptions
-              (jsonRenderOpts (Pretty 2)) exampleNotebook,
+              pretty exampleNotebook,
         goldenTest "SingleString" $
           file [ps|single_string.ipynb|] $
             renderNotebook (defaultNotebookRenderOptions { sourceFormat = SingleString })
-              (jsonRenderOpts (Pretty 2)) exampleNotebook
+              pretty exampleNotebook
       ]
     ]

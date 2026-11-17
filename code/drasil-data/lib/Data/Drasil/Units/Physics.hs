@@ -23,3 +23,9 @@ gravConstU :: UnitDefn
 
 gravConstU = compoundUnit "gravConstU" (cn "gravitational constant")
   "universal gravitational constant" (m_3 /$ (kilogram *: s_2))
+
+physicsUnits :: [UnitDefn]
+physicsUnits = [
+    accelU, angVelU, angAccelU, forcePerMeterU, momtInertU, momentOfForceU,
+    impulseU, springConstU, torqueU, velU, gravConstU
+  ]

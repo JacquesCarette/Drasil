@@ -71,7 +71,7 @@ languageToJSON language = JObject
 -- | Encode a new cell; code is unexecuted and has no outputs.
 -- IDs use cell positions in this newly generated notebook.
 cellToJSON :: NotebookRenderOptions -> Int -> Cell -> JSON
-cellToJSON options index cell = JObject $ cellId ++ case cell of
+cellToJSON options index cell = JObject $ cellId <> case cell of
   MarkdownCell metadata source ->
     [ ("cell_type", "markdown")
     , ("metadata", JObject metadata)

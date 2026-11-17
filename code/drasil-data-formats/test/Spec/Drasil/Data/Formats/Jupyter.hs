@@ -81,7 +81,7 @@ notebookToJSONTests =
             notebookJSON = notebookToJSON options exampleNotebook
         objectField "nbformat_minor" notebookJSON @?= Just (JNumber 4)
         case objectField "cells" notebookJSON of
-          Just (JArray cells) -> map (objectField "id") cells @?= [Nothing, Nothing]
+          Just (JArray cells) -> fmap (objectField "id") cells @?= [Nothing, Nothing]
           _ -> assertFailure "Expected a cells array"
     ]
   where

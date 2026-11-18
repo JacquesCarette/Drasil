@@ -229,6 +229,7 @@ infixl 9 $->
 
 class SelfSym r var | r -> var where
   -- | `self` keyword
+  -- We should probably have a way to make this a constant that can't have an L-Value
   self              :: VS (r var)
 
 -- | Given a variable `v`, creates `self.v`

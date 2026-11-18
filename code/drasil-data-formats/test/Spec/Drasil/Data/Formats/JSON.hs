@@ -2,8 +2,7 @@
 
 module Spec.Drasil.Data.Formats.JSON (jsonTests) where
 
-import Drasil.Data.Formats.JSON (JSON(..), jsonRenderOpts, renderJSON,
-  JSONRenderOptions, JSONStyle(..))
+import Drasil.Data.Formats.JSON (JSON(..), renderJSON, ugly, pretty)
 
 import Drasil.FileHandling (file, ps)
 import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
@@ -48,12 +47,6 @@ escapingTestJSON =
   [ ("a", JString "abc\"\\\b\f\n\r\t\x0000\x001F"),
     ("abc\"\\\b\f\n\r\t\x0000\x001F", JString "b")
   ]
-
-ugly :: JSONRenderOptions
-ugly = jsonRenderOpts Minified
-
-pretty :: JSONRenderOptions
-pretty = jsonRenderOpts (Pretty 2)
 
 renderJSONTests :: TestTree
 renderJSONTests =

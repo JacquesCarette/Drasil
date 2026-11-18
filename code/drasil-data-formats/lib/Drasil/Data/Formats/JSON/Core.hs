@@ -1,6 +1,7 @@
 module Drasil.Data.Formats.JSON.Core
   ( -- * JSON
     JSON(..),
+    objectField,
   )
 where
 
@@ -26,3 +27,9 @@ data JSON =
 -- can be automatically converted to 'JString's.
 instance IsString JSON where
   fromString = JString . T.pack
+
+-- | Look up the value for the first occurrence of a key in a 'JObject'.
+-- Returns 'Nothing' if the key is absent or the JSON value is not an object.
+objectField :: Text -> JSON -> Maybe JSON
+objectField key (JObject fields) = lookup key fields
+objectField _ _ = Nothing

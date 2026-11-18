@@ -20,7 +20,7 @@ data CellSourceRenderStyle
   deriving (Eq, Show)
 
 -- | Notebook format options, separate from JSON layout options.
--- Format 4.5 and later minor versions include cell IDs.
+-- Format 4.5 and later include cell IDs.
 data NotebookRenderOptions = NotebookRenderOptions
   { notebookFormat :: Int
   , notebookFormatMinor :: Int
@@ -87,7 +87,7 @@ cellToJSON options index cell = JObject $ cellId <> case cell of
   where
     format = sourceFormat options
     cellId = [("id", JString $ "cell-" <> T.pack (show index))
-      | notebookFormat options == 4 && notebookFormatMinor options >= 5]
+      | (notebookFormat options, notebookFormatMinor options) >= (4, 5)]
 
 -- | Line lists append LF to each line; single strings preserve the source verbatim.
 formatSource :: CellSourceRenderStyle -> Text -> JSON

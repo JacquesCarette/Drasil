@@ -82,6 +82,13 @@ notebookToJSONTests =
         objectField "nbformat_minor" notebookJSON @?= Just (JNumber 4)
         case objectField "cells" notebookJSON of
           Just (JArray cells) -> fmap (objectField "id") cells @?= [Nothing, Nothing]
+          _ -> assertFailure "Expected a cells array",
+      testCase "cell IDs for later major versions" $ do
+        let options = defaultNotebookRenderOptions
+              { notebookFormat = 5, notebookFormatMinor = 0 }
+        case objectField "cells" (notebookToJSON options exampleNotebook) of
+          Just (JArray cells) -> fmap (objectField "id") cells
+            @?= [Just (JString "cell-0"), Just (JString "cell-1")]
           _ -> assertFailure "Expected a cells array"
     ]
   where

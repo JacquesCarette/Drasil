@@ -48,8 +48,8 @@ import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc, extractUnits)
 
 import Drasil.SRS.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.SRS.Sections.TableOfContents (toToC)
-import Drasil.SRS.Sections.TableOfSymbols (table, tsIntro)
-import Drasil.SRS.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
+import Drasil.SRS.Sections.TableOfSymbols (table, tsContents)
+import Drasil.SRS.Sections.TableOfUnits (tOfUnitSIName, tuContents, defaultTUI)
 import qualified Drasil.SRS.Concepts as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
@@ -191,9 +191,9 @@ mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (mkSubRef <$> l)
 
     mkSubRef :: RefTab -> Section
     mkSubRef TUnits = mkSubRef $ TUnits' defaultTUI tOfUnitSIName
-    mkSubRef (TUnits' con f) = SRS.tOfUnit [tuIntro con tbl, LlC tbl] []
+    mkSubRef (TUnits' con f) = SRS.tOfUnit (tuContents con tbl) []
       where tbl = f (nub $ sortBy compUnitDefn $ extractUnits dd db)
-    mkSubRef (TSymb con) = SRS.tOfSymb [tsIntro con tbl, LlC tbl] []
+    mkSubRef (TSymb con) = SRS.tOfSymb (tsContents con tbl) []
       where tbl = table Equational (sortBySymbol
               $ filter (`hasStageSymbol` Equational)
               (nub $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) db))
@@ -224,7 +224,7 @@ collectDocumentAbbreviations rms renderedSecs cdb =
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
   [e] -> LFunc -> [TSIntro] -> Section
-mkTSymb v f c = SRS.tOfSymb [tsIntro c tbl, LlC tbl] []
+mkTSymb v f c = SRS.tOfSymb (tsContents c tbl) []
   where tbl = table Equational
           (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
           (lf f)

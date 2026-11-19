@@ -1,5 +1,5 @@
 -- | Defines functions used in the Reference Material section.
-module Drasil.SRS.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing) where
+module Drasil.SRS.Sections.ReferenceMaterial (intro, refSecContents, emptySectSentPlu, emptySectSentSing) where
 {-
 Depending where this is used, it might be worth combining it with other module(s),
 or simply moving it to Sentence.Combinators since it's highly reusable
@@ -28,3 +28,9 @@ emptySectSent p n = foldlSent [verb p (S "There") (S "no"), foldlList Comma Opti
 emptySectSentSing, emptySectSentPlu :: NamedIdea n => [n] -> Sentence
 emptySectSentSing = emptySectSent Sing
 emptySectSentPlu  = emptySectSent Plu
+
+refSecContents :: NamedIdea n => [n] -> (a -> Sentence) -> [a] -> LabelledContent -> [Contents]
+refSecContents ns f xs tbl = [foldIntro ns ((+:+) . f) xs, LlC tbl]
+  where
+    foldIntro ns' _  []  = mkParagraph $ emptySectSentPlu ns'
+    foldIntro _   f' xs' = mkParagraph $ foldr f' EmptyS xs'

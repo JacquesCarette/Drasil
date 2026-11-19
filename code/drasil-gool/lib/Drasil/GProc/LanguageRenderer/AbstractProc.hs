@@ -2,30 +2,28 @@
 
 module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   buildModule, docMod, modFromData, innerType, arrayElem, listAppend,
-  listAdd, funcDecDef, function
+  listAdd, function
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label,
-  VariableElim(variableName, variableType), TypeSym, VisibilitySym(..), funcApp,
-  getCodeType, convType, ValueStatement(..), ValueExpression, IndexTranslator)
+   TypeSym, funcApp, getCodeType, convType, ValueStatement(..),
+   ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import qualified Drasil.GProc.RendererClassesProc as RP
-import Drasil.Shared.AST (isSource, ScopeData, Terminator(..))
+import Drasil.Shared.AST (isSource)
 import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (modDoc')
 import Drasil.Shared.LanguageRenderer.Constructors (mkStateVar)
-import Drasil.Shared.State (MS, VS, FS, lensFStoGS, lensFStoMS, lensMStoVS,
-  getModuleName, setModuleName, setMainMod, currFileType, currMain, addFile,
-  useVarName, currParameters, setVarScope)
+import Drasil.Shared.State (MS, VS, FS, lensFStoGS, lensFStoMS,
+  getModuleName, setModuleName, setMainMod, currFileType, currMain, addFile)
 
 import Prelude hiding ((<>))
 import qualified Prelude as P ((<>))
-import Control.Monad.State (get, modify)
+import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
-import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty, brackets, (<>), render)
 
@@ -119,24 +117,6 @@ arrayElem arr' i' = do
       vType = innerType $ pure $ IC.valueType arr
       vRender = RC.value arr <> brackets (RC.value i)
   mkStateVar vName vType vRender
-
--- TODO [Brandon Bosman, 11/06/2026]: Split this up
-funcDecDef
-  :: (RP.ProcRenderSym r file mod mthd vis param bod block stmt var ScopeData val binder typ)
-  => VS (r var)
-  -> r ScopeData
-  -> [VS (r var)]
-  -> MS (r bod)
-  -> MS (r stmt)
-funcDecDef v scp ps b = do
-  vr <- zoom lensMStoVS v
-  modify $ useVarName $ variableName vr
-  modify $ setVarScope (variableName vr) (RC.scopeData scp)
-  s <- get
-  f <- IC.function (variableName vr) private (pure $ variableType vr)
-    (IC.param <$> ps) b
-  modify (L.set currParameters (s ^. currParameters))
-  RC.stmtFromData (RC.method f) Empty
 
 function
   :: (RC.MethodTypeSym r typ, RP.ProcRenderMethod r mthd vis param bod typ)

@@ -7,11 +7,11 @@ module Drasil.Shared.LanguageRenderer.CommonPseudoOO (
   bindingError, extFuncAppMixedArgs, notNull, listDecDef, destructorError,
   stateVarDef, constVar, litArray, litSet, litSetFunc, extraClass,
   listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
-  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
-  mainBody, inOutFunc, docInOutFunc', bool, floatRender, float, stringRender',
-  string', inherit, implements, listSize, listSet, setDecDef, intToIndex,
-  indexToInt, intToIndex', indexToInt', varDecDef, openFileR', openFileW',
-  openFileA', argExists, global, setMethodCall
+  multiAssign, multiReturn, listDec, inOutCall, forLoopError, mainBody,
+  inOutFunc, docInOutFunc', bool, floatRender, float, stringRender', string',
+  inherit, implements, listSize, listSet, setDecDef, intToIndex, indexToInt,
+  intToIndex', indexToInt', varDecDef, openFileR', openFileW', openFileA',
+  argExists, global, setMethodCall
 ) where
 
 import Utils.Drasil (stringList)
@@ -23,8 +23,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   bodyStatements, oneLiner, TypeSym(infile, outfile, innerType), TypeElim(..),
   getCodeType, getTypeString, VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), (&=), ValueStatement(valStmt),
-  ControlStatement(returnStmt), VisibilitySym(..), MethodSym(function),
-  funcApp, listSize, BlockSym)
+  ControlStatement(returnStmt), VisibilitySym(..), funcApp, listSize, BlockSym)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOTypeSym(obj), AttachmentSym(..),
   Initializers, objMethodCallNoParams, objMethodCall)
@@ -32,7 +31,7 @@ import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderBody(..),
   RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
-  BlockCommentSym(..), ScopeElim(scopeData), stmtFromData)
+  BlockCommentSym(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   onStateList)
@@ -50,18 +49,15 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
 import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd,
-  TypeData, FuncData, Terminator(..))
+  TypeData, FuncData)
 import Drasil.Shared.State (MS, VS, FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
-  lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
-  getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
-  useVarName, setVarScope)
+  lensMStoVS, lensVStoMS, getClassName, getLangImports, getLibImports,
+  getModuleImports, setClassName, setCurrMain, setMainDoc)
 
 import Prelude hiding (print,pi,(<>))
 import qualified Prelude as P ((<>))
 import Data.List (sort, intercalate)
-import Control.Monad.State (get, modify)
-import Control.Lens ((^.))
-import qualified Control.Lens as L
+import Control.Monad.State (modify)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   brackets, colon, vcat)
@@ -511,24 +507,6 @@ listDec
     )
   => VS (r var) -> r scope -> MS (r stmt)
 listDec v scp = listDecDef v scp []
-
--- TODO [Brandon Bosman, 11/04/2026]: Split this up
-funcDecDef
-  :: (OORenderSym r file mod cls stvr mthd attch vis param bod block stmt var ScopeData val binder typ)
-  => VS (r var)
-  -> r ScopeData
-  -> [VS (r var)]
-  -> MS (r bod)
-  -> MS (r stmt)
-funcDecDef v scp ps b = do
-  vr <- zoom lensMStoVS v
-  modify $ useVarName $ variableName vr
-  modify $ setVarScope (variableName vr) (scopeData scp)
-  s <- get
-  f <- function (variableName vr) private (pure $ variableType vr)
-    (IC.param <$> ps) b
-  modify (L.set currParameters (s ^. currParameters))
-  stmtFromData (RC.method f) Empty
 
 inOutCall
   ::

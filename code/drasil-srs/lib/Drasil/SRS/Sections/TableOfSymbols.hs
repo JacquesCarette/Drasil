@@ -1,5 +1,5 @@
 -- | Standard code to make a table of symbols.
-module Drasil.SRS.Sections.TableOfSymbols (table, symbTableRef, tsymb, tsymb', tsymb'', tsIntro) where
+module Drasil.SRS.Sections.TableOfSymbols (table, symbTableRef, tsymb, tsymb', tsymb'', tsContents) where
 
 -- Generic Haskell
 import Data.List (nub, (\\))
@@ -17,9 +17,9 @@ import Drasil.Metadata.Documentation (symbol_, description, tOfSymb)
 import Drasil.Metadata.Concepts.Math (unit_)
 
 -- other docLang
-import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu)
 import Drasil.SRS.DocumentLanguage.Units (toSentence) -- suspicious
 import Drasil.SRS.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), LFunc(..), RefTab(..))
+import Drasil.SRS.Sections.ReferenceMaterial (refSecContents)
 
 --Removed SymbolForm Constraint
 -- | Table of Symbols creation function. Takes in a 'Stage', 'Symbol's, and something that turns
@@ -63,11 +63,10 @@ tsymb' = TSymb' Defn
 tsymb'' :: [TSIntro] -> LFunc -> RefTab
 tsymb'' intro lfunc = TSymb' lfunc intro
 
--- | Table of symbols introduction builder. Takes the table it introduces.
--- Used by 'mkRefSec'.
-tsIntro :: [TSIntro] -> LabelledContent -> Contents
-tsIntro [] _ = mkParagraph $ emptySectSentPlu [symbol_]
-tsIntro x tbl = mkParagraph $ foldr ((+:+) . tsI) EmptyS x
+-- | Table of symbols section contents. Takes the introduction, then the table
+-- it introduces. Used by 'mkRefSec'.
+tsContents :: [TSIntro] -> LabelledContent -> [Contents]
+tsContents x tbl = refSecContents [symbol_] tsI x tbl
   where
     tsI :: TSIntro -> Sentence
     tsI (TypogConvention ts) = typogConvention ts

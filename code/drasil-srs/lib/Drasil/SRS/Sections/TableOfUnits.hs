@@ -1,6 +1,9 @@
 -- | Standard code to make a table of units.
 -- First true example of a (small) recipe.
-module Drasil.SRS.Sections.TableOfUnits (tOfUnitNone, tOfUnitDesc, tOfUnitSIName, unitTableRef, tunit, tunit', tunitNone, tuIntro, defaultTUI) where
+module Drasil.SRS.Sections.TableOfUnits (
+  tOfUnitNone, tOfUnitDesc, tOfUnitSIName, unitTableRef, tunit, tunit',
+  tunitNone, tuContents, defaultTUI
+) where
 
 -- General Haskell
 import Control.Lens ((^.))
@@ -16,7 +19,7 @@ import Drasil.Metadata.Concepts.Math (unit_)
 
 -- Other docLang
 import Drasil.SRS.DocumentLanguage.Core (TUIntro(..), RefTab(..))
-import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.SRS.Sections.ReferenceMaterial (refSecContents)
 
 -- | Creates the Table of Units with an "SI Name" column.
 tOfUnitSIName :: IsUnit s => [s] -> LabelledContent
@@ -55,11 +58,10 @@ tunit' t = TUnits' t tOfUnitDesc
 -- | Table of units with SI name in the description column.
 tunitNone t = TUnits' t tOfUnitNone
 
--- | Table of units introduction builder. Takes the table it introduces.
--- Used by 'mkRefSec'.
-tuIntro :: [TUIntro] -> LabelledContent -> Contents
-tuIntro [] _ = mkParagraph $ emptySectSentPlu [unit_]
-tuIntro x tbl = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
+-- | Table of units section contents. Takes the introduction, then the table it
+-- introduces. Used by 'mkRefSec'.
+tuContents :: [TUIntro] -> LabelledContent -> [Contents]
+tuContents x tbl = refSecContents [unit_] tuI x tbl
   where
     tuI :: TUIntro -> Sentence
     tuI System =

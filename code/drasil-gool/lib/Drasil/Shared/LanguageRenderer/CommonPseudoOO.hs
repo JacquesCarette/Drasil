@@ -9,7 +9,7 @@ module Drasil.Shared.LanguageRenderer.CommonPseudoOO (
   listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
   mainBody, inOutFunc, docInOutFunc', bool, floatRender, float, stringRender',
-  string', inherit, implements, listSize, listSet, setDecDef, setDec, intToIndex,
+  string', inherit, implements, listSize, listSet, setDecDef, intToIndex,
   indexToInt, intToIndex', indexToInt', varDecDef, openFileR', openFileW',
   openFileA', argExists, global, setMethodCall
 ) where
@@ -366,23 +366,6 @@ setDecDef v scp vals = do
   vr <- zoom lensMStoVS v
   let st = IC.litSet (innerType $ pure $ variableType vr) vals
   IC.varDecDef (pure vr) scp st
-
--- TODO [Brandon Bosman, 11/04/2026]: Split this up
-setDec
-  ::
-    ( IC.DeclStatement r bod stmt var scope val
-    , RC.RenderStatement r stmt
-    , RC.StatementElim r stmt
-    )
-  => (r val -> Doc)
-  -> VS (r val)
-  -> VS (r var)
-  -> r scope
-  -> MS (r stmt)
-setDec f vl v scp = do
-  sz <- zoom lensMStoVS vl
-  vd <- IC.varDec v scp
-  stmtFromData (RC.preStatement vd <> f sz) Semi
 
 setMethodCall
   :: (TypeSym r typ, ValueSym r val typ, IG.InternalValueExp r var val typ)

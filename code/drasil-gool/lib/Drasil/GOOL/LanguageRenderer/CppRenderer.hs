@@ -27,7 +27,7 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, Class, ProgramSym(..),
   selfMethodCall, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..), convTypeOO, attachmentTag)
-import Drasil.GOOL.Renderers (renderType, renderParam,)
+import Drasil.GOOL.Renderers (renderType, renderParam, renderConstDecDef,)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -78,8 +78,8 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
   call', listAccessFunc', containsInt, string, docInOutFunc, extraClass,
   intToIndex, indexToInt, global, setMethodCall, destructorError)
-import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
-  listAppend, innerType)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (listAppend,
+  innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
@@ -1499,7 +1499,11 @@ instance DeclStatement CppSrcCode Body Statement Variable ScopeData Value where
     decBase <- arrayDecBase vr scp
     vs <- mapM (zoom lensMStoVS) vals
     stmtFromData (decBase <+> braces (valueList vs)) Semi
-  constDecDef = CG.constDecDef
+  constDecDef vr' scp vl' = do
+    vr <- zoom lensMStoVS vr'
+    vl <- zoom lensMStoVS vl'
+    G.varDecInit vr scp
+    stmtFromData (renderConstDecDef vr vl) Semi
   funcDecDef = cppFuncDecDef
 
 instance OODeclStatement CppSrcCode Statement Variable ScopeData Value where
@@ -2190,7 +2194,11 @@ instance DeclStatement CppHdrCode Body Statement Variable ScopeData Value where
   listDecDef _ _ _ = emptyStmt
   arrayDec _ _ _ _ = emptyStmt
   arrayDecDef _ _ _ = emptyStmt
-  constDecDef = CG.constDecDef
+  constDecDef vr' scp vl' = do
+    vr <- zoom lensMStoVS vr'
+    vl <- zoom lensMStoVS vl'
+    G.varDecInit vr scp
+    stmtFromData (renderConstDecDef vr vl) Semi
   funcDecDef _ _ _ _ = emptyStmt
 
 instance OODeclStatement CppHdrCode Statement Variable ScopeData Value where

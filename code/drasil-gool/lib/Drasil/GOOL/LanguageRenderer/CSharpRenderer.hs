@@ -46,7 +46,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 import Drasil.GOOL.Renderers (renderType, renderParam, renderMethod,
-  renderListDec)
+  renderListDec, renderConstDecDef)
 import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel,
   inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', listSep',
@@ -77,8 +77,8 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   indexOf, indexToInt, inherit, int, intClass, intToIndex, listDecDef, listSet,
   mainFunction, notNull, openFileA, openFileR, openFileW, pi, setMethodCall,
   stateVar, stateVarDef, string)
-import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
-  classMethodCall, listAppend, listAdd, innerType)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
+  listAppend, listAdd, innerType)
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
@@ -561,7 +561,11 @@ instance DeclStatement CSharpCode Body Statement Variable ScopeData Value where
     vals <- mapM (zoom lensMStoVS) vals'
     vDec <- varDec vr' scp
     stmtFromData (preStatement vDec <+> equals <+> braces (valueList vals)) Semi
-  constDecDef = CG.constDecDef
+  constDecDef vr' scp vl' = do
+    vr <- zoom lensMStoVS vr'
+    vl <- zoom lensMStoVS vl'
+    G.varDecInit vr scp
+    stmtFromData (renderConstDecDef vr vl) Semi
   funcDecDef = csFuncDecDef
 
 instance OODeclStatement CSharpCode Statement Variable ScopeData Value where

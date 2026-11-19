@@ -4,11 +4,13 @@ module Drasil.Document.Layout.LayoutObj (
   LayoutObj(..), ListType(..), ItemType(..),
   -- * Type Aliases
   Contents, Items, Tags, Depth, Width, Height, Filepath, Caption,
-  MaxWidthPercent
+  MaxWidthPercent,
+  -- * Extractors
+  extractRefs
 ) where
 
-import Drasil.Document.Layout.Citation (BibRef)
-import Drasil.Document.Layout.Spec (Spec, Title, Label)
+import Drasil.Document.Layout.Citation (BibRef, Citation (Cite))
+import Drasil.Document.Layout.Spec (Spec (S), Title, Label)
 
 -- | Contents are just a sentence ('Spec').
 type Contents = Spec
@@ -60,3 +62,37 @@ data ListType
 data ItemType
   = Flat Spec
   | Nested Spec ListType
+
+-- | Helper function for extracting all reference labels defined in a 'LayoutObj'.
+extractRefs :: LayoutObj -> [String]
+extractRefs (Table _ _ l _ _)   = label2Strs l
+extractRefs (Header _ _ l)      = label2Strs l
+extractRefs Paragraph{}         = []
+extractRefs EqnBlock{}          = []
+extractRefs (Definition slos l) = label2Strs l <> concatMap (concatMap extractRefs . snd) slos
+extractRefs (List t)            = pass t
+  where
+    pass (Ordered ls)     = process  ls
+    pass (Unordered ls)   = process  ls
+    pass (Simple ls)      = process' ls
+    pass (Desc ls)        = process' ls
+    pass (Definitions ls) = process' ls
+    process  = concatMap (\(it, l)    -> foldMap label2Strs l <> extractItemRefs it)
+    process' = concatMap (\(_, it, l) -> foldMap label2Strs l <> extractItemRefs it)
+    extractItemRefs (Flat _)        = []
+    extractItemRefs (Nested _ subL) = pass subL
+extractRefs (Figure l _ _ _)    = label2Strs l
+extractRefs (Graph _ _ _ _ l)   = label2Strs l
+extractRefs CodeBlock{}         = []
+extractRefs (HDiv _ los l)      = label2Strs l <> concatMap extractRefs los
+extractRefs (Cell los)          = concatMap extractRefs los
+extractRefs (Bib ls)            = (\(Cite l _ _) -> l) <$> ls
+{-# DEPRECATED extractRefs
+  "Knowledge of where reference anchors are placed should be gathered while laying them rather than retroactively finding them." #-}
+
+-- | Helper function for extracting a label string from a 'Label'.
+label2Strs :: Label -> [String]
+label2Strs (S l) = [l]
+label2Strs _     = []
+{-# DEPRECATED label2Strs
+  "Hacky extractor that should be removed." #-}

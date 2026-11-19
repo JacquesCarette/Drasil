@@ -29,34 +29,34 @@ type RefMap   = Map String Filename
 
 -- | Builds a 'Project', recording which of its files defines each label.
 mkProject :: Title -> Author -> [File] -> Project
-mkProject t a fs = Project t a (fromList $ concatMap createRefMap' fs) fs
+mkProject t a fs = Project t a (fromList $ concatMap extractFileRefs fs) fs
 
 -- | Helper function for creating a RefMap for a File.
-createRefMap' :: File -> [(String, Filename)]
-createRefMap' (File _ l _ c) = concatMap (createRefMap l) c
+extractFileRefs :: File -> [(String, Filename)]
+extractFileRefs (File _ l _ c) = (, l) <$> concatMap extractRefs c
 
 -- | Helper function for creating a RefMap for a LayoutObj
-createRefMap :: Filename -> LayoutObj -> [(String, Filename)]
-createRefMap fn (Header _ _ l)     = createRef fn l
-createRefMap fn (HDiv   _ _ l)     = createRef fn l
-createRefMap fn (Table  _ _ l _ _) = createRef fn l
-createRefMap fn (Definition _ l)   = createRef fn l
-createRefMap fn (List t)           = pass t
+extractRefs :: LayoutObj -> [String]
+extractRefs (Header _ _ l)     = extractStrFromLabel l
+extractRefs (HDiv   _ _ l)     = extractStrFromLabel l
+extractRefs (Table  _ _ l _ _) = extractStrFromLabel l
+extractRefs (Definition _ l)   = extractStrFromLabel l
+extractRefs (List t)           = pass t
   where
     pass (Ordered ls)     = process  ls
     pass (Unordered ls)   = process  ls
     pass (Simple ls)      = process' ls
     pass (Desc ls)        = process' ls
     pass (Definitions ls) = process' ls
-    process  = concatMap (\(_, l)    -> foldMap (createRef fn) l)
-    process' = concatMap (\(_, _, l) -> foldMap (createRef fn) l)
-createRefMap fn (Figure l _ _ _)   = createRef fn l
-createRefMap fn (Bib ls)           = bibRefs <$> ls
+    process  = concatMap (\(_, l)    -> foldMap extractStrFromLabel l)
+    process' = concatMap (\(_, _, l) -> foldMap extractStrFromLabel l)
+extractRefs (Figure l _ _ _)   = extractStrFromLabel l
+extractRefs (Bib ls)           = bibRefs <$> ls
   where
-    bibRefs (Cite l _ _) = (l, fn)
-createRefMap _ _                   = []
+    bibRefs (Cite l _ _) = l
+extractRefs _                   = []
 
 -- | Helper function for mapping a Label to a Filename
-createRef :: Filename -> Label -> [(String, Filename)]
-createRef fn (S l) = [(l, fn)]
-createRef _  _     = []
+extractStrFromLabel :: Label -> [String]
+extractStrFromLabel (S l) = [l]
+extractStrFromLabel _     = []

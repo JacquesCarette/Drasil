@@ -1,6 +1,9 @@
 -- | Standard code to make a table of units.
 -- First true example of a (small) recipe.
-module Drasil.SRS.Sections.TableOfUnits (tOfUnitNone, tOfUnitDesc, tOfUnitSIName, unitTableRef, tunit, tunit', tunitNone, tuIntro, defaultTUI) where
+module Drasil.SRS.Sections.TableOfUnits (
+  tOfUnitNone, tOfUnitDesc, tOfUnitSIName, unitTableRef, tunit, tunit',
+  tunitNone, tuContents, defaultTUI
+) where
 
 -- General Haskell
 import Control.Lens ((^.))
@@ -16,7 +19,7 @@ import Drasil.Metadata.Concepts.Math (unit_)
 
 -- Other docLang
 import Drasil.SRS.DocumentLanguage.Core (TUIntro(..), RefTab(..))
-import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.SRS.Sections.ReferenceMaterial (refSecContents)
 
 -- | Creates the Table of Units with an "SI Name" column.
 tOfUnitSIName :: IsUnit s => [s] -> LabelledContent
@@ -55,21 +58,20 @@ tunit' t = TUnits' t tOfUnitDesc
 -- | Table of units with SI name in the description column.
 tunitNone t = TUnits' t tOfUnitNone
 
--- | Table of units introduction builder. Used by 'mkRefSec'.
-tuIntro :: [TUIntro] -> Contents
-tuIntro [] = mkParagraph $ emptySectSentPlu [unit_]
-tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
-
--- | Table of units introduction writer. Translates a 'TUIntro' to a 'Sentence'.
-tuI :: TUIntro -> Sentence
-tuI System  =
-  S "The unit system used throughout is SI (Système International d'Unités)."
-tuI TUPurpose =
-  S "For each unit" `sC` S "the" +:+ namedRef unitTableRef (titleize' tOfUnit) +:+
-    S "lists" +:+. foldlList Comma List [S "the" +:+ phrase symbol_,
-    S "a" +:+ phrase description, S "the SI name"]
-tuI Derived =
-  S "In addition to the basic units, several derived units are also used."
+-- | Table of units section contents. Takes the introduction, then the table it
+-- introduces. Used by 'mkRefSec'.
+tuContents :: [TUIntro] -> LabelledContent -> [Contents]
+tuContents x tbl = refSecContents [unit_] tuI x tbl
+  where
+    tuI :: TUIntro -> Sentence
+    tuI System =
+      S "The unit system used throughout is SI (Système International d'Unités)."
+    tuI TUPurpose =
+      S "For each unit" `sC` S "the" +:+ namedRef tbl (titleize' tOfUnit) +:+
+        S "lists" +:+. foldlList Comma List [S "the" +:+ phrase symbol_,
+        S "a" +:+ phrase description, S "the SI name"]
+    tuI Derived =
+      S "In addition to the basic units, several derived units are also used."
 
 -- | Default table of units intro that contains the system, derivation, and purpose.
 defaultTUI :: [TUIntro]

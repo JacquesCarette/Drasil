@@ -2,16 +2,16 @@
 module Drasil.Shared.LanguageRenderer.CommonPseudoOO (
   int, constructor, doxFunc, doxClass, doxMod, modDoc', functionDoc, extVar,
   classVarAccess, indexOf, contains, containsInt, discardFileLine, intClass,
-  funcType, buildModule, arrayType, pi, arrayDecDef, openFileA, docMain,
-  mainFunction, buildModule', call', listSizeFunc, listAccessFunc', string,
-  docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef,
-  destructorError, stateVarDef, constVar, litArray, litSet, litSetFunc,
-  extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
-  stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
-  forLoopError, mainBody, inOutFunc, docInOutFunc', bool, floatRender, float,
-  stringRender', string', inherit, implements, listSize, listSet, setDecDef,
-  setDec, intToIndex, indexToInt, intToIndex', indexToInt', varDecDef,
-  openFileR', openFileW', openFileA', argExists, global, setMethodCall
+  funcType, buildModule, arrayType, pi, openFileA, docMain, mainFunction,
+  buildModule', call', listSizeFunc, listAccessFunc', string, docInOutFunc,
+  bindingError, extFuncAppMixedArgs, notNull, listDecDef, destructorError,
+  stateVarDef, constVar, litArray, litSet, litSetFunc, extraClass,
+  listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
+  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
+  mainBody, inOutFunc, docInOutFunc', bool, floatRender, float, stringRender',
+  string', inherit, implements, listSize, listSet, setDecDef, setDec, intToIndex,
+  indexToInt, intToIndex', indexToInt', varDecDef, openFileR', openFileW',
+  openFileA', argExists, global, setMethodCall
 ) where
 
 import Utils.Drasil (stringList)
@@ -64,7 +64,7 @@ import Control.Lens ((^.))
 import qualified Control.Lens as L
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  brackets, braces, colon, vcat, equals)
+  brackets, colon, vcat)
 
 -- Python, Java, C#, C++, and Swift --
 -- | Convert an integer to an index in a 0-indexed language
@@ -216,19 +216,6 @@ arrayType t' = do
 
 pi :: (RC.RenderValue r var val typ, TypeSym r typ) => VS (r val)
 pi = mkStateVal IC.double (text $ mathFunc "PI")
-
--- TODO [Brandon Bosman, 11/04/2026]: Split this up
-arrayDecDef
-  :: ( IC.DeclStatement r bod stmt var scope val
-     , RC.RenderStatement r stmt
-     , RC.StatementElim r stmt
-     , RC.ValueElim r val
-     )
-  => VS (r var) -> r scope -> [VS (r val)] -> MS (r stmt)
-arrayDecDef v' scp vals' = do
-  vs <- mapM (zoom lensMStoVS) vals'
-  vd <- IC.varDec v' scp
-  stmtFromData (RC.preStatement vd <+> equals <+> braces (valueList vs)) Semi
 
 openFileA
   ::

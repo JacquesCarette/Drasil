@@ -581,7 +581,10 @@ instance DeclStatement JavaCode Body Statement Variable ScopeData Value where
     innerTp <- zoom lensMStoVS (innerType $ pure tp)
     stmtFromData (renderType tp <+> RC.variable vr <+> equals <+> new' <+>
                   renderType innerTp <> brackets (RC.value sz)) Semi
-  arrayDecDef = CP.arrayDecDef
+  arrayDecDef vr' scp vals' = do
+    vals <- mapM (zoom lensMStoVS) vals'
+    vDec <- varDec vr' scp
+    stmtFromData (preStatement vDec <+> equals <+> braces (valueList vals)) Semi
   constDecDef = jConstDecDef
   funcDecDef = jFuncDecDef
 

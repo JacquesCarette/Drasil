@@ -71,8 +71,8 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
   smartAdd, varDecInit)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
-  arrayDecDef, arrayType, bindingError, buildModule', classVarAccess, constVar,
-  constructor, contains, destructorError, discardFileLine, docInOutFunc, docMain,
+  arrayType, bindingError, buildModule', classVarAccess, constVar, constructor,
+  contains, destructorError, discardFileLine, docInOutFunc, docMain,
   doubleRender, doxClass, doxFunc, doxMod, extraClass, global, implements,
   indexOf, indexToInt, inherit, int, intClass, intToIndex, listDecDef, listSet,
   mainFunction, notNull, openFileA, openFileR, openFileW, pi, setMethodCall,
@@ -557,7 +557,10 @@ instance DeclStatement CSharpCode Body Statement Variable ScopeData Value where
     innerTp <- zoom lensMStoVS (innerType $ pure tp)
     stmtFromData (renderType tp <+> RC.variable vr <+> equals <+> new' <+>
                   renderType innerTp <> brackets (RC.value sz)) Semi
-  arrayDecDef = CP.arrayDecDef
+  arrayDecDef vr' scp vals' = do
+    vals <- mapM (zoom lensMStoVS) vals'
+    vDec <- varDec vr' scp
+    stmtFromData (preStatement vDec <+> equals <+> braces (valueList vals)) Semi
   constDecDef = CG.constDecDef
   funcDecDef = csFuncDecDef
 

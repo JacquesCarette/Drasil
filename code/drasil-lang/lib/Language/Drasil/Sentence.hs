@@ -7,6 +7,8 @@ module Language.Drasil.Sentence (
   Sentence(..),
   -- ** Context Types
   SentenceStyle(..), RefInfo(..), TermCapitalization(..),
+  -- ** Short Names
+  ShortName, HasShortName(..), shortname', getSentSN,
   -- * Functions
   (+:+), (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
@@ -16,10 +18,11 @@ module Language.Drasil.Sentence (
 
 import Data.Char (toUpper)
 
-import Drasil.Database (HasChunkRefs(..), UID, IsChunk, UIDRef, hide, raw,
-  declareHasChunkRefs, Generically(..))
+import Drasil.Database (HasChunkRefs(..), UID, IsChunk, TypeableChunk, UIDRef,
+  hide, raw, declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.Chunk.NamedIdea (Idea)
+import Language.Drasil.Document.Labels (HasRefAddress)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ModelExpr.Extract (meDep)
@@ -51,6 +54,16 @@ data RefInfo = None
 
 declareHasChunkRefs ''RefInfo
 
+-- | Used for holding the short form of a name (as a 'Sentence' with a wrapper).
+newtype ShortName = ShortNm Sentence
+
+-- | A 'ShortName' is the text to be displayed for a link.
+--
+--   Used for referencing within a document that can include symbols and whatnot if required.
+--   Visible in the typeset documents (pdf).
+class HasShortName  s where
+  shortname :: s -> ShortName
+
 -- | For writing 'Sentence's via combining smaller elements.
 -- 'Sentence's are made up of some known vocabulary of things:
 --
@@ -76,14 +89,10 @@ data Sentence where
   P     :: Symbol -> Sentence       -- should not be used in examples?
   -- | Lifts an expression into a Sentence.
   E     :: ModelExpr -> Sentence
-  -- | Takes a 'UID' to a reference, a display name ('Sentence'), and any
-  -- additional reference display information ('RefInfo'). Resolves the
-  -- reference later (similar to Ch).
-  --
-  -- FIXME: Attempting to convert this 'UID' into a 'UIDRef' creates a mess of a
-  -- cyclic dependency between `Language.Drasil.Document.Reference`,
-  -- `Language.Drasil.ShortName`, and this file.
-  Ref   :: UID -> Sentence -> RefInfo -> Sentence
+  -- | Takes a typed reference to a referable chunk, a display name
+  -- ('Sentence'), and any additional reference display information
+  -- ('RefInfo'). Resolves the reference later (similar to 'SyCh').
+  Ref   :: (TypeableChunk t, HasRefAddress t, HasShortName t) => UIDRef t -> Sentence -> RefInfo -> Sentence
   -- | Adds quotation marks around a Sentence.
   Quote :: Sentence -> Sentence
   -- | Used for a % symbol.
@@ -96,6 +105,14 @@ data Sentence where
 instance IsString Sentence where
   fromString [] = EmptyS
   fromString ss = S ss
+
+-- | Pulls the short form (as a 'Sentence') out of a 'ShortName'.
+getSentSN :: ShortName -> Sentence
+getSentSN (ShortNm s) = s
+
+-- | Smart constructor for making a 'Sentence' into a 'ShortName'.
+shortname' :: Sentence -> ShortName
+shortname' = ShortNm
 
 -- | Sentences can be concatenated.
 instance Semigroup Sentence where
@@ -222,7 +239,7 @@ lnames NP {}       = Set.empty
 lnames S {}        = Set.empty
 lnames Percent     = Set.empty
 lnames P {}        = Set.empty
-lnames (Ref a _ _) = Set.singleton a
+lnames (Ref a _ _) = Set.singleton (raw a)
 lnames ((:+:) a b) = lnames a `Set.union` lnames b
 lnames Quote {}    = Set.empty
 lnames E {}        = Set.empty
@@ -231,4 +248,8 @@ lnames EmptyS      = Set.empty
 
 instance HasChunkRefs Sentence where
   chunkRefs s = Set.unions [lnames s, sdep s, shortdep s]
+  {-# INLINABLE chunkRefs #-}
+
+instance HasChunkRefs ShortName where
+  chunkRefs = chunkRefs . getSentSN
   {-# INLINABLE chunkRefs #-}

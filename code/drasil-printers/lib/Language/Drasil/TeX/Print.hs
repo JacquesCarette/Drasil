@@ -334,7 +334,7 @@ pUnit (L.US ls) = formatu t b
 
 -- | Prints a (data) definition.
 makeDefn :: PrintingInformation -> [(String,[LayoutObj])] -> Spec -> D
-makeDefn _  [] _ = error "Empty definition"
+makeDefn _  [] _ = error "Definition table has no designated rows to render!"
 makeDefn sm ps l = mkMinipage (makeDefTable sm ps l)
 
 -- | Helper that creates the definition and associated table.

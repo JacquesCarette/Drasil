@@ -71,12 +71,12 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
   smartAdd, varDecInit)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
-  arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
-  constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
-  docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, global,
-  implements, indexOf, indexToInt, inherit, int, intClass, intToIndex,
-  listDecDef, listSet, mainFunction, notNull, openFileA, openFileR, openFileW,
-  pi, setMethodCall, stateVar, stateVarDef, string)
+  arrayDecDef, arrayType, bindingError, buildModule', classVarAccess, constVar,
+  constructor, contains, destructorError, discardFileLine, docInOutFunc, docMain,
+  doubleRender, doxClass, doxFunc, doxMod, extraClass, global, implements,
+  indexOf, indexToInt, inherit, int, intClass, intToIndex, listDecDef, listSet,
+  mainFunction, notNull, openFileA, openFileR, openFileW, pi, setMethodCall,
+  stateVar, stateVarDef, string)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   classMethodCall, listAppend, listAdd, innerType)
 
@@ -108,7 +108,7 @@ import Control.Monad.State (modify)
 import Data.Composition ((.:))
 import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi)
+  equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi, brackets)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (
   extFuncAppMixedArgs, extVar, listAccessFunc)
 
@@ -549,7 +549,14 @@ instance DeclStatement CSharpCode Body Statement Variable ScopeData Value where
     let assignDoc = renderListDec vr nVal
     stmtFromData (preStatement vDec <> assignDoc) Semi
   listDecDef = CP.listDecDef
-  arrayDec n _ = CP.arrayDec (litInt n)
+  arrayDec n _ vr' scp = do
+    sz <- zoom lensMStoVS (litInt n :: VS (CSharpCode Value))
+    vr <- zoom lensMStoVS vr'
+    G.varDecInit vr scp
+    let tp = variableType vr
+    innerTp <- zoom lensMStoVS (innerType $ pure tp)
+    stmtFromData (renderType tp <+> RC.variable vr <+> equals <+> new' <+>
+                  renderType innerTp <> brackets (RC.value sz)) Semi
   arrayDecDef = CP.arrayDecDef
   constDecDef = CG.constDecDef
   funcDecDef = csFuncDecDef

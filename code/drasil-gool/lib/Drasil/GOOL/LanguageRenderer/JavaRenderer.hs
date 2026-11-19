@@ -110,7 +110,7 @@ import Data.Composition ((.:))
 import qualified Data.Map as Map (lookup)
 import Data.List (nub, intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  equals, vcat, lbrace, rbrace, braces, colon, quotes)
+  equals, vcat, lbrace, rbrace, braces, colon, quotes, brackets)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
@@ -573,7 +573,14 @@ instance DeclStatement JavaCode Body Statement Variable ScopeData Value where
     let assignDoc = renderListDec vr nVal
     stmtFromData (preStatement vDec <> assignDoc) Semi
   listDecDef = CP.listDecDef
-  arrayDec n _ = CP.arrayDec (litInt n)
+  arrayDec n _ vr' scp = do
+    sz <- zoom lensMStoVS (litInt n :: VS (JavaCode Value))
+    vr <- zoom lensMStoVS vr'
+    G.varDecInit vr scp
+    let tp = variableType vr
+    innerTp <- zoom lensMStoVS (innerType $ pure tp)
+    stmtFromData (renderType tp <+> RC.variable vr <+> equals <+> new' <+>
+                  renderType innerTp <> brackets (RC.value sz)) Semi
   arrayDecDef = CP.arrayDecDef
   constDecDef = jConstDecDef
   funcDecDef = jFuncDecDef

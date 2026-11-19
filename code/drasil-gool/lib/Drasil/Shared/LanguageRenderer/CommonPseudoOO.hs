@@ -2,9 +2,9 @@
 module Drasil.Shared.LanguageRenderer.CommonPseudoOO (
   int, constructor, doxFunc, doxClass, doxMod, modDoc', functionDoc, extVar,
   classVarAccess, indexOf, contains, containsInt, discardFileLine, intClass,
-  funcType, buildModule, arrayType, pi, arrayDec, arrayDecDef, openFileA,
-  docMain, mainFunction, buildModule', call', listSizeFunc, listAccessFunc',
-  string, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef,
+  funcType, buildModule, arrayType, pi, arrayDecDef, openFileA, docMain,
+  mainFunction, buildModule', call', listSizeFunc, listAccessFunc', string,
+  docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef,
   destructorError, stateVarDef, constVar, litArray, litSet, litSetFunc,
   extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
   stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
@@ -39,7 +39,7 @@ import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue
 import Drasil.GOOL.RendererClassesOO (OORenderSym, OORenderMethod(intMethod),
   ParentSpec)
 import qualified Drasil.GOOL.RendererClassesOO as RG
-import Drasil.Shared.LanguageRenderer (listAccessFunc, array', new', args, array,
+import Drasil.Shared.LanguageRenderer (listAccessFunc, array', args, array,
   listSep, access, mathFunc, ModuleDocRenderer, FuncDocRenderer, functionDox,
   classDox, moduleDox, variableList, valueList, intValue)
 import Drasil.GOOL.Renderers (renderType)
@@ -216,27 +216,6 @@ arrayType t' = do
 
 pi :: (RC.RenderValue r var val typ, TypeSym r typ) => VS (r val)
 pi = mkStateVal IC.double (text $ mathFunc "PI")
-
--- TODO [Brandon Bosman, 11/04/2026]: Split this up
-arrayDec
-  :: ( TypeSym r TypeData
-     , ScopeElim r ScopeData
-     , UnRepr r TypeData
-     , InternalVarElim r var
-     , RC.RenderStatement r stmt
-     , RC.ValueElim r val
-     , VariableElim r var TypeData
-     )
-  => VS (r val) -> VS (r var) -> r ScopeData -> MS (r stmt)
-arrayDec n vr scp = do
-  sz <- zoom lensMStoVS n
-  v <- zoom lensMStoVS vr
-  modify $ useVarName $ variableName v
-  modify $ setVarScope (variableName v) (scopeData scp)
-  let tp = variableType v
-  innerTp <- zoom lensMStoVS $ innerType $ pure tp
-  stmtFromData (renderType tp <+> RC.variable v <+> equals <+> new' <+>
-    renderType innerTp <> brackets (RC.value sz)) Semi
 
 -- TODO [Brandon Bosman, 11/04/2026]: Split this up
 arrayDecDef

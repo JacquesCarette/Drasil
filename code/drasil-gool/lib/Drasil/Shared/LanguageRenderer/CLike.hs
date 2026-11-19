@@ -2,8 +2,8 @@
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, listSize',
-  statement, listDec, extObjDecNew, for, while, multiAssignError,
-  multiReturnError, multiTypeError
+  statement, extObjDecNew, for, while, multiAssignError, multiReturnError,
+  multiTypeError
 ) where
 
 import Drasil.FileHandling.Legacy (indent)
@@ -16,16 +16,16 @@ import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (extNewObj, objMethodCallNoParams, ($->))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (RenderValue(valFromData),
-  ValueElim(valuePrec), stmtFromData)
+  ValueElim(valuePrec))
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import Drasil.GOOL.Renderers (renderType)
-import Drasil.Shared.AST (Terminator(..), TypeData)
+import Drasil.Shared.AST (TypeData)
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing, getTerm)
 import qualified Drasil.Shared.LanguageRenderer as R
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStateVal,
   mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
-import Drasil.Shared.State (MS, VS, lensMStoVS, lensVStoMS, addLibImportVS,
+import Drasil.Shared.State (MS, VS, lensVStoMS, addLibImportVS,
   getClassName)
 
 import Prelude hiding (break,(<>))
@@ -146,19 +146,6 @@ listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
 statement :: (RC.StatementElim r stmt, RC.StatementTerm r stmt) => r stmt -> Doc
 statement st = RC.preStatement st <> getTerm (RC.statementTerm st)
-
--- TODO [Brandon Bosman, 11/04/2026]: Split this up
-listDec
-  ::
-    ( IC.DeclStatement r bod stmt var scope val
-    , RC.RenderStatement r stmt
-    , RC.StatementElim r stmt
-    )
-  => (r val -> Doc) -> VS (r val) -> VS (r var) -> r scope -> MS (r stmt)
-listDec f vl v scp = do
-  sz <- zoom lensMStoVS vl
-  vd <- IC.varDec v scp
-  stmtFromData (RC.preStatement vd <> f sz) Semi
 
 extObjDecNew
   ::

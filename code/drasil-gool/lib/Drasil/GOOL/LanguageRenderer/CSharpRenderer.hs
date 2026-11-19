@@ -83,8 +83,8 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize',
-  statement, listDec, extObjDecNew, for, while, multiAssignError,
-  multiReturnError, multiTypeError)
+  statement, extObjDecNew, for, while, multiAssignError, multiReturnError,
+  multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -542,8 +542,12 @@ instance DeclStatement CSharpCode Body Statement Variable ScopeData Value where
     stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Semi
   setDec = varDec
   setDecDef = varDecDef
-  listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (renderListDec v')
-    (litInt n) v scp)
+  listDec n vr' scp = do
+    vDec <- varDec vr' scp
+    vr <- zoom lensMStoVS vr'
+    nVal <- zoom lensMStoVS (litInt n)
+    let assignDoc = renderListDec vr nVal
+    stmtFromData (preStatement vDec <> assignDoc) Semi
   listDecDef = CP.listDecDef
   arrayDec n _ = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef

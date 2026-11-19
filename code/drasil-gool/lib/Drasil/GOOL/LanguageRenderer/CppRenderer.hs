@@ -83,7 +83,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
-  setType, listDec, extObjDecNew, for, while, multiAssignError, multiReturnError,
+  setType, extObjDecNew, for, while, multiAssignError, multiReturnError,
   multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
@@ -1485,7 +1485,10 @@ instance DeclStatement CppSrcCode Body Statement Variable ScopeData Value where
     stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Semi
   setDec = varDec
   setDecDef = varDecDef
-  listDec n = C.listDec cppListDecDoc (litInt n)
+  listDec n vr scp = do
+    let szDoc = parens (text $ show n)
+    vDec <- varDec vr scp
+    stmtFromData (preStatement vDec <> szDoc) Semi
   listDecDef = cppListDecDef cppListDecDefDoc
   arrayDec n _ vr scp = do
     decBase <- arrayDecBase vr scp
@@ -2741,9 +2744,6 @@ cppCast = join .: on2StateValues (\t v -> cppCast' (getCodeType t) (getCodeType 
         cppCast' Float String _ v = stofFunc (toState v)
         cppCast' _ _ t v = mkStateVal (toState t) (R.castObj
           (R.cast (renderType t)) (RC.value v))
-
-cppListDecDoc :: (ValueElim r val) => r val -> Doc
-cppListDecDoc n = parens (RC.value n)
 
 cppListDecDefDoc :: (ValueElim r val) => [r val] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)

@@ -67,7 +67,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
   listAccess, getFunc, setFunc, objDecNew, print, closeFile, ifCond, construct,
   param, method, getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData, local, smartAdd)
+  commentedClass, modFromData, fileDoc, fileFromData, local, smartAdd, varDecInit)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
@@ -85,14 +85,17 @@ import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
   addLangImportVS, getLangImports, addLibImportVS, getLibImports, addModuleImport,
   addModuleImportVS, getModuleImports, setFileType, getClassName, setCurrMain,
-  getClassMap, getMainDoc, varNameAvailable)
+  getClassMap, getMainDoc, varNameAvailable, currParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Prelude as P ((<>))
 import Data.Maybe (fromMaybe)
+import Control.Lens ((^.))
+import qualified Control.Lens as L
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (modify)
+import qualified Control.Monad.State as M
 import Data.List (intercalate, sort)
 import Data.Char (toUpper, isUpper, isLower)
 import qualified Data.Map as Map (lookup)
@@ -539,7 +542,13 @@ instance DeclStatement PythonCode Body Statement Variable ScopeData Value where
     if available
       then varDecDef newConst scp e
       else error "Cannot safely capitalize constant."
-  funcDecDef = CP.funcDecDef
+  funcDecDef vr' scp ps b = do
+    vr <- zoom lensMStoVS vr'
+    G.varDecInit vr scp
+    s <- M.get
+    f <- function (variableName vr) private (pure $ variableType vr) (param <$> ps) b
+    modify (L.set currParameters (s ^. currParameters))
+    stmtFromData (RC.method f) Empty
 
 instance OODeclStatement PythonCode Statement Variable ScopeData Value where
   objDecDef = varDecDef

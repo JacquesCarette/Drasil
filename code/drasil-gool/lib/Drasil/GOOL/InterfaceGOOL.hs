@@ -15,9 +15,9 @@ module Drasil.GOOL.InterfaceGOOL (
   classMethodCall, classMethodCallNamedArgs, classMethodCallMixedArgs,
   classMethodCallNoParams, OOMethodSym(..), privMethod, pubMethod, initializer,
   nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
-  AttachmentSym(..), OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..),
-  observerListName, initObserverList, addObserver, StrategyPattern(..),
-  convTypeOO
+  AttachmentSym(..), attachmentTag, OOFunctionSym(..), ($.), selfAccess,
+  ObserverPattern(..), observerListName, initObserverList, addObserver,
+  StrategyPattern(..), convTypeOO
   ) where
 
 import Drasil.Shared.InterfaceCommon (
@@ -38,7 +38,7 @@ import Drasil.Shared.InterfaceCommon (
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
-import Drasil.Shared.AST (FuncData, ProgData)
+import Drasil.Shared.AST (AttachmentTag(..), FuncData, ProgData)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -204,6 +204,10 @@ pubSVar = stateVar public classLevel
 class AttachmentSym r attch | r -> attch where
   classLevel  :: r attch
   instanceLevel :: r attch
+
+attachmentTag :: (AttachmentSym r attch) => AttachmentTag -> r attch
+attachmentTag ClassLevel = classLevel
+attachmentTag InstanceLevel = instanceLevel
 
 class OOTypeSym r typ | r -> typ where
   obj :: ClassName -> VS (r typ)

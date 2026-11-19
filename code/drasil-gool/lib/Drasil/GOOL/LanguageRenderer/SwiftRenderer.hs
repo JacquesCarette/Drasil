@@ -71,18 +71,18 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   listAccess, getFunc, setFunc, objDecNew, print, ifCond, construct, param,
   method, getMethod, setMethod, initStmts, function, docFunc, buildClass,
   implementingClass, docClass, commentedClass, modFromData, docMod, fileDoc,
-  fileFromData, defaultOptSpace, local, smartAdd)
+  fileFromData, defaultOptSpace, local, smartAdd, varDecInit)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   classVarAccess, intClass, buildModule, modDoc', contains, bindingError,
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray,
   extraClass, doubleRender, double, openFileR, openFileW, self, multiAssign,
-  multiReturn, listDec, listSet, funcDecDef, inOutCall, forLoopError, mainBody,
-  inOutFunc, docInOutFunc', float, stringRender', string', inherit, implements,
-  functionDoc, intToIndex, indexToInt, global, setMethodCall)
+  multiReturn, listDec, listSet, inOutCall, forLoopError, mainBody, inOutFunc,
+  docInOutFunc', float, stringRender', string', inherit, implements, functionDoc,
+  intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
-  listSize', varDecDef, setDecDef, extObjDecNew, while)
+  listSize', extObjDecNew, while)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
   notifyObservers', makeSetterVal, arrayDecAsList)
@@ -101,12 +101,15 @@ import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed,
   getThrowUsed, setErrorDefined, getErrorDefined, incrementLine, incrementWord,
   getLineIndex, getWordIndex, resetIndices, useVarName, genVarNameIf,
-  setVarScope, getVarScope)
+  setVarScope, getVarScope, currParameters)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
+import Control.Lens ((^.))
+import qualified Control.Lens as L
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
+import qualified Control.Monad.State as M
 import Data.Composition ((.:))
 import Data.List (intercalate, sort)
 import Data.Map (findWithDefault)
@@ -534,8 +537,14 @@ instance AssignStatement SwiftCode Statement Variable Value where
 
 instance DeclStatement SwiftCode Body Statement Variable ScopeData Value where
   varDec = swiftVarDec swiftVar
-  varDecDef = C.varDecDef Empty
-  setDecDef = C.setDecDef Empty
+  varDecDef vr scp vl' = do
+    vDec <- varDec vr scp
+    vl <- zoom lensMStoVS vl'
+    stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Empty
+  setDecDef vr scp vl' = do
+    vDec <- setDec vr scp
+    vl <- zoom lensMStoVS vl'
+    stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Empty
   setDec = swiftSetDec swiftConst
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
@@ -545,7 +554,13 @@ instance DeclStatement SwiftCode Body Statement Variable ScopeData Value where
     vdec <- swiftVarDec swiftConst vr scp
     vl <- zoom lensMStoVS vl'
     stmtFromData (RC.preStatement vdec <+> equals <+> RC.value vl) Empty
-  funcDecDef = CP.funcDecDef
+  funcDecDef vr' scp ps b = do
+    vr <- zoom lensMStoVS vr'
+    G.varDecInit vr scp
+    s <- M.get
+    f <- function (variableName vr) private (pure $ variableType vr) (param <$> ps) b
+    modify (L.set currParameters (s ^. currParameters))
+    stmtFromData (RC.method f) Empty
 
 instance OODeclStatement SwiftCode Statement Variable ScopeData Value where
   objDecDef = varDecDef

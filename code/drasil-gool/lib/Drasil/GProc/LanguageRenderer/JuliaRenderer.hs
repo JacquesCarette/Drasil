@@ -56,7 +56,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
   listAccess, csc, multiBody, sec, cot, print, param, docFunc, arg, argsList,
-  ifCond, smartAdd, local, var, smartSub)
+  ifCond, smartAdd, local, var, smartSub, varDecInit)
 import Drasil.GProc.Renderers (renderType)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
@@ -71,7 +71,7 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (litTrue, litFalse,
 
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   fileFromData, buildModule, docMod, modFromData, listAppend, listAdd,
-  innerType, arrayElem, funcDecDef, function)
+  innerType, arrayElem, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists, arrayDecAsList)
 import Drasil.Shared.AST (Terminator(Empty), FileType(..), fileD, FuncData(..),
@@ -82,14 +82,18 @@ import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.Shared.State (FS, MS, VS, lensGStoFS, revFiles, setFileType,
   lensMStoVS, getModuleImports, addModuleImportVS, getLangImports, getLibImports,
-  addLibImportVS, useVarName, getMainDoc, genVarNameIf, setVarScope, getVarScope)
+  addLibImportVS, useVarName, getMainDoc, genVarNameIf, setVarScope, getVarScope,
+  currParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Prelude as P ((<>))
 import Data.Maybe (fromMaybe, isNothing)
 import Data.Functor ((<&>))
+import Control.Lens ((^.))
+import qualified Control.Lens as L
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
+import qualified Control.Monad.State as M
 import Data.List (intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), empty,
   brackets, vcat, quotes, doubleQuotes, parens, equals, colon)
@@ -487,7 +491,13 @@ instance DeclStatement JuliaCode Body Statement Variable ScopeData Value where
   arrayDec = M.arrayDecAsList
   arrayDecDef = listDecDef
   constDecDef = jlConstDecDef
-  funcDecDef = A.funcDecDef
+  funcDecDef vr' scp ps b = do
+    vr <- zoom lensMStoVS vr'
+    G.varDecInit vr scp
+    s <- M.get
+    f <- function (variableName vr) private (pure $ variableType vr) (param <$> ps) b
+    modify (L.set currParameters (s ^. currParameters))
+    stmtFromData (RC.method f) Empty
 
 instance PrintConsole JuliaCode Statement Value where
   print      = jlOut False Nothing printFunc

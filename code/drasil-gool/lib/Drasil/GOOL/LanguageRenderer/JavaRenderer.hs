@@ -27,7 +27,7 @@ import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
   OOValueExpression(..), objMethodCall, selfMethodCall, newObj,
   InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..))
+  OOMethodSym(..), attachmentTag)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -71,14 +71,14 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   listAccess, getFunc, setFunc, objDecNew, print, closeFile, ifCond, construct,
   param, method, getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
-  smartAdd)
+  smartAdd, varDecInit)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement, varDec,
-  varDecDef, listDec, extObjDecNew, for, while, multiAssignError,
-  multiReturnError, multiTypeError, setType)
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
+  extObjDecNew, for, while, multiAssignError, multiReturnError, multiTypeError,
+  setType)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -110,7 +110,7 @@ import Data.Composition ((.:))
 import qualified Data.Map as Map (lookup)
 import Data.List (nub, intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  equals, vcat, lbrace, rbrace, braces, colon, quotes)
+  equals, vcat, lbrace, rbrace, braces, colon, quotes, brackets)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
@@ -554,15 +554,37 @@ instance AssignStatement JavaCode Statement Variable Value where
     stmtFromData (R.decrement vr) Semi
 
 instance DeclStatement JavaCode Body Statement Variable ScopeData Value where
-  varDec = C.varDec classLevel instanceLevel empty
-  varDecDef = C.varDecDef Semi
+  varDec v' scp = do
+    v <- zoom lensMStoVS v'
+    G.varDecInit v scp
+    stmtFromData
+      (unJC (attachmentTag (variableBind v)) <+> renderType (variableType v) <+> RC.variable v)
+      Semi
+  varDecDef vr scp vl' = do
+    vDec <- varDec vr scp
+    vl <- zoom lensMStoVS vl'
+    stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Semi
   setDec = varDec
   setDecDef = varDecDef
-  listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (renderListDec v')
-    (litInt n) v scp)
+  listDec n vr' scp = do
+    vDec <- varDec vr' scp
+    vr <- zoom lensMStoVS vr'
+    nVal <- zoom lensMStoVS (litInt n)
+    let assignDoc = renderListDec vr nVal
+    stmtFromData (preStatement vDec <> assignDoc) Semi
   listDecDef = CP.listDecDef
-  arrayDec n _ = CP.arrayDec (litInt n)
-  arrayDecDef = CP.arrayDecDef
+  arrayDec n _ vr' scp = do
+    sz <- zoom lensMStoVS (litInt n :: VS (JavaCode Value))
+    vr <- zoom lensMStoVS vr'
+    G.varDecInit vr scp
+    let tp = variableType vr
+    innerTp <- zoom lensMStoVS (innerType $ pure tp)
+    stmtFromData (renderType tp <+> RC.variable vr <+> equals <+> new' <+>
+                  renderType innerTp <> brackets (RC.value sz)) Semi
+  arrayDecDef vr' scp vals' = do
+    vals <- mapM (zoom lensMStoVS) vals'
+    vDec <- varDec vr' scp
+    stmtFromData (preStatement vDec <+> equals <+> braces (valueList vals)) Semi
   constDecDef = jConstDecDef
   funcDecDef = jFuncDecDef
 

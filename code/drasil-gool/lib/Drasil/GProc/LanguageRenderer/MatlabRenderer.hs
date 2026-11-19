@@ -38,8 +38,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
-  docMod, fileFromData, modFromData, function, funcDecDef,
-  innerType)
+  docMod, fileFromData, modFromData, function, innerType)
 import qualified Drasil.Shared.LanguageRenderer as R (commentedMod,
   commentedItem, parameterList, body, addComments, multiStmt, sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, break, continue,
@@ -49,7 +48,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   param, docFunc, var, multiBody, block, multiBlock, negateOp, plusOp, minusOp,
   multOp, divideOp, equalOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, csc,
   sec, cot, valueOf, litChar, litDouble, litInt, litString, funcAppMixedArgs,
-  call, print, ifCond, listAccess, smartAdd, local, lambda)
+  call, print, ifCond, listAccess, smartAdd, local, lambda, varDecInit)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt',
   listDecDef, argExists, multiReturn, litSet)
@@ -75,11 +74,14 @@ import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty, vibcat,
   getInnerType)
 import Drasil.Shared.State (MS, VS, FS, lensGStoFS, lensFStoMS, lensMStoVS,
-  revFiles, setFileType, setModuleName, getMainDoc)
+  revFiles, setFileType, setModuleName, getMainDoc, currParameters)
 
 import Data.List (intercalate)
+import Control.Lens ((^.))
+import qualified Control.Lens as L
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
+import qualified Control.Monad.State as M
 
 import Drasil.FileHandling.Legacy (indent)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -465,7 +467,13 @@ instance DeclStatement MatlabCode Body Statement Variable ScopeData Value where
   arrayDec _ _ = varDec
   arrayDecDef = listDecDef
   constDecDef = varDecDef
-  funcDecDef = A.funcDecDef
+  funcDecDef vr' scp ps b = do
+    vr <- zoom lensMStoVS vr'
+    G.varDecInit vr scp
+    s <- M.get
+    f <- function (variableName vr) private (pure $ variableType vr) (param <$> ps) b
+    modify (L.set currParameters (s ^. currParameters))
+    stmtFromData (RC.method f) Empty
 
 instance PrintConsole MatlabCode Statement Value where
   print = G.print False Nothing printFunc

@@ -1,6 +1,6 @@
 -- | Smart constructors for the document layout language. Intended for
 -- /construction/ exclusively. If you are building renderers, please see
--- 'Drasil.Document.Layout.Development' instead.
+-- 'Drasil.Document.Layout.Internal' instead.
 module Drasil.Document.Layout (
   -- * Expressions
   parens, addExprFilter,

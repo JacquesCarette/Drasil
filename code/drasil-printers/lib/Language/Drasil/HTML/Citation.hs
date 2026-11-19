@@ -16,7 +16,7 @@ import Drasil.Data.Formats.HTML (HTMLBody(..), DItem(..), bold_, emphasis_,
 
 import Drasil.Printers.Common (paren)
 import Language.Drasil.HTML.Spec (specToHTML, printSpec)
-import Drasil.Document.Layout.Development (Spec(S), CiteField(..), HP(..),
+import Drasil.Document.Layout.Internal (Spec(S), CiteField(..), HP(..),
   Citation(..), BibRef, CitationKind(..), People, Person(..))
 import Language.Drasil.Printing.Helpers (sufxer, sufxPrint)
 

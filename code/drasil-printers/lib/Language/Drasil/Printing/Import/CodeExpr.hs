@@ -12,7 +12,7 @@ import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development (Literal(..))
 
 import Drasil.Document.Layout (addExprFilter, parens)
-import qualified Drasil.Document.Layout.Development as P
+import qualified Drasil.Document.Layout.Internal as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.ExprCommon (lookupC')
 import Language.Drasil.Printing.Import.Literal (literal)

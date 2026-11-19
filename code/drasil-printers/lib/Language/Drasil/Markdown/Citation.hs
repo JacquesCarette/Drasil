@@ -15,7 +15,7 @@ import Utils.Drasil (foldlList)
 import Drasil.Printers.Common
 import Language.Drasil (numList)
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
-import Drasil.Document.Layout.Development (Spec(S, Ref), LinkType(External),
+import Drasil.Document.Layout.Internal (Spec(S, Ref), LinkType(External),
   CiteField(Year, Number, Volume, Title, Author,
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb),

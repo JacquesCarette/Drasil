@@ -15,7 +15,7 @@ import Prelude hiding ((<>))
 import qualified Prelude as P ((<>))
 import Text.PrettyPrint (text, Doc, (<>), ($$))
 
-import Drasil.Document.Layout.Development (CiteField(HowPublished), HP (..))
+import Drasil.Document.Layout.Internal (CiteField(HowPublished), HP (..))
 
 -- | Custom infix operator for concatenating
 -- two 'Doc's vertically with an empty line in between.

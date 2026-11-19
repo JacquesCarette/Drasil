@@ -19,7 +19,7 @@ import Drasil.Data.Formats.CSV (DoubleQuotationPolicy(..), csvRenderOpts,
 import Drasil.FileHandling (FileLayout, file, directory, ps)
 
 import Drasil.Printers.Common
-import Drasil.Document.Layout.Development (ItemType(..), ListType(..), Spec(..),
+import Drasil.Document.Layout.Internal (ItemType(..), ListType(..), Spec(..),
   Expr(..), Label, Spacing(Thin), Fonts(..), OverSymb(Hat), Fence(Abs),
   Ops(..), LinkType(..), Special(Circle), BibRef, Project(Project),
   LayoutObj(..), Filename, RefMap, File(File))

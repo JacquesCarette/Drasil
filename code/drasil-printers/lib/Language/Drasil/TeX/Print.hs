@@ -16,7 +16,7 @@ import qualified Language.Drasil.Display as LD
 
 import Drasil.Printers.Common (brace, brak, paren, dquote)
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
-import Drasil.Document.Layout.Development (Spec (Tooltip), ItemType(Nested, Flat),
+import Drasil.Document.Layout.Internal (Spec (Tooltip), ItemType(Nested, Flat),
   ListType(Ordered, Unordered, Desc, Definitions, Simple),
   Spec(Quote, EmptyS, Ref, S, Sp, E, (:+:)),
   Fence(Norm, Abs, Curly, Paren), Expr,

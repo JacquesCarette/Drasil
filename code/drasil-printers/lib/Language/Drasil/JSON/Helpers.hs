@@ -15,7 +15,7 @@ import qualified Data.Text as T (pack)
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
 
-import Drasil.Document.Layout.Development (MaxWidthPercent)
+import Drasil.Document.Layout.Internal (MaxWidthPercent)
 
 import Drasil.Printers.Common hiding (wrap)
 import qualified Drasil.Data.Formats.Jupyter as Jupyter

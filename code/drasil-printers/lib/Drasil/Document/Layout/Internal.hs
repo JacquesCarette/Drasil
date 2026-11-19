@@ -1,6 +1,6 @@
 -- | Re-exports all internals of the document layout language, intended for both
 -- construction and exposing internals for external authors to build renderers.
-module Drasil.Document.Layout.Development (
+module Drasil.Document.Layout.Internal (
   module Drasil.Document.Layout.Citation,
   module Drasil.Document.Layout.Document,
   module Drasil.Document.Layout.Expr,

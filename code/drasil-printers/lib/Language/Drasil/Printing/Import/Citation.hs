@@ -8,7 +8,7 @@ import qualified Language.Drasil as L (Month(..), Person, fullName,
 import Language.Drasil.Document (Citation, CiteField(..), HP(..), citeKind, HasFields(..))
 import qualified Language.Drasil.Document as L (CitationKind(..))
 
-import qualified Drasil.Document.Layout.Development as P
+import qualified Drasil.Document.Layout.Internal as P
 
 -- | For importing a bibliography.
 layCite :: Citation -> P.Citation

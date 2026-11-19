@@ -20,7 +20,7 @@ import Language.Drasil (Symbol, USymb(..), codeSymb)
 import qualified Language.Drasil as L (HasSymbol(..), Sentence, Expr)
 
 import Drasil.Printers.Common
-import Drasil.Document.Layout.Development (Expr(..), Spec(..), Ops(..), Fence(..),
+import Drasil.Document.Layout.Internal (Expr(..), Spec(..), Ops(..), Fence(..),
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..), Special(..))
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.Expr (expr)

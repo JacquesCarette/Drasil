@@ -17,7 +17,7 @@ import qualified Drasil.Data.Formats.Jupyter as Jupyter (Notebook(..), Cell,
 import Language.Drasil (checkValidStr)
 
 import Drasil.Printers.Common
-import Drasil.Document.Layout.Development (ItemType(..), ListType(..), Spec(..),
+import Drasil.Document.Layout.Internal (ItemType(..), ListType(..), Spec(..),
   Expr(..), Label, Fonts(Bold), OverSymb(Hat), Fence(..), Ops(..), LinkType(..),
   Special(Circle), BibRef, Document(Document), LayoutObj(..), MaxWidthPercent)
 import Language.Drasil.Printing.Helpers (unders, hat)

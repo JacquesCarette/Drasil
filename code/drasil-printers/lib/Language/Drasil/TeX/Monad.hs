@@ -11,7 +11,7 @@ module Language.Drasil.TeX.Monad (
 import Prelude hiding (print)
 import qualified Text.PrettyPrint as TP
 
-import Drasil.Document.Layout.Development (Special(..))
+import Drasil.Document.Layout.Internal (Special(..))
 
 import Drasil.Printers.Common
 

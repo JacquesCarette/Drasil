@@ -15,8 +15,8 @@ import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.Sentence (spec)
 import Drasil.Document.Layout (mkProject)
-import qualified Drasil.Document.Layout.Development as P
-import qualified Drasil.Document.Layout.Development as T
+import qualified Drasil.Document.Layout.Internal as P
+import qualified Drasil.Document.Layout.Internal as T
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 -- * Main Function

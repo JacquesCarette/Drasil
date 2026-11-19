@@ -17,7 +17,7 @@ import Language.Drasil.ModelExpr.Development (
   , mePrec, precC, precB, precA)
 
 import Drasil.Document.Layout (parens)
-import qualified Drasil.Document.Layout.Development as P
+import qualified Drasil.Document.Layout.Internal as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.ExprCommon (lookupC')
 import Language.Drasil.Printing.Import.Literal (literal)

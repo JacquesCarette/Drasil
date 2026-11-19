@@ -8,7 +8,7 @@ import Language.Drasil (USymb(..))
 import qualified Language.Drasil as L (Special(..))
 import Language.Drasil.ShortHands (cDelta)
 import Language.Drasil.Display (Decoration(..), Symbol(..))
-import qualified Drasil.Document.Layout.Development as P
+import qualified Drasil.Document.Layout.Internal as P
 
 -- | Converts a symbol into an expression.
 symbol :: Symbol -> P.Expr

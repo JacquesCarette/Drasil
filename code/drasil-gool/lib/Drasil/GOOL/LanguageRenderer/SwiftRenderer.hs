@@ -82,7 +82,7 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   functionDoc, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
-  listSize', setDecDef, extObjDecNew, while)
+  listSize', extObjDecNew, while)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
   notifyObservers', makeSetterVal, arrayDecAsList)
@@ -538,7 +538,10 @@ instance DeclStatement SwiftCode Body Statement Variable ScopeData Value where
     vDec <- varDec vr scp
     vl <- zoom lensMStoVS vl'
     stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Empty
-  setDecDef = C.setDecDef Empty
+  setDecDef vr scp vl' = do
+    vDec <- setDec vr scp
+    vl <- zoom lensMStoVS vl'
+    stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Empty
   setDec = swiftSetDec swiftConst
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef

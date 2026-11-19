@@ -2,7 +2,7 @@
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, listSize',
-  statement, setDecDef, listDec, extObjDecNew, for, while, multiAssignError,
+  statement, listDec, extObjDecNew, for, while, multiAssignError,
   multiReturnError, multiTypeError
 ) where
 
@@ -33,8 +33,7 @@ import qualified Prelude as P ((<>))
 import Control.Applicative ((<|>))
 import Control.Monad.State (modify)
 import Control.Lens.Zoom (zoom)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, vcat, semi,
-  equals)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, vcat, semi)
 import qualified Text.PrettyPrint.HughesPJ as D
 
 -- Types --
@@ -147,19 +146,6 @@ listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
 statement :: (RC.StatementElim r stmt, RC.StatementTerm r stmt) => r stmt -> Doc
 statement st = RC.preStatement st <> getTerm (RC.statementTerm st)
-
--- TODO [Brandon Bosman, 11/04/2026]: Split this up
-setDecDef
-  :: ( IC.DeclStatement r bod stmt var scope val
-     , RC.RenderStatement r stmt
-     , RC.StatementElim r stmt
-     , ValueElim r val
-     )
-  => Terminator -> VS (r var) -> r scope -> VS (r val) -> MS (r stmt)
-setDecDef t vr scp vl' = do
-  vd <- IC.setDec vr scp
-  vl <- zoom lensMStoVS vl'
-  stmtFromData (RC.preStatement vd <+> equals <+> RC.value vl) t
 
 -- TODO [Brandon Bosman, 11/04/2026]: Split this up
 listDec

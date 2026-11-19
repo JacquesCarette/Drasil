@@ -1,6 +1,8 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Printing helpers.
 module Language.Drasil.Printing.Import.ExprCommon (
+  -- * Builders
+  parens,
   -- * Symbol and Term Resolution
   lookupC, lookupC', lookupSymb
 ) where
@@ -11,7 +13,14 @@ import Drasil.Database (UID, ChunkDB, findOrErr, UIDRef, IsChunk, raw)
 import Language.Drasil (Stage(..), codeSymb, eqSymb, Symbol, HasSymbol,
   DefinedQuantityDict)
 
+import qualified Drasil.Document.Layout.Internal as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, stg, sysdb)
+
+-- * Builders
+
+-- | Surround an expression with parentheses.
+parens :: P.Expr -> P.Expr
+parens = P.Fenced P.Paren P.Paren
 
 -- * Lookup/Term Resolution Functions
 

@@ -16,10 +16,9 @@ import Language.Drasil.ModelExpr.Development (
   , DerivType(..)
   , mePrec, precC, precB, precA)
 
-import Drasil.Document.Layout (parens)
 import qualified Drasil.Document.Layout.Internal as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
-import Language.Drasil.Printing.Import.ExprCommon (lookupC')
+import Language.Drasil.Printing.Import.ExprCommon (lookupC', parens)
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Space (space)
 import Language.Drasil.Printing.Import.Symbol (symbol)

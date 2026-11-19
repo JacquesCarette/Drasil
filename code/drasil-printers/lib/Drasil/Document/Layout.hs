@@ -2,11 +2,8 @@
 -- /construction/ exclusively. If you are building renderers, please see
 -- 'Drasil.Document.Layout.Internal' instead.
 module Drasil.Document.Layout (
-  -- * Expressions
-  parens, addExprFilter,
   -- * Projects
   mkProject
 ) where
 
-import Drasil.Document.Layout.Expr (parens, addExprFilter)
 import Drasil.Document.Layout.Document (mkProject)

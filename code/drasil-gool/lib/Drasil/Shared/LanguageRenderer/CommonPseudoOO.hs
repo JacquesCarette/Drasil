@@ -3,14 +3,14 @@ module Drasil.Shared.LanguageRenderer.CommonPseudoOO (
   int, constructor, doxFunc, doxClass, doxMod, modDoc', functionDoc, extVar,
   classVarAccess, indexOf, contains, containsInt, discardFileLine, intClass,
   funcType, buildModule, arrayType, pi, arrayDec, arrayDecDef, openFileA,
-  docMain, mainFunction, buildModule', call', listSizeFunc, listAccessFunc',
+  docMain, mainFunction, buildModule', call', listAccessFunc',
   string, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef,
-  destructorError, stateVarDef, constVar, litArray, litSet, litSetFunc,
+  destructorError, stateVarDef, constVar, litArray, litSet,
   extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
   stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
   forLoopError, mainBody, inOutFunc, docInOutFunc', bool, floatRender, float,
-  stringRender', string', inherit, implements, listSize, listSet, setDecDef,
-  setDec, intToIndex, indexToInt, intToIndex', indexToInt', varDecDef,
+  stringRender', string', inherit, implements, listSize, listSet,
+  intToIndex, indexToInt, intToIndex', indexToInt', varDecDef,
   openFileR', openFileW', openFileA', argExists, global, setMethodCall
 ) where
 
@@ -63,7 +63,7 @@ import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
 import qualified Control.Lens as L
 import Control.Lens.Zoom (zoom)
-import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
+import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>),
   brackets, braces, colon, vcat, equals)
 
 -- Python, Java, C#, C++, and Swift --
@@ -328,9 +328,6 @@ call' _ l o n t ps ns = call empty l o n t ps ns
 namedArgError :: String -> String
 namedArgError l = "Named arguments not supported in " P.<> l
 
-listSizeFunc :: (TypeSym r typ, IG.OOFunctionSym r val typ) => VS (r FuncData)
-listSizeFunc = IG.func "size" IC.int []
-
 listAccessFunc'
   :: (ValueSym r val typ, IG.OOFunctionSym r val typ, TypeElim r typ)
   => Label -> VS (r typ) -> VS (r val) -> VS (r FuncData)
@@ -388,36 +385,6 @@ listDecDef v scp vals = do
   let lst = IC.litList (innerType $ pure $ variableType vr) vals
   IC.varDecDef (pure vr) scp lst
 
-setDecDef
-  ::
-    ( IC.DeclStatement r bod stmt var scope val
-    , TypeSym r typ
-    , IC.Literal r val typ
-    , VariableElim r var typ
-    )
-  => VS (r var) -> r scope -> [VS (r val)] -> MS (r stmt)
-setDecDef v scp vals = do
-  vr <- zoom lensMStoVS v
-  let st = IC.litSet (innerType $ pure $ variableType vr) vals
-  IC.varDecDef (pure vr) scp st
-
--- TODO [Brandon Bosman, 11/04/2026]: Split this up
-setDec
-  ::
-    ( IC.DeclStatement r bod stmt var scope val
-    , RC.RenderStatement r stmt
-    , RC.StatementElim r stmt
-    )
-  => (r val -> Doc)
-  -> VS (r val)
-  -> VS (r var)
-  -> r scope
-  -> MS (r stmt)
-setDec f vl v scp = do
-  sz <- zoom lensMStoVS vl
-  vd <- IC.varDec v scp
-  stmtFromData (RC.preStatement vd <> f sz) Semi
-
 setMethodCall
   :: (TypeSym r typ, ValueSym r val typ, IG.InternalValueExp r var val typ)
   => Label -> VS (r val) ->  VS (r val) -> VS (r val)
@@ -458,12 +425,6 @@ litSet
   => (Doc -> Doc) -> (Doc -> Doc) -> VS (r typ) -> [VS (r val)] -> VS (r val)
 litSet f1 f2 t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
   (f1 $ f2 $ valueList elems))
-
-litSetFunc
-  :: (RC.RenderValue r var val typ, IC.TypeSym r typ, RC.ValueElim r val)
-  => String -> VS (r typ) -> [VS (r val)] -> VS (r val)
-litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
-  (text s <> parens (valueList elems)))
 
 -- Python, C#, C++, and Swift--
 

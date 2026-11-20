@@ -3,24 +3,24 @@ module Drasil.Shared.State (
   -- Types
   GS, GOOLState(..), FS, CS, MS, VS,
   -- Lenses
-  lensFStoGS, lensGStoFS, lensMStoGS, lensFStoCS, lensFStoMS, lensFStoVS,
-  lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS,
+  lensFStoGS, lensGStoFS, lensMStoGS, lensFStoCS, lensFStoMS,
+  lensCStoMS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS,
   lensVStoMS, lensCStoFS, headers, sources, mainMod, currMain, currFileType, currParameters,
   -- Initial states
   initialState, initialFS,
   -- State helpers
-  modifyReturn, modifyReturnFunc, modifyReturnList,
+  modifyReturn, modifyReturnList,
   -- State modifiers
   revFiles, addFile, addCombinedHeaderSource, addHeader, addSource,
   addProgNameToPaths, setMainMod, addLangImport, addLangImportVS,
-  addExceptionImports, getLangImports, addLibImport, addLibImportVS,
-  addLibImports, getLibImports, addModuleImport, addModuleImportVS,
+  addExceptionImports, getLangImports, addLibImportVS,
+  getLibImports, addModuleImport, addModuleImportVS,
   getModuleImports, addHeaderLangImport, getHeaderLangImports,
-  addHeaderLibImport, getHeaderLibImports, addHeaderModImport,
+  getHeaderLibImports, addHeaderModImport,
   getHeaderModImports, addDefine, getDefines, addHeaderDefine,
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing,
   setFileType, setModuleName, getModuleName, setClassName, getClassName,
-  setCurrMain, getCurrMain, addClass, getClasses, updateClassMap, getClassMap,
+  setCurrMain, getCurrMain, addClass, updateClassMap, getClassMap,
   updateMethodExcMap, getMethodExcMap, updateCallMap, callMapTransClosure,
   updateMEMWithCalls, addParameter, getParameters, setOutputsDeclared,
   isOutputsDeclared, addException, addExceptions, getExceptions, addCall,
@@ -183,13 +183,7 @@ lensMStoFS = classState . fileState
 lensCStoMS :: Lens' ClassState MethodState
 lensCStoMS = lens (\cs -> set classState cs initialMS) (const (^. classState))
 
-lensMStoCS :: Lens' MethodState ClassState
-lensMStoCS = classState
-
 -- FS - VS --
-
-lensFStoVS :: Lens' FileState ValueState
-lensFStoVS = lens (\fs -> set lensVStoFS fs initialVS) (const (^. lensVStoFS))
 
 lensVStoFS :: Lens' ValueState FileState
 lensVStoFS = methodState . lensMStoFS
@@ -286,12 +280,6 @@ modifyReturn sf v = do
   modify sf
   pure v
 
-modifyReturnFunc :: (b -> s -> s) -> (b -> a) -> State s b -> State s a
-modifyReturnFunc sf vf st = do
-  v <- st
-  modify $ sf v
-  pure $ vf v
-
 modifyReturnList :: [State s b] -> (s -> s) ->
   ([b] -> a) -> State s a
 modifyReturnList l sf vf = do
@@ -345,14 +333,8 @@ addExceptionImports es = over (lensMStoFS . langImports)
 getLangImports :: FS [String]
 getLangImports = gets (^. langImports)
 
-addLibImport :: String -> MethodState -> MethodState
-addLibImport i = over (lensMStoFS . libImports) (\is -> nubSort $ i:is)
-
 addLibImportVS :: String -> ValueState -> ValueState
 addLibImportVS i = over (lensVStoFS . libImports) (\is -> nubSort $ i:is)
-
-addLibImports :: [String] -> MethodState -> MethodState
-addLibImports is s = foldl' (flip addLibImport) s is
 
 getLibImports :: FS [String]
 getLibImports = gets (^. libImports)
@@ -372,10 +354,6 @@ addHeaderLangImport i = over (lensVStoFS . headerLangImports)
 
 getHeaderLangImports :: FS [String]
 getHeaderLangImports = gets (^. headerLangImports)
-
-addHeaderLibImport :: String -> MethodState -> MethodState
-addHeaderLibImport i = over (lensMStoFS . headerLibImports)
-  (\is -> nubSort $ i:is)
 
 getHeaderLibImports :: FS [String]
 getHeaderLibImports = gets (^. headerLibImports)
@@ -442,9 +420,6 @@ getCurrMain = gets (^. currMain)
 addClass :: String -> ClassState -> ClassState
 addClass c = over (fileState . currClasses) (\cs -> ifElemError c cs
   "Multiple classes with same name in same file")
-
-getClasses :: FS [String]
-getClasses = gets (^. currClasses)
 
 updateClassMap :: String -> FileState -> FileState
 updateClassMap n fs = over (goolState . classMap) (Map.union (Map.fromList $

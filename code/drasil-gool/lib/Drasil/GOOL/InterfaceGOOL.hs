@@ -4,18 +4,17 @@
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  Program, GSProgram, Class, StateVar, CSStateVar, Initializers,
+  GSProgram, Class, StateVar, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
-  OOValueExpression(..), selfMethodCall, newObj, extNewObj, libNewObj,
+  OOValueExpression(..), selfMethodCall, newObj, extNewObj,
   OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
   OOFuncAppStatement(..), GetSet(..), InternalValueExp(..), objMethodCall,
   objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
-  classMethodCall, classMethodCallNamedArgs, classMethodCallMixedArgs,
-  classMethodCallNoParams, OOMethodSym(..), privMethod, pubMethod, initializer,
-  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
-  AttachmentSym(..), OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..),
+  classMethodCall, OOMethodSym(..), pubMethod, initializer,
+  nonInitConstructor, StateVarSym(..), privDVar, pubDVar,
+  AttachmentSym(..), OOFunctionSym(..), ($.), ObserverPattern(..),
   observerListName, initObserverList, addObserver, StrategyPattern(..),
   convTypeOO
   ) where
@@ -38,7 +37,7 @@ import Drasil.Shared.InterfaceCommon (
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
-import Drasil.Shared.AST (FuncData, ProgData)
+import Drasil.Shared.AST (FuncData)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -68,7 +67,6 @@ class (UnRepr r typ, Argument r val, BodySym r bod block, BlockSym r block stmt,
   FileSym r file mod, ProgramSym r prg file
   ) => OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
 
-type Program = ProgData
 type GSProgram a prg = GS (a prg)
 
 -- | Class for representing a program.
@@ -127,15 +125,6 @@ class OOMethodSym r mthd attch vis param bod var val typ | r -> mthd attch vis p
   inOutMethod :: Label -> r vis -> r attch -> InOutFunc r mthd bod var
   docInOutMethod :: Label -> r vis -> r attch -> DocInOutFunc r mthd bod var
 
-privMethod
-  ::
-    ( OOMethodSym r mthd attch vis param bod var val typ
-    , AttachmentSym r attch
-    , VisibilitySym r vis
-    )
-  => Label -> VS (r typ) -> [MS (r param)] -> MS (r bod) -> MS (r mthd)
-privMethod n = method n private instanceLevel
-
 pubMethod
   ::
     ( OOMethodSym r mthd attch vis param bod var val typ
@@ -190,15 +179,6 @@ pubDVar
     )
   => VS (r var) -> CSStateVar r stvr
 pubDVar = stateVar public instanceLevel
-
-pubSVar
-  ::
-    ( AttachmentSym r attch
-    , VisibilitySym r vis
-    , StateVarSym r stvr attch vis var val
-    )
-  => VS (r var) -> CSStateVar r stvr
-pubSVar = stateVar public classLevel
 
 -- | Used to differentiate whether a member is attached to the class or the instance
 class AttachmentSym r attch | r -> attch where
@@ -256,10 +236,6 @@ extNewObj
   :: (OOValueExpression r var val typ) => Library -> PosCtorCall r val typ
 extNewObj l t vs = extNewObjMixedArgs l t vs []
 
-libNewObj
-  :: (OOValueExpression r var val typ) => Library -> PosCtorCall r val typ
-libNewObj l t vs = libNewObjMixedArgs l t vs []
-
 -- TODO [Brandon Bosman, 07/22/2026]: Give this a better name
 -- | A class for representing method calls, both instance- and class-level
 class InternalValueExp r var val typ | r -> var val typ where
@@ -306,29 +282,6 @@ classMethodCall
   :: (InternalValueExp r var val typ)
   => VS (r typ) -> VS (r typ) -> Label -> [VS (r val)] -> VS (r val)
 classMethodCall t c f ps = classMethodCallMixedArgs' f t c ps []
-
--- | Calling a class method with named arguments.
-classMethodCallNamedArgs
-  :: (InternalValueExp r var val typ)
-  => VS (r typ) -> VS (r typ) -> Label -> NamedArgs r var val -> VS (r val)
-classMethodCallNamedArgs t c f = classMethodCallMixedArgs' f t c []
-
--- | Calling a class method with a mix of positional and named arguments.
-classMethodCallMixedArgs
-  :: (InternalValueExp r var val typ)
-  => VS (r typ)
-  -> VS (r typ)
-  -> Label
-  -> [VS (r val)]
-  -> NamedArgs r var val
-  -> VS (r val)
-classMethodCallMixedArgs t c f = classMethodCallMixedArgs' f t c
-
--- | Calling a class method with no parameters.
-classMethodCallNoParams
-  :: (InternalValueExp r var val typ)
-  => VS (r typ) -> VS (r typ) -> Label -> VS (r val)
-classMethodCallNoParams t c f = classMethodCall t c f []
 
 class OODeclStatement r stmt var scope val | r -> stmt var scope val where
   objDecDef    :: VS (r var) -> r scope -> VS (r val) -> MS (r stmt)
@@ -389,11 +342,6 @@ class OOFunctionSym r val typ | r -> val typ where
 ($.) :: (OOFunctionSym r val typ) => VS (r val) -> VS (r FuncData) -> VS (r val)
 infixl 9 $.
 ($.) = objAccess
-
-selfAccess
-  :: (VariableValue r var val, SelfSym r var, OOFunctionSym r val typ)
-  => VS (r FuncData) -> VS (r val)
-selfAccess = objAccess (valueOf self)
 
 class GetSet r var val | r -> var val where
   get :: VS (r val) -> VS (r var) -> VS (r val)

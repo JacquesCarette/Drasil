@@ -1,10 +1,12 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE DerivingVia #-}
 -- | MVP renderer for logging statements.
 module Drasil.Shared.LanguageRenderer.LoggingFor (LoggingFor(..)) where
 
 import Drasil.Shared.InterfaceCommon
+import qualified Drasil.GProc.InterfaceProc as P
 import qualified Drasil.GOOL.InterfaceGOOL as G
 import Drasil.Shared.State
 
@@ -16,6 +18,7 @@ import Data.Bifunctor (bimap)
 import Drasil.Shared.CodeType (CodeType)
 
 newtype LoggingFor (r :: Type -> Type) a = LC {unLC :: r a}
+  deriving newtype (Functor, Applicative, Monad)
 
 class LiftLogging u l | l -> u where
   liftLogging :: u -> l
@@ -429,9 +432,39 @@ instance (IndexTranslator r val) => IndexTranslator (LoggingFor r) val where
   intToIndex = liftLogging intToIndex
   indexToInt = liftLogging indexToInt
 
+instance (NativeVectorType lang typ) => NativeVectorType (LoggingFor lang) typ where
+  vecType = liftLogging vecType
+
+instance (NativeVector lang val typ) => NativeVector (LoggingFor lang) val typ where
+  litVec = liftLogging litVec
+  vecScale = liftLogging vecScale
+  vecAdd = liftLogging vecAdd
+  vecIndex = liftLogging vecIndex
+  vecDot = liftLogging vecDot
+  vecMag = liftLogging vecMag
+  vecUnit = liftLogging vecUnit
+
+-- GProc
+
+instance (P.ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ) => P.ProcProg (LoggingFor r) prg file mod mthd vis param bod block stmt var scope val binder typ
+
+instance (P.ModuleSym r mod mthd) => P.ModuleSym (LoggingFor r) mod mthd where
+  buildModule = liftLogging P.buildModule
+
+instance (P.FileSym r file mod) => P.FileSym (LoggingFor r) file mod where
+  fileDoc = liftLogging P.fileDoc
+  docMod = liftLogging P.docMod
+
+instance (P.ProgramSym r prg file) => P.ProgramSym (LoggingFor r) prg file where
+  prog = liftLogging P.prog
+
 -- GOOL
 
 instance (G.OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ) => G.OOProg (LoggingFor r) prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
+
+instance (G.GetSet r var val) => G.GetSet (LoggingFor r) var val where
+  get = liftLogging G.get
+  set = liftLogging G.set
 
 instance (G.InternalValueExp r var val typ) => G.InternalValueExp (LoggingFor r) var val typ where
   objMethodCallMixedArgs' = liftLogging G.objMethodCallMixedArgs'
@@ -470,6 +503,9 @@ instance (G.OOFunctionSym r val typ) => G.OOFunctionSym (LoggingFor r) val typ w
   func = liftLogging G.func
   objAccess = liftLogging G.objAccess
 
+instance (G.ObserverPattern r stmt typ) => G.ObserverPattern (LoggingFor r) stmt typ where
+  notifyObservers = liftLogging G.notifyObservers
+
 instance (G.AttachmentSym r attch) => G.AttachmentSym (LoggingFor r) attch where
   classLevel = liftLogging G.classLevel
   instanceLevel = liftLogging G.instanceLevel
@@ -502,3 +538,6 @@ instance (G.FileSym r file mod) => G.FileSym (LoggingFor r) file mod where
 
 instance (G.ProgramSym r prg file) => G.ProgramSym (LoggingFor r) prg file where
   prog = liftLogging G.prog
+
+instance (G.StrategyPattern r bod block var val) => G.StrategyPattern (LoggingFor r) bod block var val where
+  runStrategy = liftLogging G.runStrategy

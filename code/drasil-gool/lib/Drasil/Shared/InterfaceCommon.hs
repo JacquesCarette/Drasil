@@ -9,12 +9,12 @@ module Drasil.Shared.InterfaceCommon (
   UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), getTypeString, VariableSym(..), ScopeSym(..), convScope,
   VariableElim(..), listOf, listVar, ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
   IndexTranslator(..), Reference(..), Array(..), List(..), ListStatement(..),
   Set(..), NativeVectorType(..), NativeVector(..), InternalList(..), listSlice,
-  listLast, at, EmptyStatement(..), MultiStatement(..),
+  listLast, listIndexExists, at, EmptyStatement(..), MultiStatement(..),
   ValueStatement(..), AssignStatement(..), (&=), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
   ReadFile(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..),
@@ -154,6 +154,15 @@ class Literal r val typ | r -> val typ where
   litList   :: VS (r typ) -> [VS (r val)] -> VS (r val)
   litSet    :: VS (r typ) -> [VS (r val)] -> VS (r val)
 
+litZero :: (Literal r val typ, TypeElim r typ) => VS (r typ) -> VS (r val)
+litZero t = do
+  t' <- t
+  case getCodeType t' of
+    Integer -> litInt 0
+    Float -> litFloat 0
+    Double -> litDouble 0
+    _ -> error "litZero expects a numeric type"
+
 class MathConstant r val | r -> val where
   pi :: VS (r val)
 
@@ -270,6 +279,9 @@ extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
 
 libFuncApp :: (ValueExpression r var val binder typ) => Library -> PosCall r val typ
 libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
+
+exists :: (ValueExpression r var val binder typ) => VS (r val) -> VS (r val)
+exists = notNull
 
 -- | Helper class for representing the conversion between integers and array indices.
 -- GOOL is 0-indexed, so languages like Julia that are not 0-indexed
@@ -403,6 +415,11 @@ listSlice vnew vold b e tp = listSlice' b e tp vnew vold
 -- | Gets the last element of a list.
 listLast :: (List r val, Literal r val typ) => VS (r val) -> VS (r val)
 listLast v = listAccessFromEnd v (litInt 0)
+
+listIndexExists
+  :: (List r val, Comparison r val)
+  => VS (r val) -> VS (r val) -> VS (r val)
+listIndexExists lst index = listSize lst ?> index
 
 at :: (List r val) => VS (r val) -> VS (r val) -> VS (r val)
 at = listAccess

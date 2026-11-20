@@ -6,6 +6,8 @@ module Language.Drasil.Code.CodeQuantityDicts (
 import Drasil.Database (mkUid)
 import Language.Drasil
 
+import Drasil.Code.CodeVar (implVar')
+
 -- | Variable for the input file's name.
 inFileName :: DefinedQuantityDict
 inFileName = implVar' (mkUid "inFileName")

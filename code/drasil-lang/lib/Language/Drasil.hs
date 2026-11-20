@@ -85,7 +85,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.DefinedQuantity
   , DefinedQuantityDict, quant, quant', quantAU, quantNoUnit, quantNoUnit'
   , dqd, dqd', dqdWr
-  , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
+  , DefinesQuantity(defLhs)
   -- Language.Drasil.Chunk.UnitDefn
   , UnitDefn(..)
   , fromUDefn

@@ -154,13 +154,21 @@ insert0 cdb c = cdb'
     -- Finally, build the updated database.
     cdb' = cdb { chunkTable = chunkTable'', chunkTypeTable = chunkTypeTable' }
 
+-- | Does a chunk list itself among its own dependencies?
+selfReferencing :: (HasUID c, HasChunkRefs c) => c -> Bool
+selfReferencing c = S.member (c ^. uid) $ chunkRefs c
+
+-- | Hard error for a chunk that references itself.
+selfReferenceError :: UID -> a
+selfReferenceError u =
+  error $ "Chunk `" <> show u <> "` cannot reference itself as a dependancy."
+
 -- | Insert a chunk into the 'ChunkDB' if it is sensible to do so (i.e., does
 -- not depend on itself, is not a 'ChunkDB', and does not overwrite another
 -- chunk).
 insert :: TypeableChunk a => a -> ChunkDB -> ChunkDB
 insert c cdb
-  | S.member (c ^. uid) $ chunkRefs c =
-      error $ "Chunk `" <> show (c ^. uid) <> "` cannot reference itself as a dependancy."
+  | selfReferencing c = selfReferenceError (c ^. uid)
   | typeOf c == typeRep (Proxy @ChunkDB) =
       error "Insertion of ChunkDBs in ChunkDBs is disallowed; please perform unions with them instead."
   | (Just x) <- findTypeOf (c ^. uid) cdb =
@@ -187,7 +195,8 @@ insertAll as cdb = foldl' (flip insert) cdb as
 
 -- | Insert 13 lists of /unique/ chunk types into a 'ChunkDB', assuming the
 -- input 'ChunkDB' does not already contain any of the chunks from the chunk
--- lists.
+-- lists. As with 'insert', chunks may not reference themselves, but cycles
+-- among multiple chunks are allowed.
 insertAllOutOfOrder13 ::
   (TypeableChunk a, TypeableChunk b, TypeableChunk c, TypeableChunk d,
    TypeableChunk e, TypeableChunk f, TypeableChunk g, TypeableChunk h,
@@ -221,7 +230,10 @@ insertAllOutOfOrder13 strtr as bs cs ds es fs gs hs is js ks ls ms =
     calt = concat altogether
 
     -- Calculate what chunks are depended on (i.e., UID -> Dependants)
-    chDpdts = invert $ M.fromList $ (\c -> (c ^. uid, S.toList $ chunkRefs c)) <$> calt
+    chDpdts = invert $ M.fromList $ withRefs <$> calt
+    withRefs c
+      | selfReferencing c = selfReferenceError (c ^. uid)
+      | otherwise         = (c ^. uid, S.toList $ chunkRefs c)
 
     fmtIDnTy c = show (c ^. uid) <> " :: " <> show (chunkType c)
     dupeError c1 c2 = error $

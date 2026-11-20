@@ -58,10 +58,8 @@ digraph "refvsref" {
     "theory:sliceWght" -> "theory:weight";
     "theory:baseWtrF" -> "dataDefn:l_b,i";
     "theory:baseWtrF" -> "theory:pressure";
-    "theory:baseWtrF" -> "theory:baseWtrF";
     "theory:srfWtrF" -> "dataDefn:l_s,i";
     "theory:srfWtrF" -> "theory:pressure";
-    "theory:srfWtrF" -> "theory:srfWtrF";
     "theory:FS" -> "dataDefn:Phi";
     "theory:FS" -> "dataDefn:Psi";
     "theory:FS" -> "theory:normForcEq";
@@ -70,13 +68,11 @@ digraph "refvsref" {
     "theory:FS" -> "theory:resShearWO";
     "theory:FS" -> "theory:mobShearWO";
     "theory:FS" -> "theory:X_i";
-    "theory:FS" -> "theory:FS";
     "theory:FS" -> "theory:nrmShrForIM";
     "theory:FS" -> "theory:intsliceFsRC";
     "theory:nrmShrForIM" -> "theory:X_i";
     "theory:nrmShrForIM" -> "theory:momentEql";
     "theory:nrmShrForIM" -> "theory:FS";
-    "theory:nrmShrForIM" -> "theory:nrmShrForIM";
     "theory:nrmShrForIM" -> "theory:nrmShrForNumRC";
     "theory:nrmShrForIM" -> "theory:nrmShrForDenRC";
     "theory:nrmShrForIM" -> "theory:intsliceFsRC";
@@ -96,7 +92,6 @@ digraph "refvsref" {
     "theory:intsliceFsRC" -> "theory:mobShearWO";
     "theory:intsliceFsRC" -> "theory:FS";
     "theory:intsliceFsRC" -> "theory:nrmShrForIM";
-    "theory:intsliceFsRC" -> "theory:intsliceFsRC";
     "dataDefn:H_i" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:intersliceWtrF"];
     "dataDefn:alpha_i" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:angleA"];
     "dataDefn:beta_i" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:angleB"];

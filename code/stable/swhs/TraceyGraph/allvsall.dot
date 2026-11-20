@@ -14,7 +14,6 @@ digraph "allvsall" {
     "theory:rocTempSimpRC" -> "instance:assumpDWPCoV";
     "theory:rocTempSimpRC" -> "instance:assumpSHECov";
     "theory:rocTempSimpRC" -> "theory:consThermECS";
-    "theory:rocTempSimpRC" -> "theory:rocTempSimpRC";
     "theory:htFluxC" -> "instance:assumpLCCCW";
     "theory:htFluxC" -> "instance:assumpTHCCoT";
     "theory:htFluxC" -> "theory:nwtnCoolingTM";
@@ -34,7 +33,6 @@ digraph "allvsall" {
     "theory:eBalanceOnWtrRC" -> "theory:rocTempSimpRC";
     "theory:eBalanceOnWtrRC" -> "theory:htFluxC";
     "theory:eBalanceOnWtrRC" -> "theory:htFluxP";
-    "theory:eBalanceOnWtrRC" -> "theory:eBalanceOnWtrRC";
     "theory:eBalanceOnWtrRC" -> "theory:eBalanceOnPCMRC";
     "theory:eBalanceOnPCMRC" -> "instance:assumpCWTAT";
     "theory:eBalanceOnPCMRC" -> "instance:assumpTPCAV";

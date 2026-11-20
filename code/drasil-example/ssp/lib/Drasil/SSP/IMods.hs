@@ -199,7 +199,7 @@ fctSftyDerivSentence18 = [S "The multiplication" `S.ofThe` ch mobShrC,
 fctSftyDerivSentence19 :: [Sentence]
 fctSftyDerivSentence19 = [S "Isolating the", phrase fs, S "on the left-hand",
   S "side and using compact notation" `S.for` S "the products and sums yields",
-  eqN 13 `sC` S "which can also be seen in", refS fctSfty]
+  eqN 13 `sC` S "which can also be seen in this instance model"]
 
 fctSftyDerivSentence20 :: [Sentence]
 fctSftyDerivSentence20 = [ch fs +:+ S "depends on the unknowns" +:+
@@ -422,7 +422,7 @@ nrmShrDerivSentence4 = [S "Taking the summation of all", plural slice `sC`
   eS (idx (sy intNormForce) (int 0)) `sC` eS (indxn intNormForce) `sC`
   eS (idx (sy watrForce) (int 0)) `sC` S "and", eS (indxn watrForce),
   S "equal to zero" `sC` S "a general", phrase equation, S "for the",
-  getTandS normToShear, S "is developed in", eqN 16 `sC` S "which combines", refS nrmShrFor `sC` refS nrmShrForNum `sC` S "and",
+  getTandS normToShear, S "is developed in", eqN 16 `sC` S "which combines", refS nrmShrForNum, S "and",
   refS nrmShrForDen]
 
 nrmShrDerivSentence5 :: [Sentence]
@@ -565,10 +565,10 @@ intrSlcDerivSentence1 = [S "This derivation" `S.is` S "identical to the derivati
 
 intrSlcDerivSentence2 :: [Sentence]
 intrSlcDerivSentence2 = [S "A simple rearrangement of", eqN 3, S "leads to",
-  eqN 17 `sC` S "also seen in", refS intsliceFs]
+  eqN 17 `sC` S "also seen in", S "this instance model"]
 
 intrSlcDerivSentence3 :: [Sentence]
-intrSlcDerivSentence3 = [S "The cases shown in" +:+ refS intsliceFs +:+
+intrSlcDerivSentence3 = [S "The cases shown in" +:+ S "this instance model" +:+
   S "for when" +:+ eS (sy index $= int 0) `sC` eS (sy index $= int 1) `sC` S "or" +:+
   eS (sy index $= sy numbSlices) +:+ S "are derived by applying" +:+
   refS assumpES `sC` S "which says that" +:+

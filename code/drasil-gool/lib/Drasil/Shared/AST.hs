@@ -3,7 +3,7 @@ module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   AttachmentTag(..), onAttachment, AttachmentData(attachment, attachmentDoc), ad, FileData(filePath,
   fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), fd, ModData(name,
   modDoc), md, updateMod, MethodData(mthdName, mthdDoc), mthd, updateMthd, OpData(opPrec,
-  opDoc), od, ParamData(paramVar, paramDoc), pd, paramName, updateParam,
+  opDoc), od, ParamData(paramVar, paramDoc), pd, updateParam,
   ProgData(progName, progPurp, progMods), progD, emptyProg,
   StateVarData(getStVarScp, stVar), svd, TypeData(cType,
   typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), vd,
@@ -98,9 +98,6 @@ data ParamData = PD {paramVar :: VarData, paramDoc :: Doc}
 
 pd :: VarData -> Doc -> ParamData
 pd = PD
-
-paramName :: ParamData -> String
-paramName = varName . paramVar
 
 updateParam :: (Doc -> Doc) -> ParamData -> ParamData
 updateParam f v = pd (paramVar v) ((f . paramDoc) v)

@@ -40,8 +40,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, value, function, visibility, parameter, method,
-  blockComment', InternalBinderElim(binderElim), RenderValue(call),
-  StatementElim(statement))
+  blockComment', InternalBinderElim(binderElim), RenderValue(call))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, ParentSpec, RenderClass(..), ClassElim,
@@ -149,8 +148,6 @@ instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) ProgData FileData wher
     modify revFiles
     pure $ pair p1 (toCode emptyProg)
 
-instance (Pair p) => CommonRenderSym (p CppSrcCode CppHdrCode) MethodData (Doc, VisibilityTag) ParamData Body Block Statement Variable ScopeData Value BinderD TypeData
-
 instance (Pair p) => UnRepr (p CppSrcCode CppHdrCode) contents where
   unRepr c = unCPPSC $ pfst c
 
@@ -159,45 +156,17 @@ instance (Pair p) => FileSym (p CppSrcCode CppHdrCode) FileData ModData where
 
   docMod d wm a dt = pair1 (docMod d wm a dt) (docMod d wm a dt)
 
-instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) FileData ModData where
-  top m = pair (top $ pfst m) (top $ psnd m)
-  bottom = pair bottom bottom
-
-  commentedMod = pair2 commentedMod commentedMod
-
-  fileFromData fp = pair1 (fileFromData fp) (fileFromData fp)
-
-instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
-  langImport n = pair (langImport n) (langImport n)
-  modImport n = pair (modImport n) (modImport n)
-
 instance (Pair p) => AttachmentSym (p CppSrcCode CppHdrCode) AttachmentData where
   classLevel = pair classLevel classLevel
   instanceLevel = pair instanceLevel instanceLevel
-
-instance (Pair p) => PermElim (p CppSrcCode CppHdrCode) AttachmentData where
-  perm p = RC.perm $ pfst p
-  binding p = binding $ pfst p
 
 instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) Body Block where
   body = pair1List body body
 
   addComments s = pair1 (addComments s) (addComments s)
 
-instance (Pair p) => RenderBody (p CppSrcCode CppHdrCode) Body where
-  multiBody = pair1List multiBody multiBody
-
-instance (Pair p) => BodyElim (p CppSrcCode CppHdrCode) Body where
-  body b = RC.body $ pfst b
-
 instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) Block Statement where
   block = pair1List block block
-
-instance (Pair p) => RenderBlock (p CppSrcCode CppHdrCode) Block where
-  multiBlock = pair1List multiBlock multiBlock
-
-instance (Pair p) => BlockElim (p CppSrcCode CppHdrCode) Block where
-  block b = RC.block $ pfst b
 
 instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) TypeData where
   bool = on2StateValues pair bool bool
@@ -222,55 +191,10 @@ instance (Pair p) => TypeElim (p CppSrcCode CppHdrCode) TypeData where
 instance (Pair p) => OOTypeSym (p CppSrcCode CppHdrCode) TypeData where
   obj t = on2StateValues pair (obj t) (obj t)
 
-instance (Pair p) => RenderType (p CppSrcCode CppHdrCode) TypeData where
-  multiType = pair1List multiType multiType
-
-instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
-  notOp = on2StateValues pair notOp notOp
-  negateOp = on2StateValues pair negateOp negateOp
-  sqrtOp = on2StateValues pair sqrtOp sqrtOp
-  absOp = on2StateValues pair absOp absOp
-  logOp = on2StateValues pair logOp logOp
-  lnOp = on2StateValues pair lnOp lnOp
-  expOp = on2StateValues pair expOp expOp
-  sinOp = on2StateValues pair sinOp sinOp
-  cosOp = on2StateValues pair cosOp cosOp
-  tanOp = on2StateValues pair tanOp tanOp
-  asinOp = on2StateValues pair asinOp asinOp
-  acosOp = on2StateValues pair acosOp acosOp
-  atanOp = on2StateValues pair atanOp atanOp
-  floorOp = on2StateValues pair floorOp floorOp
-  ceilOp = on2StateValues pair ceilOp ceilOp
-
-instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
-  equalOp = on2StateValues pair equalOp equalOp
-  notEqualOp = on2StateValues pair notEqualOp notEqualOp
-  greaterOp = on2StateValues pair greaterOp greaterOp
-  greaterEqualOp = on2StateValues pair greaterEqualOp greaterEqualOp
-  lessOp = on2StateValues pair lessOp lessOp
-  lessEqualOp = on2StateValues pair lessEqualOp lessEqualOp
-  plusOp = on2StateValues pair plusOp plusOp
-  minusOp = on2StateValues pair minusOp minusOp
-  multOp = on2StateValues pair multOp multOp
-  divideOp = on2StateValues pair divideOp divideOp
-  powerOp = on2StateValues pair powerOp powerOp
-  moduloOp = on2StateValues pair moduloOp moduloOp
-  andOp = on2StateValues pair andOp andOp
-  orOp = on2StateValues pair orOp orOp
-
-instance (Pair p) => OpElim (p CppSrcCode CppHdrCode) where
-  uOp o = RC.uOp $ pfst o
-  bOp o = RC.bOp $ pfst o
-  uOpPrec o = uOpPrec $ pfst o
-  bOpPrec o = bOpPrec $ pfst o
-
 instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) ScopeData where
   global = pair global global
   mainFn = pair mainFn mainFn
   local = pair local local
-
-instance (Pair p) => ScopeElim (p CppSrcCode CppHdrCode) ScopeData where
-  scopeData = unCPPSC . pfst
 
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) Variable TypeData where
   var n       = pair1 (var n) (var n)
@@ -290,14 +214,6 @@ instance (Pair p) => SelfSym (p CppSrcCode CppHdrCode) Variable where
 instance (Pair p) => VariableElim (p CppSrcCode CppHdrCode) Variable TypeData where
   variableName v = variableName $ pfst v
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
-
-instance (Pair p) => InternalVarElim (p CppSrcCode CppHdrCode) Variable where
-  variableBind v = variableBind $ pfst v
-  variable v = RC.variable $ pfst v
-
-instance (Pair p) => RenderVariable (p CppSrcCode CppHdrCode) Variable TypeData where
-  varFromData b n t' d = pair1 (\t ->varFromData b n t d)
-    (\t -> varFromData b n t d) t'
 
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) Value TypeData where
   valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
@@ -391,25 +307,6 @@ instance (Pair p) => OOValueExpression (p CppSrcCode CppHdrCode) Variable Value 
     (extNewObjMixedArgs l)
     (extNewObjMixedArgs l)
 
-instance (Pair p) => RenderValue (p CppSrcCode CppHdrCode) Variable Value TypeData where
-  inputFunc = on2StateValues pair inputFunc inputFunc
-  printFunc = on2StateValues pair printFunc printFunc
-  printLnFunc = on2StateValues pair printLnFunc printLnFunc
-  printFileFunc = pair1 printFileFunc printFileFunc
-  printFileLnFunc = pair1 printFileLnFunc printFileLnFunc
-
-  cast = pair2 cast cast
-
-  call l o n = pair1Val3Lists (call l o n) (call l o n)
-
-  valFromData p i t' d = pair1 (\t -> valFromData p i t d)
-    (\t -> valFromData p i t d) t'
-
-instance (Pair p) => ValueElim (p CppSrcCode CppHdrCode) Value where
-  valuePrec v = valuePrec $ pfst v
-  valueInt v = valueInt $ pfst v
-  value v = RC.value $ pfst v
-
 instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) Variable Value TypeData where
   objMethodCallMixedArgs' f = pair2Vals3Lists
     (objMethodCallMixedArgs' f)
@@ -464,54 +361,8 @@ instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) Block Variable Value
       (onStateValue psnd <$> s))
     (zoom lensMStoVS vr) (zoom lensMStoVS vl)
 
-instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) Variable Value TypeData where
-  getFunc = pair1 getFunc getFunc
-  setFunc = pair3 setFunc setFunc
-
-instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) Value TypeData where
-  listAccessFunc = pair2 listAccessFunc listAccessFunc
-
 instance Pair p => BinderSym (p CppSrcCode CppHdrCode) BinderD TypeData where
   binder nm = pair1 (binder nm) (binder nm)
-
-instance (Pair p) => BinderElim (p CppSrcCode CppHdrCode) BinderD TypeData where
-  binderName b = bindName $ unCPPSC $ pfst b
-  binderType b = pair (binderType $ pfst b) (binderType $ psnd b)
-
-instance (Pair p) => InternalBinderElim (p CppSrcCode CppHdrCode) BinderD where
-  binderElim b = binderElim $ pfst b
-
-instance (Pair p) => RenderFunction (p CppSrcCode CppHdrCode) TypeData where
-  funcFromData d = pair1 (funcFromData d) (funcFromData d)
-
-instance (Pair p) => FunctionElim (p CppSrcCode CppHdrCode) TypeData where
-  functionType f = pair (functionType $ pfst f) (functionType $ psnd f)
-  function f = RC.function $ pfst f
-
-instance (Pair p) => InternalAssignStmt (p CppSrcCode CppHdrCode) Statement Variable Value where
-  multiAssign vrs vls = pair2Lists multiAssign multiAssign
-    (zoom lensMStoVS <$> vrs) (zoom lensMStoVS <$> vls)
-
-instance (Pair p) => InternalIOStmt (p CppSrcCode CppHdrCode) Statement Value where
-  -- Another Maybe/State combination
-  printSt nl f p v = pair2
-    (printSt nl (onStateValue pfst <$> f))
-    (printSt nl (onStateValue psnd <$> f))
-    (zoom lensMStoVS p) (zoom lensMStoVS v)
-
-instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) Statement Value where
-  multiReturn = pair1List multiReturn multiReturn . fmap (zoom lensMStoVS)
-
-instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) Statement where
-  loopStmt = pair1 loopStmt loopStmt
-  stmtFromData d t = on2StateValues pair (stmtFromData d t) (stmtFromData d t)
-
-instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) Statement where
-  statement s = RC.statement $ pfst s
-  preStatement s = preStatement $ pfst s
-
-instance (Pair p) => StatementTerm (p CppSrcCode CppHdrCode) Statement where
-  statementTerm s = statementTerm $ pfst s
 
 instance (Pair p) => EmptyStatement (p CppSrcCode CppHdrCode) Statement where
   emptyStmt = on2StateValues pair emptyStmt emptyStmt
@@ -680,31 +531,9 @@ instance (Pair p) => VisibilitySym (p CppSrcCode CppHdrCode)
   private = pair private private
   public = pair public public
 
-instance (Pair p) => RenderVisibility (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) where
-  visibilityFromData s d = pair (visibilityFromData s d) (visibilityFromData s d)
-
-instance (Pair p) => VisibilityElim (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) where
-  visibility s = RC.visibility $ pfst s
-
-instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) TypeData where
-  mType = pair1 mType mType . zoom lensMStoVS
-
-instance (Pair p) => OOMethodTypeSym (p CppSrcCode CppHdrCode) TypeData where
-  construct n = on2StateValues pair (construct n) (construct n)
-
 instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) ParamData Variable where
   param = pair1 param param . zoom lensMStoVS
   pointerParam = pair1 pointerParam pointerParam . zoom lensMStoVS
-
-instance (Pair p) => RenderParam (p CppSrcCode CppHdrCode) ParamData Variable where
-  paramFromData v' d = pair1 (`paramFromData` d) (`paramFromData` d) (zoom lensMStoVS v')
-
-instance (Pair p) => ParamElim (p CppSrcCode CppHdrCode) ParamData TypeData where
-  parameterName p = parameterName $ pfst p
-  parameterType p = pair (parameterType $ pfst p) (parameterType $ psnd p)
-  parameter p = RC.parameter $ pfst p
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) MethodData (Doc, VisibilityTag) ParamData Body Variable TypeData where
   docMain = pair1 docMain docMain
@@ -750,21 +579,6 @@ instance (Pair p) => OOMethodSym (p CppSrcCode CppHdrCode) MethodData Attachment
     (zoom lensMStoVS . snd <$> is) (zoom lensMStoVS . snd <$> os)
     (zoom lensMStoVS . snd <$> bs)
 
-instance (Pair p) => RenderMethod (p CppSrcCode CppHdrCode) MethodData where
-  commentedFunc = pair2 commentedFunc commentedFunc
-
-  mthdFromData s d = on2StateValues pair (mthdFromData s d) (mthdFromData s d)
-
-instance (Pair p) => OORenderMethod (p CppSrcCode CppHdrCode) MethodData AttachmentData (Doc, VisibilityTag) ParamData Body TypeData where
-  intMethod m n s p = pairValListVal
-    (intMethod m n (pfst s) (pfst p)) (intMethod m n (psnd s) (psnd p))
-  intFunc m n s p = pairValListVal
-    (intFunc m n (pfst s) (pfst p)) (intFunc m n (psnd s) (psnd p))
-  destructor = error $ CP.destructorError cppName
-
-instance (Pair p) => MethodElim (p CppSrcCode CppHdrCode) MethodData where
-  method m = RC.method $ pfst m
-
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) StateVarData AttachmentData (Doc, VisibilityTag) Variable Value where
   stateVar s p = pair1 (stateVar (pfst s) (pfst p)) (stateVar (psnd s) (psnd p))
     . zoom lensCStoVS
@@ -773,9 +587,6 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) StateVarData Attachme
     (stateVarDef (psnd s) (psnd p)) (zoom lensCStoVS vr) (zoom lensCStoVS vl)
   constVar s vr vl = pair2 (constVar (pfst s)) (constVar (psnd s))
     (zoom lensCStoVS vr) (zoom lensCStoVS vl)
-
-instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) StateVarData where
-  stateVar v = RC.stateVar $ pfst v
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) Class StateVarData MethodData where
   buildClass p vs cs fs = do
@@ -792,35 +603,11 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) Class StateVarData Metho
 
   docClass d = pair1 (docClass d) (docClass d)
 
-instance (Pair p) => RenderClass (p CppSrcCode CppHdrCode) Class StateVarData MethodData (Doc, VisibilityTag) where
-  intClass n s i vs cs fs = pair3Lists
-    (intClass n (pfst s) (pfst i)) (intClass n (psnd s) (psnd i))
-    vs (zoom lensCStoMS <$> cs) (zoom lensCStoMS <$> fs)
-  commentedClass = pair2 commentedClass commentedClass
-
-instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) Class where
-  class' c = RC.class' $ pfst c
-
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) ModData Class MethodData where
   buildModule n is ms cs = do
     modify (setModuleName n)
     pair2Lists (buildModule n is) (buildModule n is)
       (zoom lensFStoMS <$> ms) (zoom lensFStoCS <$> cs)
-
-instance (Pair p) => RenderMod (p CppSrcCode CppHdrCode) ModData where
-  modFromData n d = on2StateValues pair (modFromData n d) (modFromData n d)
-  updateModuleDoc f m = pair
-    (updateModuleDoc f $ pfst m) (updateModuleDoc f $ psnd m)
-
-instance (Pair p) => ModuleElim (p CppSrcCode CppHdrCode) ModData where
-  module' m = RC.module' $ pfst m
-
-instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
-  blockComment lns = pair (blockComment lns) (blockComment lns)
-  docComment lns = on2StateValues pair (docComment lns) (docComment lns)
-
-instance (Pair p) => BlockCommentElim (p CppSrcCode CppHdrCode) where
-  blockComment' c = RC.blockComment' $ pfst c
 
 -- Helpers for pair instance
 

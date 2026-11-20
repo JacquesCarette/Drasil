@@ -3,7 +3,6 @@ digraph "refvsref" {
     "dataDefn:wVol" -> "dataDefn:tankVol";
     "dataDefn:tauW" -> "dataDefn:wMass";
     "theory:rocTempSimpRC" -> "theory:consThermECS";
-    "theory:rocTempSimpRC" -> "theory:rocTempSimpRC";
     "theory:htFluxC" -> "theory:nwtnCoolingTM";
     "theory:eBalanceOnWtrRC" -> "dataDefn:tauW";
     "theory:eBalanceOnWtrRC" -> "theory:rocTempSimpRC";

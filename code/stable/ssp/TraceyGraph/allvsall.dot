@@ -81,14 +81,12 @@ digraph "allvsall" {
     "theory:baseWtrF" -> "instance:assumpHFSM";
     "theory:baseWtrF" -> "dataDefn:l_b,i";
     "theory:baseWtrF" -> "theory:pressure";
-    "theory:baseWtrF" -> "theory:baseWtrF";
     "theory:srfWtrF" -> "instance:assumpPSC";
     "theory:srfWtrF" -> "instance:assumpSBSBISL";
     "theory:srfWtrF" -> "instance:assumpWISE";
     "theory:srfWtrF" -> "instance:assumpHFSM";
     "theory:srfWtrF" -> "dataDefn:l_s,i";
     "theory:srfWtrF" -> "theory:pressure";
-    "theory:srfWtrF" -> "theory:srfWtrF";
     "theory:FS" -> "instance:assumpINSFL";
     "theory:FS" -> "instance:assumpES";
     "theory:FS" -> "instance:assumpSF";
@@ -101,7 +99,6 @@ digraph "allvsall" {
     "theory:FS" -> "theory:resShearWO";
     "theory:FS" -> "theory:mobShearWO";
     "theory:FS" -> "theory:X_i";
-    "theory:FS" -> "theory:FS";
     "theory:FS" -> "theory:nrmShrForIM";
     "theory:FS" -> "theory:intsliceFsRC";
     "theory:nrmShrForIM" -> "instance:assumpINSFL";
@@ -111,7 +108,6 @@ digraph "allvsall" {
     "theory:nrmShrForIM" -> "theory:X_i";
     "theory:nrmShrForIM" -> "theory:momentEql";
     "theory:nrmShrForIM" -> "theory:FS";
-    "theory:nrmShrForIM" -> "theory:nrmShrForIM";
     "theory:nrmShrForIM" -> "theory:nrmShrForNumRC";
     "theory:nrmShrForIM" -> "theory:nrmShrForDenRC";
     "theory:nrmShrForIM" -> "theory:intsliceFsRC";
@@ -132,7 +128,6 @@ digraph "allvsall" {
     "theory:intsliceFsRC" -> "theory:mobShearWO";
     "theory:intsliceFsRC" -> "theory:FS";
     "theory:intsliceFsRC" -> "theory:nrmShrForIM";
-    "theory:intsliceFsRC" -> "theory:intsliceFsRC";
     "theory:crtSlpIdIM" -> "instance:assumpSSC";
     "instance:determineCritSlip" -> "theory:FS";
     "instance:determineCritSlip" -> "theory:nrmShrForIM";

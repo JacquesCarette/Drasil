@@ -10,7 +10,6 @@ digraph "allvsall" {
     "theory:rocTempSimpRC" -> "instance:assumpDWCoW";
     "theory:rocTempSimpRC" -> "instance:assumpSHECoW";
     "theory:rocTempSimpRC" -> "theory:consThermECS";
-    "theory:rocTempSimpRC" -> "theory:rocTempSimpRC";
     "theory:htFluxC" -> "instance:assumpLCCCW";
     "theory:htFluxC" -> "instance:assumpTHCCoT";
     "theory:htFluxC" -> "theory:nwtnCoolingTM";

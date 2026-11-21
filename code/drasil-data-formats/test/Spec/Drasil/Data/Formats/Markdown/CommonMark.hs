@@ -6,9 +6,9 @@ import Data.Text (Text)
 import Data.Text qualified as T
 import Drasil.Data.Formats.HTML qualified as HTML
 import Drasil.Data.Formats.Markdown.CommonMark
-  ( Block (..), CodeFenceStyle (..), CommonMark (..), CommonMarkRenderOptions (..),
+  ( Block (..), CodeFenceStyle (..), CommonMark, CommonMarkRenderOptions (..),
     EmphasisDelimiter (..), HeadingLevel (..), Inline (..), ListItem (..),
-    defaultCommonMarkRO, mkHeading, renderCommonMark )
+    defaultCommonMarkRO, mkCommonMark, mkHeading, renderCommonMark )
 import Drasil.TestingKit.Golden (file, goldenTest, goldenTestingGroup, ps)
 import Prettyprinter (LayoutOptions (..), PageWidth (..), defaultLayoutOptions, group, layoutPretty)
 import Prettyprinter.Render.Text (renderStrict)
@@ -23,6 +23,10 @@ commonMarkTests = testGroup "Drasil.Data.Formats.Markdown.CommonMark"
   [ inlineTests,
     codeSyntaxTests,
     headingValidationTests,
+    testCase "split CRLF and empty nodes are rejected at document construction" $
+      mkCommonMark [Paragraph
+        [Plain "a\r", Plain "", HTMLInline (HTML.RawText ""), Plain "\nb"]]
+        @?= Left "Plain text cannot contain CR or LF; use SoftBreak, HardBreak or separate Paragraphs.",
     goldenTestingGroup
       [osp|test/build/markdown/commonmark|]
       [osp|test/golden/markdown/commonmark|]
@@ -37,23 +41,24 @@ commonMarkTests = testGroup "Drasil.Data.Formats.Markdown.CommonMark"
           renderCommonMark defaultCommonMarkRO escapingDocument
       ],
     testGroup "Block boundaries"
-      [ testCase name (renderText (CommonMark blocks) @?= expected)
+      [ testCase name (renderText (document blocks) @?= expected)
       | (name, blocks, expected) <- boundaryCases ],
     testGroup "Heading levels"
       [ testCase (show level) $
-          renderText (CommonMark [heading level [Plain "h"]]) @?= marker <> " h"
+          renderText (document [heading level [Plain "h"]]) @?= marker <> " h"
       | (level, marker) <- [(H1, "#"), (H2, "##"), (H3, "###"),
                            (H4, "####"), (H5, "#####"), (H6, "######")] ],
     testGroup "Independent delimiter options"
       [ testCase (show emphasis <> " / " <> show strong) $
           renderWith (defaultCommonMarkRO
             {emphasisDelimiter = emphasis, strongDelimiter = strong})
-            (CommonMark [Paragraph [Emphasis [Plain "small"], Plain " and ", Strong [Plain "large"]]])
+            (document [Paragraph
+              [Emphasis [Plain "small"], Plain " and ", Strong [Plain "large"]]])
             @?= emMarker <> "small" <> emMarker <> " and " <> strongMarker <> "large" <> strongMarker
       | (emphasis, emMarker) <- [(Asterisk, "*"), (Underscore, "_")],
         (strong, strongMarker) <- [(Asterisk, "**"), (Underscore, "__")] ],
     testCase "ordered-list continuation follows a two-digit marker" $
-      renderText (CommonMark [OrderedList
+      renderText (document [OrderedList
         (replicate 9 (ListItem [p "item"]) <> [ListItem [p "ten", p "continued"]])])
         @?= T.intercalate "\n\n" [T.pack (show n) <> ". item" | n <- [1 :: Int .. 9]]
           <> "\n\n10. ten\n\n    continued",
@@ -68,64 +73,68 @@ commonMarkTests = testGroup "Drasil.Data.Formats.Markdown.CommonMark"
     testCase "group and narrow layout preserve code lines" $
       renderStrict (layoutPretty (LayoutOptions (AvailablePerLine 1 1))
         (group (renderCommonMark defaultCommonMarkRO
-          (CommonMark [CodeBlock Nothing "first\n\nlast\n\n"]))))
+          (document [CodeBlock Nothing "first\n\nlast\n\n"]))))
         @?= "```\nfirst\n\nlast\n\n```",
     testCase "public HTML options reach document fragments" $
       renderWith (defaultCommonMarkRO
         {htmlRenderOptions = HTML.defaultHTMLRO {HTML.indentationSize = 4}})
-        (CommonMark [HTMLBlock [HTML.Div [] [HTML.Paragraph [] [HTML.RawText "x"]]]])
+        (document [HTMLBlock [HTML.Div [] [HTML.Paragraph [] [HTML.RawText "x"]]]])
         @?= "<div>\n    <p>\n        x\n    </p>\n</div>",
     testGroup "Whitespace and block structure"
       [ testCase "ordinary paragraph edge spaces remain raw" $
-          renderText (CommonMark [p " x "]) @?= " x ",
+          renderText (document [p " x "]) @?= " x ",
         testCase "up to three leading spaces remain raw" $
-          renderText (CommonMark [p " x", p "  x", p "   x"])
+          renderText (document [p " x", p "  x", p "   x"])
             @?= " x\n\n  x\n\n   x",
         testCase "four leading spaces stay in a paragraph" $
-          renderText (CommonMark [p "    x", p "a\n    b"])
+          renderText (document
+            [ p "    x",
+              Paragraph [Plain "a", SoftBreak, Plain "    b"]
+            ])
             @?= "&#32;   x\n\na\n&#32;   b",
         testCase "tabs count toward four-column indentation" $
-          renderText (CommonMark [p "\tx", p " \tx"])
+          renderText (document [p "\tx", p " \tx"])
             @?= "&#9;x\n\n&#32;\tx",
         testCase "interior spaces and tabs are preserved" $
-          renderText (CommonMark [p "a  b\tc"]) @?= "a  b\tc",
+          renderText (document [p "a  b\tc"]) @?= "a  b\tc",
         testCase "spaces around soft breaks do not become hard breaks" $
-          renderText (CommonMark [Paragraph [Plain "a  ", SoftBreak, Plain "  b"]])
+          renderText (document [Paragraph [Plain "a  ", SoftBreak, Plain "  b"]])
             @?= "a&#32;&#32;\n  b",
         testCase "plain whitespace and soft-break-only paragraphs are omitted" $
-          renderText (CommonMark [p "  ", p "\t",
-            Paragraph [Plain "\r\n", SoftBreak, Plain "\t "]]) @?= "",
+          renderText (document [p "  ", p "\t",
+            Paragraph [SoftBreak, SoftBreak, Plain "\t "]]) @?= "",
         testCase "nonbreaking-space-only paragraphs are omitted" $
-          renderText (CommonMark [p "\x00A0"]) @?= "",
+          renderText (document [p "\x00A0"]) @?= "",
         testCase "code HTML and hard breaks retain whitespace paragraphs" $
-          renderText (CommonMark [Paragraph [CodeSpan " "],
+          renderText (document [Paragraph [CodeSpan " "],
             Paragraph [HTMLInline (HTML.RawText " ")], Paragraph [HardBreak]])
             @?= "``` ```\n\n&#32;\n\n<br /><!-- -->",
         testCase "whitespace does not hide boundary hard breaks" $
-          renderText (CommonMark
+          renderText (document
             [Paragraph [Plain " ", HardBreak, Plain "x", HardBreak, Plain " "],
              Paragraph [Plain " ", HardBreak, Plain " "]])
             @?= "<br />x<br />\n\n<br /><!-- -->",
         testCase "heading edge spaces are trimmed" $
-          renderText (CommonMark [heading H1 [Plain "  x  "]]) @?= "# x",
+          renderText (document [heading H1 [Plain "  x  "]]) @?= "# x",
         testCase "heading edge tabs and whitespace-only contents are trimmed" $
-          renderText (CommonMark [heading H1 [Plain "\t x \t"],
+          renderText (document [heading H1 [Plain "\t x \t"],
             heading H2 [Plain " \t "]]) @?= "# x\n\n##",
         testCase "heading trims raw HTML edge spaces and tabs" $
-          renderText (CommonMark
+          renderText (document
             [heading H1 [HTMLInline (HTML.RawText "\t x \t")],
              heading H2 [HTMLInline (HTML.RawText " \t ")]]) @?= "# x\n\n##",
         testCase "heading trimming preserves adjacent code span spaces" $
-          renderText (CommonMark [heading H1 [CodeSpan " x ", CodeSpan " "]])
+          renderText (document [heading H1 [CodeSpan " x ", CodeSpan " "]])
             @?= "# <code>&#32;x&#32;</code><code>&#32;</code>",
         testCase "heading trimming preserves spaces between inline nodes" $
-          renderText (CommonMark [heading H1 [Plain " A ", Emphasis [Plain "B"], Plain " C "]])
+          renderText (document [heading H1
+            [Plain " A ", Emphasis [Plain "B"], Plain " C "]])
             @?= "# A *B* C",
         testCase "heading trimming preserves code span padding" $
-          renderText (CommonMark [heading H1 [Plain " ", CodeSpan " x ", Plain " "]])
+          renderText (document [heading H1 [Plain " ", CodeSpan " x ", Plain " "]])
             @?= "# ```  x  ```",
         testCase "heading trimming removes edge nonbreaking spaces" $
-          renderText (CommonMark [heading H1 [Plain "\x00A0x\x00A0"]])
+          renderText (document [heading H1 [Plain "\x00A0x\x00A0"]])
             @?= "# x"
       ]
   ]
@@ -137,11 +146,11 @@ headingValidationTests = testGroup "Heading validation"
           mkHeading H1 contents @?= Left "Headings require inline content without line breaks."
       | (name, contents) <- invalidHeadingCases ],
     testCase "accept nested single-line formatting" $
-      fmap (renderText . CommonMark . pure)
+      fmap (renderText . document . pure)
         (mkHeading H2 [Strong [Plain "Title"], Plain " ", Link "/target" [CodeSpan "x"]])
         @?= Right "## **Title** [```x```](</target>)",
     testCase "accept inline HTML with renderer layout newlines" $
-      fmap (renderText . CommonMark . pure)
+      fmap (renderText . document . pure)
         (mkHeading H1 [HTMLInline (HTML.Custom (HTML.CT "span") [] [HTML.RawText "x"])])
         @?= Right "# <span><!-- --> &#32; x </span>"
   ]
@@ -181,26 +190,31 @@ codeSyntaxTests :: TestTree
 codeSyntaxTests = testGroup "Code syntax"
   [ testGroup "Code spans"
       [ testCase name $
-          renderText (CommonMark [Paragraph [CodeSpan contents]]) @?= expected
+          renderText (document [Paragraph [CodeSpan contents]]) @?= expected
       | (name, contents, expected) <- codeCases ],
     testGroup "Code fences"
       [ testCase name $
-          renderText (CommonMark [CodeBlock info contents]) @?= expected
+          renderText (document [CodeBlock info contents]) @?= expected
       | (name, info, contents, expected) <- fenceCases ],
     testGroup "Code fence style options"
       [ testCase name $
           renderWith (defaultCommonMarkRO {codeFenceStyle = style})
-            (CommonMark [CodeBlock info contents]) @?= expected
+            (document [CodeBlock info contents]) @?= expected
       | (name, style, info, contents, expected) <- fenceStyleCases ],
     testCase "code languages are independent within one document" $
-      renderText (CommonMark
+      renderText (document
         [CodeBlock (Just "python") "x = 1", CodeBlock (Just "haskell") "x = 1",
          CodeBlock Nothing "plain"])
         @?= "```python\nx = 1\n```\n\n```haskell\nx = 1\n```\n\n```\nplain\n```",
     testCase "fence style does not change inline code" $
       renderWith (defaultCommonMarkRO {codeFenceStyle = TildeFence})
-        (CommonMark [Paragraph [CodeSpan "x"]]) @?= "```x```"
+        (document [Paragraph [CodeSpan "x"]]) @?= "```x```"
   ]
+
+document :: [Block] -> CommonMark
+document blocks = case mkCommonMark blocks of
+  Left message -> error message
+  Right validDocument -> validDocument
 
 renderText :: CommonMark -> Text
 renderText = renderWith defaultCommonMarkRO
@@ -254,7 +268,7 @@ boundaryCases =
   ]
 
 blocksDocument :: CommonMark
-blocksDocument = CommonMark
+blocksDocument = document
   [ heading H1 [Plain "Document"],
     Paragraph [Plain "Before ", Emphasis [Plain "small"], Plain " and ", Strong [Plain "large"]],
     heading H6 [Plain "Details"],
@@ -264,7 +278,7 @@ blocksDocument = CommonMark
   ]
 
 containersDocument :: CommonMark
-containersDocument = CommonMark
+containersDocument = document
   [ UnorderedList
       [ ListItem
           [ p "parent",
@@ -280,7 +294,7 @@ containersDocument = CommonMark
   ]
 
 htmlDocument :: CommonMark
-htmlDocument = CommonMark
+htmlDocument = document
   [ p "Before",
     HTMLBlock
       [ HTML.Div [HTML.Attr "id" "main-section"] [HTML.Paragraph [] [HTML.RawText "A & B"]],
@@ -296,7 +310,7 @@ htmlDocument = CommonMark
 
 -- Check that plain text escapes Markdown punctuation.
 escapingDocument :: CommonMark
-escapingDocument = CommonMark
+escapingDocument = document
   [p "These characters should be escaped: *, _, [, ], \\, and #."]
 
 codeCases :: [(String, Text, Text)]

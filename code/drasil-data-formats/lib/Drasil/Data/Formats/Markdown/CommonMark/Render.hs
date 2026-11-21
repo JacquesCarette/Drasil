@@ -71,6 +71,7 @@ defaultCommonMarkRO =
 -- | Render a document without a trailing newline. Empty paragraphs, lists and
 -- HTML fragments are omitted; empty quotes and list items retain their markers.
 -- Lists use loose spacing so multi-paragraph items keep their block structure.
+-- Plain text is single-line; use explicit break nodes for inline newlines.
 -- Inline contents must not contain blank lines, block HTML or nested links.
 -- HTML comments and custom raw-text elements must not contain blank lines: HTML
 -- block separators are guarded with comments to keep their Markdown context.
@@ -264,7 +265,7 @@ renderInlinesWith opt protectHTMLEdges = mconcat . go Nothing False . normalizeI
       | any startsWithNewline next = protectTrailingSpaces
       | otherwise = id
     renderNode _ startsLine (Plain text) next =
-      prepareText startsLine next (escapePlain (normalizeLineEndings text))
+      prepareText startsLine next (escapePlain text)
     renderNode before _ (Emphasis ch) after =
       emphasized "em" (emphasisDelimiter opt) 1 before ch after
     renderNode before _ (Strong ch) after =
@@ -299,27 +300,16 @@ renderInlinesWith opt protectHTMLEdges = mconcat . go Nothing False . normalizeI
       where
         contents = renderInlinesWith opt protectHTMLEdges ch
         -- Keep a tag-only opening line from starting an HTML block.
-        guardLine | openingNeedsGuard (normalizeInlines ch) = "<!-- -->"
-                  | otherwise = mempty
-    -- Only literal text and a soft break can leave the opening tag alone on
-    -- its line. Inspect those leaves without laying out the composed inlines.
-    openingNeedsGuard [] = False
-    openingNeedsGuard (SoftBreak : _) = True
-    openingNeedsGuard (Plain text : rest) =
-      checkOpening (protectNextBreak (listToMaybe rest) (escapePlain (normalizeLineEndings text))) rest
-    openingNeedsGuard (HTMLInline body@HTML.RawText{} : rest) =
-      checkOpening (protectNextBreak (listToMaybe rest) (protectHTMLEdges (renderInlineHTML opt body))) rest
-    openingNeedsGuard _ = False
-    checkOpening text remaining =
-      let (opening, rest) = T.breakOn "\n" text
-      in T.all (\c -> c == ' ' || c == '\t') opening &&
-        (not (T.null rest) || openingNeedsGuard remaining)
+        (firstLine, remainingLines) = T.breakOn "\n" contents
+        guardLine
+          | T.null remainingLines = mempty
+          | T.all (\c -> c == ' ' || c == '\t') firstLine = "<!-- -->"
+          | otherwise = mempty
 
 -- Formatting and link delimiters enclose their contents, so only these leaves
 -- can put an adjacent node at the beginning or end of a physical source line.
 startsWithNewline :: Inline -> Bool
 startsWithNewline SoftBreak = True
-startsWithNewline (Plain text) = any (isLineEnding . fst) (T.uncons text)
 startsWithNewline (HTMLInline (HTML.RawText text)) =
   any (isLineEnding . fst) (T.uncons text)
 startsWithNewline _ = False
@@ -327,7 +317,6 @@ startsWithNewline _ = False
 endsWithNewline :: Inline -> Bool
 endsWithNewline SoftBreak = True
 endsWithNewline HardBreak = True
-endsWithNewline (Plain text) = any (isLineEnding . snd) (T.unsnoc text)
 endsWithNewline (HTMLInline (HTML.RawText text)) =
   any (isLineEnding . snd) (T.unsnoc text)
 endsWithNewline _ = False
@@ -335,8 +324,8 @@ endsWithNewline _ = False
 isLineEnding :: Char -> Bool
 isLineEnding c = c == '\r' || c == '\n'
 
--- Ignore absent text when inspecting neighbors, and join adjacent literal text
--- before normalizing line endings (a CRLF pair may span two Plain nodes).
+-- Ignore empty text when inspecting neighbors. Merge adjacent Plain nodes so
+-- splitting text does not change delimiter or whitespace handling.
 normalizeInlines :: [Inline] -> [Inline]
 normalizeInlines = mergePlain . filter visible
   where
@@ -374,7 +363,7 @@ delimiterText Asterisk = "*"
 delimiterText Underscore = "_"
 
 escapePlain :: Text -> Text
-escapePlain = protectLineIndentation protectCodeIndentation . T.replace " \n" "&#32;\n" . T.concatMap escapeChar
+escapePlain = T.concatMap escapeChar
   where
     escapeChar c
       | isAscii c && (isPunctuation c || isSymbol c) = "\\" <> T.singleton c

@@ -9,6 +9,7 @@ module Drasil.Data.Formats.Markdown.CommonMark.Core
     URL,
     Source,
     -- * Smart constructors
+    mkCommonMark,
     mkHeading,
   )
 where
@@ -63,9 +64,9 @@ newtype ListItem
 
 -- | An inline CommonMark node.
 data Inline
-  = -- | Plain textual content.
+  = -- | Plain text without CR or LF. Use explicit break nodes for newlines.
     Plain
-      Text -- ^ Text to escape when rendered.
+      Text -- ^ Single-line text to escape when rendered.
   | -- | Emphasized contents.
     Emphasis
       [Inline] -- ^ Inline contents to emphasize.
@@ -91,6 +92,36 @@ data Inline
     HTMLInline
       HTML.HTMLBody -- ^ HTML body node placed inline.
   deriving (Eq, Show)
+
+-- | Build a document, rejecting CR and LF in every 'Plain' node.
+-- Use 'SoftBreak', 'HardBreak' or separate paragraphs instead.
+-- Code, HTML and link destinations keep their existing newline rules.
+mkCommonMark :: [Block] -> Either String CommonMark
+mkCommonMark blocks
+  | any blockHasPlainLineBreak blocks =
+      Left "Plain text cannot contain CR or LF; use SoftBreak, HardBreak or separate Paragraphs."
+  | otherwise = Right (CommonMark blocks)
+  where
+    blockHasPlainLineBreak (Heading _ contents) = any inlineHasPlainLineBreak contents
+    blockHasPlainLineBreak (Paragraph contents) = any inlineHasPlainLineBreak contents
+    blockHasPlainLineBreak (BlockQuote contents) = any blockHasPlainLineBreak contents
+    blockHasPlainLineBreak (OrderedList items) = any itemHasPlainLineBreak items
+    blockHasPlainLineBreak (UnorderedList items) = any itemHasPlainLineBreak items
+    blockHasPlainLineBreak (CodeBlock _ _) = False
+    blockHasPlainLineBreak ThematicBreak = False
+    blockHasPlainLineBreak (HTMLBlock _) = False
+
+    itemHasPlainLineBreak (ListItem contents) = any blockHasPlainLineBreak contents
+
+    inlineHasPlainLineBreak (Plain text) = not (isSingleLineText text)
+    inlineHasPlainLineBreak (Emphasis contents) = any inlineHasPlainLineBreak contents
+    inlineHasPlainLineBreak (Strong contents) = any inlineHasPlainLineBreak contents
+    inlineHasPlainLineBreak (Link _ contents) = any inlineHasPlainLineBreak contents
+    inlineHasPlainLineBreak (Image _ contents) = any inlineHasPlainLineBreak contents
+    inlineHasPlainLineBreak (CodeSpan _) = False
+    inlineHasPlainLineBreak (HTMLInline _) = False
+    inlineHasPlainLineBreak SoftBreak = False
+    inlineHasPlainLineBreak HardBreak = False
 
 -- | Create a heading, rejecting CR, LF, 'SoftBreak' and 'HardBreak', including
 -- breaks in nested inline contents. HTML block constructors and @br@ elements

@@ -7,8 +7,8 @@ module Spec.Drasil.Data.Formats.Markdown.CommonMark.Inline (inlineTests) where
 import Data.Text (Text)
 import Drasil.Data.Formats.HTML qualified as HTML
 import Drasil.Data.Formats.Markdown.CommonMark
-  ( Block (Paragraph), CommonMark (..), Inline (..),
-    defaultCommonMarkRO, renderCommonMark )
+  ( Block (Paragraph), Inline (..),
+    defaultCommonMarkRO, mkCommonMark, renderCommonMark )
 import Prettyprinter (defaultLayoutOptions, layoutPretty)
 import Prettyprinter.Render.Text (renderStrict)
 import Test.Tasty (TestTree, testGroup)
@@ -20,18 +20,16 @@ inlineTests = testGroup "Inline regressions through the public API"
   | (name, nodes, expected) <- inlineCases ]
 
 renderParagraph :: [Inline] -> Text
-renderParagraph nodes = renderStrict $ layoutPretty defaultLayoutOptions $
-  renderCommonMark defaultCommonMarkRO (CommonMark [Paragraph nodes])
+renderParagraph nodes = case mkCommonMark [Paragraph nodes] of
+  Left message -> error message
+  Right document -> renderStrict $ layoutPretty defaultLayoutOptions $
+    renderCommonMark defaultCommonMarkRO document
 
 -- Character references protect structural indentation and HTML literals;
 -- HTML fallbacks keep neighboring delimiters from merging.
 inlineCases :: [(String, [Inline], Text)]
 inlineCases =
-  [ -- A CRLF pair may span text nodes, even with absent nodes between them.
-    ("split CRLF and empty nodes do not create a blank line",
-      [Plain "a\r", Plain "", HTMLInline (HTML.RawText ""), Plain "\nb"],
-      "a\nb"),
-    -- Nesting and touching emphasis must retain their separate boundaries.
+  [ -- Nesting and touching emphasis must retain their separate boundaries.
     ("nested and adjacent emphasis remain separate",
       [Emphasis [Strong [Plain "inner"]], Plain " ",
         Emphasis [Plain "a"], Plain "", Emphasis [Plain "b"]],
@@ -42,8 +40,8 @@ inlineCases =
     ("empty code remains between literal text nodes",
       [Plain "a", CodeSpan "", Plain "b"],
       "a<code></code>b"),
-    ("empty code separates literal line endings",
-      [Plain "a\r", CodeSpan "", Plain "\nb"],
+    ("empty code separates explicit line breaks",
+      [Plain "a", SoftBreak, CodeSpan "", SoftBreak, Plain "b"],
       "a\n<code></code>\nb"),
     ("empty code preserves neighboring emphasis boundaries",
       [Emphasis [Plain "a"], CodeSpan "", Emphasis [Plain "b"]],
@@ -56,14 +54,14 @@ inlineCases =
       "<code></code><code></code>"),
     -- A tag-only opening line would otherwise start a CommonMark HTML block.
     ("TAB then LF in emphasis stays inline",
-      [Emphasis [Plain "\t\nx"]],
+      [Emphasis [Plain "\t", SoftBreak, Plain "x"]],
       "<em><!-- -->\t\nx</em>"),
     -- CommonMark normally trims indentation following a source newline.
     ("literal indentation inside emphasis survives a newline",
-      [Emphasis [Plain "a\n\tb"]],
-      "*a\n&#9;b*"),
+      [Emphasis [Plain "a", SoftBreak, Plain "\tb"]],
+      "<em>a\n&#9;b</em>"),
     ("literal indentation survives across Plain and HTML nodes",
-      [Plain "a\n", HTMLInline (HTML.RawText "\tb")],
+      [Plain "a", SoftBreak, HTMLInline (HTML.RawText "\tb")],
       "a\n&#9;b"),
     ("spaces before an HTML literal newline do not make a hard break",
       [Plain "a  ", HTMLInline (HTML.RawText "\nb")],

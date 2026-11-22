@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Printing helpers.
 module Language.Drasil.Printing.Import.ExprCommon (
-  -- * Expression-related
+  -- * Builders
   parens,
   -- * Symbol and Term Resolution
   lookupC, lookupC', lookupSymb
@@ -13,12 +13,12 @@ import Drasil.Database (UID, ChunkDB, findOrErr, UIDRef, IsChunk, raw)
 import Language.Drasil (Stage(..), codeSymb, eqSymb, Symbol, HasSymbol,
   DefinedQuantityDict)
 
-import qualified Language.Drasil.Printing.AST as P
+import qualified Drasil.Document.Layout.Internal as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, stg, sysdb)
 
--- * Expr-related
+-- * Builders
 
--- | Helper for inserting parentheses.
+-- | Surround an expression with parentheses.
 parens :: P.Expr -> P.Expr
 parens = P.Fenced P.Paren P.Paren
 

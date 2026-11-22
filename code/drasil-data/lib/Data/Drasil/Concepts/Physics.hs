@@ -6,7 +6,6 @@ import Drasil.Database (mkUid)
 import Language.Drasil hiding (space)
 import Language.Drasil.Document (fromSource)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.Metadata.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
@@ -18,15 +17,15 @@ import Data.Drasil.Concepts.Education (mechanics)
 
 -- | Collects all physics-related concepts.
 physicCon :: [ConceptChunk]
-physicCon = [acceleration, angDisp, angFreq, angular, chgInVelocity,
-  cohesion, collision, compression, constAccel, constAccelV, damping, dampingCoeff,
-  displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
-  friction, gravity, gravitationalAccel, gravitationalMagnitude, height,
+physicCon = [acceleration, angFreq, angular,
+  cohesion, collision, compression, constAccel, damping, dampingCoeff,
+  displacement, distance, elasticity, energy, fbd, force,
+  friction, gravity, gravitationalAccel, height,
   iPos, iSpeed, iVel, impulseS, impulseV, isotropy,
-  joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
+  joint, kEnergy, linear, mechEnergy,
   momentOfInertia, position, potEnergy, rectilinear,
-  rigidBody, scalarAccel, scalarPos, shm, space, speed, stiffCoeff, strain, stress, tension,
-  time, torque, velocity, momentum, chgMomentum, moment, moment2D, fOfGravity,
+  rigidBody, shm, space, speed, stiffCoeff, strain, stress, tension,
+  time, torque, velocity, momentum, moment, moment2D, fOfGravity,
   pendulum, body, kinematics, frequency, period, motion, horizontalMotion, verticalMotion]
 
 -- | Collects all physics-related common ideas (like a concept, but with no definition).
@@ -39,16 +38,16 @@ physicCon' = [oneD, twoD, threeD]
 --
 -- In alphabetical order.
 
-acceleration, angDisp, angFreq, angular, chgInVelocity, cohesion,
-  collision, compression, constAccel, constAccelV, damping, dampingCoeff, displacement,
-  distance, elasticity, energy, fSpeed, fVel, fbd, force, friction, gravity,
-  gravitationalAccel, gravitationalMagnitude, height, iPos, iSpeed,
+acceleration, angFreq, angular, cohesion,
+  collision, compression, constAccel, damping, dampingCoeff, displacement,
+  distance, elasticity, energy, fbd, force, friction, gravity,
+  gravitationalAccel, height, iPos, iSpeed,
   iVel, impulseS, impulseV, isotropy, joint,
-  kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
-  potEnergy, rectilinear, rigidBody, scalarAccel, scalarPos, shm,
+  kEnergy, linear, mechEnergy, momentOfInertia, position,
+  potEnergy, rectilinear, rigidBody, shm,
   space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity,
   momentum, moment, moment2D, fOfGravity, pendulum, body,
-  kinematics, frequency, period, motion, horizontalMotion, verticalMotion, chgMomentum :: ConceptChunk
+  kinematics, frequency, period, motion, horizontalMotion, verticalMotion :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdea (mkUid "oneD")   (cn "one-dimensional")   "1D" [mathematics, physics]
@@ -61,11 +60,6 @@ angular = cncpt''' (mkUid "angular") (cn' "angular")
   (S "denoting physical properties or quantities measured with reference to or by means of an angle")
 body = cncpt''' (mkUid "physicsBody") (cnIES "body")
   (S "an object with" +:+ phrase QPP.mass)
-chgInVelocity = cncpt''' (mkUid "chgInVelocity") (cn desc)
-  (S "the " +:+ S desc +:+ phrase rigidBody)
-  where desc = "change in velocity" -- TODO: This is a hack to avoid an infinite loop should we enable strict data.
-chgMomentum = cncpt''' (mkUid "chgMomentum") (cn' "change in momentum")
-  (S "The rate of change of a body's" +:+ phrase impulseV)
 collision = cncpt''' (mkUid "collision") (cn' "collision")
   (S "an encounter between particles resulting in an exchange or transformation of energy")
 cohesion = cncpt''' (mkUid "cohesion") (cn "cohesion")
@@ -100,8 +94,6 @@ gravity = cncpt''' (mkUid "gravity") (cn "gravity")
   (S "the force that attracts one physical body with mass to another")
 gravitationalAccel = cncpt''' (mkUid "gravitationalAccel") (cn "gravitational acceleration")
   (S "the approximate acceleration due to gravity on Earth at sea level")
-gravitationalMagnitude = cncpt''' (mkUid "gravitationalMagnitude") (cn "magnitude of gravitational acceleration")
-  (S "the magnitude of the approximate acceleration due to gravity on Earth at sea level")
 height = cncpt''' (mkUid "height") (cn' "height")
   (S "the" +:+ phrase distance +:+ S "above a reference point for a point of interest")
 horizontalMotion = cncpt''' (mkUid "horizontalMotion") (cn "horizontal motion")
@@ -144,10 +136,6 @@ rigidBody = cncpt''' (mkUid "rigidBody") (cnIES "rigid body")
   (S "a solid body in which deformation is neglected")
 space = cncpt''' (mkUid "space") (cn' "space")
   (S "a two-dimensional extent where objects and events have relative positions and directions")
-scalarAccel = cncpt''' (mkUid "scalarAccel") (cn' "scalar acceleration")
-  (S "magnitude" `S.the_ofThe` phrase acceleration +:+ S "vector")
-scalarPos = cncpt''' (mkUid "scalarPos") (cn' "scalar position")
-  (S "magnitude" `S.the_ofThe` phrase position +:+ S "vector")
 shm = cncpt''' (mkUid "SHM") (nounPhraseSP "simple harmonic motion") (S ("Periodic motion through an equilibrium position. " <>
                                                         "The motion is sinusoidal in time and demonstrates a" <>
                                                         " single resonant frequency")) -- source: Wikipedia
@@ -179,26 +167,14 @@ verticalMotion = cncpt''' (mkUid "verticalMotion") (cn "vertical motion")
 
 iPos = cncpt''' (mkUid "iPos") (cn "initial position") (S "The" +:+ phrase position +:+ S "at the body's initial point")
 
-fSpeed = cncpt''' (mkUid "fSpeed") (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
 iSpeed = cncpt''' (mkUid "iSpeed") (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
 
-fVel = cncpt''' (mkUid "fVel") (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
 iVel = cncpt''' (mkUid "iVel") (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
-
-constAccelV = cncpt''' (mkUid "constAccelV") (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
 
 --FIXME: COMBINATION HACK (for all below)
 --FIXME: should use compoundPhrase instead? Or better yet, use combineNINI instead of interacting with the terms directly?
-angDisp = cncpt''' (mkUid "angularDisplacement") (combineNINI angular displacement)
-  (S "the angle through which an object moves on a circular path")
 constAccel = cncpt''' (mkUid "constantAcceleration") (cn "constant acceleration")
   (S "a one-dimensional acceleration that is constant")
-linDisp = cncpt''' (mkUid "linearDisplacement") (combineNINI linear displacement)
-  (S "movement in one direction along a single axis")
-linVelo = cncpt''' (mkUid "linearVelocity") (combineNINI linear velocity)
-  (S "the speed of a moving object, dependent on the perspective taken")
-linAccel = cncpt''' (mkUid "linearAcceleration") (combineNINI linear acceleration)
-  (S "the rate of change of velocity without a change in direction")
 
 -- The following feel like they're missing something/need to be more
 -- descriptive. See issue tracker for details.

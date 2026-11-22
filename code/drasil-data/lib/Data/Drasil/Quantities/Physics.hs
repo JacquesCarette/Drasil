@@ -5,16 +5,15 @@ import Language.Drasil
 import Language.Drasil.Display (Symbol(Concat, Atop), Decoration(Delta))
 import Language.Drasil.ShortHands
 import qualified Language.Drasil.Sentence.Combinators as S
-import Language.Drasil.Chunk.Concept.NamedCombinators (combineNINI)
-import Data.Drasil.Concepts.Math (cartesian, point)
+import Language.Drasil.Chunk.Concept.NamedCombinators (combineNINI, inThe, of_)
+import Data.Drasil.Concepts.Math (cartesian, point, xComp, xDir, yComp, yDir)
 import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angular,
   angDisp, chgInVelocity, constAccel, constAccelV, displacement,
   distance, energy, fSpeed, fVel, force, frequency, gravitationalAccel,
-  gravitationalMagnitude, height, iPos, iSpeed, ixSpeed, iySpeed, iVel, impulseS, impulseV,
-  ixPos, ixVel, iyPos, iyVel, kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position,
+  gravitationalMagnitude, height, iPos, iSpeed, iVel, impulseS, impulseV,
+  kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position,
   potEnergy, scalarAccel, scalarPos, speed, time, torque,
-  velocity, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum, moment, moment2D, fOfGravity, tension, angFreq, period,
+  velocity, momentum, moment, moment2D, fOfGravity, tension, angFreq, period,
   frequency, chgMomentum)
 import Drasil.Database (mkUid)
 
@@ -111,36 +110,52 @@ fOfGravity             = dqd CP.fOfGravity             (sub (vec cF) (vec lG))  
 -- FIXME: Add variants of vector forms?
 -- FIXME: Pull out commonalities?
 
-xDist = dqd CP.xDist (subX lR) Real metre
-yDist = dqd CP.yDist (subY lR) Real metre
+xDist = quant (mkUid "xDist") (CP.distance `inThe` xDir)
+  (titleize CP.distance `S.inThe` phrase xDir) (subX lR) Real metre
+yDist = quant (mkUid "yDist") (CP.distance `inThe` yDir)
+  (titleize CP.distance `S.inThe` phrase yDir) (subY lR) Real metre
 
 iPos = dqd CP.iPos (sup lP initial) Real metre
-xPos = dqd CP.xPos (subX lP)        Real metre
-yPos = dqd CP.yPos (subY lP)        Real metre
+xPos = quant (mkUid "xPos") (xComp `of_` CP.position)
+  (S "The" +:+ NP (xComp `of_` CP.position)) (subX lP) Real metre
+yPos = quant (mkUid "yPos") (yComp `of_` CP.position)
+  (S "The" +:+ NP (yComp `of_` CP.position)) (subY lP) Real metre
 
-ixPos = dqd CP.ixPos (sup (subX lP) initial) Real metre
-iyPos = dqd CP.iyPos (sup (subY lP) initial) Real metre
+ixPos = quant (mkUid "ixPos") (xComp `of_` CP.iPos)
+  (S "The" +:+ NP (xComp `of_` CP.iPos)) (sup (subX lP) initial) Real metre
+iyPos = quant (mkUid "iyPos") (yComp `of_` CP.iPos)
+  (S "The" +:+ NP (yComp `of_` CP.iPos)) (sup (subY lP) initial) Real metre
 
 fSpeed = dqd CP.fSpeed (sup lV final)   Real velU
 iSpeed = dqd CP.iSpeed (sup lV initial) Real velU
 
-ixSpeed = dqd CP.ixSpeed (sub lU initial) Real velU -- temporary use for avoiding having too many superscripts
-iySpeed = dqd CP.iySpeed (sub lW initial) Real velU -- temporary use for avoiding having too many superscripts
+ixSpeed = quant (mkUid "ixSpeed") (xComp `of_` CP.iSpeed)
+  (S "The" +:+ NP (xComp `of_` CP.iSpeed)) (sub lU initial) Real velU -- temporary use for avoiding having too many superscripts
+iySpeed = quant (mkUid "iySpeed") (yComp `of_` CP.iSpeed)
+  (S "The" +:+ NP (yComp `of_` CP.iSpeed)) (sub lW initial) Real velU -- temporary use for avoiding having too many superscripts
 
 fVel = dqd CP.fVel (sup (vec lV) final)   Real velU
 iVel = dqd CP.iVel (sup (vec lV) initial) Real velU
-xVel = dqd CP.xVel (subX lV)              Real velU
-yVel = dqd CP.yVel (subY lV)              Real velU
+xVel = quant (mkUid "xVel") (xComp `of_` CP.velocity)
+  (S "The" +:+ NP (xComp `of_` CP.velocity)) (subX lV) Real velU
+yVel = quant (mkUid "yVel") (yComp `of_` CP.velocity)
+  (S "The" +:+ NP (yComp `of_` CP.velocity)) (subY lV) Real velU
 
-ixVel = dqd CP.ixVel (sup (subX lV) initial) Real velU
-iyVel = dqd CP.iyVel (sup (subY lV) initial) Real velU
+ixVel = quant (mkUid "ixVel") (xComp `of_` CP.iVel)
+  (S "The" +:+ NP (xComp `of_` CP.iVel)) (sup (subX lV) initial) Real velU
+iyVel = quant (mkUid "iyVel") (yComp `of_` CP.iVel)
+  (S "The" +:+ NP (yComp `of_` CP.iVel)) (sup (subY lV) initial) Real velU
 
-xAccel = dqd CP.xAccel (subX lA) Real accelU
-yAccel = dqd CP.yAccel (subY lA) Real accelU
+xAccel = quant (mkUid "xScalAcc") (xComp `of_` CP.acceleration)
+  (S "The" +:+ NP (xComp `of_` CP.acceleration)) (subX lA) Real accelU
+yAccel = quant (mkUid "yScalAcc") (yComp `of_` CP.acceleration)
+  (S "The" +:+ NP (yComp `of_` CP.acceleration)) (subY lA) Real accelU
 
 constAccelV = dqd CP.constAccelV (sup (vec  lA) constant) Real accelU
-xConstAccel = dqd CP.xConstAccel (sup (subX lA) constant) Real accelU
-yConstAccel = dqd CP.yConstAccel (sup (subY lA) constant) Real accelU
+xConstAccel = quant (mkUid "xConstAccel") (xComp `of_` CP.constAccel)
+  (S "The" +:+ NP (xComp `of_` CP.constAccel)) (sup (subX lA) constant) Real accelU
+yConstAccel = quant (mkUid "yConstAccel") (yComp `of_` CP.constAccel)
+  (S "The" +:+ NP (yComp `of_` CP.constAccel)) (sup (subY lA) constant) Real accelU
 
 constant, final, initial :: Symbol
 constant = label "c"

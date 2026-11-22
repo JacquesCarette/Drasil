@@ -1,14 +1,11 @@
-{-# LANGUAGE PatternSynonyms #-}
-
 -- | Re-export code-related smart constructors for external code writing and generation.
 module Language.Drasil.GOOL (
-  SoftwareDossierSym(..), package, PackageData(..), pattern PackageData,
+  SoftwareDossierSym(..), package, PackageData(..),
   unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP
 ) where
 
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
-import Language.Drasil.Code.PackageData (PackageData(..), pattern PackageData,
-  package)
+import Language.Drasil.Code.PackageData (PackageData(..), package)
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)

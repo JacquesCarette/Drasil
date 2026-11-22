@@ -1,5 +1,5 @@
 -- | Standard code to make a table of symbols.
-module Drasil.SRS.Sections.TableOfSymbols (table, symbTableRef, tsymb, tsymb', tsymb'', tsIntro) where
+module Drasil.SRS.Sections.TableOfSymbols (table, symbTableRef, tsymb, tsymb', tsymb'', tsContents) where
 
 -- Generic Haskell
 import Data.List (nub, (\\))
@@ -17,9 +17,9 @@ import Drasil.Metadata.Documentation (symbol_, description, tOfSymb)
 import Drasil.Metadata.Concepts.Math (unit_)
 
 -- other docLang
-import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu)
 import Drasil.SRS.DocumentLanguage.Units (toSentence) -- suspicious
 import Drasil.SRS.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), LFunc(..), RefTab(..))
+import Drasil.SRS.Sections.ReferenceMaterial (refSecContents)
 
 --Removed SymbolForm Constraint
 -- | Table of Symbols creation function. Takes in a 'Stage', 'Symbol's, and something that turns
@@ -63,19 +63,18 @@ tsymb' = TSymb' Defn
 tsymb'' :: [TSIntro] -> LFunc -> RefTab
 tsymb'' intro lfunc = TSymb' lfunc intro
 
--- | Table of symbols introduction builder. Used by 'mkRefSec'.
-tsIntro :: [TSIntro] -> Contents
-tsIntro [] = mkParagraph $ emptySectSentPlu [symbol_]
-tsIntro x = mkParagraph $ foldr ((+:+) . tsI) EmptyS x
-
--- | Table of symbols intro writer. Translates a 'TSIntro' to a list in a 'Sentence'.
-tsI :: TSIntro -> Sentence
-tsI (TypogConvention ts) = typogConvention ts
-tsI SymbOrder = S "The symbols are listed in alphabetical order."
-tsI (SymbConvention ls) = symbConvention ls
-tsI TSPurpose = S "The symbols used in this document are summarized in the" +:+
-  namedRef symbTableRef (titleize' tOfSymb) +:+. S "along with their units"
-tsI VectorUnits = S "For vector quantities, the units shown are for each component of the vector."
+-- | Table of symbols section contents. Takes the introduction, then the table
+-- it introduces. Used by 'mkRefSec'.
+tsContents :: [TSIntro] -> LabelledContent -> [Contents]
+tsContents x tbl = refSecContents [symbol_] tsI x tbl
+  where
+    tsI :: TSIntro -> Sentence
+    tsI (TypogConvention ts) = typogConvention ts
+    tsI SymbOrder = S "The symbols are listed in alphabetical order."
+    tsI (SymbConvention ls) = symbConvention ls
+    tsI TSPurpose = S "The symbols used in this document are summarized in the" +:+
+      namedRef tbl (titleize' tOfSymb) +:+. S "along with their units"
+    tsI VectorUnits = S "For vector quantities, the units shown are for each component of the vector."
 
 -- | Typographic convention writer. Translates a list of typographic conventions ('TConvention's)
 -- to a 'Sentence'.

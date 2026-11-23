@@ -16,14 +16,14 @@ import Control.Lens ((^.), _1, _2, over)
 import Drasil.Database (HasUID(..), (+++), mkUid)
 import Language.Drasil (HasSymbol(symbol), MayHaveUnit(getUnit),
   HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array,
-  Vect, Reference), implVar, implVar', compoundPhrase, nounPhrase, nounPhraseSP,
+  Vect, Reference), compoundPhrase, nounPhrase, nounPhraseSP,
   label, sub, Idea(getA), NamedIdea(term), Stage(..), Definition (defn), (+:+),
-  Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
+  Sentence (S), DefinedQuantityDict, dqdWr)
 
 import Drasil.Code.CodeExpr
 import Drasil.Code.CodeExpr.Development
 import Drasil.Code.CodeVar (CodeVarChunk (..), CodeFuncChunk, quantvar, quantfunc,
-  listToArray)
+  listToArray, implVar, implVar', implVarAU')
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Code.ExternalLibrary

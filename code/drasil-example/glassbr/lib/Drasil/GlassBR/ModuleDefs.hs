@@ -5,9 +5,10 @@
 module Drasil.GlassBR.ModuleDefs (readTableMod, allMods, implVars, interpY, interpZ) where
 
 import Drasil.Code.CodeExpr (CodeExpr, LiteralC(int))
+import Drasil.Code.CodeVar (implVar)
 import Drasil.Database (IsChunk, mkUid)
 import Language.Drasil (Space(..), nounPhraseSP,
-  label, sub, HasSymbol(..), Symbol, ExprC(..), DefinedQuantityDict, implVar)
+  label, sub, HasSymbol(..), Symbol, ExprC(..), DefinedQuantityDict)
 import Language.Drasil.Display (Symbol(Integ))
 import Language.Drasil.ShortHands (lX, lY, lZ, lV, lI, lJ, lK)
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod,

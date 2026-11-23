@@ -182,11 +182,11 @@ modelExpr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
 modelExpr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
 modelExpr (Operator o d e)           sm = eop sm o d e
 modelExpr (RealI c ri)               sm = renderRealInt sm (lookupC' sm c) ri
-modelExpr (Spc s)                    sm = space sm s
+modelExpr (Spc s)                    _  = space s
 modelExpr (SpaceBinaryOp IsIn l r)   sm = P.Row [modelExpr l sm, P.MO P.IsIn, modelExpr r sm]
 modelExpr (StatBinaryOp Defines l r) sm = P.Row [modelExpr l sm, P.MO P.Eq, modelExpr r sm]
 modelExpr (ForAll c s de)            sm = P.Row [
-    P.MO P.ForAll, symbol $ lookupC' sm c, P.MO P.IsIn, space sm s,
+    P.MO P.ForAll, symbol $ lookupC' sm c, P.MO P.IsIn, space s,
     P.MO P.Dot, modelExpr de sm
   ]
 

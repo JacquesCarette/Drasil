@@ -199,7 +199,7 @@ fctSftyDerivSentence18 = [S "The multiplication" `S.ofThe` ch mobShrC,
 fctSftyDerivSentence19 :: [Sentence]
 fctSftyDerivSentence19 = [S "Isolating the", phrase fs, S "on the left-hand",
   S "side and using compact notation" `S.for` S "the products and sums yields",
-  eqN 13 `sC` S "which can also be seen in this instance model"]
+  eqN 13]
 
 fctSftyDerivSentence20 :: [Sentence]
 fctSftyDerivSentence20 = [ch fs +:+ S "depends on the unknowns" +:+
@@ -565,11 +565,11 @@ intrSlcDerivSentence1 = [S "This derivation" `S.is` S "identical to the derivati
 
 intrSlcDerivSentence2 :: [Sentence]
 intrSlcDerivSentence2 = [S "A simple rearrangement of", eqN 3, S "leads to",
-  eqN 17 `sC` S "also seen in", S "this instance model"]
+  eqN 17]
 
 intrSlcDerivSentence3 :: [Sentence]
-intrSlcDerivSentence3 = [S "The cases shown in" +:+ S "this instance model" +:+
-  S "for when" +:+ eS (sy index $= int 0) `sC` eS (sy index $= int 1) `sC` S "or" +:+
+intrSlcDerivSentence3 = [S "The cases for when" +:+
+  eS (sy index $= int 0) `sC` eS (sy index $= int 1) `sC` S "or" +:+
   eS (sy index $= sy numbSlices) +:+ S "are derived by applying" +:+
   refS assumpES `sC` S "which says that" +:+
   eS (idx (sy intNormForce) (int 0)) `S.and_` eS (indxn intNormForce) +:+

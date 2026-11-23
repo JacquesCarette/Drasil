@@ -41,10 +41,9 @@ angleDerivSent4 = foldlSentCol[S "Next, multiply equation" +:+ refS xForceGD_2 +
                     eS cosAngleExpr2 `S.and_` S "equation" +:+ refS yForceGD_2 +:+ S "by" +:+
                     eS sinAngleExpr2 `S.and_` S "rearrange to get"]
 angleDerivSent5 = S "which leads to equation 4"
-angleDerivSent6 = foldlSentCol[S "By giving equations" +:+ refS accelXGD_1 `S.and_` refS accelXGD_2 `S.and_`
+angleDerivSent6 = foldlSentCol[S "Giving equations" +:+ refS accelXGD_1 `S.and_` refS accelXGD_2 `S.and_`
                     refS accelYGD_1 `S.and_` refS accelYGD_2 +:+
-                    S "plus additional two equations, 3 and 4, we can get" +:+ refS angleIM_1 `S.and_`
-                    S "this instance model" +:+ S "via a computer algebra program"]
+                    S "plus additional two equations, 3 and 4, to a computer algebra program, we get the following formulas"]
 
 angleIM_1 :: InstanceModel
 angleIM_1 = imNoRefs angleMK_1

@@ -4,7 +4,7 @@ module Language.Drasil.TeX.Monad (
   -- * Types
   MathContext(..), PrintLaTeX(..), D, Latex(..),
   -- * Functions
-  switch, toMath, toText, getCtx, (%%), ($+$), vcat, vpunctuate,
+  switch, toMath, toText, (%%), ($+$), vcat, vpunctuate,
   hpunctuate, nest, lub, special
 ) where
 
@@ -17,10 +17,6 @@ import Drasil.Printers.Common
 
 -----------------------------------------------------------------------------
 -- * Printing Monad
-
--- first, start with a specific data type
--- note that this is just the Reader Monad for now, but we might need
--- to extend, so start there.
 
 -- | There are two proper contexts, Text and Math; Curr is the current context.
 -- There are multiple ways of getting there: for Text, either being at the top-level
@@ -40,13 +36,6 @@ instance Functor PrintLaTeX where
 instance Applicative PrintLaTeX where
   pure = PL . const
   PL f <*> PL v = PL $ \ctx -> f ctx (v ctx)
-
--- | Define the printing monad.
-instance Monad PrintLaTeX where
-  return = pure
-  m >>= k = PL $ \ctx ->
-    let a = runPrint m ctx in
-    runPrint (k a) ctx
 
 -- | Convenient abbreviation.
 type D = PrintLaTeX TP.Doc
@@ -76,10 +65,6 @@ toMath, toText :: D -> D
 toMath = switch (const Math)
 -- | Change context to Text.
 toText = switch (const Text)
-
--- | MonadReader calls this @ask@.
-getCtx :: PrintLaTeX MathContext
-getCtx = PL id
 
 -- | D is a member of Semigroup.
 instance Semigroup (PrintLaTeX TP.Doc) where

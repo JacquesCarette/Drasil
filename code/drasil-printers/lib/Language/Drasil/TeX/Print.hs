@@ -1,20 +1,18 @@
 -- | Defines main LaTeX printer functions. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.TeX.Print.html).
-module Language.Drasil.TeX.Print (genTeX, pExpr, pUnit, spec, fence,
+module Language.Drasil.TeX.Print (genTeX, pExpr, spec, fence,
   OpenClose(..), pMatrix, cases, printMath) where
 
 import Prelude hiding (print)
 import Data.Bifunctor (bimap)
-import Data.List (transpose, partition)
+import Data.List (transpose)
 import Text.PrettyPrint (integer, text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Numeric (showEFloat)
-import Control.Arrow (second)
 
 import qualified Language.Drasil as L
 import qualified Language.Drasil.Document as L
-import qualified Language.Drasil.Display as LD
 
-import Drasil.Printers.Common (brace, brak, paren, dquote)
+import Drasil.Printers.Common (brace, brak, dquote)
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Drasil.Document.Layout.Internal (Spec (Tooltip), ItemType(Nested, Flat),
   ListType(Ordered, Unordered, Desc, Definitions, Simple),
@@ -29,15 +27,14 @@ import Drasil.Document.Layout.Internal (Spec (Tooltip), ItemType(Nested, Flat),
   Author, Address), Citation(Cite), BibRef, CitationKind(..), Month(..),
   People, Person(rendPersLFM), MaxWidthPercent,
   Document(Document), LayoutObj(..))
-import Language.Drasil.Printing.Import.Symbol (symbol)
 import qualified Language.Drasil.Printing.Import.Sentence as I (spec)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.TeX.Helpers (author, bold, caption, center, centering,
   cite, command, command0, commandD, command2D, description, description', document,
-  empty, enumerate, externalref, figure, fraction, includegraphics, item, item',
+  empty, enumerate, externalref, figure, includegraphics, item, item',
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgBr, mkEnvArgSq,
-  mkMinipage, newline, newpage, quote, sec, snref, superscript,
+  mkMinipage, newline, newpage, quote, sec, snref,
   symbDescription, texSym, title, toEqn)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (%%), ($+$),
   hpunctuate, lub, runPrint, special, switch, toMath, toText, unPL, vcat,
@@ -297,38 +294,6 @@ spec (Ref (Cite2 n) r _) = cite r (info n)
 spec (Ref External r sn) = externalref r (spec sn)
 spec EmptyS              = empty
 spec (Quote q)           = quote $ spec q
-
--- | Determines the needed context of a symbol.
-symbolNeeds :: LD.Symbol -> MathContext
-symbolNeeds (LD.Variable   _) = Text
-symbolNeeds (LD.Label      _) = Text
-symbolNeeds (LD.Integ      _) = Math
-symbolNeeds (LD.Special    _) = Math
-symbolNeeds (LD.Concat    []) = Math
-symbolNeeds (LD.Concat (s:_)) = symbolNeeds s
-symbolNeeds LD.Corners{}      = Math
-symbolNeeds (LD.Atop     _ _) = Math
-symbolNeeds LD.Empty          = Curr
-
--- | Prints units.
-pUnit :: L.USymb -> D
-pUnit (L.US ls) = formatu t b
-  where
-    (t,b) = partition ((> 0) . snd) ls
-    formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> D
-    formatu [] l = line l
-    formatu l [] = foldr ((<>) . pow) empty l
-    formatu nu de = toMath $ fraction (line nu) $ line $ second negate <$> de
-    line :: [(L.Symbol,Integer)] -> D
-    line []  = empty
-    line [n] = pow n
-    line l   = paren $ foldr ((<>) . pow) empty l
-    pow :: (L.Symbol,Integer) -> D
-    pow (n,1) = p_symb n
-    pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
-    -- printing of unit symbols is done weirdly... FIXME?
-    p_symb (LD.Concat s) = foldl' (<>) empty $ p_symb <$> s
-    p_symb n = let cn = symbolNeeds n in switch (const cn) $ pExpr $ symbol n
 
 -----------------------------------------------------------------
 ------------------ DATA DEFINITION PRINTING-----------------

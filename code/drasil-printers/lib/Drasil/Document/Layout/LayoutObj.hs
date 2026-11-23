@@ -3,7 +3,7 @@ module Drasil.Document.Layout.LayoutObj (
   -- * Types
   LayoutObj(..), ListType(..), ItemType(..),
   -- * Type Aliases
-  Contents, Items, Tags, Depth, Width, Height, Filepath, Caption,
+  Contents, Tags, Depth, Width, Height, Filepath, Caption,
   MaxWidthPercent,
   -- * Extractors
   extractRefs
@@ -14,8 +14,6 @@ import Drasil.Document.Layout.Spec (Spec (S), Title, Label)
 
 -- | Contents are just a sentence ('Spec').
 type Contents = Spec
--- | A group of layout objects.
-type Items    = [LayoutObj]
 -- | Tags.
 type Tags     = [String]
 -- | Depth of a header.

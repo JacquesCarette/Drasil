@@ -30,7 +30,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 
 \\[{q\_{\text{in}}}\\,{A\_{\text{in}}}-{q\_{\text{out}}}\\,{A\_{\text{out}}}+g\\,V=\int\_{V}{ρ\\,C\\,\frac{\\,\partial{}T}{\\,\partial{}t}}\\,dV\\]
 
-Where \\({q\_{\text{in}}}\\), \\({q\_{\text{out}}}\\), \\({A\_{\text{in}}}\\), and \\({A\_{\text{out}}}\\) are explained in the description above. Assuming \\(ρ\\), \\(C\\), and \\(T\\) are constant over the volume, which is true in our case by [A:Constant-Water-Temp-Across-Tank](./SecAssumps.md#assumpCWTAT), [A:Density-Water-Constant-over-Volume](./SecAssumps.md#assumpDWCoW), and [A:Specific-Heat-Energy-Constant-over-Volume](./SecAssumps.md#assumpSHECoW), we have:
+Where \\({q\_{\text{in}}}\\), \\({q\_{\text{out}}}\\), \\({A\_{\text{in}}}\\), and \\({A\_{\text{out}}}\\) are defined in the Description row above. Assuming \\(ρ\\), \\(C\\), and \\(T\\) are constant over the volume, which is true in our case by [A:Constant-Water-Temp-Across-Tank](./SecAssumps.md#assumpCWTAT), [A:Density-Water-Constant-over-Volume](./SecAssumps.md#assumpDWCoW), and [A:Specific-Heat-Energy-Constant-over-Volume](./SecAssumps.md#assumpSHECoW), we have:
 
 \\[ρ\\,C\\,V\\,\frac{\\,dT}{\\,dt}={q\_{\text{in}}}\\,{A\_{\text{in}}}-{q\_{\text{out}}}\\,{A\_{\text{out}}}+g\\,V\\]
 

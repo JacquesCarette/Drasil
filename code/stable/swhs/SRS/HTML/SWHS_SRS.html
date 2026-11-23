@@ -1197,7 +1197,7 @@
             </p>
             \[{q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
             <p class="paragraph">
-              Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in the description above. The integral over the surface could be simplified because the thermal flux is assumed constant over <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> and <em>0</em> on all other surfaces. Outward flux is considered positive. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href="#assumpCWTAT">A:Constant-Water-Temp-Across-Tank</a>, <a href="#assumpTPCAV">A:Temp-PCM-Constant-Across-Volume</a>, <a href="#assumpDWPCoV">A:Density-Water-PCM-Constant-over-Volume</a>, and <a href="#assumpSHECov">A:Specific-Heat-Energy-Constant-over-Volume</a>, we have:
+              Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are defined in the Description row above. The integral over the surface could be simplified because the thermal flux is assumed constant over <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> and <em>0</em> on all other surfaces. Outward flux is considered positive. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href="#assumpCWTAT">A:Constant-Water-Temp-Across-Tank</a>, <a href="#assumpTPCAV">A:Temp-PCM-Constant-Across-Volume</a>, <a href="#assumpDWPCoV">A:Density-Water-PCM-Constant-over-Volume</a>, and <a href="#assumpSHECov">A:Specific-Heat-Energy-Constant-over-Volume</a>, we have:
             </p>
             \[ρ\,C\,V\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
             <p class="paragraph">
@@ -1944,7 +1944,7 @@
             </p>
             \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}}\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
             <p class="paragraph">
-              Finally, factoring out <em>\(\frac{1}{{τ_{\text{W}}}}\)</em>, we are left with the governing <span title="ordinary differential equation">ODE</span> for this instance model:
+              Finally, factoring out <em>\(\frac{1}{{τ_{\text{W}}}}\)</em>, we are left with the governing <span title="ordinary differential equation">ODE</span>:
             </p>
             \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}+η\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)\]
           </section>

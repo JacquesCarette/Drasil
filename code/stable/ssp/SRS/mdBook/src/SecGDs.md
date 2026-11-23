@@ -377,4 +377,4 @@ Due to [A:Plane-Strain-Conditions](./SecAssumps.md#assumpPSC), only two dimensio
 
 \\[{\boldsymbol{U}\_{\text{g},i}}={\boldsymbol{L}\_{s,i}}\\,{γ\_{w}}\\,\frac{1}{2}\\,\left({\boldsymbol{y}\_{\text{wt},i}}-{\boldsymbol{y}\_{\text{slope},i}}+{\boldsymbol{y}\_{\text{wt},i-1}}-{\boldsymbol{y}\_{\text{slope},i-1}}\right)\\]
 
-This equation is the non-zero case of this general definition. The zero case is when the height of the water table is below the height of the slope surface, so there is no hydrostatic force.
+This equation is the non-zero case. The zero case is when the height of the water table is below the height of the slope surface, so there is no hydrostatic force.

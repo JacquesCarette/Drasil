@@ -1396,7 +1396,7 @@ Due to \hyperref[assumpPSC]{A:Plane-Strain-Conditions}, only two dimensions are 
 \begin{displaymath}
 \resizeExpression{{\symbf{U}_{\text{g},i}}={\symbf{L}_{s,i}}\,{γ_{w}}\,\frac{1}{2}\,\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slope},i-1}}\right)}
 \end{displaymath}
-This equation is the non-zero case of this general definition. The zero case is when the height of the water table is below the height of the slope surface, so there is no hydrostatic force.
+This equation is the non-zero case. The zero case is when the height of the water table is below the height of the slope surface, so there is no hydrostatic force.
 
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -2231,7 +2231,7 @@ The multiplication of the $\symbf{Ψ}$ terms can be further distributed over the
 \begin{displaymath}
 \resizeExpression{{F_{\text{S}}}\,\left({\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{1}\,{\symbf{T}}_{1}+{\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{2}\,{\symbf{T}}_{2}+{\symbf{Ψ}}_{n-1}\,{\symbf{T}}_{n-1}+{\symbf{T}}_{n}\right)={\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{1}\,{\symbf{R}}_{1}+{\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{2}\,{\symbf{R}}_{2}+{\symbf{Ψ}}_{n-1}\,{\symbf{R}}_{n-1}+{\symbf{R}}_{n}}
 \end{displaymath}
-Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13), which can also be seen in this instance model:
+Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13):
 
 \begin{displaymath}
 \resizeExpression{{F_{\text{S}}}=\frac{\displaystyle\sum_{i=1}^{n-1}{{\symbf{R}}_{i}\,\displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{R}}_{n}}{\displaystyle\sum_{i=1}^{n-1}{{\symbf{T}}_{i}\,\displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{T}}_{n}}}
@@ -2480,12 +2480,12 @@ This derivation is identical to the derivation for \hyperref[IM:fctSfty]{IM:fctS
 \begin{displaymath}
 \resizeExpression{{\symbf{G}}_{i}\,{\symbf{Φ}}_{i}={\symbf{Ψ}}_{i-1}\,{\symbf{G}}_{i-1}\,{\symbf{Φ}}_{i-1}+{F_{\text{S}}}\,{\symbf{T}}_{i}-{\symbf{R}}_{i}}
 \end{displaymath}
-A simple rearrangement of Equation (3) leads to Equation (17), also seen in this instance model:
+A simple rearrangement of Equation (3) leads to Equation (17):
 
 \begin{displaymath}
 \resizeExpression{{\symbf{G}}_{i}=\frac{{\symbf{Ψ}}_{i-1}\,{\symbf{G}}_{i-1}+{F_{\text{S}}}\,{\symbf{T}}_{i}-{\symbf{R}}_{i}}{{\symbf{Φ}}_{i}}}
 \end{displaymath}
-The cases shown in this instance model for when $i=0$, $i=1$, or $i=n$ are derived by applying \hyperref[assumpES]{A:Edge-Slices}, which says that ${\symbf{G}}_{0}$ and ${\symbf{G}}_{n}$ are zero, to Equation (17). $\symbf{G}$ depends on the unknowns ${F_{\text{S}}}$ (\hyperref[IM:fctSfty]{IM:fctSfty}) and $λ$ (\hyperref[IM:nrmShrFor]{IM:nrmShrFor}).
+The cases for when $i=0$, $i=1$, or $i=n$ are derived by applying \hyperref[assumpES]{A:Edge-Slices}, which says that ${\symbf{G}}_{0}$ and ${\symbf{G}}_{n}$ are zero, to Equation (17). $\symbf{G}$ depends on the unknowns ${F_{\text{S}}}$ (\hyperref[IM:fctSfty]{IM:fctSfty}) and $λ$ (\hyperref[IM:nrmShrFor]{IM:nrmShrFor}).
 
 \medskip
 \noindent

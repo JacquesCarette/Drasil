@@ -49,7 +49,7 @@ By substituting \\({τ\_{\text{W}}}\\) (from [DD:balanceDecayRate](./SecDDs.md#D
 
 \\[\frac{\\,d{T\_{\text{W}}}}{\\,dt}=\frac{1}{{τ\_{\text{W}}}}\\,\left({T\_{\text{C}}}-{T\_{\text{W}}}\right)+\frac{η}{{τ\_{\text{W}}}}\\,\left({T\_{\text{P}}}-{T\_{\text{W}}}\right)\\]
 
-Finally, factoring out \\(\frac{1}{{τ\_{\text{W}}}}\\), we are left with the governing ODE for this instance model:
+Finally, factoring out \\(\frac{1}{{τ\_{\text{W}}}}\\), we are left with the governing ODE:
 
 \\[\frac{\\,d{T\_{\text{W}}}}{\\,dt}=\frac{1}{{τ\_{\text{W}}}}\\,\left({T\_{\text{C}}}-{T\_{\text{W}}}+η\\,\left({T\_{\text{P}}}-{T\_{\text{W}}}\right)\right)\\]
 

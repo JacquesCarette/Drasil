@@ -111,7 +111,7 @@ The multiplication of the \\(\boldsymbol{Ψ}\\) terms can be further distributed
 
 \\[{F\_{\text{S}}}\\,\left({\boldsymbol{Ψ}}\_{n-1}\\,{\boldsymbol{Ψ}}\_{n-2}\\,{\boldsymbol{Ψ}}\_{1}\\,{\boldsymbol{T}}\_{1}+{\boldsymbol{Ψ}}\_{n-1}\\,{\boldsymbol{Ψ}}\_{n-2}\\,{\boldsymbol{Ψ}}\_{2}\\,{\boldsymbol{T}}\_{2}+{\boldsymbol{Ψ}}\_{n-1}\\,{\boldsymbol{T}}\_{n-1}+{\boldsymbol{T}}\_{n}\right)={\boldsymbol{Ψ}}\_{n-1}\\,{\boldsymbol{Ψ}}\_{n-2}\\,{\boldsymbol{Ψ}}\_{1}\\,{\boldsymbol{R}}\_{1}+{\boldsymbol{Ψ}}\_{n-1}\\,{\boldsymbol{Ψ}}\_{n-2}\\,{\boldsymbol{Ψ}}\_{2}\\,{\boldsymbol{R}}\_{2}+{\boldsymbol{Ψ}}\_{n-1}\\,{\boldsymbol{R}}\_{n-1}+{\boldsymbol{R}}\_{n}\\]
 
-Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13), which can also be seen in this instance model:
+Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13):
 
 \\[{F\_{\text{S}}}=\frac{\displaystyle\sum\_{i=1}^{n-1}{{\boldsymbol{R}}\_{i}\\,\displaystyle\prod\_{v=i}^{n-1}{{\boldsymbol{Ψ}}\_{v}}}+{\boldsymbol{R}}\_{n}}{\displaystyle\sum\_{i=1}^{n-1}{{\boldsymbol{T}}\_{i}\\,\displaystyle\prod\_{v=i}^{n-1}{{\boldsymbol{Ψ}}\_{v}}}+{\boldsymbol{T}}\_{n}}\\]
 
@@ -227,11 +227,11 @@ This derivation is identical to the derivation for [IM:fctSfty](./SecIMs.md#IM:f
 
 \\[{\boldsymbol{G}}\_{i}\\,{\boldsymbol{Φ}}\_{i}={\boldsymbol{Ψ}}\_{i-1}\\,{\boldsymbol{G}}\_{i-1}\\,{\boldsymbol{Φ}}\_{i-1}+{F\_{\text{S}}}\\,{\boldsymbol{T}}\_{i}-{\boldsymbol{R}}\_{i}\\]
 
-A simple rearrangement of Equation (3) leads to Equation (17), also seen in this instance model:
+A simple rearrangement of Equation (3) leads to Equation (17):
 
 \\[{\boldsymbol{G}}\_{i}=\frac{{\boldsymbol{Ψ}}\_{i-1}\\,{\boldsymbol{G}}\_{i-1}+{F\_{\text{S}}}\\,{\boldsymbol{T}}\_{i}-{\boldsymbol{R}}\_{i}}{{\boldsymbol{Φ}}\_{i}}\\]
 
-The cases shown in this instance model for when \\(i=0\\), \\(i=1\\), or \\(i=n\\) are derived by applying [A:Edge-Slices](./SecAssumps.md#assumpES), which says that \\({\boldsymbol{G}}\_{0}\\) and \\({\boldsymbol{G}}\_{n}\\) are zero, to Equation (17). \\(\boldsymbol{G}\\) depends on the unknowns \\({F\_{\text{S}}}\\) ([IM:fctSfty](./SecIMs.md#IM:fctSfty)) and \\(λ\\) ([IM:nrmShrFor](./SecIMs.md#IM:nrmShrFor)).
+The cases for when \\(i=0\\), \\(i=1\\), or \\(i=n\\) are derived by applying [A:Edge-Slices](./SecAssumps.md#assumpES), which says that \\({\boldsymbol{G}}\_{0}\\) and \\({\boldsymbol{G}}\_{n}\\) are zero, to Equation (17). \\(\boldsymbol{G}\\) depends on the unknowns \\({F\_{\text{S}}}\\) ([IM:fctSfty](./SecIMs.md#IM:fctSfty)) and \\(λ\\) ([IM:nrmShrFor](./SecIMs.md#IM:nrmShrFor)).
 
 <div align="center">
 

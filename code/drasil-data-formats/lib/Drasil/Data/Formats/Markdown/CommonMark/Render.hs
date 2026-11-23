@@ -10,12 +10,12 @@ module Drasil.Data.Formats.Markdown.CommonMark.Render
   )
 where
 
-import Data.Char (isAlphaNum, isAscii, isPunctuation, isSpace, isSymbol, ord)
+import Data.Char (GeneralCategory (Space), generalCategory, isAlphaNum, isAscii,
+  isPunctuation, isSpace, isSymbol, ord)
 import Data.List (intercalate)
 import Data.Maybe (listToMaybe, mapMaybe)
 import Data.Text (Text)
 import Data.Text qualified as T
-import Data.Tuple (swap)
 import Drasil.Data.Formats.HTML qualified as HTML
 import Drasil.Data.Formats.HTML.Render (escapeHTMLText)
 import Drasil.Data.Formats.Markdown.CommonMark.Core
@@ -284,16 +284,15 @@ renderInlinesWith opt protectHTMLEdges = mconcat . go Nothing False . normalizeI
     link prefix destination ch =
       prefix <> "[" <> renderInlinesWith opt protectHTMLEdges ch <> "](<" <>
         escapeDestination destination <> ">)"
-    -- Use Markdown delimiters only for literal contents whose edges and
-    -- neighbours pass these conservative checks. Otherwise HTML keeps formatting
-    -- boundaries explicit, including nested and adjacent emphasis. For example,
-    -- adjacent Emphasis nodes for "a" and "b" emit <em>a</em><em>b</em>.
+    -- Restrict Markdown emphasis to literal text with alphanumeric edges.
+    -- Adjacent markers may differ in character, or in length when both use *.
+    -- Thus **a***b* keeps two nodes, while *a**b* requires HTML instead.
+    -- Nested formatting and other complex contents keep the HTML fallback.
     emphasized tag delimiter count before ch after
-      | Just text <- plainContents ch,
+      | Just text <- plainContents (normalizeInlines ch),
         Just (first, _) <- T.uncons text, Just (_, lastChar) <- T.unsnoc text,
         isAlphaNum first && isAlphaNum lastChar,
-        safeNeighbor delimiter T.unsnoc before,
-        safeNeighbor delimiter (fmap swap . T.uncons) after =
+        safeBefore && safeAfter =
           let marker = T.replicate count (delimiterText delimiter)
           in marker <> contents <> marker
       | otherwise = "<" <> tag <> ">" <> guardLine <> contents <> "</" <> tag <> ">"
@@ -305,6 +304,20 @@ renderInlinesWith opt protectHTMLEdges = mconcat . go Nothing False . normalizeI
           | T.null remainingLines = mempty
           | T.all (\c -> c == ' ' || c == '\t') firstLine = "<!-- -->"
           | otherwise = mempty
+        safeBefore = case before of
+          Just (Plain text) -> safePlainBoundary delimiter (snd <$> T.unsnoc text)
+          _ -> safeNeighbor before
+        safeAfter = case after of
+          Just (Plain text) -> safePlainBoundary delimiter (fst <$> T.uncons text)
+          _ -> safeNeighbor after
+        safeNeighbor Nothing = True
+        safeNeighbor (Just (Emphasis _)) = safeMarker (emphasisDelimiter opt) 1
+        safeNeighbor (Just (Strong _)) = safeMarker (strongDelimiter opt) 2
+        safeNeighbor _ = False
+        safeMarker otherDelimiter otherCount
+          | delimiter /= otherDelimiter = True
+          | delimiter == Asterisk = count /= otherCount
+          | otherwise = False
 
 -- Formatting and link delimiters enclose their contents, so only these leaves
 -- can put an adjacent node at the beginning or end of a physical source line.
@@ -346,13 +359,17 @@ plainContents = fmap T.concat . traverse plain
     plain (Plain t) = Just t
     plain _ = Nothing
 
-safeNeighbor :: EmphasisDelimiter -> (Text -> Maybe (Text, Char)) -> Maybe Inline -> Bool
-safeNeighbor _ _ Nothing = True
-safeNeighbor delimiter boundary (Just (Plain t)) =
-  case boundary t of
-    Just (_, c) -> isSpace c || (delimiter == Asterisk && isAlphaNum c)
-    Nothing -> True
-safeNeighbor _ _ _ = False
+-- With alphanumeric content edges, * permits intraword emphasis; _ does not.
+-- Escaping Plain punctuation preserves its boundary character classification.
+-- CommonMark whitespace is Unicode Zs plus TAB, LF, FF and CR.
+safePlainBoundary :: EmphasisDelimiter -> Maybe Char -> Bool
+safePlainBoundary Asterisk _ = True
+safePlainBoundary _ Nothing = True
+safePlainBoundary Underscore (Just c)
+  | generalCategory c == Space = True
+  | elem c ['\t', '\n', '\f', '\r'] = True
+  | isPunctuation c || isSymbol c = True
+  | otherwise = False
 
 adjacentCode :: Maybe Inline -> Bool
 adjacentCode (Just (CodeSpan _)) = True

@@ -74,11 +74,11 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   notifyObservers', arrayDecAsList)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
   listAppend, listAdd, innerType)
-import Drasil.Shared.AST (Terminator(Empty), FileType(..), fileD, FuncData(..),
-  fd, ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
-  ParamData(..), pd, ProgData(..), progD, TypeData(..), ValData(..), vd,
-  VarData(..), vard, BinderD(..), bindFormD, AttachmentTag(..),
-  AttachmentData(..), ad, FileData, ScopeData)
+import Drasil.Shared.AST (FileType(..), fileD, FuncData(..), fd, ModData(..), md,
+  updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
+  ProgData(..), progD, TypeData(..), ValData(..), vd, VarData(..), vard,
+  BinderD(..), bindFormD, AttachmentTag(..), AttachmentData(..), ad, FileData,
+  ScopeData)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -491,15 +491,14 @@ instance InternalControlStmt PythonCode Statement Value where
 instance RenderStatement PythonCode Statement where
   loopStmt s' = do
     s <- s'
-    stmtFromData (preStatement s) Empty
-  stmtFromData d _ = toState $ toCode d
+    stmtFromData (preStatement s)
 
 instance StatementElim PythonCode Statement where
   statement = preStatement
   preStatement = unPC
 
 instance EmptyStatement PythonCode Statement where
-  emptyStmt = stmtFromData empty Empty
+  emptyStmt = stmtFromData empty
 
 instance MultiStatement PythonCode Statement where
   multi = onStateList (onCodeList vcat)
@@ -507,21 +506,21 @@ instance MultiStatement PythonCode Statement where
 instance ValueStatement PythonCode Statement Value where
   valStmt v' = do
     v <- zoom lensMStoVS v'
-    stmtFromData (RC.value v) Empty
+    stmtFromData (RC.value v)
 
 instance AssignStatement PythonCode Statement Variable Value where
   assign vr' v' = do
     vr <- zoom lensMStoVS vr'
     v <- zoom lensMStoVS v'
-    stmtFromData (R.assign vr v) Empty
+    stmtFromData (R.assign vr v)
   (&-=) vr' v' = do
     vr <- zoom lensMStoVS vr'
     v <- zoom lensMStoVS v'
-    stmtFromData (R.subAssign vr v) Empty
+    stmtFromData (R.subAssign vr v)
   (&+=) vr' v' = do
     vr <- zoom lensMStoVS vr'
     v <- zoom lensMStoVS v'
-    stmtFromData (R.addAssign vr v) Empty
+    stmtFromData (R.addAssign vr v)
   (&++) = M.increment1
   (&--) = M.decrement1
 
@@ -548,7 +547,7 @@ instance DeclStatement PythonCode Body Statement Variable ScopeData Value where
     s <- M.get
     f <- function (variableName vr) private (pure $ variableType vr) (param <$> ps) b
     modify (L.set currParameters (s ^. currParameters))
-    stmtFromData (RC.method f) Empty
+    stmtFromData (RC.method f)
 
 instance OODeclStatement PythonCode Statement Variable ScopeData Value where
   objDecDef = varDecDef
@@ -600,19 +599,19 @@ instance OOFuncAppStatement PythonCode Statement Variable Value where
   selfInOutCall = CP.inOutCall selfMethodCall
 
 instance CommentStatement PythonCode Statement where
-  comment c = stmtFromData (R.comment c pyCommentStart) Empty
+  comment c = stmtFromData (R.comment c pyCommentStart)
 
 instance ControlStatement PythonCode Body Statement Variable Value where
-  break = stmtFromData R.break Empty
-  continue = stmtFromData R.continue Empty
+  break = stmtFromData R.break
+  continue = stmtFromData R.continue
 
   returnStmt v' = do
     v <- zoom lensMStoVS v'
-    stmtFromData (R.return' [v]) Empty
+    stmtFromData (R.return' [v])
 
   throw msg' = do
     msg <- zoom lensMStoVS (litString msg')
-    stmtFromData (pyThrow msg) Empty
+    stmtFromData (pyThrow msg)
 
   ifCond cs eBody = do
     let condPair (v, b) = on2StateValues
@@ -621,7 +620,6 @@ instance ControlStatement PythonCode Body Statement Variable Value where
     elseSec <- onStateValue (\bd -> emptyIfEmpty (RC.body bd) (RC.body bd)) eBody
     stmtFromData
       (G.ifCond id pyBodyStart pySpace pyElseIf pyBodyEnd empty condPair' elseSec)
-      Empty
   switch = switchAsIf
 
   ifExists = M.ifExists
@@ -632,21 +630,21 @@ instance ControlStatement PythonCode Body Statement Variable Value where
     i <- zoom lensMStoVS i'
     v <- zoom lensMStoVS v'
     b <- b'
-    stmtFromData (pyForEach i v b) Empty
+    stmtFromData (pyForEach i v b)
   while v' b' = do
     v <- zoom lensMStoVS v'
     b <- b'
-    stmtFromData (pyWhile v b) Empty
+    stmtFromData (pyWhile v b)
 
   tryCatch try' catch' = do
     try <- try'
     catch <- catch'
-    stmtFromData (pyTryCatch try catch) Empty
+    stmtFromData (pyTryCatch try catch)
 
   assert condition errorMessage = do
       cond <- zoom lensMStoVS condition
       errMsg <- zoom lensMStoVS errorMessage
-      stmtFromData (pyAssert cond errMsg) Empty
+      stmtFromData (pyAssert cond errMsg)
 
 instance ObserverPattern PythonCode Statement TypeData where
   notifyObservers = M.notifyObservers'
@@ -792,6 +790,9 @@ initName = "__init__"
 pyName, pyVersion :: String
 pyName = "Python"
 pyVersion = "3.5.1"
+
+stmtFromData :: Doc -> MS (PythonCode Statement)
+stmtFromData = toState . toCode
 
 pyInt, pyDouble, pyString, pyVoid :: String
 pyInt = "int"
@@ -981,7 +982,7 @@ pyPrint newLn f' p' v' = do
                RC.value s
         fl = emptyIfEmpty (RC.value f) $ listSep' <> text "file" <> equals
                <> RC.value f
-    stmtFromData (RC.value prf <> parens (RC.value v <> nl <> fl)) Empty
+    stmtFromData (RC.value prf <> parens (RC.value v <> nl <> fl))
 
 pyOut
   ::

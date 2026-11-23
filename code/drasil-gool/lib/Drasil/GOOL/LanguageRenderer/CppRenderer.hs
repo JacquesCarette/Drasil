@@ -505,7 +505,6 @@ instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) Statement Val
 
 instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) Statement where
   loopStmt = pair1 loopStmt loopStmt
-  stmtFromData d t = on2StateValues pair (stmtFromData d t) (stmtFromData d t)
 
 instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) Statement where
   statement s = RC.statement $ pfst s
@@ -1429,7 +1428,6 @@ instance RenderStatement CppSrcCode Statement where
   loopStmt s' = do
     s <- s'
     stmtFromData (preStatement s) Empty
-  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppSrcCode Statement where
   statement = C.statement
@@ -2155,7 +2153,6 @@ instance InternalControlStmt CppHdrCode Statement Value where
 
 instance RenderStatement CppHdrCode Statement where
   loopStmt _ = emptyStmt
-  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppHdrCode Statement where
   statement = C.statement
@@ -2428,6 +2425,10 @@ instance BlockCommentElim CppHdrCode where
   blockComment' = unCPPHC
 
 -- helpers
+
+stmtFromData :: (Monad r) => Doc -> Terminator -> MS (r Statement)
+stmtFromData d t = toState $ toCode (d, t)
+
 isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
@@ -2672,15 +2673,15 @@ cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef
   ::
-    ( DeclStatement r bod stmt var scope val
-    , RenderStatement r stmt
-    , StatementElim r stmt
+    ( Monad r
+    , DeclStatement r bod Statement var scope val
+    , StatementElim r Statement
     )
   => ([r Value] -> Doc)
   -> VS (r var)
   -> r scope
   -> [VS (r Value)]
-  -> MS (r stmt)
+  -> MS (r Statement)
 cppListDecDef f v scp vls = do
   vdc <- varDec v scp
   vs <- zoom lensMStoVS $ sequence vls
@@ -2781,8 +2782,8 @@ cppFuncDecDef v scp ps bod = do
     indent (RC.body b) $$ bodyEnd) Semi
 
 cppPrint
-  :: (RenderStatement r stmt, ValueElim r val)
-  => Bool -> VS (r val) -> VS (r val) -> MS (r stmt)
+  :: (Monad r, ValueElim r val)
+  => Bool -> VS (r val) -> VS (r val) -> MS (r Statement)
 cppPrint newLn pf vl = do
   e <- zoom lensMStoVS end
   printFn <- zoom lensMStoVS pf

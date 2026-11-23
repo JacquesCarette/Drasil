@@ -488,7 +488,6 @@ instance RenderStatement CSharpCode Statement where
   loopStmt s' = do
     s <- s'
     stmtFromData (preStatement s) Empty
-  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CSharpCode Statement where
   statement = C.statement
@@ -812,6 +811,9 @@ addSystemImport = (>>) $ modify (addLangImportVS csSystem)
 csName, csVersion :: String
 csName = "C#"
 csVersion = "6.0"
+
+stmtFromData :: Doc -> Terminator -> MS (CSharpCode Statement)
+stmtFromData d t = toState $ toCode (d, t)
 
 csImport :: Label -> Doc
 csImport n = text ("using " P.<> n) <> endStatement

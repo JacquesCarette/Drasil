@@ -179,8 +179,6 @@ class InternalControlStmt r stmt val | r -> stmt val where
 class RenderStatement r stmt | r -> stmt where
   loopStmt :: MS (r stmt) -> MS (r stmt)
 
-  stmtFromData :: Doc -> Terminator -> MS (r stmt)
-
 class StatementElim r stmt | r -> stmt where
   -- | Render a stmt to Doc
   statement :: r stmt -> Doc

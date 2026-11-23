@@ -427,7 +427,6 @@ instance RenderStatement MatlabCode Statement where
   loopStmt s' = do
     s <- s'
     stmtFromData (preStatement s) Empty
-  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim MatlabCode Statement where
   statement = C.statement
@@ -653,6 +652,9 @@ instance BlockCommentElim MatlabCode where
 mlName, mlVersion :: String
 mlName = "MATLAB"
 mlVersion = "R2024b"
+
+stmtFromData :: Doc -> Terminator -> MS (MatlabCode Statement)
+stmtFromData d t = toState $ toCode (d, t)
 
 -- | MATLAB source file extension.
 mlExt :: String

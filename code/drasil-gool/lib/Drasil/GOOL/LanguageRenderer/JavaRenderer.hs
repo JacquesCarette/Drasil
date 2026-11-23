@@ -513,7 +513,6 @@ instance RenderStatement JavaCode Statement where
   loopStmt s' = do
     s <- s'
     stmtFromData (preStatement s) Empty
-  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JavaCode Statement where
   statement = C.statement
@@ -841,6 +840,9 @@ instance HasException JavaCode where
 jName, jVersion :: String
 jName = "Java"
 jVersion = "14"
+
+stmtFromData :: Doc -> Terminator -> MS (JavaCode Statement)
+stmtFromData d t = toState $ toCode (d, t)
 
 jImport :: Label -> Doc
 jImport n = importLabel <+> text n <> endStatement

@@ -88,11 +88,11 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   notifyObservers', makeSetterVal, arrayDecAsList)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
   listAppend, innerType)
-import Drasil.Shared.AST (Terminator(Empty), VisibilityTag(..), qualName,
-  FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
-  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
-  progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
-  ScopeData, BinderD(..), bindFormD, FileData)
+import Drasil.Shared.AST (VisibilityTag(..), qualName, FileType(..), fileD,
+  FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, updateMthd,
+  OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), ValData(..),
+  vd, AttachmentTag(..), VarData(..), vard, ScopeData, BinderD(..), bindFormD,
+  FileData)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -501,15 +501,14 @@ instance InternalControlStmt SwiftCode Statement Value where
 instance RenderStatement SwiftCode Statement where
   loopStmt s' = do
     s <- s'
-    stmtFromData (preStatement s) Empty
-  stmtFromData d _ = toState $ toCode d
+    stmtFromData (preStatement s)
 
 instance StatementElim SwiftCode Statement where
   statement = preStatement
   preStatement = unSC
 
 instance EmptyStatement SwiftCode Statement where
-  emptyStmt = stmtFromData empty Empty
+  emptyStmt = stmtFromData empty
 
 instance MultiStatement SwiftCode Statement where
   multi = onStateList (onCodeList vcat)
@@ -517,21 +516,21 @@ instance MultiStatement SwiftCode Statement where
 instance ValueStatement SwiftCode Statement Value where
   valStmt v' = do
     v <- zoom lensMStoVS v'
-    stmtFromData (RC.value v) Empty
+    stmtFromData (RC.value v)
 
 instance AssignStatement SwiftCode Statement Variable Value where
   assign vr' v' = do
     vr <- zoom lensMStoVS vr'
     v <- zoom lensMStoVS v'
-    stmtFromData (R.assign vr v) Empty
+    stmtFromData (R.assign vr v)
   (&-=) vr' v' = do
     vr <- zoom lensMStoVS vr'
     v <- zoom lensMStoVS v'
-    stmtFromData (R.subAssign vr v) Empty
+    stmtFromData (R.subAssign vr v)
   (&+=) vr' v' = do
     vr <- zoom lensMStoVS vr'
     v <- zoom lensMStoVS v'
-    stmtFromData (R.addAssign vr v) Empty
+    stmtFromData (R.addAssign vr v)
   (&++) = M.increment1
   (&--) = M.decrement1
 
@@ -540,11 +539,11 @@ instance DeclStatement SwiftCode Body Statement Variable ScopeData Value where
   varDecDef vr scp vl' = do
     vDec <- varDec vr scp
     vl <- zoom lensMStoVS vl'
-    stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Empty
+    stmtFromData (preStatement vDec <+> equals <+> RC.value vl)
   setDecDef vr scp vl' = do
     vDec <- setDec vr scp
     vl <- zoom lensMStoVS vl'
-    stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Empty
+    stmtFromData (preStatement vDec <+> equals <+> RC.value vl)
   setDec = swiftSetDec swiftConst
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
@@ -553,14 +552,14 @@ instance DeclStatement SwiftCode Body Statement Variable ScopeData Value where
   constDecDef vr scp vl' = do
     vdec <- swiftVarDec swiftConst vr scp
     vl <- zoom lensMStoVS vl'
-    stmtFromData (RC.preStatement vdec <+> equals <+> RC.value vl) Empty
+    stmtFromData (RC.preStatement vdec <+> equals <+> RC.value vl)
   funcDecDef vr' scp ps b = do
     vr <- zoom lensMStoVS vr'
     G.varDecInit vr scp
     s <- M.get
     f <- function (variableName vr) private (pure $ variableType vr) (param <$> ps) b
     modify (L.set currParameters (s ^. currParameters))
-    stmtFromData (RC.method f) Empty
+    stmtFromData (RC.method f)
 
 instance OODeclStatement SwiftCode Statement Variable ScopeData Value where
   objDecDef = varDecDef
@@ -611,7 +610,7 @@ instance ReadFile SwiftCode Statement Variable Value where
     modify incrementLine
     slc <- listSlice swiftLineVar (listAccess swiftContentsVal (litInt li))
       (Just $ litInt wi) Nothing Nothing
-    multi [varDec swiftLineVar scp, stmtFromData (RC.block slc) Empty,
+    multi [varDec swiftLineVar scp, stmtFromData (RC.block slc),
       v &= swiftJoinedFunc ' ' swiftLineVal]
   discardFileLine _ = modify incrementLine >> emptyStmt
   getFileInputAll _ v = do
@@ -620,7 +619,7 @@ instance ReadFile SwiftCode Statement Variable Value where
         l_var = var "l" (listType string)
     slc <- listSlice swiftContentsVar swiftContentsVal
       (Just $ litInt (li+1)) Nothing Nothing
-    multi [stmtFromData (RC.block slc) Empty,
+    multi [stmtFromData (RC.block slc),
       v &= swiftMapFunc swiftContentsVal
         (lambda [l_binder] (swiftJoinedFunc ' ' (valueOf l_var)))]
 
@@ -638,20 +637,20 @@ instance OOFuncAppStatement SwiftCode Statement Variable Value where
   selfInOutCall = CP.inOutCall selfMethodCall
 
 instance CommentStatement SwiftCode Statement where
-  comment c = stmtFromData (R.comment c commentStart) Empty
+  comment c = stmtFromData (R.comment c commentStart)
 
 instance ControlStatement SwiftCode Body Statement Variable Value where
-  break = stmtFromData R.break Empty
-  continue = stmtFromData R.continue Empty
+  break = stmtFromData R.break
+  continue = stmtFromData R.continue
 
   returnStmt v' = do
     v <- zoom lensMStoVS v'
-    stmtFromData (R.return' [v]) Empty
+    stmtFromData (R.return' [v])
 
   throw msg' = do
     modify setThrowUsed
     msg <- zoom lensMStoVS (litString msg')
-    stmtFromData (swiftThrowDoc msg) Empty
+    stmtFromData (swiftThrowDoc msg)
 
   ifCond cs eBody = do
     let condPair (v, b) = on2StateValues
@@ -660,14 +659,13 @@ instance ControlStatement SwiftCode Body Statement Variable Value where
     elseSec <- onStateValue (\bd -> emptyIfEmpty (RC.body bd) (RC.body bd)) eBody
     stmtFromData
       (G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty condPair' elseSec)
-      Empty
   switch v cs bod = do
     st <- emptyStmt
     vl <- zoom lensMStoVS v
     vals <- mapM (zoom lensMStoVS . fst) cs
     bods <- mapM snd cs
     dflt <- bod
-    stmtFromData (R.switch (space <>) st vl dflt (zip vals bods)) Empty
+    stmtFromData (R.switch (space <>) st vl dflt (zip vals bods))
 
   ifExists = M.ifExists
 
@@ -677,23 +675,22 @@ instance ControlStatement SwiftCode Body Statement Variable Value where
     i <- zoom lensMStoVS i'
     v <- zoom lensMStoVS v'
     b <- b'
-    stmtFromData (swiftForEach i v b) Empty
+    stmtFromData (swiftForEach i v b)
   while val' bod' = do
     val <- zoom lensMStoVS val'
     bod <- bod'
     stmtFromData
       (C.while id bodyStart bodyEnd (RC.value val) (RC.body bod))
-      Empty
 
   tryCatch try' catch' = do
     try <- try'
     catch <- catch'
-    stmtFromData (swiftTryCatch try catch) Empty
+    stmtFromData (swiftTryCatch try catch)
 
   assert condition errorMessage = do
     cond <- zoom lensMStoVS condition
     errMsg <- zoom lensMStoVS errorMessage
-    stmtFromData (swiftAssert cond errMsg) Empty
+    stmtFromData (swiftAssert cond errMsg)
 
 instance ObserverPattern SwiftCode Statement TypeData where
   notifyObservers = M.notifyObservers'
@@ -820,6 +817,9 @@ instance BlockCommentSym SwiftCode where
 
 instance BlockCommentElim SwiftCode where
   blockComment' = unSC
+
+stmtFromData :: Doc -> MS (SwiftCode Statement)
+stmtFromData = toState . toCode
 
 addMathImport :: VS a -> VS a
 addMathImport = (>>) $ modify (addLangImportVS swiftMath)
@@ -1261,7 +1261,7 @@ swiftVarDec dec v' scp = do
       bind InstanceLevel = instanceLevel :: SwiftCode Doc
       p = bind $ variableBind v
   stmtFromData (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
-    <+> renderType (variableType v)) Empty
+    <+> renderType (variableType v))
 
 swiftSetDec
   :: Doc
@@ -1277,7 +1277,7 @@ swiftSetDec dec v' scp = do
       bind InstanceLevel = instanceLevel :: SwiftCode Doc
       p = bind $ variableBind v
   stmtFromData (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
-    <+> text (swiftSet P.<> "<" P.<> getTypeString innerTp P.<> ">")) Empty
+    <+> text (swiftSet P.<> "<" P.<> getTypeString innerTp P.<> ">"))
 
 swiftThrowDoc :: SwiftCode Value -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg

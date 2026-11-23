@@ -9,7 +9,6 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.Metadata.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
-import Data.Drasil.Concepts.Math (point, axis)
 import Control.Lens((^.)) --need for parametrization hack
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.Citations (dampingSource)
@@ -17,16 +16,16 @@ import Data.Drasil.Concepts.Education (mechanics)
 
 -- | Collects all physics-related concepts.
 physicCon :: [ConceptChunk]
-physicCon = [acceleration, angFreq, angular,
+physicCon = [acceleration, angular,
   cohesion, collision, compression, constAccel, damping, dampingCoeff,
   displacement, distance, elasticity, energy, fbd, force,
-  friction, gravity, gravitationalAccel, height,
-  iPos, iSpeed, iVel, impulseS, impulseV, isotropy,
-  joint, kEnergy, linear, mechEnergy,
-  momentOfInertia, position, potEnergy, rectilinear,
-  rigidBody, shm, space, speed, stiffCoeff, strain, stress, tension,
-  time, torque, velocity, momentum, moment, moment2D, fOfGravity,
-  pendulum, body, kinematics, frequency, period, motion, horizontalMotion, verticalMotion]
+  friction, gravity, height,
+  iPos, iSpeed, iVel, impulseV, isotropy,
+  joint, linear, mechEnergy,
+  position, rectilinear,
+  rigidBody, shm, space, speed, stiffCoeff, strain, stress,
+  time, velocity,
+  pendulum, body, kinematics, motion, horizontalMotion, verticalMotion]
 
 -- | Collects all physics-related common ideas (like a concept, but with no definition).
 physicCon' :: [CI]
@@ -38,16 +37,16 @@ physicCon' = [oneD, twoD, threeD]
 --
 -- In alphabetical order.
 
-acceleration, angFreq, angular, cohesion,
+acceleration, angular, cohesion,
   collision, compression, constAccel, damping, dampingCoeff, displacement,
   distance, elasticity, energy, fbd, force, friction, gravity,
-  gravitationalAccel, height, iPos, iSpeed,
-  iVel, impulseS, impulseV, isotropy, joint,
-  kEnergy, linear, mechEnergy, momentOfInertia, position,
-  potEnergy, rectilinear, rigidBody, shm,
-  space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity,
-  momentum, moment, moment2D, fOfGravity, pendulum, body,
-  kinematics, frequency, period, motion, horizontalMotion, verticalMotion :: ConceptChunk
+  height, iPos, iSpeed,
+  iVel, impulseV, isotropy, joint,
+  linear, mechEnergy, position,
+  rectilinear, rigidBody, shm,
+  space, speed, stiffCoeff, strain, stress, time, velocity,
+  pendulum, body,
+  kinematics, motion, horizontalMotion, verticalMotion :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdea (mkUid "oneD")   (cn "one-dimensional")   "1D" [mathematics, physics]
@@ -84,16 +83,10 @@ fbd = cncpt''' (mkUid "FBD") (cn' "free body diagram")
    "reactions on a body in a steady state condition"))
 force = cncpt''' (mkUid "force") (cn' "force")
   (S "an interaction that tends to produce change in the motion of an object")
-frequency = cncpt''' (mkUid "frequency") (cn' "frequency")
-  (S "the number of occurrences of a repeating event per unit of time")
 friction = cncpt''' (mkUid "friction") (cn' "friction")
   (S "the force resisting the relative motion of two surfaces")
-fOfGravity = cncpt''' (mkUid "fOfGravity") (cn "force of gravity")
-  (S "the force exerted by gravity on an object")
 gravity = cncpt''' (mkUid "gravity") (cn "gravity")
   (S "the force that attracts one physical body with mass to another")
-gravitationalAccel = cncpt''' (mkUid "gravitationalAccel") (cn "gravitational acceleration")
-  (S "the approximate acceleration due to gravity on Earth at sea level")
 height = cncpt''' (mkUid "height") (cn' "height")
   (S "the" +:+ phrase distance +:+ S "above a reference point for a point of interest")
 horizontalMotion = cncpt''' (mkUid "horizontalMotion") (cn "horizontal motion")
@@ -103,8 +96,6 @@ isotropy = cncpt''' (mkUid "isotropy") (cn "isotropy")
    S "independent of the direction in which it is measured")
 joint = cncpt''' (mkUid "joint") (cn' "joint")
   (S "a connection between two rigid bodies which allows movement with one or more degrees of freedom")
-kEnergy = cncpt''' (mkUid "kEnergy") (cn "kinetic energy")
-  (S "measure" `S.the_ofThe` phrase energy +:+ S "a body possesses due to its motion")
 kinematics = cncpt''' (mkUid "kinematics") (cn "kinematics")
   (S "branch" `S.of_` phrase mechanics +:+ S "that describes the motion" `S.of_`
     S "objects without reference to the causes of motion")
@@ -112,24 +103,13 @@ linear = cncpt''' (mkUid "linear") (cn' "linear")
   (S "arranged in or extending along a straight or nearly straight line")
 mechEnergy = cncpt''' (mkUid "mechEnergy") (cn "mechanical energy")
   (S "the energy that comes from motion and position")
-momentum = cncpt''' (mkUid "momentum") (cn "momentum")
-  ( S "the quantity of motion" `S.of_` S "a moving body, measured as a product" `S.of_`
-  (phrase QPP.mass `S.and_` phrase velocity))
-moment = cncpt''' (mkUid "moment") (cn' "moment")
-  (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `S.or_` phrase axis)
-moment2D = cncpt''' (mkUid "moment2D") (cn' "moment")
-  (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `S.or_` phrase axis)
 motion = cncpt''' (mkUid "motion") (cn "motion")
   (S "change in position of a physical body over time")
-period = cncpt''' (mkUid "period") (cn' "period")
-   (S "the" +:+ phrase time +:+ S "required for one complete cycle of vibration to pass a given point.")
 pendulum = cncpt''' (mkUid "pendulum") (cn "pendulum")
  (S "a body suspended from a fixed support so that it swings freely back and forth under the influence"
        `S.of_` phrase gravity)
 position = cncpt''' (mkUid "position") (cn' "position")
   (S "an object's location relative to a reference point")
-potEnergy = cncpt''' (mkUid "potEnergy") (cn "potential energy")
-  (S "measure" `S.the_ofThe` phrase energy +:+ S "held by an object because of its" +:+ phrase position)
 rectilinear = cncpt''' (mkUid "rectilinear") (cn "rectilinear")
   (S "occurring in one dimension")
 rigidBody = cncpt''' (mkUid "rigidBody") (cnIES "rigid body")
@@ -150,12 +130,8 @@ strain = cncpt''' (mkUid "strain") (cn' "strain")
 stress = cncpt''' (mkUid "stress") (cn''' "stress")
   (S "the ratio of an applied force to a cross-sectional area")
   --definition of stress used in SSP, can be made clearer
-tension = cncpt''' (mkUid "tension") (cn' "tension")
-  (S "a" +:+ phrase stress +:+ S "that causes displacement of the body away from its center")
 time = cncpt''' (mkUid "time") (cn' "time")
   (S "the indefinite continued progress of existence and events in the past, present, and future regarded as a whole")
-torque = cncpt''' (mkUid "torque") (cn' "torque")
-  (S "a twisting force that tends to cause rotation")
 velocity = cncpt''' (mkUid "velocity") (cnIES "velocity")
   (S "the rate of change of a body's" +:+ phrase position)
 verticalMotion = cncpt''' (mkUid "verticalMotion") (cn "vertical motion")
@@ -176,15 +152,6 @@ iVel = cncpt''' (mkUid "iVel") (cn "initial velocity") (S "The" +:+ phrase veloc
 constAccel = cncpt''' (mkUid "constantAcceleration") (cn "constant acceleration")
   (S "a one-dimensional acceleration that is constant")
 
--- The following feel like they're missing something/need to be more
--- descriptive. See issue tracker for details.
--- FIXME: plurals below?
-momentOfInertia = cncpt''' (mkUid "momentOfInertia") (cn "moment of inertia")
-  (S "a quantity expressing a body's tendency to resist angular acceleration")
-angFreq = cncpt''' (mkUid "angularFrequency") (cn "angular frequency")
-  (S "the frequency of a periodic process, wave system etc, per unit time.")
 --FIXME: These two should be built off "impulse"
 impulseV = cncpt''' (mkUid "impulseV") (cn "impulse (vector)")
   (S "a force acting briefly on a body and producing a finite change of momentum in a given direction")
-impulseS = cncpt''' (mkUid "impulseS") (cn "impulse (scalar)")
-  (S "a force acting briefly on a body and producing a finite change of momentum")

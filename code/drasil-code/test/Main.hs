@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE QuasiQuotes #-}
 
 -- | Main module to gather all the GOOL tests and generate them.
@@ -20,8 +19,7 @@ import Drasil.TestingKit (testMain)
 import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
 import Language.Drasil.Code (ImplementationType(..), makeSds, toFileLayout)
 import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
-  PackageData(..), pattern PackageData,
-  unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP)
+  PackageData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP)
 
 import HelloWorld (helloWorldOO, helloWorldProc)
 import GOOL.PatternTest (patternTest)

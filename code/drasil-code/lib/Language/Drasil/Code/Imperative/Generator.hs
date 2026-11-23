@@ -1,4 +1,4 @@
-{-# LANGUAGE PatternSynonyms, QuasiQuotes #-}
+{-# LANGUAGE QuasiQuotes #-}
 -- | Defines generation functions for SCS code packages.
 module Language.Drasil.Code.Imperative.Generator (
   SomeProgGenerator(..),
@@ -45,8 +45,7 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (makeSds,
   SoftwareDossierSym(..))
 import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
-import Language.Drasil.Code.PackageData (PackageData(..), pattern PackageData,
-  package)
+import Language.Drasil.Code.PackageData (PackageData(..), package)
 import Language.Drasil.SoftwareDossier.FileNames(sampleInputName)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))

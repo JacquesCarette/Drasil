@@ -267,7 +267,7 @@ makeCell content size = content <> spaces
 
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: RefMap -> [(String,[LayoutObj])] -> Doc -> Doc
-makeDefn _  [] _ = error "L.Empty definition"
+makeDefn _  [] _ = error "Definition table has no designated rows to render!"
 makeDefn rm slos l =
   makeDHeaderText rm slos l $^$
   makeHeaderCols [text "Refname", l] size $$

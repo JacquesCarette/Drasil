@@ -92,7 +92,7 @@ makeTableHTML ts (l : lls) r b t = [Div wrapperAttrs $ tableNode : [captionNode 
 
 -- | Internal: Generates definition tables.
 makeDefnHTML :: HTMLGenOptions -> [(String, [AST.LayoutObj])] -> AST.Spec -> [HTMLBody]
-makeDefnHTML _ [] _ = error "Empty definition"
+makeDefnHTML _ [] _ = error "Definition table has no designated rows to render!"
 makeDefnHTML rOpts ps l =
   let attrs = specToIdAttr l <> [class_ ["defn-table"]]
       refRow = Row [] [THeader [] ["Refname"], TData []

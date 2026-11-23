@@ -256,7 +256,7 @@ count c (x:xs)
 
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: [(String, [LayoutObj])] -> Doc -> Doc
-makeDefn [] _ = error "Empty definition"
+makeDefn [] _ = error "Definition table has no designated rows to render!"
 makeDefn ps l = refID l $$ table ["defn-table"]
   (tr (th (text "Refname") $$ td (bold l)) $$ makeDRows ps)
 

@@ -8,7 +8,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators (combineNINI, inThe, of_)
 import Data.Drasil.Concepts.Math (axis, cartesian, point, xComp, xDir, yComp, yDir)
 import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angular,
-  constAccel, displacement, distance, energy, force, height, iPos, iSpeed, iVel,
+  constAccel, displacement, distance, energy, force, height,
   impulseV, linear, position, rigidBody, speed, stress, time, velocity)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Drasil.Database (mkUid)
@@ -160,38 +160,44 @@ xDist = quant (mkUid "xDist") (CP.distance `inThe` xDir)
 yDist = quant (mkUid "yDist") (CP.distance `inThe` yDir)
   (titleize CP.distance `S.inThe` phrase yDir) (subY lR) Real metre
 
-iPos = dqd CP.iPos (sup lP initial) Real metre
+iPos = quant (mkUid "iPos") (cn "initial position")
+  (S "The" +:+ phrase CP.position +:+ S "at the body's initial point")
+  (sup lP initial) Real metre
 xPos = quant (mkUid "xPos") (xComp `of_` CP.position)
   (S "The" +:+ NP (xComp `of_` CP.position)) (subX lP) Real metre
 yPos = quant (mkUid "yPos") (yComp `of_` CP.position)
   (S "The" +:+ NP (yComp `of_` CP.position)) (subY lP) Real metre
 
-ixPos = quant (mkUid "ixPos") (xComp `of_` CP.iPos)
-  (S "The" +:+ NP (xComp `of_` CP.iPos)) (sup (subX lP) initial) Real metre
-iyPos = quant (mkUid "iyPos") (yComp `of_` CP.iPos)
-  (S "The" +:+ NP (yComp `of_` CP.iPos)) (sup (subY lP) initial) Real metre
+ixPos = quant (mkUid "ixPos") (xComp `of_` iPos)
+  (S "The" +:+ NP (xComp `of_` iPos)) (sup (subX lP) initial) Real metre
+iyPos = quant (mkUid "iyPos") (yComp `of_` iPos)
+  (S "The" +:+ NP (yComp `of_` iPos)) (sup (subY lP) initial) Real metre
 
 fSpeed = quant (mkUid "fSpeed") (cn "final speed")
   (S "The" +:+ phrase CP.speed +:+ S "at the body's final point") (sup lV final) Real velU
-iSpeed = dqd CP.iSpeed (sup lV initial) Real velU
+iSpeed = quant (mkUid "iSpeed") (cn "initial speed")
+  (S "The" +:+ phrase CP.speed +:+ S "at the body's initial point")
+  (sup lV initial) Real velU
 
-ixSpeed = quant (mkUid "ixSpeed") (xComp `of_` CP.iSpeed)
-  (S "The" +:+ NP (xComp `of_` CP.iSpeed)) (sub lU initial) Real velU -- temporary use for avoiding having too many superscripts
-iySpeed = quant (mkUid "iySpeed") (yComp `of_` CP.iSpeed)
-  (S "The" +:+ NP (yComp `of_` CP.iSpeed)) (sub lW initial) Real velU -- temporary use for avoiding having too many superscripts
+ixSpeed = quant (mkUid "ixSpeed") (xComp `of_` iSpeed)
+  (S "The" +:+ NP (xComp `of_` iSpeed)) (sub lU initial) Real velU -- temporary use for avoiding having too many superscripts
+iySpeed = quant (mkUid "iySpeed") (yComp `of_` iSpeed)
+  (S "The" +:+ NP (yComp `of_` iSpeed)) (sub lW initial) Real velU -- temporary use for avoiding having too many superscripts
 
 fVel = quant (mkUid "fVel") (cn "final velocity")
   (S "The" +:+ phrase CP.velocity +:+ S "at the body's final point") (sup (vec lV) final) Real velU
-iVel = dqd CP.iVel (sup (vec lV) initial) Real velU
+iVel = quant (mkUid "iVel") (cn "initial velocity")
+  (S "The" +:+ phrase CP.velocity +:+ S "at the body's initial point")
+  (sup (vec lV) initial) Real velU
 xVel = quant (mkUid "xVel") (xComp `of_` CP.velocity)
   (S "The" +:+ NP (xComp `of_` CP.velocity)) (subX lV) Real velU
 yVel = quant (mkUid "yVel") (yComp `of_` CP.velocity)
   (S "The" +:+ NP (yComp `of_` CP.velocity)) (subY lV) Real velU
 
-ixVel = quant (mkUid "ixVel") (xComp `of_` CP.iVel)
-  (S "The" +:+ NP (xComp `of_` CP.iVel)) (sup (subX lV) initial) Real velU
-iyVel = quant (mkUid "iyVel") (yComp `of_` CP.iVel)
-  (S "The" +:+ NP (yComp `of_` CP.iVel)) (sup (subY lV) initial) Real velU
+ixVel = quant (mkUid "ixVel") (xComp `of_` iVel)
+  (S "The" +:+ NP (xComp `of_` iVel)) (sup (subX lV) initial) Real velU
+iyVel = quant (mkUid "iyVel") (yComp `of_` iVel)
+  (S "The" +:+ NP (yComp `of_` iVel)) (sup (subY lV) initial) Real velU
 
 xAccel = quant (mkUid "xScalAcc") (xComp `of_` CP.acceleration)
   (S "The" +:+ NP (xComp `of_` CP.acceleration)) (subX lA) Real accelU

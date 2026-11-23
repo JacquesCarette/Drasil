@@ -20,7 +20,7 @@ physicCon = [acceleration, angular,
   cohesion, collision, compression, constAccel, damping, dampingCoeff,
   displacement, distance, elasticity, energy, fbd, force,
   friction, gravity, height,
-  iPos, iSpeed, iVel, impulseV, isotropy,
+  impulseV, isotropy,
   joint, linear, mechEnergy,
   position, rectilinear,
   rigidBody, shm, space, speed, stiffCoeff, strain, stress,
@@ -40,8 +40,7 @@ physicCon' = [oneD, twoD, threeD]
 acceleration, angular, cohesion,
   collision, compression, constAccel, damping, dampingCoeff, displacement,
   distance, elasticity, energy, fbd, force, friction, gravity,
-  height, iPos, iSpeed,
-  iVel, impulseV, isotropy, joint,
+  height, impulseV, isotropy, joint,
   linear, mechEnergy, position,
   rectilinear, rigidBody, shm,
   space, speed, stiffCoeff, strain, stress, time, velocity,
@@ -136,16 +135,6 @@ velocity = cncpt''' (mkUid "velocity") (cnIES "velocity")
   (S "the rate of change of a body's" +:+ phrase position)
 verticalMotion = cncpt''' (mkUid "verticalMotion") (cn "vertical motion")
   (S " the movement of the object against the gravitational pull")
-
--- Some variants of distance, speed, velocity, and scalar acceleration
--- FIXME: Complete all variants?
--- FIXME: Pull out commonalities?
-
-iPos = cncpt''' (mkUid "iPos") (cn "initial position") (S "The" +:+ phrase position +:+ S "at the body's initial point")
-
-iSpeed = cncpt''' (mkUid "iSpeed") (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
-
-iVel = cncpt''' (mkUid "iVel") (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
 
 --FIXME: COMBINATION HACK (for all below)
 --FIXME: should use compoundPhrase instead? Or better yet, use combineNINI instead of interacting with the terms directly?

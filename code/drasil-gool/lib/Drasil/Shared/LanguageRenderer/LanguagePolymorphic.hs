@@ -3,7 +3,7 @@
 module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
-  multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
+  multOp, divideOp, moduloOp, varDecInit, var, classVar, instanceVarAccess,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, newObjMixedArgs, lambda,
   objAccess, objMethodCall, func, get, set, listAccess, getFunc, setFunc,
@@ -33,7 +33,7 @@ import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
   FunctionElim(functionType), RenderStatement(stmtFromData), StatementElim,
   MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
-  BlockCommentSym(..), ValueElim (value), RenderVariable)
+  BlockCommentSym(..), ValueElim (value), RenderVariable, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(commentedMod),
   OORenderMethod(intMethod), RenderClass, RenderMod(updateModuleDoc), ParentSpec)
@@ -52,7 +52,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   addPrec, multPrec, typeFromData)
 import Drasil.Shared.State (VS, FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
-  addParameter, getParameters, useVarName)
+  addParameter, getParameters, useVarName, setVarScope)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
 import qualified Prelude as P ((<>))
@@ -194,6 +194,13 @@ moduloOp :: (Monad r) => VSOp r
 moduloOp = multPrec "%"
 
 -- Variables --
+
+varDecInit
+  :: (VariableElim r var typ, ScopeElim r ScopeData)
+  => r var -> r ScopeData -> MS ()
+varDecInit v scp = do
+    modify $ useVarName (variableName v)
+    modify $ setVarScope (variableName v) (scopeData scp)
 
 var :: (RenderVariable r var typ) => Label -> VS (r typ) -> VS (r var)
 var n t = mkStateVar n t (R.var n)

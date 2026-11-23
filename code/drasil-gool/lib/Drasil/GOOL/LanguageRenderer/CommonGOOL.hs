@@ -1,40 +1,19 @@
 -- | Contains common implementations specific to GOOL
 module Drasil.GOOL.LanguageRenderer.CommonGOOL (
-  constDecDef, classMethodCall, listAppend, listAdd, innerType
+  classMethodCall, listAppend, listAdd, innerType
 ) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), TypeElim(..), NamedArgs,
-  VariableElim(..), TypeSym(void), IndexTranslator(..), getCodeType,
+  TypeSym(void), IndexTranslator(..), getCodeType,
   ValueStatement(valStmt))
 import Drasil.GOOL.InterfaceGOOL (objMethodCall, convTypeOO, InternalValueExp,
   OOTypeSym)
-import Drasil.Shared.RendererClassesCommon (ScopeElim(..), RenderValue(..),
-  InternalVarElim, RenderStatement, ValueElim, stmtFromData)
+import Drasil.Shared.RendererClassesCommon (RenderValue(..))
 import Drasil.Shared.LanguageRenderer (dot)
-import Drasil.GOOL.Renderers (renderType, renderConstDecDef)
-import Drasil.Shared.AST (TypeData, ScopeData, Terminator(..))
-import Drasil.Shared.State (MS, VS, lensMStoVS, useVarName, setVarScope)
+import Drasil.GOOL.Renderers (renderType)
+import Drasil.Shared.AST (TypeData)
+import Drasil.Shared.State (MS, VS)
 import Drasil.Shared.Helpers (getInnerType)
-
-import Control.Lens.Zoom (zoom)
-import Control.Monad.State (modify)
-
--- TODO [Brandon Bosman, 11/04/2026]: Split up
-constDecDef
-  :: ( InternalVarElim r var
-     , RenderStatement r stmt
-     , ScopeElim r ScopeData
-     , UnRepr r TypeData
-     , ValueElim r val
-     , VariableElim r var TypeData
-     )
-  => VS (r var) -> r ScopeData -> VS (r val) -> MS (r stmt)
-constDecDef vr' scp v'= do
-  vr <- zoom lensMStoVS vr'
-  v <- zoom lensMStoVS v'
-  modify $ useVarName $ variableName vr
-  modify $ setVarScope (variableName vr) (scopeData scp)
-  stmtFromData (renderConstDecDef vr v) Semi
 
 classMethodCall
   :: (RenderValue r var val TypeData, UnRepr r TypeData)

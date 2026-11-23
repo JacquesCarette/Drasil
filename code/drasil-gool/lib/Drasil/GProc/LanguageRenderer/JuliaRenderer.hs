@@ -549,7 +549,14 @@ instance ControlStatement JuliaCode Body Statement Variable Value where
   throw msg' = do
     msg <- zoom lensMStoVS (litString msg')
     stmtFromData (jlThrow msg) Empty
-  ifCond = G.ifCond id empty jlSpace elseIfLabel empty jlEnd
+  ifCond cs eBody = do
+    let condPair (v, b) = on2StateValues
+          (\val bd -> (RC.value val, RC.body bd)) (zoom lensMStoVS v) b
+    condPair' <- traverse condPair cs
+    elseSec <- onStateValue (\bd -> emptyIfEmpty (RC.body bd) (RC.body bd)) eBody
+    stmtFromData
+      (G.ifCond id empty jlSpace elseIfLabel empty jlEnd condPair' elseSec)
+      Empty
   switch = switchAsIf
   ifExists = M.ifExists
   for _ _ _ _ = error $ CP.forLoopError jlName

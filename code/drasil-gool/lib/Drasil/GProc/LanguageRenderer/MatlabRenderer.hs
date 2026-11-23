@@ -525,7 +525,14 @@ instance ControlStatement MatlabCode Body Statement Variable Value where
     v <- zoom lensMStoVS v'
     var mlRet (toState (valueType v)) &= v'
   throw errMsg = valStmt $ funcApp "error" void [litString errMsg]
-  ifCond = G.ifCond id empty (OSpace empty) mlElseIf empty mlEnd
+  ifCond cs eBody = do
+    let condPair (v, b) = on2StateValues
+          (\val bd -> (RC.value val, RC.body bd)) (zoom lensMStoVS v) b
+    condPair' <- traverse condPair cs
+    elseSec <- onStateValue (\bd -> emptyIfEmpty (RC.body bd) (RC.body bd)) eBody
+    stmtFromData
+      (G.ifCond id empty (OSpace empty) mlElseIf empty mlEnd condPair' elseSec)
+      Empty
   switch = switchAsIf
   ifExists = M.ifExists
   for initS cond updateS b = do

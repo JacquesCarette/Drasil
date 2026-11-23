@@ -1596,7 +1596,14 @@ instance ControlStatement CppSrcCode Body Statement Variable Value where
     msg <- zoom lensMStoVS (litString msg')
     stmtFromData (cppThrowDoc msg) Semi
 
-  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
+  ifCond cs eBody = do
+    let condPair (v, b) = on2StateValues
+          (\val bd -> (RC.value val, RC.body bd)) (zoom lensMStoVS v) b
+    condPair' <- traverse condPair cs
+    elseSec <- onStateValue (\bd -> emptyIfEmpty (RC.body bd) (RC.body bd)) eBody
+    stmtFromData
+      (G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty condPair' elseSec)
+      Empty
   switch val' cases' dflt' = do
     brk <- break
     val <- zoom lensMStoVS val'

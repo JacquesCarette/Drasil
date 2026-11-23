@@ -94,7 +94,7 @@ import Drasil.Shared.AST (Terminator(Empty), VisibilityTag(..), qualName,
   progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
   ScopeData, BinderD(..), bindFormD, FileData)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
-  onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
+  onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, revFiles, addLangImportVS,
   getLangImports, getLibImports, setFileType, getClassName, setModuleName,
@@ -653,7 +653,14 @@ instance ControlStatement SwiftCode Body Statement Variable Value where
     msg <- zoom lensMStoVS (litString msg')
     stmtFromData (swiftThrowDoc msg) Empty
 
-  ifCond = G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
+  ifCond cs eBody = do
+    let condPair (v, b) = on2StateValues
+          (\val bd -> (RC.value val, RC.body bd)) (zoom lensMStoVS v) b
+    condPair' <- traverse condPair cs
+    elseSec <- onStateValue (\bd -> emptyIfEmpty (RC.body bd) (RC.body bd)) eBody
+    stmtFromData
+      (G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty condPair' elseSec)
+      Empty
   switch v cs bod = do
     st <- emptyStmt
     vl <- zoom lensMStoVS v

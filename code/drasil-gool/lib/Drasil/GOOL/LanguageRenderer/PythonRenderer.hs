@@ -614,7 +614,14 @@ instance ControlStatement PythonCode Body Statement Variable Value where
     msg <- zoom lensMStoVS (litString msg')
     stmtFromData (pyThrow msg) Empty
 
-  ifCond = G.ifCond id pyBodyStart pySpace pyElseIf pyBodyEnd empty
+  ifCond cs eBody = do
+    let condPair (v, b) = on2StateValues
+          (\val bd -> (RC.value val, RC.body bd)) (zoom lensMStoVS v) b
+    condPair' <- traverse condPair cs
+    elseSec <- onStateValue (\bd -> emptyIfEmpty (RC.body bd) (RC.body bd)) eBody
+    stmtFromData
+      (G.ifCond id pyBodyStart pySpace pyElseIf pyBodyEnd empty condPair' elseSec)
+      Empty
   switch = switchAsIf
 
   ifExists = M.ifExists

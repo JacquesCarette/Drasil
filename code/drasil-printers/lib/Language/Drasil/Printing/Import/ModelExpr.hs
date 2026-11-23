@@ -1,6 +1,7 @@
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.ModelExpr (modelExpr, modelExpr') where
 
+import Control.Lens ((^.))
 import Data.List (intersperse)
 
 import Drasil.Database (UID)
@@ -17,7 +18,7 @@ import Language.Drasil.ModelExpr.Development (
   , mePrec, precC, precB, precA)
 
 import qualified Drasil.Document.Layout.Internal as P
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, notation)
 import Language.Drasil.Printing.Import.ExprCommon (lookupC', parens)
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Space (space)
@@ -112,7 +113,7 @@ sup n | n == 1 = []
 
 -- | Translate Exprs to printable layout AST.
 modelExpr :: ModelExpr -> PrintingInformation -> P.Expr
-modelExpr (Lit l)                    sm = literal l sm
+modelExpr (Lit l)                    sm = literal l $ sm ^. notation
 modelExpr (AssocB And l)             sm = assocExpr P.And (precB And) l sm
 modelExpr (AssocB Or l)              sm = assocExpr P.Or (precB Or) l sm
 modelExpr (AssocB Equivalence l)     sm = assocExpr P.Eq (precB Equivalence) l sm

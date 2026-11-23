@@ -566,7 +566,7 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
           elseLabel <> optSpaceDoc os <> ifStart,
           indent bd,
           bEnd]) $+$ ifEnd) eBody
-    in vcat (ifSect c : fmap elseIfSect cs ++ [elseSect])
+    in vcat (ifSect c : fmap elseIfSect cs P.<> [elseSect])
 
 -- Methods --
 

@@ -46,33 +46,38 @@ layoutCells SingleCell    los = [markdownCell (losToMarkdown los)]
 
 -- | Internal: Rendering LayoutObjects into JSON in a single cell.
 loToMarkdown :: LayoutObj -> Doc
-loToMarkdown (Header n contents l)            = text "" $$ h (n + 1) <> pSpec contents $$ refID (pSpec l)
-loToMarkdown (Cell _)                         = empty
-loToMarkdown (HDiv _ layoutObs _)             = vcat (loToMarkdown <$> layoutObs)
-loToMarkdown (Paragraph contents)             = text "" $$ stripnewLine (show (pSpec contents))
-loToMarkdown (EqnBlock contents)              = eqnBlock contents
-loToMarkdown (Table _ rows r _ _)            = text "" $$ makeTable rows (pSpec r)
-loToMarkdown (Definition ssPs l)             = text "<br>" $$ makeDefn ssPs (pSpec l)
-loToMarkdown (List t)                        = text "" $$ makeList t False
-loToMarkdown (Figure r c f wp)               = makeFigure (pSpec r) (pSpec <$> c) (text f) wp
-loToMarkdown (Bib bib)                       = makeBib bib
-loToMarkdown Graph{}                         = empty
-loToMarkdown CodeBlock {}                    = empty
+loToMarkdown (Header n contents l) = text "" $$ h (n + 1) <> pSpec contents $$ refID (pSpec l)
+loToMarkdown (Cell _)              = empty
+loToMarkdown (HDiv _ layoutObs _)  = vcat (loToMarkdown <$> layoutObs)
+loToMarkdown (Paragraph contents)  = text "" $$ stripnewLine (show (pSpec contents))
+loToMarkdown (EqnBlock contents)   = eqnBlock contents
+loToMarkdown (Table _ rows r _ _)  = text "" $$ makeTable rows (pSpec r)
+loToMarkdown (Definition ssPs l)   = text "<br>" $$ makeDefn ssPs (pSpec l)
+loToMarkdown (List t)              = text "" $$ makeList t False
+loToMarkdown (Figure r c f wp)     = makeFigure (pSpec r) (pSpec <$> c) (text f) wp
+loToMarkdown (Bib bib)             = makeBib bib
+loToMarkdown Graph{}               = empty
+loToMarkdown CodeBlock {}          = empty
 
 -- | Internal: Rendering LayoutObjects into JSON into multiple cells.
 loToCells :: LayoutObj -> [Cell]
-loToCells (Header n contents l)            = [markdownCell $ (h (n + 1) <> pSpec contents) $$ refID (pSpec l)]
-loToCells (Cell layoutObs)                 = concatMap loToCells layoutObs
-loToCells HDiv{} = []
-loToCells (Paragraph contents)             = [markdownCell $ stripnewLine (show (pSpec contents))]
-loToCells (EqnBlock contents)              = [markdownCell $ eqnBlock contents]
-loToCells (Table _ rows r _ _)             = [markdownCell $ makeTable rows (pSpec r)]
-loToCells Definition{}                     = []
-loToCells (List t)                         = [markdownCell $ makeList t False]
-loToCells (Figure r c f wp)                = [markdownCell $ makeFigure (pSpec r) (pSpec <$> c) (text f) wp]
-loToCells (Bib bib)                        = [markdownCell $ makeBib bib]
-loToCells Graph{}                          = []
-loToCells (CodeBlock contents)             = [codeCell $ cSpec contents]
+loToCells (Header n contents l) = [markdownCell $ (h (n + 1) <> pSpec contents) $$ refID (pSpec l)]
+loToCells (Cell layoutObs)      = concatMap loToCells layoutObs
+loToCells HDiv{}                = []
+loToCells (Paragraph contents)  = [markdownCell $ stripnewLine (show (pSpec contents))]
+loToCells (EqnBlock contents)   = [markdownCell $ eqnBlock contents]
+loToCells (Table _ rows r _ _)  = [markdownCell $ makeTable rows (pSpec r)]
+loToCells Definition{}          = []
+loToCells (List t)              = [markdownCell $ makeList t False]
+loToCells (Figure r c f wp)     = [markdownCell $ makeFigure (pSpec r) (pSpec <$> c) (text f) wp]
+loToCells (Bib bib)             = [markdownCell $ makeBib bib]
+loToCells Graph{}               = []
+loToCells (CodeBlock contents)  = [codeCell $ cSpec contents]
+  where
+    -- FIXME: CodeBlock's 'contents' type looks like it can be improved...
+    cSpec :: Spec -> Doc
+    cSpec (E e) = pExpr NotebookCode e
+    cSpec _     = empty
 
 -- | Internal: Renders an equation block as display math.
 eqnBlock :: Spec -> Doc
@@ -85,25 +90,22 @@ losToMarkdown = foldr (($$) . loToMarkdown) empty
 data ExprContext = NotebookMath | NotebookCode
 
 pSpec :: Spec -> Doc
-pSpec (E e)  = dollar $ pMathExpr e
-pSpec (a :+: b) = pSpec a <> pSpec b
-pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
+pSpec (E e)                    = dollar $ pMathExpr e
+pSpec (a :+: b)                = pSpec a <> pSpec b
+pSpec (S s)                    =
+  either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Tooltip _ s) = pSpec s
-pSpec (Sp Circle) = text "&deg;"
-pSpec (Ref Internal r a)      = reflink     r $ pSpec a
+pSpec (Tooltip _ s)            = pSpec s
+pSpec (Sp Circle)              = text "&deg;"
+pSpec (Ref Internal r a)       = reflink     r $ pSpec a
 pSpec (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec a -- no difference for citations?
-pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)
-pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
-pSpec EmptyS    = text "" -- Expected in the output
-pSpec (Quote q) = dquote $ pSpec q
-
-cSpec :: Spec -> Doc
-cSpec (E e)  = pExpr NotebookCode e
-cSpec _      = empty
+pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r  (pSpec a) (pSpec n)
+pSpec (Ref External r a)       = reflinkURI  r $ pSpec a
+pSpec (Quote q)                = dquote $ pSpec q
+pSpec EmptyS                   = text "" -- Expected in the output
 
 -- | Render math where the enclosing context already delimits the expression.
 pMathExpr :: Expr -> Doc
@@ -112,93 +114,86 @@ pMathExpr e = pExpr NotebookMath e
 
 -- | Renders expressions in JSON.
 pExpr :: ExprContext -> Expr -> Doc
-pExpr _ (Dbl d)        = text $ showEFloat Nothing d ""
-pExpr _ (Int i)        = text $ show i
-pExpr _ (Str s)        = dquote $ text s
-pExpr NotebookMath (Div n d) =
-  mkDiv "frac" (pMathExpr n) (pMathExpr d)
-pExpr ctx (Div n d)    = mkDiv "frac" (pExpr ctx n) (pExpr ctx d)
-pExpr NotebookMath (Row [x]) =
-  braces $ pExpr NotebookMath x
-pExpr ctx (Row l)      = hcat $ pExpr ctx <$> l
-pExpr ctx (Set l)      = hcat $ pExpr ctx <$> l
-pExpr _ (Ident s)      = text s
-pExpr NotebookMath (Label s) =
-  TeX.printMath $ TeX.pExpr (Label s)
-pExpr NotebookCode (Label s) = text s
-pExpr _ (Spec Circle)  = text "&deg;"
-pExpr NotebookMath (Sub e) =
-  unders <> braces (pMathExpr e)
-pExpr NotebookCode (Sub e) =
-  unders <> pExpr NotebookCode e
-pExpr NotebookMath (Sup e) =
-  hat <> braces (pMathExpr e)
-pExpr NotebookCode (Sup e) =
-  hat <> pExpr NotebookCode e
-pExpr ctx (Over Hat s) = pExpr ctx s <> text "&#770;"
-pExpr _ (MO o)         = text $ pOps o
-pExpr ctx (Fenced l r e) =
+pExpr _            (Dbl d)        = text $ showEFloat Nothing d ""
+pExpr _            (Int i)        = text $ show i
+pExpr _            (Str s)        = dquote $ text s
+pExpr NotebookMath (Div n d)      = mkDiv "frac" (pMathExpr n) (pMathExpr d)
+pExpr ctx          (Div n d)      = mkDiv "frac" (pExpr ctx n) (pExpr ctx d)
+pExpr NotebookMath (Row [x])      = braces $ pExpr NotebookMath x
+pExpr ctx          (Row l)        = hcat $ pExpr ctx <$> l
+pExpr ctx          (Set l)        = hcat $ pExpr ctx <$> l
+pExpr _            (Ident s)      = text s
+pExpr NotebookMath (Label s)      = TeX.printMath $ TeX.pExpr (Label s)
+pExpr NotebookCode (Label s)      = text s
+pExpr _            (Spec Circle)  = text "&deg;"
+pExpr NotebookMath (Sub e)        = unders <> braces (pMathExpr e)
+pExpr NotebookCode (Sub e)        = unders <> pExpr NotebookCode e
+pExpr NotebookMath (Sup e)        = hat <> braces (pMathExpr e)
+pExpr NotebookCode (Sup e)        = hat <> pExpr NotebookCode e
+pExpr ctx          (Over Hat s)   = pExpr ctx s <> text "&#770;"
+pExpr _            (MO o)         = text $ pOps o
+pExpr ctx          (Fenced l r e) =
   text (fence Open l) <> pExpr ctx e <> text (fence Close r)
-pExpr ctx (Font Bold e) = pExpr ctx e
+pExpr ctx          (Font Bold e)  = pExpr ctx e
 -- Uses TeX for Mathjax for all other exprs
-pExpr _ e              = TeX.printMath $ TeX.pExpr e
+pExpr _            e              = TeX.printMath $ TeX.pExpr e
 
 -- TODO: edit all operations in markdown format
 pOps :: Ops -> String
-pOps IsIn       = "&thinsp;&isin;&thinsp;"
-pOps Integer    = "&#8484;"
-pOps Rational   = "&#8474;"
-pOps Real       = "&#8477;"
-pOps Natural    = "&#8469;"
-pOps Boolean    = "&#120121;"
-pOps Comma      = ","
-pOps Prime      = "&prime;"
-pOps Log        = "log"
-pOps Ln         = "ln"
-pOps Sin        = "sin"
-pOps Cos        = "cos"
-pOps Tan        = "tan"
-pOps Sec        = "sec"
-pOps Csc        = "csc"
-pOps Cot        = "cot"
-pOps Arcsin     = "arcsin"
-pOps Arccos     = "arccos"
-pOps Arctan     = "arctan"
-pOps Not        = "&not;"
-pOps Dim        = "dim"
-pOps Exp        = "e"
-pOps Neg        = "-"
-pOps Cross      = "&#10799;"
-pOps VAdd       = " + "
-pOps VSub       = " - "
-pOps Dot        = "&sdot;"
-pOps Scale      = "" -- same as Mul
-pOps Eq         = " = " -- with spaces?
-pOps NEq        = "&ne;"
-pOps Lt         = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
-pOps Gt         = "&thinsp;&gt;&thinsp;"
-pOps LEq        = "&thinsp;&le;&thinsp;"
-pOps GEq        = "&thinsp;&ge;&thinsp;"
-pOps Impl       = " &rArr; "
-pOps Iff        = " &hArr; "
-pOps Subt       = " - "
-pOps And        = " &and; "
-pOps Or         = " &or; "
-pOps Add        = " + "
-pOps Mul        = ""
-pOps Summ       = "&sum"
-pOps Inte       = "&int;"
-pOps Prod       = "&prod;"
-pOps Point      = "."
-pOps Perc       = "%"
-pOps LArrow     = " &larr; "
-pOps RArrow     = " &rarr; "
-pOps ForAll     = " ForAll "
-pOps Partial    = "&part;"
-pOps SAdd       = " + "
-pOps SRemove    = " - "
-pOps SContains  = " in "
-pOps SUnion     = " and "
+pOps IsIn      = "&thinsp;&isin;&thinsp;"
+pOps Integer   = "&#8484;"
+pOps Rational  = "&#8474;"
+pOps Real      = "&#8477;"
+pOps Natural   = "&#8469;"
+pOps Boolean   = "&#120121;"
+pOps Comma     = ","
+pOps Prime     = "&prime;"
+pOps Log       = "log"
+pOps Ln        = "ln"
+pOps Sin       = "sin"
+pOps Cos       = "cos"
+pOps Tan       = "tan"
+pOps Sec       = "sec"
+pOps Csc       = "csc"
+pOps Cot       = "cot"
+pOps Arcsin    = "arcsin"
+pOps Arccos    = "arccos"
+pOps Arctan    = "arctan"
+pOps Not       = "&not;"
+pOps Dim       = "dim"
+pOps Exp       = "e"
+pOps Neg       = "-"
+pOps Cross     = "&#10799;"
+pOps VAdd      = " + "
+pOps VSub      = " - "
+pOps Dot       = "&sdot;"
+pOps Scale     = "" -- same as Mul
+pOps Eq        = " = " -- with spaces?
+pOps NEq       = "&ne;"
+pOps Lt        = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
+pOps Gt        = "&thinsp;&gt;&thinsp;"
+pOps LEq       = "&thinsp;&le;&thinsp;"
+pOps GEq       = "&thinsp;&ge;&thinsp;"
+pOps Impl      = " &rArr; "
+pOps Iff       = " &hArr; "
+pOps Subt      = " - "
+pOps And       = " &and; "
+pOps Or        = " &or; "
+pOps Add       = " + "
+pOps Mul       = ""
+pOps Summ      = "&sum"
+pOps Inte      = "&int;"
+pOps Prod      = "&prod;"
+pOps Point     = "."
+pOps Perc      = "%"
+pOps LArrow    = " &larr; "
+pOps RArrow    = " &rarr; "
+pOps ForAll    = " ForAll "
+pOps Partial   = "&part;"
+pOps SAdd      = " + "
+pOps SRemove   = " - "
+pOps SContains = " in "
+pOps SUnion    = " and "
 
 -- | Referring to 'fence' (for parenthesis and brackets). Either opened or closed.
 data OpenClose = Open | Close
@@ -225,9 +220,10 @@ makeRows = foldr (($$) . makeColumns) empty
 -- | makeColumns: Helper for creating table columns
 makeHeaderCols, makeColumns :: [Spec] -> Doc
 makeHeaderCols l = text header $$ text (genMDtable P.<> "|")
-  where header = show (text "|" <> hcat (punctuate (text "|") (pSpec <$> l)) <> text "|")
-        c = count '|' header
-        genMDtable = concat (replicate (c-1) "|:--- ")
+  where
+    header = show (text "|" <> hcat (punctuate (text "|") (pSpec <$> l)) <> text "|")
+    c = count '|' header
+    genMDtable = concat (replicate (c-1) "|:--- ")
 
 makeColumns ls = text "|" <> hcat (punctuate (text "|") (pSpec <$> ls)) <> text "|"
 

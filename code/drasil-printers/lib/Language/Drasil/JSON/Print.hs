@@ -5,7 +5,7 @@ module Language.Drasil.JSON.Print (
   CellLayout(..), genJupyter
 ) where
 
-import Prelude hiding (print, (<>))
+import Prelude hiding ((<>))
 import qualified Prelude as P ((<>))
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
@@ -18,8 +18,7 @@ import Drasil.Document.Layout.Internal (ItemType(..), ListType(..), Spec(..),
   Expr(..), Label, Fonts(Bold), OverSymb(Hat), Fence(..), Ops(..), LinkType(..),
   Special(Circle), BibRef, Document(Document), LayoutObj(..), MaxWidthPercent)
 import Language.Drasil.Printing.Helpers (unders, hat)
-import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
-import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
+import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr, printMath)
 import Language.Drasil.Markdown.Citation (BibFormatter(..), renderCite)
 
 import Language.Drasil.JSON.Helpers (notebookMetadata, h, stripnewLine,
@@ -43,11 +42,7 @@ genJupyter cl (Document t a c) =
 -- | Lays out a document's contents as notebook cells.
 layoutCells :: CellLayout -> [LayoutObj] -> [Cell]
 layoutCells CellPerObject los = concatMap loToCells los
-layoutCells SingleCell    los = [markdownCell (print los)]
-
--- | Helper for rendering a D from Latex print
-printMath :: D -> Doc
-printMath = (`runPrint` Math)
+layoutCells SingleCell    los = [markdownCell (losToMarkdown los)]
 
 -- | Internal: Rendering LayoutObjects into JSON in a single cell.
 loToMarkdown :: LayoutObj -> Doc
@@ -55,11 +50,7 @@ loToMarkdown (Header n contents l)            = text "" $$ h (n + 1) <> pSpec co
 loToMarkdown (Cell _)                         = empty
 loToMarkdown (HDiv _ layoutObs _)             = vcat (loToMarkdown <$> layoutObs)
 loToMarkdown (Paragraph contents)             = text "" $$ stripnewLine (show (pSpec contents))
-loToMarkdown (EqnBlock contents)              = mathEqn
-  where
-    toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp = ddollars . stripnewLine . show
-    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
+loToMarkdown (EqnBlock contents)              = eqnBlock contents
 loToMarkdown (Table _ rows r _ _)            = text "" $$ makeTable rows (pSpec r)
 loToMarkdown (Definition ssPs l)             = text "<br>" $$ makeDefn ssPs (pSpec l)
 loToMarkdown (List t)                        = text "" $$ makeList t False
@@ -74,11 +65,7 @@ loToCells (Header n contents l)            = [markdownCell $ (h (n + 1) <> pSpec
 loToCells (Cell layoutObs)                 = concatMap loToCells layoutObs
 loToCells HDiv{} = []
 loToCells (Paragraph contents)             = [markdownCell $ stripnewLine (show (pSpec contents))]
-loToCells (EqnBlock contents)              = [markdownCell mathEqn]
-  where
-    toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp = ddollars . stripnewLine . show
-    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
+loToCells (EqnBlock contents)              = [markdownCell $ eqnBlock contents]
 loToCells (Table _ rows r _ _)             = [markdownCell $ makeTable rows (pSpec r)]
 loToCells Definition{}                     = []
 loToCells (List t)                         = [markdownCell $ makeList t False]
@@ -87,10 +74,13 @@ loToCells (Bib bib)                        = [markdownCell $ makeBib bib]
 loToCells Graph{}                          = []
 loToCells (CodeBlock contents)             = [codeCell $ cSpec contents]
 
--- | Called by build, uses 'loToMarkdown' to render the layout
--- objects in Doc format.
-print :: [LayoutObj] -> Doc
-print = foldr (($$) . loToMarkdown) empty
+-- | Internal: Renders an equation block as display math.
+eqnBlock :: Spec -> Doc
+eqnBlock = ddollars . stripnewLine . show . TeX.printMath . TeX.spec
+
+-- | Renders layout objects as Markdown, one after another.
+losToMarkdown :: [LayoutObj] -> Doc
+losToMarkdown = foldr (($$) . loToMarkdown) empty
 
 data ExprContext = NotebookMath | NotebookCode
 
@@ -134,7 +124,7 @@ pExpr ctx (Row l)      = hcat $ pExpr ctx <$> l
 pExpr ctx (Set l)      = hcat $ pExpr ctx <$> l
 pExpr _ (Ident s)      = text s
 pExpr NotebookMath (Label s) =
-  printMath $ toMath $ TeX.pExpr (Label s)
+  TeX.printMath $ TeX.pExpr (Label s)
 pExpr NotebookCode (Label s) = text s
 pExpr _ (Spec Circle)  = text "&deg;"
 pExpr NotebookMath (Sub e) =
@@ -150,11 +140,8 @@ pExpr _ (MO o)         = text $ pOps o
 pExpr ctx (Fenced l r e) =
   text (fence Open l) <> pExpr ctx e <> text (fence Close r)
 pExpr ctx (Font Bold e) = pExpr ctx e
---pExpr (Font Bold e)  = bold $ pExpr e -- used before
---pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- HTML used
---pExpr (Spc Thin)     = text "&#8239;" -- HTML used
 -- Uses TeX for Mathjax for all other exprs
-pExpr _ e              = printMath $ toMath $ TeX.pExpr e
+pExpr _ e              = TeX.printMath $ TeX.pExpr e
 
 -- TODO: edit all operations in markdown format
 pOps :: Ops -> String
@@ -258,9 +245,8 @@ makeDefn ps l = refID l $$ table ["defn-table"]
 
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc
-makeDRows []         = error "No fields to create defn table"
-makeDRows [(f,d)]    = tr (th (text f) $$ td (vcat $ loToMarkdown <$> d))
-makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ loToMarkdown <$> d)) $$ makeDRows ps
+makeDRows [] = error "No fields to create defn table"
+makeDRows ps = vcat $ (\(f, d) -> tr (th (text f) $$ td (vcat $ loToMarkdown <$> d))) <$> ps
 
 -- | Renders lists
 makeList :: ListType -> Bool -> Doc -- FIXME: ref id's should be folded into the li
@@ -305,6 +291,5 @@ pSpecBib (Ref External r a) = text ("<a href=\"" P.<> r P.<> "\">") <> pSpecBib 
 pSpecBib s                  = pSpec s
 
 makeBib :: BibRef -> Doc
-makeBib = vcat .
-  zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [brak $ text $ show x | x <- [1..] :: [Int]] . fmap (renderCite jsonBibFormatter)
+makeBib = vcat . zipWith entry [1 :: Int ..] . fmap (renderCite jsonBibFormatter)
+  where entry i (l, a) = makeRefList a l (brak $ text $ show i)

@@ -10,13 +10,13 @@ import Control.Lens ((^.))
 import Drasil.FileHandling (FileLayout, directory, file, ps)
 import Language.Drasil (Stage(Equational))
 import Language.Drasil.Document (Document(..), checkToC)
-import Language.Drasil.Printers (genericCSS, genHTML, renderHTML, genTeX,
+import Language.Drasil.Printers (genericCSS, genHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
   genJupyterSRS, makeDocument, makeProject, defaultHTMLGO)
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
-import Drasil.Data.Formats.HTML (defaultHTMLRO)
+import Drasil.Data.Formats.HTML (defaultHTMLRO, renderHTML)
 import Drasil.System (systemdb)
 import qualified Language.Drasil.Sentence.Combinators as S
 

@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Language.Drasil.HTML.Render(
-  genHTML, HTMLGenOptions(..), defaultHTMLGO,
-  renderHTML
+  genHTML, HTMLGenOptions(..), defaultHTMLGO
 ) where
 
 import Data.Text (Text)

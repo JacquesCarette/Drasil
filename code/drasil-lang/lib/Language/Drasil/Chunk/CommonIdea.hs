@@ -12,8 +12,9 @@ module Language.Drasil.Chunk.CommonIdea (
 ) where
 
 import Control.Lens (makeLenses, (^.), view)
+import qualified Data.Set as S (unions, fromList)
 
-import Drasil.Database (UID, HasUID(uid), declareHasChunkRefs, Generically(..))
+import Drasil.Database (UID, HasUID(uid), HasChunkRefs(..))
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, idea')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
@@ -28,7 +29,6 @@ import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 -- Ex. The term "Operating System" has the abbreviation "OS" and comes from the domain of computer science.
 data CI = CI { _nc' :: IdeaDict, _ab :: String, cdom' :: [UID]}
 makeLenses ''CI
-declareHasChunkRefs ''CI
 
 -- | Finds 'UID' of the 'IdeaDict' used to make the 'CI'.
 instance HasUID        CI where uid  = nc' . uid
@@ -38,6 +38,10 @@ instance NamedIdea     CI where term = nc' . term
 instance Idea          CI where getA = Just . view ab
 -- | Finds the idea of a 'CI' (abbreviation).
 instance CommonIdea    CI where abrv = view ab
+-- | Finds the chunks referenced by a 'CI': those in its 'IdeaDict' and its
+-- domains.
+instance HasChunkRefs  CI where
+  chunkRefs ci = S.unions [chunkRefs (ci ^. nc'), S.fromList (cdom' ci)]
 
 -- | The commonIdea smart constructor requires a chunk id ('String'), a
 -- term ('NP'), an abbreviation ('String'), and a

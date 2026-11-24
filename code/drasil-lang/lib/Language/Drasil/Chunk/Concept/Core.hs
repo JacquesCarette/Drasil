@@ -8,8 +8,9 @@ module Language.Drasil.Chunk.Concept.Core(
 ) where
 
 import Control.Lens (makeLenses, (^.),)
+import qualified Data.Set as S (unions, fromList)
 
-import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..))
+import Drasil.Database (UID, HasUID(..), HasChunkRefs(..))
 
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom))
@@ -34,7 +35,6 @@ data ConceptChunk = ConDict { _uu :: UID -- ^ The 'UID' of the concept.
                             , cdom' :: [UID] -- ^ Domain of the concept.
                             }
 makeLenses ''ConceptChunk
-declareHasChunkRefs ''ConceptChunk
 
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
@@ -48,3 +48,8 @@ instance Idea          ConceptChunk where getA = mabbr
 instance Definition    ConceptChunk where defn = defn'
 -- | Finds the domain of 'UID's of a 'ConceptChunk'.
 instance ConceptDomain ConceptChunk where cdom = cdom'
+-- | Finds the chunks referenced by a 'ConceptChunk': those in its term and
+-- definition, and its domains.
+instance HasChunkRefs  ConceptChunk where
+  chunkRefs (ConDict _ nounPhr _ defSent doms) =
+    S.unions [chunkRefs nounPhr, chunkRefs defSent, S.fromList doms]

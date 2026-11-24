@@ -6,7 +6,7 @@ import Drasil.Data.Formats.JSON (JSON(..), objectField, pretty)
 import Drasil.Data.Formats.Jupyter (Cell(..), CellSourceRenderStyle(..),
   KernelSpec(..), LanguageInfo(..), Notebook(..), NotebookMetadata(..),
   NotebookRenderOptions(..), defaultNotebookRenderOptions,
-  defaultPython39Metadata, notebookToJSON, renderNotebook)
+  defaultPython39Metadata, renderJupyter, renderJupyter')
 
 import Drasil.FileHandling (file, ps)
 import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
@@ -18,8 +18,8 @@ jupyterTests :: TestTree
 jupyterTests =
   testGroup
     "Drasil.Data.Formats.Jupyter"
-    [ notebookToJSONTests,
-      renderNotebookTests
+    [ renderJupyterTests,
+      renderJupyter'Tests
     ]
 
 exampleNotebook :: Notebook
@@ -42,10 +42,10 @@ customMetadata = NotebookMetadata
       }
   }
 
-notebookToJSONTests :: TestTree
-notebookToJSONTests =
+renderJupyterTests :: TestTree
+renderJupyterTests =
   testGroup
-    "notebookToJSON"
+    "renderJupyter"
     [ testCase "custom kernel metadata" $
         (metadataJSON >>= objectField "kernelspec") @?= Just (JObject
           [ ("display_name", "Julia 1.10"),
@@ -78,7 +78,7 @@ notebookToJSONTests =
           @?= Just (JObject metadata),
       testCase "selected notebook format 4.4" $ do
         let options = defaultNotebookRenderOptions { notebookFormatMinor = 4 }
-            notebookJSON = notebookToJSON options exampleNotebook
+            notebookJSON = renderJupyter options exampleNotebook
         objectField "nbformat_minor" notebookJSON @?= Just (JNumber 4)
         case objectField "cells" notebookJSON of
           Just (JArray cells) -> fmap (objectField "id") cells @?= [Nothing, Nothing]
@@ -86,37 +86,37 @@ notebookToJSONTests =
       testCase "cell IDs for later major versions" $ do
         let options = defaultNotebookRenderOptions
               { notebookFormat = 5, notebookFormatMinor = 0 }
-        case objectField "cells" (notebookToJSON options exampleNotebook) of
+        case objectField "cells" (renderJupyter options exampleNotebook) of
           Just (JArray cells) -> fmap (objectField "id") cells
             @?= [Just (JString "cell-0"), Just (JString "cell-1")]
           _ -> assertFailure "Expected a cells array"
     ]
   where
     metadataJSON = objectField "metadata" $
-      notebookToJSON defaultNotebookRenderOptions $
+      renderJupyter defaultNotebookRenderOptions $
         Notebook customMetadata [MarkdownCell [] "# Report"]
 
 cellMetadata :: Cell -> Maybe JSON
 cellMetadata cell = do
   JArray [cellJSON] <- objectField "cells" $
-    notebookToJSON defaultNotebookRenderOptions (Notebook defaultPython39Metadata [cell])
+    renderJupyter defaultNotebookRenderOptions (Notebook defaultPython39Metadata [cell])
   objectField "metadata" cellJSON
 
-renderNotebookTests :: TestTree
-renderNotebookTests =
+renderJupyter'Tests :: TestTree
+renderJupyter'Tests =
   testGroup
-    "renderNotebook"
+    "renderJupyter'"
     [ goldenTestingGroup
       [osp|test/build/jupyter|]
       [osp|test/golden/jupyter|]
       "Golden Tests"
       [ goldenTest "ListOfLines" $
           file [ps|list_of_lines.ipynb|] $
-            renderNotebook defaultNotebookRenderOptions
+            renderJupyter' defaultNotebookRenderOptions
               pretty exampleNotebook,
         goldenTest "SingleString" $
           file [ps|single_string.ipynb|] $
-            renderNotebook (defaultNotebookRenderOptions { sourceFormat = SingleString })
+            renderJupyter' (defaultNotebookRenderOptions { sourceFormat = SingleString })
               pretty exampleNotebook
       ]
     ]

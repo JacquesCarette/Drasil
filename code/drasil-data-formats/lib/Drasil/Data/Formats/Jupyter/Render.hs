@@ -2,7 +2,7 @@
 
 module Drasil.Data.Formats.Jupyter.Render
   ( CellSourceRenderStyle(..), NotebookRenderOptions(..), defaultNotebookRenderOptions
-  , notebookToJSON, renderNotebook
+  , renderJupyter, renderJupyter'
   ) where
 
 import Data.Text (Text)
@@ -32,8 +32,8 @@ defaultNotebookRenderOptions :: NotebookRenderOptions
 defaultNotebookRenderOptions = NotebookRenderOptions 4 5 ListOfLines
 
 -- | Encode a new notebook using the selected version and source representation.
-notebookToJSON :: NotebookRenderOptions -> Notebook -> JSON
-notebookToJSON options (Notebook metadata cells) = JObject
+renderJupyter :: NotebookRenderOptions -> Notebook -> JSON
+renderJupyter options (Notebook metadata cells) = JObject
   [ ("cells", JArray $ zipWith (cellToJSON options) [0..] cells)
   , ("metadata", metadataToJSON metadata)
   , ("nbformat", JNumber $ fromIntegral $ notebookFormat options)
@@ -41,8 +41,8 @@ notebookToJSON options (Notebook metadata cells) = JObject
   ]
 
 -- | Render a notebook with the shared JSON renderer.
-renderNotebook :: NotebookRenderOptions -> JSONRenderOptions -> Notebook -> Doc ann
-renderNotebook options jsonOptions = renderJSON jsonOptions . notebookToJSON options
+renderJupyter' :: NotebookRenderOptions -> JSONRenderOptions -> Notebook -> Doc ann
+renderJupyter' options jsonOptions = renderJSON jsonOptions . renderJupyter options
 
 metadataToJSON :: NotebookMetadata -> JSON
 metadataToJSON metadata = JObject

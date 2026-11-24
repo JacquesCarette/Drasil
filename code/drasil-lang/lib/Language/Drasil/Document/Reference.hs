@@ -10,7 +10,8 @@ module Language.Drasil.Document.Reference (
 
 import Control.Lens ((^.), makeLenses)
 
-import Drasil.Database (UID, HasUID(..), IsChunk, declareHasChunkRefs, Generically(..))
+import Drasil.Database (UID, HasUID(..), IsChunk, TypeableChunk, hide,
+  declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.Document.Labels (LblType, HasRefAddress(..))
 import Language.Drasil.Document.ShortName (HasShortName(..), ShortName)
@@ -44,21 +45,20 @@ instance Referable Reference where
 ref :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> Reference
 ref r = Reference (r ^. uid) (getRefAdd r) (shortname r)
 
--- Maybe just use r ^. uid without 'ref'?
--- | Takes the reference 'UID' and wraps it into a 'Sentence'.
-refS :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> Sentence
+-- | Takes something referable and wraps a reference to it into a 'Sentence'.
+refS :: (TypeableChunk r, HasRefAddress r, HasShortName r) => r -> Sentence
 refS r = namedRef r EmptyS
 
 -- | Takes a 'Reference' with a name to be displayed and wraps it into a 'Sentence'.
 -- Does not overwrite the shortname contained in the reference, but will only display as the given 'Sentence'.
-namedRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> Sentence -> Sentence
+namedRef :: (TypeableChunk r, HasRefAddress r, HasShortName r) => r -> Sentence -> Sentence
 namedRef r s = namedComplexRef r s None
 
 -- | Takes a 'Reference' with additional display info. Uses the internal shortname for its display name.
-complexRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sentence
-complexRef r = Ref (r ^. uid) EmptyS
+complexRef :: (TypeableChunk r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sentence
+complexRef r = Ref (hide r) EmptyS
 
 -- | Takes a 'Reference' with a name to be displayed and any additional information and wraps it into a 'Sentence'.
 -- Does not overwrite the shortname contained in the reference, but will only display as the given 'Sentence' along with the given 'RefInfo'.
-namedComplexRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
-namedComplexRef r = Ref (r ^. uid)
+namedComplexRef :: (TypeableChunk r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
+namedComplexRef r = Ref (hide r)

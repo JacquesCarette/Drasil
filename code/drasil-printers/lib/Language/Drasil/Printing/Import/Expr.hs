@@ -1,6 +1,7 @@
 -- | Defines functions for printing expressions.
 module Language.Drasil.Printing.Import.Expr (expr) where
 
+import Control.Lens ((^.))
 import Data.List (intersperse)
 
 import Drasil.Database (UID)
@@ -14,7 +15,7 @@ import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
 import Language.Drasil.Literal.Development (Literal(..))
 
 import qualified Drasil.Document.Layout.Internal as P
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, notation)
 import Language.Drasil.Printing.Import.ExprCommon (lookupC', parens)
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Symbol (symbol)
@@ -102,7 +103,7 @@ eop sm Mul = eopMuls sm
 
 -- | Translate Exprs to printable layout AST.
 expr :: Expr -> PrintingInformation -> P.Expr
-expr (Lit l)                  sm = literal l sm
+expr (Lit l)                  sm = literal l $ sm ^. notation
 expr (AssocB And l)           sm = assocExpr P.And (precB And) l sm
 expr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
 expr (AssocA Add l)           sm = P.Row $ addExpr l Add sm

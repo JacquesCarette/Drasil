@@ -1,26 +1,22 @@
 module Language.Drasil.Printing.Import.Literal (literal) where
 
+import Numeric (floatToDigits)
+
 import Language.Drasil (dbl)
 import Language.Drasil.Literal.Development (Literal(..))
 
 import qualified Drasil.Document.Layout.Internal as P
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
-  Notation(..), notation)
+import Language.Drasil.Printing.PrintingInformation (Notation(..))
 
-import Control.Lens ((^.))
-import Numeric (floatToDigits)
-
-literal :: Literal -> PrintingInformation -> P.Expr
-literal (Dbl d)                  sm = case sm ^. notation of
-  Engineering ->
-     let (f, s) = processExpo $ snd $ floatToDigits 10 d in
-     P.Row $ digitsProcess (fmap toInteger $ fst $ floatToDigits 10 d)
-     f 0 (toInteger s)
-  Scientific  ->  P.Dbl d
-literal (Int i)                   _ = P.Int i
-literal (ExactDbl d)              _ = P.Int d
-literal (Str s)                   _ = P.Str s
-literal (Perc a b)               sm = P.Row [literal (dbl val) sm, P.MO P.Perc]
+literal :: Literal -> Notation -> P.Expr
+literal (Dbl d)      Engineering =
+  P.Row $ digitsProcess (fmap toInteger $ fst $ floatToDigits 10 d) f 0 (toInteger s)
+  where (f, s) = processExpo $ snd $ floatToDigits 10 d
+literal (Dbl d)      Scientific = P.Dbl d
+literal (Int i)      _          = P.Int i
+literal (ExactDbl d) _          = P.Int d
+literal (Str s)      _          = P.Str s
+literal (Perc a b)   n          = P.Row [literal (dbl val) n, P.MO P.Perc]
   where
     val = fromIntegral a / (10 ** fromIntegral (b - 2))
 

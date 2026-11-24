@@ -20,10 +20,10 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (mechEnergy)
 import Data.Drasil.Concepts.Software (softwarecon, program)
 import Data.Drasil.Concepts.Theory (inModel)
-import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
-  thermalAnalysis, thermalConduction, thermocon)
+import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatCapSpec, htFlux,
+  phaseChange, thermalAnalysis, thermalConduction, thermocon)
 
-import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
+import Data.Drasil.Quantities.Thermodynamics (temp,
   heatCapSpec, htFlux, sensHeat, meltPt, boilPt, latentHeat)
 import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect, surArea, area)
@@ -77,7 +77,7 @@ concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
 
 symbolConcepts :: [DefinedQuantityDict]
 symbolConcepts = [density, mass, time, vol, energy,
-  QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat, QT.meltPt, QT.boilPt, QT.latentHeat, pressure]
+  temp, heatCapSpec, htFlux, sensHeat, meltPt, boilPt, latentHeat, pressure]
 
 -------------------
 --INPUT INFORMATION
@@ -159,7 +159,7 @@ cis = [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  softwarecon <> thermocon <> con <> physicalcon
+  softwarecon <> CT.thermocon <> con <> physicalcon
   <> [mechEnergy]
 
 symbMap :: ChunkDB
@@ -191,7 +191,7 @@ extraInfoSent = foldlSent [S "The", phrase program,
 -------------------------------------
 
 scope :: Sentence
-scope = phrase thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
+scope = phrase CT.thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
 
 --------------------------------------------------
 --Section 2.3 : CHARACTERISTICS Of INTENDED READER
@@ -245,13 +245,13 @@ orgDocEnd = foldlSent [D.toSent (atStartNP (the inModel)),
 --Introduction of Problem Description section derived from purp
 
 terms :: [ConceptChunk]
-terms = [htFlux, heatCapSpec, thermalConduction, transient]
+terms = [CT.htFlux, CT.heatCapSpec, CT.thermalConduction, transient]
 
 physSystParts :: [Sentence]
 physSystParts = foldlSent_ <$> [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
 goalInputs :: [Sentence]
-goalInputs = [D.toSent (phraseNP (QT.temp `the_ofThe` coil)),
+goalInputs = [D.toSent (phraseNP (temp `the_ofThe` coil)),
   S "the initial" +:+ phrase tempW, D.toSent (pluralNP (the materialProprty))]
 
 ------------------------------------------------------
@@ -265,8 +265,8 @@ sensHtE :: TheoryModel
 sensHtE = sensHtETemplate Liquid sensHtEdesc
 
 sensHtEdesc :: Sentence
-sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase material_, S "does not reach a",
-  phrase QT.temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", refS assumpWAL]
+sensHtEdesc = foldlSent [ch sensHeat, S "occurs as long as the", phrase material_, S "does not reach a",
+  phrase temp, S "where a", phrase CT.phaseChange, S "occurs" `sC` S "as assumed in", refS assumpWAL]
 
 --TODO: Implement physical properties of a substance
 

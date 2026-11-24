@@ -10,7 +10,7 @@ module Language.Drasil.Document.Reference (
 
 import Control.Lens ((^.), makeLenses)
 
-import Drasil.Database (UID, HasUID(..), IsChunk, TypeableChunk, hide,
+import Drasil.Database (UID, HasUID(..), IsChunk, hide,
   declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.Document.Labels (LblType, HasRefAddress(..))
@@ -46,19 +46,19 @@ ref :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> Reference
 ref r = Reference (r ^. uid) (getRefAdd r) (shortname r)
 
 -- | Takes something referable and wraps a reference to it into a 'Sentence'.
-refS :: (TypeableChunk r, HasRefAddress r, HasShortName r) => r -> Sentence
+refS :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> Sentence
 refS r = namedRef r EmptyS
 
 -- | Takes a 'Reference' with a name to be displayed and wraps it into a 'Sentence'.
 -- Does not overwrite the shortname contained in the reference, but will only display as the given 'Sentence'.
-namedRef :: (TypeableChunk r, HasRefAddress r, HasShortName r) => r -> Sentence -> Sentence
+namedRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> Sentence -> Sentence
 namedRef r s = namedComplexRef r s None
 
 -- | Takes a 'Reference' with additional display info. Uses the internal shortname for its display name.
-complexRef :: (TypeableChunk r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sentence
+complexRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sentence
 complexRef r = Ref (hide r) EmptyS
 
 -- | Takes a 'Reference' with a name to be displayed and any additional information and wraps it into a 'Sentence'.
 -- Does not overwrite the shortname contained in the reference, but will only display as the given 'Sentence' along with the given 'RefInfo'.
-namedComplexRef :: (TypeableChunk r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
+namedComplexRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
 namedComplexRef r = Ref (hide r)

@@ -12,7 +12,7 @@ module Language.Drasil.Document.DecoratedReference (
 
 import Control.Lens (Lens')
 
-import Drasil.Database (UIDRef, HasChunkRefs(..), TypeableChunk, hide, raw)
+import Drasil.Database (UIDRef, HasChunkRefs(..), IsChunk, hide, raw)
 
 import Language.Drasil.Sentence (Sentence(Ref, EmptyS), RefInfo(..))
 import Language.Drasil.Document.Labels (HasRefAddress)
@@ -21,7 +21,7 @@ import Language.Drasil.Document.ShortName (HasShortName)
 -- | For holding a reference to something that is decorated with extra
 -- information (ex. page numbers, equation sources, etc.).
 data DecRef where
-  DR :: (TypeableChunk r, HasRefAddress r, HasShortName r) => UIDRef r -> RefInfo -> DecRef
+  DR :: (IsChunk r, HasRefAddress r, HasShortName r) => UIDRef r -> RefInfo -> DecRef
 
 -- | A class that contains a list of decorated references ('DecRef's).
 class HasDecRef c where
@@ -39,11 +39,11 @@ instance HasChunkRefs DecRef where
 instance Eq DecRef where DR a _ == DR b _ = raw a == raw b
 
 -- | For creating a decorated reference ('DecRef') with extra reference information ('RefInfo').
-dRefInfo :: (TypeableChunk r, HasRefAddress r, HasShortName r) => r -> RefInfo -> DecRef
+dRefInfo :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> RefInfo -> DecRef
 dRefInfo = DR . hide
 
 -- | Same as 'ref', but for 'DecRef' instead of 'Reference'.
-dRef :: (TypeableChunk r, HasRefAddress r, HasShortName r) => r -> DecRef
+dRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> DecRef
 dRef r = dRefInfo r None
 
 -- | Translate a 'DecRef' into a human-readable 'Sentence'.

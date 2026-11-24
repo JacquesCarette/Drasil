@@ -11,8 +11,8 @@ import Control.Lens ((^.), makeLensesFor, makeClassyFor)
 import Data.Char (toLower, isAlphaNum, isPrint)
 import Data.List.Extras (replaceAll)
 
-import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..))
-import Language.Drasil (NP, Sentence(Ch), SentenceStyle(..), TermCapitalization(CapW), sParen, (+:+))
+import Drasil.Database (UID, HasUID(..), hide, declareHasChunkRefs, Generically(..))
+import Language.Drasil (NP, NamedIdea(..), Idea(..), Sentence(Ch), SentenceStyle(..), TermCapitalization(CapW), sParen, (+:+))
 
 -- | General software projects generally have at least 3 names: a human-readable
 -- title, a human-preferred abbreviation, and a preferred repository name
@@ -35,6 +35,12 @@ makeClassyFor "HasProjectName" "projectName" [("_title", "projTitle"), ("_abbrev
 
 instance HasUID ProjectName where
   uid = pnUID
+
+instance NamedIdea ProjectName where
+  term = projTitle
+
+instance Idea ProjectName where
+  getA = Just . (^. projAbrv)
 
 -- | Construct a 'ProjectName' from a 'UID', title ('NP'), abbreviation ('String'),
 -- and repository name formatter ('String -> String'). Errors if the repository
@@ -66,11 +72,11 @@ mkCommonProjName u ttl ab = mkProjectName u ttl ab frmtr
 
 -- | Get the title of a 'ProjectName' (as a 'Sentence').
 projTitleS :: ProjectName -> Sentence
-projTitleS = Ch TermStyle CapW . (^. uid)
+projTitleS = Ch TermStyle CapW . hide
 
 -- | Get the human-readable abbreviation of a 'ProjectName' (as a 'Sentence').
 projAbrvS :: ProjectName -> Sentence
-projAbrvS = Ch ShortStyle CapW . (^. uid)
+projAbrvS = Ch ShortStyle CapW . hide
 
 -- | Combine a 'ProjectName''s title and abbreviation into an introductory
 -- 'Sentence' (e.g. "Title (Abbreviation)").

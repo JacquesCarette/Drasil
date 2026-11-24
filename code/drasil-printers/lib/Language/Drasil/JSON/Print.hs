@@ -11,7 +11,7 @@ import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 import qualified Prettyprinter as PNew (Doc)
 
-import Drasil.Data.Formats.JSON (JSONRenderOptions, JSONStyle(..), jsonRenderOpts)
+import Drasil.Data.Formats.JSON (pretty)
 import qualified Drasil.Data.Formats.Jupyter as Jupyter (Notebook(..), Cell,
   renderJupyter', defaultNotebookRenderOptions)
 import Language.Drasil (checkValidStr)
@@ -28,9 +28,6 @@ import Language.Drasil.Markdown.Citation (BibFormatter(..), renderCite)
 import Language.Drasil.JSON.Helpers (notebookMetadata, h, stripnewLine,
  tr, td, th, bold, em, image, li, pa, ba, table, refwrap, refID, reflink,
  reflinkInfo, reflinkURI, mkDiv, markdownCell, codeCell)
-
-pretty :: JSONRenderOptions
-pretty = jsonRenderOpts (Pretty 2)
 
 -- | Build the general Jupyter Notebook document.
 genJupyterLessonPlan :: Document -> PNew.Doc ann

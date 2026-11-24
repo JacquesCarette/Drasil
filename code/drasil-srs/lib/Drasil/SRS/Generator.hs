@@ -69,7 +69,7 @@ prntDoc d pinfo fn HTML =
     file [ps|{fn}.css|] genericCSS
   ]
 prntDoc d@(Document _ _ st _) pinfo fn TeX =
-  [ file [ps|{fn}.tex|] $ genTeX (makeDocument pinfo $ checkToC d) st pinfo,
+  [ file [ps|{fn}.tex|] $ genTeX (makeDocument pinfo $ checkToC d) st,
     teXMakefile fn
   ]
 prntDoc Notebook {} _ _ TeX = error "cannot render notebooks into LaTeX"

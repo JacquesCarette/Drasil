@@ -2,7 +2,7 @@
 
 -- | Defines .json printers to generate jupyter notebooks. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.JSON.Print.html).
 module Language.Drasil.JSON.Print (
-  genJupyterLessonPlan, genJupyterSRS
+  CellLayout(..), genJupyter
 ) where
 
 import Prelude hiding (print, (<>))
@@ -26,21 +26,21 @@ import Language.Drasil.JSON.Helpers (notebookMetadata, h, stripnewLine,
  tr, td, th, bold, em, image, li, pa, ba, table, refwrap, refID, reflink,
  reflinkInfo, reflinkURI, mkDiv, markdownCell, codeCell)
 
--- | Build the general Jupyter Notebook document.
-genJupyterLessonPlan :: Document -> Jupyter.Notebook
-genJupyterLessonPlan (Document t a c) =
-  let
-    titleCell = markdownCell (vcat [text "# " <> pSpec t, text "## " <> pSpec a])
-    cells = titleCell : concatMap printLO' c
-  in Jupyter.Notebook notebookMetadata cells
+-- | How a document's contents are split into notebook cells.
+data CellLayout
+  = CellPerObject -- ^ Each 'LayoutObject' gets its own cell, and code blocks
+                  --   become code cells.
+  | SingleCell    -- ^ All content goes into one Markdown cell.
 
--- | Build an SRS document in JSON format.
-genJupyterSRS :: Document -> Jupyter.Notebook
-genJupyterSRS (Document t a c) =
-  let
+-- | Build a Jupyter notebook from a document, splitting its contents into
+-- cells according to the 'CellLayout'.
+genJupyter :: CellLayout -> Document -> Jupyter.Notebook
+genJupyter cl (Document t a c) =
+  Jupyter.Notebook notebookMetadata (titleCell : cells cl)
+  where
     titleCell = markdownCell (vcat [text "# " <> pSpec t, text "## " <> pSpec a])
-    cells = titleCell : [markdownCell (print c)]
-  in Jupyter.Notebook notebookMetadata cells
+    cells CellPerObject = concatMap printLO' c
+    cells SingleCell    = [markdownCell (print c)]
 
 -- | Helper for rendering a D from Latex print
 printMath :: D -> Doc

@@ -58,7 +58,7 @@ instance ToFiles LessonPlan JupyterGenOptions where
       pd = makeDocument printSetting nb
 
       -- 3. Transform TDL into a Jupyter notebook.
-      jupyter = genJupyterLessonPlan pd
+      jupyter = genJupyter CellPerObject pd
 
       -- 4. Produce final files (with the rendered notebook as the body).
       files = [file [ps|{fileName}.ipynb|] $

@@ -12,7 +12,7 @@ import Language.Drasil (Stage(Equational))
 import Language.Drasil.Document (Document(..), checkToC)
 import Language.Drasil.Printers (genericCSS, genHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
-  genJupyterSRS, makeDocument, makeProject, defaultHTMLGO)
+  genJupyter, CellLayout(SingleCell), makeDocument, makeProject, defaultHTMLGO)
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
@@ -64,7 +64,7 @@ prntDoc d pinfo _ MDBook =
 prntDoc d pinfo fn Jupyter =
   [ file [ps|{fn}.ipynb|]
       $ renderJupyter' defaultNotebookRenderOptions pretty
-      $ genJupyterSRS
+      $ genJupyter SingleCell
       $ makeDocument pinfo d
   ]
 prntDoc d pinfo fn HTML =

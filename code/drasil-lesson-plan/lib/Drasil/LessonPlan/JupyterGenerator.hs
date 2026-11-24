@@ -7,6 +7,8 @@ module Drasil.LessonPlan.JupyterGenerator (
 
 import Control.Lens ((^.))
 
+import Drasil.Data.Formats.JSON (pretty)
+import Drasil.Data.Formats.Jupyter (defaultNotebookRenderOptions, renderJupyter')
 import Drasil.Database (ChunkDB)
 import Drasil.FileHandling
 import Language.Drasil hiding (Options)
@@ -55,11 +57,12 @@ instance ToFiles LessonPlan JupyterGenOptions where
       printSetting = piSys (plan ^. systemdb) Equational Engineering
       pd = makeDocument printSetting nb
 
-      -- 3. Transform TDL into `Prettyprinter.Doc`.
-      doc = genJupyterLessonPlan pd
+      -- 3. Transform TDL into a Jupyter notebook.
+      jupyter = genJupyterLessonPlan pd
 
-      -- 4. Produce final files (with `Prettyprinter.Doc` body).
-      files = [file [ps|{fileName}.ipynb|] doc]
+      -- 4. Produce final files (with the rendered notebook as the body).
+      files = [file [ps|{fileName}.ipynb|] $
+        renderJupyter' defaultNotebookRenderOptions pretty jupyter]
 
 -- | Helper for creating the notebook sections.
 mkSections :: ChunkDB -> LsnDesc -> [Section]

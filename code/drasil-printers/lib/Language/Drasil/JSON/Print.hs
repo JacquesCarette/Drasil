@@ -9,11 +9,8 @@ import Prelude hiding (print, (<>))
 import qualified Prelude as P ((<>))
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
-import qualified Prettyprinter as PNew (Doc)
 
-import Drasil.Data.Formats.JSON (pretty)
-import qualified Drasil.Data.Formats.Jupyter as Jupyter (Notebook(..), Cell,
-  renderJupyter', defaultNotebookRenderOptions)
+import qualified Drasil.Data.Formats.Jupyter as Jupyter (Notebook(..), Cell)
 import Language.Drasil (checkValidStr)
 
 import Drasil.Printers.Common
@@ -30,20 +27,20 @@ import Language.Drasil.JSON.Helpers (notebookMetadata, h, stripnewLine,
  reflinkInfo, reflinkURI, mkDiv, markdownCell, codeCell)
 
 -- | Build the general Jupyter Notebook document.
-genJupyterLessonPlan :: Document -> PNew.Doc ann
+genJupyterLessonPlan :: Document -> Jupyter.Notebook
 genJupyterLessonPlan (Document t a c) =
   let
     titleCell = markdownCell (vcat [text "# " <> pSpec t, text "## " <> pSpec a])
     cells = titleCell : concatMap printLO' c
-  in Jupyter.renderJupyter' Jupyter.defaultNotebookRenderOptions pretty $ Jupyter.Notebook notebookMetadata cells
+  in Jupyter.Notebook notebookMetadata cells
 
 -- | Build an SRS document in JSON format.
-genJupyterSRS :: Document -> PNew.Doc ann
+genJupyterSRS :: Document -> Jupyter.Notebook
 genJupyterSRS (Document t a c) =
   let
     titleCell = markdownCell (vcat [text "# " <> pSpec t, text "## " <> pSpec a])
     cells = titleCell : [markdownCell (print c)]
-  in Jupyter.renderJupyter' Jupyter.defaultNotebookRenderOptions pretty $ Jupyter.Notebook notebookMetadata cells
+  in Jupyter.Notebook notebookMetadata cells
 
 -- | Helper for rendering a D from Latex print
 printMath :: D -> Doc

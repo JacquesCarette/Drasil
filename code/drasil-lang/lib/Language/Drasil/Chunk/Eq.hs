@@ -24,7 +24,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs),
   quant, quantNoUnit, quant', quantNoUnit', quantAU)
 import Language.Drasil.Expr.Lang (Expr)
-import qualified Language.Drasil.Expr.Lang as E (Expr(C))
+import qualified Language.Drasil.Expr.Lang as E (ExprF(C))
 import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))

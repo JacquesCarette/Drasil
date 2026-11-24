@@ -18,7 +18,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Constrained(constraints), HasReasVal(reasVal))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
-import Language.Drasil.Expr.Lang (Expr(..))
+import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 import Language.Drasil.Sentence (Sentence(S))

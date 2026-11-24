@@ -8,7 +8,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, space,
 
 import Drasil.FileHandling.Legacy (blank)
 import Language.Drasil hiding (space, Matrix)
-import Language.Drasil.Expr.Development (Expr(Matrix))
+import Language.Drasil.Expr.Development (ExprF(Matrix))
 import Language.Drasil.Printers (PrintingInformation, oneLineSentenceDoc,
   oneLineExprDoc, oneLineUnitDoc)
 

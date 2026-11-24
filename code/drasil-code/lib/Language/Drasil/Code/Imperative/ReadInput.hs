@@ -9,7 +9,7 @@ import Data.List.Split (splitOn)
 import Data.List.NonEmpty (NonEmpty(..), toList)
 
 import Language.Drasil hiding (Matrix)
-import Language.Drasil.Expr.Development (Expr(Matrix))
+import Language.Drasil.Expr.Development (ExprF(Matrix))
 
 import Drasil.Code.CodeVar (CodeVarChunk)
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..),

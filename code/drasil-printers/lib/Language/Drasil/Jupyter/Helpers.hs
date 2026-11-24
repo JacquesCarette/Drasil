@@ -1,5 +1,5 @@
 -- | Defines helper functions for creating jupyter notebooks.
-module Language.Drasil.JSON.Helpers (
+module Language.Drasil.Jupyter.Helpers (
   -- * Jupyter-related
   markdownCell, codeCell, notebookMetadata,
   -- * HTML Tag Wrappers

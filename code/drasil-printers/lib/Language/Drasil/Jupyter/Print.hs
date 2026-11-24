@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- | Defines .json printers to generate jupyter notebooks. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.JSON.Print.html).
-module Language.Drasil.JSON.Print (
+-- | Defines .json printers to generate jupyter notebooks.
+module Language.Drasil.Jupyter.Print (
   CellLayout(..), genJupyter
 ) where
 
@@ -21,7 +21,7 @@ import Language.Drasil.Printing.Helpers (unders, hat)
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr, printMath)
 import Language.Drasil.Markdown.Citation (BibFormatter(..), renderCite)
 
-import Language.Drasil.JSON.Helpers (notebookMetadata, h, stripnewLine,
+import Language.Drasil.Jupyter.Helpers (notebookMetadata, h, stripnewLine,
  tr, td, th, bold, em, image, li, pa, ba, table, refwrap, refID, reflink,
  reflinkInfo, reflinkURI, mkDiv, markdownCell, codeCell)
 

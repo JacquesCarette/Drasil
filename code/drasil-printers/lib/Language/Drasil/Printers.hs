@@ -25,7 +25,7 @@ module Language.Drasil.Printers (
 import Language.Drasil.HTML.CSS (genericCSS)
 import Language.Drasil.HTML.Render (HTMLGenOptions (..), defaultHTMLGO,
   genHTML)
-import Language.Drasil.JSON.Print (CellLayout(..), genJupyter)
+import Language.Drasil.Jupyter.Print (CellLayout(..), genJupyter)
 import Language.Drasil.Markdown.Print (genMDBook)
 import Language.Drasil.Plain.Print (SingleLine(..), oneLineCodeSymbolDoc,
   oneLineSentenceDoc, oneLineExprDoc, oneLineCodeExprDoc, oneLineUnitDoc)

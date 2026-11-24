@@ -10,7 +10,7 @@ import qualified Prelude as P ((<>))
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
-import qualified Drasil.Data.Formats.Jupyter as Jupyter (Notebook(..), Cell)
+import Drasil.Data.Formats.Jupyter (Notebook(..), Cell)
 import Language.Drasil (checkValidStr)
 
 import Drasil.Printers.Common
@@ -34,61 +34,63 @@ data CellLayout
 
 -- | Build a Jupyter notebook from a document, splitting its contents into
 -- cells according to the 'CellLayout'.
-genJupyter :: CellLayout -> Document -> Jupyter.Notebook
+genJupyter :: CellLayout -> Document -> Notebook
 genJupyter cl (Document t a c) =
-  Jupyter.Notebook notebookMetadata (titleCell : cells cl)
+  Notebook notebookMetadata (titleCell : layoutCells cl c)
   where
     titleCell = markdownCell (vcat [text "# " <> pSpec t, text "## " <> pSpec a])
-    cells CellPerObject = concatMap printLO' c
-    cells SingleCell    = [markdownCell (print c)]
+
+-- | Lays out a document's contents as notebook cells.
+layoutCells :: CellLayout -> [LayoutObj] -> [Cell]
+layoutCells CellPerObject los = concatMap loToCells los
+layoutCells SingleCell    los = [markdownCell (print los)]
 
 -- | Helper for rendering a D from Latex print
 printMath :: D -> Doc
 printMath = (`runPrint` Math)
 
--- | Helper for rendering LayoutObjects into JSON
--- printLO is used for generating SRS
-printLO :: LayoutObj -> Doc
-printLO (Header n contents l)            = text "" $$ h (n + 1) <> pSpec contents $$ refID (pSpec l)
-printLO (Cell _)                         = empty
-printLO (HDiv _ layoutObs _)             = vcat (printLO <$> layoutObs)
-printLO (Paragraph contents)             = text "" $$ stripnewLine (show (pSpec contents))
-printLO (EqnBlock contents)              = mathEqn
+-- | Internal: Rendering LayoutObjects into JSON in a single cell.
+loToMarkdown :: LayoutObj -> Doc
+loToMarkdown (Header n contents l)            = text "" $$ h (n + 1) <> pSpec contents $$ refID (pSpec l)
+loToMarkdown (Cell _)                         = empty
+loToMarkdown (HDiv _ layoutObs _)             = vcat (loToMarkdown <$> layoutObs)
+loToMarkdown (Paragraph contents)             = text "" $$ stripnewLine (show (pSpec contents))
+loToMarkdown (EqnBlock contents)              = mathEqn
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
     mjDelimDisp = ddollars . stripnewLine . show
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
-printLO (Table _ rows r _ _)            = text "" $$ makeTable rows (pSpec r)
-printLO (Definition ssPs l)             = text "<br>" $$ makeDefn ssPs (pSpec l)
-printLO (List t)                        = text "" $$ makeList t False
-printLO (Figure r c f wp)               = makeFigure (pSpec r) (pSpec <$> c) (text f) wp
-printLO (Bib bib)                       = makeBib bib
-printLO Graph{}                         = empty
-printLO CodeBlock {}                    = empty
+loToMarkdown (Table _ rows r _ _)            = text "" $$ makeTable rows (pSpec r)
+loToMarkdown (Definition ssPs l)             = text "<br>" $$ makeDefn ssPs (pSpec l)
+loToMarkdown (List t)                        = text "" $$ makeList t False
+loToMarkdown (Figure r c f wp)               = makeFigure (pSpec r) (pSpec <$> c) (text f) wp
+loToMarkdown (Bib bib)                       = makeBib bib
+loToMarkdown Graph{}                         = empty
+loToMarkdown CodeBlock {}                    = empty
 
--- printLO' is used for generating general notebook (lesson plans)
-printLO' :: LayoutObj -> [Jupyter.Cell]
-printLO' (Header n contents l)            = [markdownCell $ (h (n + 1) <> pSpec contents) $$ refID (pSpec l)]
-printLO' (Cell layoutObs)                 = concatMap printLO' layoutObs
-printLO' HDiv{} = []
-printLO' (Paragraph contents)             = [markdownCell $ stripnewLine (show (pSpec contents))]
-printLO' (EqnBlock contents)              = [markdownCell mathEqn]
+-- | Internal: Rendering LayoutObjects into JSON into multiple cells.
+loToCells :: LayoutObj -> [Cell]
+loToCells (Header n contents l)            = [markdownCell $ (h (n + 1) <> pSpec contents) $$ refID (pSpec l)]
+loToCells (Cell layoutObs)                 = concatMap loToCells layoutObs
+loToCells HDiv{} = []
+loToCells (Paragraph contents)             = [markdownCell $ stripnewLine (show (pSpec contents))]
+loToCells (EqnBlock contents)              = [markdownCell mathEqn]
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
     mjDelimDisp = ddollars . stripnewLine . show
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
-printLO' (Table _ rows r _ _)             = [markdownCell $ makeTable rows (pSpec r)]
-printLO' Definition{}                     = []
-printLO' (List t)                         = [markdownCell $ makeList t False]
-printLO' (Figure r c f wp)                = [markdownCell $ makeFigure (pSpec r) (pSpec <$> c) (text f) wp]
-printLO' (Bib bib)                        = [markdownCell $ makeBib bib]
-printLO' Graph{}                          = []
-printLO' (CodeBlock contents)             = [codeCell $ cSpec contents]
+loToCells (Table _ rows r _ _)             = [markdownCell $ makeTable rows (pSpec r)]
+loToCells Definition{}                     = []
+loToCells (List t)                         = [markdownCell $ makeList t False]
+loToCells (Figure r c f wp)                = [markdownCell $ makeFigure (pSpec r) (pSpec <$> c) (text f) wp]
+loToCells (Bib bib)                        = [markdownCell $ makeBib bib]
+loToCells Graph{}                          = []
+loToCells (CodeBlock contents)             = [codeCell $ cSpec contents]
 
--- | Called by build, uses 'printLO' to render the layout
+-- | Called by build, uses 'loToMarkdown' to render the layout
 -- objects in Doc format.
 print :: [LayoutObj] -> Doc
-print = foldr (($$) . printLO) empty
+print = foldr (($$) . loToMarkdown) empty
 
 data ExprContext = NotebookMath | NotebookCode
 
@@ -118,7 +120,7 @@ pMathExpr :: Expr -> Doc
 pMathExpr (Row [e]) = pMathExpr e
 pMathExpr e = pExpr NotebookMath e
 
--- | Renders expressions in JSON (called by multiple functions)
+-- | Renders expressions in JSON.
 pExpr :: ExprContext -> Expr -> Doc
 pExpr _ (Dbl d)        = text $ showEFloat Nothing d ""
 pExpr _ (Int i)        = text $ show i
@@ -223,7 +225,7 @@ fence Close Curly = "}"
 fence _     Abs   = "|"
 fence _     Norm  = "||"
 
--- | Renders Markdown table, called by 'printLO'
+-- | Renders Markdown table.
 makeTable :: [[Spec]] -> Doc -> Doc
 makeTable [] _      = error "No table to print"
 makeTable (l:lls) r = refID r $$ text "" $$ (makeHeaderCols l $$ makeRows lls) $$ text ""
@@ -257,8 +259,8 @@ makeDefn ps l = refID l $$ table ["defn-table"]
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
-makeDRows [(f,d)]    = tr (th (text f) $$ td (vcat $ printLO <$> d))
-makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ printLO <$> d)) $$ makeDRows ps
+makeDRows [(f,d)]    = tr (th (text f) $$ td (vcat $ loToMarkdown <$> d))
+makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ loToMarkdown <$> d)) $$ makeDRows ps
 
 -- | Renders lists
 makeList :: ListType -> Bool -> Doc -- FIXME: ref id's should be folded into the li

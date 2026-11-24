@@ -114,7 +114,7 @@ rocTempDerivArbVol = [S "We consider an arbitrary" +:+. phrase vol,
 rocTempDerivConsFlx :: Sentence -> [ConceptInstance] -> [Sentence]
 rocTempDerivConsFlx s assumps = [S "Where",
   foldlList Comma List (ch <$> [htFluxIn, htFluxOut, inSA, outSA]),
-  S "are defined in the" +:+. S "Description row above", s, S "Assuming",
+  S "are defined in the" +:+. S "description row above", s, S "Assuming",
   foldlList Comma List (ch <$> [density, QT.heatCapSpec, QT.temp]),
   S "are constant over the", phrase vol `sC` S "which is true in our case by",
   foldlList Comma List (refS <$> assumps) `sC` S "we have"]

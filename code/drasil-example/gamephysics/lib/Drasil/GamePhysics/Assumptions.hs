@@ -6,8 +6,9 @@ import Language.Drasil
 import Language.Drasil.Document (ConceptInstance, cic)
 
 import Data.Drasil.Concepts.Documentation as Doc (simulation, assumpDom)
-import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, force,
+import qualified Data.Drasil.Concepts.Physics as CP (collision, damping,
   friction, joint, rigidBody)
+import qualified Data.Drasil.Quantities.Physics as QP (force)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, constraint, rightHand)
 
 import Drasil.GamePhysics.Concepts (twoD)
@@ -51,7 +52,7 @@ assumpADDesc = [S "The axes are defined using", phrase CM.rightHand]
 assumpCTDesc = [S "All", plural CP.rigidBody, plural CP.collision,
   S "are vertex-to-edge", plural CP.collision]
 
-assumpDIDesc = thereNo [phrase CP.damping] <> implies (phrase CP.friction +:+ plural CP.force)
+assumpDIDesc = thereNo [phrase CP.damping] <> implies (phrase CP.friction +:+ plural QP.force)
 assumpCAJIDesc = thereNo [plural CM.constraint, plural CP.joint]
 
 {-assumptions_list = enumSimple 1 (short assumption) $ map (foldlSent)

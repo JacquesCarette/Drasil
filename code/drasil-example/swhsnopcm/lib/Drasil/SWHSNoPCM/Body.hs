@@ -17,11 +17,11 @@ import Data.Drasil.People (thulasi)
 import Data.Drasil.Concepts.Documentation as Doc (material_)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy)
+import Data.Drasil.Concepts.Physics (mechEnergy)
 import Data.Drasil.Concepts.Software (softwarecon, program)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
-  temp, thermalAnalysis, thermalConduction, thermocon)
+  thermalAnalysis, thermalConduction, thermocon)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat, meltPt, boilPt, latentHeat)
@@ -76,7 +76,7 @@ concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
   surArea, area]
 
 symbolConcepts :: [DefinedQuantityDict]
-symbolConcepts = [density, mass, time, vol,
+symbolConcepts = [density, mass, time, vol, energy,
   QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat, QT.meltPt, QT.boilPt, QT.latentHeat, pressure]
 
 -------------------
@@ -160,7 +160,7 @@ cis = [phsChgMtrl]
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   softwarecon <> thermocon <> con <> physicalcon
-  <> [CP.energy, CP.mechEnergy]
+  <> [mechEnergy]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName uriReferences symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
@@ -251,7 +251,7 @@ physSystParts :: [Sentence]
 physSystParts = foldlSent_ <$> [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
 goalInputs :: [Sentence]
-goalInputs = [D.toSent (phraseNP (temp `the_ofThe` coil)),
+goalInputs = [D.toSent (phraseNP (QT.temp `the_ofThe` coil)),
   S "the initial" +:+ phrase tempW, D.toSent (pluralNP (the materialProprty))]
 
 ------------------------------------------------------
@@ -266,7 +266,7 @@ sensHtE = sensHtETemplate Liquid sensHtEdesc
 
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase material_, S "does not reach a",
-  phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", refS assumpWAL]
+  phrase QT.temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", refS assumpWAL]
 
 --TODO: Implement physical properties of a substance
 

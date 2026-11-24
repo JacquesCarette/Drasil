@@ -2,7 +2,7 @@ module Drasil.Projectile.Lesson.Review (
   reviewSecs
 ) where
 
-import Data.Drasil.Concepts.Physics (motion, position, time, velocity)
+import Data.Drasil.Concepts.Physics (motion, position, velocity)
 import Data.Drasil.Concepts.Math (equation)
 import qualified Drasil.Projectile.Expressions as E (lcrectVel, lcrectPos, lcrectNoTime)
 import qualified Data.Drasil.Quantities.Physics as QP (speed, time, scalarPos, iPos, iSpeed, constAccel)
@@ -23,7 +23,7 @@ reviewContextP1, reviewEqns, reviewContextP2 :: Contents
 reviewContextP1
   = foldlSP_
       [S "As covered previously, the", plural equation, S "relating", phrase velocity, sParen (eS (sy QP.speed)) `sC`
-        phrase position, sParen (eS (sy QP.scalarPos)) `S.and_` phrase time, sParen (eS (sy QP.time))
+        phrase position, sParen (eS (sy QP.scalarPos)) `S.and_` phrase QP.time, sParen (eS (sy QP.time))
         `S.for` phrase motion `S.in_` S "one dimension with", phrase QP.constAccel,
         sParen (eS (sy QP.constAccel)) +:+ S "are as follows:"]
 

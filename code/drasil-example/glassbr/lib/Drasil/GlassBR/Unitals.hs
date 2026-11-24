@@ -365,7 +365,7 @@ sdVector = sdx :| [sdy, sdz]
 termsWithDefsOnly, loadTypes, glassTypes :: [ConceptChunk]
 
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
-termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
+termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla]
 loadTypes = [glassWL, shortDurLoad, specDeLoad, longDurLoad]
 
 --Defined for DataDefs.hs and this file only--

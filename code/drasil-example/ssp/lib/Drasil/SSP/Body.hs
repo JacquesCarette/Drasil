@@ -24,12 +24,14 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   physical, physics, problem, software, softwareSys, symbol_,
   sysCont, system, type_, user, value, variable, datumConstraint)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
-import Data.Drasil.Concepts.Math (equation, shape, surface,
-  number)
-import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
+import Data.Drasil.Concepts.Math (equation, shape, number)
+import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon)
 import Data.Drasil.Concepts.Theory (inModel)
-import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
-  strain, stress, time, twoD, distance, friction, linear, velocity, position)
+import Data.Drasil.Concepts.Physics (cohesion, fbd, gravity, isotropy,
+  strain, stress, twoD, friction, linear, velocity, position)
+import Data.Drasil.Quantities.Math (surface)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
+import Data.Drasil.Quantities.Physics (force, time)
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
   shearRes, solidcon)
@@ -131,7 +133,7 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   defs' <> softwarecon <> solidcon <> physicalcon <>
-  [distance, friction, linear, velocity, gravity, stress, fbd, position]
+  [friction, linear, velocity, gravity, stress, fbd, position]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName allRefs symbols ideaDicts [] conceptChunks

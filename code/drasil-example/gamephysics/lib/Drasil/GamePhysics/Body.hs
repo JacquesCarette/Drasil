@@ -25,7 +25,7 @@ import Data.Drasil.Software.Products (openSource, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass)
 import qualified Data.Drasil.Concepts.Physics as CP (elasticity,
-  rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
+  rigidBody, collision, damping, angular, linear, friction, joint, motion, space)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian,
   rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
@@ -112,7 +112,7 @@ cis = [centreMass]
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   softwarecon <> [CP.angular, CP.linear, CP.rigidBody, CP.collision,
-  CP.damping, CP.friction, CP.joint, CP.energy, CP.motion, CP.space,
+  CP.damping, CP.friction, CP.joint, CP.motion, CP.space,
   CP.elasticity]
 
 symbMap :: ChunkDB

@@ -22,7 +22,7 @@ import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, angularAccel,
   angularDisplacement, angularVelocity, chgInVelocity, chgMomentum, displacement, distance,
-  final, force, gravitationalAccel, gravitationalConst, gravitationalConstValue,
+  energy, final, force, gravitationalAccel, gravitationalConst, gravitationalConstValue,
   height, impulseS, impulseV, initial, kEnergy, linearAccel, linearDisplacement,
   linearVelocity, momentOfInertia, position, potEnergy, restitutionCoef, time,
   torque, velocity, fOfGravity, positionVec)
@@ -54,7 +54,7 @@ outputSymbols = QP.position :| [QP.velocity, QM.orientation,
 
 unitalSymbols :: [DefinedQuantityDict]
 unitalSymbols = [QM.surface, QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
-  QP.force, QP.impulseV, QP.impulseS, QP.distance, QP.displacement,
+  QP.energy, QP.force, QP.impulseV, QP.impulseS, QP.distance, QP.displacement,
   QP.time, QP.angularDisplacement, QP.linearDisplacement, QP.linearVelocity,
   QP.linearAccel, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.height,
   QP.fOfGravity, QP.positionVec, QP.chgMomentum, QP.gravitationalConst,

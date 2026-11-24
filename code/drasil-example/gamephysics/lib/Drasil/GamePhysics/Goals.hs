@@ -6,7 +6,7 @@ import Language.Drasil
 import Language.Drasil.Document (ConceptInstance, cic)
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
-import Data.Drasil.Concepts.Physics (time)
+import Data.Drasil.Quantities.Physics (time)
 
 import Drasil.GamePhysics.Unitals (inputSymbols, outputSymbols)
 

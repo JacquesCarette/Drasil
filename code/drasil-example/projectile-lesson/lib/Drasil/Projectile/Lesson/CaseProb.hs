@@ -2,13 +2,14 @@ module Drasil.Projectile.Lesson.CaseProb (
   caseProbCont, caseProbSecs, figures
 ) where
 
-import Data.Drasil.Concepts.Physics (motion, acceleration, velocity, force, time,
-  constAccel, horizontalMotion, verticalMotion, gravity, position)
+import Data.Drasil.Concepts.Physics (motion, acceleration, velocity, force,
+  verticalMotion, gravity, position)
 import Data.Drasil.Units.Physics (accelU)
 import Data.Drasil.Concepts.Math (component, direction, equation, xDir, yAxis)
 import Drasil.Projectile.Concepts (projectile, projMotion)
 import Drasil.Projectile.Expressions
 import Drasil.Projectile.Lesson.Figures (figCSandA)
+import Drasil.Projectile.Lesson.Example (horiz_velo)
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed, ixSpeed, iySpeed, speed,
   constAccel, gravitationalAccel, xAccel, yAccel, time,
   ixPos, iyPos, xPos, yPos, ixVel, iyVel, xVel, yVel)
@@ -122,7 +123,7 @@ motionContextP2
   = foldlSP_
       [S "The equations" `S.for` S "rectilinear kinematics given above", refS lcrectVel, S "are in one dimension.",
        S "These equations can be applied for both the", phrase verticalMotion `S.andThe`
-       phrase horizontalMotion :+: S ", as follows:"]
+       phrase horiz_velo :+: S ", as follows:"]
 
 hMintro, hMconcl, vMintro, vMconcl, summary :: Contents
 hMintro = foldlSP_ [
@@ -140,7 +141,7 @@ vMintro = foldlSP_ [
             S "in the vertical direction is" +:+. eS (sy QP.yAccel $= neg (sy QP.gravitationalAccel)), motionSent]
 vMconcl = foldlSP [
             S "Recall that the last equation can be formulated" `S.onThe` S "basis of eliminating the",
-            phrase time +:+ eS (sy QP.time), S "between the first two equations" `sC` S "and therefore only ",
+            phrase QP.time +:+ eS (sy QP.time), S "between the first two equations" `sC` S "and therefore only ",
             S "two of the above three equations" `S.are` S "independent of one another"]
 
 summary = foldlSP [S "In addition to knowing that the horizontal component" `S.of_` phrase velocity,
@@ -207,7 +208,7 @@ stepFiveCont = foldlSP [S "Use the equations from Step 4" `sC` S "together with 
   S "Any equations with one unknown can be used to solve for that unknown directly"]
 
 motionSent :: Sentence
-motionSent = S "This value can be substituted" `S.inThe` S "equations for" +:+ phrase constAccel +:
+motionSent = S "This value can be substituted" `S.inThe` S "equations for" +:+ phrase QP.constAccel +:
              S "given above (ref) to yield the following"
 
 foot, accelinftU :: UnitDefn

@@ -22,14 +22,14 @@ import Drasil.Website.Example (exampleSec, exampleRefs, allExampleProjNames)
 import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs, graphsTable, dependencyGraph)
 import Drasil.Website.GettingStarted (gettingStartedSec)
-import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody)
+import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody, force, gravity)
 import Drasil.GlassBR.Concepts (glaSlab, glass, blast)
 import Data.Drasil.Concepts.Thermodynamics (heatTrans)
 import Drasil.SWHS.Concepts (sWHT, water, phsChgMtrl)
 import Drasil.PDController.Concepts (pidC)
 import Drasil.Projectile.Concepts (target, projectile)
 import Drasil.SSP.Defs (crtSlpSrf, intrslce, slope, slpSrf, factor, fsConcept)
-import Data.Drasil.Concepts.SolidMechanics (shearForce, normForce)
+import Data.Drasil.Concepts.SolidMechanics (shearForce, normForce, mobShear, shearRes)
 
 -- * Functions to Generate the Website Through Drasil
 
@@ -109,7 +109,8 @@ cis = [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = [pendulum, motion, rigidBody, blast, heatTrans, sWHT, water,
-  pidC, target, projectile, crtSlpSrf, shearForce, normForce, slpSrf, fsConcept]
+  pidC, target, projectile, crtSlpSrf, shearForce, normForce, slpSrf, fsConcept,
+  gravity, force, mobShear, shearRes]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName [] [] ideaDicts cis conceptChunks [] [] [] [] [] [] [] []

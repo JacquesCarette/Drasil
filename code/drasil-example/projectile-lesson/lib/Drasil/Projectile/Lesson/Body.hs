@@ -11,7 +11,7 @@ import qualified Data.Drasil.Quantities.Physics as Qs (iSpeed, ixSpeed, iySpeed,
   speed, constAccel, gravitationalAccel, xAccel, yAccel, time, ixPos, iyPos,
   xPos, yPos, ixVel, iyVel, xVel, yVel, scalarPos, iPos, height)
 import qualified Data.Drasil.Concepts.Physics as CCs (motion, acceleration,
-  velocity, force, verticalMotion, gravity, position)
+  velocity, force, verticalMotion, gravity, position, distance)
 
 import Data.Drasil.People (spencerSmith)
 
@@ -43,7 +43,7 @@ symbMap = withCommonKnowledge projName [] symbols ideaDicts [] conceptChunks [] 
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = defs <> [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,
-  CCs.verticalMotion, CCs.gravity, CCs.position]
+  CCs.verticalMotion, CCs.gravity, CCs.position, CCs.distance]
 
 symbols :: [DefinedQuantityDict]
 symbols = [horiz_velo, Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAccel,

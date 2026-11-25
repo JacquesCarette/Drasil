@@ -9,7 +9,6 @@
 module Drasil.Database.Chunk (
   Chunk,
   IsChunk,
-  TypeableChunk,
   HasChunkRefs(..),
   mkChunk, -- FIXME: mkChunk should not be exported but is temporarily because this module is NOT in `drasil-database`
   unChunk,
@@ -28,19 +27,9 @@ import Drasil.Database.UID (HasUID (..), UID)
 -- | Constraint for anything that may be considered a valid chunk type.
 type IsChunk a = (HasUID a, HasChunkRefs a)
 
--- | Constraint for anything that may be considered a valid chunk type, and is
--- also 'Typeable'. Type-ability is necessary for storing/retrieving chunks
--- in/from the 'ChunkDB'.
---
--- 'TypeableChunk' is meant to be a purely /internal/ concept; users of Drasil
--- should only ever need to use 'IsChunk'. 'Typeable' is automatically derived
--- by GHC, but can cause issues with type inference if used directly in user
--- code, especially when involving parameterized chunk types.
-type TypeableChunk a = (IsChunk a, Typeable a)
-
 -- | A piece of reusable knowledge, with an internal identifier ('UID'),
 -- possibly dependant on other chunks.
-data Chunk = forall a. TypeableChunk a => Chunk a
+data Chunk = forall a. IsChunk a => Chunk a
 
 instance Eq Chunk where
   (==) :: Chunk -> Chunk -> Bool
@@ -55,7 +44,7 @@ instance HasChunkRefs Chunk where
   chunkRefs (Chunk c) = chunkRefs c
 
 -- | Create a 'Chunk', ensuring that 'Chunk's are never placed within 'Chunk's.
-mkChunk :: TypeableChunk a => a -> Chunk
+mkChunk :: IsChunk a => a -> Chunk
 mkChunk a
   | typeOf a == typeRep (Proxy @Chunk) = error "Cannot place a Chunk inside of a Chunk"
   | otherwise = Chunk a
@@ -72,7 +61,11 @@ chunkType (Chunk c) = typeOf c
 -- words, the majority of our chunks *depend* on others. 'HasChunkRefs' is meant
 -- as a way to capture what things a chunk *directly* refers to (i.e., depends
 -- on directly).
-class HasChunkRefs a where
+--
+-- 'Typeable' is a superclass because every chunk must be 'Typeable' to be
+-- stored in the 'ChunkDB'. Having it here means a parameterized chunk (e.g.,
+-- @QDefinition e@) only ever needs @HasChunkRefs e@, never @Typeable e@.
+class Typeable a => HasChunkRefs a where
   chunkRefs :: a -> S.Set UID
 
 instance HasChunkRefs UID where
@@ -127,7 +120,7 @@ instance (HasChunkRefs l, HasChunkRefs r) => HasChunkRefs (Either l r) where
   chunkRefs = either chunkRefs chunkRefs
   {-# INLINABLE chunkRefs #-}
 
-instance (Generic a, GHasCRefs (Rep a)) => HasChunkRefs (Generically a) where
+instance (Typeable a, Generic a, GHasCRefs (Rep a)) => HasChunkRefs (Generically a) where
   chunkRefs (Generically a) = gChunkRefs $ from a
   {-# INLINABLE chunkRefs #-}
 

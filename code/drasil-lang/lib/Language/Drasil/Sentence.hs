@@ -18,10 +18,10 @@ module Language.Drasil.Sentence (
 
 import Data.Char (toUpper)
 
-import Drasil.Database (HasChunkRefs(..), UID, IsChunk, TypeableChunk, UIDRef,
+import Drasil.Database (HasChunkRefs(..), UID, IsChunk, IsChunk, UIDRef,
   hide, raw, declareHasChunkRefs, Generically(..))
 
-import Language.Drasil.Chunk.NamedIdea (Idea)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea, Idea)
 import Language.Drasil.Document.Labels (HasRefAddress)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
@@ -36,9 +36,10 @@ import Data.String (IsString (..))
 
 -- | Used in 'Ch' constructor to determine the state of a term
 -- (can record whether something is in plural form, a singular term, or in short form).
-data SentenceStyle = PluralTerm
-                   | TermStyle
-                   | ShortStyle -- TODO: Short plural?
+data SentenceStyle t where
+  PluralTerm :: NamedIdea t => SentenceStyle t
+  TermStyle  :: NamedIdea t => SentenceStyle t
+  ShortStyle :: Idea t      => SentenceStyle t -- TODO: Short plural?
 
 -- | Used in 'Ch' constructor to determine the capitalization of a term.
 -- CapF is for capitalizing the first word from the 'UID' of the given term.
@@ -74,9 +75,9 @@ class HasShortName  s where
 --     * references to specific layout objects
 infixr 5 :+:
 data Sentence where
-  -- | Ch looks up the term for a given 'UID' and displays the term with a given 'SentenceStyle' and 'CapitalizationRule'.
+  -- | Ch looks up the term for a given 'UIDRef' and displays the term with a given 'SentenceStyle' and 'CapitalizationRule'.
   -- This allows Sentences to hold plural forms of 'NamedIdea's.
-  Ch    :: SentenceStyle -> TermCapitalization -> UID -> Sentence
+  Ch    :: SentenceStyle t -> TermCapitalization -> UIDRef t -> Sentence
   -- | A branch of Ch dedicated to SymbolStyle only.
   SyCh  :: (IsChunk t, Idea t, HasSpace t, HasSymbol t) => UIDRef t -> Sentence
   -- | Converts a unit symbol into a usable Sentence form.
@@ -92,7 +93,7 @@ data Sentence where
   -- | Takes a typed reference to a referable chunk, a display name
   -- ('Sentence'), and any additional reference display information
   -- ('RefInfo'). Resolves the reference later (similar to 'SyCh').
-  Ref   :: (TypeableChunk t, HasRefAddress t, HasShortName t) => UIDRef t -> Sentence -> RefInfo -> Sentence
+  Ref   :: (IsChunk t, HasRefAddress t, HasShortName t) => UIDRef t -> Sentence -> RefInfo -> Sentence
   -- | Adds quotation marks around a Sentence.
   Quote :: Sentence -> Sentence
   -- | Used for a % symbol.
@@ -134,14 +135,16 @@ eS' = E . express
 ch :: (IsChunk t, Idea t, HasSpace t, HasSymbol t) => t -> Sentence
 ch s = SyCh $ hide s
 
--- | Smart constructors for turning a 'UID' into a 'Sentence'.
-sentencePlural, sentenceShort, sentenceTerm :: UID -> Sentence
--- | Gets plural term of 'UID'.
+-- | Smart constructors for turning a 'UIDRef' into a 'Sentence'.
+sentencePlural, sentenceTerm :: NamedIdea t => UIDRef t -> Sentence
+-- | Gets plural term of 'UIDRef'.
 sentencePlural = Ch PluralTerm NoCap
--- | Gets short form of 'UID'.
-sentenceShort  = Ch ShortStyle NoCap
--- | Gets singular form of 'UID'.
+-- | Gets singular form of 'UIDRef'.
 sentenceTerm   = Ch TermStyle NoCap
+
+-- | Gets short form of 'UIDRef'.
+sentenceShort :: Idea t => UIDRef t -> Sentence
+sentenceShort  = Ch ShortStyle NoCap
 
 -- | Helper for wrapping 'Sentence's in parentheses.
 sParen :: Sentence -> Sentence
@@ -203,7 +206,7 @@ getUIDs EmptyS              = []
 -- | Generic traverse of all positions that could lead to /symbolic/ and /abbreviated/ 'UID's from 'Sentence's
 -- but doesn't go into expressions.
 getUIDshort :: Sentence -> [UID]
-getUIDshort (Ch ShortStyle _ a) = [a]
+getUIDshort (Ch ShortStyle _ a) = [raw a]
 getUIDshort (Ch TermStyle _ _)  = []
 getUIDshort (Ch PluralTerm _ _) = []
 getUIDshort SyCh {}             = []

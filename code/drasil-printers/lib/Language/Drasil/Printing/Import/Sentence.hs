@@ -5,11 +5,12 @@ import Control.Lens ((^.))
 import Data.Char (toUpper)
 import Data.Maybe (fromMaybe)
 
-import Drasil.Database (UID, UIDRef, TypeableChunk, raw, findOrErr)
-import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
+import Drasil.Database (UIDRef, raw, findOrErr, IsChunk)
+import Drasil.Database.SearchTools (termResolve, termResolve', termResolveNP,
+  TermAbbr(..))
 import Language.Drasil (Sentence(..), NP, NounPhrase(..), (+:+), sParen,
   atStartNP, atStartNP', titleizeNP, titleizeNP', foldNums, checkValidStr,
-  SentenceStyle(..), TermCapitalization(..), RefInfo(..))
+  SentenceStyle(..), TermCapitalization(..), RefInfo(..), NamedIdea, Idea)
 import Language.Drasil.Development (toSent)
 import Language.Drasil.Document (IRefProg(..), LblType(..), ShortName,
   getSentSN, HasRefAddress(..), HasShortName(..))
@@ -36,8 +37,9 @@ spec _  (P s)                   = P.E $ symbol s
 spec sm (SyCh s)                = P.E $ symbol $ lookupSymb sm s
 
 -- First term is the tooltip, second term is the rendered short form
-spec sm (Ch ShortStyle caps s)  = P.Tooltip (spec sm $ lookupT
-  sm s caps) (spec sm $ lookupS sm s caps)
+spec sm (Ch ShortStyle caps s)  =
+  let (tooltip, shortSent) = lookupS sm s caps
+  in P.Tooltip (spec sm tooltip) (spec sm shortSent)
 
 spec sm (Ch TermStyle caps s)   = spec sm $ lookupT sm s caps
 spec sm (Ch PluralTerm caps s) = spec sm $ lookupP sm s caps
@@ -50,7 +52,7 @@ spec sm (E e)              = P.E $ modelExpr e sm
 
 -- | Render a chunk reference. Displays the given name, or a default one if it
 -- is empty.
-specRef :: forall t. (TypeableChunk t, HasRefAddress t, HasShortName t) =>
+specRef :: forall t. (IsChunk t, HasRefAddress t, HasShortName t) =>
   PrintingInformation -> UIDRef t -> Sentence -> RefInfo -> P.Spec
 specRef sm u dName notes = case getRefAdd c of
     RP rp ra    -> P.Ref P.Internal ra $ spec sm $ named $ renderShortName sm rp sn
@@ -65,7 +67,7 @@ specRef sm u dName notes = case getRefAdd c of
 
 -- | Renders the shortname of a reference/domain.
 renderShortName :: PrintingInformation -> IRefProg -> ShortName -> Sentence
-renderShortName pinfo (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $ shortForm $ termResolve' (pinfo ^. sysdb) u
+renderShortName pinfo (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $ shortForm $ termResolve TermAbbr (pinfo ^. sysdb) u
 renderShortName pinfo (RConcat a b) sn = renderShortName pinfo a sn :+: renderShortName pinfo b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = getSentSN sn
@@ -79,12 +81,14 @@ renderCitInfo (Equation  i ) = sParen (S "Eqs." +:+ foldNums "-" i)
 renderCitInfo (Page     [x]) = sParen (S "pg." +:+ S (show x))
 renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums "-" i)
 
--- | Look up the acronym/abbreviation of a term. Otherwise returns the singular
--- form of a term. Takes a chunk database and a 'UID' associated with the term.
-lookupS :: PrintingInformation -> UID -> TermCapitalization -> Sentence
-lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= capHelper sCap
+-- | Look up the tooltip and acronym/abbreviation of a term (falling back to the
+-- singular form if there is no abbreviation). Takes a chunk database and a
+-- 'UIDRef' associated with the term.
+lookupS :: Idea t => PrintingInformation -> UIDRef t -> TermCapitalization -> (Sentence, Sentence)
+lookupS sm c sCap = (tooltip, maybe tooltip S $ shortForm l >>= capHelper sCap)
   where
     l = termResolve' (sm ^. sysdb) c
+    tooltip = resolveCapT sCap $ longForm l
 
     -- | Get the capital case of an abbreviation based on
     -- 'TermCapitalization'. For sentence and title cases.
@@ -93,10 +97,10 @@ lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= ca
     capHelper _     []     = Nothing
     capHelper _     (x:xs) = Just (toUpper x : xs)
 
--- | Look up a term given a chunk database and a 'UID' associated with the term.
+-- | Look up a term given a chunk database and a 'UIDRef' associated with the term.
 -- Also specifies capitalization
-lookupT :: PrintingInformation -> UID -> TermCapitalization -> Sentence
-lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' (sm ^. sysdb) c
+lookupT :: NamedIdea t => PrintingInformation -> UIDRef t -> TermCapitalization -> Sentence
+lookupT sm c tCap = resolveCapT tCap $ termResolveNP (sm ^. sysdb) c
 
 -- | Get the right function for capitalizing a 'NP' based on its
 -- 'TermCapitalization'. Singular case.
@@ -105,10 +109,10 @@ resolveCapT NoCap = toSent . phraseNP
 resolveCapT CapF = toSent . atStartNP
 resolveCapT CapW = toSent . titleizeNP
 
--- | Look up the plural form of a term given a chunk database and a 'UID'
+-- | Look up the plural form of a term given a chunk database and a 'UIDRef'
 -- associated with the term.
-lookupP :: PrintingInformation -> UID -> TermCapitalization -> Sentence
-lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' (sm ^. sysdb) c
+lookupP :: NamedIdea t => PrintingInformation -> UIDRef t -> TermCapitalization -> Sentence
+lookupP sm c pCap = resolveCapP pCap $ termResolveNP (sm ^. sysdb) c
   where
     -- | Get the right function for capitalizing a 'NP' based on its
     -- 'TermCapitalization'. Plural case.

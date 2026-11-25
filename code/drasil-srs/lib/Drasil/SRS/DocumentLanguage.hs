@@ -21,7 +21,7 @@ import Language.Drasil.Display (compsy)
 import Language.Drasil.Development (shortdep)
 
 import Drasil.Database (ChunkDB, insertAll, UID, HasUID(..))
-import Drasil.Database.SearchTools (TermAbbr, shortForm, termResolve')
+import Drasil.Database.SearchTools (TermAbbr(TermAbbr, shortForm), termResolve)
 
 import Drasil.System (HasSystemMeta(..), HasProjectName(..), projTitleS, ProjectName)
 import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
@@ -219,7 +219,7 @@ collectDocumentAbbreviations rms renderedSecs cdb =
       inModel, requirement, thModel, refName, refBy]
     -- Filter out the system name and duplicates
     filtered = nub (foundInDoc <> missingFromDocHACK) \\ rms
-    allTerms = termResolve' cdb <$> filtered
+    allTerms = termResolve TermAbbr cdb <$> filtered
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>

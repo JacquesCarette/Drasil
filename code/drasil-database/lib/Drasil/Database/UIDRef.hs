@@ -5,19 +5,22 @@ module Drasil.Database.UIDRef (
 ) where
 
 import Control.Lens ((^.))
+import Data.Kind (Type)
 import Data.Maybe (fromMaybe)
+import Data.Typeable (Typeable)
 
-import Drasil.Database.Chunk (TypeableChunk, HasChunkRefs (..), IsChunk)
+import Drasil.Database.Chunk (HasChunkRefs(..), IsChunk)
 import Drasil.Database.ChunkDB (ChunkDB, find)
 import Drasil.Database.UID (HasUID(..), UID)
 import qualified Data.Set as S (singleton)
 
 -- | A reference to another chunk through its 'UID', with a type variable to
 -- retain information about the original chunk's type, useful for type-safe
--- dereferencing.
-newtype UIDRef typ = UIDRef UID
+-- dereferencing. @typ@ is kinded 'Type' so that @Typeable typ@ is enough for
+-- @Typeable (UIDRef typ)@ (needed by 'HasChunkRefs').
+newtype UIDRef (typ :: Type) = UIDRef UID
 
-instance HasChunkRefs (UIDRef t) where
+instance Typeable t => HasChunkRefs (UIDRef t) where
   -- | A 'UIDRef t' carries a 'UID' referring to a chunk of type 't'.
   chunkRefs (UIDRef u) = S.singleton u
   {-# INLINABLE chunkRefs #-}
@@ -27,11 +30,11 @@ hide :: IsChunk t => t -> UIDRef t
 hide = UIDRef . (^. uid)
 
 -- | Find a chunk by a 'UIDRef'.
-unhide :: TypeableChunk t => UIDRef t -> ChunkDB -> Maybe t
+unhide :: IsChunk t => UIDRef t -> ChunkDB -> Maybe t
 unhide (UIDRef u) = find u
 
 -- | Find a chunk by a 'UIDRef', erroring if not found.
-unhideOrErr :: TypeableChunk t => UIDRef t -> ChunkDB -> t
+unhideOrErr :: IsChunk t => UIDRef t -> ChunkDB -> t
 unhideOrErr tu cdb = fromMaybe (error "Typed UID dereference failed.") (unhide tu cdb)
 
 -- | Get the raw 'UID' from a 'UIDRef'.
@@ -52,11 +55,11 @@ hideUni :: IsChunk t => t -> UnitypedUIDRef
 hideUni = UnitypedUIDRef . (^. uid)
 
 -- | Find a chunk by its 'UnitypedUIDRef'.
-unhideUni :: TypeableChunk t => UnitypedUIDRef -> ChunkDB -> Maybe t
+unhideUni :: IsChunk t => UnitypedUIDRef -> ChunkDB -> Maybe t
 unhideUni (UnitypedUIDRef u) = find u
 
 -- | Find a chunk by its 'UnitypedUIDRef', erroring if not found.
-unhideUniOrErr :: TypeableChunk t => UnitypedUIDRef -> ChunkDB -> t
+unhideUniOrErr :: IsChunk t => UnitypedUIDRef -> ChunkDB -> t
 unhideUniOrErr tu cdb = fromMaybe (error "Untyped UID dereference failed.") (unhideUni tu cdb)
 
 -- | Get the raw 'UID' from a 'UnitypedUIDRef'.

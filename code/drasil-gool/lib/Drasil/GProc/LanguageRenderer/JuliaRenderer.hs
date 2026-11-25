@@ -74,10 +74,10 @@ import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   innerType, arrayElem, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists, arrayDecAsList)
-import Drasil.Shared.AST (Terminator(Empty), FileType(..), fileD, FuncData(..),
-  ModData(..), md, updateMod, MethodData(..), mthd, OpData(..), ParamData(..),
-  ProgData(..), TypeData(..), ValData(..), vd, VarData(..), vard, progD, fd, pd,
-  updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD, FileData)
+import Drasil.Shared.AST (FileType(..), fileD, FuncData(..), ModData(..), md,
+  updateMod, MethodData(..), mthd, OpData(..), ParamData(..), ProgData(..),
+  TypeData(..), ValData(..), vd, VarData(..), vard, progD, fd, pd, updateMthd,
+  ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD, FileData)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.Shared.State (FS, MS, VS, lensGStoFS, revFiles, setFileType,
@@ -456,15 +456,14 @@ instance InternalControlStmt JuliaCode Statement Value where
 instance RenderStatement JuliaCode Statement where
   loopStmt s' = do
     s <- s'
-    stmtFromData (preStatement s) Empty
-  stmtFromData d _ = toState $ toCode d
+    stmtFromData (preStatement s)
 
 instance StatementElim JuliaCode Statement where
   statement = preStatement
   preStatement = unJLC
 
 instance EmptyStatement JuliaCode Statement where
-  emptyStmt = stmtFromData empty Empty
+  emptyStmt = stmtFromData empty
 
 instance MultiStatement JuliaCode Statement where
   multi = onStateList (onCodeList vcat)
@@ -472,7 +471,7 @@ instance MultiStatement JuliaCode Statement where
 instance ValueStatement JuliaCode Statement Value where
   valStmt v' = do
     v <- zoom lensMStoVS v'
-    stmtFromData (RC.value v) Empty
+    stmtFromData (RC.value v)
 
 instance AssignStatement JuliaCode Statement Variable Value where
   assign = jlAssign
@@ -497,7 +496,7 @@ instance DeclStatement JuliaCode Body Statement Variable ScopeData Value where
     s <- M.get
     f <- function (variableName vr) private (pure $ variableType vr) (param <$> ps) b
     modify (L.set currParameters (s ^. currParameters))
-    stmtFromData (RC.method f) Empty
+    stmtFromData (RC.method f)
 
 instance PrintConsole JuliaCode Statement Value where
   print      = jlOut False Nothing printFunc
@@ -538,18 +537,24 @@ instance FuncAppStatement JuliaCode Statement Variable Value where
   extInOutCall m = CP.inOutCall (extFuncApp m)
 
 instance CommentStatement JuliaCode Statement where
-  comment c = stmtFromData (R.comment c jlCmtStart) Empty
+  comment c = stmtFromData (R.comment c jlCmtStart)
 
 instance ControlStatement JuliaCode Body Statement Variable Value where
-  break = stmtFromData R.break Empty
-  continue = stmtFromData R.continue Empty
+  break = stmtFromData R.break
+  continue = stmtFromData R.continue
   returnStmt v' = do
     v <- zoom lensMStoVS v'
-    stmtFromData (R.return' [v]) Empty
+    stmtFromData (R.return' [v])
   throw msg' = do
     msg <- zoom lensMStoVS (litString msg')
-    stmtFromData (jlThrow msg) Empty
-  ifCond = G.ifCond id empty jlSpace elseIfLabel empty jlEnd
+    stmtFromData (jlThrow msg)
+  ifCond cs eBody = do
+    let condPair (v, b) = on2StateValues
+          (\val bd -> (RC.value val, RC.body bd)) (zoom lensMStoVS v) b
+    condPair' <- traverse condPair cs
+    elseSec <- onStateValue (\bd -> emptyIfEmpty (RC.body bd) (RC.body bd)) eBody
+    stmtFromData
+      (G.ifCond id empty jlSpace elseIfLabel empty jlEnd condPair' elseSec)
   switch = switchAsIf
   ifExists = M.ifExists
   for _ _ _ _ = error $ CP.forLoopError jlName
@@ -558,21 +563,20 @@ instance ControlStatement JuliaCode Body Statement Variable Value where
     i <- zoom lensMStoVS i'
     v <- zoom lensMStoVS v'
     b <- b'
-    stmtFromData (jlForEach i v b) Empty
+    stmtFromData (jlForEach i v b)
   while val' bod' = do
     val <- zoom lensMStoVS val'
     bod <- bod'
     stmtFromData
       (C.while id empty jlEnd (RC.value val) (RC.body bod))
-      Empty
   tryCatch try' catch' = do
     try <- try'
     catch <- catch'
-    stmtFromData (jlTryCatch try catch) Empty
+    stmtFromData (jlTryCatch try catch)
   assert condition errorMessage = do
     cond <- zoom lensMStoVS condition
     errMsg <- zoom lensMStoVS errorMessage
-    stmtFromData (jlAssert cond errMsg) Empty
+    stmtFromData (jlAssert cond errMsg)
 
 instance VisibilitySym JuliaCode Doc where
 
@@ -648,6 +652,9 @@ jlName, jlVersion :: String
 jlName = "Julia"
 jlVersion = "1.10.3"
 
+stmtFromData :: Doc -> MS (JuliaCode Statement)
+stmtFromData = toState . toCode
+
 -- Concrete versions of each Julia datatype
 jlIntConc, jlFloatConc, jlDoubleConc, jlCharConc, jlStringConc, jlListConc,
   jlSetConc, jlFile, jlVoid :: String
@@ -703,7 +710,7 @@ jlAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
-  stmtFromData (jlGlobalDec scpData <+> R.assign vr v) Empty
+  stmtFromData (jlGlobalDec scpData <+> R.assign vr v)
 
 jlSubAssign
   :: VS (JuliaCode Variable)
@@ -713,7 +720,7 @@ jlSubAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
-  stmtFromData (jlGlobalDec scpData <+> R.subAssign vr v) Empty
+  stmtFromData (jlGlobalDec scpData <+> R.subAssign vr v)
 
 jlIncrement
   :: VS (JuliaCode Variable)
@@ -723,7 +730,7 @@ jlIncrement vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
-  stmtFromData (jlGlobalDec scpData <+> R.addAssign vr v) Empty
+  stmtFromData (jlGlobalDec scpData <+> R.addAssign vr v)
 
 jlGlobalDec :: ScopeData -> Doc
 jlGlobalDec scp = if scopeTag scp == Global then jlGlobal else empty
@@ -743,7 +750,7 @@ jlConstDecDef v' scp def' = do
   modify $ useVarName $ variableName v
   modify $ setVarScope (variableName v) scpData
   let decDoc = if scopeTag scpData == Global then R.constDec' else empty
-  stmtFromData (decDoc <+> RC.variable v <+> equals <+> RC.value def) Empty
+  stmtFromData (decDoc <+> RC.variable v <+> equals <+> RC.value def)
 
 -- List API
 jlListSize, jlListAdd, jlListAppend, jlListAbsdex :: Label
@@ -1042,7 +1049,7 @@ jlPrint _ f' p' v' = do
   prf <- zoom lensMStoVS p' -- The print function to use
   v <- zoom lensMStoVS v' -- The value to print
   let fl = emptyIfEmpty (RC.value f) $ RC.value f <> listSep'
-  stmtFromData (RC.value prf <> parens (fl <> RC.value v)) Empty
+  stmtFromData (RC.value prf <> parens (fl <> RC.value v))
 
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut

@@ -95,7 +95,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
   bindFormD, FileData, Statement)
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  on2StateWrapped, onCodeList, onStateList)
+  on2StateWrapped, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn,
   revFiles, addLangImport, addLangImportVS, setFileType, getClassName,
   setCurrMain, useVarName, setVarScope)
@@ -488,7 +488,6 @@ instance RenderStatement CSharpCode Statement where
   loopStmt s' = do
     s <- s'
     stmtFromData (preStatement s) Empty
-  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CSharpCode Statement where
   statement = C.statement
@@ -633,7 +632,14 @@ instance ControlStatement CSharpCode Body Statement Variable Value where
     msg <- zoom lensMStoVS (litString msg')
     stmtFromData (csThrowDoc msg) Semi
 
-  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
+  ifCond cs eBody = do
+    let condPair (v, b) = on2StateValues
+          (\val bd -> (RC.value val, RC.body bd)) (zoom lensMStoVS v) b
+    condPair' <- traverse condPair cs
+    elseSec <- onStateValue (\bd -> emptyIfEmpty (RC.body bd) (RC.body bd)) eBody
+    stmtFromData
+      (G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty condPair' elseSec)
+      Empty
   switch val' cases' dflt' = do
     brk <- break
     val <- zoom lensMStoVS val'
@@ -805,6 +811,9 @@ addSystemImport = (>>) $ modify (addLangImportVS csSystem)
 csName, csVersion :: String
 csName = "C#"
 csVersion = "6.0"
+
+stmtFromData :: Doc -> Terminator -> MS (CSharpCode Statement)
+stmtFromData d t = toState $ toCode (d, t)
 
 csImport :: Label -> Doc
 csImport n = text ("using " P.<> n) <> endStatement

@@ -93,7 +93,7 @@ import Drasil.Shared.CodeAnalysis (Exception(..), ExceptionType(..), exception,
   stdExc, HasException(..))
 import Drasil.Shared.Helpers (emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  onCodeList, onStateList, on2StateWrapped)
+  onCodeList, onStateList, on2StateWrapped, emptyIfEmpty)
 import Drasil.Shared.State (CS, MS, VS, lensGStoFS, lensMStoFS, lensMStoVS,
   lensVStoFS, lensVStoMS, modifyReturn, modifyReturnList, revFiles,
   addProgNameToPaths, addLangImport, addLangImportVS, addExceptionImports,
@@ -513,7 +513,6 @@ instance RenderStatement JavaCode Statement where
   loopStmt s' = do
     s <- s'
     stmtFromData (preStatement s) Empty
-  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JavaCode Statement where
   statement = C.statement
@@ -655,7 +654,14 @@ instance ControlStatement JavaCode Body Statement Variable Value where
     msg <- zoom lensMStoVS (litString msg')
     stmtFromData (jThrowDoc msg) Semi
 
-  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
+  ifCond cs eBody = do
+    let condPair (v, b) = on2StateValues
+          (\val bd -> (RC.value val, RC.body bd)) (zoom lensMStoVS v) b
+    condPair' <- traverse condPair cs
+    elseSec <- onStateValue (\bd -> emptyIfEmpty (RC.body bd) (RC.body bd)) eBody
+    stmtFromData
+      (G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty condPair' elseSec)
+      Empty
   switch val' cases' dflt' = do
     brk <- break
     val <- zoom lensMStoVS val'
@@ -834,6 +840,9 @@ instance HasException JavaCode where
 jName, jVersion :: String
 jName = "Java"
 jVersion = "14"
+
+stmtFromData :: Doc -> Terminator -> MS (JavaCode Statement)
+stmtFromData d t = toState $ toCode (d, t)
 
 jImport :: Label -> Doc
 jImport n = importLabel <+> text n <> endStatement

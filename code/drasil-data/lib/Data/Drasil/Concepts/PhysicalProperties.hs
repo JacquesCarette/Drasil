@@ -15,7 +15,7 @@ physicalcon = [gaseous, liquid, solid, ctrOfMass, dimension, flexure]
 -- * Physical Properties
 
 gaseous, liquid, solid, ctrOfMass, mass, len, dimension,
-  vol, flexure :: ConceptChunk
+  flexure :: ConceptChunk
 
 gaseous    = cncpt''' (mkUid "gaseous")    (cn''' "gas"          ) (S "gaseous state")
 liquid     = cncpt''' (mkUid "liquid")     (cn' "liquid"         ) (S "liquid state")
@@ -26,7 +26,6 @@ flexure    = cncpt''' (mkUid "flexure")    (cn' "flexure"        ) (S "a bent or
 len        = cncpt''' (mkUid "length")     (cn' "length"         ) (S ("the straight-line distance between two points along an object, " <>
                                                        "typically used to represent the size of an object from one end to the other"))
 mass       = cncpt''' (mkUid "mass")       (cn''' "mass"         ) (S "the quantity of matter in a body")
-vol        = cncpt''' (mkUid "volume")     (cn' "volume"         ) (S "the amount of space that a substance or object occupies")
 
 materialProprty :: IdeaDict
 materialProprty = compoundNC material_ property

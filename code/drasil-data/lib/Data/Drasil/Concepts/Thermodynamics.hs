@@ -17,7 +17,7 @@ thermocon = [boiling, degree_', enerSrc, heat, heatTrans, htTransTheo,
 
 boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans, htFlux,
   htTransTheo, lawConsEnergy, lawConvCooling, melting,
-  phaseChange, sensHeat, temp, thermalAnalysis, thermalConduction,
+  phaseChange, thermalAnalysis, thermalConduction,
   thermalConductor, thermalEnergy :: ConceptChunk
 
 -- FIXME: "Boiling" is not a noun. How should we deal with it?
@@ -46,12 +46,6 @@ melting           = cncpt''' (mkUid "melting")           (cn "melting")
                       (S "the phase change from solid to liquid")
 phaseChange       = cncpt''' (mkUid "phaseChange")       (cn' "phase change")
                       (S "a change of state")
-sensHeat          = cncpt''' (mkUid "sensHeat")          (cn' "sensible heat")
-                      (S ("heat exchanged by a body in which the exchange of heat " <>
-                      "changes the temperature and some macroscopic variables of " <>
-                      "the body or system, but leaves others unchanged"))
-temp              = cncpt''' (mkUid "temperature")       (cn' "temperature")
-                      (S "the degree or intensity of heat present in a substance or object")
 thermalAnalysis   = cncpt''' (mkUid "thermalAnalysis")
                       (cnIP "thermal analysis" (IrregPlur (\x -> init (init x) <> "es")))
                       (S "the study of material properties as they change with temperature")

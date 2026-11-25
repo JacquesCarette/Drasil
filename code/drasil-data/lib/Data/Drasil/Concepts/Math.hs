@@ -32,15 +32,14 @@ mathcon' = [de, leftSide, ode, pde, rightSide]
 
 -- * Mathematical Concepts
 
-amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint,
+amplitude, angle, axis, calculation, cartesian, centre, change, component, constraint,
   direction, euclidSpace, laplaceTransform, law, line, matrix, norm, normal,
   number, origin, perp, positive, negative, point, probability,
-  rOfChng, rate, rightHand, shape, surArea, surface, vector, xAxis, xCoord, xComp, xDir,
+  rOfChng, rate, rightHand, shape, surface, vector, xAxis, xCoord, xComp, xDir,
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
 amplitude   = cncpt''' (mkUid "amplitude")   (nounPhraseSP "amplitude")  (D.S "The peak deviation of a function from zero")
 angle       = cncpt''' (mkUid "angle")       (cn' "angle")               (D.S "the amount of rotation needed to bring one line or plane into coincidence with another")
-area        = cncpt''' (mkUid "area")        (cn' "area")                (D.S "a part of an object or surface")
 axis        = cncpt''' (mkUid "axis")        (cn' "axis")                (D.S "a fixed reference line for the measurement of coordinates")
 calculation = cncpt''' (mkUid "calculation") (cn' "calculation")         (D.S "a mathematical determination of the size or number of something")
 cartesian   = cncpt''' (mkUid "cartesian") (pn' "Cartesian coordinate system") $ D.S "a coordinate system that specifies each point uniquely in a plane by a set" `S.of_`
@@ -106,4 +105,3 @@ rightSide = commonIdea (mkUid "rightSide") (nounPhrase "right-hand side" "right-
 --FIXME: COMBINATION HACK (all below)
 -- do we really need fterms here? Would combineNINI work?
 rOfChng = cncpt''' (mkUid "rOfChng")       (rate `of_` change) (D.S "ratio between a change in one variable relative to a corresponding change in another")
-surArea = cncpt''' (mkUid "surArea")       (combineNINI surface area)     (D.S "a measure of the total area that the surface of the object occupies")

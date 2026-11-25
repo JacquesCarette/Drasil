@@ -1,5 +1,5 @@
 module Drasil.PDController.Concepts (
-  acronyms, termDefs, simulation, processError, simulationTime, stepTime,
+  acronyms, termDefs, processError, simulationTime, stepTime,
   controlVariable, propControl, derControl,
   pdControllerCI, proportionalCI, pidC, piCI, pidCI, pidCL,
   ccDampingCoeff, ccStiffCoeff, ccFrequencyDomain, ccLaplaceTransform, ccTransferFxn,
@@ -20,7 +20,7 @@ piCI            = commonIdea (mkUid "piCI")            (pn "proportional integra
 pidCI           = commonIdea (mkUid "pidCI")           (pn "proportional integral derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
-      simulationTime, propControl, derControl, simulation, ccFrequencyDomain, ccTimeDomain,
+      simulationTime, propControl, derControl, ccFrequencyDomain, ccTimeDomain,
       ccLaplaceTransform, controlVariable, stepTime, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
 pidCL
   = cncpt''' (mkUid "pdCtrlLoop") (nounPhraseSP "PD Control Loop") (S ("Closed-Loop control " <>
@@ -68,10 +68,6 @@ derControl
   = cncpt''' (mkUid "derControl") (nounPhraseSP "Derivative control")
       (S ("Monitors the rate of change of the error signal and contributes a component " <>
       "of the output signal (proportional to a derivative of the error signal)"))
-
-simulation
-  = cncpt''' (mkUid "simulation") (cn' "simulation")
-      (S "Simulation of the PD controller")
 
 ccFrequencyDomain
   = cncpt''' (mkUid "frequencyDomain") (nounPhraseSP "frequency domain")

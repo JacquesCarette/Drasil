@@ -1312,7 +1312,7 @@ Notes & This equation is based on the assumption that the base of a slice is a s
 Source & \cite{fredlund1977}
          
 \\ \midrule
-RefBy & \hyperref[GD:resShearWO]{GD:resShearWO}, \hyperref[GD:effNormF]{GD:effNormF}, and \hyperref[GD:baseWtrF]{GD:baseWtrF}
+RefBy & \hyperref[GD:resShearWO]{GD:resShearWO} and \hyperref[GD:effNormF]{GD:effNormF}
         
 \\ \bottomrule
 \end{tabular}
@@ -1335,7 +1335,7 @@ Due to \hyperref[assumpPSC]{A:Plane-Strain-Conditions}, only two dimensions are 
 \begin{displaymath}
 \resizeExpression{{\symbf{U}_{\text{b},i}}={\symbf{L}_{b,i}}\,{γ_{w}}\,\frac{1}{2}\,\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right)}
 \end{displaymath}
-This equation is the non-zero case of \hyperref[GD:baseWtrF]{GD:baseWtrF}. The zero case is when the height of the water table is below the height of the slip surface, so there is no hydrostatic force.
+This equation is the non-zero case of this general definition. The zero case is when the height of the water table is below the height of the slip surface, so there is no hydrostatic force.
 
 \medskip
 \noindent
@@ -1373,7 +1373,7 @@ Notes & This equation is based on the assumption that the surface of a slice is 
 Source & \cite{fredlund1977}
          
 \\ \midrule
-RefBy & \hyperref[GD:srfWtrF]{GD:srfWtrF}, \hyperref[GD:resShearWO]{GD:resShearWO}, \hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}, \hyperref[GD:normForcEq]{GD:normForcEq}, \hyperref[GD:momentEql]{GD:momentEql}, \hyperref[GD:mobShearWO]{GD:mobShearWO}, and \hyperref[GD:bsShrFEq]{GD:bsShrFEq}
+RefBy & \hyperref[GD:resShearWO]{GD:resShearWO}, \hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}, \hyperref[GD:normForcEq]{GD:normForcEq}, \hyperref[GD:momentEql]{GD:momentEql}, \hyperref[GD:mobShearWO]{GD:mobShearWO}, and \hyperref[GD:bsShrFEq]{GD:bsShrFEq}
         
 \\ \bottomrule
 \end{tabular}
@@ -1396,7 +1396,7 @@ Due to \hyperref[assumpPSC]{A:Plane-Strain-Conditions}, only two dimensions are 
 \begin{displaymath}
 \resizeExpression{{\symbf{U}_{\text{g},i}}={\symbf{L}_{s,i}}\,{γ_{w}}\,\frac{1}{2}\,\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slope},i-1}}\right)}
 \end{displaymath}
-This equation is the non-zero case of \hyperref[GD:srfWtrF]{GD:srfWtrF}. The zero case is when the height of the water table is below the height of the slope surface, so there is no hydrostatic force.
+This equation is the non-zero case. The zero case is when the height of the water table is below the height of the slope surface, so there is no hydrostatic force.
 
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -2116,7 +2116,7 @@ Notes & $\symbf{R}$ is defined in \hyperref[GD:resShearWO]{GD:resShearWO}, $\sym
 Source & \cite{chen2005} and \cite{karchewski2012}
          
 \\ \midrule
-RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
+RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
         
 \\ \bottomrule
 \end{tabular}
@@ -2231,7 +2231,7 @@ The multiplication of the $\symbf{Ψ}$ terms can be further distributed over the
 \begin{displaymath}
 \resizeExpression{{F_{\text{S}}}\,\left({\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{1}\,{\symbf{T}}_{1}+{\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{2}\,{\symbf{T}}_{2}+{\symbf{Ψ}}_{n-1}\,{\symbf{T}}_{n-1}+{\symbf{T}}_{n}\right)={\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{1}\,{\symbf{R}}_{1}+{\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{2}\,{\symbf{R}}_{2}+{\symbf{Ψ}}_{n-1}\,{\symbf{R}}_{n-1}+{\symbf{R}}_{n}}
 \end{displaymath}
-Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13), which can also be seen in \hyperref[IM:fctSfty]{IM:fctSfty}:
+Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13):
 
 \begin{displaymath}
 \resizeExpression{{F_{\text{S}}}=\frac{\displaystyle\sum_{i=1}^{n-1}{{\symbf{R}}_{i}\,\displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{R}}_{n}}{\displaystyle\sum_{i=1}^{n-1}{{\symbf{T}}_{i}\,\displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{T}}_{n}}}
@@ -2277,7 +2277,7 @@ Notes & ${\symbf{C}_{\text{num}}}$ is defined in \hyperref[IM:nrmShrForNum]{IM:n
 Source & \cite{chen2005} and \cite{karchewski2012}
          
 \\ \midrule
-RefBy & \hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:nrmShrForDen]{IM:nrmShrForDen}, \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
+RefBy & \hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}, \hyperref[IM:nrmShrForDen]{IM:nrmShrForDen}, \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
         
 \\ \bottomrule
 \end{tabular}
@@ -2300,7 +2300,7 @@ This equation can be simplified by applying assumptions \hyperref[assumpSF]{A:Se
 \begin{displaymath}
 \resizeExpression{λ=\frac{-{\symbf{G}}_{i}\,\left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{G}}_{i-1}\,\left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)-{\symbf{H}}_{i}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{H}}_{i-1}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)\,{\symbf{h}}_{i}}{-\frac{{\symbf{b}}_{i}}{2}\,\left({\symbf{G}}_{i}\,{\symbf{f}}_{i}+{\symbf{G}}_{i-1}\,{\symbf{f}}_{i-1}\right)}}
 \end{displaymath}
-Taking the summation of all slices, and applying \hyperref[assumpES]{A:Edge-Slices} to set ${\symbf{G}}_{0}$, ${\symbf{G}}_{n}$, ${\symbf{H}}_{0}$, and ${\symbf{H}}_{n}$ equal to zero, a general equation for the proportionality constant $λ$ is developed in Equation (16), which combines \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}, and \hyperref[IM:nrmShrForDen]{IM:nrmShrForDen}:
+Taking the summation of all slices, and applying \hyperref[assumpES]{A:Edge-Slices} to set ${\symbf{G}}_{0}$, ${\symbf{G}}_{n}$, ${\symbf{H}}_{0}$, and ${\symbf{H}}_{n}$ equal to zero, a general equation for the proportionality constant $λ$ is developed in Equation (16), which combines \hyperref[IM:nrmShrForNum]{IM:nrmShrForNum} and \hyperref[IM:nrmShrForDen]{IM:nrmShrForDen}:
 
 \begin{displaymath}
 \resizeExpression{λ=\frac{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({{\symbf{F}_{\text{x}}}^{\text{G}}}+{{\symbf{F}_{\text{x}}}^{\text{H}}}\right)\,\tan\left({\symbf{α}}_{i}\right)+{\symbf{h}}_{i}\,-2\,{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({\symbf{G}}_{i}\,{\symbf{f}}_{i}+{\symbf{G}}_{i-1}\,{\symbf{f}}_{i-1}\right)}}}
@@ -2467,7 +2467,7 @@ Notes & $\symbf{T}$ is defined in \hyperref[GD:mobShearWO]{GD:mobShearWO}, $\sym
 Source & \cite{chen2005}
          
 \\ \midrule
-RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
+RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
         
 \\ \bottomrule
 \end{tabular}
@@ -2480,12 +2480,12 @@ This derivation is identical to the derivation for \hyperref[IM:fctSfty]{IM:fctS
 \begin{displaymath}
 \resizeExpression{{\symbf{G}}_{i}\,{\symbf{Φ}}_{i}={\symbf{Ψ}}_{i-1}\,{\symbf{G}}_{i-1}\,{\symbf{Φ}}_{i-1}+{F_{\text{S}}}\,{\symbf{T}}_{i}-{\symbf{R}}_{i}}
 \end{displaymath}
-A simple rearrangement of Equation (3) leads to Equation (17), also seen in \hyperref[IM:intsliceFs]{IM:intsliceFs}:
+A simple rearrangement of Equation (3) leads to Equation (17):
 
 \begin{displaymath}
 \resizeExpression{{\symbf{G}}_{i}=\frac{{\symbf{Ψ}}_{i-1}\,{\symbf{G}}_{i-1}+{F_{\text{S}}}\,{\symbf{T}}_{i}-{\symbf{R}}_{i}}{{\symbf{Φ}}_{i}}}
 \end{displaymath}
-The cases shown in \hyperref[IM:intsliceFs]{IM:intsliceFs} for when $i=0$, $i=1$, or $i=n$ are derived by applying \hyperref[assumpES]{A:Edge-Slices}, which says that ${\symbf{G}}_{0}$ and ${\symbf{G}}_{n}$ are zero, to Equation (17). $\symbf{G}$ depends on the unknowns ${F_{\text{S}}}$ (\hyperref[IM:fctSfty]{IM:fctSfty}) and $λ$ (\hyperref[IM:nrmShrFor]{IM:nrmShrFor}).
+The cases for when $i=0$, $i=1$, or $i=n$ are derived by applying \hyperref[assumpES]{A:Edge-Slices}, which says that ${\symbf{G}}_{0}$ and ${\symbf{G}}_{n}$ are zero, to Equation (17). $\symbf{G}$ depends on the unknowns ${F_{\text{S}}}$ (\hyperref[IM:fctSfty]{IM:fctSfty}) and $λ$ (\hyperref[IM:nrmShrFor]{IM:nrmShrFor}).
 
 \medskip
 \noindent
@@ -2931,19 +2931,19 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[GD:hsPressure]{GD:hsPressure} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:baseWtrF]{GD:baseWtrF} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  & 
+\hyperref[GD:baseWtrF]{GD:baseWtrF} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:srfWtrF]{GD:srfWtrF} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X &  &  &  &  &  & 
+\hyperref[GD:srfWtrF]{GD:srfWtrF} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:fctSfty]{IM:fctSfty} &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  & X & X &  & X &  & X & X & X &  &  &  &  &  &  & X & X &  &  & X & 
+\hyperref[IM:fctSfty]{IM:fctSfty} &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  & X & X &  & X &  & X & X & X &  &  &  &  &  &  &  & X &  &  & X & 
 \\
-\hyperref[IM:nrmShrFor]{IM:nrmShrFor} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & X & X & X & X & X & 
+\hyperref[IM:nrmShrFor]{IM:nrmShrFor} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & X &  & X & X & X & 
 \\
 \hyperref[IM:nrmShrForNum]{IM:nrmShrForNum} & X & X & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X &  &  &  & 
 \\
 \hyperref[IM:nrmShrForDen]{IM:nrmShrForDen} &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
 \\
-\hyperref[IM:intsliceFs]{IM:intsliceFs} &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  & X & X &  &  & X & 
+\hyperref[IM:intsliceFs]{IM:intsliceFs} &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  & X & X &  &  &  & 
 \\
 \hyperref[IM:crtSlpId]{IM:crtSlpId} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatRefvsRef}

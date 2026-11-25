@@ -149,7 +149,7 @@ eBalanceOnWtrDerivDesc6 = substitute [balanceDecayRate, balanceDecayTime]
 
 eBalanceOnWtrDerivDesc7 :: Expr -> Sentence
 eBalanceOnWtrDerivDesc7 eq22 = foldlSentCol [S "Finally, factoring out", eS' eq22 `sC`
-  S "we" `S.are` S "left with the governing", short ode `S.for` refS eBalanceOnWtr]
+  S "we" `S.are` S "left with the governing", short ode]
 
 eq1, eq2 :: Expr
 eq1 = sy wMass $* sy htCapW

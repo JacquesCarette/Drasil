@@ -17,7 +17,6 @@ digraph "allvsall" {
     "theory:angleIM2" -> "theory:xForce2";
     "theory:angleIM2" -> "theory:yForce2";
     "theory:angleIM2" -> "theory:angleIM1";
-    "theory:angleIM2" -> "theory:angleIM2";
     "instance:calcAng" -> "theory:angleIM1";
     "instance:calcAng" -> "theory:angleIM2";
     "instance:outputValues" -> "theory:angleIM1";

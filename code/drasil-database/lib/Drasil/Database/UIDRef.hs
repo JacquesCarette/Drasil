@@ -1,13 +1,13 @@
 module Drasil.Database.UIDRef (
   -- * 'UID' References
-  UIDRef, hide, unhide, unhideOrErr, raw,
+  UIDRef, hide, unhide, unhideOrErr, raw, asUnitype,
   UnitypedUIDRef, hideUni, unhideUni, unhideUniOrErr, rawUni
 ) where
 
 import Control.Lens ((^.))
 import Data.Kind (Type)
 import Data.Maybe (fromMaybe)
-import Data.Typeable (Typeable)
+import Data.Typeable (Typeable, TypeRep, Proxy(..), typeRep, typeOf)
 
 import Drasil.Database.Chunk (HasChunkRefs(..), IsChunk)
 import Drasil.Database.ChunkDB (ChunkDB, find)
@@ -41,22 +41,30 @@ unhideOrErr tu cdb = fromMaybe (error "Typed UID dereference failed.") (unhide t
 raw :: UIDRef t -> UID
 raw (UIDRef u) = u
 
+-- | Convert a 'UIDRef t' to a 'UnitypedUIDRef'.
+asUnitype :: forall t. IsChunk t => UIDRef t -> UnitypedUIDRef
+asUnitype (UIDRef u) = UnitypedUIDRef u (typeRep (Proxy @t))
+
 -- | A variant of 'UIDRef' without type information about the chunk being
 -- referred to, effectively treating chunks as being "unityped."
-newtype UnitypedUIDRef = UnitypedUIDRef UID
+data UnitypedUIDRef = UnitypedUIDRef UID TypeRep
 
 instance HasChunkRefs UnitypedUIDRef where
   -- | A 'UnitypedUIDRef t' carries a 'UID' referring to another chunk.
-  chunkRefs (UnitypedUIDRef u) = S.singleton u
+  chunkRefs (UnitypedUIDRef u _) = S.singleton u
   {-# INLINABLE chunkRefs #-}
 
 -- | Create a 'UnitypedUIDRef' to a chunk.
 hideUni :: IsChunk t => t -> UnitypedUIDRef
-hideUni = UnitypedUIDRef . (^. uid)
+hideUni c = UnitypedUIDRef (c ^. uid) (typeOf c)
 
 -- | Find a chunk by its 'UnitypedUIDRef'.
 unhideUni :: IsChunk t => UnitypedUIDRef -> ChunkDB -> Maybe t
-unhideUni (UnitypedUIDRef u) = find u
+unhideUni (UnitypedUIDRef u tr) db = do
+  c <- find u db
+  if typeOf c == tr
+    then pure c
+    else Nothing
 
 -- | Find a chunk by its 'UnitypedUIDRef', erroring if not found.
 unhideUniOrErr :: IsChunk t => UnitypedUIDRef -> ChunkDB -> t
@@ -64,4 +72,4 @@ unhideUniOrErr tu cdb = fromMaybe (error "Untyped UID dereference failed.") (unh
 
 -- | Get the raw 'UID' from a 'UnitypedUIDRef'.
 rawUni :: UnitypedUIDRef -> UID
-rawUni (UnitypedUIDRef u) = u
+rawUni (UnitypedUIDRef u _) = u

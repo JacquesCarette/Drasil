@@ -12,11 +12,13 @@ import Language.Drasil (Stage(Equational))
 import Language.Drasil.Document (Document(..), checkToC)
 import Language.Drasil.Printers (genericCSS, genHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
-  genJupyterSRS, makeDocument, makeProject, defaultHTMLGO)
+  genJupyter, CellLayout(SingleCell), makeDocument, makeProject, defaultHTMLGO)
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
 import Drasil.Data.Formats.HTML (defaultHTMLRO, renderHTML)
+import Drasil.Data.Formats.JSON (pretty)
+import Drasil.Data.Formats.Jupyter (defaultNotebookRenderOptions, renderJupyter')
 import Drasil.System (systemdb)
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -60,7 +62,11 @@ prntDoc :: Document -> PrintingInformation -> String -> Format -> [FileLayout]
 prntDoc d pinfo _ MDBook =
   mdBookMakefile : genMDBook (makeProject pinfo d)
 prntDoc d pinfo fn Jupyter =
-  [file [ps|{fn}.ipynb|] $ genJupyterSRS $ makeDocument pinfo d]
+  [ file [ps|{fn}.ipynb|]
+      $ renderJupyter' defaultNotebookRenderOptions pretty
+      $ genJupyter SingleCell
+      $ makeDocument pinfo d
+  ]
 prntDoc d pinfo fn HTML =
   [ file [ps|{fn}.html|]
       $ renderHTML defaultHTMLRO

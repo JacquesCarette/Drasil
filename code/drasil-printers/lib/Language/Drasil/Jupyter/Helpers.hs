@@ -1,5 +1,5 @@
 -- | Defines helper functions for creating jupyter notebooks.
-module Language.Drasil.JSON.Helpers (
+module Language.Drasil.Jupyter.Helpers (
   -- * Jupyter-related
   markdownCell, codeCell, notebookMetadata,
   -- * HTML Tag Wrappers
@@ -15,11 +15,10 @@ import qualified Data.Text as T (pack)
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
 
+import Drasil.Data.Formats.Jupyter (Cell(..), NotebookMetadata, defaultPython39Metadata)
 import Drasil.Document.Layout.Internal (MaxWidthPercent)
 
 import Drasil.Printers.Common hiding (wrap)
-import qualified Drasil.Data.Formats.Jupyter as Jupyter
-  ( Cell(..), NotebookMetadata, defaultPython39Metadata )
 import Language.Drasil.Printing.Helpers (bslash)
 
 data Variation = Class | Id
@@ -120,13 +119,13 @@ stripnewLine :: String -> Doc
 stripnewLine s = hcat (text <$> splitOn "\n" s)
 
 -- | Construct a Jupyter markdown cell with the given content.
-markdownCell :: Doc -> Jupyter.Cell
-markdownCell = Jupyter.MarkdownCell [] . T.pack . render
+markdownCell :: Doc -> Cell
+markdownCell = MarkdownCell [] . T.pack . render
 
 -- | Construct a Jupyter code cell with the given content.
-codeCell :: Doc -> Jupyter.Cell
-codeCell = Jupyter.CodeCell [] . T.pack . render
+codeCell :: Doc -> Cell
+codeCell = CodeCell [] . T.pack . render
 
 -- | Preserve the Python metadata used by the current notebook generators.
-notebookMetadata :: Jupyter.NotebookMetadata
-notebookMetadata = Jupyter.defaultPython39Metadata
+notebookMetadata :: NotebookMetadata
+notebookMetadata = defaultPython39Metadata

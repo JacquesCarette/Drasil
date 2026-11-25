@@ -50,10 +50,12 @@ class RenderFile r file mod | r -> file mod where
 
   fileFromData :: FilePath -> FS (r mod) -> FS (r file)
 
+-- This assumes a certain representation for Permanence
 class PermElim r attch where
   perm :: r attch -> Doc
   binding :: r attch -> AttachmentTag
 
+-- Why do we have these here on top of InterfaceCommon?
 class InternalGetSet r var val typ | r -> var val typ where
   getFunc :: VS (r var) -> VS (r FuncData)
   setFunc :: VS (r typ) -> VS (r var) -> VS (r val) -> VS (r FuncData)
@@ -73,6 +75,7 @@ class OORenderMethod r mthd attch vis param bod typ | r -> mthd attch vis param 
 
   destructor :: [IG.CSStateVar r stvr] -> MS (r mthd)
 
+-- This assumes a certain representation for StateVar
 class StateVarElim r stvr | r -> stvr where
   stateVar :: r stvr -> Doc
 
@@ -91,5 +94,6 @@ class RenderMod r mod | r -> mod where
   modFromData :: String -> FS Doc -> FS (r mod)
   updateModuleDoc :: (Doc -> Doc) -> r mod -> r mod
 
+-- This assumes a certain representation for Module
 class ModuleElim r mod | r -> mod where
   module' :: r mod -> Doc

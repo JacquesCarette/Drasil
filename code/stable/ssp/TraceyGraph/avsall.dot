@@ -74,13 +74,13 @@ digraph "avsall" {
     "dataDefn:f_i" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:ratioVariation"];
     "dataDefn:Phi" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:convertFunc1"];
     "dataDefn:Psi" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:convertFunc2"];
-    "dataDefn:F_x^G" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:nrmForceSumDD"];
-    "dataDefn:F_x^H" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:watForceSumDD"];
-    "dataDefn:h^R" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:sliceHghtRightDD"];
-    "dataDefn:h^L" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:sliceHghtLeftDD"];
+    "qd:dataDefn:F_x^G" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:nrmForceSumDD"];
+    "qd:dataDefn:F_x^H" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:watForceSumDD"];
+    "qd:dataDefn:h^R" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:sliceHghtRightDD"];
+    "qd:dataDefn:h^L" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:sliceHghtLeftDD"];
     subgraph "DD" {
         rank="same";
-        "dataDefn:H_i" "dataDefn:alpha_i" "dataDefn:beta_i" "dataDefn:b_i" "dataDefn:l_b,i" "dataDefn:l_s,i" "dataDefn:h_i" "dataDefn:sigma" "dataDefn:tau" "dataDefn:torque" "dataDefn:f_i" "dataDefn:Phi" "dataDefn:Psi" "dataDefn:F_x^G" "dataDefn:F_x^H" "dataDefn:h^R" "dataDefn:h^L";
+        "dataDefn:H_i" "dataDefn:alpha_i" "dataDefn:beta_i" "dataDefn:b_i" "dataDefn:l_b,i" "dataDefn:l_s,i" "dataDefn:h_i" "dataDefn:sigma" "dataDefn:tau" "dataDefn:torque" "dataDefn:f_i" "dataDefn:Phi" "dataDefn:Psi" "qd:dataDefn:F_x^G" "qd:dataDefn:F_x^H" "qd:dataDefn:h^R" "qd:dataDefn:h^L";
     }
     "theory:factOfSafetyTM" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:factOfSafety"];
     "theory:equilibriumCS" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:equilibrium"];

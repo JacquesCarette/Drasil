@@ -657,7 +657,7 @@ bsWtrFDeriv2DSentence = [S "Due to", refS assumpPSC `sC`
   D.toSent (phraseNP (the baseHydroForce)), S "are defined as"]
 
 bsWtrFDerivEndSentence = [foldlSent [S "This", phrase equation `S.is`
-  S "the non-zero case of" +:+. refS baseWtrFGD,
+  S "the non-zero case of" +:+. S "this general definition",
   S "The zero case is when", D.toSent (phraseNP (height `the_ofThe` waterTable)),
   S "is below", D.toSent (phraseNP (height `the_ofThe` slpSrf)) `sC` S "so there is no",
   S "hydrostatic", phrase force]]
@@ -740,7 +740,7 @@ srfWtrFDeriv2DSentence = [S "Due to", refS assumpPSC `sC`
   D.toSent(phraseNP (the surfHydroForce)), S "are defined as"]
 
 srfWtrFDerivEndSentence = [foldlSent [S "This" +:+ phrase equation `S.is`
-  S "the non-zero case of" +:+. refS srfWtrFGD,
+  S "the non-zero case.",
   S "The zero case is when", D.toSent (phraseNP (height `the_ofThe` waterTable)),
   S "is below", D.toSent (phraseNP (height `the_ofThe` slopeSrf)) `sC` S "so there is no",
   S "hydrostatic", phrase force]]

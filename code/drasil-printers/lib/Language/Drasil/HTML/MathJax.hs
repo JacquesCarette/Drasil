@@ -7,7 +7,7 @@ module Language.Drasil.HTML.MathJax (
 import Data.Text (Text)
 import qualified Data.Text as T
 
-import Drasil.Data.Formats.JSON (renderJSON, jsonRenderOpts, JSONStyle(..), JSON(..))
+import Drasil.Data.Formats.JSON (renderJSON, pretty, JSON(..))
 
 import Drasil.Printers.Common (wrap)
 
@@ -18,8 +18,7 @@ mathJax3Url = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
 mathJaxScript :: Text
 mathJaxScript = "MathJax = " <> configJSON <> ";"
   where
-    configJSON = T.pack $ show $ renderJSON
-      (jsonRenderOpts (Pretty 2))
+    configJSON = T.pack $ show $ renderJSON pretty
       ( JObject [
         ("loader",
         JObject [("load", JArray ["[tex]/textmacros", "output/chtml"])]),

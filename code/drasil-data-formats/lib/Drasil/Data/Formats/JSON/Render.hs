@@ -5,6 +5,8 @@ module Drasil.Data.Formats.JSON.Render
     JSONRenderOptions,
     JSONStyle(..),
     jsonRenderOpts,
+    ugly,
+    pretty,
     renderJSON,
   )
 where
@@ -16,8 +18,9 @@ import Data.Scientific (formatScientific, isInteger, FPFormat(..))
 import Data.Text (Text)
 import qualified Data.Text as T (concatMap, pack, singleton)
 import Numeric.Natural (Natural)
-import Prettyprinter (Doc, braces, brackets, colon, comma, dquotes, pretty,
+import Prettyprinter (Doc, braces, brackets, colon, comma, dquotes,
   hcat, indent, lbrace, lbracket, punctuate, rbrace, rbracket, space, vcat)
+import qualified Prettyprinter as PP (pretty)
 import Text.Printf (printf)
 
 -- | Options for rendering 'JSON'.
@@ -33,6 +36,14 @@ data JSONStyle =
 -- | Create 'JSONRenderOptions'.
 jsonRenderOpts :: JSONStyle -> JSONRenderOptions
 jsonRenderOpts = JSONRO
+
+-- | Minified JSON rendering options.
+ugly :: JSONRenderOptions
+ugly = jsonRenderOpts Minified
+
+-- | Pretty JSON rendering options with two-space indentation.
+pretty :: JSONRenderOptions
+pretty = jsonRenderOpts (Pretty 2)
 
 -- | Render 'JSON' to a 'Doc' with the given options.
 renderJSON :: JSONRenderOptions -> JSON -> Doc ann
@@ -57,17 +68,17 @@ renderJSON opts (JArray a) =
     content = punctuate comma contents
 renderJSON _ (JString s) = renderString s
 renderJSON _ (JNumber n) =
-  pretty $
+  PP.pretty $
     if isInteger n
       then formatScientific Fixed (Just 0) n -- Avoid inclding .0 for integers
       else show n
-renderJSON _ (JBool True) = pretty ("true" :: Text)
-renderJSON _ (JBool False) = pretty ("false" :: Text)
-renderJSON _ JNull = pretty ("null" :: Text)
+renderJSON _ (JBool True) = PP.pretty ("true" :: Text)
+renderJSON _ (JBool False) = PP.pretty ("false" :: Text)
+renderJSON _ JNull = PP.pretty ("null" :: Text)
 
 -- | Internal: Renders Text as a JSON string, with appropriate escaping.
 renderString :: Text -> Doc ann
-renderString s = dquotes $ pretty (T.concatMap escapeChar s)
+renderString s = dquotes $ PP.pretty (T.concatMap escapeChar s)
 
 -- | Internal: Escapes a character for encoding in JSON.
 escapeChar :: Char -> Text

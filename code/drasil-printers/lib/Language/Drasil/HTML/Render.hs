@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Language.Drasil.HTML.Render(
-  genHTML, HTMLGenOptions(..), defaultHTMLGO,
-  renderHTML
+  genHTML, HTMLGenOptions(..), defaultHTMLGO
 ) where
 
 import Data.Text (Text)
@@ -12,8 +11,7 @@ import Drasil.Data.Formats.HTML
 import Language.Drasil.HTML.Citation (printBib)
 import Language.Drasil.HTML.MathJax (mathJax3Url, mathJaxScript, blockEqn)
 import Language.Drasil.HTML.Spec (printSpec, specToHTML)
-import qualified Language.Drasil.Printing.AST as AST
-import qualified Language.Drasil.Printing.LayoutObj as AST
+import qualified Drasil.Document.Layout.Internal as AST
 import qualified Language.Drasil.TeX.Print as TeX (spec, printMath)
 
 -- | Options for converting layout objects ('LayoutObj's) into HTML AST
@@ -93,7 +91,7 @@ makeTableHTML ts (l : lls) r b t = [Div wrapperAttrs $ tableNode : [captionNode 
 
 -- | Internal: Generates definition tables.
 makeDefnHTML :: HTMLGenOptions -> [(String, [AST.LayoutObj])] -> AST.Spec -> [HTMLBody]
-makeDefnHTML _ [] _ = error "Empty definition"
+makeDefnHTML _ [] _ = error "Definition table has no designated rows to render!"
 makeDefnHTML rOpts ps l =
   let attrs = specToIdAttr l <> [class_ ["defn-table"]]
       refRow = Row [] [THeader [] ["Refname"], TData []

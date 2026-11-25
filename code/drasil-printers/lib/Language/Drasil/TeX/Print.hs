@@ -1,84 +1,81 @@
 -- | Defines main LaTeX printer functions. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.TeX.Print.html).
-module Language.Drasil.TeX.Print (genTeX, pExpr, pUnit, spec, fence,
+module Language.Drasil.TeX.Print (genTeX, pExpr, spec, fence,
   OpenClose(..), pMatrix, cases, printMath) where
 
 import Prelude hiding (print)
 import Data.Bifunctor (bimap)
-import Data.List (transpose, partition)
+import Data.List (intercalate, transpose)
 import Text.PrettyPrint (integer, text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Numeric (showEFloat)
-import Control.Arrow (second)
 
 import qualified Language.Drasil as L
 import qualified Language.Drasil.Document as L
-import qualified Language.Drasil.Display as LD
 
-import Drasil.Printers.Common (brace, brak, paren, dquote)
+import Drasil.Printers.Common (brace, brak, dquote)
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
-import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Nested, Flat),
+import Drasil.Document.Layout.Internal (Spec (Tooltip), ItemType(Nested, Flat),
   ListType(Ordered, Unordered, Desc, Definitions, Simple),
   Spec(Quote, EmptyS, Ref, S, Sp, E, (:+:)),
   Fence(Norm, Abs, Curly, Paren), Expr,
   Ops(..), Spacing(Thin), Fonts(Emph, Bold),
   Expr(..), OverSymb(Hat), Label,
-  LinkType(Internal, Cite2, External))
-import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished,
+  LinkType(Internal, Cite2, External),
+  HP(Verb, URL), CiteField(HowPublished,
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
-  Author, Address), Citation(Cite), BibRef)
-import Language.Drasil.Printing.Import.Symbol (symbol)
-import qualified Language.Drasil.Printing.Import.Sentence as I (spec)
-import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+  Author, Address), Citation(Cite), BibRef, CitationKind(..), Month(..),
+  People, Person(rendPersLFM), MaxWidthPercent,
+  Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.TeX.Helpers (author, bold, caption, center, centering,
   cite, command, command0, commandD, command2D, description, description', document,
-  empty, enumerate, externalref, figure, fraction, includegraphics, item, item',
+  empty, enumerate, externalref, figure, includegraphics, item, item',
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgBr, mkEnvArgSq,
-  mkMinipage, newline, newpage, quote, sec, snref, superscript,
+  mkMinipage, newline, newpage, quote, sec, snref,
   symbDescription, texSym, title, toEqn)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (%%), ($+$),
-  hpunctuate, lub, runPrint, switch, toMath, toText, unPL, vcat, vpunctuate)
+  hpunctuate, lub, runPrint, special, switch, toMath, toText, unPL, vcat,
+  vpunctuate)
 import Language.Drasil.TeX.Preamble (genPreamble)
 
 -- | Generates a LaTeX document.
-genTeX :: Document -> L.ShowTableOfContents -> PrintingInformation -> TP.Doc
-genTeX doc toC sm = runPrint (buildStd sm toC doc) Text
+genTeX :: Document -> L.ShowTableOfContents -> TP.Doc
+genTeX doc toC = runPrint (buildStd toC doc) Text
 
 -- | Helper to build the document.
-buildStd :: PrintingInformation -> L.ShowTableOfContents -> Document -> D
-buildStd sm toC (Document t a c) =
+buildStd :: L.ShowTableOfContents -> Document -> D
+buildStd toC (Document t a c) =
   genPreamble c %%
   title (spec t) %%
   author (spec a) %%
   case toC of
-    L.ToC -> document (maketitle %% maketoc %% newpage %% print sm c) -- includes ToC generation
-    _ -> document (maketitle %% newpage %% print sm c) -- omits ToC generation
+    L.ToC -> document (maketitle %% maketoc %% newpage %% print c) -- includes ToC generation
+    _ -> document (maketitle %% newpage %% print c) -- omits ToC generation
 
 -- clean until here; lo needs its sub-functions fixed first though
 -- | Helper for converting layout objects into a more printable form.
-lo :: LayoutObj -> PrintingInformation -> D
-lo (Header d t l)         _ = sec d (spec t) %% label (lspec l)
-lo (HDiv _ con _)        sm = print sm con -- FIXME ignoring 2 arguments?
-lo (Paragraph contents)   _ = toText $ newline (spec contents)
-lo (EqnBlock contents)    _ = makeEquation contents
-lo (Table _ rows r bl t)  _ = toText $ makeTable rows (lspec r) bl (spec t)
-lo (Definition ssPs l)   sm = toText $ makeDefn sm ssPs l
-lo (List l)               _ = toText $ makeList l
-lo (Figure r c f wp)      _ = toText $ makeFigure (lspec r) (maybe empty spec c) f wp
-lo (Bib bib)             sm = toText $ makeBib sm bib
-lo (Graph ps w h c l)    _  = toText $ makeGraph
+lo :: LayoutObj -> D
+lo (Header d t l)        = sec d (spec t) %% label (lspec l)
+lo (HDiv _ con _)        = print con -- FIXME ignoring 2 arguments?
+lo (Paragraph contents)  = toText $ newline (spec contents)
+lo (EqnBlock contents)   = makeEquation contents
+lo (Table _ rows r bl t) = toText $ makeTable rows (lspec r) bl (spec t)
+lo (Definition ssPs l)   = toText $ makeDefn ssPs l
+lo (List l)              = toText $ makeList l
+lo (Figure r c f wp)     = toText $ makeFigure (lspec r) (maybe empty spec c) f wp
+lo (Bib bib)             = toText $ makeBib bib
+lo (Graph ps w h c l)    = toText $ makeGraph
   (bimap spec spec <$> ps)
   (pure $ text $ maybe "" (\x -> "text width = " <> show x <> "em ,") w)
   (pure $ text $ maybe "" (\x -> "minimum height = " <> show x <> "em, ") h)
   (spec c) (lspec l)
-lo (Cell _) _               = empty
-lo (CodeBlock _) _          = empty
+lo (Cell _)              = empty
+lo (CodeBlock _)         = empty
 
 -- | Converts layout objects into a document form.
-print :: PrintingInformation -> [LayoutObj] -> D
-print sm = foldr (($+$) . (`lo` sm)) empty
+print :: [LayoutObj] -> D
+print = foldr (($+$) . lo) empty
 
 -- | Determine wether braces and brackets are opening or closing.
 data OpenClose = Open | Close
@@ -113,7 +110,7 @@ pExpr (Set l)        = foldl1 (<>) (pExpr <$> l)
 pExpr (Ident s@[_])  = pure . text . escapeIdentSymbols $ s
 pExpr (Ident s)      = commandD "mathit" (pure . text . escapeIdentSymbols $ s)
 pExpr (Label s)      = command "text" s
-pExpr (Spec s)       = pure . text $ unPL $ L.special s
+pExpr (Spec s)       = pure . text $ unPL $ special s
 --pExpr (Gr g)         = unPL $ greek g
 pExpr (Sub e)        = pure unders <> brace (pExpr e)
 pExpr (Sup e)        = pure hat    <> brace (pExpr e)
@@ -286,7 +283,7 @@ spec (S s)  = either error (pure . text . concatMap escapeChars) $ L.checkValidS
     escapeChars '&' = "\\&"
     escapeChars c = [c]
 spec (Tooltip _ s) = spec s
-spec (Sp s) = pure $ text $ unPL $ L.special s
+spec (Sp s) = pure $ text $ unPL $ special s
 spec (Ref Internal r sn) = snref r (spec sn)
 spec (Ref (Cite2 n) r _) = cite r (info n)
   where
@@ -296,54 +293,22 @@ spec (Ref External r sn) = externalref r (spec sn)
 spec EmptyS              = empty
 spec (Quote q)           = quote $ spec q
 
--- | Determines the needed context of a symbol.
-symbolNeeds :: LD.Symbol -> MathContext
-symbolNeeds (LD.Variable   _) = Text
-symbolNeeds (LD.Label      _) = Text
-symbolNeeds (LD.Integ      _) = Math
-symbolNeeds (LD.Special    _) = Math
-symbolNeeds (LD.Concat    []) = Math
-symbolNeeds (LD.Concat (s:_)) = symbolNeeds s
-symbolNeeds LD.Corners{}      = Math
-symbolNeeds (LD.Atop     _ _) = Math
-symbolNeeds LD.Empty          = Curr
-
--- | Prints units.
-pUnit :: L.USymb -> D
-pUnit (L.US ls) = formatu t b
-  where
-    (t,b) = partition ((> 0) . snd) ls
-    formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> D
-    formatu [] l = line l
-    formatu l [] = foldr ((<>) . pow) empty l
-    formatu nu de = toMath $ fraction (line nu) $ line $ second negate <$> de
-    line :: [(L.Symbol,Integer)] -> D
-    line []  = empty
-    line [n] = pow n
-    line l   = paren $ foldr ((<>) . pow) empty l
-    pow :: (L.Symbol,Integer) -> D
-    pow (n,1) = p_symb n
-    pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
-    -- printing of unit symbols is done weirdly... FIXME?
-    p_symb (LD.Concat s) = foldl' (<>) empty $ p_symb <$> s
-    p_symb n = let cn = symbolNeeds n in switch (const cn) $ pExpr $ symbol n
-
 -----------------------------------------------------------------
 ------------------ DATA DEFINITION PRINTING-----------------
 -----------------------------------------------------------------
 
 -- | Prints a (data) definition.
-makeDefn :: PrintingInformation -> [(String,[LayoutObj])] -> Spec -> D
-makeDefn _  [] _ = error "Empty definition"
-makeDefn sm ps l = mkMinipage (makeDefTable sm ps l)
+makeDefn :: [(String,[LayoutObj])] -> Spec -> D
+makeDefn [] _ = error "Definition table has no designated rows to render!"
+makeDefn ps l = mkMinipage (makeDefTable ps l)
 
 -- | Helper that creates the definition and associated table.
-makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> Spec -> D
-makeDefTable _ [] _ = error "Trying to make empty Data Defn"
-makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth <> col (rr <> "\\arraybackslash") colBwidth) $ vcat [
+makeDefTable :: [(String,[LayoutObj])] -> Spec -> D
+makeDefTable [] _ = error "Trying to make empty Data Defn"
+makeDefTable ps l = mkEnvArgBr "tabular" (col rr colAwidth <> col (rr <> "\\arraybackslash") colBwidth) $ vcat [
   command0 "toprule " <> bold (pure $ text "Refname") <> pure (text " & ") <> bold (spec l), --shortname instead of refname?
   command0 "phantomsection ", label (lspec l),
-  makeDRows sm ps,
+  makeDRows ps,
   pure $ dbs <+> text "\\bottomrule"
   ]
   where
@@ -352,11 +317,11 @@ makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth <> col (rr <> "\\a
     tw = "\\textwidth"
 
 -- | Helper that makes the rows of a definition table.
-makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
-makeDRows _  []      = error "No fields to create Defn table"
-makeDRows sm ls      = foldl1 (%%) $ (\(f, d) ->
+makeDRows :: [(String,[LayoutObj])] -> D
+makeDRows []      = error "No fields to create Defn table"
+makeDRows ls      = foldl1 (%%) $ (\(f, d) ->
   pure (dbs <+> text "\\midrule") %%
-  pure (text (f <> " & ")) <> print sm d) <$> ls
+  pure (text (f <> " & ")) <> print d) <$> ls
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------
@@ -423,7 +388,7 @@ defItem = fmap (\(x,y,l) -> item $ mlref l <> spec (x :+: S " is the " :+: d_ite
 -----------------------------------------------------------------
 
 -- | Prints figures. Takes in a label and caption along with information for 'includegraphics'.
-makeFigure :: D -> D -> String -> L.MaxWidthPercent -> D
+makeFigure :: D -> D -> String -> MaxWidthPercent -> D
 makeFigure r c f wp =
   figure (center (
   vcat [
@@ -458,66 +423,61 @@ makeGraph ps w h c l =
 ---------------------------
 -- **THE MAIN FUNCTION** --
 -- | Prints a bibliography.
-makeBib :: PrintingInformation -> BibRef -> D
-makeBib sm bib = mkEnvArgBr "filecontents*" (bibFname <> ".bib") (mkBibRef sm bib) %%
+makeBib :: BibRef -> D
+makeBib bib = mkEnvArgBr "filecontents*" (bibFname <> ".bib") (mkBibRef bib) %%
   command "nocite" "*" %% command "bibstyle" bibStyleT %%
   command0 "printbibliography" <> brak (pure $ text "heading=none")
 
 -- | Renders a bibliographical reference with a single line break between
 -- entries.
-mkBibRef :: PrintingInformation -> BibRef -> D
-mkBibRef sm = foldr ((%%) . renderF sm) mempty
+mkBibRef :: BibRef -> D
+mkBibRef = foldr ((%%) . renderF) mempty
 
 -- | Helper that renders a citation.
-renderF :: PrintingInformation -> Citation -> D
-renderF sm (Cite cid refType fields) = pure (text (showT refType)) <>
-  brace (hpunctuate (text ",\n") $ pure (text cid) : fmap (showBibTeX sm) fields)
+renderF :: Citation -> D
+renderF (Cite cid refType fields) = pure (text (showT refType)) <>
+  brace (hpunctuate (text ",\n") $ pure (text cid) : fmap showBibTeX fields)
 
 -- | Renders different kinds of citation mediums.
-showT :: L.CitationKind -> String
-showT L.Article       = "@article"
-showT L.Book          = "@book"
-showT L.Booklet       = "@booklet"
-showT L.InBook        = "@inbook"
-showT L.InCollection  = "@incollection"
-showT L.InProceedings = "@inproceedings"
-showT L.Manual        = "@manual"
-showT L.MThesis       = "@mastersthesis"
-showT L.Misc          = "@misc"
-showT L.PhDThesis     = "@phdthesis"
-showT L.Proceedings   = "@proceedings"
-showT L.TechReport    = "@techreport"
-showT L.Unpublished   = "@unpublished"
+showT :: CitationKind -> String
+showT Article       = "@article"
+showT Book          = "@book"
+showT Booklet       = "@booklet"
+showT InBook        = "@inbook"
+showT InCollection  = "@incollection"
+showT InProceedings = "@inproceedings"
+showT Manual        = "@manual"
+showT MThesis       = "@mastersthesis"
+showT Misc          = "@misc"
+showT PhDThesis     = "@phdthesis"
+showT Proceedings   = "@proceedings"
+showT TechReport    = "@techreport"
+showT Unpublished   = "@unpublished"
 
 -- | Renders different citation fields.
-showBibTeX :: PrintingInformation -> CiteField -> D
-showBibTeX  _ (Address      s) = showField "address" s
-showBibTeX sm (Author       p) = showField "author" (rendPeople sm p)
-showBibTeX  _ (BookTitle    b) = showField "booktitle" b
-showBibTeX  _ (Chapter      c) = showField "chapter" (wrapS c)
-showBibTeX  _ (Edition      e) = showField "edition" (wrapS e)
-showBibTeX sm (Editor       e) = showField "editor" (rendPeople sm e)
-showBibTeX  _ (Institution  i) = showField "institution" i
-showBibTeX  _ (Journal      j) = showField "journal" j
-showBibTeX  _ (Month        m) = showFieldRaw "month" (bibTeXMonth m)
-showBibTeX  _ (Note         n) = showField "note" n
-showBibTeX  _ (Number       n) = showField "number" (wrapS n)
-showBibTeX  _ (Organization o) = showField "organization" o
-showBibTeX sm (Pages        p) = showField "pages" (I.spec sm $ L.foldNums "--" p)
-showBibTeX  _ (Publisher    p) = showField "publisher" p
-showBibTeX  _ (School       s) = showField "school" s
-showBibTeX  _ (Series       s) = showField "series" s
-showBibTeX  _ (Title        t) = showField "title" t
-showBibTeX  _ (Type         t) = showField "type" t
-showBibTeX  _ (Volume       v) = showField "volume" (wrapS v)
-showBibTeX  _ (Year         y) = showField "year" (wrapS y)
-showBibTeX  _ (HowPublished (URL  u)) = showFieldCom "url" "howpublished" u
-showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
-
---showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author"
-  -- (LS.spec sm (rendPeople p)) :+: S ",\n" :+:
-  -- showField "sortkey" (LS.spec sm (rendPeople p))
--- showBibTeX sm (Author    p) = showField "author" $ LS.spec sm (rendPeople p)
+showBibTeX :: CiteField -> D
+showBibTeX (Address      s) = showField "address" s
+showBibTeX (Author       p) = showField "author" (rendPeople p)
+showBibTeX (BookTitle    b) = showField "booktitle" b
+showBibTeX (Chapter      c) = showField "chapter" (wrapS c)
+showBibTeX (Edition      e) = showField "edition" (wrapS e)
+showBibTeX (Editor       e) = showField "editor" (rendPeople e)
+showBibTeX (Institution  i) = showField "institution" i
+showBibTeX (Journal      j) = showField "journal" j
+showBibTeX (Month        m) = showFieldRaw "month" (bibTeXMonth m)
+showBibTeX (Note         n) = showField "note" n
+showBibTeX (Number       n) = showField "number" (wrapS n)
+showBibTeX (Organization o) = showField "organization" o
+showBibTeX (Pages        p) = showField "pages" (rendPages p)
+showBibTeX (Publisher    p) = showField "publisher" p
+showBibTeX (School       s) = showField "school" s
+showBibTeX (Series       s) = showField "series" s
+showBibTeX (Title        t) = showField "title" t
+showBibTeX (Type         t) = showField "type" t
+showBibTeX (Volume       v) = showField "volume" (wrapS v)
+showBibTeX (Year         y) = showField "year" (wrapS y)
+showBibTeX (HowPublished (URL  u)) = showFieldCom "url" "howpublished" u
+showBibTeX (HowPublished (Verb v)) = showField "howpublished" v
 
 -- | Citation fields may be wrapped with braces, nothing, or a command.
 data FieldWrap = Braces | NoDelimiters | Command String
@@ -540,26 +500,37 @@ showFieldRaw = wrapField NoDelimiters
 showFieldCom   :: String -> String -> Spec -> D
 showFieldCom s = wrapField (Command s)
 
--- | Helper that renders people for citations.
-rendPeople :: PrintingInformation -> L.People -> Spec
-rendPeople _ []  = S "N.a." -- "No authors given"
-rendPeople sm people = I.spec sm $
-  foldl1 (\x y -> x L.+:+ L.S "and" L.+:+ y) $ L.S . L.rendPersLFM <$> people
+-- | Render a list of people separated by "and".
+rendPeople :: People -> Spec
+rendPeople []     = S "N.a." -- "No authors given"
+rendPeople people = S $ intercalate " and " $ rendPersLFM <$> people
+
+-- | Renders page numbers for citations, merging consecutive pages into ranges
+-- (e.g., "1--3, 7, and 9").
+rendPages :: [Int] -> Spec
+rendPages = S . listWithAnd . L.numList "--"
+  where
+    listWithAnd [x]    = x
+    listWithAnd [x, y] = x <> " and " <> y
+    listWithAnd xs     = commas xs
+    commas [x, y] = x <> ", and " <> y
+    commas (x:xs) = x <> ", " <> commas xs
+    commas []     = ""
 
 -- | Helper that renders months for citations.
-bibTeXMonth :: L.Month -> Spec
-bibTeXMonth L.Jan = S "jan"
-bibTeXMonth L.Feb = S "feb"
-bibTeXMonth L.Mar = S "mar"
-bibTeXMonth L.Apr = S "apr"
-bibTeXMonth L.May = S "may"
-bibTeXMonth L.Jun = S "jun"
-bibTeXMonth L.Jul = S "jul"
-bibTeXMonth L.Aug = S "aug"
-bibTeXMonth L.Sep = S "sep"
-bibTeXMonth L.Oct = S "oct"
-bibTeXMonth L.Nov = S "nov"
-bibTeXMonth L.Dec = S "dec"
+bibTeXMonth :: Month -> Spec
+bibTeXMonth Jan = S "jan"
+bibTeXMonth Feb = S "feb"
+bibTeXMonth Mar = S "mar"
+bibTeXMonth Apr = S "apr"
+bibTeXMonth May = S "may"
+bibTeXMonth Jun = S "jun"
+bibTeXMonth Jul = S "jul"
+bibTeXMonth Aug = S "aug"
+bibTeXMonth Sep = S "sep"
+bibTeXMonth Oct = S "oct"
+bibTeXMonth Nov = S "nov"
+bibTeXMonth Dec = S "dec"
 
 -- | Helper that lifts something showable into a 'Spec'.
 wrapS :: Show a => a -> Spec

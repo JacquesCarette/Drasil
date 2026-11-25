@@ -3,7 +3,7 @@
 module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
-  multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
+  multOp, divideOp, moduloOp, varDecInit, var, classVar, instanceVarAccess,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, newObjMixedArgs, lambda,
   objAccess, objMethodCall, func, get, set, listAccess, getFunc, setFunc,
@@ -31,15 +31,15 @@ import Drasil.GOOL.InterfaceGOOL (Initializers, CSStateVar, newObj,
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
-  FunctionElim(functionType), RenderStatement(stmtFromData), StatementElim,
-  MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
-  BlockCommentSym(..), ValueElim (value), RenderVariable)
+  FunctionElim(functionType), StatementElim, MethodTypeSym(mType),
+  RenderParam(paramFromData), RenderMethod(commentedFunc), BlockCommentSym(..),
+  ValueElim (value), RenderVariable, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(commentedMod),
   OORenderMethod(intMethod), RenderClass, RenderMod(updateModuleDoc), ParentSpec)
 import qualified Drasil.GOOL.RendererClassesOO as RO
 import Drasil.Shared.AST (AttachmentTag(..), isSource, ScopeTag(Local),
-  ScopeData, sd, TypeData(..), FuncData, Terminator(..))
+  ScopeData, sd, TypeData(..), FuncData)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getNestDegree,
   on2StateWrapped)
@@ -52,7 +52,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStateVal, mkVal,
   addPrec, multPrec, typeFromData)
 import Drasil.Shared.State (VS, FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
-  addParameter, getParameters, useVarName)
+  addParameter, getParameters, useVarName, setVarScope)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
 import qualified Prelude as P ((<>))
@@ -194,6 +194,13 @@ moduloOp :: (Monad r) => VSOp r
 moduloOp = multPrec "%"
 
 -- Variables --
+
+varDecInit
+  :: (VariableElim r var typ, ScopeElim r ScopeData)
+  => r var -> r ScopeData -> MS ()
+varDecInit v scp = do
+    modify $ useVarName (variableName v)
+    modify $ setVarScope (variableName v) (scopeData scp)
 
 var :: (RenderVariable r var typ) => Label -> VS (r typ) -> VS (r var)
 var n t = mkStateVar n t (R.var n)
@@ -536,32 +543,30 @@ optSpaceDoc OSpace {oSpace = sp} = sp
 -- 4th parameter is the syntax for ending a block in an if-condition
 -- 5th parameter is the syntax for ending an if-statement
 ifCond
-  :: (RC.BodyElim r bod, RenderStatement r stmt, ValueElim r val)
-  => (Doc -> Doc)
+  :: (Doc -> Doc)
   -> Doc
   -> OptionalSpace
   -> Doc
   -> Doc
   -> Doc
-  -> [(VS (r val), MS (r bod))]
-  -> MS (r bod)
-  -> MS (r stmt)
+  -> [(Doc, Doc)]
+  -> Doc
+  -> Doc
 ifCond _ _ _ _ _ _ [] _ = error "if condition created with no cases"
 ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
-    let ifSect (v, b) = on2StateValues (\val bd -> vcat [
-          ifLabel <+> f (RC.value val) <> optSpaceDoc os <> ifStart,
-          indent $ RC.body bd,
-          bEnd]) (zoom lensMStoVS v) b
-        elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
-          elif <+> f (RC.value val) <> optSpaceDoc os <> ifStart,
-          indent $ RC.body bd,
-          bEnd]) (zoom lensMStoVS v) b
-        elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) (vcat [
+    let ifSect (v, b) = (\val bd -> vcat [
+          ifLabel <+> f val <> optSpaceDoc os <> ifStart,
+          indent bd,
+          bEnd]) v b
+        elseIfSect (v, b) = (\val bd -> vcat [
+          elif <+> f val <> optSpaceDoc os <> ifStart,
+          indent bd,
+          bEnd]) v b
+        elseSect = (\bd -> emptyIfEmpty bd (vcat [
           elseLabel <> optSpaceDoc os <> ifStart,
-          indent $ RC.body bd,
+          indent bd,
           bEnd]) $+$ ifEnd) eBody
-    in sequence (ifSect c : fmap elseIfSect cs P.<> [elseSect])
-      >>= (\stmtDocs -> stmtFromData (vcat stmtDocs) Empty)
+    in vcat (ifSect c : fmap elseIfSect cs P.<> [elseSect])
 
 -- Methods --
 

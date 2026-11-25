@@ -27,7 +27,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, Class, StateVar, ProgramSym(..),
   selfMethodCall, newObj, InternalValueExp(..), objMethodCall,
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+  StrategyPattern(..), OOMethodSym(..), attachmentTag)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -46,7 +46,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 import Drasil.GOOL.Renderers (renderType, renderParam, renderMethod,
-  renderListDec)
+  renderListDec, renderConstDecDef)
 import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel,
   inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', listSep',
@@ -69,22 +69,22 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   listAccess, getFunc, setFunc, objDecNew, print, closeFile, ifCond, construct,
   param, method, getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
-  smartAdd)
+  smartAdd, varDecInit)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
-  arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
-  constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
-  docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, global,
-  implements, indexOf, indexToInt, inherit, int, intClass, intToIndex,
-  listDecDef, listSet, mainFunction, notNull, openFileA, openFileR, openFileW,
-  pi, setMethodCall, stateVar, stateVarDef, string)
-import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
-  classMethodCall, listAppend, listAdd, innerType)
+  arrayType, bindingError, buildModule', classVarAccess, constVar, constructor,
+  contains, destructorError, discardFileLine, docInOutFunc, docMain,
+  doubleRender, doxClass, doxFunc, doxMod, extraClass, global, implements,
+  indexOf, indexToInt, inherit, int, intClass, intToIndex, listDecDef, listSet,
+  mainFunction, notNull, openFileA, openFileR, openFileW, pi, setMethodCall,
+  stateVar, stateVarDef, string)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
+  listAppend, listAdd, innerType)
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize',
-  statement, varDec, varDecDef, listDec, extObjDecNew, for, while,
-  multiAssignError, multiReturnError, multiTypeError)
+  statement, extObjDecNew, for, while, multiAssignError, multiReturnError,
+  multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -95,7 +95,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
   bindFormD, FileData, Statement)
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  on2StateWrapped, onCodeList, onStateList)
+  on2StateWrapped, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn,
   revFiles, addLangImport, addLangImportVS, setFileType, getClassName,
   setCurrMain, useVarName, setVarScope)
@@ -108,7 +108,7 @@ import Control.Monad.State (modify)
 import Data.Composition ((.:))
 import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi)
+  equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi, brackets)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (
   extFuncAppMixedArgs, extVar, listAccessFunc)
 
@@ -488,7 +488,6 @@ instance RenderStatement CSharpCode Statement where
   loopStmt s' = do
     s <- s'
     stmtFromData (preStatement s) Empty
-  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CSharpCode Statement where
   statement = C.statement
@@ -529,17 +528,43 @@ instance AssignStatement CSharpCode Statement Variable Value where
     stmtFromData (R.decrement vr) Semi
 
 instance DeclStatement CSharpCode Body Statement Variable ScopeData Value where
-  varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $
-    C.varDec classLevel instanceLevel empty v scp)
-  varDecDef = C.varDecDef Semi
+  varDec v' scp = do
+    v <- zoom lensMStoVS v'
+    G.varDecInit v scp
+    csVarDec (variableBind v) $
+      stmtFromData
+        (unCSC (attachmentTag (variableBind v)) <+> renderType (variableType v) <+> RC.variable v)
+        Semi
+  varDecDef vr scp vl' = do
+    vDec <- varDec vr scp
+    vl <- zoom lensMStoVS vl'
+    stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Semi
   setDec = varDec
   setDecDef = varDecDef
-  listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (renderListDec v')
-    (litInt n) v scp)
+  listDec n vr' scp = do
+    vDec <- varDec vr' scp
+    vr <- zoom lensMStoVS vr'
+    nVal <- zoom lensMStoVS (litInt n)
+    let assignDoc = renderListDec vr nVal
+    stmtFromData (preStatement vDec <> assignDoc) Semi
   listDecDef = CP.listDecDef
-  arrayDec n _ = CP.arrayDec (litInt n)
-  arrayDecDef = CP.arrayDecDef
-  constDecDef = CG.constDecDef
+  arrayDec n _ vr' scp = do
+    sz <- zoom lensMStoVS (litInt n :: VS (CSharpCode Value))
+    vr <- zoom lensMStoVS vr'
+    G.varDecInit vr scp
+    let tp = variableType vr
+    innerTp <- zoom lensMStoVS (innerType $ pure tp)
+    stmtFromData (renderType tp <+> RC.variable vr <+> equals <+> new' <+>
+                  renderType innerTp <> brackets (RC.value sz)) Semi
+  arrayDecDef vr' scp vals' = do
+    vals <- mapM (zoom lensMStoVS) vals'
+    vDec <- varDec vr' scp
+    stmtFromData (preStatement vDec <+> equals <+> braces (valueList vals)) Semi
+  constDecDef vr' scp vl' = do
+    vr <- zoom lensMStoVS vr'
+    vl <- zoom lensMStoVS vl'
+    G.varDecInit vr scp
+    stmtFromData (renderConstDecDef vr vl) Semi
   funcDecDef = csFuncDecDef
 
 instance OODeclStatement CSharpCode Statement Variable ScopeData Value where
@@ -607,7 +632,14 @@ instance ControlStatement CSharpCode Body Statement Variable Value where
     msg <- zoom lensMStoVS (litString msg')
     stmtFromData (csThrowDoc msg) Semi
 
-  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
+  ifCond cs eBody = do
+    let condPair (v, b) = on2StateValues
+          (\val bd -> (RC.value val, RC.body bd)) (zoom lensMStoVS v) b
+    condPair' <- traverse condPair cs
+    elseSec <- onStateValue (\bd -> emptyIfEmpty (RC.body bd) (RC.body bd)) eBody
+    stmtFromData
+      (G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty condPair' elseSec)
+      Empty
   switch val' cases' dflt' = do
     brk <- break
     val <- zoom lensMStoVS val'
@@ -779,6 +811,9 @@ addSystemImport = (>>) $ modify (addLangImportVS csSystem)
 csName, csVersion :: String
 csName = "C#"
 csVersion = "6.0"
+
+stmtFromData :: Doc -> Terminator -> MS (CSharpCode Statement)
+stmtFromData d t = toState $ toCode (d, t)
 
 csImport :: Label -> Doc
 csImport n = text ("using " P.<> n) <> endStatement

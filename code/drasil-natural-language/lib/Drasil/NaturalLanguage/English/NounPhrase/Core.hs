@@ -10,6 +10,8 @@ module Drasil.NaturalLanguage.English.NounPhrase.Core (
   npS, npP, (.-.), (.+.)
 ) where
 
+import Data.Typeable (Typeable)
+
 import Drasil.Database (HasChunkRefs(..))
 
 -- | Essentially a subset of 'Sentence' that contains only the parts
@@ -66,7 +68,7 @@ data NPG a =
   | Phrase     (NPStructG a) (PluralFormG a) (CapitalizationRuleG a) (CapitalizationRuleG a) -- ^ Stores noun phrase and its pluralization.
 
 -- | Gather the chunk references mentioned within an 'NP'.
-instance HasChunkRefs (NPG a) where
+instance Typeable a => HasChunkRefs (NPG a) where
     -- NPStructG only contains Strings, so it cannot embed UID refs.
     chunkRefs _ = mempty
     {-# INLINABLE chunkRefs #-}

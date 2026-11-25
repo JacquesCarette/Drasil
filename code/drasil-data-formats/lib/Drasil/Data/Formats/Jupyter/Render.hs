@@ -2,11 +2,11 @@
 
 module Drasil.Data.Formats.Jupyter.Render
   ( CellSourceRenderStyle(..), NotebookRenderOptions(..), defaultNotebookRenderOptions
-  , notebookToJSON, renderNotebook
+  , renderJupyter, renderJupyter'
   ) where
 
 import Data.Text (Text)
-import qualified Data.Text as T (lines)
+import qualified Data.Text as T (lines, pack)
 import Prettyprinter (Doc)
 import Drasil.Data.Formats.JSON
   ( JSON(..), JSONRenderOptions, renderJSON )
@@ -20,29 +20,29 @@ data CellSourceRenderStyle
   deriving (Eq, Show)
 
 -- | Notebook format options, separate from JSON layout options.
--- Version numbers label the output; they do not convert the notebook structure.
+-- Format 4.5 and later include cell IDs.
 data NotebookRenderOptions = NotebookRenderOptions
   { notebookFormat :: Int
   , notebookFormatMinor :: Int
   , sourceFormat :: CellSourceRenderStyle
   } deriving (Eq, Show)
 
--- | Use notebook format 4.4 and a list of lines per cell by default.
+-- | Use notebook format 4.5 and a list of lines per cell by default.
 defaultNotebookRenderOptions :: NotebookRenderOptions
-defaultNotebookRenderOptions = NotebookRenderOptions 4 4 ListOfLines
+defaultNotebookRenderOptions = NotebookRenderOptions 4 5 ListOfLines
 
 -- | Encode a new notebook using the selected version and source representation.
-notebookToJSON :: NotebookRenderOptions -> Notebook -> JSON
-notebookToJSON options (Notebook metadata cells) = JObject
-  [ ("cells", JArray $ cellToJSON (sourceFormat options) <$> cells)
+renderJupyter :: NotebookRenderOptions -> Notebook -> JSON
+renderJupyter options (Notebook metadata cells) = JObject
+  [ ("cells", JArray $ zipWith (cellToJSON options) [0..] cells)
   , ("metadata", metadataToJSON metadata)
   , ("nbformat", JNumber $ fromIntegral $ notebookFormat options)
   , ("nbformat_minor", JNumber $ fromIntegral $ notebookFormatMinor options)
   ]
 
 -- | Render a notebook with the shared JSON renderer.
-renderNotebook :: NotebookRenderOptions -> JSONRenderOptions -> Notebook -> Doc ann
-renderNotebook options jsonOptions = renderJSON jsonOptions . notebookToJSON options
+renderJupyter' :: NotebookRenderOptions -> JSONRenderOptions -> Notebook -> Doc ann
+renderJupyter' options jsonOptions = renderJSON jsonOptions . renderJupyter options
 
 metadataToJSON :: NotebookMetadata -> JSON
 metadataToJSON metadata = JObject
@@ -69,19 +69,25 @@ languageToJSON language = JObject
   ]
 
 -- | Encode a new cell; code is unexecuted and has no outputs.
-cellToJSON :: CellSourceRenderStyle -> Cell -> JSON
-cellToJSON format (MarkdownCell metadata source) = JObject
-  [ ("cell_type", "markdown")
-  , ("metadata", JObject metadata)
-  , ("source", formatSource format source)
-  ]
-cellToJSON format (CodeCell metadata source) = JObject
-  [ ("cell_type", "code")
-  , ("execution_count", JNull)
-  , ("metadata", JObject metadata)
-  , ("outputs", JArray [])
-  , ("source", formatSource format source)
-  ]
+-- IDs use cell positions in this newly generated notebook.
+cellToJSON :: NotebookRenderOptions -> Int -> Cell -> JSON
+cellToJSON options index cell = JObject $ cellId <> case cell of
+  MarkdownCell metadata source ->
+    [ ("cell_type", "markdown")
+    , ("metadata", JObject metadata)
+    , ("source", formatSource format source)
+    ]
+  CodeCell metadata source ->
+    [ ("cell_type", "code")
+    , ("execution_count", JNull)
+    , ("metadata", JObject metadata)
+    , ("outputs", JArray [])
+    , ("source", formatSource format source)
+    ]
+  where
+    format = sourceFormat options
+    cellId = [("id", JString $ "cell-" <> T.pack (show index))
+      | (notebookFormat options, notebookFormatMinor options) >= (4, 5)]
 
 -- | Line lists append LF to each line; single strings preserve the source verbatim.
 formatSource :: CellSourceRenderStyle -> Text -> JSON

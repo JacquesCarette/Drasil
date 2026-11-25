@@ -15,7 +15,7 @@ import qualified Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, newton, radian)
-import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, force, velocity,
+import qualified Data.Drasil.Quantities.Physics as QP (position, iPos, ixPos, xPos, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, gravitationalConst, weight, tension, acceleration, yAccel,
   xAccel, yVel, xVel, iyPos, yPos, time, torque, momentOfInertia, angularDisplacement,
   angularFrequency, frequency, period)
@@ -35,7 +35,7 @@ outputs :: NE.NonEmpty DefinedQuantityDict
 outputs = NE.singleton pendDisplacementAngle
 
 unitalChunks :: [DefinedQuantityDict]
-unitalChunks = [QPP.len, QP.force, QP.ixPos, QP.xPos, QP.yPos,
+unitalChunks = [QPP.len, QP.force, QP.iPos, QP.ixPos, QP.xPos, QP.yPos,
    QP.angularVelocity, QP.gravitationalAccel, QP.tension, QP.acceleration,
    QP.yAccel, QP.xAccel, QP.yVel, QP.xVel, QP.iyPos, QP.time, QP.velocity, QP.position, QP.torque,
    QP.momentOfInertia, QP.angularDisplacement, xForce, yForce,

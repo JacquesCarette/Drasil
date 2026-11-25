@@ -1,6 +1,7 @@
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 
+import Control.Lens ((^.))
 import Data.List (intersperse)
 
 import Drasil.Code.CodeExpr.Development
@@ -11,8 +12,8 @@ import Language.Drasil (DomainDesc(..), Inclusive(..), RTopology(..),
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development (Literal(..))
 
-import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import qualified Drasil.Document.Layout.Internal as P
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, notation)
 import Language.Drasil.Printing.Import.ExprCommon (lookupC', parens)
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Symbol (symbol)
@@ -100,7 +101,7 @@ eop sm Mul = eopMuls sm
 
 -- | Translate 'CodeExpr's to printable layout AST 'Expr's.
 codeExpr :: PrintingInformation -> CodeExpr -> P.Expr
-codeExpr sm (Lit l)                  = literal l sm
+codeExpr sm (Lit l)                  = literal l $ sm ^. notation
 codeExpr sm (AssocB And l)           = assocExpr P.And (precB And) l sm
 codeExpr sm (AssocB Or l)            = assocExpr P.Or (precB Or) l sm
 codeExpr sm (AssocA Add l)           = P.Row $ addExpr l Add sm

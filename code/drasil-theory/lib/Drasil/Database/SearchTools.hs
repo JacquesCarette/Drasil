@@ -4,21 +4,21 @@
 -}
 module Drasil.Database.SearchTools (
   -- * Types
-  TermAbbr,
-  -- * Field Accessors
-  longForm, shortForm,
+  TermAbbr(..),
   -- * Resolvers
-  termResolve, termResolve',
-  refResolve,
+  termResolve, termResolve', termResolveNP,
   findAllConcInstsUnder
 ) where
 
 import Control.Lens ((^.))
+import Data.Typeable (Proxy(Proxy), typeRep)
+import Debug.Trace (trace)
 
-import Drasil.Database (ChunkDB, UID, find, findAll, findOrErr)
+import Drasil.Database (ChunkDB, UID, UIDRef, IsChunk, find, findAll,
+  findOrErr, findTypeOf, raw, unhide)
 import Language.Drasil
-import Language.Drasil.Document
-import Drasil.System (ProjectName, HasProjectName(..))
+import Language.Drasil.Document hiding (raw)
+import Drasil.System (ProjectName)
 import Theory.Drasil.DataDefinition (DataDefinition)
 import Theory.Drasil.InstanceModel (InstanceModel)
 import Theory.Drasil.GenDefn (GenDefn)
@@ -33,7 +33,7 @@ termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
 termResolve f db trg
   | (Just c) <- find trg db :: Maybe IdeaDict            = go f c
   | (Just c) <- find trg db :: Maybe CI                  = go f c
-  | (Just c) <- find trg db :: Maybe ProjectName         = f (c ^. projTitle) (Just $ c ^. projAbrv)
+  | (Just c) <- find trg db :: Maybe ProjectName         = go f c
   | (Just c) <- find trg db :: Maybe DefinedQuantityDict = go f c
   | (Just c) <- find trg db :: Maybe ConceptChunk        = go f c
   | (Just c) <- find trg db :: Maybe UnitDefn            = go f c
@@ -47,25 +47,40 @@ termResolve f db trg
     go :: Idea t => (NP -> Maybe String -> c) -> t -> c
     go f' c = f' (c ^. term) (getA c)
 
--- | Find a chunk's "term" and abbreviation, erroring out if it doesn't exist.
-termResolve' :: ChunkDB -> UID -> TermAbbr
-termResolve' = termResolve TermAbbr
+resolveOrFallback
+  :: forall t a. IsChunk t
+  => String
+  -> ChunkDB
+  -> UIDRef t
+  -> (t -> a)
+  -> (UID -> a)
+  -> a
+resolveOrFallback fn db uref ok fallback = case unhide uref db of
+  Just c  -> ok c
+  Nothing ->
+    let u = raw uref
+    in trace
+      (fn <> ": `" <> show u <> "` expected `" <> show (typeRep (Proxy @t))
+        <> "`, found `" <> maybe "nothing" show (findTypeOf u db) <> "`")
+      (fallback u)
 
--- | Looks up a 'UID' in a 'ChunkDB' with a /referrable/ handle.
-refResolve :: ChunkDB -> UID -> Reference
-refResolve db trg
-  | (Just c) <- find trg db :: Maybe DataDefinition      = ref c
-  | (Just c) <- find trg db :: Maybe InstanceModel       = ref c
-  | (Just c) <- find trg db :: Maybe GenDefn             = ref c
-  | (Just c) <- find trg db :: Maybe TheoryModel         = ref c
-  | (Just c) <- find trg db :: Maybe ConceptInstance     = ref c
-  | (Just c) <- find trg db :: Maybe LabelledContent     = ref c
-  | (Just c) <- find trg db :: Maybe Citation            = ref c
-  | (Just c) <- find trg db :: Maybe Section             = ref c
-  -- FIXME: When URIs are made not-`Reference`-types, we can (should) remove the
-  -- below `Just` case.
-  | (Just c) <- find trg db :: Maybe Reference           = c
-  | otherwise = error $ "Reference for `" <> show trg <> "` not found."
+-- | Find a chunk's "term" and abbreviation, first trying to resolve it as the
+-- expected chunk type @t@, falling back to the 'termResolve' lookup with a
+-- trace message if that fails, and erroring out if it doesn't exist.
+termResolve' :: Idea t => ChunkDB -> UIDRef t -> TermAbbr
+termResolve' db uref =
+  resolveOrFallback "termResolve'" db uref
+    (\c -> TermAbbr (c ^. term) (getA c))
+    (termResolve TermAbbr db)
+
+-- | Find a chunk's "term" ('NP'), first trying to resolve it as the expected
+-- chunk type @t@, falling back to the 'termResolve' lookup with a trace message
+-- if that fails, and erroring out if it doesn't exist.
+termResolveNP :: NamedIdea t => ChunkDB -> UIDRef t -> NP
+termResolveNP db uref =
+  resolveOrFallback "termResolveNP" db uref
+    (^. term)
+    (termResolve const db)
 
 -- | Find all 'ConceptInstance's whose domain is the given one, or is nested
 -- (through parent domains, which are always 'ConceptChunk's) under it.

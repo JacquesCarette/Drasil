@@ -12,7 +12,7 @@ import Language.Drasil hiding (Space(..))
 import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Database (UID, find, isRegistered, mkUid, ChunkDB)
-import Drasil.Database.SearchTools (termResolve', shortForm)
+import Drasil.Database.SearchTools (TermAbbr(TermAbbr, shortForm), termResolve)
 import Drasil.System (systemdb)
 import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
 import Theory.Drasil (DataDefinition, InstanceModel, GenDefn, TheoryModel)
@@ -40,11 +40,11 @@ import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
 traceMGF [] [] [] = SRS.traceyMandG [mkParagraph $ emptySectSentPlu [traceyMatrix, traceyGraph]]
 traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents
-  <> fmap UlC (traceGIntro traceGUIDs (trailing <> [allvsallDesc])) <> traceGCon)
+  <> fmap UlC (traceGIntro genTraceGraphLabCons (trailing <> [allvsallDesc])) <> traceGCon)
 
 -- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
 -- and wraps in 'Contents'. Usually references the five graphs as defined in 'GraphInfo'.
-traceGIntro :: [UID] -> [Sentence] -> [UnlabelledContent]
+traceGIntro :: [LabelledContent] -> [Sentence] -> [UnlabelledContent]
 traceGIntro refs trailings = [ulcc $ Para [foldlSent
         [phrase purpose `S.the_ofTheC` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
@@ -130,7 +130,7 @@ checkUIDAbbrev s t
   | Just x <- find t s :: Maybe InstanceModel   = abrv x
   | Just x <- find t s :: Maybe GenDefn         = abrv x
   | Just x <- find t s :: Maybe TheoryModel     = abrv x
-  | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" $ shortForm $ termResolve' s $ sDom $ cdom x
+  | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" $ shortForm $ termResolve TermAbbr s $ sDom $ cdom x
   | otherwise = error $ "`" <> show t
     <> "` is neither a DD/IM/GD/TM/ConceptInstance or non-existent. It should "
     <> "not have been attempted to be displayed in a traceability graph."
@@ -142,7 +142,7 @@ checkUIDRefAdd s t
   | Just x <- find t s :: Maybe InstanceModel   = getAdd $ getRefAdd x
   | Just x <- find t s :: Maybe GenDefn         = getAdd $ getRefAdd x
   | Just x <- find t s :: Maybe TheoryModel     = getAdd $ getRefAdd x
-  | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" (shortForm $ termResolve' s $ sDom $ cdom x) <> ":" <> getAdd (getRefAdd x)
+  | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" (shortForm $ termResolve TermAbbr s $ sDom $ cdom x) <> ":" <> getAdd (getRefAdd x)
   | otherwise = error $ "`" <> show t
     <> "` is neither a DD/IM/GD/TM/ConceptInstance or non-existent. It should "
     <> "not have been attempted to be displayed in a traceability graph."
@@ -152,10 +152,9 @@ checkUIDRefAdd s t
 traceGRowHeader :: [UID] -> SmithEtAlSRS -> [UID]
 traceGRowHeader us c = (`checkUID` (c ^. systemdb)) <$> us
 
--- FIXME: Should take a Reference instead of just a Reference UID
--- | Helper that makes references of the form "@reference@ shows the dependencies of @something@". Only takes a reference `UID` instead of a `Reference`.
-graphShows :: UID -> Sentence -> Sentence
-graphShows r end = refS (makeFigRef' r) +:+ S "shows the" +:+ plural dependency `S.of_` (end !.)
+-- | Helper that makes references of the form "@graph@ shows the dependencies of @something@".
+graphShows :: LabelledContent -> Sentence -> Sentence
+graphShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.of_` (end !.)
 
 -- * Functions to Create a Traceability Graphs
 --

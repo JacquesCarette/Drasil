@@ -26,8 +26,8 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, Class, ProgramSym(..),
   SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueExpression(..),
   selfMethodCall, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..), convTypeOO)
-import Drasil.GOOL.Renderers (renderType, renderParam,)
+  StrategyPattern(..), OOMethodSym(..), convTypeOO, attachmentTag)
+import Drasil.GOOL.Renderers (renderType, renderParam, renderConstDecDef,)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -70,19 +70,20 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAccess, getFunc,
   setFunc, objDecNew, print, closeFile, ifCond, construct, param, method,
   getMethod, setMethod, function, buildClass, implementingClass, commentedClass,
-  modFromData, fileDoc, fileFromData, defaultOptSpace, local, smartAdd)
+  modFromData, fileDoc, fileFromData, defaultOptSpace, local, smartAdd,
+  varDecInit)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
   call', listAccessFunc', containsInt, string, docInOutFunc, extraClass,
   intToIndex, indexToInt, global, setMethodCall, destructorError)
-import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
-  listAppend, innerType)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (listAppend,
+  innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement, varDec,
-  setType, varDecDef, listDec, extObjDecNew, for, while, multiAssignError,
-  multiReturnError, multiTypeError)
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, statement,
+  setType, extObjDecNew, for, while, multiAssignError, multiReturnError,
+  multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
@@ -1215,7 +1216,6 @@ instance RenderStatement CppSrcCode Statement where
   loopStmt s' = do
     s <- s'
     stmtFromData (preStatement s) Empty
-  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppSrcCode Statement where
   statement = C.statement
@@ -1255,16 +1255,26 @@ instance AssignStatement CppSrcCode Statement Variable Value where
 
 instance DeclStatement CppSrcCode Body Statement Variable ScopeData Value where
   -- TODO [Brandon Bosman, 05/29/2026]: consider re-enabling `varDec` for arrays
-  varDec vr scp = do
-    vr' <- zoom lensMStoVS vr
-    let tp = (cType . unCPPSC . variableType) vr'
+  varDec v' scp = do
+    v <- zoom lensMStoVS v'
+    let tp = (cType . unCPPSC . variableType) v
     case tp of
       (Array _) -> error "Can't use `varDec` for C++ arrays; use `arrayDec`"
-      _         -> C.varDec classLevel instanceLevel empty vr scp
-  varDecDef = C.varDecDef Semi
+      _         -> do
+        G.varDecInit v scp
+        stmtFromData
+          (attachmentDoc (unCPPSC (attachmentTag (variableBind v))) <+> renderType (variableType v) <+> RC.variable v)
+          Semi
+  varDecDef vr scp vl' = do
+    vDec <- varDec vr scp
+    vl <- zoom lensMStoVS vl'
+    stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Semi
   setDec = varDec
   setDecDef = varDecDef
-  listDec n = C.listDec cppListDecDoc (litInt n)
+  listDec n vr scp = do
+    let szDoc = parens (text $ show n)
+    vDec <- varDec vr scp
+    stmtFromData (preStatement vDec <> szDoc) Semi
   listDecDef = cppListDecDef cppListDecDefDoc
   arrayDec n _ vr scp = do
     decBase <- arrayDecBase vr scp
@@ -1275,7 +1285,11 @@ instance DeclStatement CppSrcCode Body Statement Variable ScopeData Value where
     decBase <- arrayDecBase vr scp
     vs <- mapM (zoom lensMStoVS) vals
     stmtFromData (decBase <+> braces (valueList vs)) Semi
-  constDecDef = CG.constDecDef
+  constDecDef vr' scp vl' = do
+    vr <- zoom lensMStoVS vr'
+    vl <- zoom lensMStoVS vl'
+    G.varDecInit vr scp
+    stmtFromData (renderConstDecDef vr vl) Semi
   funcDecDef = cppFuncDecDef
 
 instance OODeclStatement CppSrcCode Statement Variable ScopeData Value where
@@ -1368,7 +1382,14 @@ instance ControlStatement CppSrcCode Body Statement Variable Value where
     msg <- zoom lensMStoVS (litString msg')
     stmtFromData (cppThrowDoc msg) Semi
 
-  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
+  ifCond cs eBody = do
+    let condPair (v, b) = on2StateValues
+          (\val bd -> (RC.value val, RC.body bd)) (zoom lensMStoVS v) b
+    condPair' <- traverse condPair cs
+    elseSec <- onStateValue (\bd -> emptyIfEmpty (RC.body bd) (RC.body bd)) eBody
+    stmtFromData
+      (G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty condPair' elseSec)
+      Empty
   switch val' cases' dflt' = do
     brk <- break
     val <- zoom lensMStoVS val'
@@ -1920,7 +1941,6 @@ instance InternalControlStmt CppHdrCode Statement Value where
 
 instance RenderStatement CppHdrCode Statement where
   loopStmt _ = emptyStmt
-  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppHdrCode Statement where
   statement = C.statement
@@ -1946,20 +1966,31 @@ instance AssignStatement CppHdrCode Statement Variable Value where
   (&--) _ = emptyStmt
 
 instance DeclStatement CppHdrCode Body Statement Variable ScopeData Value where
-  varDec vr scp = do
-    vr' <- zoom lensMStoVS vr
-    let tp = (cType . unCPPHC . variableType) vr'
+  varDec v' scp = do
+    v <- zoom lensMStoVS v'
+    let tp = (cType . unCPPHC . variableType) v
     case tp of
       (Array _) -> error "Can't use `varDec` for C++ arrays; use `arrayDec`"
-      _         -> C.varDec classLevel instanceLevel empty vr scp
-  varDecDef = C.varDecDef Semi
+      _         -> do
+        G.varDecInit v scp
+        stmtFromData
+          (attachmentDoc (unCPPHC (attachmentTag (variableBind v))) <+> renderType (variableType v) <+> RC.variable v)
+          Semi
+  varDecDef vr scp vl' = do
+    vDec <- varDec vr scp
+    vl <- zoom lensMStoVS vl'
+    stmtFromData (preStatement vDec <+> equals <+> RC.value vl) Semi
   setDec = varDec
   setDecDef = varDecDef
   listDec _ _ _ = emptyStmt
   listDecDef _ _ _ = emptyStmt
   arrayDec _ _ _ _ = emptyStmt
   arrayDecDef _ _ _ = emptyStmt
-  constDecDef = CG.constDecDef
+  constDecDef vr' scp vl' = do
+    vr <- zoom lensMStoVS vr'
+    vl <- zoom lensMStoVS vl'
+    G.varDecInit vr scp
+    stmtFromData (renderConstDecDef vr vl) Semi
   funcDecDef _ _ _ _ = emptyStmt
 
 instance OODeclStatement CppHdrCode Statement Variable ScopeData Value where
@@ -2113,7 +2144,7 @@ instance MethodElim CppHdrCode MethodData where
 
 instance StateVarSym CppHdrCode StateVarData AttachmentData (Doc, VisibilityTag) Variable Value where
   stateVar s p v = do
-    dec <- zoom lensCStoMS $ C.varDec classLevel instanceLevel empty v local
+    dec <- zoom lensCStoMS $ varDec v local
     pure $ on2CodeValues svd (onCodeValue snd s)
       (toCode $ R.stateVar empty (RC.perm p) (statement dec))
   stateVarDef s p vr vl = do
@@ -2182,6 +2213,10 @@ instance BlockCommentElim CppHdrCode where
   blockComment' = unCPPHC
 
 -- helpers
+
+stmtFromData :: (Monad r) => Doc -> Terminator -> MS (r Statement)
+stmtFromData d t = toState $ toCode (d, t)
+
 isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
@@ -2426,15 +2461,15 @@ cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef
   ::
-    ( DeclStatement r bod stmt var scope val
-    , RenderStatement r stmt
-    , StatementElim r stmt
+    ( Monad r
+    , DeclStatement r bod Statement var scope val
+    , StatementElim r Statement
     )
   => ([r Value] -> Doc)
   -> VS (r var)
   -> r scope
   -> [VS (r Value)]
-  -> MS (r stmt)
+  -> MS (r Statement)
 cppListDecDef f v scp vls = do
   vdc <- varDec v scp
   vs <- zoom lensMStoVS $ sequence vls
@@ -2514,9 +2549,6 @@ cppCast = join .: on2StateValues (\t v -> cppCast' (getCodeType t) (getCodeType 
         cppCast' _ _ t v = mkStateVal (toState t) (R.castObj
           (R.cast (renderType t)) (RC.value v))
 
-cppListDecDoc :: (ValueElim r val) => r val -> Doc
-cppListDecDoc n = parens (RC.value n)
-
 cppListDecDefDoc :: (ValueElim r val) => [r val] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
@@ -2538,8 +2570,8 @@ cppFuncDecDef v scp ps bod = do
     indent (RC.body b) $$ bodyEnd) Semi
 
 cppPrint
-  :: (RenderStatement r stmt, ValueElim r val)
-  => Bool -> VS (r val) -> VS (r val) -> MS (r stmt)
+  :: (Monad r, ValueElim r val)
+  => Bool -> VS (r val) -> VS (r val) -> MS (r Statement)
 cppPrint newLn pf vl = do
   e <- zoom lensMStoVS end
   printFn <- zoom lensMStoVS pf

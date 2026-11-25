@@ -6,7 +6,6 @@ digraph "refvsref" {
     "theory:sensHeat" -> "theory:latentHtETM";
     "theory:latentHtETM" -> "dataDefn:meltFrac";
     "theory:rocTempSimpRC" -> "theory:consThermECS";
-    "theory:rocTempSimpRC" -> "theory:rocTempSimpRC";
     "theory:htFluxC" -> "theory:nwtnCoolingTM";
     "theory:htFluxP" -> "theory:nwtnCoolingTM";
     "theory:eBalanceOnWtrRC" -> "dataDefn:tauW";
@@ -14,7 +13,6 @@ digraph "refvsref" {
     "theory:eBalanceOnWtrRC" -> "theory:rocTempSimpRC";
     "theory:eBalanceOnWtrRC" -> "theory:htFluxC";
     "theory:eBalanceOnWtrRC" -> "theory:htFluxP";
-    "theory:eBalanceOnWtrRC" -> "theory:eBalanceOnWtrRC";
     "theory:eBalanceOnWtrRC" -> "theory:eBalanceOnPCMRC";
     "theory:eBalanceOnPCMRC" -> "dataDefn:tauSP";
     "theory:eBalanceOnPCMRC" -> "dataDefn:tauLP";

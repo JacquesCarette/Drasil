@@ -1,6 +1,7 @@
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.ModelExpr (modelExpr, modelExpr') where
 
+import Control.Lens ((^.))
 import Data.List (intersperse)
 
 import Drasil.Database (UID)
@@ -16,8 +17,8 @@ import Language.Drasil.ModelExpr.Development (
   , DerivType(..)
   , mePrec, precC, precB, precA)
 
-import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import qualified Drasil.Document.Layout.Internal as P
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, notation)
 import Language.Drasil.Printing.Import.ExprCommon (lookupC', parens)
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Space (space)
@@ -112,7 +113,7 @@ sup n | n == 1 = []
 
 -- | Translate Exprs to printable layout AST.
 modelExpr :: ModelExpr -> PrintingInformation -> P.Expr
-modelExpr (Lit l)                    sm = literal l sm
+modelExpr (Lit l)                    sm = literal l $ sm ^. notation
 modelExpr (AssocB And l)             sm = assocExpr P.And (precB And) l sm
 modelExpr (AssocB Or l)              sm = assocExpr P.Or (precB Or) l sm
 modelExpr (AssocB Equivalence l)     sm = assocExpr P.Eq (precB Equivalence) l sm
@@ -181,11 +182,11 @@ modelExpr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
 modelExpr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
 modelExpr (Operator o d e)           sm = eop sm o d e
 modelExpr (RealI c ri)               sm = renderRealInt sm (lookupC' sm c) ri
-modelExpr (Spc s)                    sm = space sm s
+modelExpr (Spc s)                    _  = space s
 modelExpr (SpaceBinaryOp IsIn l r)   sm = P.Row [modelExpr l sm, P.MO P.IsIn, modelExpr r sm]
 modelExpr (StatBinaryOp Defines l r) sm = P.Row [modelExpr l sm, P.MO P.Eq, modelExpr r sm]
 modelExpr (ForAll c s de)            sm = P.Row [
-    P.MO P.ForAll, symbol $ lookupC' sm c, P.MO P.IsIn, space sm s,
+    P.MO P.ForAll, symbol $ lookupC' sm c, P.MO P.IsIn, space s,
     P.MO P.Dot, modelExpr de sm
   ]
 

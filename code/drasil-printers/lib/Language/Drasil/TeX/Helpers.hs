@@ -6,21 +6,18 @@ module Language.Drasil.TeX.Helpers (
   command0, command, commandD, command1o, command1oD, command1p, command1pD,
   texSym, command2, command2D, command3,
   -- * Environments
-  mkEnv, mkEnvArgBr, mkEnvArgSq, mkMinipage, comm, renewcomm, empty,
+  mkEnv, mkEnvArgBr, mkEnvArgSq, mkMinipage, empty,
   -- * Sectioning
   genSec, sec,
   -- * References and Citations
-  ref, sref, hyperref, externalref, snref, href, cite,
+  externalref, snref, cite,
   -- * Document Elements
-  count, mathbb, usepackage, includegraphics, author, caption, item, label,
-  title, bold, item', maketitle, maketoc, newpage, centering, code, itemize,
+  mathbb, usepackage, includegraphics, author, caption, item, label,
+  title, bold, item', maketitle, maketoc, newpage, centering, itemize,
   enumerate, description, description', figure, center, document, equation,
   symbDescription, docclass,
-  -- * Math Symbols
-  subscript, superscript, fraction,
   -- * Preamble
-  bullet, counter, ddefnum, ddref, colAw, colBw, arrayS, modcounter, modnum,
-  newline, hyperConfig, useTikz,
+  newline,
   -- * Equations
   toEqn
 ) where
@@ -29,10 +26,10 @@ import Data.List (isSuffixOf)
 import Text.PrettyPrint (text, Doc)
 import qualified Text.PrettyPrint as TP
 
-import Language.Drasil.Document (MaxWidthPercent)
+import Drasil.Document.Layout.Internal (MaxWidthPercent)
 
 import Drasil.Printers.Common hiding (quote)
-import Language.Drasil.Config (numberedSections, hyperSettings)
+import Language.Drasil.Config (numberedSections)
 import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$))
 
@@ -131,16 +128,6 @@ mkMinipage :: D -> D
 mkMinipage d = command0 "medskip" $+$
   command0 "noindent" $+$ mkEnvArgBr "minipage" "\\textwidth" d $+$ pure (text "")
 
--- | For defining (LaTeX) macros.
-comm :: String -> String -> Maybe String -> D
-comm b1 b2 s1 = command0 "newcommand" <> pure (brak' ("\\" <> b1) TP.<>
-  maybe TP.empty (brak . text) s1 TP.<> brak' b2)
-
--- this one is special enough, let this sub-optimal implementation stand
--- | Renews given command.
-renewcomm :: String -> String -> D
-renewcomm b1 = command2 "renewcommand" ("\\" <> b1)
-
 -- | Useful to have an empty case.
 empty :: D
 empty = pure TP.empty
@@ -156,17 +143,10 @@ genSec d
       TP.<> (if not numberedSections then text "*" else TP.empty)
 
 -- | For references.
-ref, sref, hyperref, externalref, snref :: String -> D -> D
-sref            = if numberedSections then ref else hyperref
-ref         t x = pure (text $ t <> "~") <> commandD "ref" x
-hyperref    t x = command1pD "hyperref" x (pure (text (t <> "~")) <> x)
+externalref, snref :: String -> D -> D
 externalref t x = command0 "hyperref" <> brace (pure $ text t) <> brace empty <>
   brace empty <> brace x
 snref       r   = command1pD "hyperref" (pure (text r))
-
--- | For references.
-href :: String -> String -> D
-href = command2 "href"
 
 -- | For citations.
 cite :: String -> Maybe D -> D
@@ -175,11 +155,7 @@ cite c n = command1oD "cite" n (pure $ text c) --may need to be changed to allow
 -----------------------------------------------------------------------------
 -- * Define Common LaTeX Commands
 
-count, mathbb, usepackage :: String -> D
--- | Newcounter command.
-count      = command "newcounter"
--- changed to command "newcounter" from command "count" (I assume this was
--- what was intended?)
+mathbb, usepackage :: String -> D
 -- | Mathbb command.
 mathbb     = command "mathbb"
 -- | Usepackage command.
@@ -216,9 +192,8 @@ newpage   = command0 "newpage"
 centering = command0 "centering"
 
 -- | Common commands and formatting options for a LaTeX document.
-code, itemize, enumerate, description, description', figure,
+itemize, enumerate, description, description', figure,
   center, document, equation, symbDescription :: D -> D
-code         = mkEnv "lstlisting" ($+$)
 itemize      = mkEnv "itemize" ($+$)
 enumerate    = mkEnv "enumerate" ($+$)
 description  = mkEnv "description" ($+$)
@@ -237,53 +212,9 @@ docclass = command1p "documentclass"
 sec :: Int -> D -> D
 sec d b1 = genSec d <> brace b1
 
-subscript, superscript :: D -> D -> D
--- | Makes second argument a subscript of the first argument.
-subscript   a b = a <> pure H.unders <> brace b
--- | Makes second argument a superscript of the first argument.
-superscript a b = a <> pure H.hat    <> brace b
-
--- grave, acute :: Char -> D
--- grave c = (pure $ text "\\`{") <> pure (TP.char c) <> (pure $ text "}")
--- acute c = (pure $ text "\\'{") <> pure (TP.char c) <> (pure $ text "}")
-
--- Macro / Command def'n --
---TeX--
--- | Macro/Command definitions.
-bullet, counter, ddefnum, ddref, colAw, colBw, arrayS, modcounter, modnum :: D
-
-counter    = count "datadefnum"
-modcounter = count "modnum"
-
-bullet  = comm "blt"             "- "                Nothing
-ddefnum = comm "ddthedatadefnum" "MG\\thedatadefnum" Nothing
-ddref   = comm "ddref"           "MG\\ref{#1}"       (Just "1")
-colAw   = comm "colAwidth"       "0.2\\textwidth"    Nothing
-colBw   = comm "colBwidth"       "0.73\\textwidth"   Nothing
-modnum  = comm "mthemodnum"      "M\\themodnum"      Nothing
-
-arrayS  = renewcomm "arraystretch" "1.2"
-
 -- | Add newline.
 newline :: D -> D
 newline s = s $+$ pure (text "")
-
--- | Create a fraction.
-fraction :: D -> D -> D
-fraction = command2D "frac"
-
--- | Configuration settings.
-hyperConfig :: D
-hyperConfig = command "hypersetup" hyperSettings
-
--- | Uses luatex85 tex packages.
-useTikz :: D
-useTikz = usepackage "luatex85" $+$ command0 "def" <>
-  command "pgfsysdriver" "pgfsys-pdftex.def" $+$
-  -- the above is a workaround..  temporary until TeX packages have been fixed
-  usepackage "tikz" $+$ command "usetikzlibrary" "arrows.meta" $+$
-  command "usetikzlibrary" "graphs" $+$ command "usetikzlibrary" "graphdrawing" $+$
-  command "usegdlibrary" "layered"
 
 -- * Helpers
 

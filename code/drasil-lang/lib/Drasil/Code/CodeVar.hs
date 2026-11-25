@@ -3,22 +3,27 @@
 module Drasil.Code.CodeVar (
   CodeIdea(..), DefiningCodeExpr(..), VarOrFunc(..), CodeChunk(..), qc,
   CodeVarChunk(..), ccv, obv, CodeFuncChunk(..),  ccf,
-  funcPrefix, listToArray, quantvar, quantfunc
+  funcPrefix, listToArray, quantvar, quantfunc,
+  -- * Constructors
+  implVar, implVar', implVarAU, implVarAU'
 ) where
 
 import Control.Lens ((^.), view, makeLenses, Lens')
 
-import Drasil.Database (HasUID(uid), (+++), declareHasChunkRefs, Generically(..))
+import Drasil.Database (HasUID(uid), UID, (+++), declareHasChunkRefs, Generically(..))
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqdWr,
+  quantAU, quantNoUnit')
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
+import Language.Drasil.Classes (Quantity, Idea(getA), NamedIdea(..), Concept,
+  Definition(defn))
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
+import Language.Drasil.Space (HasSpace(..), Space(..))
+import Language.Drasil.Stages (Stage(..))
+import Language.Drasil.Symbol (HasSymbol(symbol), Symbol(Empty))
+import Language.Drasil.Sentence (Sentence(S))
 
 import Drasil.Code.Classes (Callable)
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
-import Language.Drasil.Classes (Quantity, Idea(getA), NamedIdea(..), Concept,
-  Definition(defn))
-import Language.Drasil.Space (HasSpace(..), Space(..))
-import Language.Drasil.Symbol (HasSymbol(symbol))
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
-import Language.Drasil.Stages (Stage(..))
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, implVarAU', dqdWr)
 
 -- | A 'CodeIdea' must include some code and its name.
 class CodeIdea c where
@@ -95,15 +100,6 @@ instance MayHaveUnit   CodeVarChunk where getUnit = getUnit . view ccv
 quantvar :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeVarChunk
 quantvar c = CodeVC (CodeC (dqdWr c) Var) Nothing
 
--- FIXME: use show for the UID here? Perhaps need a different implVar function for UIDs
--- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
-listToArray :: CodeVarChunk -> CodeVarChunk
-listToArray c = newSpc (c ^. typ)
-  where newSpc (Vect t) = CodeVC (CodeC (implVarAU' (c +++ "_array")
-          (c ^. term) (c ^. defn) (getA c)
-          (Array t) (symbol c Implementation) (getUnit c)) Var) (c ^. obv)
-        newSpc _ = c
-
 -- | Chunk representing a function.
 newtype CodeFuncChunk = CodeFC {_ccf :: CodeChunk}
 makeLenses ''CodeFuncChunk
@@ -131,3 +127,46 @@ instance MayHaveUnit   CodeFuncChunk where getUnit = getUnit . view ccf
 -- | Construct a 'CodeFuncChunk' from a 'Quantity'.
 quantfunc :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeFuncChunk
 quantfunc c = CodeFC $ CodeC (dqdWr c) Func
+
+-- FIXME: use show for the UID here? Perhaps need a different implVar function for UIDs
+-- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
+listToArray :: CodeVarChunk -> CodeVarChunk
+listToArray c = newSpc (c ^. typ)
+  where newSpc (Vect t) = CodeVC (CodeC (implVarAU' (c +++ "_array")
+          (c ^. term) (c ^. defn) (getA c)
+          (Array t) (symbol c Implementation) (getUnit c)) Var) (c ^. obv)
+        newSpc _ = c
+
+-- FIXME: All of the below constructors should export some sort of 'CodeVar' chunk.
+
+-- | Makes a variable that is implementation-only.
+implVar :: UID -> NP -> String -> Space -> Symbol -> DefinedQuantityDict
+implVar i ter desc sp sym = quantNoUnit' i ter (S desc) f sp
+  where
+    f :: Stage -> Symbol
+    f Implementation = sym
+    f Equational = Empty
+
+-- | Similar to 'implVar', but takes in a 'Sentence' for the description rather than a 'String'.
+implVar' :: UID -> NP -> Sentence -> Space -> Symbol -> DefinedQuantityDict
+implVar' i ter desc sp sym = quantNoUnit' i ter desc f sp
+  where
+    f :: Stage -> Symbol
+    f Implementation = sym
+    f Equational = Empty
+
+-- | Similar to 'implVar' but allows specification of abbreviation and unit.
+implVarAU :: UID -> NP -> String -> Maybe String -> Space -> Symbol ->
+  Maybe UnitDefn -> DefinedQuantityDict
+implVarAU s np desc a t sym = quantAU s np (S desc) a f t
+  where f :: Stage -> Symbol
+        f Implementation = sym
+        f Equational = Empty
+
+-- | Similar to 'implVarAU' but takes a Sentence for the description rather than a String.
+implVarAU' :: UID -> NP -> Sentence -> Maybe String -> Space -> Symbol ->
+  Maybe UnitDefn -> DefinedQuantityDict
+implVarAU' s np desc a t sym = quantAU s np desc a f t
+  where f :: Stage -> Symbol
+        f Implementation = sym
+        f Equational = Empty

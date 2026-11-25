@@ -18,8 +18,9 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (constant)
 import Data.Drasil.Concepts.Physics (oneD, position, speed, acceleration, distance,
-  iSpeed, time)
+  time)
 import Data.Drasil.Quantities.Math (pi_)
+import Data.Drasil.Quantities.Physics (iSpeed)
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (radian, metre, second)

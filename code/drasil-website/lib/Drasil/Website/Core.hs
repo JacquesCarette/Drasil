@@ -12,13 +12,13 @@ where
 import Control.Lens (makeLenses, (^.))
 import Prettyprinter (Doc)
 
-import Drasil.Data.Formats.HTML (defaultHTMLRO)
+import Drasil.Data.Formats.HTML (defaultHTMLRO, renderHTML)
 import Drasil.FileHandling (file, ps)
 import Drasil.System (HasProjectName (..), HasSystemMeta (..), SystemMeta, ToFiles (..))
 import Language.Drasil (Stage (Equational))
 import Language.Drasil.Document (Document)
 import Language.Drasil.Printers (defaultHTMLGO, Notation (Engineering),
-  genHTML, renderHTML, genericCSS, piSys, makeDocument)
+  genHTML, genericCSS, piSys, makeDocument)
 
 data DrasilWebsite = DW
   { _sm :: SystemMeta,

@@ -7,8 +7,7 @@ module Language.Drasil.Chunk.DefinedQuantity (
   DefinesQuantity(defLhs),
   -- * Constructors
   quant, quant', quantAU, quantNoUnit, quantNoUnit',
-  dqd, dqd', dqdWr,
-  implVar, implVar', implVarAU, implVarAU'
+  dqd, dqd', dqdWr
 ) where
 
 import Control.Lens ((^.), makeLenses, view, Getter)
@@ -16,14 +15,14 @@ import Control.Lens ((^.), makeLenses, view, Getter)
 import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 import qualified Data.Set as Set
 
-import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
+import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw, cncpt'', cncpt''')
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))
-import Language.Drasil.Stages (Stage (Implementation, Equational))
+import Language.Drasil.Stages (Stage)
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 import Language.Drasil.Sentence (Sentence(..))
 
@@ -163,35 +162,3 @@ dqd' c = DQD (c ^. uid) c
 -- | When the input already has all the necessary information. A 'projection' operator from some a type with instances of listed classes to a 'DefinedQuantityDict'.
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 dqdWr c = DQD (c ^. uid) (cw c) (symbol c) (c ^. typ) (getUnit c)
-
--- | Makes a variable that is implementation-only.
-implVar :: UID -> NP -> String -> Space -> Symbol -> DefinedQuantityDict
-implVar i ter desc sp sym = quantNoUnit' i ter (S desc) f sp
-  where
-    f :: Stage -> Symbol
-    f Implementation = sym
-    f Equational = Empty
-
--- | Similar to 'implVar', but takes in a 'Sentence' for the description rather than a 'String'.
-implVar' :: UID -> NP -> Sentence -> Space -> Symbol -> DefinedQuantityDict
-implVar' i ter desc sp sym = quantNoUnit' i ter desc f sp
-  where
-    f :: Stage -> Symbol
-    f Implementation = sym
-    f Equational = Empty
-
--- | Similar to 'implVar' but allows specification of abbreviation and unit.
-implVarAU :: UID -> NP -> String -> Maybe String -> Space -> Symbol ->
-  Maybe UnitDefn -> DefinedQuantityDict
-implVarAU s np desc a t sym = quantAU s np (S desc) a f t
-  where f :: Stage -> Symbol
-        f Implementation = sym
-        f Equational = Empty
-
--- | Similar to 'implVarAU' but takes a Sentence for the description rather than a String.
-implVarAU' :: UID -> NP -> Sentence -> Maybe String -> Space -> Symbol ->
-  Maybe UnitDefn -> DefinedQuantityDict
-implVarAU' s np desc a t sym = quantAU s np desc a f t
-  where f :: Stage -> Symbol
-        f Implementation = sym
-        f Equational = Empty

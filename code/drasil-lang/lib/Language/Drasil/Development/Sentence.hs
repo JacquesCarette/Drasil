@@ -18,7 +18,7 @@ module Language.Drasil.Development.Sentence (
 
 import Control.Lens ((^.))
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (hide)
 
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(term), Idea)
 import Language.Drasil.Sentence ((+:+), sParen, sentenceTerm,
@@ -41,7 +41,7 @@ toSent (PC p) = S.P p
 -- term, where lookupS is the main helper for looking up the short form of a
 -- 'Ch' Sentence.
 short :: Idea c => c -> S.Sentence
-short c = sentenceShort (c ^. uid)
+short = sentenceShort . hide
 
 -- | Introduce a noun phrase and its (parenthesized) abbreviation.
 introduceAbb :: Idea n => n -> S.Sentence
@@ -69,11 +69,11 @@ titleize' n = toSent $ NP.titleizeNP' (n ^. term)
 
 -- | Helper for getting the phrase from a 'NamedIdea' using it's UID.
 phrase :: NamedIdea n => n -> S.Sentence
-phrase n = sentenceTerm (n ^. uid)
+phrase = sentenceTerm . hide
 
 -- | Helper for getting the plural of a phrase from a 'NamedIdea'.
 plural :: NamedIdea n => n -> S.Sentence
-plural n = sentencePlural (n ^. uid)
+plural = sentencePlural . hide
 --plural n = NP.plural (n ^. term)
 
 -- | Helper for getting the possesive cases from the term of a 'NamedIdea'.

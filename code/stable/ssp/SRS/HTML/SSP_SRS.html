@@ -1959,7 +1959,7 @@
             <tr>
               <th>RefBy</th>
               <td><p class="paragraph">
-                <a href="#GD:resShearWO">GD:resShearWO</a>, <a href="#GD:effNormF">GD:effNormF</a>, and <a href="#GD:baseWtrF">GD:baseWtrF</a>
+                <a href="#GD:resShearWO">GD:resShearWO</a> and <a href="#GD:effNormF">GD:effNormF</a>
               </p></td>
             </tr>
           </table>
@@ -1977,7 +1977,7 @@
             </p>
             \[{\symbf{U}_{\text{b},i}}={\symbf{L}_{b,i}}\,{γ_{w}}\,\frac{1}{2}\,\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slip},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slip},i-1}}\right)\]
             <p class="paragraph">
-              This equation is the non-zero case of <a href="#GD:baseWtrF">GD:baseWtrF</a>. The zero case is when the height of the water table is below the height of the slip surface, so there is no hydrostatic force.
+              This equation is the non-zero case of this general definition. The zero case is when the height of the water table is below the height of the slip surface, so there is no hydrostatic force.
             </p>
           </section>
           <table id="GD:srfWtrF" class="defn-table">
@@ -2030,7 +2030,7 @@
             <tr>
               <th>RefBy</th>
               <td><p class="paragraph">
-                <a href="#GD:srfWtrF">GD:srfWtrF</a>, <a href="#GD:resShearWO">GD:resShearWO</a>, <a href="#IM:nrmShrForNum">IM:nrmShrForNum</a>, <a href="#GD:normForcEq">GD:normForcEq</a>, <a href="#GD:momentEql">GD:momentEql</a>, <a href="#GD:mobShearWO">GD:mobShearWO</a>, and <a href="#GD:bsShrFEq">GD:bsShrFEq</a>
+                <a href="#GD:resShearWO">GD:resShearWO</a>, <a href="#IM:nrmShrForNum">IM:nrmShrForNum</a>, <a href="#GD:normForcEq">GD:normForcEq</a>, <a href="#GD:momentEql">GD:momentEql</a>, <a href="#GD:mobShearWO">GD:mobShearWO</a>, and <a href="#GD:bsShrFEq">GD:bsShrFEq</a>
               </p></td>
             </tr>
           </table>
@@ -2048,7 +2048,7 @@
             </p>
             \[{\symbf{U}_{\text{g},i}}={\symbf{L}_{s,i}}\,{γ_{w}}\,\frac{1}{2}\,\left({\symbf{y}_{\text{wt},i}}-{\symbf{y}_{\text{slope},i}}+{\symbf{y}_{\text{wt},i-1}}-{\symbf{y}_{\text{slope},i-1}}\right)\]
             <p class="paragraph">
-              This equation is the non-zero case of <a href="#GD:srfWtrF">GD:srfWtrF</a>. The zero case is when the height of the water table is below the height of the slope surface, so there is no hydrostatic force.
+              This equation is the non-zero case. The zero case is when the height of the water table is below the height of the slope surface, so there is no hydrostatic force.
             </p>
           </section>
         </section>
@@ -3022,7 +3022,7 @@
             <tr>
               <th>RefBy</th>
               <td><p class="paragraph">
-                <a href="#IM:nrmShrFor">IM:nrmShrFor</a>, <a href="#IM:intsliceFs">IM:intsliceFs</a>, <a href="#IM:fctSfty">IM:fctSfty</a>, <a href="#displayShear">FR:Display-Interslice-Shear-Forces</a>, <a href="#displayNormal">FR:Display-Interslice-Normal-Forces</a>, <a href="#displayFS">FR:Display-Factor-of-Safety</a>, and <a href="#determineCritSlip">FR:Determine-Critical-Slip-Surface</a>
+                <a href="#IM:nrmShrFor">IM:nrmShrFor</a>, <a href="#IM:intsliceFs">IM:intsliceFs</a>, <a href="#displayShear">FR:Display-Interslice-Shear-Forces</a>, <a href="#displayNormal">FR:Display-Interslice-Normal-Forces</a>, <a href="#displayFS">FR:Display-Factor-of-Safety</a>, and <a href="#determineCritSlip">FR:Determine-Critical-Slip-Surface</a>
               </p></td>
             </tr>
           </table>
@@ -3108,7 +3108,7 @@
             </p>
             \[{F_{\text{S}}}\,\left({\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{1}\,{\symbf{T}}_{1}+{\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{2}\,{\symbf{T}}_{2}+{\symbf{Ψ}}_{n-1}\,{\symbf{T}}_{n-1}+{\symbf{T}}_{n}\right)={\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{1}\,{\symbf{R}}_{1}+{\symbf{Ψ}}_{n-1}\,{\symbf{Ψ}}_{n-2}\,{\symbf{Ψ}}_{2}\,{\symbf{R}}_{2}+{\symbf{Ψ}}_{n-1}\,{\symbf{R}}_{n-1}+{\symbf{R}}_{n}\]
             <p class="paragraph">
-              Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13), which can also be seen in <a href="#IM:fctSfty">IM:fctSfty</a>:
+              Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13):
             </p>
             \[{F_{\text{S}}}=\frac{\displaystyle\sum_{i=1}^{n-1}{{\symbf{R}}_{i}\,\displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{R}}_{n}}{\displaystyle\sum_{i=1}^{n-1}{{\symbf{T}}_{i}\,\displaystyle\prod_{v=i}^{n-1}{{\symbf{Ψ}}_{v}}}+{\symbf{T}}_{n}}\]
             <p class="paragraph">
@@ -3175,7 +3175,7 @@
             <tr>
               <th>RefBy</th>
               <td><p class="paragraph">
-                <a href="#IM:nrmShrForNum">IM:nrmShrForNum</a>, <a href="#IM:nrmShrFor">IM:nrmShrFor</a>, <a href="#IM:nrmShrForDen">IM:nrmShrForDen</a>, <a href="#IM:intsliceFs">IM:intsliceFs</a>, <a href="#IM:fctSfty">IM:fctSfty</a>, <a href="#displayShear">FR:Display-Interslice-Shear-Forces</a>, <a href="#displayNormal">FR:Display-Interslice-Normal-Forces</a>, <a href="#displayFS">FR:Display-Factor-of-Safety</a>, and <a href="#determineCritSlip">FR:Determine-Critical-Slip-Surface</a>
+                <a href="#IM:nrmShrForNum">IM:nrmShrForNum</a>, <a href="#IM:nrmShrForDen">IM:nrmShrForDen</a>, <a href="#IM:intsliceFs">IM:intsliceFs</a>, <a href="#IM:fctSfty">IM:fctSfty</a>, <a href="#displayShear">FR:Display-Interslice-Shear-Forces</a>, <a href="#displayNormal">FR:Display-Interslice-Normal-Forces</a>, <a href="#displayFS">FR:Display-Factor-of-Safety</a>, and <a href="#determineCritSlip">FR:Determine-Critical-Slip-Surface</a>
               </p></td>
             </tr>
           </table>
@@ -3193,7 +3193,7 @@
             </p>
             \[λ=\frac{-{\symbf{G}}_{i}\,\left({\symbf{h}_{\text{z},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{G}}_{i-1}\,\left({\symbf{h}_{\text{z},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)-{\symbf{H}}_{i}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i}}+\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{H}}_{i-1}\,\left(\frac{1}{3}\,{\symbf{h}_{\text{z,w},i-1}}-\frac{{\symbf{b}}_{i}}{2}\,\tan\left({\symbf{α}}_{i}\right)\right)+{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)\,{\symbf{h}}_{i}}{-\frac{{\symbf{b}}_{i}}{2}\,\left({\symbf{G}}_{i}\,{\symbf{f}}_{i}+{\symbf{G}}_{i-1}\,{\symbf{f}}_{i-1}\right)}\]
             <p class="paragraph">
-              Taking the summation of all slices, and applying <a href="#assumpES">A:Edge-Slices</a> to set <em><b>G</b><sub>0</sub></em>, <em><b>G</b><sub>n</sub></em>, <em><b>H</b><sub>0</sub></em>, and <em><b>H</b><sub>n</sub></em> equal to zero, a general equation for the proportionality constant <em>λ</em> is developed in Equation (16), which combines <a href="#IM:nrmShrFor">IM:nrmShrFor</a>, <a href="#IM:nrmShrForNum">IM:nrmShrForNum</a>, and <a href="#IM:nrmShrForDen">IM:nrmShrForDen</a>:
+              Taking the summation of all slices, and applying <a href="#assumpES">A:Edge-Slices</a> to set <em><b>G</b><sub>0</sub></em>, <em><b>G</b><sub>n</sub></em>, <em><b>H</b><sub>0</sub></em>, and <em><b>H</b><sub>n</sub></em> equal to zero, a general equation for the proportionality constant <em>λ</em> is developed in Equation (16), which combines <a href="#IM:nrmShrForNum">IM:nrmShrForNum</a> and <a href="#IM:nrmShrForDen">IM:nrmShrForDen</a>:
             </p>
             \[λ=\frac{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({{\symbf{F}_{\text{x}}}^{\text{G}}}+{{\symbf{F}_{\text{x}}}^{\text{H}}}\right)\,\tan\left({\symbf{α}}_{i}\right)+{\symbf{h}}_{i}\,-2\,{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({\symbf{G}}_{i}\,{\symbf{f}}_{i}+{\symbf{G}}_{i-1}\,{\symbf{f}}_{i-1}\right)}}\]
             <p class="paragraph">
@@ -3421,7 +3421,7 @@
             <tr>
               <th>RefBy</th>
               <td><p class="paragraph">
-                <a href="#IM:nrmShrFor">IM:nrmShrFor</a>, <a href="#IM:intsliceFs">IM:intsliceFs</a>, <a href="#IM:fctSfty">IM:fctSfty</a>, <a href="#displayShear">FR:Display-Interslice-Shear-Forces</a>, <a href="#displayNormal">FR:Display-Interslice-Normal-Forces</a>, <a href="#displayFS">FR:Display-Factor-of-Safety</a>, and <a href="#determineCritSlip">FR:Determine-Critical-Slip-Surface</a>
+                <a href="#IM:nrmShrFor">IM:nrmShrFor</a>, <a href="#IM:fctSfty">IM:fctSfty</a>, <a href="#displayShear">FR:Display-Interslice-Shear-Forces</a>, <a href="#displayNormal">FR:Display-Interslice-Normal-Forces</a>, <a href="#displayFS">FR:Display-Factor-of-Safety</a>, and <a href="#determineCritSlip">FR:Determine-Critical-Slip-Surface</a>
               </p></td>
             </tr>
           </table>
@@ -3431,11 +3431,11 @@
             </p>
             \[{\symbf{G}}_{i}\,{\symbf{Φ}}_{i}={\symbf{Ψ}}_{i-1}\,{\symbf{G}}_{i-1}\,{\symbf{Φ}}_{i-1}+{F_{\text{S}}}\,{\symbf{T}}_{i}-{\symbf{R}}_{i}\]
             <p class="paragraph">
-              A simple rearrangement of Equation (3) leads to Equation (17), also seen in <a href="#IM:intsliceFs">IM:intsliceFs</a>:
+              A simple rearrangement of Equation (3) leads to Equation (17):
             </p>
             \[{\symbf{G}}_{i}=\frac{{\symbf{Ψ}}_{i-1}\,{\symbf{G}}_{i-1}+{F_{\text{S}}}\,{\symbf{T}}_{i}-{\symbf{R}}_{i}}{{\symbf{Φ}}_{i}}\]
             <p class="paragraph">
-              The cases shown in <a href="#IM:intsliceFs">IM:intsliceFs</a> for when <em>i = 0</em>, <em>i = 1</em>, or <em>i = n</em> are derived by applying <a href="#assumpES">A:Edge-Slices</a>, which says that <em><b>G</b><sub>0</sub></em> and <em><b>G</b><sub>n</sub></em> are zero, to Equation (17). <em><b>G</b></em> depends on the unknowns <em>F<sub>S</sub></em> (<a href="#IM:fctSfty">IM:fctSfty</a>) and <em>λ</em> (<a href="#IM:nrmShrFor">IM:nrmShrFor</a>).
+              The cases for when <em>i = 0</em>, <em>i = 1</em>, or <em>i = n</em> are derived by applying <a href="#assumpES">A:Edge-Slices</a>, which says that <em><b>G</b><sub>0</sub></em> and <em><b>G</b><sub>n</sub></em> are zero, to Equation (17). <em><b>G</b></em> depends on the unknowns <em>F<sub>S</sub></em> (<a href="#IM:fctSfty">IM:fctSfty</a>) and <em>λ</em> (<a href="#IM:nrmShrFor">IM:nrmShrFor</a>).
             </p>
           </section>
           <table id="IM:crtSlpId" class="defn-table">
@@ -6996,7 +6996,7 @@
             <td></td>
             <td></td>
             <td>X</td>
-            <td>X</td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -7042,7 +7042,7 @@
             <td></td>
             <td>X</td>
             <td></td>
-            <td>X</td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -7088,7 +7088,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>X</td>
+            <td></td>
             <td>X</td>
             <td></td>
             <td></td>
@@ -7134,7 +7134,7 @@
             <td></td>
             <td></td>
             <td>X</td>
-            <td>X</td>
+            <td></td>
             <td>X</td>
             <td>X</td>
             <td>X</td>
@@ -7272,7 +7272,7 @@
             <td>X</td>
             <td></td>
             <td></td>
-            <td>X</td>
+            <td></td>
             <td></td>
           </tr>
           <tr>

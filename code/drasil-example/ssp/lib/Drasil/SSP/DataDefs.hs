@@ -293,16 +293,16 @@ sliceHghtLeftDD = ddE sliceHghtLeftQD [dRef fredlund1977] Nothing
   "sliceHghtLeftDD" []--Notes
 
 nrmForceSumQD :: SimpleQDef
-nrmForceSumQD = mkQuantDefQd nrmForceSum (inxi intNormForce $+ inxiM1 intNormForce)
+nrmForceSumQD = mkQuantDefQd nrmForceSum EmptyS (inxi intNormForce $+ inxiM1 intNormForce)
 
 watForceSumQD :: SimpleQDef
-watForceSumQD = mkQuantDefQd watForceSum (inxi watrForce $+ inxiM1 watrForce)
+watForceSumQD = mkQuantDefQd watForceSum EmptyS (inxi watrForce $+ inxiM1 watrForce)
 
 sliceHghtRightQD :: SimpleQDef
-sliceHghtRightQD = mkQuantDefQd sliceHghtRight (inxi slopeHght $- inxi slipHght)
+sliceHghtRightQD = mkQuantDefQd sliceHghtRight EmptyS (inxi slopeHght $- inxi slipHght)
 
 sliceHghtLeftQD :: SimpleQDef
-sliceHghtLeftQD = mkQuantDefQd sliceHghtLeft (inxiM1 slopeHght $- inxiM1 slipHght)
+sliceHghtLeftQD = mkQuantDefQd sliceHghtLeft EmptyS (inxiM1 slopeHght $- inxiM1 slipHght)
 
 --------------------------
 -- Derivation Sentences --

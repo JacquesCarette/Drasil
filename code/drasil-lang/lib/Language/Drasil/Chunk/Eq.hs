@@ -136,11 +136,11 @@ mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 -- | Smart constructor for 'QDefinition's whose own 'UID' is derived from the
 -- quantity's: the quantity's 'UID' in the @qd@ namespace. The left-hand side
 -- is still the quantity itself, so it keeps resolving to that quantity's chunk.
--- The definition is left empty.
-mkQuantDefQd :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
-mkQuantDefQd q = QD
+-- The given 'Sentence' is the definition of the quantity.
+mkQuantDefQd :: (Quantity c, MayHaveUnit c) => c -> Sentence -> e -> QDefinition e
+mkQuantDefQd q dfn = QD
   (nsUid "qd" (q ^. uid))
-  (quantAU (q ^. uid) (q ^. term) EmptyS Nothing (symbol q) (q ^. typ) (getUnit q))
+  (quantAU (q ^. uid) (q ^. term) dfn Nothing (symbol q) (q ^. typ) (getUnit q))
   []
 
 -- | Factored version of 'QDefinition' functions.

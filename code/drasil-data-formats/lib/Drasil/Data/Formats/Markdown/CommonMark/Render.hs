@@ -106,8 +106,8 @@ renderBlock opt (Heading level contents) =
   Just [marker <> if T.null text then mempty else " " <> text]
   where
     marker = T.replicate (fromEnum level + 1) "#"
-    -- Inline HTML can introduce layout newlines even in a validated heading.
-    text = T.strip $ T.replace "\n" " " $ renderInlinesWith opt id contents
+    -- Inline HTML layout keeps validated heading contents on one line.
+    text = T.strip $ renderInlinesWith opt id contents
 renderBlock opt (Paragraph contents)
   | all paragraphWhitespace (normalizeInlines contents) || null rendered = Nothing
   | otherwise = Just rendered
@@ -432,13 +432,15 @@ protectTrailingSpaces contents =
 
 -- Preserve HTML tags while protecting their text from Markdown interpretation.
 -- Only the inline HTML constructors need recursive text handling here.
--- Protect indentation after HTML escaping, preserving the fragment's text
--- (including its configured formatting) without double-escaping entities.
+-- Protect content whitespace after HTML escaping without double-escaping
+-- entities; the HTML renderer handles layout.
 renderInlineHTML :: CommonMarkRenderOptions -> HTML.HTMLBody -> Text
 renderInlineHTML opt body = guardOpeningLine rendered
   where
     rendered = protectLineIndentation protectLeadingWhitespace $ T.replace " \n" "&#32;\n" $ normalizeLineEndings $
-      renderHTMLText opt [protectText body]
+      renderHTMLText inlineOptions [protectText body]
+    inlineOptions = opt
+      {htmlRenderOptions = (htmlRenderOptions opt) {HTML.htmlLayout = HTML.InlineLayout}}
     protectText (HTML.RawText t) = HTML.RawText (T.concatMap escapeChar t)
     protectText (HTML.TextFormat fmt attrs ch) = HTML.TextFormat fmt attrs (protectText <$> ch)
     protectText (HTML.Anchor url attrs ch) = HTML.Anchor url attrs (protectText <$> ch)

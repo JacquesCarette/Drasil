@@ -67,11 +67,11 @@ inlineCases =
       [Plain "a  ", HTMLInline (HTML.RawText "\nb")],
       "a&#32;&#32;\nb"),
     -- Custom inline elements need the same recursive text protection as em.
-    ("Custom HTML preserves literal Markdown and its indentation",
+    ("Custom inline HTML preserves literal Markdown",
       [Plain "before ",
         HTMLInline (HTML.Custom (HTML.CT "span") [] [HTML.RawText "*literal*"]),
         Plain " after"],
-      "before <span><!-- -->\n&#32; \\*literal\\*\n</span> after"),
+      "before <span>\\*literal\\*</span> after"),
     ("leading spaces do not expose an HTML comment as a block",
       [Plain "  ", HTMLInline (HTML.Comment "note"), Plain " after"],
       "  <span></span><!-- note --> after"),

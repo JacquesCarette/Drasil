@@ -5,10 +5,12 @@ module Drasil.Data.Formats.HTML.Render
     renderHTMLFragment,
     escapeHTMLText,
     HTMLRenderOptions (..),
+    HTMLLayout (..),
     defaultHTMLRO,
   )
 where
 
+import Control.Monad.Trans.Reader (Reader, asks, runReader)
 import Data.Map qualified as M
 import Data.Text (Text)
 import Data.Text qualified as T
@@ -40,82 +42,96 @@ import Prettyprinter
     vcat,
   )
 
+-- | Layout within HTML elements and body fragments.
+data HTMLLayout
+  = VerticalLayout -- ^ Preserve the usual per-element layout.
+  | InlineLayout -- ^ Add no line breaks or indentation; preserve content whitespace.
+
 data HTMLRenderOptions = HTMLRO
   { -- | What 'TagType' is each 'CustomTag'?
     customElementTagTypes :: M.Map CustomTag TagType,
     -- | The number of spaces to use for each level of indentation.
-    indentationSize :: Int
+    indentationSize :: Int,
+    -- | Layout inherited by nested elements and fragment siblings.
+    htmlLayout :: HTMLLayout
   }
 
 -- | Default 'HTMLRenderOptions' with standard indentation and no custom tags.
 defaultHTMLRO :: HTMLRenderOptions
-defaultHTMLRO = HTMLRO M.empty 2
+defaultHTMLRO = HTMLRO M.empty 2 VerticalLayout
 
 -- | Render 'HTML' to a 'Doc'
 renderHTML :: HTMLRenderOptions -> HTML -> Doc ann
-renderHTML opt (HTML heads bodies) =
-  vcat
-    [ "<!DOCTYPE html>",
-      wrapBlock
-        opt
-        "html"
-        []
-        [renderHeadSec opt heads, renderBodySec opt bodies]
-    ]
+renderHTML opt (HTML heads bodies) = flip runReader opt $ do
+  contents <- sequence [renderHeadSec heads, renderBodySec bodies]
+  html <- wrapBlock "html" [] contents
+  pure $ vcat ["<!DOCTYPE html>", html]
 
 -- | Render body nodes without the doctype, @html@, @head@ or @body@ wrappers.
 -- Adjacent text nodes are normalized using the full-document renderer's rules.
 renderHTMLFragment :: HTMLRenderOptions -> [HTMLBody] -> Doc ann
-renderHTMLFragment opt bodies =
-  vcat (renderBody opt <$> normalizeBody bodies)
+renderHTMLFragment opt = flip runReader opt . renderFragment
+
+renderFragment :: [HTMLBody] -> Reader HTMLRenderOptions (Doc ann)
+renderFragment bodies = do
+  docs <- traverse renderBody (normalizeBody bodies)
+  layout <- asks htmlLayout
+  pure $ case layout of
+    VerticalLayout -> vcat docs
+    InlineLayout -> hcat docs
 
 -- | Internal: Render the 'head' section
-renderHeadSec :: HTMLRenderOptions -> [HTMLHead] -> Doc ann
-renderHeadSec opt heads = wrapBlock opt "head" [] (renderHead opt <$> heads)
+renderHeadSec :: [HTMLHead] -> Reader HTMLRenderOptions (Doc ann)
+renderHeadSec heads = traverse renderHead heads >>= wrapBlock "head" []
 
 -- | Internal: Render the 'body' section
-renderBodySec :: HTMLRenderOptions -> [HTMLBody] -> Doc ann
-renderBodySec opt bodies = wrapBlock opt "body" [] [renderHTMLFragment opt bodies]
+renderBodySec :: [HTMLBody] -> Reader HTMLRenderOptions (Doc ann)
+renderBodySec bodies = do
+  contents <- renderFragment bodies
+  wrapBlock "body" [] [contents]
 
 -- | Internal: Render 'head' elements
-renderHead :: HTMLRenderOptions -> HTMLHead -> Doc ann
-renderHead _ (Link relation file attrs) =
-  angles ("link" <> renderAttrs (Attr "rel" relation : Attr "href" file : attrs))
-renderHead _ (Title txt) = wrapLine "title" [] [pretty (escapeHTMLText txt)]
-renderHead _ (Meta attrs) = angles ("meta" <> renderAttrs attrs)
-renderHead opt (Script attrs txt) = wrapBlock opt "script" attrs [pretty txt | not (T.null txt)]
+renderHead :: HTMLHead -> Reader HTMLRenderOptions (Doc ann)
+renderHead (Link relation file attrs) =
+  pure $ angles ("link" <> renderAttrs (Attr "rel" relation : Attr "href" file : attrs))
+renderHead (Title txt) = pure $ wrapLine "title" [] [pretty (escapeHTMLText txt)]
+renderHead (Meta attrs) = pure $ angles ("meta" <> renderAttrs attrs)
+renderHead (Script attrs txt) = wrapBlock "script" attrs [pretty txt | not (T.null txt)]
 
 -- | Internal: Render 'body' elements
-renderBody :: HTMLRenderOptions -> HTMLBody -> Doc ann
-renderBody opt (Div attrs ch) = renderBlock opt "div" attrs ch
-renderBody opt (Paragraph attrs ch) = renderBlockInline opt "p" attrs ch
-renderBody opt (List Unordered attrs items) = wrapBlock opt "ul" attrs (renderIList <$> items)
+renderBody :: HTMLBody -> Reader HTMLRenderOptions (Doc ann)
+renderBody (Div attrs ch) = renderBlock "div" attrs ch
+renderBody (Paragraph attrs ch) = renderBlockInline "p" attrs ch
+renderBody (List Unordered attrs items) = traverse renderIList items >>= wrapBlock "ul" attrs
   where
-    renderIList (LItem iAttrs ch) = renderLine opt "li" iAttrs ch
-renderBody opt (List Ordered attrs items) = wrapBlock opt "ol" attrs (renderIList <$> items)
+    renderIList (LItem iAttrs ch) = renderLine "li" iAttrs ch
+renderBody (List Ordered attrs items) = traverse renderIList items >>= wrapBlock "ol" attrs
   where
-    renderIList (LItem iAttrs ch) = renderBlockInline opt "li" iAttrs ch
-renderBody opt (Section attrs ch) = renderBlock opt "section" attrs ch
-renderBody opt (DescriptionList attrs items) = wrapBlock opt "dl" attrs (renderDItem <$> items)
+    renderIList (LItem iAttrs ch) = renderBlockInline "li" iAttrs ch
+renderBody (Section attrs ch) = renderBlock "section" attrs ch
+renderBody (DescriptionList attrs items) = traverse renderDItem items >>= wrapBlock "dl" attrs
   where
-    renderDItem (DTerm iAttrs ch) = renderLine opt "dt" iAttrs ch
-    renderDItem (DDetails iAttrs ch) = renderBlockInline opt "dd" iAttrs ch
-renderBody opt (Table attrs rows) = wrapBlock opt "table" attrs (renderRow <$> rows)
+    renderDItem (DTerm iAttrs ch) = renderLine "dt" iAttrs ch
+    renderDItem (DDetails iAttrs ch) = renderBlockInline "dd" iAttrs ch
+renderBody (Table attrs rows) = traverse renderRow rows >>= wrapBlock "table" attrs
   where
-    renderRow (Row rAttrs cells) = wrapBlock opt "tr" rAttrs (renderCell <$> cells)
-    renderCell (THeader cAttrs ch) = renderLine opt "th" cAttrs ch
-    renderCell (TData cAttrs ch) = renderLine opt "td" cAttrs ch
-renderBody opt (Figure attrs ch) = renderBlock opt "figure" attrs ch
-renderBody opt (FigCaption attrs ch) = renderLine opt "figcaption" attrs ch
-renderBody opt (TextFormat fmt attrs ch) = renderLine opt (fmtTag fmt) attrs ch
-renderBody opt (Heading lvl attrs ch) = renderLine opt (headTag lvl) attrs ch
-renderBody opt (Anchor url attrs ch) = renderLine opt "a" (Attr "href" url : attrs) ch
-renderBody _ (Img source altTxt attrs) = angles ("img" <> renderAttrs (Attr "src" source : Attr "alt" altTxt : attrs))
-renderBody _ (RawText txt) = pretty (escapeHTMLText txt)
-renderBody opt (Custom (CT tagName) attrs ch)
-  | Just Void <- M.lookup (CT tagName) (customElementTagTypes opt) = angles (pretty tagName <> renderAttrs attrs <> " /")
-  | otherwise = renderBlock opt tagName attrs ch
-renderBody _ (Comment cmmnt) = "<!-- " <> pretty cmmnt <> " -->"
+    renderRow (Row rAttrs cells) = traverse renderCell cells >>= wrapBlock "tr" rAttrs
+    renderCell (THeader cAttrs ch) = renderLine "th" cAttrs ch
+    renderCell (TData cAttrs ch) = renderLine "td" cAttrs ch
+renderBody (Figure attrs ch) = renderBlock "figure" attrs ch
+renderBody (FigCaption attrs ch) = renderLine "figcaption" attrs ch
+renderBody (TextFormat fmt attrs ch) = renderLine (fmtTag fmt) attrs ch
+renderBody (Heading lvl attrs ch) = renderLine (headTag lvl) attrs ch
+renderBody (Anchor url attrs ch) = renderLine "a" (Attr "href" url : attrs) ch
+renderBody (Img source altTxt attrs) =
+  pure $ angles ("img" <> renderAttrs (Attr "src" source : Attr "alt" altTxt : attrs))
+renderBody (RawText txt) = pure $ pretty (escapeHTMLText txt)
+renderBody (Custom (CT tagName) attrs ch) = do
+  tagTypes <- asks customElementTagTypes
+  case M.lookup (CT tagName) tagTypes of
+    Just Void -> pure $ angles (pretty tagName <> renderAttrs attrs <> " /")
+    _ -> renderBlock tagName attrs ch
+renderBody (Comment cmmnt) = pure $ "<!-- " <> pretty cmmnt <> " -->"
 
 -- | Internal: gets tag from text format
 fmtTag :: Format -> Text
@@ -135,20 +151,20 @@ headTag H5 = "h5"
 headTag H6 = "h6"
 
 -- | Internal: Render the element and its children in the same line
-renderLine :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
-renderLine opt tag attrs ch = wrapLine tag attrs $ renderBody opt <$> ch
+renderLine :: Text -> [Attr] -> [HTMLBody] -> Reader HTMLRenderOptions (Doc ann)
+renderLine tag attrs ch = wrapLine tag attrs <$> traverse renderBody ch
 
 -- | Internal: Render the children breaking lines
-renderBlock :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
-renderBlock opt tag attrs ch = wrapBlock opt tag attrs $ renderBody opt <$> ch
+renderBlock :: Text -> [Attr] -> [HTMLBody] -> Reader HTMLRenderOptions (Doc ann)
+renderBlock tag attrs ch = traverse renderBody ch >>= wrapBlock tag attrs
 
 -- | Internal: Render the element as a block, but keep all children on a single indented line
-renderBlockInline :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
-renderBlockInline _ tag attrs [] = wrapLine tag attrs []
-renderBlockInline opt tag attrs ch = wrapBlockInline opt tag attrs (renderBody opt <$> ch)
+renderBlockInline :: Text -> [Attr] -> [HTMLBody] -> Reader HTMLRenderOptions (Doc ann)
+renderBlockInline tag attrs [] = pure $ wrapLine tag attrs []
+renderBlockInline tag attrs ch = traverse renderBody ch >>= wrapBlockInline tag attrs
 
 -- | Internal: Wrap an element with tag and its children breaking lines
-wrapBlock :: HTMLRenderOptions -> Text -> [Attr] -> [Doc ann] -> Doc ann
+wrapBlock :: Text -> [Attr] -> [Doc ann] -> Reader HTMLRenderOptions (Doc ann)
 wrapBlock = wrapBlockWith vcat
 
 -- | Internal: Wrap an element with tag and its children in the same line
@@ -157,17 +173,22 @@ wrapLine tag attrs docs =
   angles (pretty tag <> renderAttrs attrs) <> hcat docs <> angles ("/" <> pretty tag)
 
 -- | Internal: Wrap an element with tags on separate lines, but children on the same line
-wrapBlockInline :: HTMLRenderOptions -> Text -> [Attr] -> [Doc ann] -> Doc ann
+wrapBlockInline :: Text -> [Attr] -> [Doc ann] -> Reader HTMLRenderOptions (Doc ann)
 wrapBlockInline = wrapBlockWith hcat
 
 -- | Internal: Wraps block elements using a document combining function.
-wrapBlockWith :: ([Doc ann] -> Doc ann) -> HTMLRenderOptions -> Text -> [Attr] -> [Doc ann] -> Doc ann
-wrapBlockWith catDocs opt tag attrs docs =
-  vcat
-    [ angles (pretty tag <> renderAttrs attrs),
-      indent (indentationSize opt) (catDocs docs),
-      angles ("/" <> pretty tag)
-    ]
+wrapBlockWith :: ([Doc ann] -> Doc ann) -> Text -> [Attr] -> [Doc ann] -> Reader HTMLRenderOptions (Doc ann)
+wrapBlockWith catDocs tag attrs docs = do
+  layout <- asks htmlLayout
+  case layout of
+    InlineLayout -> pure $ wrapLine tag attrs docs
+    VerticalLayout -> do
+      indentation <- asks indentationSize
+      pure $ vcat
+        [ angles (pretty tag <> renderAttrs attrs),
+          indent indentation (catDocs docs),
+          angles ("/" <> pretty tag)
+        ]
 
 -- | Internal: Render attribute in the format 'key="value"'
 renderAttrs :: [Attr] -> Doc ann

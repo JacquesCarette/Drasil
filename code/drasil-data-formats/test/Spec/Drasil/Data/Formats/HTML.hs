@@ -32,10 +32,11 @@ blockquoteTag = customTag "blockquote"
 inputTag      = customTag "input"
 
 testRenderOptions :: HTMLRenderOptions
-testRenderOptions = HTMLRO (M.fromList [
+testRenderOptions = defaultHTMLRO
+  {customElementTagTypes = M.fromList [
     (blockquoteTag, Standard),
     (inputTag, Void)
-  ]) 2
+  ]}
 
 tagsHTMLTest :: HTML
 tagsHTMLTest =

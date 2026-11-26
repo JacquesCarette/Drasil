@@ -25,6 +25,7 @@ dependencies:
 - scientific
 - text
 - containers
+- transformers
 
 ghc-options:
 - -Wall

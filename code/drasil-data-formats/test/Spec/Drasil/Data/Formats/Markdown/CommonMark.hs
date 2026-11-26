@@ -149,10 +149,10 @@ headingValidationTests = testGroup "Heading validation"
       fmap (renderText . document . pure)
         (mkHeading H2 [Strong [Plain "Title"], Plain " ", Link "/target" [CodeSpan "x"]])
         @?= Right "## **Title** [```x```](</target>)",
-    testCase "accept inline HTML with renderer layout newlines" $
+    testCase "Custom HTML headings use inline layout" $
       fmap (renderText . document . pure)
         (mkHeading H1 [HTMLInline (HTML.Custom (HTML.CT "span") [] [HTML.RawText "x"])])
-        @?= Right "# <span><!-- --> &#32; x </span>"
+        @?= Right "# <span>x</span>"
   ]
 
 invalidHeadingCases :: [(String, [Inline])]

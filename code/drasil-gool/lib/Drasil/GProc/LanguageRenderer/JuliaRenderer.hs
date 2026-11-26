@@ -32,11 +32,10 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..), InternalBinderElim(..))
+  RenderMethod(..), MethodElim, BlockCommentSym(..), ScopeElim(..),
+  InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  uOp, bOp, variable, value, valueInt, function, visibility, parameter, method,
-  blockComment')
+  uOp, bOp, variable, value, valueInt, function, visibility, parameter, method)
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
@@ -133,11 +132,14 @@ instance FileSym JuliaCode FileData ModData where
     A.fileDoc jlExt m
   docMod = A.docMod jlExt
 
-instance RenderFile JuliaCode FileData ModData where
+instance RenderFile JuliaCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
-  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
+  commentedMod fl' cmt' = do
+    fl <- fl'
+    cmt <- cmt'
+    pure $ pure $ R.commentedMod (unJLC fl) cmt
 
   fileFromData = A.fileFromData (onCodeValue . fileD)
 
@@ -615,7 +617,7 @@ instance MethodSym JuliaCode MethodData Doc ParamData Body Variable TypeData whe
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance RenderMethod JuliaCode MethodData where
+instance RenderMethod JuliaCode MethodData Statement where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd "" d
@@ -639,13 +641,10 @@ instance RenderMod JuliaCode ModData where
 instance ModuleElim JuliaCode ModData where
   module' = modDoc . unJLC
 
-instance BlockCommentSym JuliaCode where
+instance BlockCommentSym JuliaCode Statement where
   blockComment lns = toCode $ R.blockCmt lns jlBlockCmtStart jlBlockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns jlDocCmtStart
     jlDocCmtEnd)
-
-instance BlockCommentElim JuliaCode where
-  blockComment' = unJLC
 
 -- convenience
 jlName, jlVersion :: String

@@ -37,9 +37,9 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderStatement(..), StatementElim(..), StatementTerm(..),
   RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
+  BlockCommentSym(..), ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
-  bOp, variable, value, function, visibility, parameter, method, blockComment')
+  bOp, variable, value, function, visibility, parameter, method)
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..), OORenderMethod(..),
   StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim)
@@ -148,11 +148,14 @@ instance FileSym CSharpCode FileData ModData where
 
   docMod = CP.doxMod csExt
 
-instance RenderFile CSharpCode FileData ModData where
+instance RenderFile CSharpCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
-  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
+  commentedMod fl' cmt' = do
+    fl <- fl'
+    cmt <- cmt'
+    pure $ pure $ R.commentedMod (unCSC fl) cmt
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
@@ -747,9 +750,11 @@ instance OOMethodSym CSharpCode MethodData Doc Doc ParamData Body Variable Value
   inOutMethod n s p = csInOut (method n s p)
   docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-instance RenderMethod CSharpCode MethodData where
-  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
-    (onStateValue (onCodeValue R.commentedItem) cmt)
+instance RenderMethod CSharpCode MethodData Statement where
+  commentedFunc cmt' m' = do
+    m <- m'
+    cmt <- cmt'
+    return $ return $ updateMthd (unCSC m) (R.commentedItem (statement cmt))
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
@@ -780,7 +785,7 @@ instance ClassSym CSharpCode Class StateVar MethodData where
 
   docClass = CP.doxClass
 
-instance RenderClass CSharpCode Class StateVar MethodData Doc where
+instance RenderClass CSharpCode Class StateVar MethodData Doc Statement where
   intClass = CP.intClass R.class'
   commentedClass = G.commentedClass
 
@@ -797,13 +802,10 @@ instance RenderMod CSharpCode ModData where
 instance ModuleElim CSharpCode ModData where
   module' = modDoc . unCSC
 
-instance BlockCommentSym CSharpCode where
-  blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
-  docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
-    blockCmtEnd)
-
-instance BlockCommentElim CSharpCode where
-  blockComment' = unCSC
+instance BlockCommentSym CSharpCode Statement where
+  blockComment lns = toCode (R.blockCmt lns blockCmtStart blockCmtEnd, Empty)
+  docComment = onStateValue (\lns -> toCode (R.docCmt lns docCmtStart
+    blockCmtEnd, Empty))
 
 addSystemImport :: VS a -> VS a
 addSystemImport = (>>) $ modify (addLangImportVS csSystem)

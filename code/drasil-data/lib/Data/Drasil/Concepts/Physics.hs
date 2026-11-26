@@ -19,7 +19,7 @@ physicCon :: [ConceptChunk]
 physicCon = [acceleration, angular,
   collision, compression, constAccel, damping, dampingCoeff,
   displacement, distance, elasticity, energy, fbd, force,
-  friction, gravity, height,
+  friction, gravity,
   impulseV, isotropy,
   joint, linear, mechEnergy,
   position, rectilinear,
@@ -40,7 +40,7 @@ physicCon' = [oneD, twoD, threeD]
 acceleration, angular,
   collision, compression, constAccel, damping, dampingCoeff, displacement,
   distance, elasticity, energy, fbd, force, friction, gravity,
-  height, impulseV, isotropy, joint,
+  impulseV, isotropy, joint,
   linear, mechEnergy, position,
   rectilinear, rigidBody, shm,
   space, speed, stiffCoeff, stress, time, velocity,
@@ -84,8 +84,6 @@ friction = cncpt''' (mkUid "friction") (cn' "friction")
   (S "the force resisting the relative motion of two surfaces")
 gravity = cncpt''' (mkUid "gravity") (cn "gravity")
   (S "the force that attracts one physical body with mass to another")
-height = cncpt''' (mkUid "height") (cn' "height")
-  (S "the" +:+ phrase distance +:+ S "above a reference point for a point of interest")
 horizontalMotion = cncpt''' (mkUid "horizontalMotion") (cn "horizontal motion")
   (S "the result of the tendency of any object in motion to remain in motion at constant velocity")
 isotropy = cncpt''' (mkUid "isotropy") (cn "isotropy")

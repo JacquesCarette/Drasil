@@ -245,14 +245,14 @@ inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
-  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusion, coilSA, tempC,
+  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
-  htCapLP, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
+  htCapLP, htFusion, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
 tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
-  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusion, coilSA, tempC,
+  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
@@ -340,11 +340,13 @@ htCapLPUnc = uq (constrained' htCapLP
   (exactDbl 2270)) defaultUncrt
 
 --Constraint 9
-htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
-  "amount of thermal energy required to completely melt a unit mass of a substance"
-  (sub cH lFusion) specificE Real
+htFusion = quant (mkUid "htFusion") (nounPhraseSP "specific latent heat of fusion")
+  (S "amount of thermal energy required to completely melt a unit mass of a substance")
+  (sub cH lFusion) Real specificE
+
+htFusionUnc = uq (constrained' htFusion
   [gtZeroConstr,
-  sfwrRange $ Bounded (Exc, sy htFusionMin) (Exc, sy htFusionMax)] (exactDbl 211600) defaultUncrt
+  sfwrRange $ Bounded (Exc, sy htFusionMin) (Exc, sy htFusionMax)] (exactDbl 211600)) defaultUncrt
 
 -- Constraint 10
 -- The "S "heating coil" " should be replaced by "phrase coil",

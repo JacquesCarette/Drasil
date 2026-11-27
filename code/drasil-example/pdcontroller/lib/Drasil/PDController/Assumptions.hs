@@ -9,7 +9,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Documentation (assumpDom)
+import Data.Drasil.Concepts.Documentation (assumpDom, simulation)
 
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.SI_Units (kilogram)

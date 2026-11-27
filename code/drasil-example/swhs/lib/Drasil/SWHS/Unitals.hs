@@ -29,7 +29,7 @@ import qualified Data.List.NonEmpty as NE
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : units <> unitless <> fmap dqdWr constrained
  <> unitalChuncks <> fmap dqdWr specParamValList <>
-   fmap dqdWr [absTolUnc, relTol]
+   [absTol, relTol]
 
 -- Symbols with Units --
 
@@ -241,7 +241,7 @@ constrained = fmap cnstrw' inputConstraints <> [tempWCon, tempPCMCon, watECon, p
 
 -- Input Constraints
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = fmap dqdWr (absTolUnc :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
+inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
@@ -441,8 +441,8 @@ pcmECon = constrained' pcmE
 -- Uncertainties with no Units --
 ---------------------------------
 
-absTol :: DefinedQuantityDict
-absTolUnc, relTol :: UncertQ
+absTol, relTol :: DefinedQuantityDict
+absTolUnc, relTolUnc :: UncertQ
 
 absTol = quantNoUnit (mkUid "absTol") (nounPhraseSP "absolute tolerance")
   (S "the absolute tolerance") (sub cA lTol) Real
@@ -451,8 +451,10 @@ absTolUnc = uq (constrained' absTol
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)]
   (dbl (10.0**(-10)))) (uncty 0.01 Nothing)
 
-relTol = uq (constrained' (quantNoUnit (mkUid "relTol") (nounPhraseSP "relative tolerance")
-  (S "the relative tolerance") (sub cR lTol) Real)
+relTol = quantNoUnit (mkUid "relTol") (nounPhraseSP "relative tolerance")
+  (S "the relative tolerance") (sub cR lTol) Real
+
+relTolUnc = uq (constrained' relTol
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)]
   (dbl (10.0**(-10)))) (uncty 0.01 Nothing)
 

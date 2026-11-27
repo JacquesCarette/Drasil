@@ -13,19 +13,19 @@ import Data.Drasil.Quantities.Thermodynamics (temp)
 import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTC, coilHTCMax,
   coilHTCMin, coilSA, coilSAMax, diam, htCapW, htCapWMax, htCapWMin, lInit,
   relTol, tankLength, tankLengthMax, tankLengthMin, tempC, timeFinal,
-  timeFinalMax, timeStep, wDensity, wDensityMax, wDensityMin, watE, tempW)
+  timeFinalMax, timeStep, wDensity, wDensityMax, wDensityMin, watE, tempWCon)
 
 inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = (fmap dqdWr constrained <> fmap dqdWr unconstrained) `NE.prependList` NE.singleton (dqdWr watE)
 
 outputs :: NE.NonEmpty ConstrConcept
-outputs =  tempW :| [watE]
+outputs =  tempWCon :| [watE]
 
 unconstrained :: [UncertQ]
 unconstrained = [absTol, relTol]
 
 constrained :: [UncertQ]
-constrained =  [coilSA, htCapW, coilHTC, tempInit,
+constrained = [coilSA, htCapW, coilHTC, tempInit,
   timeFinal, tankLength, tempC, timeStep, wDensity, diam]
   -- w_E, temp_W
 

@@ -54,7 +54,7 @@ eBalanceOnWtr = im (deModel' eBalanceOnWtrRC)
   ,qwUC tempPCM, qwUC timeFinal, qwC tempC $ UpFrom (Exc, sy tempInit)
   ,qwUC tempInit]
   -- [sy tempInit $< sy tempC]
-  (dqdWr tempW) []
+  tempW []
   -- [0 $<= sy time $<= sy timeFinal]
   [dRef koothoor2013] (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrDesc
 

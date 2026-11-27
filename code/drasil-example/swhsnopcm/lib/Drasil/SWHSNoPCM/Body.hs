@@ -44,7 +44,7 @@ import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
 import Drasil.SWHS.Unitals (deltaT, htFluxC, htFluxIn,
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
-  tempEnv, tempW, thFluxVect, volHtGen, watE,
+  tempEnv, tempW, tempWCon, thFluxVect, volHtGen, watE,
   wMass, wVol, absTol, relTol)
 import Drasil.SWHS.References (uriReferences)
 
@@ -145,7 +145,7 @@ si = mkSmithEtAlICO
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs
-  (fmap cnstrw' constrained <> [tempW, watE]) (piConst : specParamValList) symbols
+  (fmap cnstrw' constrained <> [tempWCon, watE]) (piConst : specParamValList) symbols
   symbMap
 
 purp :: Sentence
@@ -271,7 +271,7 @@ sensHtEdesc = foldlSent [ch sensHeat, S "occurs as long as the", phrase material
 --TODO: Implement physical properties of a substance
 
 dataConstListOut :: [ConstrConcept]
-dataConstListOut = [tempW, watE]
+dataConstListOut = [tempWCon, watE]
 
 --------------------------
 --Section 5 : REQUIREMENTS

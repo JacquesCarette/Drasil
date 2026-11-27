@@ -248,11 +248,13 @@ inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
-tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
-  htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity,
-  htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
+tempW :: DefinedQuantityDict
 
-tempPCM, tempW, watE, pcmE :: ConstrConcept
+tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
+  htCapLP, htFusion, coilSA, tempC, wDensity, htCapW, coilHTC,
+  pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
+
+tempWCon, tempPCM, watE, pcmE :: ConstrConcept
 
 -- Constraint 1
 tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
@@ -399,13 +401,15 @@ timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
 -- Output Constraints
 outputs :: NE.NonEmpty ConstrConcept
 --FIXME: Add typical values or use Nothing if not known
-outputs = tempW :| [tempPCM, watE, pcmE]
+outputs = tempWCon :| [tempPCM, watE, pcmE]
 
 -- Constraint 18
-tempW = cuc' "tempW"
+tempW = quant (mkUid "tempW")
   (nounPhraseSP "temperature of the water")
-  "the average kinetic energy of the particles within the water"
-  (sub (eqSymb temp) lWater) centigrade (Vect Real)
+  (S "the average kinetic energy of the particles within the water")
+  (sub (eqSymb temp) lWater) (Vect Real) centigrade
+
+tempWCon = constrained' tempW
   [physRange $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (exactDbl 0)
 
 -- Constraint 19

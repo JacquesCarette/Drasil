@@ -25,7 +25,7 @@ import Drasil.SWHS.DataDefs (balanceDecayRate)
 import Drasil.SWHS.GenDefs (htFluxWaterFromCoil)
 import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc3, heatEInWtr)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, htCapW, htFluxC, tauW, tempC,
-  tempInit, tempW, timeFinal, wMass)
+  tempInit, tempW, tempWCon, timeFinal, wMass)
 
 -- local
 import Drasil.SWHSNoPCM.Assumptions (assumpNIHGBW, assumpWAL)
@@ -43,7 +43,7 @@ eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im (newDEModel' eBalanceOnWtrRC)
   [qwC tempC $ UpFrom (Inc, sy tempInit)
   , qwUC tempInit, qwUC timeFinal, qwUC coilSA, qwUC coilHTC, qwUC htCapW, qwUC wMass]
-  (dqdWr tempW) []
+  tempW []
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
   [dRefInfo koothoor2013 $ RefNote "with PCM removed"]
   (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrNotes
@@ -52,7 +52,7 @@ eBalanceOnWtrRC :: DifferentialModel
 eBalanceOnWtrRC =
   makeASystemDE
     time
-    tempW
+    tempWCon
     coeffs
     unknowns
     constants

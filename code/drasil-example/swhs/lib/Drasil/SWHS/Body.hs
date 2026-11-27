@@ -52,9 +52,9 @@ import Drasil.SWHS.Requirements (funcReqs, nfRequirements,
   verifyEnergyOutput, funcReqsTables)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
-  htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
-  simTime, specParamValList, symbols, tempC, tempPCM,
-  tempW, thickness, watE)
+  htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmECon, pcmHTC, pcmSA,
+  simTime, specParamValList, symbols, tempC, tempPCM, tempPCMCon,
+  tempW, tempWCon, thickness, watE, watECon)
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
@@ -450,7 +450,7 @@ dataContFooter = foldlSent_ $ foldlSent <$> [
 ------------------------------
 
 outputConstraints :: [ConstrConcept]
-outputConstraints = [tempW, tempPCM, watE, pcmE] --FIXME: add "(by A11)" in Physical Constraints of `tempW` and `tempPCM`?
+outputConstraints = [tempWCon, tempPCMCon, watECon, pcmECon] --FIXME: add "(by A11)" in Physical Constraints of `tempW` and `tempPCM`?
 
 -- Other Notes:
 ---- Will there be a way to have asterisks for certain pieces of the table?

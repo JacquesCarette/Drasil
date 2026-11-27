@@ -1,5 +1,6 @@
 module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 
+import Control.Lens ((^.))
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
@@ -44,7 +45,7 @@ import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
 import Drasil.SWHS.Unitals (deltaT, htFluxC, htFluxIn,
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
-  tempEnv, tempW, thFluxVect, volHtGen, watE,
+  tempEnv, tempW, tempWCon, thFluxVect, volHtGen, watECon,
   wMass, wVol, absTol, relTol)
 import Drasil.SWHS.References (uriReferences)
 
@@ -61,14 +62,14 @@ import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
 import Drasil.SWHSNoPCM.References (citations, swhsNoPCMOriginal)
-import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
+import Drasil.SWHSNoPCM.Unitals (inputs, inQuantities, constrained, specParamValList, outputs)
 import Drasil.SWHS.MetaConcepts (swhs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = concepts <> fmap dqdWr constrained <>
+symbols = concepts <> inQuantities <>
   [gradient, pi_, uNormalVect, surface] <> symbolConcepts <>
-  fmap dqdWr specParamValList <> fmap dqdWr [absTol, relTol] <> fmap dqdWr (NE.toList outputs)
+  fmap (^. defLhs) specParamValList <> [absTol, relTol] <> NE.toList outputs
 
 concepts :: [DefinedQuantityDict]
 concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
@@ -145,7 +146,7 @@ si = mkSmithEtAlICO
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs
-  (fmap cnstrw' constrained <> [tempW, watE]) (piConst : specParamValList) symbols
+  (fmap cnstrw' constrained <> [tempWCon, watECon]) (piConst : specParamValList) symbols
   symbMap
 
 purp :: Sentence
@@ -271,7 +272,7 @@ sensHtEdesc = foldlSent [ch sensHeat, S "occurs as long as the", phrase material
 --TODO: Implement physical properties of a substance
 
 dataConstListOut :: [ConstrConcept]
-dataConstListOut = [tempW, watE]
+dataConstListOut = [tempWCon, watECon]
 
 --------------------------
 --Section 5 : REQUIREMENTS

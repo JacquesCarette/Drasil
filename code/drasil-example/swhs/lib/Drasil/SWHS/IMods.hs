@@ -54,7 +54,7 @@ eBalanceOnWtr = im (deModel' eBalanceOnWtrRC)
   ,qwUC tempPCM, qwUC timeFinal, qwC tempC $ UpFrom (Exc, sy tempInit)
   ,qwUC tempInit]
   -- [sy tempInit $< sy tempC]
-  (dqdWr tempW) []
+  tempW []
   -- [0 $<= sy time $<= sy timeFinal]
   [dRef koothoor2013] (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrDesc
 
@@ -165,7 +165,7 @@ eBalanceOnPCM :: InstanceModel
 eBalanceOnPCM = im (deModel' eBalanceOnPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
   , qwUC timeFinal, qwUC tempInit, qwUC pcmSA
   , qwUC pcmHTC, qwUC pcmMass, qwUC htCapSP, qwUC htCapLP]
-  (dqdWr tempPCM) []
+  tempPCM []
   [dRef koothoor2013] (Just eBalanceOnPCMDeriv) "eBalanceOnPCM" balPCMNotes
 
 eBalanceOnPCMRC :: RelationConcept
@@ -277,7 +277,7 @@ eq6_2 = (deriv (sy tempPCM) time) $= 0
 heatEInWtr :: InstanceModel
 heatEInWtr = imNoDeriv heatEInWtrMK
   [qwUC tempInit, qwUC wMass, qwUC htCapW, qwUC wMass]
-  (dqdWr watE) [] [dRef koothoor2013]
+  watE [] [dRef koothoor2013]
   "heatEInWtr" htWtrNotes
 
 heatEInWtrMK :: ModelKind Expr
@@ -308,7 +308,7 @@ heatEInPCM :: InstanceModel
 heatEInPCM = imNoDeriv (deModel' heatEInPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
   , qwUC timeFinal, qwUC tempInit, qwUC pcmSA, qwUC pcmHTC
   , qwUC pcmMass, qwUC htCapSP, qwUC htCapLP, qwUC tempPCM, qwUC htFusion, qwUC tInitMelt]
-  (dqdWr pcmE)
+  pcmE
   [] [dRef koothoor2013]
   "heatEInPCM" htPCMNotes
 

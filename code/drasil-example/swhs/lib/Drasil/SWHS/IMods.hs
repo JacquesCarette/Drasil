@@ -308,7 +308,7 @@ heatEInPCM :: InstanceModel
 heatEInPCM = imNoDeriv (deModel' heatEInPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
   , qwUC timeFinal, qwUC tempInit, qwUC pcmSA, qwUC pcmHTC
   , qwUC pcmMass, qwUC htCapSP, qwUC htCapLP, qwUC tempPCM, qwUC htFusion, qwUC tInitMelt]
-  (dqdWr pcmE)
+  pcmE
   [] [dRef koothoor2013]
   "heatEInPCM" htPCMNotes
 

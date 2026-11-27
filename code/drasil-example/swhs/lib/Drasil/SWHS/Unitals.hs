@@ -237,7 +237,7 @@ aspectRatioMax = quantNoUnit (mkUid "aspectRatioMax")
 -----------------
 
 constrained :: [ConstrConcept]
-constrained = fmap cnstrw' inputConstraints <> NE.toList outputs
+constrained = fmap cnstrw' inputConstraints <> [tempWCon, tempPCMCon, watECon, pcmECon]
 
 -- Input Constraints
 inputs :: NE.NonEmpty DefinedQuantityDict
@@ -248,13 +248,13 @@ inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
-tempW, tempPCM, watE :: DefinedQuantityDict
+tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
   htCapLP, htFusion, coilSA, tempC, wDensity, htCapW, coilHTC,
   pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
-tempWCon, tempPCMCon, watECon, pcmE :: ConstrConcept
+tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
 
 -- Constraint 1
 tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
@@ -399,9 +399,9 @@ timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   (dbl 0.01) defaultUncrt
 
 -- Output Constraints
-outputs :: NE.NonEmpty ConstrConcept
+outputs :: NE.NonEmpty DefinedQuantityDict
 --FIXME: Add typical values or use Nothing if not known
-outputs = tempWCon :| [tempPCMCon, watECon, pcmE]
+outputs = tempW :| [tempPCM, watE, pcmE]
 
 -- Constraint 18
 tempW = quant (mkUid "tempW")
@@ -430,9 +430,11 @@ watECon = constrained' watE
   [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)
 
 -- Constraint 21
-pcmE = cuc' "pcmE" (nounPhraseSP "change in heat energy in the PCM")
-  "change in thermal energy within the phase change material"
-  (sub (eqSymb sensHeat) lPCM) joule Real
+pcmE = quant (mkUid "pcmE") (nounPhraseSP "change in heat energy in the PCM")
+  (S "change in thermal energy within the phase change material")
+  (sub (eqSymb sensHeat) lPCM) Real joule
+
+pcmECon = constrained' pcmE
   [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)
 
 ---------------------------------

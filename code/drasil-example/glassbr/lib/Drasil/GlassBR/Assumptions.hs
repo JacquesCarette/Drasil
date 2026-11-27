@@ -13,7 +13,8 @@ import Drasil.System (projAbrvS)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,
   constant, practice, reference, scenario, system, value)
-import Data.Drasil.Concepts.Math (calculation, surface, shape)
+import Data.Drasil.Concepts.Math (calculation, shape)
+import Data.Drasil.Quantities.Math (surface)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass,

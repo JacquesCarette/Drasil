@@ -17,12 +17,15 @@ import Data.Drasil.Citations
 
 import Data.Drasil.Concepts.Documentation (assumption, condition, constraint,
   goal, input_, solution, output_)
-import Data.Drasil.Concepts.Math (change, equation, ode, rightSide, rOfChng, surArea)
-import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
-import Data.Drasil.Concepts.Thermodynamics (boiling, heat, heatCapSpec,
-  heatTrans, htFlux, melting, phaseChange, sensHeat, temp)
+import Data.Drasil.Concepts.Math (change, equation, ode, rightSide, rOfChng)
+import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
+import Data.Drasil.Concepts.Thermodynamics (boiling, heat,
+  heatTrans, melting, phaseChange)
+import Data.Drasil.Quantities.Math (surArea)
+import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Quantities.Thermodynamics (boilPt, latentHeat)
+import Data.Drasil.Quantities.Thermodynamics (boilPt, heatCapSpec, htFlux,
+  latentHeat, sensHeat, temp)
 
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpTHCCoL,

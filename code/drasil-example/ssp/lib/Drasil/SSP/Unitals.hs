@@ -206,7 +206,7 @@ units = [accel, genericMass, genericF, genericA, genericM, genericV,
   porePressure, sliceHght, sliceHghtW, fx, fy, fn, ft, nrmForceSum, watForceSum,
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totNormStress, tangStress,
   effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm, posVec,
-  time, surface, len, elastMod, nrmStrss, stffness]
+  time, surface, len, distance, elastMod, nrmStrss, stffness]
 
 accel, genericMass, genericF, genericA, genericM, genericV, genericW,
   genericSpWght, gravAccel, dens, genericH, genericP, genericR, genericT,

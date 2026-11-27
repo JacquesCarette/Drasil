@@ -7,7 +7,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (model, likeChgDom, unlikeChgDom)
-import Data.Drasil.Concepts.Thermodynamics (temp)
+import Data.Drasil.Quantities.Thermodynamics (temp)
 
 import Drasil.SWHSNoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpWAL)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr)

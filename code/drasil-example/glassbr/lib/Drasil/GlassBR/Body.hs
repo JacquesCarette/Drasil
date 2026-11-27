@@ -32,7 +32,7 @@ import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab, ptOfExplsn, con',
-  glass, blast, blastTy, bomb, explosion, glassTy, glBreakage, load, probBreak,
+  glass, blast, blastTy, bomb, explosion, glassTy, glBreakage, probBreak,
   cis')
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.LabelledContent
@@ -44,9 +44,9 @@ import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations,
   glassBROriginal)
 import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.TMods (tMods)
-import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
+import Drasil.GlassBR.Unitals (constants, constrained, eqTNTWeight, inputs, outputs,
   specParamVals, glassTypes, lateralLoad, loadTypes, pbTol, probBr, stressDistFac,
-  termsWithDefsOnly, concepts, dataConstraints, symbols,
+  termsWithDefsOnly, tmDemand, concepts, dataConstraints, symbols,
   loadSF, gTF, aspectRatio, standOffDist, lRe, nonFactorL)
 import Drasil.GlassBR.Units (units)
 
@@ -136,7 +136,7 @@ termsAndDescBullets :: Contents
 termsAndDescBullets = UlC $ ulcc $ Enumeration$
   Numeric $
     noRefs $
-      fmap tAndDOnly termsWithDefsOnly
+      fmap tAndDOnly termsWithDefsOnly <> [tAndDOnly eqTNTWeight]
       <> termsAndDescBulletsGlTySubSec
       <> termsAndDescBulletsLoadSubSec
       <> [tAndDOnly standOffDist, tAndDOnly loadSF, tAndDOnly gTF, tAndDOnly aspectRatio]
@@ -148,7 +148,7 @@ termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
 termsAndDescBulletsGlTySubSec = [Nested (EmptyS +: titleize glassTy) $
   Bullet $ noRefs $ tAndDWAcc <$> glassTypes]
 
-termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` capSent (load ^. defn) !.) $
+termsAndDescBulletsLoadSubSec = [Nested (atStart tmDemand `sDash` capSent (tmDemand ^. defn) !.) $
   Bullet $ noRefs $ [tAndDOnly lRe, tAndDOnly nonFactorL] <> fmap tAndDOnly loadTypes]
 
 --Used in "Values of Auxiliary Constants" Section--

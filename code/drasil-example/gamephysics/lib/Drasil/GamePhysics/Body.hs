@@ -25,10 +25,10 @@ import Data.Drasil.Software.Products (openSource, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass)
 import qualified Data.Drasil.Concepts.Physics as CP (elasticity,
-  rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
+  rigidBody, collision, damping, angular, linear, friction, joint, motion, space)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian,
   rightHand, line, point)
-import qualified Data.Drasil.Quantities.Physics as QP (force, time)
+import Data.Drasil.Quantities.Physics (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
@@ -60,8 +60,8 @@ mkSRS = [TableOfContents,
    SSDSec $ SSDProg
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
-        , Goals [S "the kinematic" +:+ plural property `sC` S "and" +:+ plural QP.force +:+
-                 sParen (S "including any" +:+ phrase CP.collision +:+ plural QP.force) +:+
+        , Goals [S "the kinematic" +:+ plural property `sC` S "and" +:+ plural force +:+
+                 sParen (S "including any" +:+ phrase CP.collision +:+ plural force) +:+
                  S "applied on a set of" +:+ plural CP.rigidBody]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -112,7 +112,7 @@ cis = [centreMass]
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   softwarecon <> [CP.angular, CP.linear, CP.rigidBody, CP.collision,
-  CP.damping, CP.friction, CP.joint, CP.energy, CP.motion, CP.space,
+  CP.damping, CP.friction, CP.joint, CP.motion, CP.space,
   CP.elasticity]
 
 symbMap :: ChunkDB
@@ -159,7 +159,7 @@ para1_introduction_intro = foldlSent
 ---------------------------------
 scope :: Sentence
 scope = foldlSent_ [D.toSent (phraseNP (the physicalSim)) `S.of_` short twoD,
-  plural CP.rigidBody, S "acted on by", plural QP.force]
+  plural CP.rigidBody, S "acted on by", plural force]
 
 --scope_of_requirements_intro_p2 = EmptyS
 
@@ -198,7 +198,7 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", D.toSent (phraseNP (pr
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide initial" +:+ D.toSent (pluralNP (condition `ofThePS`
   physical)) +:+ S "state" `S.ofThe` phrase simulation `sC`
-  plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
+  plural CP.rigidBody +:+ S "present, and" +:+ plural force +:+.
   S "applied to them",
   S "Ensure application programming" +:+ phrase interface +:+
   S "use complies with the" +:+ phrase user +:+. phrase guide,
@@ -259,7 +259,7 @@ probDescIntro = foldlSent_
   S "need", plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
   plural condition `sC` S "while simultaneously being fast and efficient enough to work in soft",
   phrase realtime, S "during the" +:+. phrase game, S "Developing a",
-  phrase physLib, S "from scratch takes a long period" `S.of_` phrase QP.time `S.and_`
+  phrase physLib, S "from scratch takes a long period" `S.of_` phrase time `S.and_`
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
   phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+.
   plural product_, S "There are a few free" `sC` phrase openSource `S.and_` S "high quality",

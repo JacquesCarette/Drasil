@@ -53,7 +53,7 @@ riskQD = mkQuantDef riskFun ((sy sflawParamK $/
 
 strDisFac :: InstanceModel
 strDisFac = imNoDeriv (equationalModelN (stressDistFac ^. term) strDisFacQD)
-  (qwC aspectRatio aspectRatioConstraint : [qwUC dimlessLoad]) (dqdWr stressDistFac)
+  (qwC aspectRatio aspectRatioConstraint : [qwUC dimlessLoad]) stressDistFac
   [Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)]
   [dRef astm2009] "stressDistFac"
   [interpolating stressDistFac dimlessloadVsARFig, arRef, qHtRef]

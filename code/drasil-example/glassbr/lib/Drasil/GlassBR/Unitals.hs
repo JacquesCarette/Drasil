@@ -29,7 +29,7 @@ import Drasil.GlassBR.Units (sFlawPU)
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList inputs <> tmSymbols <> fmap dqdWr specParamVals <>
   [modElas] <> interps <> unitalSymbols <>
-  unitless <> fmap dqdWr [probBrCon, stressDistFac] <>
+  unitless <> [probBr, stressDistFac] <>
   [standOffDist, aspectRatio] <>
   mathunitals <> physicalquants <> mathquants
 
@@ -150,14 +150,14 @@ glassTypeCon = constrainedNRV' glassTypeQ
   [sfwrElem $ mkSet String $ str . abrv . snd <$> glassType]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
-outputs = (isSafePb :| [isSafeLR]) <> fmap dqdWr (probBrCon :| [stressDistFac])
+outputs = isSafePb :| [isSafeLR, probBr, stressDistFac]
 
 -- | Symbols uniquely relevant to theory models.
 tmSymbols :: [DefinedQuantityDict]
 tmSymbols = dqdWr <$> [probFail, pbTolfail]
 
-probBr :: DefinedQuantityDict
-probBrCon, probFail, pbTolfail, stressDistFac :: ConstrConcept
+probBr, stressDistFac :: DefinedQuantityDict
+probBrCon, probFail, pbTolfail, stressDistFacCon :: ConstrConcept
 probBr = quantNoUnit' (mkUid "probBr")
   (nounPhraseSP "probability of breakage")
   (foldlSent_ [S "the fraction of glass lites or plies that would break at the",
@@ -167,9 +167,12 @@ probBr = quantNoUnit' (mkUid "probBr")
 
 probBrCon = constrained' probBr [probConstr] (dbl 0.4)
 
-stressDistFac = cucNoUnit' "stressDistFac" (nounPhraseSP "stress distribution factor (Function)")
-  "the stress distribution factor of the glass plate"
-  cJ Real [physRange $ Bounded (Inc, sy stressDistFacMin)
+stressDistFac = quantNoUnit (mkUid "stressDistFac")
+  (nounPhraseSP "stress distribution factor (Function)")
+  (S "the stress distribution factor of the glass plate") cJ Real
+
+stressDistFacCon = constrained' stressDistFac
+  [physRange $ Bounded (Inc, sy stressDistFacMin)
   (Inc, sy stressDistFacMax)] (exactDbl 15)
 
 probFail = cucNoUnit' "probFail" (nounPhraseSP "probability of failure")

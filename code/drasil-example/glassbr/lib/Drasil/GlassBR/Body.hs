@@ -45,7 +45,7 @@ import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations,
 import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (constants, constrained, eqTNTWeight, inputs, outputs,
-  specParamVals, glassTypes, lateralLoad, loadTypes, pbTol, probBr, probBrCon, stressDistFac,
+  specParamVals, glassTypes, lateralLoad, loadTypes, pbTol, probBr, probBrCon, stressDistFacCon,
   termsWithDefsOnly, tmDemand, concepts, dataConstraints, symbols,
   loadSF, gTF, aspectRatio, standOffDist, lRe, nonFactorL)
 import Drasil.GlassBR.Units (units)
@@ -85,7 +85,7 @@ mkSRS = [TableOfContents,
         , DDs [] ([Label, Symbol, Units] <> stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] <> stdFields) HideDerivation
         , Constraints auxSpecSent dataConstraints
-        , CorrSolnPpties [probBrCon, stressDistFac] []
+        , CorrSolnPpties [probBrCon, stressDistFacCon] []
         ]
       ],
   ReqrmntSec $ ReqsProg [

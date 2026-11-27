@@ -148,8 +148,7 @@ instance RenderFile PythonCode FileData ModData Statement where
 
   commentedMod fl' cmt' = do
     fl <- fl'
-    cmt <- cmt'
-    pure $ pure $ R.commentedMod (unPC fl) cmt
+    pure . R.commentedMod (unPC fl) <$> cmt'
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
 

@@ -400,7 +400,7 @@ moduleDox desc watermark as date m = (doxFile P.<> m) :
   [doxNote P.<> watermark]
 
 commentedMod :: (StatementElim r stmt) => FileData -> r stmt -> FileData
-commentedMod m cmt = updateFileMod (updateMod (commentedItem $ (RC.statement cmt) $+$ blank) (fileMod m)) m
+commentedMod m cmt = updateFileMod (updateMod (commentedItem $ RC.statement cmt $+$ blank) (fileMod m)) m
 
 -- Helper Functions --
 

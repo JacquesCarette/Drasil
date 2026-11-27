@@ -155,8 +155,7 @@ instance RenderFile JavaCode FileData ModData Statement where
 
   commentedMod fl' cmt' = do
     fl <- fl'
-    cmt <- cmt'
-    pure $ pure $ R.commentedMod (unJC fl) cmt
+    pure . R.commentedMod (unJC fl) <$> cmt'
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
@@ -775,7 +774,7 @@ instance RenderMethod JavaCode MethodData Statement where
   commentedFunc cmt' m' = do
     m <- m'
     cmt <- cmt'
-    return $ return $ updateMthd (unJC m) (R.commentedItem (statement cmt))
+    pure $ pure $ updateMthd (unJC m) (R.commentedItem (statement cmt))
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 

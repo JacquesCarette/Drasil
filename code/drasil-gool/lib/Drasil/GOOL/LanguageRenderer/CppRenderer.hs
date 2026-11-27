@@ -1613,7 +1613,7 @@ instance RenderFile CppHdrCode FileData ModData Statement where
     fl <- fl'
     cmt <- cmt'
     let m = unCPPHC fl
-    pure $ pure $ if isEmpty (RC.module' $ (pure $ fileMod m :: CppHdrCode ModData))
+    pure $ pure $ if isEmpty (RC.module' (pure $ fileMod m :: CppHdrCode ModData))
       then m
       else R.commentedMod m cmt
 

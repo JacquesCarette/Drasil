@@ -122,8 +122,7 @@ instance RenderFile MatlabCode FileData ModData Statement where
   bottom = toCode empty
   commentedMod fl' cmt' = do
     fl <- fl'
-    cmt <- cmt'
-    pure $ pure $ R.commentedMod (unMLC fl) cmt
+    pure . R.commentedMod (unMLC fl) <$> cmt'
   fileFromData = A.fileFromData (onCodeValue . fileD)
 
 instance ImportSym MatlabCode where

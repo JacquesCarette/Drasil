@@ -138,8 +138,7 @@ instance RenderFile JuliaCode FileData ModData Statement where
 
   commentedMod fl' cmt' = do
     fl <- fl'
-    cmt <- cmt'
-    pure $ pure $ R.commentedMod (unJLC fl) cmt
+    pure . R.commentedMod (unJLC fl) <$> cmt'
 
   fileFromData = A.fileFromData (onCodeValue . fileD)
 

@@ -8,7 +8,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators (combineNINI, inThe, of_)
 import Data.Drasil.Concepts.Math (axis, cartesian, point, xComp, xDir, yComp, yDir)
 import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angular,
-  constAccel, displacement, distance, energy, force, height,
+  constAccel, displacement, distance, energy, force,
   impulseV, linear, position, rigidBody, speed, stress, time, velocity)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Drasil.Database (mkUid)
@@ -87,7 +87,9 @@ gravitationalConst     = quant (mkUid "gravitationalConst") (cn "gravitational c
 gravitationalMagnitude = quant (mkUid "gravitationalMagnitude") (cn "magnitude of gravitational acceleration")
                            (S "the magnitude of the approximate acceleration due to gravity on Earth at sea level")
                            lG Real accelU
-height                 = dqd CP.height                 lH                                          Real        metre
+height                 = quant (mkUid "height") (cn' "height")
+                           (S "the" +:+ phrase distance +:+ S "above a reference point for a point of interest")
+                           lH Real metre
 impulseS               = quant (mkUid "impulseS") (cn "impulse (scalar)")
                            (S "a force acting briefly on a body and producing a finite change of momentum")
                            lJ Real impulseU

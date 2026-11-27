@@ -45,7 +45,7 @@ import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtET
 import Drasil.SWHS.Unitals (deltaT, htFluxC, htFluxIn,
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
   tempEnv, tempW, tempWCon, thFluxVect, volHtGen, watECon,
-  wMass, wVol, absTol, relTol)
+  wMass, wVol, absTolUnc, relTol)
 import Drasil.SWHS.References (uriReferences)
 
 import Drasil.SWHSNoPCM.Assumptions
@@ -68,7 +68,7 @@ import Drasil.SWHS.MetaConcepts (swhs)
 symbols :: [DefinedQuantityDict]
 symbols = concepts <> fmap dqdWr constrained <>
   [gradient, pi_, uNormalVect, surface] <> symbolConcepts <>
-  fmap dqdWr specParamValList <> fmap dqdWr [absTol, relTol] <> NE.toList outputs
+  fmap dqdWr specParamValList <> fmap dqdWr [absTolUnc, relTol] <> NE.toList outputs
 
 concepts :: [DefinedQuantityDict]
 concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,

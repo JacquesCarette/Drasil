@@ -244,15 +244,15 @@ inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
-inputConstraints = [tankLengthUnc, diam, pcmVol, pcmSA, pcmDensity,
+inputConstraints = [tankLengthUnc, diamUnc, pcmVol, pcmSA, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
-tankLength, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
+tankLength, diam, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
-tankLengthUnc, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
-  htCapLP, htFusion, coilSA, tempC, wDensity, htCapW, coilHTC,
-  pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
+tankLengthUnc, diamUnc, pcmVol, pcmSA, pcmDensity, tempMeltP,
+  htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity, htCapW,
+  coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
 
@@ -266,10 +266,12 @@ tankLengthUnc = uq (constrained' tankLength
   defaultUncrt
 
 -- Constraint 2
-diam = uqc "diam" (nounPhraseSP "diameter of tank")
-  "the diameter of the tank" cD metre Real
+diam = quant (mkUid "diam") (nounPhraseSP "diameter of tank")
+  (S "the diameter of the tank") cD Real metre
+
+diamUnc = uq (constrained' diam
   [gtZeroConstr, sfwrRange $ Bounded (Inc, sy arMin) (Inc, sy arMax)]
-  (dbl 0.412) defaultUncrt
+  (dbl 0.412)) defaultUncrt
 
 -- Constraint 3
 pcmVol = uqc "pcmVol" (nounPhraseSP "volume of PCM")

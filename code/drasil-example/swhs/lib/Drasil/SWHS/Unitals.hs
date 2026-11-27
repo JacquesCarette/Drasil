@@ -244,23 +244,25 @@ inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
-inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
+inputConstraints = [tankLengthUnc, diam, pcmVol, pcmSA, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
-tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
+tankLength, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
-tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
+tankLengthUnc, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
   htCapLP, htFusion, coilSA, tempC, wDensity, htCapW, coilHTC,
   pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
 
 -- Constraint 1
-tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
-  "the length of the tank" cL metre Real
+tankLength = quant (mkUid "tankLength") (nounPhraseSP "length of tank")
+  (S "the length of the tank") cL Real metre
+
+tankLengthUnc = uq (constrained' tankLength
   [gtZeroConstr,
-  sfwrRange $ Bounded (Inc, sy tankLengthMin) (Inc, sy tankLengthMax)] (dbl 1.5)
+  sfwrRange $ Bounded (Inc, sy tankLengthMin) (Inc, sy tankLengthMax)] (dbl 1.5))
   defaultUncrt
 
 -- Constraint 2

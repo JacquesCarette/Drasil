@@ -246,15 +246,15 @@ inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
   tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc, tempCUnc,
-  wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTC, tempInit, timeStep, timeFinal]
+  wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTCUnc, tempInit, timeStep, timeFinal]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
-  htCapLP, htFusion, coilSA, tempC, wDensity, htCapW, coilHTC, tempW,
-  tempPCM, watE, pcmE :: DefinedQuantityDict
+  htCapLP, htFusion, coilSA, tempC, wDensity, htCapW, coilHTC,
+  pcmHTC, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
 tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
   tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc,
-  tempCUnc, wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTC, tempInit,
+  tempCUnc, wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTCUnc, tempInit,
   timeStep, timeFinal :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
@@ -400,13 +400,15 @@ coilHTCUnc = uq (constrained' coilHTC
   sfwrRange $ Bounded (Inc, sy coilHTCMin) (Inc, sy coilHTCMax)] (exactDbl 1000)) defaultUncrt
 
 -- Constraint 15
-pcmHTC = uqc "pcmHTC"
+pcmHTC = quant (mkUid "pcmHTC")
   (nounPhraseSP "convective heat transfer coefficient between PCM and water")
-  ("the convective heat transfer coefficient that models " <>
+  (S $ "the convective heat transfer coefficient that models " <>
    "the thermal flux from the phase change material to the surrounding water")
-  (sub lH lPCM) UT.heatTransferCoef Real
+  (sub lH lPCM) Real UT.heatTransferCoef
+
+pcmHTCUnc = uq (constrained' pcmHTC
   [gtZeroConstr,
-  sfwrRange $ Bounded (Inc, sy pcmHTCMin) (Inc, sy pcmHTCMax)] (exactDbl 1000) defaultUncrt
+  sfwrRange $ Bounded (Inc, sy pcmHTCMin) (Inc, sy pcmHTCMax)] (exactDbl 1000)) defaultUncrt
 
 -- Constraint 16
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")

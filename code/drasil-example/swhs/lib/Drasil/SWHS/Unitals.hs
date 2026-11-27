@@ -245,15 +245,15 @@ inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
-  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc, tempC,
+  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc, tempCUnc,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
-  htCapLP, htFusion, coilSA, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
+  htCapLP, htFusion, coilSA, tempC, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
 tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
   tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc,
-  tempC, wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep,
+  tempCUnc, wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep,
   timeFinal :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
@@ -361,10 +361,12 @@ coilSAUnc = uq (constrained' coilSA
   sfwrRange $ UpTo (Inc, sy coilSAMax)] (dbl 0.12)) defaultUncrt
 
 -- Constraint 11
-tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
-  "the average kinetic energy of the particles within the coil"
-  (sub (eqSymb temp) lCoil) centigrade Real
-  [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)] (exactDbl 50) defaultUncrt
+tempC = quant (mkUid "tempC") (nounPhraseSP "temperature of the heating coil")
+  (S "the average kinetic energy of the particles within the coil")
+  (sub (eqSymb temp) lCoil) Real centigrade
+
+tempCUnc = uq (constrained' tempC
+  [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)] (exactDbl 50)) defaultUncrt
 
 -- Constraint 12
 wDensity = uq (cuc'' "wDensity" (density `of_` water)

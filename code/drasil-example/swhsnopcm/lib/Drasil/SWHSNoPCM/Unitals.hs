@@ -10,7 +10,7 @@ import qualified Data.List.NonEmpty as NE
 import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTCUnc, coilHTCMax,
   coilHTCMin, coilSAUnc, coilSAMax, diamUnc, htCapWUnc, htCapWMax, htCapWMin,
   tempInit, relTol, tankLengthUnc, tankLengthMax, tankLengthMin, tempCUnc,
-  timeFinal, timeFinalMax, timeStep, wDensityUnc, wDensityMax, wDensityMin,
+  timeFinalUnc, timeFinalMax, timeStep, wDensityUnc, wDensityMax, wDensityMin,
   watE, tempW)
 
 inputs :: NE.NonEmpty DefinedQuantityDict
@@ -24,7 +24,7 @@ unconstrained = [absTol, relTol]
 
 constrained :: [UncertQ]
 constrained = [coilSAUnc, htCapWUnc, coilHTCUnc, tempInitUnc,
-  timeFinal, tankLengthUnc, tempCUnc, timeStep, wDensityUnc, diamUnc]
+  timeFinalUnc, tankLengthUnc, tempCUnc, timeStep, wDensityUnc, diamUnc]
   -- w_E, temp_W
 
 tempInitUnc :: UncertQ

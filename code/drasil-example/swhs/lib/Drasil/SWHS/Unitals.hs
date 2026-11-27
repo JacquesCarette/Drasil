@@ -246,16 +246,16 @@ inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
   tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc, tempCUnc,
-  wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTCUnc, tempInitUnc, timeStep, timeFinal]
+  wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTCUnc, tempInitUnc, timeStep, timeFinalUnc]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
   htCapLP, htFusion, coilSA, tempC, wDensity, htCapW, coilHTC,
-  pcmHTC, tempInit, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
+  pcmHTC, tempInit, timeFinal, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
 tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
   tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc,
   tempCUnc, wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTCUnc,
-  tempInitUnc, timeStep, timeFinal :: UncertQ
+  tempInitUnc, timeStep, timeFinalUnc :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
 
@@ -419,12 +419,14 @@ tempInitUnc = uq (constrained' tempInit
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, sy meltPt)] (exactDbl 40)) defaultUncrt
 
 -- Constraint 17
-timeFinal = uqc "timeFinal" (nounPhraseSP "final time")
-  ("the amount of time elapsed from the beginning of the " <>
+timeFinal = quant (mkUid "timeFinal") (nounPhraseSP "final time")
+  (S $ "the amount of time elapsed from the beginning of the " <>
    "simulation to its conclusion") (sub (eqSymb time)
-  lFinal) second Real
+  lFinal) Real second
+
+timeFinalUnc = uq (constrained' timeFinal
   [gtZeroConstr,
-  sfwrRange $ UpTo (Exc, sy timeFinalMax)] (exactDbl 50000) defaultUncrt
+  sfwrRange $ UpTo (Exc, sy timeFinalMax)] (exactDbl 50000)) defaultUncrt
 
 timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   ("the finite discretization of time used in the numerical method " <>

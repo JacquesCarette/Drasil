@@ -245,14 +245,14 @@ inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
-  tempMeltPUnc, htCapSPUnc, htCapLP, htFusion, coilSA, tempC,
+  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusion, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
-  tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
+  htCapLP, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
 tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
-  tempMeltPUnc, htCapSPUnc, htCapLP, htFusion, coilSA, tempC,
+  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusion, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
@@ -328,14 +328,16 @@ htCapSPUnc = uq (constrained' htCapSP
   (exactDbl 1760)) defaultUncrt
 
 -- Constraint 8
-htCapLP = uqc "htCapLP"
+htCapLP = quant (mkUid "htCapLP")
   (nounPhraseSP "specific heat capacity of PCM as a liquid")
-  ("the amount of energy required to raise the temperature of a " <>
+  (S $ "the amount of energy required to raise the temperature of a " <>
   "given unit mass of liquid phase change material by a given amount")
-  (sup (sub (eqSymb heatCapSpec) lPCM) lLiquid) UT.heatCapSpec Real
+  (sup (sub (eqSymb heatCapSpec) lPCM) lLiquid) Real UT.heatCapSpec
+
+htCapLPUnc = uq (constrained' htCapLP
   [gtZeroConstr,
   sfwrRange $ Bounded (Exc, sy htCapLPMin) (Exc, sy htCapLPMax )]
-  (exactDbl 2270) defaultUncrt
+  (exactDbl 2270)) defaultUncrt
 
 --Constraint 9
 htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")

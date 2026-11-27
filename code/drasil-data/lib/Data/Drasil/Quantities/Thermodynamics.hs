@@ -6,7 +6,6 @@ import Language.Drasil.ShortHands (cT, cC, lQ, cQ, cE)
 import Drasil.Database (mkUid)
 
 import Data.Drasil.SI_Units (centigrade, joule)
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatCapSpec, htFlux)
 import qualified Data.Drasil.Units.Thermodynamics as UT (heatCapSpec, thermalFlux)
 
 -- * With Units
@@ -22,8 +21,14 @@ boilPt        = quant (mkUid "boilPt") (cn' "boiling point temperature")
 temp          = quant (mkUid "temperature") (cn' "temperature")
                   (S "the degree or intensity of heat present in a substance or object")
                   cT Real centigrade
-heatCapSpec   = dqd CT.heatCapSpec cC                      Real UT.heatCapSpec
-htFlux        = dqd CT.htFlux      lQ                      Real UT.thermalFlux
+heatCapSpec   = quant (mkUid "heatCapSpec") (cnIES "specific heat capacity")
+                  (S ("the amount of energy required to raise the temperature " <>
+                      "of the unit mass of a given substance by a given amount"))
+                  cC Real UT.heatCapSpec
+htFlux        = quant (mkUid "htFlux") (cn'' "heat flux")
+                  (S ("the rate of thermal energy transfer through a given " <>
+                      "surface per unit time"))
+                  lQ Real UT.thermalFlux
 latentHeat    = quant (mkUid "latentHeat") (cn' "latent heat")
                   (S ("the heat required to convert a solid into a liquid or " <>
                       "vapor, or a liquid into a vapor, without change of temperature"))

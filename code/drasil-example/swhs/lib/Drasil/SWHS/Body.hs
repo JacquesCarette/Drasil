@@ -26,13 +26,13 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (force, mechEnergy)
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.Theory (inModel)
-import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans, htFlux,
+import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans,
   htTransTheo, lawConsEnergy, thermalAnalysis, thermalConduction, thermalEnergy,
   thermocon)
 import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat)
+import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, htFlux, latentHeat)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 
@@ -319,7 +319,7 @@ userChars pro = foldlSP [S "The end", phrase user `S.of_` projAbrvS pro,
 -----------------------------------------
 
 terms :: [ConceptChunk]
-terms = [htFlux, phaseChangeMaterial, cw heatCapSpec, thermalConduction, transient]
+terms = [cw htFlux, phaseChangeMaterial, cw heatCapSpec, thermalConduction, transient]
 
 -- Included heat flux and specific heat in NamedChunks even though they are
 -- already in SWHSUnits

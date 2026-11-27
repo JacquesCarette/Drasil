@@ -18,7 +18,6 @@ import Drasil.GlassBR.DataDefs (aGrtrThanB, arRef, calofDemand, glaTyFac,
 import Drasil.GlassBR.LabelledContent (dimlessloadVsARFig)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
-import Drasil.GlassBR.Concepts (demandq)
 import Drasil.GlassBR.Unitals
 
 iMods :: [InstanceModel]
@@ -187,7 +186,7 @@ pbTolUsr :: Sentence
 pbTolUsr = ch pbTol `S.is` S "entered by the" +:+. phrase user
 
 qRef :: Sentence
-qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. refS calofDemand
+qRef = ch demand `S.isThe` (demand ^. defn) `sC` S "as given in" +:+. refS calofDemand
 
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = iModDesc isSafeLR

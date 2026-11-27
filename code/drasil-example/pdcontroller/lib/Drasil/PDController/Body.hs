@@ -18,7 +18,7 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
 import Drasil.PDController.Concepts (acronyms, pidC, termDefs,
-  pdControllerCI, proportionalCI, piCI, pidCI, simulationTime, stepTime, ccLaplaceTransform)
+  pdControllerCI, proportionalCI, piCI, pidCI, ccLaplaceTransform)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
@@ -33,7 +33,8 @@ import Drasil.PDController.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
-  inpConstrained, pidConstants, propGain, derGain, setPoint, processVariable, absTol, relTol)
+  inpConstrained, pidConstants, propGain, derGain, setPoint, processVariable, absTol, relTol,
+  dqdSimTime, dqdStepTime)
 import Drasil.PDController.ODEs (pidODEInfo)
 
 mkSRS :: SRSDecl
@@ -61,7 +62,7 @@ mkSRS
               -- extends `termDefs` with non-unique chunks containing
               -- alternative definitions for use in the `Terminology and
               -- Definitions` section.
-              [TermsAndDefs Nothing (termDefs <> [simulationTime, cw processVariable, cw setPoint, cw propGain, cw derGain, ccLaplaceTransform, stepTime, cw absTol, cw relTol]),
+              [TermsAndDefs Nothing (termDefs <> [cw dqdSimTime, cw processVariable, cw setPoint, cw propGain, cw derGain, ccLaplaceTransform, cw dqdStepTime, cw absTol, cw relTol]),
                PhySysDesc sysParts sysFigure [],
                Goals sysGoalInput],
           SSDSolChSpec $

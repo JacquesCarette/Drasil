@@ -15,7 +15,7 @@ thermocon = [boiling, degree_', enerSrc, heat, heatTrans, htTransTheo,
   lawConsEnergy, lawConvCooling, melting, phaseChange, thermalAnalysis,
   thermalConduction, thermalConductor, thermalEnergy]
 
-boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans, htFlux,
+boiling, degree_', enerSrc, heat, heatTrans,
   htTransTheo, lawConsEnergy, lawConvCooling, melting,
   phaseChange, thermalAnalysis, thermalConduction,
   thermalConductor, thermalEnergy :: ConceptChunk
@@ -32,12 +32,6 @@ heat              = cncpt''' (mkUid "heat")              (cn "heat")
 heatTrans         = cncpt''' (mkUid "heatTrans")         (cn' "heat transfer")
                       (S ("the generation, use, conversion, and exchange of thermal " <>
                       "energy and heat between physical systems"))
-heatCapSpec       = cncpt''' (mkUid "heatCapSpec")       (cnIES "specific heat capacity")
-                      (S ("the amount of energy required to raise the temperature " <>
-                      "of the unit mass of a given substance by a given amount"))
-htFlux            = cncpt''' (mkUid "htFlux")            (cn'' "heat flux")
-                      (S ("the rate of thermal energy transfer through a given " <>
-                      "surface per unit time"))
 lawConsEnergy     = cncpt''' (mkUid "lawConsEnergy")     (nounPhraseSP "law of conservation of energy")
                       (S "the law that energy is conserved")
 lawConvCooling    = cncpt''' (mkUid "lawConvCooling")    (nounPhraseSP "Newton's law of cooling")

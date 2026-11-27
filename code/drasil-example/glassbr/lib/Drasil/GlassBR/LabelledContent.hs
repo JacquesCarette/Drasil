@@ -13,7 +13,6 @@ import qualified Language.Drasil.Sentence.Combinators as S (versus)
 
 import Data.Drasil.Concepts.Documentation (physicalSystem, sysCont)
 
-import Drasil.GlassBR.Concepts (demandq)
 import Drasil.GlassBR.Unitals (aspectRatio, charWeight, demand,
   dimlessLoad, lateralLoad, standOffDist, stressDistFac)
 
@@ -31,7 +30,7 @@ sysCtxFig = llccFig "sysCtxDiag" $
 physSystFig = llccFig "physSystImage" $ figWithWidth
   (D.toSent $ atStartNP $ the physicalSystem) (resourcePath <> "physicalsystimage.png") 30
 
-demandVsSDFig = llccFig "demandVSsod" $ fig ((demandq ^. defn) +:+
+demandVsSDFig = llccFig "demandVSsod" $ fig ((demand ^. defn) +:+
   sParen (ch demand) `S.versus` atStart standOffDist +:+ sParen (ch standOffDist)
   `S.versus` atStart charWeight +:+ sParen (ch charWeight))
   (resourcePath <> "ASTM_F2248-09.png")

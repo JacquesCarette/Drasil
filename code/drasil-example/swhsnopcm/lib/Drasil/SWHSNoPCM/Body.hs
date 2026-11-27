@@ -20,8 +20,8 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (force, mechEnergy)
 import Data.Drasil.Concepts.Software (softwarecon, program)
 import Data.Drasil.Concepts.Theory (inModel)
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatCapSpec, htFlux,
-  phaseChange, thermalAnalysis, thermalConduction, thermocon)
+import qualified Data.Drasil.Concepts.Thermodynamics as CT (phaseChange,
+  thermalAnalysis, thermalConduction, thermocon)
 
 import Data.Drasil.Quantities.Thermodynamics (temp,
   heatCapSpec, htFlux, sensHeat, meltPt, boilPt, latentHeat)
@@ -245,7 +245,7 @@ orgDocEnd = foldlSent [D.toSent (atStartNP (the inModel)),
 --Introduction of Problem Description section derived from purp
 
 terms :: [ConceptChunk]
-terms = [CT.htFlux, CT.heatCapSpec, CT.thermalConduction, transient]
+terms = [cw htFlux, cw heatCapSpec, CT.thermalConduction, transient]
 
 physSystParts :: [Sentence]
 physSystParts = foldlSent_ <$> [physSyst1 tank water, physSyst2 coil tank htFluxC]

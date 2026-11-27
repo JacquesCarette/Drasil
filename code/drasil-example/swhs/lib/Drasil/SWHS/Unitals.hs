@@ -246,16 +246,16 @@ inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
   tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc, tempCUnc,
-  wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTCUnc, tempInit, timeStep, timeFinal]
+  wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTCUnc, tempInitUnc, timeStep, timeFinal]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
   htCapLP, htFusion, coilSA, tempC, wDensity, htCapW, coilHTC,
-  pcmHTC, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
+  pcmHTC, tempInit, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
 tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
   tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc,
-  tempCUnc, wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTCUnc, tempInit,
-  timeStep, timeFinal :: UncertQ
+  tempCUnc, wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTCUnc,
+  tempInitUnc, timeStep, timeFinal :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
 
@@ -411,10 +411,12 @@ pcmHTCUnc = uq (constrained' pcmHTC
   sfwrRange $ Bounded (Inc, sy pcmHTCMin) (Inc, sy pcmHTCMax)] (exactDbl 1000)) defaultUncrt
 
 -- Constraint 16
-tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
-  "the temperature at the beginning of the simulation"
-  (sub (eqSymb temp) lInit) centigrade Real
-  [physRange $ Bounded (Exc, exactDbl 0) (Exc, sy meltPt)] (exactDbl 40) defaultUncrt
+tempInit = quant (mkUid "tempInit") (nounPhraseSP "initial temperature")
+  (S "the temperature at the beginning of the simulation")
+  (sub (eqSymb temp) lInit) Real centigrade
+
+tempInitUnc = uq (constrained' tempInit
+  [physRange $ Bounded (Exc, exactDbl 0) (Exc, sy meltPt)] (exactDbl 40)) defaultUncrt
 
 -- Constraint 17
 timeFinal = uqc "timeFinal" (nounPhraseSP "final time")

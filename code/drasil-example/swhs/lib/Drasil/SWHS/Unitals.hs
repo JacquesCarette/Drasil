@@ -27,9 +27,8 @@ import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : units <> unitless <> fmap dqdWr constrained
- <> unitalChuncks <> fmap dqdWr specParamValList <>
-   [absTol, relTol]
+symbols = pi_ : units <> unitless <> inQuantities <> NE.toList outputs
+ <> unitalChuncks <> fmap (^. defLhs) specParamValList <> [absTol, relTol]
 
 -- Symbols with Units --
 
@@ -241,21 +240,26 @@ constrained = fmap cnstrw' inputConstraints <> [tempWCon, tempPCMCon, watECon, p
 
 -- Input Constraints
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
+inputs = (absTol :| [relTol]) `NE.appendList` inQuantities
+
+inQuantities :: [DefinedQuantityDict]
+inQuantities = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
+  tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
+  wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
   tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc, tempCUnc,
-  wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTCUnc, tempInitUnc, timeStep, timeFinalUnc]
+  wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTCUnc, tempInitUnc, timeStepUnc, timeFinalUnc]
 
-tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
-  htCapLP, htFusion, coilSA, tempC, wDensity, htCapW, coilHTC,
-  pcmHTC, tempInit, timeFinal, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
+tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
+  htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity,
+  htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal,
+  tempPCM, tempW, watE, pcmE :: DefinedQuantityDict
 
-tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
-  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc,
-  tempCUnc, wDensityUnc, htCapWUnc, coilHTCUnc, pcmHTCUnc,
-  tempInitUnc, timeStep, timeFinalUnc :: UncertQ
+tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc, tempMeltPUnc,
+  htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc, tempCUnc, wDensityUnc,
+  htCapWUnc, coilHTCUnc, pcmHTCUnc, tempInitUnc, timeStepUnc, timeFinalUnc :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
 
@@ -428,12 +432,14 @@ timeFinalUnc = uq (constrained' timeFinal
   [gtZeroConstr,
   sfwrRange $ UpTo (Exc, sy timeFinalMax)] (exactDbl 50000)) defaultUncrt
 
-timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
-  ("the finite discretization of time used in the numerical method " <>
+timeStep = quant (mkUid "timeStep") (nounPhraseSP "time step for simulation")
+  (S $ "the finite discretization of time used in the numerical method " <>
    "for solving the computational model")
-  (sub (eqSymb time) lStep) second Real
+  (sub (eqSymb time) lStep) Real second
+
+timeStepUnc = uq (constrained' timeStep
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, sy timeFinal)]
-  (dbl 0.01) defaultUncrt
+  (dbl 0.01)) defaultUncrt
 
 -- Output Constraints
 outputs :: NE.NonEmpty DefinedQuantityDict

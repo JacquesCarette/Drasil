@@ -1,5 +1,6 @@
 module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 
+import Control.Lens ((^.))
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
@@ -61,14 +62,14 @@ import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
 import Drasil.SWHSNoPCM.References (citations, swhsNoPCMOriginal)
-import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
+import Drasil.SWHSNoPCM.Unitals (inputs, inQuantities, constrained, specParamValList, outputs)
 import Drasil.SWHS.MetaConcepts (swhs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = concepts <> fmap dqdWr constrained <>
+symbols = concepts <> inQuantities <>
   [gradient, pi_, uNormalVect, surface] <> symbolConcepts <>
-  fmap dqdWr specParamValList <> [absTol, relTol] <> NE.toList outputs
+  fmap (^. defLhs) specParamValList <> [absTol, relTol] <> NE.toList outputs
 
 concepts :: [DefinedQuantityDict]
 concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,

@@ -1,5 +1,5 @@
 module Drasil.SWHSNoPCM.Unitals (
-  inputs, constrained, specParamValList, outputs
+  inputs, inQuantities, constrained, specParamValList, outputs
 ) where
 
 import Language.Drasil
@@ -7,14 +7,15 @@ import Language.Drasil
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
-import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTCUnc, coilHTCMax,
-  coilHTCMin, coilSAUnc, coilSAMax, diamUnc, htCapWUnc, htCapWMax, htCapWMin,
-  tempInit, relTol, tankLengthUnc, tankLengthMax, tankLengthMin, tempCUnc,
-  timeFinalUnc, timeFinalMax, timeStep, wDensityUnc, wDensityMax, wDensityMin,
-  watE, tempW)
+import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTC, coilHTCUnc,
+  coilHTCMax, coilHTCMin, coilSA, coilSAUnc, coilSAMax, diam, diamUnc, htCapW,
+  htCapWUnc, htCapWMax, htCapWMin, relTol, tankLength, tankLengthUnc,
+  tankLengthMax, tankLengthMin, tempC, tempCUnc, tempInit, tempW, timeFinal,
+  timeFinalUnc, timeFinalMax, timeStep, timeStepUnc, wDensity, wDensityUnc,
+  wDensityMax, wDensityMin, watE)
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = (fmap dqdWr constrained <> unconstrained) `NE.prependList` NE.singleton watE
+inputs = (inQuantities <> unconstrained) `NE.prependList` NE.singleton watE
 
 outputs :: NE.NonEmpty DefinedQuantityDict
 outputs = tempW :| [watE]
@@ -22,9 +23,13 @@ outputs = tempW :| [watE]
 unconstrained :: [DefinedQuantityDict]
 unconstrained = [absTol, relTol]
 
+inQuantities :: [DefinedQuantityDict]
+inQuantities = [coilSA, htCapW, coilHTC, tempInit,
+  timeFinal, tankLength, tempC, timeStep, wDensity, diam]
+
 constrained :: [UncertQ]
 constrained = [coilSAUnc, htCapWUnc, coilHTCUnc, tempInitUnc,
-  timeFinalUnc, tankLengthUnc, tempCUnc, timeStep, wDensityUnc, diamUnc]
+  timeFinalUnc, tankLengthUnc, tempCUnc, timeStepUnc, wDensityUnc, diamUnc]
   -- w_E, temp_W
 
 tempInitUnc :: UncertQ

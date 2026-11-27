@@ -14,6 +14,7 @@ module Language.Drasil (
   , square, half
   , oneHalf, oneThird
   , apply1, apply2
+  , matrixRows
   , m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
   , Completeness, Relation
 
@@ -80,7 +81,7 @@ module Language.Drasil (
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
-  , mkQDefSt, mkQuantDef, mkQuantDef', ec
+  , mkQDefSt, mkQuantDef, mkQuantDef', mkQuantDefQd
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.DefinedQuantity
   , DefinedQuantityDict, quant, quant', quantAU, quantNoUnit, quantNoUnit'
@@ -192,6 +193,7 @@ import Language.Drasil.WellTyped (RequiresChecking(..), Typed(..), TypingContext
 import Language.Drasil.Expr.Class (ExprC(..),
   frac, recip_, square, half, oneHalf, oneThird, apply1, apply2,
   m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet, PExpr)
+import Language.Drasil.Expr.Extract (matrixRows)
 import Language.Drasil.Expr.Lang (Expr, Completeness, Relation)
 import Language.Drasil.ExprClasses (Express(..))
 import Language.Drasil.Literal.Class (LiteralC(..))
@@ -212,7 +214,7 @@ import Language.Drasil.Constraint (physRange, sfwrRange, physElem, sfwrElem, phy
   Constraint(..), ConstraintE, ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
-  fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
+  fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', mkQuantDefQd,
   mkFuncDef, mkFuncDef', mkFuncDefByQ, ConstQDef, SimpleQDef, ModelQDef)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.UncertainQuantity

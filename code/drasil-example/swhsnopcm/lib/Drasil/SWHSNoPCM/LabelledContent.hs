@@ -7,7 +7,7 @@ import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (sysCont)
-import Data.Drasil.Concepts.Thermodynamics (htFlux)
+import Data.Drasil.Quantities.Thermodynamics (htFlux)
 
 import Drasil.SWHS.Concepts (coil, sWHT)
 import Drasil.SWHS.Unitals (htFluxC)

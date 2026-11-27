@@ -6,14 +6,14 @@ module Language.Drasil.Chunk.Eq (
   QDefinition,
   -- * Constructors
   fromEqn, fromEqn', fromEqnSt,
-  fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
+  fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', mkQuantDefQd,
   mkFuncDef, mkFuncDef', mkFuncDefByQ,
   -- * Synonyms
   ConstQDef, SimpleQDef, ModelQDef
 ) where
 
 import Control.Lens ((^.), view, makeLenses)
-import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk, mkUid)
+import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk, mkUid, nsUid)
 import qualified Data.Set as Set
 
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
@@ -24,8 +24,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs),
   quant, quantNoUnit, quant', quantNoUnit', quantAU)
 import Language.Drasil.Expr.Lang (Expr)
-import qualified Language.Drasil.Expr.Lang as E (Expr(C))
-import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
+import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)), syUID)
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import qualified Language.Drasil.ModelExpr.Lang as M (ModelExpr(C))
@@ -73,8 +72,8 @@ instance (Express e, HasChunkRefs e) => Express (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where
       f = case q ^. inputs of
-        [] -> defines (sy q)
-        is -> defines $ apply q (M.C <$> is)
+        [] -> defines (sy (q ^. qua))
+        is -> defines $ apply (q ^. qua) (M.C <$> is)
         -- FIXME: The fact that we have to manually use `C` here is because our
         -- UID references don't carry enough information. This feels hacky at
         -- the moment, and should eventually be fixed.
@@ -85,7 +84,7 @@ instance RequiresChecking (QDefinition Expr) Expr Space where
   -- "normal" way does not work for Functions because it leaves function input
   -- parameters left unchecked. It's probably preferred to be doing type
   -- checking at time of chunk creation rather than here, really.
-  requiredChecks q = pure (apply (q ^. qua) (E.C <$> (q ^. inputs)) $= (q ^. expr), Boolean)
+  requiredChecks q = pure (apply (q ^. qua) (syUID <$> (q ^. inputs)) $= (q ^. expr), Boolean)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.
@@ -133,16 +132,15 @@ mkQuantDef c = mkQDefSt (c ^. uid) (c ^. term) (c ^. defn) (symbol c) (c ^. typ)
 mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> e -> QDefinition e
 mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 
--- HACK - makes the definition EmptyS !!! FIXME
--- | Smart constructor for QDefinitions. Requires a quantity and its defining
--- equation.
-ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
-ec c = QD
-  (c ^. uid)
-  (quantAU (c ^. uid) (c ^. term) EmptyS Nothing (symbol c) (c ^. typ) (getUnit c))
+-- | Smart constructor for 'QDefinition's whose own 'UID' is derived from the
+-- quantity's: the quantity's 'UID' in the @qd@ namespace. The left-hand side
+-- is still the quantity itself, so it keeps resolving to that quantity's chunk.
+-- The given 'Sentence' is the definition of the quantity.
+mkQuantDefQd :: (Quantity c, MayHaveUnit c) => c -> Sentence -> e -> QDefinition e
+mkQuantDefQd q dfn = QD
+  (nsUid "qd" (q ^. uid))
+  (quantAU (q ^. uid) (q ^. term) dfn Nothing (symbol q) (q ^. typ) (getUnit q))
   []
-
-{-# DEPRECATED ec "`ec` is an unsafe chunk constructor that encourages `UID` double-use." #-}
 
 -- | Factored version of 'QDefinition' functions.
 mkFuncDef0 :: (IsChunk f, HasSymbol f, HasSpace f,

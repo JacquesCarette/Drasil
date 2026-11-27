@@ -20,8 +20,10 @@ import Drasil.SSP.References (morgenstern1965)
 
 import Data.Drasil.Concepts.Documentation (analysis, assumpDom, assumption,
   condition, constant, effect, interface)
-import Data.Drasil.Concepts.Physics (force, position, stress, twoD)
-import Data.Drasil.Concepts.Math (surface, unit_)
+import Data.Drasil.Concepts.Physics (position, stress, twoD)
+import Data.Drasil.Concepts.Math (unit_)
+import Data.Drasil.Quantities.Math (surface)
+import Data.Drasil.Quantities.Physics (force)
 
 assumptions :: [ConceptInstance]
 assumptions = [assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI,

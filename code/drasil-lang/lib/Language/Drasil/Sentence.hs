@@ -250,7 +250,18 @@ lnames EmptyS      = Set.empty
 {-# INLINE lnames #-}
 
 instance HasChunkRefs Sentence where
-  chunkRefs s = Set.unions [lnames s, sdep s, shortdep s]
+  chunkRefs (Ch _ _ u)    = Set.singleton (raw u)
+  chunkRefs (SyCh u)      = Set.singleton (raw u)
+  chunkRefs Sy {}         = mempty -- unit symbol: no instance, waiting for <https://github.com/JacquesCarette/Drasil/pull/5570>
+  chunkRefs (NP np)       = chunkRefs np
+  chunkRefs S {}          = mempty
+  chunkRefs P {}          = mempty -- variable symbol: no instance, waiting for <https://github.com/JacquesCarette/Drasil/pull/5570>
+  chunkRefs (E e)         = chunkRefs e
+  chunkRefs (Ref u dn ri) = Set.insert (raw u) (chunkRefs dn `Set.union` chunkRefs ri)
+  chunkRefs (Quote s)     = chunkRefs s
+  chunkRefs Percent       = mempty
+  chunkRefs (a :+: b)     = chunkRefs a `Set.union` chunkRefs b
+  chunkRefs EmptyS        = mempty
   {-# INLINABLE chunkRefs #-}
 
 instance HasChunkRefs ShortName where

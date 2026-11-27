@@ -1,5 +1,5 @@
 module Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat,
-  vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue,
+  vmap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, getInnerType, on2StateWrapped,
   getNestDegree
@@ -34,9 +34,6 @@ vibcat = vicat blank
 
 vmap :: (a -> Doc) -> [a] -> Doc
 vmap f = vcat . fmap f
-
-vimap :: Doc -> (a -> Doc) -> [a] -> Doc
-vimap c f = vicat c . fmap f
 
 emptyIfEmpty :: Doc -> Doc -> Doc
 emptyIfEmpty ifDoc elseDoc = if isEmpty ifDoc then empty else elseDoc

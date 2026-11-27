@@ -3,10 +3,11 @@ module Language.Drasil.Code.Imperative.Comments (
   renderTermAndUnit
 ) where
 
+import Control.Lens ((^.))
 import Control.Monad.State (get)
 import Text.PrettyPrint.HughesPJ ((<+>), parens, render)
 
-import Drasil.Code.CodeVar (CodeIdea(..))
+import Drasil.Code.CodeVar (CodeIdea(..), qc)
 import Language.Drasil (phrase, MayHaveUnit(..), HasUnitSymbol(..))
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Printers (oneLineSentenceDoc, oneLineUnitDoc)
@@ -16,7 +17,7 @@ import Language.Drasil.Printers (oneLineSentenceDoc, oneLineUnitDoc)
 renderTermAndUnit :: (CodeIdea c) => c -> GenState String
 renderTermAndUnit l = do
   g <- get
-  let quant = codeChunk l
+  let quant = codeChunk l ^. qc
       tm = oneLineSentenceDoc (printfo g) $ phrase quant
       unit = parens . oneLineUnitDoc . usymb <$> getUnit quant
   pure $ render $ maybe tm (tm <+>) unit

@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC)
-import Drasil.GlassBR.Concepts (annealedGl, fTemperedGl, glass, hStrengthGl, glassType, demandq)
+import Drasil.GlassBR.Concepts (annealedGl, fTemperedGl, glass, hStrengthGl, glassType)
 import Drasil.GlassBR.LabelledContent (demandVsSDFig)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals
@@ -127,8 +127,8 @@ glassTypeHelper t = short t `S.is` phrase t +:+. phrase glass
 
 calofDemandDesc :: Sentence
 calofDemandDesc =
-  foldlSent [ch demand `sC` EmptyS `S.or_` phrase demandq `sC` EmptyS `S.isThe`
-  (demandq ^. defn), S "obtained from", refS demandVsSDFig,
+  foldlSent [ch demand `sC` EmptyS `S.or_` phrase demand `sC` EmptyS `S.isThe`
+  (demand ^. defn), S "obtained from", refS demandVsSDFig,
   S "by interpolation using", phrase standOffDist, sParen (ch standOffDist)
   `S.and_` ch eqTNTWeight, S "as" +:+. plural parameter, ch eqTNTWeight,
   S "is defined in" +:+. refS eqTNTWDD, ch standOffDist `S.isThe`

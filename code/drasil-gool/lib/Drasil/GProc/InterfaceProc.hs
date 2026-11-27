@@ -4,7 +4,7 @@
 
 module Drasil.GProc.InterfaceProc (
   -- Types
-  Program, GSProgram,
+  GSProgram,
   -- Typeclasses
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
@@ -18,7 +18,7 @@ import Drasil.Shared.InterfaceCommon (Label, VisibilitySym, MethodSym(..),
   ValueExpression, ValueSym, VariableSym, VariableValue, UnRepr, ScopeSym,
   BinderSym, InternalList, TypeSym, TypeElim, VariableElim, BodySym, BlockSym)
 import Drasil.Shared.State (GS, FS, MS)
-import Drasil.Shared.AST (ProgData, TypeData)
+import Drasil.Shared.AST (TypeData)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating a procedural program.
@@ -41,7 +41,6 @@ class (UnRepr r TypeData, BodySym r bod block, BlockSym r block stmt,
   ProgramSym r prg file)
   => ProcProg r prg file mod mthd vis param bod block stmt var scope val binder typ
 
-type Program = ProgData
 type GSProgram a prg = GS (a prg)
 
 -- | Class for representing a program.

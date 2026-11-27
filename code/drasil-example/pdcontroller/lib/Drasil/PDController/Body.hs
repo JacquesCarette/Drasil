@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.People (naveen)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
-import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
+import Data.Drasil.Concepts.Physics (angular, linear, rigidBody, stress) -- FIXME: should not be needed?
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Math (posInf, negInf)
 
@@ -109,7 +109,7 @@ orgSecEnd = foldlSent [
   ]
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = physicalcon <> [linear, angular] <> termDefs
+conceptChunks = physicalcon <> [linear, angular, rigidBody, stress] <> termDefs
 
 allSymbols :: [DefinedQuantityDict]
 allSymbols = physicscon <> symbols <>

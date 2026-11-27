@@ -7,6 +7,7 @@ module Language.Drasil.UnitLang (
   ) where
 
 import Language.Drasil.Symbol (Symbol, compsy)
+import Drasil.Database (HasChunkRefs(..))
 
 -- UName for the base cases, otherwise build up.
 -- Probably a 7-vector would be better (less error-prone!)
@@ -15,11 +16,19 @@ import Language.Drasil.Symbol (Symbol, compsy)
 newtype USymb = US [(Symbol, Integer)] -- can be negative, should not be 0
   deriving (Eq)
 
+instance HasChunkRefs USymb where
+  chunkRefs _ = mempty
+  {-# INLINABLE chunkRefs #-}
+
 -- | Language of unit equations, to define a unit relative
 -- to another.
 data UDefn = USynonym USymb      -- ^ to define straight synonyms.
            | UScale Double USymb -- ^ scale, i.e. *.
            | UShift Double USymb -- ^ shift, i.e. +.
+
+instance HasChunkRefs UDefn where
+  chunkRefs _ = mempty
+  {-# INLINABLE chunkRefs #-}
 
 -- | Generates a default unit symbol.
 fromUDefn :: UDefn -> USymb
@@ -41,6 +50,10 @@ data UnitSymbol =
      BaseSI USymb
    | DerivedSI USymb USymb UDefn
    | Defined USymb UDefn
+
+instance HasChunkRefs UnitSymbol where
+  chunkRefs _ = mempty
+  {-# INLINABLE chunkRefs #-}
 
 -- | Generates a default unit symbol.
 getUSymb :: UnitSymbol -> USymb

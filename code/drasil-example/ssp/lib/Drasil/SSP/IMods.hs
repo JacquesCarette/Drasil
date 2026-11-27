@@ -17,8 +17,8 @@ import Drasil.SRS.Concepts (propCorSol)
 import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint,
   definition, first, goal, method_, physical, problem, solution, value)
 import Data.Drasil.Concepts.Math (angle, equation, leftSide)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (force)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
+import Data.Drasil.Quantities.Physics (force)
 
 import Drasil.SSP.Assumptions (assumpSSC, assumpINSFL,
   assumpES, assumpSF, assumpSL)

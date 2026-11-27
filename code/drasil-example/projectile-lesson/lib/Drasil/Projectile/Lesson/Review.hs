@@ -2,10 +2,10 @@ module Drasil.Projectile.Lesson.Review (
   reviewSecs
 ) where
 
-import Data.Drasil.Concepts.Physics (motion, position, time, velocity)
+import qualified Data.Drasil.Concepts.Physics as CP (motion, position, velocity)
 import Data.Drasil.Concepts.Math (equation)
 import qualified Drasil.Projectile.Expressions as E (lcrectVel, lcrectPos, lcrectNoTime)
-import qualified Data.Drasil.Quantities.Physics as QP (speed, time, scalarPos, iPos, iSpeed, constAccel)
+import Data.Drasil.Quantities.Physics (speed, time, scalarPos, iPos, iSpeed, constAccel)
 import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -22,15 +22,15 @@ reviewHead = section (S "Rectilinear Kinematics: Continuous Motion")
 reviewContextP1, reviewEqns, reviewContextP2 :: Contents
 reviewContextP1
   = foldlSP_
-      [S "As covered previously, the", plural equation, S "relating", phrase velocity, sParen (eS (sy QP.speed)) `sC`
-        phrase position, sParen (eS (sy QP.scalarPos)) `S.and_` phrase time, sParen (eS (sy QP.time))
-        `S.for` phrase motion `S.in_` S "one dimension with", phrase QP.constAccel,
-        sParen (eS (sy QP.constAccel)) +:+ S "are as follows:"]
+      [S "As covered previously, the", plural equation, S "relating", phrase CP.velocity, sParen (eS (sy speed)) `sC`
+        phrase CP.position, sParen (eS (sy scalarPos)) `S.and_` phrase time, sParen (eS (sy time))
+        `S.for` phrase CP.motion `S.in_` S "one dimension with", phrase constAccel,
+        sParen (eS (sy constAccel)) +:+ S "are as follows:"]
 
 reviewEqns
   = foldlSP
-      [S "where", eS (sy QP.iSpeed) `S.and_` eS (sy QP.iPos),
-       S "are the initial", phrase velocity `S.and_` phrase position, S ",respectively"]
+      [S "where", eS (sy iSpeed) `S.and_` eS (sy iPos),
+       S "are the initial", phrase CP.velocity `S.and_` phrase CP.position, S ",respectively"]
 
 reviewContextP2
   = foldlSP

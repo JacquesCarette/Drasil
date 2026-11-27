@@ -8,6 +8,7 @@ import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
+import Data.Drasil.Concepts.Documentation (simulation)
 import Data.Drasil.Concepts.Math (equation)
 
 import Theory.Drasil (DataDefinition, ddE)

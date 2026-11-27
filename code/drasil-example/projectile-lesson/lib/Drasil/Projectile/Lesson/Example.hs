@@ -1,7 +1,7 @@
 module Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo) where
 
-import Data.Drasil.Concepts.Physics (velocity, height, time, acceleration, gravity, horizontalMotion)
-import qualified Data.Drasil.Quantities.Physics as QP (height, gravitationalAccel)
+import qualified Data.Drasil.Concepts.Physics as CP (velocity, acceleration, gravity, horizontalMotion)
+import Data.Drasil.Quantities.Physics (height, gravitationalAccel, time)
 import Data.Drasil.Units.Physics (velU)
 import Language.Drasil.ShortHands (cR, lG)
 import Language.Drasil
@@ -13,17 +13,17 @@ exampleContent = [exampleContextP1, codeC1, exampleContextP2, codeC2, exampleCon
 
 exampleContextP1, exampleContextP2, exampleContextP3 :: Contents
 exampleContextP1 = foldlSP_ [S "A sack slides off the ramp" `sC` S "shown in Figure.",
-    S "We can ignore the physics" `S.ofThe` S "sack sliding down the ramp and just focus on its exit", phrase velocity +:+. S "from the ramp",
-    S "There is initially no vertical component" `S.of_` phrase velocity `S.andThe` S "horizontal", phrase velocity, S "is:"]
+    S "We can ignore the physics" `S.ofThe` S "sack sliding down the ramp and just focus on its exit", phrase CP.velocity +:+. S "from the ramp",
+    S "There is initially no vertical component" `S.of_` phrase CP.velocity `S.andThe` S "horizontal", phrase CP.velocity, S "is:"]
 exampleContextP2 = foldlSP_ [S "The", phrase height `S.ofThe` S "ramp from the floor is"]
 exampleContextP3 = foldlSP_ [S "Task: Determine the", phrase time, S "needed for the sack to strike the floor and the range",
     P cR +:+. S "where sacks begin to pile up",
-    S "The", phrase acceleration, S "due to", phrase gravity, P lG +:+. S "is assumed to have the following value"]
+    S "The", phrase CP.acceleration, S "due to", phrase CP.gravity, P lG +:+. S "is assumed to have the following value"]
 
 codeC1, codeC2, codeC3 :: Contents
 codeC1 = unlbldCode (sy horiz_velo $= exactDbl 17)
-codeC2 = unlbldCode (sy QP.height $= exactDbl 6)
-codeC3 = unlbldCode (sy QP.gravitationalAccel $= dbl 9.81)
+codeC2 = unlbldCode (sy height $= exactDbl 6)
+codeC3 = unlbldCode (sy gravitationalAccel $= dbl 9.81)
 
 horiz_velo :: DefinedQuantityDict
-horiz_velo = dqd horizontalMotion (variable "horiz_velo") Real velU
+horiz_velo = dqd CP.horizontalMotion (variable "horiz_velo") Real velU

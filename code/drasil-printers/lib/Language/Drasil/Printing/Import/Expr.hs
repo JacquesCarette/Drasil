@@ -9,7 +9,7 @@ import Language.Drasil (Expr, Symbol, RealInterval(..), LiteralC(int),
   DomainDesc(..), Inclusive(..), RTopology(..))
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
-  AssocBoolOper(..), EqBinOp(..), Expr(..),
+  AssocBoolOper(..), EqBinOp(..), ExprF(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocConcatOper(..), eprec, precA, precB, precC)
 import Language.Drasil.Literal.Development (Literal(..))

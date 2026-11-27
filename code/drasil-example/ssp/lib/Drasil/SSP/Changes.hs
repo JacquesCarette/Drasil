@@ -10,7 +10,8 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (analysis, likeChgDom, model, system, unlikeChgDom)
 import Data.Drasil.Concepts.Math (calculation, zDir)
-import Data.Drasil.Concepts.Physics (force, stress, threeD, twoD)
+import Data.Drasil.Concepts.Physics (stress, threeD, twoD)
+import Data.Drasil.Quantities.Physics (force)
 
 -- local
 import Drasil.SSP.Assumptions (assumpSLH, assumpINSFL, assumpENSL,

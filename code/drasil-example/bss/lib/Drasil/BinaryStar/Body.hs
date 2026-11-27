@@ -15,7 +15,8 @@ import Data.Drasil.Concepts.Documentation (assumption, endUser, input_,
   interface, output_, physical, software, sysCont, softwareConstraint,
   softwareSys, system, user, environment, product_, datum)
 import Data.Drasil.Concepts.Education (undergraduate, calculus)
-import Data.Drasil.Concepts.Physics (gravity, twoD, force)
+import Data.Drasil.Concepts.Physics (gravity, twoD)
+import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Language.Drasil.Document
 

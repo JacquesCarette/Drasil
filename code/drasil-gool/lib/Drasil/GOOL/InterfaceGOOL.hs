@@ -4,7 +4,7 @@
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  Program, GSProgram, Class, StateVar, CSStateVar, Initializers,
+  GSProgram, Class, StateVar, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
@@ -38,7 +38,7 @@ import Drasil.Shared.InterfaceCommon (
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
-import Drasil.Shared.AST (AttachmentTag(..), FuncData, ProgData)
+import Drasil.Shared.AST (AttachmentTag(..), FuncData)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -68,7 +68,6 @@ class (UnRepr r typ, Argument r val, BodySym r bod block, BlockSym r block stmt,
   FileSym r file mod, ProgramSym r prg file
   ) => OOProg r prg file mod cls stvr mthd attch vis param bod block stmt var scope val binder typ
 
-type Program = ProgData
 type GSProgram a prg = GS (a prg)
 
 -- | Class for representing a program.

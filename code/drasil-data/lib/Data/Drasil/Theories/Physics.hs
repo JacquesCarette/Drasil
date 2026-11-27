@@ -10,10 +10,10 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Citations (velocityWiki, accelerationWiki, hibbeler2004)
 import Data.Drasil.Concepts.Documentation (component, material_, value, constant)
 import Data.Drasil.Concepts.Math (cartesian, equation, vector)
-import Data.Drasil.Concepts.Physics (gravity, twoD, rigidBody)
+import qualified Data.Drasil.Concepts.Physics as CP (gravity, twoD, rigidBody)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density,
   mass, specWeight, vol)
-import qualified Data.Drasil.Quantities.Physics as QP (acceleration, velocity,
+import Data.Drasil.Quantities.Physics (acceleration, velocity,
   force, gravitationalAccel, pressure, torque, weight, positionVec, momentOfInertia,
   angularAccel, speed)
 import Data.Drasil.Equations.Defining.Physics
@@ -32,18 +32,18 @@ newtonSL = tm (equationalModelU "newtonSL" newtonSLQD) [dRef hibbeler2004]
 -- * Weight
 
 weightGD :: GenDefn
-weightGD = gd (equationalModel' weightQD) (getUnit QP.weight) (Just weightDeriv) [dRef weightSrc]
+weightGD = gd (equationalModel' weightQD) (getUnit weight) (Just weightDeriv) [dRef weightSrc]
   "weight" [{-Notes-}]
 
 weightQD :: ModelQDef
-weightQD = mkQuantDef' QP.weight (nounPhraseSP "weight") weightEqn
+weightQD = mkQuantDef' weight (nounPhraseSP "weight") weightEqn
 
 weightSrc :: Reference
 weightSrc = makeURI "weightSrc" "https://en.wikipedia.org/wiki/Weight" $
   shortname' $ S "Definition of Weight"
 
 weightDeriv :: Derivation
-weightDeriv = mkDerivName (phrase QP.weight) $ weave weightDerivSentences weightDerivEqns
+weightDeriv = mkDerivName (phrase weight) $ weave weightDerivSentences weightDerivEqns
 
 weightDerivSentences, weightDerivEqns :: [Sentence]
 weightDerivSentences = foldlSentCol <$> [weightDerivAccelSentence,
@@ -53,14 +53,14 @@ weightDerivEqns = eS <$> [weightDerivAccelEqn, weightDerivNewtonEqn,
   weightDerivReplaceMassEqn, weightDerivSpecWeightEqn]
 
 weightDerivAccelSentence :: [Sentence]
-weightDerivAccelSentence = [S "Under the influence" `S.of_` phrase gravity `sC`
-  S "and assuming a", short twoD, phrase cartesian, S "with down as positive" `sC`
-  S "an object has an", phrase QP.acceleration, phrase vector, S "of"]
+weightDerivAccelSentence = [S "Under the influence" `S.of_` phrase CP.gravity `sC`
+  S "and assuming a", short CP.twoD, phrase cartesian, S "with down as positive" `sC`
+  S "an object has an", phrase acceleration, phrase vector, S "of"]
 
 weightDerivNewtonSentence :: [Sentence]
 weightDerivNewtonSentence = [S "Since there is only one non-zero",
   phrase vector, phrase component `sC` S "the scalar", phrase value,
-  ch QP.weight, S "will be used for the" +:+. phrase QP.weight,
+  ch weight, S "will be used for the" +:+. phrase weight,
   S "In this scenario" `sC` phrase newtonSL, S "from", refS newtonSL,
   S "can be expressed as"]
 
@@ -70,17 +70,17 @@ weightDerivReplaceMassSentence = [atStart QPP.mass, S "can be expressed as",
 
 weightDerivSpecWeightSentence :: [Sentence]
 weightDerivSpecWeightSentence = [S "Substituting", phrase QPP.specWeight,
-  S "as the product" `S.of_` phrase QPP.density `S.and_` phrase QP.gravitationalAccel,
+  S "as the product" `S.of_` phrase QPP.density `S.and_` phrase gravitationalAccel,
   S "yields"]
 
 -- * Pressure
 
 hsPressureGD :: GenDefn
-hsPressureGD = gd (equationalModel' hsPressureQD) (getUnit QP.pressure) Nothing
+hsPressureGD = gd (equationalModel' hsPressureQD) (getUnit pressure) Nothing
   [dRef hsPressureSrc] "hsPressure" [hsPressureNotes]
 
 hsPressureQD :: ModelQDef
-hsPressureQD = mkQuantDef' QP.pressure (nounPhraseSP "hydrostatic pressure") hsPressureEqn
+hsPressureQD = mkQuantDef' pressure (nounPhraseSP "hydrostatic pressure") hsPressureEqn
 
 hsPressureSrc :: Reference
 hsPressureSrc = makeURI "hsPressureSrc" "https://en.wikipedia.org/wiki/Pressure" $
@@ -94,28 +94,28 @@ hsPressureNotes = S "This" +:+ phrase equation +:+ S "is derived from" +:+
 -- * Torque
 
 torqueDD :: DataDefinition
-torqueDD = ddENoRefs torque Nothing "torque" [torqueDesc]
+torqueDD = ddENoRefs torqueQD Nothing "torque" [torqueDesc]
 
-torque :: SimpleQDef
-torque = mkQuantDef QP.torque torqueEqn
+torqueQD :: SimpleQDef
+torqueQD = mkQuantDef torque torqueEqn
 
 torqueEqn :: Expr
-torqueEqn = sy QP.positionVec `cross` sy QP.force
+torqueEqn = sy positionVec `cross` sy force
 
 torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", phrase torque,
-  S "on a body measures the", S "tendency" `S.of_` S "a", phrase QP.force,
+  S "on a body measures the", S "tendency" `S.of_` S "a", phrase force,
   S "to rotate the body around an axis or pivot"]
 
 -- * Vector Magnitude
 
 vecMagQD :: SimpleQDef
-vecMagQD = mkQuantDef QP.speed speedEqn
+vecMagQD = mkQuantDef speed speedEqn
 
 magNote :: Sentence
-magNote = foldlSent [S "For a given", phrase QP.velocity, S "vector", ch QP.velocity `sC`
+magNote = foldlSent [S "For a given", phrase velocity, S "vector", ch velocity `sC`
   S "the magnitude of the vector", sParen (eS speedEqn) `S.isThe`
-  S "scalar called", phrase QP.speed]
+  S "scalar called", phrase speed]
 
 vecMag :: DataDefinition
 vecMag = ddENoRefs vecMagQD Nothing "vecMag" [magNote]
@@ -127,17 +127,17 @@ newtonSLR = tm (equationalModelU "newtonSLR" newtonSLRQD) [dRef hibbeler2004]
   "NewtonSecLawRotMot" newtonSLRNotes
 
 newtonSLRQD :: ModelQDef
-newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
+newtonSLRQD = mkQuantDef' torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
 
 newtonSLRExpr :: ExprC r => r
-newtonSLRExpr = sy QP.momentOfInertia $* sy QP.angularAccel
+newtonSLRExpr = sy momentOfInertia $* sy angularAccel
 
 newtonSLRNotes :: [Sentence]
 newtonSLRNotes = [foldlSent
-  [S "The net", getTandS QP.torque, S "on a", phrase rigidBody `S.is`
-   S "proportional to its", getTandS QP.angularAccel `sC` S "where",
-   ch QP.momentOfInertia, S "denotes", phrase QP.momentOfInertia `S.the_ofThe`
-   phrase rigidBody, S "as the", phrase constant `S.of_` S "proportionality"]]
+  [S "The net", getTandS torque, S "on a", phrase CP.rigidBody `S.is`
+   S "proportional to its", getTandS angularAccel `sC` S "where",
+   ch momentOfInertia, S "denotes", phrase momentOfInertia `S.the_ofThe`
+   phrase CP.rigidBody, S "as the", phrase constant `S.of_` S "proportionality"]]
 
 -- * Acceleration
 

@@ -36,18 +36,18 @@ symbols = NE.toList inputs <> tmSymbols <> fmap dqdWr specParamVals <>
 constrained :: [ConstrConcept]
 constrained = fmap cnstrw' dataConstraints <> [nomThick, glassTypeCon]
 
-plateLen, plateWidth :: DefinedQuantityDict
-plateLenUnc, plateWidthUnc, aspectRatio, charWeight, standOffDist, pbTol,
-  tNT :: UncertQ
+plateLen, plateWidth, charWeight :: DefinedQuantityDict
+plateLenUnc, plateWidthUnc, aspectRatio, charWeightUnc, standOffDist,
+  pbTol, tNT :: UncertQ
 glassTypeCon, nomThick :: ConstrConcept
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = fmap dqdWr inputsWUnitsUncrtn <> fmap dqdWr inputsWUncrtn <>
+inputs = (plateLen :| [plateWidth, charWeight]) <> fmap dqdWr inputsWUncrtn <>
   fmap dqdWr inputsNoUncrtn <> sdVector
 
 --inputs with units and uncertainties
 inputsWUnitsUncrtn :: NE.NonEmpty UncertQ
-inputsWUnitsUncrtn = plateLenUnc :| [plateWidthUnc, charWeight]
+inputsWUnitsUncrtn = plateLenUnc :| [plateWidthUnc, charWeightUnc]
 
 --inputs with uncertainties and no units
 inputsWUncrtn :: NE.NonEmpty UncertQ
@@ -106,11 +106,13 @@ pbTol = uq (constrained' (quantNoUnit (mkUid "pbTol") (nounPhraseSP "tolerable p
   (sub cP (lBreak <> lTol)) Real)
   [probConstr] (dbl 0.008)) (uncty 0.001 Nothing)
 
-charWeight = uqcND "charWeight" (nounPhraseSP "charge weight")
-  lW kilogram Real
+charWeight = quant (mkUid "charWeight") (nounPhraseSP "charge weight")
+  (S "") lW Real kilogram
+
+charWeightUnc = uq (constrained' charWeight
   [ gtZeroConstr,
     sfwrRange $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
-    (exactDbl 42) defaultUncrt
+    (exactDbl 42)) defaultUncrt
 
 tNT = uq (constrained' (quantNoUnit (mkUid "tNT") (nounPhraseSP "TNT equivalent factor")
   (S "the TNT equivalent factor")

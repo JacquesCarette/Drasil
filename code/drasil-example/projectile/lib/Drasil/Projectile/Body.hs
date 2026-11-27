@@ -22,7 +22,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity,
-  rectilinear, twoD, motion, distance, collision)
+  rectilinear, twoD, motion, distance, collision, force)
 import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
@@ -145,7 +145,7 @@ tMods = [accelerationTM, velocityTM]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  [mass] <> defs <> [distance, motion, gravity, collision, rectilinear]
+  [mass] <> defs <> [distance, motion, gravity, collision, rectilinear, force]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName [] symbols ideaDicts []

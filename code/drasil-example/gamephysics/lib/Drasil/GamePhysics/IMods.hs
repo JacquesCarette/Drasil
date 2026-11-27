@@ -64,7 +64,7 @@ transMotOutputs = foldlSent [D.toSent (atStartNP (output_ `the_ofThe` inModel)),
  phrase centreMass, fromSource ctrOfMassDD]
 
 transMotDeriv :: Derivation
-transMotDeriv = mkDerivName (phrase transMot)
+transMotDeriv = mkDerivName (phrase accj)
       (weave transMotDerivStmts transMotDerivEqns)
 
 transMotDerivStmts :: [Sentence]
@@ -101,7 +101,7 @@ rotMotDesc = foldlSent [S "The above", phrase equation, S "for the total",
   foldlList Comma List (refS <$> [angDispDD, angVelDD, angAccelDD])]
 
 rotMotDeriv :: Derivation
-rotMotDeriv = mkDerivName (phrase rotMot)
+rotMotDeriv = mkDerivName (phrase angAccj)
       (weave rotMotDerivStmts rotMotDerivEqns)
 
 rotMotDerivStmts :: [Sentence]

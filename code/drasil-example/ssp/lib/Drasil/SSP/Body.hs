@@ -133,7 +133,7 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   defs' <> softwarecon <> solidcon <> physicalcon <>
-  [friction, linear, velocity, gravity, stress, fbd, position]
+  [friction, linear, velocity, gravity, stress, strain, fbd, position]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName allRefs symbols ideaDicts [] conceptChunks

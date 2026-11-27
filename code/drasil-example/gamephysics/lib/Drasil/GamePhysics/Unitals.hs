@@ -40,7 +40,8 @@ import Data.Drasil.Constraints (gtZeroConstr)
 ----------------------
 
 symbols :: [DefinedQuantityDict]
-symbols = [restitutionCoef, QM.normalVect, QM.perpVect] <> unitless <> unitalSymbols
+symbols = [restitutionCoef, QM.euclidNorm, QM.normalVect, QM.perpVect,
+  dqdWr QM.unitVect] <> unitless <> unitalSymbols
 
 inputSymbols, outputSymbols :: NE.NonEmpty DefinedQuantityDict
 

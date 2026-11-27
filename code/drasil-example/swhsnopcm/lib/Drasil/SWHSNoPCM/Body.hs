@@ -17,7 +17,7 @@ import Data.Drasil.People (thulasi)
 import Data.Drasil.Concepts.Documentation as Doc (material_)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import Data.Drasil.Concepts.Physics (mechEnergy)
+import Data.Drasil.Concepts.Physics (force, mechEnergy)
 import Data.Drasil.Concepts.Software (softwarecon, program)
 import Data.Drasil.Concepts.Theory (inModel)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatCapSpec, htFlux,
@@ -160,7 +160,7 @@ cis = [phsChgMtrl]
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   softwarecon <> CT.thermocon <> con <> physicalcon
-  <> [mechEnergy]
+  <> [mechEnergy, force]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge projName uriReferences symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs

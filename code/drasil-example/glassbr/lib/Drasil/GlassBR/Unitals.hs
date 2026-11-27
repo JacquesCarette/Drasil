@@ -37,14 +37,13 @@ constrained :: [ConstrConcept]
 constrained = fmap cnstrw' dataConstraints <> [nomThickCon, glassTypeCon]
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist, pbTol, tNT,
-  nomThick :: DefinedQuantityDict
+  nomThick, glassTypeQ :: DefinedQuantityDict
 plateLenUnc, plateWidthUnc, aspectRatioUnc, charWeightUnc, standOffDistUnc,
   pbTolUnc, tNTUnc :: UncertQ
 glassTypeCon, nomThickCon :: ConstrConcept
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = (plateLen :| [plateWidth, charWeight]) <> (pbTol :| [tNT]) <>
-  fmap dqdWr inputsNoUncrtn <> sdVector
+inputs = (plateLen :| [plateWidth, charWeight, pbTol, tNT, glassTypeQ, nomThick]) <> sdVector
 
 --inputs with units and uncertainties
 inputsWUnitsUncrtn :: NE.NonEmpty UncertQ
@@ -142,10 +141,12 @@ nomThick = quant (mkUid "nomThick") (nounPhraseSP "nominal thickness")
 nomThickCon = constrained' nomThick
   [sfwrElem $ mkSet Rational (dbl <$> nominalThicknesses)] $ exactDbl 8 -- for testing
 
-glassTypeCon = constrainedNRV' (quantNoUnit' (mkUid "glassTy")
+glassTypeQ = quantNoUnit' (mkUid "glassTy")
   (cn' "glass type")
   (S "type of glass")
-  (const lG) String)
+  (const lG) String
+
+glassTypeCon = constrainedNRV' glassTypeQ
   [sfwrElem $ mkSet String $ str . abrv . snd <$> glassType]
 
 outputs :: NE.NonEmpty DefinedQuantityDict

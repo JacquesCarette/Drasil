@@ -36,9 +36,9 @@ symbols = NE.toList inputs <> tmSymbols <> fmap dqdWr specParamVals <>
 constrained :: [ConstrConcept]
 constrained = fmap cnstrw' dataConstraints <> [nomThick, glassTypeCon]
 
-plateLen, plateWidth, charWeight :: DefinedQuantityDict
+plateLen, plateWidth, charWeight, pbTol :: DefinedQuantityDict
 plateLenUnc, plateWidthUnc, aspectRatio, charWeightUnc, standOffDist,
-  pbTol, tNT :: UncertQ
+  pbTolUnc, tNT :: UncertQ
 glassTypeCon, nomThick :: ConstrConcept
 
 inputs :: NE.NonEmpty DefinedQuantityDict
@@ -51,7 +51,7 @@ inputsWUnitsUncrtn = plateLenUnc :| [plateWidthUnc, charWeightUnc]
 
 --inputs with uncertainties and no units
 inputsWUncrtn :: NE.NonEmpty UncertQ
-inputsWUncrtn = pbTol :| [tNT]
+inputsWUncrtn = pbTolUnc :| [tNT]
 
 --inputs with no uncertainties
 inputsNoUncrtn :: NE.NonEmpty ConstrConcept
@@ -101,9 +101,11 @@ aspectRatio = uq (constrained' (quantNoUnit (mkUid "aR") (nounPhraseSP "aspect r
   [ physRange $ UpFrom (Inc, exactDbl 1),
     sfwrRange $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
-pbTol = uq (constrained' (quantNoUnit (mkUid "pbTol") (nounPhraseSP "tolerable probability of breakage")
+pbTol = quantNoUnit (mkUid "pbTol") (nounPhraseSP "tolerable probability of breakage")
   (S "the tolerable probability of breakage of the glass plate")
-  (sub cP (lBreak <> lTol)) Real)
+  (sub cP (lBreak <> lTol)) Real
+
+pbTolUnc = uq (constrained' pbTol
   [probConstr] (dbl 0.008)) (uncty 0.001 Nothing)
 
 charWeight = quant (mkUid "charWeight") (nounPhraseSP "charge weight")

@@ -30,14 +30,14 @@ symbols :: [DefinedQuantityDict]
 symbols = NE.toList inputs <> tmSymbols <> fmap dqdWr specParamVals <>
   [modElas] <> interps <> unitalSymbols <>
   unitless <> fmap dqdWr [probBr, stressDistFac] <>
-  fmap dqdWr derivedInputDataConstraints <>
+  [standOffDist, aspectRatio] <>
   mathunitals <> physicalquants <> mathquants
 
 constrained :: [ConstrConcept]
 constrained = fmap cnstrw' dataConstraints <> [nomThick, glassTypeCon]
 
-plateLen, plateWidth, charWeight, standOffDist, pbTol, tNT :: DefinedQuantityDict
-plateLenUnc, plateWidthUnc, aspectRatio, charWeightUnc, standOffDistUnc,
+plateLen, plateWidth, aspectRatio, charWeight, standOffDist, pbTol, tNT :: DefinedQuantityDict
+plateLenUnc, plateWidthUnc, aspectRatioUnc, charWeightUnc, standOffDistUnc,
   pbTolUnc, tNTUnc :: UncertQ
 glassTypeCon, nomThick :: ConstrConcept
 
@@ -63,7 +63,7 @@ derivedInsWUnitsUncrtn = [standOffDistUnc]
 
 --derived inputs with uncertainties and no units
 derivedInsWUncrtn :: [UncertQ]
-derivedInsWUncrtn = [aspectRatio]
+derivedInsWUncrtn = [aspectRatioUnc]
 
 inputDataConstraints :: [UncertQ]
 inputDataConstraints = NE.toList $ inputsWUnitsUncrtn <> inputsWUncrtn
@@ -90,14 +90,16 @@ plateWidthUnc = uq (constrained' plateWidth
   [ physRange $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen),
     sfwrRange $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2)) defaultUncrt
 
-aspectRatio = uq (constrained' (quantNoUnit (mkUid "aR") (nounPhraseSP "aspect ratio")
+aspectRatio = quantNoUnit (mkUid "aR") (nounPhraseSP "aspect ratio")
   (S $ "the ratio of the long dimension of the glass to the short dimension of " <>
     "the glass. For glass supported on four sides, the aspect ratio is " <>
     "always equal to or greater than 1.0. For glass supported on three " <>
     "sides, the ratio of the length of one of the supported edges " <>
     "perpendicular to the free edge, to the length of the free edge, is " <>
     "equal to or greater than 0.5")
-  (variable "AR") Real)
+  (variable "AR") Real
+
+aspectRatioUnc = uq (constrained' aspectRatio
   [ physRange $ UpFrom (Inc, exactDbl 1),
     sfwrRange $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 

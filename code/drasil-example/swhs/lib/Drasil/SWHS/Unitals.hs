@@ -245,15 +245,16 @@ inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
-  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSA, tempC,
+  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
-  htCapLP, htFusion, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
+  htCapLP, htFusion, coilSA, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
 tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
-  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSA, tempC,
-  wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
+  tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc,
+  tempC, wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep,
+  timeFinal :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
 
@@ -351,11 +352,13 @@ htFusionUnc = uq (constrained' htFusion
 -- Constraint 10
 -- The "S "heating coil" " should be replaced by "phrase coil",
 -- Since the capitalization issue, they are replaced by S so far.
-coilSA = uqc "coilSA"
+coilSA = quant (mkUid "coilSA")
   (compoundPhrase (nounPhraseSP "heating coil") (surArea ^. term))
-  "area covered by the outermost layer of the coil" (sub cA lCoil) m_2 Real
+  (S "area covered by the outermost layer of the coil") (sub cA lCoil) Real m_2
+
+coilSAUnc = uq (constrained' coilSA
   [gtZeroConstr,
-  sfwrRange $ UpTo (Inc, sy coilSAMax)] (dbl 0.12) defaultUncrt
+  sfwrRange $ UpTo (Inc, sy coilSAMax)] (dbl 0.12)) defaultUncrt
 
 -- Constraint 11
 tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")

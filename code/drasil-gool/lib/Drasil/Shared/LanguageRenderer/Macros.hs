@@ -1,6 +1,6 @@
 -- | Language-polymorphic functions that are defined by GOOL code
 module Drasil.Shared.LanguageRenderer.Macros (
-  ifExists, decrement1, increment, increment1, runStrategy,
+  ifExists, decrement1, increment1, runStrategy,
   listSlice, makeSetterVal, stringListVals, stringListLists, forRange,
   notifyObservers, notifyObservers', arrayDecAsList
 ) where
@@ -42,15 +42,6 @@ decrement1
   :: (IC.AssignStatement r stmt var val, IC.Literal r val typ)
   => VS (r var) -> MS (r stmt)
 decrement1 v = v &-= IC.litInt 1
-
-increment
-  ::
-    ( IC.AssignStatement r stmt var val
-    , IC.NumericExpression r val
-    , IC.VariableValue r var val
-    )
-  => VS (r var) -> VS (r val) -> MS (r stmt)
-increment vr vl = vr &= IC.valueOf vr #+ vl
 
 increment1
   :: (IC.AssignStatement r stmt var val, IC.Literal r val typ)

@@ -154,10 +154,10 @@ outputs = isSafePb :| [isSafeLR, probBr, stressDistFac]
 
 -- | Symbols uniquely relevant to theory models.
 tmSymbols :: [DefinedQuantityDict]
-tmSymbols = dqdWr <$> [probFailCon, pbTolfail]
+tmSymbols = [probFail, pbTolfail]
 
-probBr, probFail, stressDistFac :: DefinedQuantityDict
-probBrCon, probFailCon, pbTolfail, stressDistFacCon :: ConstrConcept
+probBr, probFail, pbTolfail, stressDistFac :: DefinedQuantityDict
+probBrCon, probFailCon, pbTolfailCon, stressDistFacCon :: ConstrConcept
 probBr = quantNoUnit' (mkUid "probBr")
   (nounPhraseSP "probability of breakage")
   (foldlSent_ [S "the fraction of glass lites or plies that would break at the",
@@ -181,10 +181,12 @@ probFail = quantNoUnit (mkUid "probFail") (nounPhraseSP "probability of failure"
 
 probFailCon = constrained' probFail [probConstr] (dbl 0.4)
 
-pbTolfail = cucNoUnit' "pbTolfail" (nounPhraseSP "tolerable probability of failure")
-  "the tolerable probability of failure of the glass plate"
+pbTolfail = quantNoUnit (mkUid "pbTolfail")
+  (nounPhraseSP "tolerable probability of failure")
+  (S "the tolerable probability of failure of the glass plate")
   (sub cP (lFail <> lTol)) Real
-  [probConstr] (dbl 0.008)
+
+pbTolfailCon = constrained' pbTolfail [probConstr] (dbl 0.008)
 
   --FIXME: no typical value!
 

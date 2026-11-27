@@ -36,13 +36,13 @@ symbols = NE.toList inputs <> tmSymbols <> fmap dqdWr specParamVals <>
 constrained :: [ConstrConcept]
 constrained = fmap cnstrw' dataConstraints <> [nomThick, glassTypeCon]
 
-plateLen, plateWidth, charWeight, pbTol :: DefinedQuantityDict
+plateLen, plateWidth, charWeight, pbTol, tNT :: DefinedQuantityDict
 plateLenUnc, plateWidthUnc, aspectRatio, charWeightUnc, standOffDist,
-  pbTolUnc, tNT :: UncertQ
+  pbTolUnc, tNTUnc :: UncertQ
 glassTypeCon, nomThick :: ConstrConcept
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = (plateLen :| [plateWidth, charWeight]) <> fmap dqdWr inputsWUncrtn <>
+inputs = (plateLen :| [plateWidth, charWeight]) <> (pbTol :| [tNT]) <>
   fmap dqdWr inputsNoUncrtn <> sdVector
 
 --inputs with units and uncertainties
@@ -51,7 +51,7 @@ inputsWUnitsUncrtn = plateLenUnc :| [plateWidthUnc, charWeightUnc]
 
 --inputs with uncertainties and no units
 inputsWUncrtn :: NE.NonEmpty UncertQ
-inputsWUncrtn = pbTolUnc :| [tNT]
+inputsWUncrtn = pbTolUnc :| [tNTUnc]
 
 --inputs with no uncertainties
 inputsNoUncrtn :: NE.NonEmpty ConstrConcept
@@ -116,9 +116,11 @@ charWeightUnc = uq (constrained' charWeight
     sfwrRange $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
     (exactDbl 42)) defaultUncrt
 
-tNT = uq (constrained' (quantNoUnit (mkUid "tNT") (nounPhraseSP "TNT equivalent factor")
+tNT = quantNoUnit (mkUid "tNT") (nounPhraseSP "TNT equivalent factor")
   (S "the TNT equivalent factor")
-  (variable "TNT") Real)
+  (variable "TNT") Real
+
+tNTUnc = uq (constrained' tNT
   [ gtZeroConstr ] (exactDbl 1)) defaultUncrt
 
 standOffDist = uq (constrained' (quant (mkUid "stdOffDist") (nounPhraseSP "stand off distance")

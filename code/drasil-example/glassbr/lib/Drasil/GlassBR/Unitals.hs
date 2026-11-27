@@ -29,7 +29,7 @@ import Drasil.GlassBR.Units (sFlawPU)
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList inputs <> tmSymbols <> fmap dqdWr specParamVals <>
   [modElas] <> interps <> unitalSymbols <>
-  unitless <> fmap dqdWr [probBr, stressDistFac] <>
+  unitless <> fmap dqdWr [probBrCon, stressDistFac] <>
   [standOffDist, aspectRatio] <>
   mathunitals <> physicalquants <> mathquants
 
@@ -150,20 +150,22 @@ glassTypeCon = constrainedNRV' glassTypeQ
   [sfwrElem $ mkSet String $ str . abrv . snd <$> glassType]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
-outputs = (isSafePb :| [isSafeLR]) <> fmap dqdWr (probBr :| [stressDistFac])
+outputs = (isSafePb :| [isSafeLR]) <> fmap dqdWr (probBrCon :| [stressDistFac])
 
 -- | Symbols uniquely relevant to theory models.
 tmSymbols :: [DefinedQuantityDict]
 tmSymbols = dqdWr <$> [probFail, pbTolfail]
 
-probBr, probFail, pbTolfail, stressDistFac :: ConstrConcept
-probBr = constrained' (quantNoUnit' (mkUid "probBr")
+probBr :: DefinedQuantityDict
+probBrCon, probFail, pbTolfail, stressDistFac :: ConstrConcept
+probBr = quantNoUnit' (mkUid "probBr")
   (nounPhraseSP "probability of breakage")
   (foldlSent_ [S "the fraction of glass lites or plies that would break at the",
     S "first occurrence of a specified load and duration, typically expressed",
     S "in lites per 1000", sParen $ refS astm2016])
-  (const $ sub cP lBreak) Real)
-  [probConstr] (dbl 0.4)
+  (const $ sub cP lBreak) Real
+
+probBrCon = constrained' probBr [probConstr] (dbl 0.4)
 
 stressDistFac = cucNoUnit' "stressDistFac" (nounPhraseSP "stress distribution factor (Function)")
   "the stress distribution factor of the glass plate"

@@ -130,7 +130,7 @@ tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))
 
 probOfBreak :: InstanceModel
 probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
-  [qwUC $ risk ^. output] (dqdWr probBr) [probConstraint] (dRef <$> [astm2009, beasonEtAl1998]) "probOfBreak"
+  [qwUC $ risk ^. output] probBr [probConstraint] (dRef <$> [astm2009, beasonEtAl1998]) "probOfBreak"
   [riskRef]
 
 probOfBreakQD :: SimpleQDef

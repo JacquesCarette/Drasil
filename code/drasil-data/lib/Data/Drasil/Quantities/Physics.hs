@@ -22,6 +22,13 @@ restitutionCoef = quantNoUnit' (mkUid "restitutionCoef") (cn "coefficient of res
   (S "a measure of the restitution of a collision between two objects")
   (const $ sub cC (label "R")) Real
 
+strain, cohesion :: ConceptChunk
+strain = cncpt''' (mkUid "strain") (cn' "strain")
+  (S "a measure of deformation representing the" +:+ phrase CP.displacement +:+
+   S "between particles in the body relative to a reference length")
+  --definition of strain used in SSP, can be made clearer
+cohesion = cncpt''' (mkUid "cohesion") (cn "cohesion")
+  (S "an attractive" +:+ phrase CP.force +:+ S "between adjacent particles that holds the matter together")
 -- | Collects all physical quantities defined in this file for easy use in Drasil.
 physicscon :: [DefinedQuantityDict]
 physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,

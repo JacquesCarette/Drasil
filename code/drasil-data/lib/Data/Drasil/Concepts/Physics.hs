@@ -17,13 +17,13 @@ import Data.Drasil.Concepts.Education (mechanics)
 -- | Collects all physics-related concepts.
 physicCon :: [ConceptChunk]
 physicCon = [acceleration, angular,
-  cohesion, collision, compression, constAccel, damping, dampingCoeff,
+  collision, compression, constAccel, damping, dampingCoeff,
   displacement, distance, elasticity, energy, fbd, force,
   friction, gravity, height,
   impulseV, isotropy,
   joint, linear, mechEnergy,
   position, rectilinear,
-  rigidBody, shm, space, speed, stiffCoeff, strain, stress,
+  rigidBody, shm, space, speed, stiffCoeff, stress,
   time, velocity,
   pendulum, body, kinematics, motion, horizontalMotion, verticalMotion]
 
@@ -37,13 +37,13 @@ physicCon' = [oneD, twoD, threeD]
 --
 -- In alphabetical order.
 
-acceleration, angular, cohesion,
+acceleration, angular,
   collision, compression, constAccel, damping, dampingCoeff, displacement,
   distance, elasticity, energy, fbd, force, friction, gravity,
   height, impulseV, isotropy, joint,
   linear, mechEnergy, position,
   rectilinear, rigidBody, shm,
-  space, speed, stiffCoeff, strain, stress, time, velocity,
+  space, speed, stiffCoeff, stress, time, velocity,
   pendulum, body,
   kinematics, motion, horizontalMotion, verticalMotion :: ConceptChunk
 
@@ -60,8 +60,6 @@ body = cncpt''' (mkUid "physicsBody") (cnIES "body")
   (S "an object with" +:+ phrase QPP.mass)
 collision = cncpt''' (mkUid "collision") (cn' "collision")
   (S "an encounter between particles resulting in an exchange or transformation of energy")
-cohesion = cncpt''' (mkUid "cohesion") (cn "cohesion")
-  (S "an attractive" +:+ phrase force +:+ S "between adjacent particles that holds the matter together")
 compression = cncpt''' (mkUid "compression") (cn' "compression")
   (S "a" +:+ phrase stress +:+ S "that causes displacement of the body towards its center")
 damping = cncpt''' (mkUid "damping") (pn' "damping")
@@ -122,10 +120,6 @@ speed = cncpt''' (mkUid "speed") (cn' "speed")
   (S "magnitude" `S.the_ofThe` phrase velocity +:+ S "vector")
 stiffCoeff = cncpt''' (mkUid "stiffnessCoeff") (cn' "stiffness coefficient")
   (S "Quantity that characterizes a spring's stiffness")
-strain = cncpt''' (mkUid "strain") (cn' "strain")
-  (S "a measure of deformation representing the" +:+ phrase displacement +:+
-   S "between particles in the body relative to a reference length")
-  --definition of strain used in SSP, can be made clearer
 stress = cncpt''' (mkUid "stress") (cn''' "stress")
   (S "the ratio of an applied force to a cross-sectional area")
   --definition of stress used in SSP, can be made clearer

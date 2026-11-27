@@ -108,7 +108,7 @@ offsetIM :: InstanceModel
 offsetIM = imNoDerivNoRefs (equationalModelN (nounPhraseSP "offset") offsetQD)
   [qwC landPos $ UpFrom (Exc, exactDbl 0)
   ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
-  (dqdWr offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
+  offset [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
 offsetQD :: SimpleQDef
 offsetQD = mkQuantDef offset E.offset'

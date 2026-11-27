@@ -5,7 +5,7 @@ module Language.Drasil.Expr.Precedence (
   eprec
 ) where
 
-import Language.Drasil.Expr.Lang (Expr(..),
+import Language.Drasil.Expr.Lang (Expr, ExprF(..),
   ArithBinOp(..), EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
   UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   AssocBoolOper(..), AssocArithOper(..), VVVBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocConcatOper(..))

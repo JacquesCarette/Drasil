@@ -15,7 +15,7 @@ import Control.Lens (makeLenses)
 import qualified Data.Set as S (union)
 
 import Drasil.Database (HasChunkRefs(..))
-import Language.Drasil.Expr.Lang (Expr(..))
+import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.Sentence (Sentence)
 
 -- | Represents a reasonable value ('Expr') with an optional

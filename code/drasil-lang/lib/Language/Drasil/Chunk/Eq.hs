@@ -24,8 +24,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs),
   quant, quantNoUnit, quant', quantNoUnit', quantAU)
 import Language.Drasil.Expr.Lang (Expr)
-import qualified Language.Drasil.Expr.Lang as E (Expr(C))
-import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
+import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)), syUID)
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(defines))
 import qualified Language.Drasil.ModelExpr.Lang as M (ModelExpr(C))
@@ -85,7 +84,7 @@ instance RequiresChecking (QDefinition Expr) Expr Space where
   -- "normal" way does not work for Functions because it leaves function input
   -- parameters left unchecked. It's probably preferred to be doing type
   -- checking at time of chunk creation rather than here, really.
-  requiredChecks q = pure (apply (q ^. qua) (E.C <$> (q ^. inputs)) $= (q ^. expr), Boolean)
+  requiredChecks q = pure (apply (q ^. qua) (syUID <$> (q ^. inputs)) $= (q ^. expr), Boolean)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.

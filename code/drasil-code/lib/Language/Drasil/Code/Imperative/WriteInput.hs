@@ -9,8 +9,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, space,
 
 import Drasil.Code.CodeVar (ccv, qc)
 import Drasil.FileHandling.Legacy (blank)
-import Language.Drasil hiding (space, Matrix)
-import Language.Drasil.Expr.Development (Expr(Matrix))
+import Language.Drasil hiding (space)
 import Language.Drasil.Printers (PrintingInformation, oneLineSentenceDoc,
   oneLineExprDoc, oneLineUnitDoc)
 
@@ -78,8 +77,9 @@ orderVecs vs = transpose $ getVecList <$> vs
 
 -- | Helper to get a vector (singular 'Matrix') in list form.
 getVecList :: Expr -> [Expr]
-getVecList (Matrix [l]) = l
-getVecList _ = error "makeInputFile encountered unexpected type, expected vector"
+getVecList e = case matrixRows e of
+  Just [row] -> row
+  _          -> error "makeInputFile encountered unexpected type, expected vector"
 
 -- | Order matricies.
 orderMtxs :: [Expr] -> [[[Expr]]]
@@ -87,5 +87,6 @@ orderMtxs ms = transpose $ getMtxLists <$> ms
 
 -- | Helper to get a 'Matrix' in a 2D list form.
 getMtxLists :: Expr -> [[Expr]]
-getMtxLists (Matrix l) = l
-getMtxLists _ = error "makeInputFile encountered unexpected type, expected matrix"
+getMtxLists e = case matrixRows e of
+  Just rows -> rows
+  Nothing   -> error "makeInputFile encountered unexpected type, expected matrix"

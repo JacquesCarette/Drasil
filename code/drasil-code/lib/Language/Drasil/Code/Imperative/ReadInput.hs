@@ -8,8 +8,7 @@ import Data.List (intersperse, isPrefixOf, transpose)
 import Data.List.Split (splitOn)
 import Data.List.NonEmpty (NonEmpty(..), toList)
 
-import Language.Drasil hiding (Matrix)
-import Language.Drasil.Expr.Development (Expr(Matrix))
+import Language.Drasil
 
 import Drasil.Code.CodeVar (CodeVarChunk)
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..),
@@ -28,13 +27,13 @@ readWithDataDesc fp ddsc = do
       readData Junk _ = []
       readData (Datum d) s = [readDataItem d s]
       readData (Data dis 0 d) s = zipWith readDataItem (toList dis) (splitOn d s)
-      readData (Data ((DI c [dlm1]):|_) 1 dlm2) s = fmap ((Matrix . (:[])) .
+      readData (Data ((DI c [dlm1]):|_) 1 dlm2) s = fmap ((matrix . (:[])) .
         fmap (strAsExpr (getInnerSpace $ c ^. typ))) $ transpose $
         splitOn dlm2 <$> splitOn dlm1 s
-      readData (Data ((DI c [dlm1, dlm3]):|_) 1 dlm2) s = fmap (Matrix .
+      readData (Data ((DI c [dlm1, dlm3]):|_) 1 dlm2) s = fmap (matrix .
         fmap (fmap (strAsExpr (getInnerSpace $ c ^. typ)))) $ transpose $
         fmap (splitOn dlm3) . splitOn dlm2 <$> splitOn dlm1 s
-      readData (Data ((DI c [dlm1, dlm2]):|_) 2 dlm3) s = fmap (Matrix .
+      readData (Data ((DI c [dlm1, dlm2]):|_) 2 dlm3) s = fmap (matrix .
         fmap (fmap (strAsExpr (getInnerSpace $ c ^. typ))) . transpose) $
         transpose $ fmap (splitOn dlm3) . splitOn dlm2 <$> splitOn dlm1 s
       readData _ _ = error "Invalid degree of intermixing in DataDesc or list with more than 2 dimensions (not yet supported)"
@@ -101,10 +100,10 @@ splitAtFirst = splitAtFirst' []
 
 -- | Converts a list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strListAsExpr :: Space -> [String] -> Expr
-strListAsExpr (Vect t) ss = Matrix [strAsExpr t <$> ss]
+strListAsExpr (Vect t) ss = matrix [strAsExpr t <$> ss]
 strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
 
 -- | Converts a 2D list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strList2DAsExpr :: Space -> [[String]] -> Expr
-strList2DAsExpr (Vect (Vect t)) sss = Matrix $ fmap (strAsExpr t) <$> sss
+strList2DAsExpr (Vect (Vect t)) sss = matrix $ fmap (strAsExpr t) <$> sss
 strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"

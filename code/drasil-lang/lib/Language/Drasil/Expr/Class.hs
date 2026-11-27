@@ -6,13 +6,14 @@ module Language.Drasil.Expr.Class (
   oneHalf, oneThird,
   apply1, apply2,
   m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet,
+  syUID,
   PExpr
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 import Control.Lens ((^.))
 
-import Drasil.Database (HasUID(..), IsChunk)
+import Drasil.Database (HasUID(..), IsChunk, UID)
 import Data.List.Extras (toColumn)
 
 import Language.Drasil.Symbol
@@ -21,6 +22,10 @@ import Language.Drasil.Literal.Lang
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval, Space)
 import qualified Language.Drasil.ModelExpr.Lang as M
 import Language.Drasil.Literal.Class (LiteralC(..))
+
+-- | Variable expression from a bare 'UID'.
+syUID :: UID -> Expr
+syUID = C
 
 -- | Smart constructor for fractions.
 frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r

@@ -3,7 +3,7 @@ module Language.Drasil.Expr.Lang (
   Relation, ArithBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..),
   VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..),
   AssocConcatOper(..), AssocArithOper(..), AssocBoolOper(..), UFunc(..),
-  UFuncB(..), UFuncVV(..), UFuncVN(..), Completeness(..), Expr(..),
+  UFuncB(..), UFuncVV(..), UFuncVN(..), Completeness(..), Expr, ExprF(..),
   eNames, eNames', eNamesRI
 ) where
 
@@ -104,61 +104,65 @@ data Completeness = Complete | Incomplete
 -- | Expression language where all terms are supposed to be 'well understood'
 --   (i.e., have a definite meaning). Right now, this coincides with
 --   "having a definite value", but should not be restricted to that.
-data Expr where
+--   The parameter @a@ is the type of the identifiers the expression refers to.
+data ExprF a where
   -- | Brings a literal into the expression language.
-  Lit :: Literal -> Expr
+  Lit :: Literal -> ExprF a
   -- | Takes an associative arithmetic operator with a list of expressions.
-  AssocA   :: AssocArithOper -> [Expr] -> Expr
+  AssocA   :: AssocArithOper -> [ExprF a] -> ExprF a
   -- | Takes an associative boolean operator with a list of expressions.
-  AssocB   :: AssocBoolOper  -> [Expr] -> Expr
+  AssocB   :: AssocBoolOper  -> [ExprF a] -> ExprF a
 
-  AssocC   :: AssocConcatOper -> [Expr] -> Expr
+  AssocC   :: AssocConcatOper -> [ExprF a] -> ExprF a
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
-  C        :: UID -> Expr
+  C        :: a -> ExprF a
   -- | Function applications.
-  FCall    :: UID -> [Expr] -> Expr
+  FCall    :: a -> [ExprF a] -> ExprF a
   -- | For multi-case expressions, each pair represents one case.
-  Case     :: Completeness -> [(Expr, Relation)] -> Expr
+  Case     :: Completeness -> [(ExprF a, ExprF a)] -> ExprF a
   -- | Represents a matrix of expressions.
-  Matrix   :: [[Expr]] -> Expr
+  Matrix   :: [[ExprF a]] -> ExprF a
   -- | Represents a set of expressions
-  Set      :: Space -> [Expr] -> Expr
+  Set      :: Space -> [ExprF a] -> ExprF a
   -- | used to refernce the (name + type = variable )
-  Variable :: String -> Expr -> Expr
+  Variable :: String -> ExprF a -> ExprF a
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
-  UnaryOp       :: UFunc -> Expr -> Expr
+  UnaryOp       :: UFunc -> ExprF a -> ExprF a
   -- | Unary operation for @Bool -> Bool@ operations.
-  UnaryOpB      :: UFuncB -> Expr -> Expr
+  UnaryOpB      :: UFuncB -> ExprF a -> ExprF a
   -- | Unary operation for @Vector -> Vector@ operations.
-  UnaryOpVV     :: UFuncVV -> Expr -> Expr
+  UnaryOpVV     :: UFuncVV -> ExprF a -> ExprF a
   -- | Unary operation for @Vector -> Number@ operations.
-  UnaryOpVN     :: UFuncVN -> Expr -> Expr
+  UnaryOpVN     :: UFuncVN -> ExprF a -> ExprF a
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
-  ArithBinaryOp :: ArithBinOp -> Expr -> Expr -> Expr
+  ArithBinaryOp :: ArithBinOp -> ExprF a -> ExprF a -> ExprF a
   -- | Binary operator for equality between expressions.
-  EqBinaryOp    :: EqBinOp -> Expr -> Expr -> Expr
+  EqBinaryOp    :: EqBinOp -> ExprF a -> ExprF a -> ExprF a
   -- | Binary operator for indexing two expressions.
-  LABinaryOp    :: LABinOp -> Expr -> Expr -> Expr
+  LABinaryOp    :: LABinOp -> ExprF a -> ExprF a -> ExprF a
   -- | Binary operator for ordering expressions (less than, greater than, etc.).
-  OrdBinaryOp   :: OrdBinOp -> Expr -> Expr -> Expr
+  OrdBinaryOp   :: OrdBinOp -> ExprF a -> ExprF a -> ExprF a
   -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
-  VVVBinaryOp   :: VVVBinOp -> Expr -> Expr -> Expr
+  VVVBinaryOp   :: VVVBinOp -> ExprF a -> ExprF a -> ExprF a
   -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
-  VVNBinaryOp   :: VVNBinOp -> Expr -> Expr -> Expr
+  VVNBinaryOp   :: VVNBinOp -> ExprF a -> ExprF a -> ExprF a
   -- | Binary operator for @Expr x Vector -> Vector@ operations (scaling).
-  NVVBinaryOp   :: NVVBinOp -> Expr -> Expr -> Expr
+  NVVBinaryOp   :: NVVBinOp -> ExprF a -> ExprF a -> ExprF a
   -- | Set operator for Element + Set -> Set
-  ESSBinaryOp :: ESSBinOp -> Expr -> Expr -> Expr
+  ESSBinaryOp :: ESSBinOp -> ExprF a -> ExprF a -> ExprF a
   -- | Set operator for Element + Set -> Bool
-  ESBBinaryOp :: ESBBinOp -> Expr -> Expr -> Expr
+  ESBBinaryOp :: ESBBinOp -> ExprF a -> ExprF a -> ExprF a
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
-  Operator :: AssocArithOper -> DiscreteDomainDesc Expr Expr -> Expr -> Expr
-  -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
-  RealI    :: UID -> RealInterval Expr Expr -> Expr
+  Operator :: AssocArithOper -> DiscreteDomainDesc (ExprF a) (ExprF a) -> ExprF a -> ExprF a
+  -- | A different kind of 'IsIn'. An identifier is an element of an interval.
+  RealI    :: a -> RealInterval (ExprF a) (ExprF a) -> ExprF a
+
+-- | Expressions whose identifiers are 'UID's.
+type Expr = ExprF UID
 
 -- | Expressions are equal if their constructors and contents are equal.
 instance Eq Expr where

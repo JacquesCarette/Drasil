@@ -773,8 +773,8 @@ instance OOMethodSym JavaCode MethodData Doc Doc ParamData Body Variable Value T
 
 instance RenderMethod JavaCode MethodData Statement where
   commentedFunc cmt' m' = do
-    cmt <- cmt'
     m <- m'
+    cmt <- cmt'
     return $ return $ updateMthd (unJC m) (R.commentedItem (statement cmt))
 
   mthdFromData _ d = toState $ toCode $ mthd "" d

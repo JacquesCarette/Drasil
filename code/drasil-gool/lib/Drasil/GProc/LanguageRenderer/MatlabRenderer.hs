@@ -611,8 +611,8 @@ instance MethodSym MatlabCode MethodData Doc ParamData Body Variable TypeData wh
 
 instance RenderMethod MatlabCode MethodData Statement where
   commentedFunc cmt' f' = do
-    cmt <- cmt'
     f <- f'
+    cmt <- cmt'
     pure $ pure $ updateMthd (unMLC f) (R.commentedItem (statement cmt))
   mthdFromData _ d = toState $ toCode $ mthd "" d
 

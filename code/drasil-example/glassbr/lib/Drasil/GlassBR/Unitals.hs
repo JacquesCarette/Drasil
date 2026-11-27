@@ -36,8 +36,8 @@ symbols = NE.toList inputs <> tmSymbols <> fmap dqdWr specParamVals <>
 constrained :: [ConstrConcept]
 constrained = fmap cnstrw' dataConstraints <> [nomThick, glassTypeCon]
 
-plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
-pbTol, tNT :: UncertQ
+plateLen :: DefinedQuantityDict
+plateLenUnc, plateWidth, aspectRatio, charWeight, standOffDist, pbTol, tNT :: UncertQ
 glassTypeCon, nomThick :: ConstrConcept
 
 inputs :: NE.NonEmpty DefinedQuantityDict
@@ -46,7 +46,7 @@ inputs = fmap dqdWr inputsWUnitsUncrtn <> fmap dqdWr inputsWUncrtn <>
 
 --inputs with units and uncertainties
 inputsWUnitsUncrtn :: NE.NonEmpty UncertQ
-inputsWUnitsUncrtn = plateLen :| [plateWidth, charWeight]
+inputsWUnitsUncrtn = plateLenUnc :| [plateWidth, charWeight]
 
 --inputs with uncertainties and no units
 inputsWUncrtn :: NE.NonEmpty UncertQ
@@ -74,11 +74,13 @@ derivedInputDataConstraints = derivedInsWUnitsUncrtn
 dataConstraints :: [UncertQ]
 dataConstraints = inputDataConstraints <> derivedInputDataConstraints
 
-plateLen = uqc "plateLen" (nounPhraseSP "plate length (long dimension)")
-  "the length (long dimension) of the glass plate" lA metre Real
+plateLen = quant (mkUid "plateLen") (nounPhraseSP "plate length (long dimension)")
+  (S "the length (long dimension) of the glass plate") lA Real metre
+
+plateLenUnc = uq (constrained' plateLen
   [ gtZeroConstr,
     physRange $ UpFrom (Inc, sy plateWidth),
-    sfwrRange $ Bounded (Inc , sy dimMin) (Inc , sy dimMax)] (dbl 1.5) defaultUncrt
+    sfwrRange $ Bounded (Inc , sy dimMin) (Inc , sy dimMax)] (dbl 1.5)) defaultUncrt
 
 plateWidth = uqc "plateWidth" (nounPhraseSP "plate width (short dimension)")
   "the width (short dimension) of the glass plate" lB metre Real

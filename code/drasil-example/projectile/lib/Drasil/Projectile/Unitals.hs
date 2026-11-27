@@ -2,7 +2,7 @@ module Drasil.Projectile.Unitals (
   offset, flightDur, targPos, inputs, outputs,
   launAngle, launSpeed, landPos, projSpeed, projPos,
   launAngleUnc, launSpeedUnc, targPosUnc, landPosUnc, offsetUnc, flightDurUnc,
-  flightDurCon
+  flightDurCon, landPosCon
 ) where
 
 import Control.Lens ((^.))
@@ -50,26 +50,27 @@ projPos = quant (mkUid "projPos")
 ---
 landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc,
   flightDurUnc :: UncertQ
-landPosUnc   = uq landPos defaultUncrt
+landPosUnc   = uq landPosCon defaultUncrt
 launAngleUnc = uq launAngle defaultUncrt
 launSpeedUnc = uq launSpeed defaultUncrt
 offsetUnc    = uq offset defaultUncrt
 targPosUnc   = uq targPos defaultUncrt
 flightDurUnc = uq flightDurCon defaultUncrt
 
-flightDur :: DefinedQuantityDict
+flightDur, landPos :: DefinedQuantityDict
 flightDur = quant (mkUid "flightduration")
   (compoundPhrase (nounPhraseSP "flight") (nounPhraseSP "duration"))
   (foldlSent_ [D.toSent $ phraseNP (the time), S "when the", phrase C.projectile, S "lands"])
   (subStr lT "flight") Real second
-
-flightDurCon, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
-flightDurCon = constrainedNRV' flightDur [gtZeroConstr]
-landPos   = constrainedNRV' (quant (mkUid "landingposition")
+landPos   = quant (mkUid "landingposition")
   (compoundPhrase (nounPhraseSP "landing") (position ^. term))
   (foldlSent_ [D.toSent (phraseNP (the distance)) `S.fromThe` phrase C.launcher
     `S.toThe` S "final", D.toSent $ phraseNP (position `ofThe` C.projectile)])
-  (subStr lP "land") Real metre) [gtZeroConstr]
+  (subStr lP "land") Real metre
+
+flightDurCon, landPosCon, launAngle, launSpeed, offset, targPos :: ConstrConcept
+flightDurCon = constrainedNRV' flightDur [gtZeroConstr]
+landPosCon   = constrainedNRV' landPos   [gtZeroConstr]
 launAngle = constrained' (quant' (mkUid "launchangle") C.launAngleTerm C.launAngleDef
               (autoStage lTheta) Real radian)
               [physRange $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)] (sy pi_ $/ exactDbl 4)

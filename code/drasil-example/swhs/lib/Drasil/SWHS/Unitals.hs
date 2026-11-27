@@ -246,16 +246,16 @@ inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
   tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc, tempCUnc,
-  wDensityUnc, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
+  wDensityUnc, htCapWUnc, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
-  htCapLP, htFusion, coilSA, tempC, wDensity, tempW, tempPCM, watE,
-  pcmE :: DefinedQuantityDict
+  htCapLP, htFusion, coilSA, tempC, wDensity, htCapW, tempW, tempPCM,
+  watE, pcmE :: DefinedQuantityDict
 
 tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
   tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc,
-  tempCUnc, wDensityUnc, htCapW, coilHTC, pcmHTC, tempInit, timeStep,
-  timeFinal :: UncertQ
+  tempCUnc, wDensityUnc, htCapWUnc, coilHTC, pcmHTC, tempInit,
+  timeStep, timeFinal :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
 
@@ -378,12 +378,14 @@ wDensityUnc = uq (constrained' wDensity
   (exactDbl 1000)) defaultUncrt
 
 -- Constraint 13
-htCapW = uqc "htCapW" (heatCapSpec `of_` water)
-  ("the amount of energy required to raise the " <>
+htCapW = quant (mkUid "htCapW") (heatCapSpec `of_` water)
+  (S $ "the amount of energy required to raise the " <>
    "temperature of a given unit mass of water by a given amount")
-  (sub (eqSymb heatCapSpec) lWater) UT.heatCapSpec Real
+  (sub (eqSymb heatCapSpec) lWater) Real UT.heatCapSpec
+
+htCapWUnc = uq (constrained' htCapW
   [gtZeroConstr,
-  sfwrRange $ Bounded (Exc, sy htCapWMin) (Exc, sy htCapWMax)] (exactDbl 4186) defaultUncrt
+  sfwrRange $ Bounded (Exc, sy htCapWMin) (Exc, sy htCapWMax)] (exactDbl 4186)) defaultUncrt
 
 -- Constraint 14
 coilHTC = uqc "coilHTC" (nounPhraseSP

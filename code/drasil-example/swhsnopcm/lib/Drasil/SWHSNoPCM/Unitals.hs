@@ -11,7 +11,7 @@ import Data.Drasil.SI_Units (centigrade)
 import Data.Drasil.Quantities.Thermodynamics (temp)
 
 import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTC, coilHTCMax,
-  coilHTCMin, coilSAUnc, coilSAMax, diamUnc, htCapW, htCapWMax, htCapWMin,
+  coilHTCMin, coilSAUnc, coilSAMax, diamUnc, htCapWUnc, htCapWMax, htCapWMin,
   lInit, relTol, tankLengthUnc, tankLengthMax, tankLengthMin, tempCUnc,
   timeFinal, timeFinalMax, timeStep, wDensityUnc, wDensityMax, wDensityMin,
   watE, tempW)
@@ -26,7 +26,7 @@ unconstrained :: [DefinedQuantityDict]
 unconstrained = [absTol, relTol]
 
 constrained :: [UncertQ]
-constrained = [coilSAUnc, htCapW, coilHTC, tempInit,
+constrained = [coilSAUnc, htCapWUnc, coilHTC, tempInit,
   timeFinal, tankLengthUnc, tempCUnc, timeStep, wDensityUnc, diamUnc]
   -- w_E, temp_W
 

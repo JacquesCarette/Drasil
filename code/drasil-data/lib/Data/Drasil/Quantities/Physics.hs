@@ -8,8 +8,8 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators (combineNINI, inThe, of_)
 import Data.Drasil.Concepts.Math (axis, cartesian, point, xComp, xDir, yComp, yDir)
 import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angular,
-  constAccel, displacement, distance, energy, force,
-  impulseV, linear, position, rigidBody, speed, stress, time, velocity)
+  displacement, distance, force,
+  linear, position, rigidBody, stress, velocity)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Drasil.Database (mkUid)
 
@@ -70,10 +70,14 @@ chgInVelocity          = quant (mkUid "chgInVelocity") (cn desc)
                            (S "the " +:+ S desc +:+ phrase CP.rigidBody)
                            (Atop Delta $ vec lV) Real velU
   where desc = "change in velocity"
-constAccel             = dqd CP.constAccel             (sup lA lC)                                 Real        accelU
+constAccel             = quant (mkUid "constantAcceleration") (cn "constant acceleration")
+                           (S "a one-dimensional acceleration that is constant")
+                           (sup lA lC) Real accelU
 displacement           = dqd CP.displacement           (vec lU)                                    Real        metre
 distance               = dqd CP.distance               lD                                          Real        metre
-energy                 = dqd CP.energy                 cE                                          Real        joule
+energy                 = quant (mkUid "energy") (cn "energy")
+                           (S "power derived from the utilization of physical or chemical resources")
+                           cE Real joule
 force                  = dqd CP.force                  (vec cF)                                    (Vect Real) newton
 frequency              = quant (mkUid "frequency") (cn' "frequency")
                            (S "the number of occurrences of a repeating event per unit of time")
@@ -93,9 +97,11 @@ height                 = quant (mkUid "height") (cn' "height")
 impulseS               = quant (mkUid "impulseS") (cn "impulse (scalar)")
                            (S "a force acting briefly on a body and producing a finite change of momentum")
                            lJ Real impulseU
-impulseV               = dqd CP.impulseV               (vec cJ)                                    Real        impulseU
+impulseV               = quant (mkUid "impulseV") (cn "impulse (vector)")
+                           (S "a force acting briefly on a body and producing a finite change of momentum in a given direction")
+                           (vec cJ) Real impulseU
 kEnergy                = quant (mkUid "kEnergy") (cn "kinetic energy")
-                           (S "measure" `S.the_ofThe` phrase CP.energy +:+ S "a body possesses due to its motion")
+                           (S "measure" `S.the_ofThe` phrase energy +:+ S "a body possesses due to its motion")
                            (cK <> cE) Real joule
 linearAccel            = quant (mkUid "linearAcceleration") (combineNINI CP.linear CP.acceleration)
                            (S "the rate of change of velocity without a change in direction")
@@ -110,7 +116,7 @@ momentOfInertia        = quant (mkUid "momentOfInertia") (cn "moment of inertia"
                            (S "a quantity expressing a body's tendency to resist angular acceleration")
                            (vec cI) Real momtInertU
 chgMomentum            = quant (mkUid "chgMomentum") (cn' "change in momentum")
-                           (S "The rate of change of a body's" +:+ phrase CP.impulseV)
+                           (S "The rate of change of a body's" +:+ phrase impulseV)
                            (cDelta <> vec cP) Real impulseU
 
 momentum               = quant (mkUid "momentum") (cn "momentum")
@@ -125,7 +131,7 @@ moment2D               = quant (mkUid "moment2D") (cn' "moment")
                            cM Real torqueU
 -- FIXME: moment2D should eventually be a specialization of moment, not separately defined
 period                 = quant (mkUid "period") (cn' "period")
-                           (S "the" +:+ phrase CP.time +:+ S "required for one complete cycle of vibration to pass a given point.")
+                           (S "the" +:+ phrase time +:+ S "required for one complete cycle of vibration to pass a given point.")
                            cT Real second
 position               = dqd CP.position               (Concat [vec lP, label "(", lT, label ")"]) Real        metre
 positionVec            = quant (mkUid "positionVec") (cn' "position vector")
@@ -133,12 +139,14 @@ positionVec            = quant (mkUid "positionVec") (cn' "position vector")
                               `S.toThe` phrase point +:+ S "where the" +:+ phrase CP.force +:+ S "is applied")
                            (vec lR) Real metre
 potEnergy              = quant (mkUid "potEnergy") (cn "potential energy")
-                           (S "measure" `S.the_ofThe` phrase CP.energy +:+ S "held by an object because of its" +:+ phrase CP.position)
+                           (S "measure" `S.the_ofThe` phrase energy +:+ S "held by an object because of its" +:+ phrase CP.position)
                            (cP <> cE) Real joule
 pressure               = quant (mkUid "pressure") (cn' "pressure")
                            (S "a" +:+ phrase CP.force +:+ S "exerted over an area")
                            lP Real pascal
-speed                  = dqd CP.speed                  lV                                          Real        velU
+speed                  = quant (mkUid "speed") (cn' "speed")
+                           (S "magnitude" `S.the_ofThe` phrase velocity +:+ S "vector")
+                           lV Real velU
 scalarAccel            = quant (mkUid "scalarAccel") (cn' "scalar acceleration")
                            (S "magnitude" `S.the_ofThe` phrase CP.acceleration +:+ S "vector")
                            lA Real accelU
@@ -148,7 +156,9 @@ scalarPos              = quant (mkUid "scalarPos") (cn' "scalar position")
 tension                = quant (mkUid "tension") (cn' "tension")
                            (S "a" +:+ phrase CP.stress +:+ S "that causes displacement of the body away from its center")
                            (vec cT) Real newton
-time                   = dqd CP.time                   lT                                          Real        second
+time                   = quant (mkUid "time") (cn' "time")
+                           (S "the indefinite continued progress of existence and events in the past, present, and future regarded as a whole")
+                           lT Real second
 torque                 = quant (mkUid "torque") (cn' "torque")
                            (S "a twisting force that tends to cause rotation")
                            (vec lTau) Real torqueU
@@ -183,9 +193,9 @@ iyPos = quant (mkUid "iyPos") (yComp `of_` iPos)
   (S "The" +:+ NP (yComp `of_` iPos)) (sup (subY lP) initial) Real metre
 
 fSpeed = quant (mkUid "fSpeed") (cn "final speed")
-  (S "The" +:+ phrase CP.speed +:+ S "at the body's final point") (sup lV final) Real velU
+  (S "The" +:+ phrase speed +:+ S "at the body's final point") (sup lV final) Real velU
 iSpeed = quant (mkUid "iSpeed") (cn "initial speed")
-  (S "The" +:+ phrase CP.speed +:+ S "at the body's initial point")
+  (S "The" +:+ phrase speed +:+ S "at the body's initial point")
   (sup lV initial) Real velU
 
 ixSpeed = quant (mkUid "ixSpeed") (xComp `of_` iSpeed)
@@ -214,11 +224,11 @@ yAccel = quant (mkUid "yScalAcc") (yComp `of_` CP.acceleration)
   (S "The" +:+ NP (yComp `of_` CP.acceleration)) (subY lA) Real accelU
 
 constAccelV = quant (mkUid "constAccelV") (cn "constant acceleration vector")
-  (S "The" +:+ phrase CP.constAccel +:+ S "vector") (sup (vec lA) constant) Real accelU
-xConstAccel = quant (mkUid "xConstAccel") (xComp `of_` CP.constAccel)
-  (S "The" +:+ NP (xComp `of_` CP.constAccel)) (sup (subX lA) constant) Real accelU
-yConstAccel = quant (mkUid "yConstAccel") (yComp `of_` CP.constAccel)
-  (S "The" +:+ NP (yComp `of_` CP.constAccel)) (sup (subY lA) constant) Real accelU
+  (S "The" +:+ phrase constAccel +:+ S "vector") (sup (vec lA) constant) Real accelU
+xConstAccel = quant (mkUid "xConstAccel") (xComp `of_` constAccel)
+  (S "The" +:+ NP (xComp `of_` constAccel)) (sup (subX lA) constant) Real accelU
+yConstAccel = quant (mkUid "yConstAccel") (yComp `of_` constAccel)
+  (S "The" +:+ NP (yComp `of_` constAccel)) (sup (subY lA) constant) Real accelU
 
 constant, final, initial :: Symbol
 constant = label "c"

@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import Drasil.Database (mkUid)
 
 import Data.Drasil.Concepts.Documentation (source, theory)
-import Data.Drasil.Concepts.Physics (energy)
+import Data.Drasil.Quantities.Physics (energy)
 
 -- | Collects all thermodynamics-related concepts.
 thermocon :: [ConceptChunk]

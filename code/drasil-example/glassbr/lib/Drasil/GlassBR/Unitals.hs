@@ -36,8 +36,8 @@ symbols = NE.toList inputs <> tmSymbols <> fmap dqdWr specParamVals <>
 constrained :: [ConstrConcept]
 constrained = fmap cnstrw' dataConstraints <> [nomThick, glassTypeCon]
 
-plateLen, plateWidth, charWeight, pbTol, tNT :: DefinedQuantityDict
-plateLenUnc, plateWidthUnc, aspectRatio, charWeightUnc, standOffDist,
+plateLen, plateWidth, charWeight, standOffDist, pbTol, tNT :: DefinedQuantityDict
+plateLenUnc, plateWidthUnc, aspectRatio, charWeightUnc, standOffDistUnc,
   pbTolUnc, tNTUnc :: UncertQ
 glassTypeCon, nomThick :: ConstrConcept
 
@@ -59,7 +59,7 @@ inputsNoUncrtn = glassTypeCon :| [nomThick]
 
 --derived inputs with units and uncertainties
 derivedInsWUnitsUncrtn :: [UncertQ]
-derivedInsWUnitsUncrtn = [standOffDist]
+derivedInsWUnitsUncrtn = [standOffDistUnc]
 
 --derived inputs with uncertainties and no units
 derivedInsWUncrtn :: [UncertQ]
@@ -123,10 +123,12 @@ tNT = quantNoUnit (mkUid "tNT") (nounPhraseSP "TNT equivalent factor")
 tNTUnc = uq (constrained' tNT
   [ gtZeroConstr ] (exactDbl 1)) defaultUncrt
 
-standOffDist = uq (constrained' (quant (mkUid "stdOffDist") (nounPhraseSP "stand off distance")
+standOffDist = quant (mkUid "stdOffDist") (nounPhraseSP "stand off distance")
   (S "the distance from the glazing surface to the centroid of a hemispherical" +:+
    S "high explosive charge")
-  (variable "SD") Real metre)
+  (variable "SD") Real metre
+
+standOffDistUnc = uq (constrained' standOffDist
   [ gtZeroConstr,
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 

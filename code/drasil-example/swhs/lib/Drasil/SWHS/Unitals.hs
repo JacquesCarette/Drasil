@@ -246,14 +246,15 @@ inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
   tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc, tempCUnc,
-  wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
+  wDensityUnc, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
-  htCapLP, htFusion, coilSA, tempC, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
+  htCapLP, htFusion, coilSA, tempC, wDensity, tempW, tempPCM, watE,
+  pcmE :: DefinedQuantityDict
 
 tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
   tempMeltPUnc, htCapSPUnc, htCapLPUnc, htFusionUnc, coilSAUnc,
-  tempCUnc, wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep,
+  tempCUnc, wDensityUnc, htCapW, coilHTC, pcmHTC, tempInit, timeStep,
   timeFinal :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
@@ -369,8 +370,10 @@ tempCUnc = uq (constrained' tempC
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)] (exactDbl 50)) defaultUncrt
 
 -- Constraint 12
-wDensity = uq (cuc'' "wDensity" (density `of_` water)
-  "mass per unit volume of water" (autoStage $ sub (eqSymb density) lWater) densityU Real
+wDensity = quant' (mkUid "wDensity") (density `of_` water)
+  (S "mass per unit volume of water") (autoStage $ sub (eqSymb density) lWater) Real densityU
+
+wDensityUnc = uq (constrained' wDensity
   [gtZeroConstr, sfwrRange $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)]
   (exactDbl 1000)) defaultUncrt
 

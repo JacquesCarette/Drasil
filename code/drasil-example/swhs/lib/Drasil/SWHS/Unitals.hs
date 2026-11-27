@@ -245,14 +245,14 @@ inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
-  tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
+  tempMeltPUnc, htCapSP, htCapLP, htFusion, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
-tankLength, diam, pcmVol, pcmSA, pcmDensity, tempW, tempPCM, watE,
-  pcmE :: DefinedQuantityDict
+tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, tempW,
+  tempPCM, watE, pcmE :: DefinedQuantityDict
 
 tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
-  tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity,
+  tempMeltPUnc, htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity,
   htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
@@ -307,11 +307,13 @@ pcmDensityUnc = uq (constrained' pcmDensity
   (exactDbl 1007)) defaultUncrt
 
 -- Constraint 6
-tempMeltP = uqc "tempMeltP"
+tempMeltP = quant (mkUid "tempMeltP")
   (nounPhraseSP "melting point temperature for PCM")
-  "temperature at which the phase change material transitions from a solid to a liquid"
-  (sup (sub (eqSymb temp) lMelt) lPCM) centigrade Real
-  [physRange $ Bounded (Exc, exactDbl 0) (Exc, sy tempC)] (dbl 44.2) defaultUncrt
+  (S "temperature at which the phase change material transitions from a solid to a liquid")
+  (sup (sub (eqSymb temp) lMelt) lPCM) Real centigrade
+
+tempMeltPUnc = uq (constrained' tempMeltP
+  [physRange $ Bounded (Exc, exactDbl 0) (Exc, sy tempC)] (dbl 44.2)) defaultUncrt
 
 -- Constraint 7
 htCapSP = uqc "htCapSP"

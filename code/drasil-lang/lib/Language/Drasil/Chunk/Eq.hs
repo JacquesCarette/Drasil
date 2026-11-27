@@ -6,14 +6,14 @@ module Language.Drasil.Chunk.Eq (
   QDefinition,
   -- * Constructors
   fromEqn, fromEqn', fromEqnSt,
-  fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
+  fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', mkQuantDefQd,
   mkFuncDef, mkFuncDef', mkFuncDefByQ,
   -- * Synonyms
   ConstQDef, SimpleQDef, ModelQDef
 ) where
 
 import Control.Lens ((^.), view, makeLenses)
-import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk, mkUid)
+import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk, mkUid, nsUid)
 import qualified Data.Set as Set
 
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
@@ -73,8 +73,8 @@ instance (Express e, HasChunkRefs e) => Express (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where
       f = case q ^. inputs of
-        [] -> defines (sy q)
-        is -> defines $ apply q (M.C <$> is)
+        [] -> defines (sy (q ^. qua))
+        is -> defines $ apply (q ^. qua) (M.C <$> is)
         -- FIXME: The fact that we have to manually use `C` here is because our
         -- UID references don't carry enough information. This feels hacky at
         -- the moment, and should eventually be fixed.
@@ -133,16 +133,15 @@ mkQuantDef c = mkQDefSt (c ^. uid) (c ^. term) (c ^. defn) (symbol c) (c ^. typ)
 mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> e -> QDefinition e
 mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 
--- HACK - makes the definition EmptyS !!! FIXME
--- | Smart constructor for QDefinitions. Requires a quantity and its defining
--- equation.
-ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
-ec c = QD
-  (c ^. uid)
-  (quantAU (c ^. uid) (c ^. term) EmptyS Nothing (symbol c) (c ^. typ) (getUnit c))
+-- | Smart constructor for 'QDefinition's whose own 'UID' is derived from the
+-- quantity's: the quantity's 'UID' in the @qd@ namespace. The left-hand side
+-- is still the quantity itself, so it keeps resolving to that quantity's chunk.
+-- The given 'Sentence' is the definition of the quantity.
+mkQuantDefQd :: (Quantity c, MayHaveUnit c) => c -> Sentence -> e -> QDefinition e
+mkQuantDefQd q dfn = QD
+  (nsUid "qd" (q ^. uid))
+  (quantAU (q ^. uid) (q ^. term) dfn Nothing (symbol q) (q ^. typ) (getUnit q))
   []
-
-{-# DEPRECATED ec "`ec` is an unsafe chunk constructor that encourages `UID` double-use." #-}
 
 -- | Factored version of 'QDefinition' functions.
 mkFuncDef0 :: (IsChunk f, HasSymbol f, HasSpace f,

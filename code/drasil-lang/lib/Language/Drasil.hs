@@ -80,7 +80,7 @@ module Language.Drasil (
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
-  , mkQDefSt, mkQuantDef, mkQuantDef', ec
+  , mkQDefSt, mkQuantDef, mkQuantDef', mkQuantDefQd
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.DefinedQuantity
   , DefinedQuantityDict, quant, quant', quantAU, quantNoUnit, quantNoUnit'
@@ -212,7 +212,7 @@ import Language.Drasil.Constraint (physRange, sfwrRange, physElem, sfwrElem, phy
   Constraint(..), ConstraintE, ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
-  fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
+  fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', mkQuantDefQd,
   mkFuncDef, mkFuncDef', mkFuncDefByQ, ConstQDef, SimpleQDef, ModelQDef)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.UncertainQuantity

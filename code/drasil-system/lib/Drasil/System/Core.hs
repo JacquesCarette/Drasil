@@ -41,12 +41,13 @@ instance HasProjectName SystemMeta where
   projectName = projName
 
 instance HasChunkRefs SystemMeta where
-  chunkRefs x = S.unions [
-      chunkRefs (x ^. projName),
-      chunkRefs (x ^. authors),
-      chunkRefs (x ^. background),
-      chunkRefs (x ^. scope),
-      chunkRefs (x ^. motivation)
+  chunkRefs x = S.unions
+    [ chunkRefs $ x ^. projName
+    , chunkRefs $ x ^. authors
+    , chunkRefs $ x ^. purpose
+    , chunkRefs $ x ^. background
+    , chunkRefs $ x ^. scope
+    , chunkRefs $ x ^. motivation
     ]
 
 mkSystemMeta :: ProjectName -> People -> Purpose -> Background -> Scope ->

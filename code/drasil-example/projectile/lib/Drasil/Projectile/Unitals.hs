@@ -2,7 +2,7 @@ module Drasil.Projectile.Unitals (
   offset, flightDur, targPos, inputs, outputs,
   launAngle, launSpeed, landPos, projSpeed, projPos,
   launAngleUnc, launSpeedUnc, targPosUnc, landPosUnc, offsetUnc, flightDurUnc,
-  flightDurCon, landPosCon, launAngleCon, launSpeedCon, offsetCon
+  flightDurCon, landPosCon, launAngleCon, launSpeedCon, offsetCon, targPosCon
 ) where
 
 import Control.Lens ((^.))
@@ -30,7 +30,7 @@ import qualified Drasil.Projectile.Concepts as C (launAngleTerm, launAngleDef, l
   launcher, projectile, target)
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = dqdWr <$> launSpeedCon :| [launAngleCon, targPos]
+inputs = launSpeed :| [launAngle, targPos]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
 outputs = offset :| [flightDur]
@@ -54,10 +54,10 @@ landPosUnc   = uq landPosCon defaultUncrt
 launAngleUnc = uq launAngleCon defaultUncrt
 launSpeedUnc = uq launSpeedCon defaultUncrt
 offsetUnc    = uq offsetCon defaultUncrt
-targPosUnc   = uq targPos defaultUncrt
+targPosUnc   = uq targPosCon defaultUncrt
 flightDurUnc = uq flightDurCon defaultUncrt
 
-flightDur, landPos, launAngle, launSpeed, offset :: DefinedQuantityDict
+flightDur, landPos, launAngle, launSpeed, offset, targPos :: DefinedQuantityDict
 flightDur = quant (mkUid "flightduration")
   (compoundPhrase (nounPhraseSP "flight") (nounPhraseSP "duration"))
   (foldlSent_ [D.toSent $ phraseNP (the time), S "when the", phrase C.projectile, S "lands"])
@@ -77,15 +77,16 @@ offset    = quant (mkUid "offset")
   (compoundPhrase (cn "distance between the") (targPos `andThe` landPos))
   (S "the offset between the" +:+ D.toSent (phraseNP (targPos `andThe` landPos)))
   (subStr lD "offset") Real metre
+targPos   = quant (mkUid "targetposition")
+  (compoundPhrase (C.target ^. term) (position ^. term))
+  (D.toSent (phraseNP (the distance)) `S.fromThe` D.toSent (phraseNP (C.launcher `toThe` C.target)))
+  (subStr lP "target") Real metre
 
-flightDurCon, landPosCon, launAngleCon, launSpeedCon, offsetCon, targPos :: ConstrConcept
+flightDurCon, landPosCon, launAngleCon, launSpeedCon, offsetCon, targPosCon :: ConstrConcept
 flightDurCon = constrainedNRV' flightDur [gtZeroConstr]
 landPosCon   = constrainedNRV' landPos   [gtZeroConstr]
 launAngleCon = constrained' launAngle
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)] (sy pi_ $/ exactDbl 4)
 launSpeedCon = constrained' launSpeed [gtZeroConstr] (exactDbl 100)
 offsetCon    = constrainedNRV' offset [physRange $ UpFrom (Exc, neg $ sy targPos)]
-targPos   = constrained' (quant (mkUid "targetposition")
-  (compoundPhrase (C.target ^. term) (position ^. term))
-  (D.toSent (phraseNP (the distance)) `S.fromThe` D.toSent (phraseNP (C.launcher `toThe` C.target)))
-  (subStr lP "target") Real metre) [gtZeroConstr] (exactDbl 1000)
+targPosCon   = constrained' targPos   [gtZeroConstr] (exactDbl 1000)

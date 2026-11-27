@@ -258,7 +258,7 @@ constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst]
 
 unitalQuants :: [DefinedQuantityDict]
-unitalQuants = dqdWr <$> constrained
+unitalQuants = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 
 inConstraints :: [UncertQ]
 inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]
@@ -267,4 +267,4 @@ outConstraints :: [UncertQ]
 outConstraints = [landPosUnc, offsetUnc, flightDurUnc]
 
 constrained :: [ConstrConcept]
-constrained = [flightDurCon, landPosCon, launAngleCon, launSpeedCon, offsetCon, targPos]
+constrained = [flightDurCon, landPosCon, launAngleCon, launSpeedCon, offsetCon, targPosCon]

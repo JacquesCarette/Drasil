@@ -44,7 +44,7 @@ import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
 import Drasil.SWHS.Unitals (deltaT, htFluxC, htFluxIn,
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
-  tempEnv, tempW, tempWCon, thFluxVect, volHtGen, watE,
+  tempEnv, tempW, tempWCon, thFluxVect, volHtGen, watECon,
   wMass, wVol, absTol, relTol)
 import Drasil.SWHS.References (uriReferences)
 
@@ -68,7 +68,7 @@ import Drasil.SWHS.MetaConcepts (swhs)
 symbols :: [DefinedQuantityDict]
 symbols = concepts <> fmap dqdWr constrained <>
   [gradient, pi_, uNormalVect, surface] <> symbolConcepts <>
-  fmap dqdWr specParamValList <> fmap dqdWr [absTol, relTol] <> fmap dqdWr (NE.toList outputs)
+  fmap dqdWr specParamValList <> fmap dqdWr [absTol, relTol] <> NE.toList outputs
 
 concepts :: [DefinedQuantityDict]
 concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
@@ -145,7 +145,7 @@ si = mkSmithEtAlICO
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs
-  (fmap cnstrw' constrained <> [tempWCon, watE]) (piConst : specParamValList) symbols
+  (fmap cnstrw' constrained <> [tempWCon, watECon]) (piConst : specParamValList) symbols
   symbMap
 
 purp :: Sentence
@@ -271,7 +271,7 @@ sensHtEdesc = foldlSent [ch sensHeat, S "occurs as long as the", phrase material
 --TODO: Implement physical properties of a substance
 
 dataConstListOut :: [ConstrConcept]
-dataConstListOut = [tempWCon, watE]
+dataConstListOut = [tempWCon, watECon]
 
 --------------------------
 --Section 5 : REQUIREMENTS

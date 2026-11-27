@@ -248,13 +248,13 @@ inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
-tempW, tempPCM :: DefinedQuantityDict
+tempW, tempPCM, watE :: DefinedQuantityDict
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
   htCapLP, htFusion, coilSA, tempC, wDensity, htCapW, coilHTC,
   pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
-tempWCon, tempPCMCon, watE, pcmE :: ConstrConcept
+tempWCon, tempPCMCon, watECon, pcmE :: ConstrConcept
 
 -- Constraint 1
 tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
@@ -401,7 +401,7 @@ timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
 -- Output Constraints
 outputs :: NE.NonEmpty ConstrConcept
 --FIXME: Add typical values or use Nothing if not known
-outputs = tempWCon :| [tempPCMCon, watE, pcmE]
+outputs = tempWCon :| [tempPCMCon, watECon, pcmE]
 
 -- Constraint 18
 tempW = quant (mkUid "tempW")
@@ -422,9 +422,11 @@ tempPCMCon = constrained' tempPCM
   [physRange $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (exactDbl 0)
 
 -- Constraint 20
-watE = cuc' "watE" (nounPhraseSP "change in heat energy in the water")
-  "change in thermal energy within the water"
-  (sub (eqSymb sensHeat) lWater) joule Real
+watE = quant (mkUid "watE") (nounPhraseSP "change in heat energy in the water")
+  (S "change in thermal energy within the water")
+  (sub (eqSymb sensHeat) lWater) Real joule
+
+watECon = constrained' watE
   [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)
 
 -- Constraint 21

@@ -277,7 +277,7 @@ eq6_2 = (deriv (sy tempPCM) time) $= 0
 heatEInWtr :: InstanceModel
 heatEInWtr = imNoDeriv heatEInWtrMK
   [qwUC tempInit, qwUC wMass, qwUC htCapW, qwUC wMass]
-  (dqdWr watE) [] [dRef koothoor2013]
+  watE [] [dRef koothoor2013]
   "heatEInWtr" htWtrNotes
 
 heatEInWtrMK :: ModelKind Expr

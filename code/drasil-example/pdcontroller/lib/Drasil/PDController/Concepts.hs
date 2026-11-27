@@ -1,5 +1,5 @@
 module Drasil.PDController.Concepts (
-  acronyms, termDefs, processError, simulationTime, stepTime,
+  acronyms, termDefs, processError,
   controlVariable, propControl, derControl,
   pdControllerCI, proportionalCI, pidC, piCI, pidCI, pidCL,
   ccDampingCoeff, ccStiffCoeff, ccFrequencyDomain, ccLaplaceTransform, ccTransferFxn,
@@ -20,8 +20,8 @@ piCI            = commonIdea (mkUid "piCI")            (pn "proportional integra
 pidCI           = commonIdea (mkUid "pidCI")           (pn "proportional integral derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
-      simulationTime, propControl, derControl, ccFrequencyDomain, ccTimeDomain,
-      ccLaplaceTransform, controlVariable, stepTime, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
+      propControl, derControl, ccFrequencyDomain, ccTimeDomain,
+      ccLaplaceTransform, controlVariable, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
 pidCL
   = cncpt''' (mkUid "pdCtrlLoop") (nounPhraseSP "PD Control Loop") (S ("Closed-Loop control " <>
         "system with PD Controller, Summing Point and Power Plant"))
@@ -48,12 +48,6 @@ processError
   = cncpt''' (mkUid "processError") (nounPhraseSP "Process Error")
       (S ("Input to the PID controller. Process Error is the difference between the "
          <> "Set-Point and the Process Variable"))
-
-stepTime = cncpt''' (mkUid "stepTime") (nounPhraseSP "Step Time") (S "Simulation step time")
-
-simulationTime
-  = cncpt''' (mkUid "simulationTime") (nounPhraseSP "Simulation Time")
-      (S "Total execution time of the PD simulation")
 
 controlVariable
   = cncpt''' (mkUid "controlVariable") (nounPhraseSP "Control Variable")

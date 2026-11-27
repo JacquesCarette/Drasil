@@ -114,14 +114,16 @@ ipStepTime = constrained' dqdStepTime
   [physRange $ Bounded (Inc, frac 1 1000) (Exc, sy ipSimTime)]
   (dbl 0.001)
 ipStepTimeUnc = uq ipStepTime defaultUncrt
-dqdStepTime = dqd stepTime symTStep Real second
+dqdStepTime = quant (mkUid "stepTime") (nounPhraseSP "Step Time")
+  (S "Simulation step time") symTStep Real second
 
 ipSimTime
   = constrained' dqdSimTime
       [physRange $ Bounded (Inc, exactDbl 1) (Inc, exactDbl 60)]
       (exactDbl 10)
 ipSimTimeUnc = uq ipSimTime defaultUncrt
-dqdSimTime = dqd simulationTime symTSim Real second
+dqdSimTime = quant (mkUid "simulationTime") (nounPhraseSP "Simulation Time")
+  (S "Total execution time of the PD simulation") symTSim Real second
 
 odeAbsTolConst, odeRelTolConst :: ConstQDef
 

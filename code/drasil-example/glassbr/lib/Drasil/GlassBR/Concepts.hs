@@ -6,8 +6,8 @@ module Drasil.GlassBR.Concepts (
   -- * ConceptChunks
   annealedGl, fTemperedGl, hStrengthGl,
   blast, blastResisGla,
-  blastTy, bomb, demandq, eqTNTChar, explosion, glassGeo, glassTy,
-  glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe, probBreak,
+  blastTy, bomb, explosion, glassGeo, glassTy,
+  glassWL, glBreakage, lateral, lite, longDurLoad, notSafe, probBreak,
   safeMessage, shortDurLoad, specA, specDeLoad,
 
   -- * CIs
@@ -50,8 +50,8 @@ glaPlane   = compoundNC glass plane
 responseTy = compoundNC response type_
 
 annealedGl, fTemperedGl, hStrengthGl,
-  blast, blastResisGla, blastTy, bomb, demandq, eqTNTChar, explosion,
-  glassGeo, glassTy, glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe, probBreak,
+  blast, blastResisGla, blastTy, bomb, explosion,
+  glassGeo, glassTy, glassWL, glBreakage, lateral, lite, longDurLoad, notSafe, probBreak,
   safeMessage, shortDurLoad, specA, specDeLoad :: ConceptChunk
 
 annealedGl  = cncpt'' (mkUid "annealedGl")
@@ -84,10 +84,6 @@ blastTy       = cncpt''' (mkUid "blastTy")       (cn'          "blast type")
   (S "the blast type input includes parameters like weight of charge, TNT equivalent factor, and stand off distance from the point of explosion")
 bomb          = cncpt''' (mkUid "bomb")          (cn'          "bomb")
   (S "a container filled with a destructive substance designed to exlode on impact or via detonation")
-demandq       = cncpt''' (mkUid "demandq")       (nounPhraseSP "applied load (demand)")
-  (S "3 second duration equivalent pressure")
-eqTNTChar     = cncpt''' (mkUid "eqTNTChar")     (nounPhraseSP "equivalent TNT charge mass")
-  (S "mass of TNT placed on the ground in a hemisphere that represents the design explosive threat")
 explosion     = cncpt''' (mkUid "explosion")     (cn' "explosion")
   (S "a destructive shattering of something")
 glassGeo      = cncpt''' (mkUid "glassGeo")      (cnIES        "glass geometry")
@@ -103,8 +99,6 @@ lateral       = cncpt''' (mkUid "lateral")       (nounPhraseSP "lateral")
   (S "perpendicular to the glass surface")
 lite          = cncpt''' (mkUid "lite")          (cn'          "lite")
   (S "pieces of glass that are cut, prepared, and used to create the window or door")
-load          = cncpt''' (mkUid "load")          (nounPhraseSP "applied load (demand) or pressure")
-  (S "a uniformly distributed lateral pressure")
 longDurLoad   = cncpt''' (mkUid "longDurLoad")   (nounPhraseSP "long duration load")
   (S "any load lasting approximately 30 days")
 notSafe       = cncpt''' (mkUid "notSafe")       (nounPhraseSP "not safe")

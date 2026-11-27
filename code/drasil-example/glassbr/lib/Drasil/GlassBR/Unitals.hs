@@ -21,8 +21,8 @@ import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (annealedGl, fTemperedGl, hStrengthGl, iGlass, lGlass,
-  blast, blastResisGla, blastTy, bomb, demandq, eqTNTChar, explosion, glassGeo,
-  glassWL, glBreakage, lateral, lite, load, longDurLoad, notSafe,
+  blast, blastResisGla, blastTy, bomb, explosion, glassGeo,
+  glassWL, glBreakage, lateral, lite, longDurLoad, notSafe,
   safeMessage, shortDurLoad, specA, specDeLoad, glassType)
 import Drasil.GlassBR.Units (sFlawPU)
 
@@ -224,9 +224,11 @@ sdx, sdy, sdz :: DefinedQuantityDict
 demand, tmDemand, lRe, tmLRe, minThick, nonFactorL, eqTNTWeight,
   sflawParamM, sflawParamK, loadDur, modElas :: DefinedQuantityDict
 
-demand      = dqd demandq lQ Real pascal --correct Space used?
+demand      = quant (mkUid "demandq") (nounPhraseSP "applied load (demand)")
+  (S "3 second duration equivalent pressure") lQ Real pascal --correct Space used?
 
-tmDemand    = dqd load (variable "Load") Real pascal --correct Space used?
+tmDemand    = quant (mkUid "load") (nounPhraseSP "applied load (demand) or pressure")
+  (S "a uniformly distributed lateral pressure") (variable "Load") Real pascal --correct Space used?
 
 lRe         = quant (mkUid "lResistance") (nounPhraseSP "load resistance")
   (foldlSent_ [S "the uniform lateral load that a glass construction can sustain",
@@ -243,8 +245,9 @@ nonFactorL  = quant (mkUid "nFL") (nounPhraseSP "non-factored load")
   S "per 1000 for monolithic", short annealedGl, S "glass"])
   (variable "NFL") Real pascal --correct Space used?
 
-eqTNTWeight = dqd eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real
-  kilogram
+eqTNTWeight = quant (mkUid "eqTNTChar") (nounPhraseSP "equivalent TNT charge mass")
+  (S "mass of TNT placed on the ground in a hemisphere that represents the design explosive threat")
+  (sub (eqSymb charWeight) (eqSymb tNT)) Real kilogram
 
 modElas     = quant (mkUid "modElas") (nounPhraseSP "modulus of elasticity of glass")
   (S "the ratio of tensile stress to tensile strain of glass") cE Real pascal
@@ -397,4 +400,4 @@ glassThickness =
 
 --Below are present in this file temporarily--
 lateralLoad :: IdeaDict
-lateralLoad = compoundNC lateral load
+lateralLoad = compoundNC lateral tmDemand

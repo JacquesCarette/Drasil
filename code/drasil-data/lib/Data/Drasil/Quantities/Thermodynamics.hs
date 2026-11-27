@@ -6,7 +6,7 @@ import Language.Drasil.ShortHands (cT, cC, lQ, cQ, cE)
 import Drasil.Database (mkUid)
 
 import Data.Drasil.SI_Units (centigrade, joule)
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatCapSpec, htFlux, sensHeat, temp)
+import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatCapSpec, htFlux)
 import qualified Data.Drasil.Units.Thermodynamics as UT (heatCapSpec, thermalFlux)
 
 -- * With Units
@@ -19,7 +19,9 @@ boilPt, temp, heatCapSpec, htFlux, latentHeat, meltPt, sensHeat :: DefinedQuanti
 boilPt        = quant (mkUid "boilPt") (cn' "boiling point temperature")
                   (S "the temperature at which a substance changes from liquid to vapour")
                   (sub cT (label "boil")) Real centigrade
-temp          = dqd CT.temp        cT                      Real centigrade
+temp          = quant (mkUid "temperature") (cn' "temperature")
+                  (S "the degree or intensity of heat present in a substance or object")
+                  cT Real centigrade
 heatCapSpec   = dqd CT.heatCapSpec cC                      Real UT.heatCapSpec
 htFlux        = dqd CT.htFlux      lQ                      Real UT.thermalFlux
 latentHeat    = quant (mkUid "latentHeat") (cn' "latent heat")
@@ -29,4 +31,8 @@ latentHeat    = quant (mkUid "latentHeat") (cn' "latent heat")
 meltPt        = quant (mkUid "meltPt") (cn' "melting point temperature")
                   (S "the temperature at which a substance changes from solid to liquid")
                   (sub cT (label "melt")) Real centigrade
-sensHeat      = dqd CT.sensHeat    cE                      Real joule
+sensHeat      = quant (mkUid "sensHeat") (cn' "sensible heat")
+                  (S ("heat exchanged by a body in which the exchange of heat " <>
+                      "changes the temperature and some macroscopic variables of " <>
+                      "the body or system, but leaves others unchanged"))
+                  cE Real joule

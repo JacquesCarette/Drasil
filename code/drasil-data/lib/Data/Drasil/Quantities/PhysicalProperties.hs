@@ -5,7 +5,7 @@ import Language.Drasil
 import Drasil.Database (mkUid)
 import Language.Drasil.ShortHands (lM, cL, cV, lGamma, lRho)
 
-import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (len, mass, vol)
+import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (len, mass)
 import Data.Drasil.SI_Units (kilogram, metre, m_3, specificWeight)
 import Data.Drasil.Units.PhysicalProperties (densityU)
 
@@ -19,4 +19,5 @@ specWeight = quant (mkUid "specWeight") (cn' "specific weight")
   (S "the weight per unit volume") lGamma Real specificWeight
 mass       = dqd CPP.mass       lM     Real kilogram
 len        = dqd CPP.len        cL     Real metre
-vol        = dqd CPP.vol        cV     Real m_3
+vol        = quant (mkUid "volume") (cn' "volume")
+  (S "the amount of space that a substance or object occupies") cV Real m_3

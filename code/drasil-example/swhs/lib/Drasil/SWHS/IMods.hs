@@ -165,7 +165,7 @@ eBalanceOnPCM :: InstanceModel
 eBalanceOnPCM = im (deModel' eBalanceOnPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
   , qwUC timeFinal, qwUC tempInit, qwUC pcmSA
   , qwUC pcmHTC, qwUC pcmMass, qwUC htCapSP, qwUC htCapLP]
-  (dqdWr tempPCM) []
+  tempPCM []
   [dRef koothoor2013] (Just eBalanceOnPCMDeriv) "eBalanceOnPCM" balPCMNotes
 
 eBalanceOnPCMRC :: RelationConcept

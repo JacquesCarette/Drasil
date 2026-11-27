@@ -34,12 +34,13 @@ symbols = NE.toList inputs <> tmSymbols <> fmap dqdWr specParamVals <>
   mathunitals <> physicalquants <> mathquants
 
 constrained :: [ConstrConcept]
-constrained = fmap cnstrw' dataConstraints <> [nomThick, glassTypeCon]
+constrained = fmap cnstrw' dataConstraints <> [nomThickCon, glassTypeCon]
 
-plateLen, plateWidth, aspectRatio, charWeight, standOffDist, pbTol, tNT :: DefinedQuantityDict
+plateLen, plateWidth, aspectRatio, charWeight, standOffDist, pbTol, tNT,
+  nomThick :: DefinedQuantityDict
 plateLenUnc, plateWidthUnc, aspectRatioUnc, charWeightUnc, standOffDistUnc,
   pbTolUnc, tNTUnc :: UncertQ
-glassTypeCon, nomThick :: ConstrConcept
+glassTypeCon, nomThickCon :: ConstrConcept
 
 inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = (plateLen :| [plateWidth, charWeight]) <> (pbTol :| [tNT]) <>
@@ -55,7 +56,7 @@ inputsWUncrtn = pbTolUnc :| [tNTUnc]
 
 --inputs with no uncertainties
 inputsNoUncrtn :: NE.NonEmpty ConstrConcept
-inputsNoUncrtn = glassTypeCon :| [nomThick]
+inputsNoUncrtn = glassTypeCon :| [nomThickCon]
 
 --derived inputs with units and uncertainties
 derivedInsWUnitsUncrtn :: [UncertQ]
@@ -134,9 +135,11 @@ standOffDistUnc = uq (constrained' standOffDist
   [ gtZeroConstr,
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
-nomThick = cuc' "nomThick" (nounPhraseSP "nominal thickness")
-  "the specified standard thickness of the glass plate" lT millimetre
-  {-Discrete nominalThicknesses, but not implemented-} Rational
+nomThick = quant (mkUid "nomThick") (nounPhraseSP "nominal thickness")
+  (S "the specified standard thickness of the glass plate") lT
+  {-Discrete nominalThicknesses, but not implemented-} Rational millimetre
+
+nomThickCon = constrained' nomThick
   [sfwrElem $ mkSet Rational (dbl <$> nominalThicknesses)] $ exactDbl 8 -- for testing
 
 glassTypeCon = constrainedNRV' (quantNoUnit' (mkUid "glassTy")

@@ -244,13 +244,13 @@ inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
-inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSA, pcmDensity,
+inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
-tankLength, diam, pcmVol, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
+tankLength, diam, pcmVol, pcmSA, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
-tankLengthUnc, diamUnc, pcmVolUnc, pcmSA, pcmDensity, tempMeltP,
+tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensity, tempMeltP,
   htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity, htCapW,
   coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
@@ -286,13 +286,15 @@ pcmVolUnc = uq (constrained' pcmVol
 
 -- Constraint 4
 -- Capitalization Issue here too.
-pcmSA = uqc "pcmSA"
+pcmSA = quant (mkUid "pcmSA")
   (compoundPhrase (nounPhraseSP "phase change material") (surArea ^. term))
-  "area covered by the outermost layer of the phase change material"
-  (sub cA lPCM) m_2 Real
+  (S "area covered by the outermost layer of the phase change material")
+  (sub cA lPCM) Real m_2
+
+pcmSAUnc = uq (constrained' pcmSA
   [gtZeroConstr,
   sfwrRange $ Bounded (Inc, sy pcmVol) (Inc, (exactDbl 2 $/ sy thickness) $* sy tankVol)]
-  (dbl 1.2) defaultUncrt
+  (dbl 1.2)) defaultUncrt
 
 -- Constraint 5
 pcmDensity = uq (cuc'' "pcmDensity" (nounPhraseSP "density of PCM")

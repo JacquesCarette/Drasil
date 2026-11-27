@@ -38,11 +38,11 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..), InternalBinderElim(..))
+  RenderMethod(..), MethodElim, BlockCommentSym(..), ScopeElim(..),
+  InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, binderElim, value, function, preStatement, visibility,
-  parameter, method, blockComment')
+  parameter, method)
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
@@ -156,11 +156,13 @@ instance FileSym SwiftCode FileData ModData where
 
   docMod = G.docMod CP.modDoc' swiftExt
 
-instance RenderFile SwiftCode FileData ModData where
+instance RenderFile SwiftCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
-  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
+  commentedMod fl' cmt' = do
+    fl <- fl'
+    pure . R.commentedMod (unSC fl) <$> cmt'
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
@@ -747,7 +749,7 @@ instance OOMethodSym SwiftCode MethodData Doc Doc ParamData Body Variable Value 
   inOutMethod n s p = CP.inOutFunc (method n s p)
   docInOutMethod n s p = CP.docInOutFunc' CP.functionDoc (inOutMethod n s p)
 
-instance RenderMethod SwiftCode MethodData where
+instance RenderMethod SwiftCode MethodData Statement where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
@@ -778,7 +780,7 @@ instance ClassSym SwiftCode Class StateVar MethodData where
 
   docClass = G.docClass swiftClassDoc
 
-instance RenderClass SwiftCode Class StateVar MethodData Doc where
+instance RenderClass SwiftCode Class StateVar MethodData Doc Statement where
   intClass = CP.intClass R.class'
   commentedClass = G.commentedClass
 
@@ -810,13 +812,10 @@ instance RenderMod SwiftCode ModData where
 instance ModuleElim SwiftCode ModData where
   module' = modDoc . unSC
 
-instance BlockCommentSym SwiftCode where
+instance BlockCommentSym SwiftCode Statement where
   blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
     blockCmtEnd)
-
-instance BlockCommentElim SwiftCode where
-  blockComment' = unSC
 
 stmtFromData :: Doc -> MS (SwiftCode Statement)
 stmtFromData = toState . toCode

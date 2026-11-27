@@ -37,9 +37,9 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderStatement(..), StatementElim(..), StatementTerm(..),
   RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
+  BlockCommentSym(..), ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
-  bOp, variable, value, function, visibility, parameter, method, blockComment')
+  bOp, variable, value, function, visibility, parameter, method)
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
@@ -149,11 +149,13 @@ instance FileSym JavaCode FileData ModData where
 
   docMod = CP.doxMod jExt
 
-instance RenderFile JavaCode FileData ModData where
+instance RenderFile JavaCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
-  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
+  commentedMod fl' cmt' = do
+    fl <- fl'
+    pure . R.commentedMod (unJC fl) <$> cmt'
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
@@ -768,9 +770,11 @@ instance OOMethodSym JavaCode MethodData Doc Doc ParamData Body Variable Value T
   inOutMethod n s p = jInOut (method n s p)
   docInOutMethod n s p = jDocInOut (inOutMethod n s p)
 
-instance RenderMethod JavaCode MethodData where
-  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
-    (onStateValue (onCodeValue R.commentedItem) cmt)
+instance RenderMethod JavaCode MethodData Statement where
+  commentedFunc cmt' m' = do
+    m <- m'
+    cmt <- cmt'
+    pure $ pure $ updateMthd (unJC m) (R.commentedItem (statement cmt))
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
@@ -807,7 +811,7 @@ instance ClassSym JavaCode Class StateVar MethodData where
 
   docClass = CP.doxClass
 
-instance RenderClass JavaCode Class StateVar MethodData Doc where
+instance RenderClass JavaCode Class StateVar MethodData Doc Statement where
   intClass = CP.intClass R.class'
   commentedClass = G.commentedClass
 
@@ -824,13 +828,10 @@ instance RenderMod JavaCode ModData where
 instance ModuleElim JavaCode ModData where
   module' = modDoc . unJC
 
-instance BlockCommentSym JavaCode where
-  blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
-  docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
-    blockCmtEnd)
-
-instance BlockCommentElim JavaCode where
-  blockComment' = unJC
+instance BlockCommentSym JavaCode Statement where
+  blockComment lns = toCode (R.blockCmt lns blockCmtStart blockCmtEnd, Empty)
+  docComment = onStateValue (\lns -> toCode (R.docCmt lns docCmtStart
+    blockCmtEnd, Empty))
 
 instance HasException JavaCode where
   toConcreteExc Standard = toCode $ stdExc exceptionObj
@@ -1208,7 +1209,7 @@ jInOut f ins outs both b = f (returnTp rets)
         rets = both P.<> outs
 
 jDocInOut
-  :: (BlockCommentSym r, RenderMethod r mthd)
+  :: (BlockCommentSym r stmt, RenderMethod r mthd stmt)
   => ([VS (r Variable)] -> [VS (r Variable)] -> [VS (r Variable)] -> MS (r Body) -> MS (r mthd))
   -> String
   -> [(String, VS (r Variable))]
@@ -1228,7 +1229,7 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (fst <$> bs P.<> is)
           fmap fst os
 
 jExtraClass
-  :: (RenderClass r cls stvr mthd vis, RenderVisibility r vis, Monad r)
+  :: (RenderClass r cls stvr mthd vis stmt, RenderVisibility r vis, Monad r)
   => Label
   -> Maybe Label
   -> [CSStateVar r stvr]

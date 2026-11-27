@@ -31,10 +31,9 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderStatement(..), StatementElim(..), StatementTerm(..),
   RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
+  BlockCommentSym(..), ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
-  bOp, variable, value, valueInt, function, visibility, parameter, method,
-  blockComment')
+  bOp, variable, value, valueInt, function, visibility, parameter, method)
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
@@ -118,10 +117,12 @@ instance FileSym MatlabCode FileData ModData where
     A.fileDoc mlExt m
   docMod = A.docMod mlExt
 
-instance RenderFile MatlabCode FileData ModData where
+instance RenderFile MatlabCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
-  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
+  commentedMod fl' cmt' = do
+    fl <- fl'
+    pure . R.commentedMod (unMLC fl) <$> cmt'
   fileFromData = A.fileFromData (onCodeValue . fileD)
 
 instance ImportSym MatlabCode where
@@ -607,9 +608,11 @@ instance MethodSym MatlabCode MethodData Doc ParamData Body Variable TypeData wh
     pure $ toCode $ mthd n $ mlFuncDoc n (RC.variable <$> rets) pms (RC.body bod)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance RenderMethod MatlabCode MethodData where
-  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
-    (onStateValue (onCodeValue R.commentedItem) cmt)
+instance RenderMethod MatlabCode MethodData Statement where
+  commentedFunc cmt' f' = do
+    f <- f'
+    cmt <- cmt'
+    pure $ pure $ updateMthd (unMLC f) (R.commentedItem (statement cmt))
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
 instance ProcRenderMethod MatlabCode MethodData Doc ParamData Body TypeData where
@@ -641,12 +644,9 @@ instance RenderMod MatlabCode ModData where
 instance ModuleElim MatlabCode ModData where
   module' = modDoc . unMLC
 
-instance BlockCommentSym MatlabCode where
+instance BlockCommentSym MatlabCode Statement where
   blockComment lns = toCode $ mlLineCmt lns
   docComment = onStateValue (toCode . mlLineCmt)
-
-instance BlockCommentElim MatlabCode where
-  blockComment' = unMLC
 
 -- convenience
 mlName, mlVersion :: String
@@ -694,8 +694,8 @@ mlCmtStart = text "%"
 
 -- | Makes a MATLAB comment. Every line starts with %.
 --   (We avoid %{ %} blocks: those need the markers alone on a line.)
-mlLineCmt :: [String] -> Doc
-mlLineCmt = vcat . fmap ((mlCmtStart <+>) . text)
+mlLineCmt :: [String] -> Statement
+mlLineCmt lns = ((vcat . fmap ((mlCmtStart <+>) . text)) lns, Empty)
 
 -- | A stand-in print function. mlPrint never uses it, but it must be a real
 --   value so the print methods type-check.

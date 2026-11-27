@@ -37,10 +37,10 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(..),
   StatementTerm(..), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
+  MethodElim, BlockCommentSym(..), ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, value, function, visibility, parameter, method,
-  blockComment', InternalBinderElim(binderElim), RenderValue(call))
+  InternalBinderElim(binderElim), RenderValue(call))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, ParentSpec, RenderClass(..), ClassElim,
@@ -820,12 +820,18 @@ instance FileSym CppSrcCode FileData ModData where
 
   docMod = CP.doxMod cppSrcExt
 
-instance RenderFile CppSrcCode FileData ModData where
+instance RenderFile CppSrcCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
-  commentedMod = on3StateValues (\mn m cmt -> if mn then on2CodeValues
-    R.commentedMod m cmt else m) getCurrMain
+  commentedMod fl' cmt' = do
+    fl <- fl'
+    cmt <- cmt'
+    let m = unCPPSC fl
+    mn <- getCurrMain
+    pure $ pure $ if mn
+      then R.commentedMod m cmt
+      else m
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
@@ -1497,7 +1503,7 @@ instance OOMethodSym CppSrcCode MethodData AttachmentData (Doc, VisibilityTag) P
   inOutMethod n s p = cppsInOut (method n s p)
   docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-instance RenderMethod CppSrcCode MethodData where
+instance RenderMethod CppSrcCode MethodData Statement where
   commentedFunc = cppCommentedFunc Source
 
   mthdFromData s d = toState $ toCode $ mthd s d
@@ -1530,7 +1536,7 @@ instance ClassSym CppSrcCode Class StateVarData MethodData where
 
   docClass = CP.doxClass
 
-instance RenderClass CppSrcCode Class StateVarData MethodData (Doc, VisibilityTag) where
+instance RenderClass CppSrcCode Class StateVarData MethodData (Doc, VisibilityTag) Statement where
   intClass n _ _ vs cs fs = do
     modify (setClassName n)
     on2StateLists cppsClass vs (zoom lensCStoMS <$> cs P.<> fs)
@@ -1565,13 +1571,10 @@ instance RenderMod CppSrcCode ModData where
 instance ModuleElim CppSrcCode ModData where
   module' = modDoc . unCPPSC
 
-instance BlockCommentSym CppSrcCode where
-  blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
-  docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
-    blockCmtEnd)
-
-instance BlockCommentElim CppSrcCode where
-  blockComment' = unCPPSC
+instance BlockCommentSym CppSrcCode Statement where
+  blockComment lns = toCode (R.blockCmt lns blockCmtStart blockCmtEnd, Empty)
+  docComment = onStateValue (\lns -> toCode (R.docCmt lns docCmtStart
+    blockCmtEnd, Empty))
 
 -----------------
 -- Header File --
@@ -1602,12 +1605,17 @@ instance FileSym CppHdrCode FileData ModData where
 
   docMod = CP.doxMod cppHdrExt
 
-instance RenderFile CppHdrCode FileData ModData where
+instance RenderFile CppHdrCode FileData ModData Statement where
   top = onCodeValue cpphtop
   bottom = toCode endif
 
-  commentedMod = on2StateValues (\m cmt -> if isEmpty (RC.module' $
-    onCodeValue fileMod m) then m else on2CodeValues R.commentedMod m cmt)
+  commentedMod fl' cmt' = do
+    fl <- fl'
+    cmt <- cmt'
+    let m = unCPPHC fl
+    pure $ pure $ if isEmpty (RC.module' (pure $ fileMod m :: CppHdrCode ModData))
+      then m
+      else R.commentedMod m cmt
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
@@ -2125,7 +2133,7 @@ instance OOMethodSym CppHdrCode MethodData AttachmentData (Doc, VisibilityTag) P
   inOutMethod n s p = cpphInOut (method n s p)
   docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-instance RenderMethod CppHdrCode MethodData where
+instance RenderMethod CppHdrCode MethodData Statement where
   commentedFunc = cppCommentedFunc Header
 
   mthdFromData s d = toState $ toCode $ mthd s d
@@ -2168,7 +2176,7 @@ instance ClassSym CppHdrCode Class StateVarData MethodData where
 
   docClass = CP.doxClass
 
-instance RenderClass CppHdrCode Class StateVarData MethodData (Doc, VisibilityTag) where
+instance RenderClass CppHdrCode Class StateVarData MethodData (Doc, VisibilityTag) Statement where
   intClass n _ i vs cstrs mths = do
     modify (setClassName n)
     vars <- sequence vs
@@ -2204,13 +2212,10 @@ instance RenderMod CppHdrCode ModData where
 instance ModuleElim CppHdrCode ModData where
   module' = modDoc . unCPPHC
 
-instance BlockCommentSym CppHdrCode where
-  blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
-  docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
-    blockCmtEnd)
-
-instance BlockCommentElim CppHdrCode where
-  blockComment' = unCPPHC
+instance BlockCommentSym CppHdrCode Statement where
+  blockComment lns = toCode (R.blockCmt lns blockCmtStart blockCmtEnd, Empty)
+  docComment = onStateValue (\lns -> toCode (R.docCmt lns docCmtStart
+    blockCmtEnd, Empty))
 
 -- helpers
 
@@ -2694,15 +2699,15 @@ cpphMethod n t a ps = let attchDoc = RC.perm a
     <> parens (parameterList ps) <> endStatement
 
 cppCommentedFunc
-  :: (BlockCommentElim r, Monad r)
-  => FileType -> MS (r Doc) -> MS (r MethodData) -> MS (r MethodData)
+  :: (StatementElim r stmt, Monad r)
+  => FileType -> MS (r stmt) -> MS (r MethodData) -> MS (r MethodData)
 cppCommentedFunc ft cmt fn = do
   f <- fn
   mn <- getCurrMainFunc
   scp <- getVisibility
   cmnt <- cmt
   let cf = pure (onCodeValue (mthd scp . R.commentedItem
-        (RC.blockComment' cmnt) . mthdDoc) f)
+        (statement cmnt) . mthdDoc) f)
       ret Source = if mn then cf else pure f
       ret Header = if mn then pure f else cf
       ret Combined = error "Combined passed to cppCommentedFunc"

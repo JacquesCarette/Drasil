@@ -35,11 +35,10 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..), InternalBinderElim(..))
+  RenderMethod(..), MethodElim, BlockCommentSym(..), ScopeElim(..),
+  InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  uOp, bOp, variable, value, function, visibility, parameter, method,
-  blockComment')
+  uOp, bOp, variable, value, function, visibility, parameter, method)
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
@@ -143,11 +142,13 @@ instance FileSym PythonCode FileData ModData where
 
   docMod = CP.doxMod pyExt
 
-instance RenderFile PythonCode FileData ModData where
+instance RenderFile PythonCode FileData ModData Statement where
   top _ = toCode empty
   bottom = toCode empty
 
-  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
+  commentedMod fl' cmt' = do
+    fl <- fl'
+    pure . R.commentedMod (unPC fl) <$> cmt'
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
@@ -700,7 +701,7 @@ instance OOMethodSym PythonCode MethodData AttachmentData Doc ParamData Body Var
   inOutMethod n s p = CP.inOutFunc (method n s p)
   docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
 
-instance RenderMethod PythonCode MethodData where
+instance RenderMethod PythonCode MethodData Statement where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
@@ -746,7 +747,7 @@ instance ClassSym PythonCode Class StateVar MethodData where
 
   docClass = CP.doxClass
 
-instance RenderClass PythonCode Class StateVar MethodData Doc where
+instance RenderClass PythonCode Class StateVar MethodData Doc Statement where
   intClass = CP.intClass pyClass
   commentedClass = G.commentedClass
 
@@ -775,13 +776,10 @@ instance RenderMod PythonCode ModData where
 instance ModuleElim PythonCode ModData where
   module' = modDoc . unPC
 
-instance BlockCommentSym PythonCode where
+instance BlockCommentSym PythonCode Statement where
   blockComment lns = toCode $ pyBlockComment lns pyCommentStart
   docComment = onStateValue (\lns -> toCode $ pyDocComment lns pyDocCommentStart
     pyCommentStart)
-
-instance BlockCommentElim PythonCode where
-  blockComment' = unPC
 
 -- convenience
 initName :: Label

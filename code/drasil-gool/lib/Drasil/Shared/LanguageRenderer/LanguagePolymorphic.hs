@@ -630,7 +630,7 @@ function
 function n s t = RO.intFunc False n s classLevel (mType t)
 
 docFuncRepr
-  :: (BlockCommentSym r, RenderMethod r mthd)
+  :: (BlockCommentSym r stmt, RenderMethod r mthd stmt)
   => FuncDocRenderer
   -> String
   -> [String]
@@ -641,7 +641,7 @@ docFuncRepr f desc pComms rComms = commentedFunc (docComment $ onStateValue
   (\ps -> f desc (zip ps pComms) rComms) getParameters)
 
 docFunc
-  :: (BlockCommentSym r, RenderMethod r mthd)
+  :: (BlockCommentSym r stmt, RenderMethod r mthd stmt)
   => FuncDocRenderer
   -> String
   -> [String]
@@ -653,7 +653,7 @@ docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 -- Classes --
 
 buildClass
-  :: (RenderClass r cls stvr mthd vis, VisibilitySym r vis)
+  :: (RenderClass r cls stvr mthd vis stmt, VisibilitySym r vis)
   => (Maybe Label -> r ParentSpec)
   -> Maybe Label
   -> [CSStateVar r stvr]
@@ -665,7 +665,7 @@ buildClass inherit p stVars constructors methods = do
   RO.intClass n public (inherit p) stVars constructors methods
 
 implementingClass
-  :: (RenderClass r cls stvr mthd vis, VisibilitySym r vis)
+  :: (RenderClass r cls stvr mthd vis stmt, VisibilitySym r vis)
   => ([Label] -> r ParentSpec)
   -> Label
   -> [Label]
@@ -676,15 +676,15 @@ implementingClass
 implementingClass implements n is = RO.intClass n public (implements is)
 
 docClass
-  :: (RenderClass r cls stvr mthd vis, BlockCommentSym r)
+  :: (RenderClass r cls stvr mthd vis stmt, BlockCommentSym r stmt)
   => ClassDocRenderer -> String -> CS (r cls) -> CS (r cls)
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 
 commentedClass
-  :: (RC.BlockCommentElim r, RO.ClassElim r cls, Monad r)
-  => CS (r Doc) -> CS (r cls) -> CS (r Doc)
+  :: (RC.StatementElim r stmt, RO.ClassElim r cls, Monad r)
+  => CS (r stmt) -> CS (r cls) -> CS (r Doc)
 commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
-  (RC.blockComment' cmt) (RO.class' cs))
+  (RC.statement cmt) (RO.class' cs))
 
 -- Modules --
 
@@ -694,7 +694,7 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 -- Files --
 
 fileDoc
-  :: (RC.BlockElim r block, RenderMod r mod, RenderFile r file mod)
+  :: (RC.BlockElim r block, RenderMod r mod, RenderFile r file mod stmt)
   => String -> (r mod -> r block) -> r block -> FS (r mod) -> FS (r file)
 fileDoc ext topb botb mdl = do
   m <- mdl
@@ -713,7 +713,7 @@ fileDoc ext topb botb mdl = do
 --   dt is the date
 --   fl is the file
 docMod
-  :: (BlockCommentSym r, RenderFile r file mod)
+  :: (BlockCommentSym r stmt, RenderFile r file mod stmt)
   => ModuleDocRenderer
   -> String
   -> String

@@ -245,15 +245,15 @@ inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
-  tempMeltPUnc, htCapSP, htCapLP, htFusion, coilSA, tempC,
+  tempMeltPUnc, htCapSPUnc, htCapLP, htFusion, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
-tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, tempW,
-  tempPCM, watE, pcmE :: DefinedQuantityDict
+tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP, htCapSP,
+  tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
 tankLengthUnc, diamUnc, pcmVolUnc, pcmSAUnc, pcmDensityUnc,
-  tempMeltPUnc, htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity,
-  htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
+  tempMeltPUnc, htCapSPUnc, htCapLP, htFusion, coilSA, tempC,
+  wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
 tempWCon, tempPCMCon, watECon, pcmECon :: ConstrConcept
 
@@ -316,14 +316,16 @@ tempMeltPUnc = uq (constrained' tempMeltP
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, sy tempC)] (dbl 44.2)) defaultUncrt
 
 -- Constraint 7
-htCapSP = uqc "htCapSP"
+htCapSP = quant (mkUid "htCapSP")
   (nounPhraseSP "specific heat capacity of PCM as a solid")
-  ("the amount of energy required to raise the temperature of a " <>
+  (S $ "the amount of energy required to raise the temperature of a " <>
   "given unit mass of solid phase change material by a given amount")
-  (sup (sub (eqSymb heatCapSpec) lPCM) lSolid) UT.heatCapSpec Real
+  (sup (sub (eqSymb heatCapSpec) lPCM) lSolid) Real UT.heatCapSpec
+
+htCapSPUnc = uq (constrained' htCapSP
   [gtZeroConstr,
   sfwrRange $ Bounded (Exc, sy htCapSPMin) (Exc, sy htCapSPMax)]
-  (exactDbl 1760) defaultUncrt
+  (exactDbl 1760)) defaultUncrt
 
 -- Constraint 8
 htCapLP = uqc "htCapLP"

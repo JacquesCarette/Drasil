@@ -244,13 +244,13 @@ inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = (absTol :| [relTol]) `NE.appendList` fmap dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
-inputConstraints = [tankLengthUnc, diamUnc, pcmVol, pcmSA, pcmDensity,
+inputConstraints = [tankLengthUnc, diamUnc, pcmVolUnc, pcmSA, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
   wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
-tankLength, diam, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
+tankLength, diam, pcmVol, tempW, tempPCM, watE, pcmE :: DefinedQuantityDict
 
-tankLengthUnc, diamUnc, pcmVol, pcmSA, pcmDensity, tempMeltP,
+tankLengthUnc, diamUnc, pcmVolUnc, pcmSA, pcmDensity, tempMeltP,
   htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity, htCapW,
   coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
@@ -274,12 +274,14 @@ diamUnc = uq (constrained' diam
   (dbl 0.412)) defaultUncrt
 
 -- Constraint 3
-pcmVol = uqc "pcmVol" (nounPhraseSP "volume of PCM")
-  "the amount of space occupied by a given quantity of phase change material"
-  (sub (eqSymb vol) lPCM) m_3 Real
+pcmVol = quant (mkUid "pcmVol") (nounPhraseSP "volume of PCM")
+  (S "the amount of space occupied by a given quantity of phase change material")
+  (sub (eqSymb vol) lPCM) Real m_3
+
+pcmVolUnc = uq (constrained' pcmVol
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, sy tankVol),
    sfwrRange $ UpFrom (Inc, sy fracMin $* sy tankVol)]
-  (dbl 0.05) defaultUncrt
+  (dbl 0.05)) defaultUncrt
   -- needs to add (D,L)*minfract to end of last constraint
 
 -- Constraint 4

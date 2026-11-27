@@ -1,7 +1,8 @@
 module Drasil.Projectile.Unitals (
   offset, flightDur, targPos, inputs, outputs,
   launAngle, launSpeed, landPos, projSpeed, projPos,
-  launAngleUnc, launSpeedUnc, targPosUnc, landPosUnc, offsetUnc, flightDurUnc
+  launAngleUnc, launSpeedUnc, targPosUnc, landPosUnc, offsetUnc, flightDurUnc,
+  flightDurCon
 ) where
 
 import Control.Lens ((^.))
@@ -32,7 +33,7 @@ inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = dqdWr <$> launSpeed :| [launAngle, targPos]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
-outputs = dqdWr <$> offset :| [flightDur]
+outputs = dqdWr <$> offset :| [flightDurCon]
 
 projSpeed :: DefinedQuantityDict
 projSpeed = quant (mkUid "projSpeed")
@@ -49,18 +50,21 @@ projPos = quant (mkUid "projPos")
 ---
 landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc,
   flightDurUnc :: UncertQ
-landPosUnc   = uq landPos   defaultUncrt
+landPosUnc   = uq landPos defaultUncrt
 launAngleUnc = uq launAngle defaultUncrt
 launSpeedUnc = uq launSpeed defaultUncrt
-offsetUnc    = uq offset    defaultUncrt
-targPosUnc   = uq targPos   defaultUncrt
-flightDurUnc = uq flightDur defaultUncrt
+offsetUnc    = uq offset defaultUncrt
+targPosUnc   = uq targPos defaultUncrt
+flightDurUnc = uq flightDurCon defaultUncrt
 
-flightDur, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
-flightDur = constrainedNRV' (quant (mkUid "flightduration")
+flightDur :: DefinedQuantityDict
+flightDur = quant (mkUid "flightduration")
   (compoundPhrase (nounPhraseSP "flight") (nounPhraseSP "duration"))
   (foldlSent_ [D.toSent $ phraseNP (the time), S "when the", phrase C.projectile, S "lands"])
-  (subStr lT "flight") Real second) [gtZeroConstr]
+  (subStr lT "flight") Real second
+
+flightDurCon, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
+flightDurCon = constrainedNRV' flightDur [gtZeroConstr]
 landPos   = constrainedNRV' (quant (mkUid "landingposition")
   (compoundPhrase (nounPhraseSP "landing") (position ^. term))
   (foldlSent_ [D.toSent (phraseNP (the distance)) `S.fromThe` phrase C.launcher
